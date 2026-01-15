@@ -1,0 +1,42 @@
+# OS and Editor
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.iml
+*.sublime-workspace
+
+# Node/npm (if docs tooling ever uses these)
+node_modules/
+package-lock.json
+npm-debug.log
+
+# Python (if Python docs generation is added)
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Generated files (if any build system is added)
+*.generated.md
+.cache/
+
+# Local environment files
+.env
+.env.local
+*.local.json
+
+# IDE/build artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
