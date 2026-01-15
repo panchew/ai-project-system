@@ -66,7 +66,7 @@ Execution-aligned documentation.
 - Milestone specs
 - Epic specs
 
-Epic files are the **primary execution drivers**.
+Epic specs are the **primary execution drivers**.
 
 ---
 
@@ -105,8 +105,8 @@ Historical documentation retained for reference.
 
 - New documentation **must** be placed in the correct folder
 - Files at the root of `docs/` are limited to governance and indexes
+- Execution work requires an Epic spec with valid front-matter
 - Meaning is preserved; structure may evolve
-- Execution work requires an Epic spec
 
 ---
 
