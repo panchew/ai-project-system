@@ -54,6 +54,7 @@ If any structure, document, or practice conflicts with this file, **this file wi
 │  ├─ phases/
 │  ├─ decisions/
 │  ├─ context/
+│  ├─ systems/
 │  ├─ templates/
 │  └─ _legacy/
 ├─ src/
@@ -85,8 +86,6 @@ Local enforcement is defined in `docs/README.md`.
 ## 5. Mandatory Document Front-Matter
 
 All **execution-relevant Markdown documents** MUST begin with a YAML front-matter block.
-
-Front-matter defines document identity, scope, lifecycle, and enables deterministic context extraction.
 
 ### Required Front-Matter
 
@@ -229,37 +228,42 @@ The starter is a binding execution contract and MUST include:
 - Explicit scope and non-goals
 - Governance enforcement statement
 - Definition of Done reminder
-- **Delivery Requirements**, including:
-  - Working branch name (`epic/*`)
-  - Required PR source and target
-  - Explicit statement that delivery is part of completion
+- Delivery Requirements (branch + PR target)
 
 Execution chats that omit delivery requirements are invalid.
 
 A canonical template is provided under:
+
 ```
 docs/templates/epic-execution-chat-starter.md
 ```
 
 ---
 
-## 14. Canonical Epic Spec Template
+## 14. Project Tracker Integration (Optional, Declarative)
+
+Projects **may declare integrations with external project trackers** (e.g. Jira, Azure DevOps, GitHub Projects, Pivotal Tracker) via **system references**.
+
+Such integrations:
+- Are optional
+- Must be explicitly declared
+- Must not replace the canonical project structure
+
+Details are defined in the Project Tracker Integration System reference.
+
+---
+
+## 15. Canonical Epic Spec Template
 
 All Epic specs MUST follow the canonical structure defined in:
+
 ```
 docs/templates/epic-spec.md
 ```
 
-The template includes:
-- Mandatory front-matter
-- Scope and non-goals
-- Constraints
-- Acceptance Criteria
-- Definition of Done
-
 ---
 
-## 15. System Installation Tasks
+## 16. System Installation Tasks
 
 Governance changes that affect structure or conventions require a **System Installation Task**.
 
@@ -271,7 +275,7 @@ Such tasks are:
 
 ---
 
-## 16. Adoption & Evolution
+## 17. Adoption & Evolution
 
 - Adopted at project creation
 - Enforced forward-only

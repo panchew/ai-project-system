@@ -127,7 +127,20 @@ If delivery cannot be completed, AI must block and ask.
 
 ---
 
-## 8. Question Policy
+## 8. External Tracker Semantics
+
+AI **must not assume external tracker semantics**.
+
+When a project declares integration with a project tracker:
+- AI MUST rely on declared mappings
+- AI MUST follow the Project Tracker Integration System reference
+- AI MUST NOT infer hierarchy, states, or workflows
+
+If tracker mappings are missing or ambiguous, execution MUST stop.
+
+---
+
+## 9. Question Policy
 
 AI may ask questions ONLY when:
 - Execution is blocked
@@ -141,7 +154,7 @@ AI must NOT ask:
 
 ---
 
-## 9. Exit Ritual (Mandatory)
+## 10. Exit Ritual (Mandatory)
 
 A Coding Agent chat concludes ONLY when:
 
@@ -154,7 +167,7 @@ After declaration, the agent must stop.
 
 ---
 
-## 10. Error Handling
+## 11. Error Handling
 
 If AI detects:
 - Missing specs
@@ -170,7 +183,7 @@ Silent failure or guessing is prohibited.
 
 ---
 
-## 11. Evolution
+## 12. Evolution
 
 These guidelines evolve:
 - Intentionally
