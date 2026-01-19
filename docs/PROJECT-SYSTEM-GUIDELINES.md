@@ -156,6 +156,10 @@ One epic branch corresponds to one epic spec.
 
 Branch merges MUST follow the project hierarchy.
 
+Only Coding Agents (and humans) are permitted to mutate the repository, including creating branches, committing files, and opening pull requests. HQ chats are declarative only and MUST NOT be assumed to have filesystem or CLI access.
+
+Coding Agents MAY create Epic, Milestone, or Phase branches when required to fulfill an explicit execution contract. Branch creation MUST be intentional and traceable to an Epic Execution Chat Starter or a system installation task.
+
 ### Promotion Path
 
 ```
