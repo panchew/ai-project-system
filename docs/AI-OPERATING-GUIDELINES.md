@@ -98,6 +98,8 @@ If the starter is incomplete or violates governance:
 - Execution MUST NOT begin
 - AI must ask for clarification
 
+Epic Execution Chat Starters are produced by HQ chats and MUST NOT be inferred, synthesized, or reconstructed by humans or Coding Agents.
+
 ---
 
 ## 6. Scope Discipline
@@ -128,6 +130,22 @@ AI MUST NOT:
 - Delegate delivery to the human implicitly
 
 If delivery cannot be completed, AI must block and ask.
+
+When an execution contract specifies a target branch that does not yet exist, the Coding Agent MAY create the branch from the correct parent branch before opening a pull request.
+
+### Pull Request Creation Strategy
+
+Coding Agents MUST attempt to create pull requests using an automated method when available.
+
+If the primary method is unavailable or fails, the agent MUST attempt at least one alternative method before deferring to a human.
+
+If automated PR creation is not possible, the agent MUST:
+- Verify that all delivery artifacts are committed
+- Provide an exact PR creation URL
+- Provide a ready-to-use PR title and body
+- Explicitly state that manual PR creation is the only remaining step
+
+In such cases, the Epic MAY be considered complete once delivery readiness is verified and the handoff is explicit.
 
 ---
 

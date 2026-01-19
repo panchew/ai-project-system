@@ -207,6 +207,8 @@ Execution chats MUST:
 - Produce an Epic Completion Report
 - Declare completion explicitly and stop
 
+Delivery readiness includes verified commits and an explicit pull request handoff when automated PR creation is unavailable.
+
 ---
 
 ## 12. Epic Completion Reports (Mandatory)
