@@ -142,6 +142,8 @@ When a project declares integration with a project tracker:
 
 If tracker mappings are missing or ambiguous, execution MUST stop.
 
+If no explicit tracker mapping is declared, the AI MUST assume no tracker integration exists and MUST NOT interact with external tracking systems.
+
 ---
 
 ## 9. Question Policy

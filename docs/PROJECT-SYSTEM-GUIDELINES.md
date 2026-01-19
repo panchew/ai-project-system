@@ -255,6 +255,8 @@ Such integrations:
 
 Details are defined in the Project Tracker Integration System reference.
 
+Tracker integrations MUST be declared via a system reference under `docs/systems/` and MUST NOT be inferred from external tools or naming conventions.
+
 ---
 
 ## 15. Canonical Epic Spec Template
