@@ -1,6 +1,10 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
+**Version:** 1.2.0  
+**Effective Date:** 2026-01-17  
+**Status:** Current  
+
 ---
 
 ## 1. Purpose
