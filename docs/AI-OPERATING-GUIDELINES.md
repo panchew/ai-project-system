@@ -86,6 +86,8 @@ Lower layers MUST NOT override higher layers.
 
 ## 5. Epic Execution Chat Starter (Binding Contract)
 
+Epic specs are authoritative inputs and MUST exist before execution begins. If an Epic spec is not found at the declared path, the Coding Agent MUST stop and report the issue. Coding Agents MUST NOT create or redefine Epic specs.
+
 Coding Agents MUST treat the **Epic Execution Chat Starter** as a binding execution contract.
 
 The starter defines:
