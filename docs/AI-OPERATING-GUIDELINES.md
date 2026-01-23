@@ -177,23 +177,9 @@ AI must NOT ask:
 - Preference questions
 - “What do you think?” prompts
 - Open-ended design questions during execution
-
 ---
 
-## 10. Exit Ritual (Mandatory)
-
-A Coding Agent chat concludes ONLY when:
-
-1. All Definition of Done items are satisfied
-2. Delivery requirements are fulfilled
-3. Epic Completion Report is produced and committed
-4. AI explicitly declares the Epic complete
-
-After declaration, the agent must stop.
-
----
-
-## 11. Error Handling
+## 13. Error Handling
 
 If AI detects:
 - Missing specs
@@ -209,7 +195,7 @@ Silent failure or guessing is prohibited.
 
 ---
 
-## 12. Evolution
+## 14. Evolution
 
 These guidelines evolve:
 - Intentionally
@@ -217,10 +203,116 @@ These guidelines evolve:
 - Via versioned documentation
 
 AI must always prefer the most recent version.
+---
+
+## 10. Execution Completion vs. Acceptance
+
+**Critical distinction:** Execution completion is NOT the same as acceptance.
+
+- **Execution Completion:** The Epic is technically correct, all Definition of Done items are verified, code is delivered, and tests pass.
+- **Acceptance:** A human (Layer 8) has reviewed the execution, made a judgment about correctness and fitness, and HQ Chat has made an explicit accept/reject decision.
+
+Coding Agents MUST:
+- Report execution completion accurately
+- Stop after reporting
+- NOT infer acceptance
+- NOT iterate without a new execution contract
+
+HQ Chat (human) MUST:
+- Conduct human review after execution completion
+- Express findings via Epic Review Seal (see below)
+- Make an explicit accept/reject decision
+- Create follow-up Epics if required
+
+This separation prevents ambiguity and ensures human judgment is properly captured.
 
 ---
 
-## Closing Statement
+## 11. Human Review and Epic Review Seal
+
+After a Coding Agent reports execution completion, human review is required before acceptance can be finalized.
+
+**Human Review Process:**
+1. Human (Layer 8) tests/reviews the delivered work
+2. Human expresses findings naturally, identifying any issues or concerns
+3. Human documents findings in an **Epic Review Seal** (a structured, copy-pasteable block)
+4. Human pastes the Epic Review Seal into HQ Chat, requesting an explicit decision
+
+The Epic Review Seal is NOT an acceptance artifact. It is a decision input.
+
+The Epic Review Seal captures:
+- What was tested or reviewed
+- Findings in plain language
+- Issues identified (if any)
+- An explicit request for HQ decision: **Accept as-is**, **Accept with follow-up Epic(s)**, or **Reject and create new Epic(s)**
+
+Example Epic Review Seal structure (see docs/templates/epic-review-seal.md for canonical form):
+
+```
+---
+## Epic Review Seal — [Epic ID]
+
+**Reviewer:** [Name]  
+**Review Date:** [Date]  
+**Epic:** [Epic ID and Title]  
+
+**Findings:**
+- [Finding 1]
+- [Finding 2]
+- [Issue 1, if any]
+
+**Recommendation:** [Accept as-is | Accept with follow-ups | Reject]
+
+**HQ Decision Requested:** Based on findings above, should this Epic be:
+1. Accepted as-is
+2. Accepted with follow-up Epic(s)
+3. Rejected and require new Epic(s)
+
+---
+```
+
+---
+
+## 12. Acceptance Outcomes
+
+HQ Chat makes explicit acceptance decisions using one of three outcomes:
+
+1. **Accept as-is:** Epic is complete, no follow-ups needed.
+2. **Accept with follow-up Epic(s):** Epic is accepted, but new Epics must be created to address findings.
+3. **Reject:** Epic does not meet requirements; new Epic(s) must be created.
+
+Acceptance is documented in the Epic Completion Report and becomes immutable.
+
+---
+
+## 13. Exit Ritual (Mandatory)
+
+A Coding Agent chat concludes ONLY when:
+
+1. All Definition of Done items are satisfied
+2. Delivery requirements are fulfilled
+3. Epic Completion Report is produced and committed
+4. AI explicitly declares the Epic complete
+
+---
+
+## 14. Error Handling
+
+If AI detects:
+- Missing specs
+- Invalid branch targets
+- Governance violations
+
+It must:
+- Stop execution
+- State the issue clearly
+- Request explicit guidance
+
+Silent failure or guessing is prohibited.
+
+---
+
+## 15. Closing Statement
 
 AI is a force multiplier only when it is constrained.
 

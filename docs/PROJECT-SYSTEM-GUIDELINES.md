@@ -215,6 +215,44 @@ Delivery readiness includes verified commits and an explicit pull request handof
 
 ---
 
+## 11.5. Human Review, Acceptance vs. Execution Completion
+
+**Critical lifecycle distinction:** An Epic can be **execution-complete** while still requiring **human acceptance**.
+
+### Definitions
+
+- **Execution Completion:** All Definition of Done items are verified, code is delivered, tests pass, and the Coding Agent reports completion. This is technical correctness and delivery completeness.
+
+- **Human Review:** After execution completion, a human (Layer 8) conducts an independent review—testing functionality, evaluating correctness against intent, identifying design issues, or uncovering unexpected behavior.
+
+- **Acceptance:** An explicit decision made by HQ Chat (human) regarding whether to accept, accept-with-follow-ups, or reject the completed Epic based on human review findings.
+
+### Flow
+
+```
+Coding Agent Executes
+    ↓
+Coding Agent Reports: "Execution Complete"
+    ↓
+Human Reviews (Layer 8)
+    ↓
+Human Files: Epic Review Seal
+    ↓
+HQ Chat Makes Decision: Accept | Accept-with-Followups | Reject
+    ↓
+Acceptance Recorded in Completion Report
+```
+
+### Key Rules
+
+1. **Coding Agents MUST stop after reporting execution completion.** They do NOT infer acceptance.
+2. **Humans OWN review.** Human judgment is a first-class input, not a rubber stamp.
+3. **HQ Chat OWNS acceptance decisions.** Acceptance is recorded explicitly and becomes immutable.
+4. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
+5. **Acceptance decisions are recorded in the Epic Completion Report.** The report captures human findings, the decision, and any follow-up actions.
+
+---
+
 ## 12. Epic Completion Reports (Mandatory)
 
 Every Epic MUST conclude with an **Epic Completion Report**.
@@ -224,6 +262,7 @@ The Epic Completion Report:
 - Is stored alongside the Epic spec under `docs/phases/`
 - Records what was delivered, verified, and deferred
 - Serves as the durable closure artifact for the Epic
+- **Includes the acceptance decision and human review findings** (if applicable)
 
 Completion Reports are append-only and MUST NOT modify the original Epic spec.
 
