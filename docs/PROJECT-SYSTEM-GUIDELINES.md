@@ -24,6 +24,25 @@ If any structure, document, or practice conflicts with this file, **this file wi
 
 ---
 
+## 1A. Canonical Happy Path for Epic Closure (Mandatory)
+
+All Epics MUST follow the single canonical happy path for closure:
+
+1. **Execution**: Coding Agent executes all Definition of Done items.
+2. **Delivery Notice**: Coding Agent produces a structured Epic Delivery Notice and declares execution complete. No Epic may proceed to review or closure without this notice.
+3. **Human Review**: HQ Chat requests and receives human review findings in plain language.
+4. **Epic Review Seal**: AI (Coding Agent or HQ Chat) structures findings into an Epic Review Seal for human confirmation.
+5. **HQ Decision**: HQ Chat issues an explicit delivery authorization (accept, accept-with-follow-ups, or reject).
+6. **HQ Delivery Authorization**: Only after explicit HQ authorization may a PR be created and merged.
+7. **PR and Merge**: Coding Agent opens a PR to the correct branch and merges only after HQ authorization. No Epic may close with uncommitted changes or without merge.
+8. **Stop**: Execution stops immediately after merge. No further actions are taken.
+
+**No step may be skipped, inferred, or collapsed.**
+
+---
+
+---
+
 ## 2. Core Principles
 
 - **Consistency over optimization**  
@@ -223,6 +242,8 @@ Delivery readiness includes verified commits and an explicit pull request handof
 
 - **Execution Completion:** All Definition of Done items are verified, code is delivered, tests pass, and the Coding Agent reports completion. This is technical correctness and delivery completeness.
 
+- **Delivery Notice:** A structured, explicit notice produced by the Coding Agent upon execution completion. This is a mandatory artifact and a prerequisite for human review and HQ authorization. No Epic may proceed to review or closure without a Delivery Notice.
+
 - **Human Review:** After execution completion, a human (Layer 8) conducts an independent review—testing functionality, evaluating correctness against intent, identifying design issues, or uncovering unexpected behavior.
 
 - **Acceptance:** An explicit decision made by HQ Chat (human) regarding whether to accept, accept-with-follow-ups, or reject the completed Epic based on human review findings.
@@ -246,17 +267,37 @@ Acceptance Recorded in Completion Report
 ### Key Rules
 
 1. **Coding Agents MUST stop after reporting execution completion.** They do NOT infer acceptance.
+2. **Coding Agents MUST produce a Delivery Notice before review.** No Epic may proceed to review or closure without a Delivery Notice.
 2. **Humans OWN review.** Human judgment is a first-class input, not a rubber stamp.
 3. **HQ Chat OWNS acceptance decisions.** Acceptance is recorded explicitly and becomes immutable.
+4. **HQ Chat MUST issue explicit delivery authorization before PR/merge.** Coding Agents must await this authorization and refuse to proceed without it.
 4. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
 5. **Acceptance decisions are recorded in the Epic Completion Report.** The report captures human findings, the decision, and any follow-up actions.
 6. **Structured review artifacts are AI-generated.** Humans provide plain-language findings; Coding Agents or HQ Chat produce the Epic Review Seal from that input. Humans may approve or correct AI-structured text but are not required to author or edit markdown.
+
+7. **No Epic may close with uncommitted changes.** The working tree must be clean before merge and closure.
+8. **Execution stops immediately after merge.** No further actions are taken by the Coding Agent.
+
+---
 
 ---
 
 ## 12. Epic Completion Reports (Mandatory)
 
 Every Epic MUST conclude with an **Epic Completion Report**.
+
+---
+## 12A. Delivery Notice (Mandatory)
+
+Every Epic MUST include a structured Delivery Notice as a prerequisite for review and closure. The Delivery Notice:
+- Is produced by the Coding Agent immediately upon execution completion
+- Is required before human review or HQ authorization
+- Must be explicit, structured, and committed to the repository
+- Is referenced in the Epic Completion Report
+
+See `docs/templates/epic-completion-notice.md` for the canonical Delivery Notice template.
+
+---
 
 The Epic Completion Report:
 - Is created once, at Epic completion

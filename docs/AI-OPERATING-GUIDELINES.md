@@ -23,6 +23,25 @@ If AI behavior conflicts with this document, **this document wins**.
 
 ---
 
+## 1A. Canonical Happy Path Enforcement (Mandatory)
+
+All AI agents (Coding Agents and HQ Chats) MUST enforce the single canonical happy path for Epic closure:
+
+1. **Execution**: Coding Agent executes all Definition of Done items.
+2. **Delivery Notice**: Coding Agent produces a structured Epic Delivery Notice and declares execution complete. No Epic may proceed to review or closure without this notice.
+3. **Human Review**: HQ Chat requests and receives human review findings in plain language.
+4. **Epic Review Seal**: AI (Coding Agent or HQ Chat) structures findings into an Epic Review Seal for human confirmation.
+5. **HQ Decision**: HQ Chat issues an explicit delivery authorization (accept, accept-with-follow-ups, or reject).
+6. **HQ Delivery Authorization**: Only after explicit HQ authorization may a PR be created and merged.
+7. **PR and Merge**: Coding Agent opens a PR to the correct branch and merges only after HQ authorization. No Epic may close with uncommitted changes or without merge.
+8. **Stop**: Execution stops immediately after merge. No further actions are taken.
+
+**No step may be skipped, inferred, or collapsed.**
+
+---
+
+---
+
 ## 2. Core Principles
 
 - **AI assists, it does not lead strategy**  
@@ -210,6 +229,7 @@ AI must always prefer the most recent version.
 **Critical distinction:** Execution completion is NOT the same as acceptance.
 
 - **Execution Completion:** The Epic is technically correct, all Definition of Done items are verified, code is delivered, and tests pass.
+- **Delivery Notice:** A structured, explicit notice produced by the Coding Agent upon execution completion. This is a mandatory artifact and a prerequisite for human review and HQ authorization. No Epic may proceed to review or closure without a Delivery Notice.
 - **Acceptance:** A human (Layer 8) has reviewed the execution, made a judgment about correctness and fitness, and HQ Chat has made an explicit accept/reject decision.
 
 
@@ -228,6 +248,12 @@ Human review (plain language) → AI-generated Epic Review Seal → HQ decision
 - Present the draft to the human for confirmation before HQ decision.
 - Do not ask humans to format or edit markdown; handle structuring within AI.
 
+**Coding Agent enforcement and stop rules:**
+- Coding Agent MUST always produce a Delivery Notice upon execution completion.
+- Coding Agent MUST explicitly state when it is awaiting HQ authorization and refuse to proceed without it.
+- Coding Agent MUST NOT close an Epic with uncommitted changes.
+- Coding Agent MUST stop execution immediately after merge; no further actions are permitted.
+
 Coding Agents MUST:
 - Report execution completion accurately
 - Stop after reporting
@@ -240,6 +266,12 @@ HQ Chat (human) MUST:
 - Use AI to generate the Epic Review Seal from that input (see below)
 - Make an explicit accept/reject decision
 - Create follow-up Epics if required
+
+**HQ Chat enforcement and closure rules:**
+- HQ Chat MUST require a Delivery Notice before review.
+- HQ Chat MUST issue explicit delivery authorization before PR/merge.
+- HQ Chat MUST decide resolution for any uncommitted changes before closure.
+- HQ Chat MUST declare Epics closed only after merge.
 
 This separation prevents ambiguity and ensures human judgment is properly captured.
 
@@ -310,6 +342,10 @@ A Coding Agent chat concludes ONLY when:
 2. Delivery requirements are fulfilled
 3. Epic Completion Report is produced and committed
 4. AI explicitly declares the Epic complete
+5. A structured Delivery Notice has been produced and committed
+6. HQ authorization for PR/merge has been received and executed
+7. The working tree is clean (no uncommitted changes)
+8. Execution stops immediately after merge
 
 ---
 
