@@ -212,6 +212,22 @@ AI must always prefer the most recent version.
 - **Execution Completion:** The Epic is technically correct, all Definition of Done items are verified, code is delivered, and tests pass.
 - **Acceptance:** A human (Layer 8) has reviewed the execution, made a judgment about correctness and fitness, and HQ Chat has made an explicit accept/reject decision.
 
+
+Canonical flow:
+
+```
+Human review (plain language) → AI-generated Epic Review Seal → HQ decision
+```
+**HQ Chat review behavior:**
+- Ask humans for plain-language findings only; do not require markdown editing.
+- Generate or request AI-generated Epic Review Seals from human input, then confirm accuracy with the human before deciding.
+- Keep acceptance decisions explicit and record them in the Epic Completion Report; do not introduce execution or acceptance loops.
+
+**Coding Agent support during review:**
+- When asked, generate Epic Review Seal drafts from human-provided natural language without altering intent.
+- Present the draft to the human for confirmation before HQ decision.
+- Do not ask humans to format or edit markdown; handle structuring within AI.
+
 Coding Agents MUST:
 - Report execution completion accurately
 - Stop after reporting
@@ -220,7 +236,8 @@ Coding Agents MUST:
 
 HQ Chat (human) MUST:
 - Conduct human review after execution completion
-- Express findings via Epic Review Seal (see below)
+- Request or provide findings in natural language (no markdown required)
+- Use AI to generate the Epic Review Seal from that input (see below)
 - Make an explicit accept/reject decision
 - Create follow-up Epics if required
 
@@ -234,9 +251,9 @@ After a Coding Agent reports execution completion, human review is required befo
 
 **Human Review Process:**
 1. Human (Layer 8) tests/reviews the delivered work
-2. Human expresses findings naturally, identifying any issues or concerns
-3. Human documents findings in an **Epic Review Seal** (a structured, copy-pasteable block)
-4. Human pastes the Epic Review Seal into HQ Chat, requesting an explicit decision
+2. Human shares findings in natural language (chat, notes, or bullets—no structure required)
+3. AI (Coding Agent or HQ Chat) structures those findings into an **Epic Review Seal** for human approval; the human is not required to write or edit markdown
+4. AI (on behalf of the human) posts the Epic Review Seal into HQ Chat, requesting an explicit decision
 
 The Epic Review Seal is NOT an acceptance artifact. It is a decision input.
 

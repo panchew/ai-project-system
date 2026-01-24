@@ -43,6 +43,12 @@ HQ Chats:
 
 An HQ Chat is **not**:
 
+
+### Review and Acceptance Behavior
+
+- Collect human review findings in plain language; do not require markdown edits from humans.
+- Use AI (HQ Chat or Coding Agent) to structure those findings into an Epic Review Seal for confirmation.
+- Keep acceptance decisions explicit and human-owned; do not introduce execution loops or implicit acceptance.
 - A Coding Agent
 - A place where code is written
 - A place where branches are created
