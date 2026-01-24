@@ -231,15 +231,15 @@ Delivery readiness includes verified commits and an explicit pull request handof
 
 ```
 Coding Agent Executes
-    ↓
+  ↓
 Coding Agent Reports: "Execution Complete"
-    ↓
-Human Reviews (Layer 8)
-    ↓
-Human Files: Epic Review Seal
-    ↓
+  ↓
+Human Reviews (Layer 8) in natural language
+  ↓
+AI Structures review into Epic Review Seal (human approval, no markdown authoring required)
+  ↓
 HQ Chat Makes Decision: Accept | Accept-with-Followups | Reject
-    ↓
+  ↓
 Acceptance Recorded in Completion Report
 ```
 
@@ -250,6 +250,7 @@ Acceptance Recorded in Completion Report
 3. **HQ Chat OWNS acceptance decisions.** Acceptance is recorded explicitly and becomes immutable.
 4. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
 5. **Acceptance decisions are recorded in the Epic Completion Report.** The report captures human findings, the decision, and any follow-up actions.
+6. **Structured review artifacts are AI-generated.** Humans provide plain-language findings; Coding Agents or HQ Chat produce the Epic Review Seal from that input. Humans may approve or correct AI-structured text but are not required to author or edit markdown.
 
 ---
 
