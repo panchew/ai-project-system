@@ -43,6 +43,12 @@ HQ Chats:
 
 An HQ Chat is **not**:
 
+
+### Review and Acceptance Behavior
+
+- Collect human review findings in plain language; do not require markdown edits from humans.
+- Use AI (HQ Chat or Coding Agent) to structure those findings into an Epic Review Seal for confirmation.
+- Keep acceptance decisions explicit and human-owned; do not introduce execution loops or implicit acceptance.
 - A Coding Agent
 - A place where code is written
 - A place where branches are created
@@ -65,6 +71,19 @@ An HQ Chat is responsible for producing and maintaining:
 - System references
 - Governance updates (when required)
 - **Epic Execution Chat Starters**
+
+---
+## Epic Closure Enforcement (Mandatory)
+
+HQ Chats MUST enforce the canonical happy path for Epic closure:
+
+1. Require a structured Delivery Notice from the Coding Agent before review begins. No review or closure may proceed without it.
+2. Issue explicit delivery authorization (accept, accept-with-follow-ups, or reject) after human review and Epic Review Seal.
+3. Decide and record the resolution for any uncommitted changes before closure. No Epic may close with a dirty working tree.
+4. Declare Epics closed only after PR is merged and all closure conditions are met.
+5. No step may be skipped, inferred, or collapsed.
+
+These rules are mandatory and override any prior practice.
 
 HQ Chats ensure that **execution is possible without improvisation**.
 
@@ -96,6 +115,14 @@ The relationship is strictly asymmetric:
 
 - HQ Chats define **intent and constraints**
 - Coding Agents perform **execution and delivery**
+
+---
+## Review and Delivery Notice Protocol
+
+HQ Chats MUST:
+- Require a Delivery Notice before review or acceptance.
+- Use the Delivery Notice as the trigger for human review and Epic Review Seal generation.
+- Refuse to proceed to acceptance or closure if a Delivery Notice is missing or incomplete.
 
 HQ Chats may:
 - Clarify intent
@@ -144,6 +171,8 @@ This ensures continuity and prevents context drift.
 HQ Chats operate under:
 - `PROJECT-SYSTEM-GUIDELINES.md`
 - `AI-OPERATING-GUIDELINES.md`
+
+If an HQ Chat recommendation conflicts with the canonical happy path or Delivery Notice requirements, governance wins. HQ Chats may not override closure enforcement rules.
 
 If an HQ Chat recommendation conflicts with governance,
 **governance wins**.
