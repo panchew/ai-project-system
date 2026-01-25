@@ -4,7 +4,16 @@ status: active
 last_updated: 2026-01-17
 ---
 
+
 # EPIC EXECUTION CHAT STARTER
+
+GOVERNANCE RESOLUTION
+
+- All governance for Epic Execution Chat Starters is resolved **by explicit reference** to the authoritative governance source.
+- The authoritative governance model is documented in [docs/systems/governance-propagation.md](governance-propagation.md).
+- Projects adopting this governance must include a `governance-source.md` file referencing the authoritative source.
+- **No live GitHub access or automatic governance syncing is available.** All governance enforcement is by reference and manual review.
+- If no `governance-source.md` is present, governance is not adopted for the project.
 
 MANDATORY CONTEXT PACKET
 
@@ -16,6 +25,7 @@ Spec Path:
 Governance Versions:
 Execution Mode:
 Scope Rule:
+
 
 SPEC EXISTENCE REQUIREMENT
 
@@ -30,10 +40,12 @@ DELIVERY REQUIREMENTS (MANDATORY)
 - Branch creation authorization:
 - Delivery is part of the Definition of Done.
 
+
 EXECUTION INSTRUCTIONS
 
 - Treat the Epic spec as the single source of truth.
 - Execute only what is defined.
+- All governance is enforced by reference to the authoritative source (see GOVERNANCE RESOLUTION above).
 - Ask questions only if blocked.
 - Do not expand scope.
 
