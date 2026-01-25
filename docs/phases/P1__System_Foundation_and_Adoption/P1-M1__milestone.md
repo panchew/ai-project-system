@@ -4,7 +4,7 @@ phase: P1
 milestone: M1
 epic: null
 type: milestone
-status: active
+status: completed
 last_updated: 2026-01-17
 ---
 
