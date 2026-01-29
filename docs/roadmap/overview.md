@@ -14,46 +14,29 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Phases
 
-### P0 – Project Formalization *(Active)*
+### P1 – System Foundation & Adoption *(Active)*
 
-**Goal**: Formalize the ai-project-system as a clean, governed GitHub repository.
+**Goal**: Establish the AI Project System as a stable, adoptable, and self-hosting system.
 
 **Status**: Active (Started 2026-01-14)
 
 **Milestones**:
-- **M0.1** – Repository Bootstrap *(Active)*
-- **M0.2** – Documentation System Validation *(Planned)*
-- **M0.3** – Roadmap Publication *(Planned)*
+- **M1** – Genesis & Integration Baseline *(Completed 2026-01-25)*
+- **M2** – Execution Ergonomics & Validation *(Active)*
+- **M3** – Governance Distribution & Adoption *(Active)*
+- **M4** – Adoption Readiness & Practical Enablement *(Planned)*
 
 **Deliverables**:
-- Repository structure aligned with PROJECT-SYSTEM-GUIDELINES.md
-- Authoritative governance documents published
-- GitHub repository initialized with tracking
-- Complete phase/milestone/epic documentation
-
----
-
-### P1 – System Validation *(Planned)*
-
-**Goal**: Validate the project system by applying it to a real use case.
-
-**Status**: Not Started
-
-**Purpose**:
-- Prove the system works in practice
-- Identify gaps or friction points
-- Refine guidelines based on real usage
-- Build confidence in the methodology
-
-**Possible Use Cases**:
-- Documentation-heavy project
-- Small automation tool
-- API integration project
-
-**Success Criteria**:
-- Complete project executed using this system
-- Lessons learned documented
-- Guidelines refined if needed
+- ✅ Repository structure aligned with PROJECT-SYSTEM-GUIDELINES.md
+- ✅ Authoritative governance documents published
+- ✅ Complete phase/milestone/epic documentation
+- ✅ Project tracker integration system (optional)
+- ✅ Human review and acceptance framework
+- ✅ Governance propagation model
+- 📋 Templates and scaffolding
+- 📋 Quick-start guide and visual documentation
+- 📋 Example project and walkthrough
+- 📋 FAQ, licensing, and community readiness
 
 ---
 
@@ -114,8 +97,15 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Current Focus
 
-**Active Phase**: P0 – Project Formalization  
-**Active Milestone**: M0.1 – Repository Bootstrap  
-**Active Epic**: E0.1.1 – Formalize System Project Repository
+**Active Phase**: P1 – System Foundation & Adoption
+**Active Milestones**: 
+- M2 — Execution Ergonomics & Validation (1/3 Epics complete)
+- M3 — Governance Distribution & Adoption (1/? Epics complete)
 
-See [docs/phases/](../phases/) for detailed specs.
+**Planned Milestone**: M4 — Adoption Readiness & Practical Enablement
+
+**Next Epics (candidates)**:
+- M2: E2.2 (Human-Language Review Capture) or E2.3 (Happy-Path Enforcement)
+- M4: E4.1 (Templates & Scaffolding)
+
+See [docs/phases/P1__System_Foundation_and_Adoption/](../phases/P1__System_Foundation_and_Adoption/) for detailed specs.
