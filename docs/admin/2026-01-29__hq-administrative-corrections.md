@@ -77,9 +77,30 @@ During HQ Chat establishment on 2026-01-29, a verification audit revealed:
 ### **5. Branch Cleanup**
 
 **Branches deleted:**
-- `epic/E1.1` (merged to milestone/M1, then to phase/P1, then to master)
-- `epic/E2.1` (merged to milestone/M2, then to phase/P1, then to master)
-- `milestone/M1` (merged to phase/P1, then to master)
+- `epic/E1.1` (work merged to master via PR #2; local branch had divergent commit history)
+- `epic/E2.1` (work merged to master via PR #3; local branch had divergent commit history)
+- `milestone/M1` (work merged to master via PR #5; local branch had divergent commit history)
+
+**Note on force deletion:**
+
+All three branches required force deletion (`git branch -D`) because:
+- The work was merged via pull requests (squash/merge strategy)
+- Local branches contained merge commits not present in master
+- Git could not trace direct ancestry due to PR merge strategy
+- Investigation confirmed all work exists in master (content verified, SHAs differ)
+
+**Verification performed:**
+- Confirmed PR merge status (PRs #2, #3, #5 merged)
+- Verified E1.1-related commits exist in master history
+- Checked branch divergence: only merge commits and rewritten commits found
+- No unique work lost
+
+**Branches deleted from remote:**
+```bash
+git push origin --delete epic/E1.1
+git push origin --delete epic/E2.1
+git push origin --delete milestone/M1
+```
 
 ---
 
