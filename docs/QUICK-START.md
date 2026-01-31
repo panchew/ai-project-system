@@ -629,20 +629,26 @@ You've completed your first Epic using the AI Project System!
 
 Now that you've completed your first Epic, explore:
 
-1. **Understand Governance**
+1. **See a Complete Example**
+   - Walk through the [Task Tracker CLI example project](../examples/task-tracker-project/)
+   - See all artifact types in context (spec, completion, delivery, review, chat starter)
+   - Understand the full Epic lifecycle in ~30 minutes
+   - Copy structure for your own projects
+
+2. **Understand Governance**
    - Read [PROJECT-SYSTEM-GUIDELINES.md](PROJECT-SYSTEM-GUIDELINES.md) for system structure
    - Read [AI-OPERATING-GUIDELINES.md](AI-OPERATING-GUIDELINES.md) for execution procedures
 
-2. **Visual Learning**
+3. **Visual Learning**
    - Review [Epic Lifecycle Flow](diagrams/epic-lifecycle-flow.md) diagram
    - Review [Authority Hierarchy](diagrams/authority-hierarchy.md) diagram
    - Review [Repository Structure](diagrams/repository-structure.md) diagram
 
-3. **See Examples**
+4. **See Examples**
    - Browse [docs/phases/P1__System_Foundation_and_Adoption/](phases/P1__System_Foundation_and_Adoption/) for real Epic examples
    - Study how this system was built using itself
 
-4. **System References**
+5. **System References**
    - [How to Start a Project](systems/start-a-project.md)
    - [HQ Chat Guide](systems/hq-chat.md)
    - [Governance Propagation](systems/governance-propagation.md)
