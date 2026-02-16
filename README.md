@@ -199,8 +199,8 @@ Make decision:
 
 ## System vs Traditional PM
 
-| Traditional PM | AI Project System |
-|----------------|-------------------|
+| Traditional Project Management | AI Project System |
+|-------------------------------|-------------------|
 | Jira tickets | Epic Specs (Markdown) |
 | Standup meetings | Epic Delivery Notices |
 | Verbal context | Documentation (version-controlled) |
@@ -211,6 +211,34 @@ Make decision:
 | Human assumes context | AI reads authoritative docs |
 
 **Key difference:** Traditional PM assumes humans retain context. AI Project System assumes context must be **explicitly documented**.
+
+---
+
+## Value Proposition
+
+**What you get:**
+- ✅ **Structure** — Clear boundaries for AI execution (no scope creep)
+- ✅ **Repeatability** — Same process for every Epic, predictable outcomes
+- ✅ **Context preservation** — Documentation survives session boundaries
+- ✅ **Quality control** — Explicit review and acceptance gates
+- ✅ **AI speed** — Autonomous execution once spec is clear
+
+**What you give up:**
+- ❌ **Improvisation** — Must plan before executing
+- ❌ **Verbal context** — Everything must be written down
+- ❌ **Continuous iteration** — Changes require spec updates
+
+**Who should use this:**
+- Engineers building production systems with AI assistance
+- Projects where context loss has caused rework
+- Teams wanting predictable AI execution
+- People who value structure over chaos
+
+**Who should NOT use this:**
+- Pure exploratory coding (no clear deliverables)
+- Throwaway prototypes (overhead not worth it)
+- Single-file scripts (too much process)
+- Projects without AI assistance (system assumes AI execution)
 
 ---
 
@@ -311,46 +339,51 @@ New capabilities will be added **when real usage demands them**, not speculative
 
 ---
 
+## Licensing
+
+This repository uses **dual licensing**:
+
+- **Code & Templates:** [MIT License](LICENSE)  
+  Freely use, modify, and distribute code, templates, and configuration files.
+
+- **Documentation:** [Creative Commons BY-SA 4.0](docs/LICENSE)  
+  Documentation must be attributed and shared under the same license.
+
+**Why dual licensing?**
+- **MIT** allows unrestricted reuse of templates and code (maximum adoption)
+- **CC BY-SA 4.0** ensures documentation improvements flow back to the community
+
+See [LICENSE](LICENSE) and [docs/LICENSE](docs/LICENSE) for full license texts.
+
+---
+
 ## Contributing
 
-This is a personal project system currently optimized for individual use.
+**Contributions are welcome!** 
 
-**Want to contribute?**
-- File issues for bugs or clarifications
-- Share your usage experiences
-- Suggest improvements based on real usage (not theory)
+This system is designed to improve through real usage experience. We especially value:
+- Bug reports (governance conflicts, unclear procedures)
+- Documentation improvements (clarifications, examples)
+- Real-world usage feedback ("I tried X and encountered Y")
 
-**Not accepting:**
-- Speculative features
-- Team/org features (out of scope for now)
+**Before contributing:**
+- Read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
+- Open an issue to discuss significant changes
+- Follow existing documentation style and conventions
+
+**Not accepting (without discussion):**
+- Speculative features (no real usage motivation)
+- Major redesigns (prove concepts first)
 - Tooling/automation (intentionally deferred)
 
----
-
-## Roadmap
-
-See [docs/roadmap/overview.md](docs/roadmap/overview.md) for planned future work.
-
-**Upcoming:**
-- E4.3 — Example Projects & Case Studies
-- E4.4 — FAQ & Troubleshooting Guide
-- Future phases TBD based on adoption needs
-
----
-
-## License
-
-No license currently specified. This is a personal project system.
-
-Future licensing decisions will be documented through the governance process.
+👉 **[Read the full contributing guide](CONTRIBUTING.md)**
 
 ---
 
 ## Questions?
 
-- 📖 **Read:** [Quick Start Guide](docs/QUICK-START.md)
+- 📖 **Start here:** [Quick Start Guide](docs/QUICK-START.md)
+- ❓ **FAQ:** [Frequently Asked Questions](docs/FAQ.md)
 - 🎨 **Visualize:** [Diagrams](docs/diagrams/)
-- 🔍 **Explore:** [Example Epics](docs/phases/P1__System_Foundation_and_Adoption/)
-- ❓ **Ask:** File an issue in this repository
-
-**The best way to understand the system is to use it.** Start with the [Quick Start Guide](docs/QUICK-START.md).
+- 🔍 **Examples:** [Phase P1 Epics](docs/phases/P1__System_Foundation_and_Adoption/)
+- 💬 **Ask:** [Open an issue](https://github.com/panchew/ai-project-system/issues)
