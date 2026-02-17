@@ -27,6 +27,25 @@
 
 ---
 
+## When to Create Unplanned Progress Branches
+
+If you encounter ideas, improvements, or refinements during execution that fall **outside current Epic scope**, create an **unplanned progress branch**:
+
+```bash
+git checkout milestone/M<N>  # or other stable branch
+git checkout -b unplanned/<topic-slug>
+# Make commits capturing your ideas
+```
+
+**Examples:**
+- Template improvements discovered while writing specs
+- Governance clarifications identified during execution
+- Documentation refinements that help future users
+
+Unplanned branches are reviewed during planning and integrated via future Epics. See PROJECT-SYSTEM-GUIDELINES.md section 8A for details.
+
+---
+
 ## Quick Start Workflow
 
 ### Starting a New Project
