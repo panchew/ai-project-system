@@ -740,15 +740,20 @@ git push origin milestone/M1
 | **Epic Delivery Notice** | Chat message from agent documenting completion |
 | **Epic Review Seal** | Document capturing human review findings |
 | **Canonical Happy Path** | Standard Epic lifecycle: Plan → Execute → Deliver → Review → Accept → Merge → Close |
+| **Unplanned Progress Branch** | Git branch for exploratory work outside current Epic scope; reviewed during planning, integrated via future Epic |
 
 ### Branch Naming
 
 ```
-master                  (production)
-  └── phase/P1         (long-lived)
-      └── milestone/M1 (long-lived)
-          └── epic/E1.1 (short-lived)
+master                      (production)
+  └── phase/P1             (long-lived)
+      └── milestone/M1     (long-lived)
+          └── epic/E1.1     (short-lived)
+
+unplanned/<topic-slug>  (exploratory work, integrated via future Epic)
 ```
+
+**Note:** If you encounter ideas during execution that fall outside Epic scope, create an `unplanned/<topic>` branch to capture them. See PROJECT-SYSTEM-GUIDELINES.md section 8A.
 
 ### File Naming
 
