@@ -150,6 +150,42 @@ The system is **scalable down**. You don't need to use every feature for every p
 
 **Guideline:** The Epic workflow is for planned work. Emergencies bypass process, but require post-hoc documentation.
 
+### What if I have an idea during execution that's out of scope?
+
+**Use an unplanned progress branch.**
+
+During execution, you may encounter ideas, improvements, or refinements that add value but fall outside current Epic scope:
+- Template improvements
+- Governance clarifications  
+- Documentation refinements
+- Feature ideas for future work
+
+**Don't break scope discipline.** Instead:
+
+1. **Create an unplanned branch:**
+   ```bash
+   git checkout milestone/M<N>  # or other stable branch
+   git checkout -b unplanned/<topic-slug>
+   ```
+
+2. **Commit your exploratory work** to the unplanned branch
+
+3. **Continue your original Epic** without scope creep
+
+4. **During planning**, HQ reviews unplanned branches and decides:
+   - Create Epic to integrate the work
+   - Defer for later
+   - Discard explicitly
+
+**Benefits:**
+- Preserves creative insights without breaking execution discipline
+- Creates feedback loop from execution → planning
+- Stays within governance (no ungoverned commits)
+
+**See also:**
+- PROJECT-SYSTEM-GUIDELINES.md section 8A — Unplanned Progress Branches
+- AI-OPERATING-GUIDELINES.md section 3.3 — HQ Planning and Unplanned Branches
+
 ---
 
 ## Technical
