@@ -199,6 +199,74 @@ These rules override conventional Git workflows.
 
 ---
 
+## 8A. Unplanned Progress Branches
+
+**Purpose:** Capture exploratory work, creative insights, and improvements that emerge during execution but fall outside current Epic scope, without breaking execution discipline.
+
+Unplanned Progress Branches provide a Git-native mechanism for preserving ideas and work that need planning integration before acceptance.
+
+### Branch Naming
+
+```
+unplanned/<topic-slug>
+```
+
+Examples:
+- `unplanned/template-refinements`
+- `unplanned/governance-clarifications`
+- `unplanned/example-improvements`
+
+### Authority
+
+Unplanned branches are **proposals**, not accepted work.
+
+- Work in unplanned branches has no authority until explicitly integrated via Epic execution
+- Unplanned branches MUST NOT be merged directly to milestone, phase, or develop branches
+- Integration MUST occur through a planned Epic with explicit integration strategy
+
+### Lifecycle
+
+1. **Creation**: When insight or improvement emerges during execution, create `unplanned/<topic>` from a stable branch (develop, phase, or milestone)
+2. **Work**: Commit exploratory work, ideas, and improvements to the unplanned branch
+3. **Planning Review**: During HQ planning sessions, unplanned branches are reviewed for potential integration
+4. **Integration**: HQ creates an Epic to integrate the work; Epic spec defines integration strategy
+5. **Closure**: After successful integration OR explicit rejection, the unplanned branch is deleted
+
+### Rules
+
+- MUST be created from a stable branch (develop, phase/*, or milestone/*)
+- MUST be scoped to a coherent topic (not a dumping ground for unrelated work)
+- MUST NOT merge directly to any governed branch
+- MUST be reviewed by HQ during planning
+- MUST be integrated via Epic execution only
+- MUST stay open until fully integrated or explicitly discarded (no automatic expiration)
+
+### Distinction from Epic Branches
+
+| Aspect | Epic Branch | Unplanned Branch |
+|--------|-------------|------------------|
+| **Authority** | Authoritative (spec-driven) | Proposal (needs planning) |
+| **Scope** | Defined in Epic spec | Exploratory, emergent |
+| **Entry** | Epic spec MUST exist first | Created when insight emerges |
+| **Integration** | Promoted via branch hierarchy | Integrated via Epic execution |
+| **Lifecycle** | Created → Execute → PR → Merge → Delete | Created → Review → Epic plans integration → Delete |
+
+### Example Workflow
+
+1. **During Epic E3.5 execution**, a developer notices template improvements that would help users
+2. **Insight is out of scope** for E3.5 (correctly — scope discipline is preserved)
+3. **Developer creates** `unplanned/template-refinements` from `milestone/M3`
+4. **Developer commits** improvements to unplanned branch (5 commits)
+5. **During M4 planning**, HQ asks: "Any unplanned branches to review?"
+6. **Human reports** `unplanned/template-refinements` exists with template improvements
+7. **HQ reviews** commits and proposes integration
+8. **HQ creates Epic E4.3**: "Integrate Template Refinements"
+9. **Epic spec defines strategy**: Cherry-pick commits 2, 3, 5 from `unplanned/template-refinements`
+10. **Coding Agent executes E4.3**: Reads unplanned branch, cherry-picks specified commits to `epic/E4.3`
+11. **After E4.3 closes**: `unplanned/template-refinements` is deleted (work fully integrated)
+
+---
+
 ## 9. Documentation ↔ Branch Alignment
 
 - Every active epic branch MUST have a corresponding epic spec

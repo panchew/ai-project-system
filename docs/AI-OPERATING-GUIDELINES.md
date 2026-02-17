@@ -87,6 +87,84 @@ Coding Agent chats are **authoritative for execution**, not for intent.
 
 ---
 
+### 3.3 HQ Planning and Unplanned Progress Branches
+
+During milestone or phase planning, HQ Chats MUST check for and review unplanned progress branches.
+
+#### HQ Planning Behavior
+
+When conducting planning (milestone or phase scope), HQ MUST:
+
+1. **Ask about unplanned branches**: "Are there any unplanned progress branches to review?"
+2. **Request branch listing**: Ask human to provide `unplanned/*` branch names
+3. **Review each branch**:
+   - Ask human to describe the branch intent and key commits
+   - Review commits if branch content is accessible
+   - Assess alignment with project goals
+4. **Propose integration approach** for each branch:
+   - **Create Epic to integrate**: Define Epic with integration strategy
+   - **Defer**: Branch stays open for future planning cycle
+   - **Discard**: Branch is closed without integration (explicit decision documented)
+
+#### Epic Specification Requirements for Unplanned Branch Integration
+
+When an Epic is created to integrate work from an unplanned branch, the Epic spec MUST include:
+
+1. **Branch reference**: Explicit name of the unplanned branch (e.g., `unplanned/template-refinements`)
+2. **Integration strategy**: How the work will be integrated:
+   - **Cherry-pick**: List specific commits or commit ranges to cherry-pick
+   - **Full merge**: Merge entire branch history
+   - **Partial integration**: Describe what subset of work to extract and how
+   - **Reimplementation**: Reimplement concepts from scratch with reference to unplanned branch
+3. **Branch closure**: Specify whether unplanned branch should be deleted after Epic completion
+
+**Example (in Epic spec):**
+
+```markdown
+## Integration Strategy
+
+This Epic integrates work from `unplanned/template-refinements`.
+
+**Approach:** Cherry-pick commits from unplanned branch
+
+**Commits to integrate:**
+- `abc1234` — Add epic-review-seal.md template
+- `def5678` — Refine epic-completion-report.md structure
+- `ghi9012` — Add examples to epic-spec.md template
+
+**Branch closure:** Delete `unplanned/template-refinements` after Epic completion.
+```
+
+#### Coding Agent Integration Behavior
+
+When executing an Epic that integrates an unplanned branch, Coding Agents MUST:
+
+1. **Read unplanned branch**: Access commits and content from the specified unplanned branch
+2. **Follow integration strategy exactly**: Execute the strategy defined in the Epic spec
+   - If cherry-pick: Use `git cherry-pick` for specified commits
+   - If full merge: Merge branch (though this should be rare given promotion rules)
+   - If partial: Extract and implement specified subset
+   - If reimplementation: Reference unplanned branch but write new code
+3. **Work in Epic branch**: All integration work happens in the Epic branch (e.g., `epic/E4.3`)
+4. **Do NOT modify unplanned branch**: Unplanned branch remains unchanged during integration
+5. **Report integration**: Document which commits/work were integrated in Epic Delivery Notice
+6. **Branch closure**: Delete unplanned branch after Epic closes ONLY if Epic spec specifies deletion
+
+#### Branch Lifecycle
+
+Unplanned branches have an **explicit lifecycle**:
+
+- **Open**: Branch exists with commits; awaits planning review
+- **Under Review**: HQ is evaluating during planning
+- **Scheduled for Integration**: Epic created to integrate the work
+- **Integrated**: Work fully absorbed into governed branch; branch deleted
+- **Deferred**: Stays open for future planning cycle
+- **Discarded**: Explicitly rejected; branch deleted without integration
+
+**Critical Rule:** Unplanned branches MUST stay open until they are fully integrated OR explicitly discarded. There is no automatic expiration.
+
+---
+
 ## 4. Authority Hierarchy
 
 AI must respect the following authority order:
