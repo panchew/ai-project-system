@@ -208,13 +208,16 @@ Unplanned Progress Branches provide a Git-native mechanism for preserving ideas 
 ### Branch Naming
 
 ```
-unplanned/<topic-slug>
+unplanned/<descriptive-slug>
 ```
+
+Branch names should be descriptive but not restrictive. Single-topic names (e.g., `unplanned/delivery-notice-improvements`) and multi-topic names (e.g., `unplanned/m5-explorations`, `unplanned/governance-clarifications`) are both valid. The slug helps identify the general area of work but does not constrain scope.
 
 Examples:
 - `unplanned/template-refinements`
 - `unplanned/governance-clarifications`
 - `unplanned/example-improvements`
+- `unplanned/m5-explorations`
 
 ### Authority
 
@@ -227,7 +230,7 @@ Unplanned branches are **proposals**, not accepted work.
 ### Lifecycle
 
 1. **Creation**: When insight or improvement emerges during execution, create `unplanned/<topic>` from a stable branch (develop, phase, or milestone)
-2. **Work**: Commit exploratory work, ideas, and improvements to the unplanned branch
+2. **Work**: Commits are made freely to capture ideas, prototypes, improvements across any topics. Multi-topic drift is allowed and expected. When ready to return to governance, organize commits by scope (via rebase, commit splitting, reordering, or clear commit messages) to facilitate cherry-picking during integration. Freedom during exploration, discipline during integration.
 3. **Planning Review**: During HQ planning sessions, unplanned branches are reviewed for potential integration
 4. **Integration**: HQ creates an Epic to integrate the work; Epic spec defines integration strategy
 5. **Closure**: After successful integration OR explicit rejection, the unplanned branch is deleted
@@ -235,7 +238,9 @@ Unplanned branches are **proposals**, not accepted work.
 ### Rules
 
 - MUST be created from a stable branch (develop, phase/*, or milestone/*)
-- MUST be scoped to a coherent topic (not a dumping ground for unrelated work)
+- MUST contain meaningful work (not a dumping ground for random unrelated commits)
+- MAY contain multi-topic exploratory work
+- Organization by scope happens before integration, not during exploration
 - MUST NOT merge directly to any governed branch
 - MUST be reviewed by HQ during planning
 - MUST be integrated via Epic execution only
@@ -257,9 +262,11 @@ Unplanned branches are **proposals**, not accepted work.
 2. **Insight is out of scope** for E3.5 (correctly — scope discipline is preserved)
 3. **Developer creates** `unplanned/template-refinements` from `milestone/M3`
 4. **Developer commits** improvements to unplanned branch (5 commits)
-5. **During M4 planning**, HQ asks: "Any unplanned branches to review?"
+   - (Branch may accumulate commits across multiple topics — this is expected)
+5. **During M4 planning**, HQ asks: "Are there any unplanned branches to review?"
 6. **Human reports** `unplanned/template-refinements` exists with template improvements
 7. **HQ reviews** commits and proposes integration
+   - (If branch contains multi-topic work, HQ may create multiple Epics, each cherry-picking relevant commits)
 8. **HQ creates Epic E4.3**: "Integrate Template Refinements"
 9. **Epic spec defines strategy**: Cherry-pick commits 2, 3, 5 from `unplanned/template-refinements`
 10. **Coding Agent executes E4.3**: Reads unplanned branch, cherry-picks specified commits to `epic/E4.3`
