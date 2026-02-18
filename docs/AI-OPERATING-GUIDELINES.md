@@ -1,7 +1,7 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 1.3.0  
+**Version:** 1.3.1  
 **Effective Date:** 2026-02-17  
 **Status:** Current  
 
@@ -101,7 +101,8 @@ When conducting planning (milestone or phase scope), HQ MUST:
    - Ask human to describe the branch intent and key commits
    - Review commits if branch content is accessible
    - Assess alignment with project goals
-4. **Propose integration approach** for each branch:
+4. **Identify scope groupings**: If branch contains multi-topic work, identify logical commit groupings by scope. Propose separate Epics for distinct topics, each cherry-picking relevant commits.
+5. **Propose integration approach** for each branch:
    - **Create Epic to integrate**: Define Epic with integration strategy
    - **Defer**: Branch stays open for future planning cycle
    - **Discard**: Branch is closed without integration (explicit decision documented)
@@ -117,6 +118,11 @@ When an Epic is created to integrate work from an unplanned branch, the Epic spe
    - **Partial integration**: Describe what subset of work to extract and how
    - **Reimplementation**: Reimplement concepts from scratch with reference to unplanned branch
 3. **Branch closure**: Specify whether unplanned branch should be deleted after Epic completion
+
+**For multi-topic unplanned branches:**
+- HQ may create multiple Epics to integrate different aspects
+- Each Epic cherry-picks commits relevant to its scope
+- Epic specs must clearly document which commits are integrated
 
 **Example (in Epic spec):**
 
