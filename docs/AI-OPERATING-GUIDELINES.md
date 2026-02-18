@@ -1,7 +1,7 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 1.3.0  
+**Version:** 1.3.1  
 **Effective Date:** 2026-02-17  
 **Status:** Current  
 

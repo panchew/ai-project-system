@@ -1,7 +1,7 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 1.4.0  
+**Version:** 1.4.1  
 **Effective Date:** 2026-02-17  
 **Status:** Current  
 
