@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 1.4.1  
-**Effective Date:** 2026-02-17  
+**Version:** 1.5.0  
+**Effective Date:** 2026-02-18  
 **Status:** Current  
 
 ---
@@ -137,6 +137,141 @@ Front-matter is not required for:
 - Templates
 
 Execution context MUST be derivable from front-matter.
+
+---
+
+## 5B. Milestone Closure
+
+Milestone closure is the process of consolidating a completed milestone's work into the parent branch and formally declaring the milestone fully closed.
+
+### Milestone Closure vs. Completion
+
+**Two distinct states:**
+
+- **Milestone complete:** All planned Epics for the milestone are executed, reviewed, accepted, and merged to the milestone branch. All milestone completion criteria (from milestone spec) are satisfied.
+
+- **Milestone fully closed:** Milestone complete AND consolidated into parent branch via merged PR. The milestone branch work is now part of the canonical branch hierarchy.
+
+**A milestone can be "complete" without being "fully closed."** Full closure requires consolidation.
+
+---
+
+### 7-Step Milestone Closure Process
+
+Milestone closure follows a structured process parallel to Epic closure:
+
+**Step 1: All Epics Complete**
+- All planned Epics for the milestone are executed
+- All Epics reviewed and accepted by HQ
+- All Epic branches merged to milestone branch
+- Milestone branch contains all milestone work
+
+**Step 2: HQ Declares Milestone Complete**
+- HQ Chat evaluates milestone completion criteria (from milestone spec)
+- Verifies each criterion is satisfied
+- Declares "Milestone <id> complete" with verification checklist
+- Documents milestone summary
+
+**Step 3: PR Created**
+- Create Pull Request: `milestone/<id>` → parent branch
+- Parent branch determined by branch hierarchy (see below)
+- PR title: "Milestone <id>: <Milestone Name>"
+- PR description includes milestone summary and Epic list
+
+**Step 4: Human Reviews Consolidation**
+- Human reviews PR to verify all milestone work is present
+- Confirms branch hierarchy is correct
+- Verifies no conflicts or missing work
+- Approves consolidation
+
+**Step 5: Merge Completes**
+- PR merged after human approval
+- Milestone work now consolidated into parent branch
+- Merge commit becomes milestone closure commit
+
+**Step 6: Milestone Declared Fully Closed**
+- HQ declares "Milestone <id> fully closed"
+- Records closure date and merge commit
+- Confirms branch hierarchy preserved
+
+**Step 7: Next Milestone Branch Created**
+- Next milestone branch created from merged parent branch
+- Ensures next milestone starts from clean baseline
+- Branch name: `milestone/<next-id>`
+
+---
+
+### Branch Hierarchy Consolidation
+
+Milestone closure consolidates work up the branch hierarchy:
+
+```
+epic/E<id> → milestone/M<id> → phase/P<id> → develop/main
+           (Epic closure)    (Milestone      (Phase
+                             closure)         closure)
+```
+
+**Consolidation rules:**
+- **Epic branches** merge to **milestone branches** (Epic closure)
+- **Milestone branches** merge to **phase branches** OR **develop/main** (Milestone closure)
+- **Phase branches** merge to **develop** or **main** (Phase closure - future work)
+
+**Each level requires explicit PR and human review.** No automatic promotion.
+
+---
+
+### Parent Branch Determination
+
+When closing a milestone, determine the parent branch:
+
+**If phase branch exists:**
+- Milestone merges to phase branch: `milestone/M<id>` → `phase/P<id>`
+- Next milestone branches from same phase branch
+
+**If no phase branch exists:**
+- Milestone merges to `develop` or `main` (project-specific)
+- Next milestone branches from same target (`develop` or `main`)
+
+**Rule:** Next milestone MUST branch from the same parent where previous milestone merged.
+
+---
+
+### Example: Milestone M4 Closure
+
+**Context:** Milestone M4 (System Refinement) completed 2026-02-17 with 4 Epics (E4.1-E4.4).
+
+**Closure workflow:**
+
+1. **All Epics complete:** E4.1, E4.2, E4.3, E4.4 executed, accepted, merged to `milestone/M4`
+2. **HQ declares M4 complete:** HQ evaluated M4 completion criteria, all satisfied
+3. **PR created:** `milestone/M4` → `phase/P1` (Phase 1 branch exists)
+4. **Human reviews:** Verified all M4 work present, no conflicts
+5. **Merge completes:** PR merged (commit `1784fe0`)
+6. **M4 declared fully closed:** Milestone M4 fully closed 2026-02-17
+7. **M5 branch created:** `milestone/M5` created from `phase/P1` (merged parent)
+
+**Key insight:** M4 closure exposed the need for explicit milestone closure process (this Epic formalizes that process).
+
+---
+
+### Milestone Closure Authority
+
+- **HQ Chat** declares milestone complete (evaluates criteria)
+- **Human** reviews and approves consolidation PR
+- **HQ Chat** declares milestone fully closed (after merge)
+- **Coding Agent** does NOT close milestones (authority belongs to HQ and human)
+
+---
+
+### No Uncommitted Work at Closure
+
+At milestone closure (Step 6), the milestone branch MUST have:
+- All Epic branches merged
+- All commits consolidated
+- No uncommitted changes
+- Clean working tree
+
+**Uncommitted work blocks closure.** All work must be committed and merged before milestone is declared fully closed.
 
 ---
 

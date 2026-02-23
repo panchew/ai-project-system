@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 1.3.1  
-**Effective Date:** 2026-02-17  
+**Version:** 1.4.0  
+**Effective Date:** 2026-02-18  
 **Status:** Current  
 
 ---
@@ -168,6 +168,242 @@ Unplanned branches have an **explicit lifecycle**:
 - **Discarded**: Explicitly rejected; branch deleted without integration
 
 **Critical Rule:** Unplanned branches MUST stay open until they are fully integrated OR explicitly discarded. There is no automatic expiration.
+
+---
+
+### 3.4 Milestone Closure
+
+Milestone closure is the process by which HQ Chat declares a milestone complete, prompts for consolidation, and confirms full closure after merge.
+
+**Key distinction:** Milestone closure is parallel to Epic closure but operates at the milestone level (consolidating Epic work into parent branch).
+
+---
+
+#### When Milestone Closure Begins
+
+Milestone closure begins when:
+- All planned Epics for the milestone are complete (executed, reviewed, accepted, merged)
+- All milestone completion criteria (from milestone spec) are satisfied
+- HQ Chat evaluates milestone status
+
+**Trigger:** HQ Chat SHOULD proactively check milestone status when the last planned Epic is closed.
+
+---
+
+#### HQ Chat Milestone Closure Behavior (6 Steps)
+
+When all milestone Epics are complete, HQ Chat MUST execute this process:
+
+**Step 1: Evaluate Completion Criteria**
+- Review milestone spec completion criteria section
+- Verify each criterion is satisfied
+- Document which criteria are met (or not met)
+- Do NOT proceed if any criterion unsatisfied
+
+**Step 2: Check Epic Status**
+- Verify all planned Epics are executed
+- Confirm all Epics reviewed and accepted
+- Confirm all Epic branches merged to milestone branch
+- List all completed Epics with status
+
+**Step 3: Declare Milestone Complete**
+- Issue explicit declaration: "Milestone <id> complete"
+- Provide structured verification checklist
+- Include milestone summary (brief description of what was delivered)
+
+**Step 4: Prompt for Consolidation**
+- Inform human that milestone consolidation is required
+- Provide PR guidance:
+  - Source branch: `milestone/<id>`
+  - Target branch: `<parent-branch>` (identify phase branch or develop/main)
+  - PR title suggestion: "Milestone <id>: <Milestone Name>"
+  - PR description guidance: Include milestone summary and Epic list
+- Do NOT create PR automatically (human owns this step)
+
+**Step 5: After Merge — Declare Fully Closed**
+- Once human confirms PR merged, declare "Milestone <id> fully closed"
+- Record closure date
+- Record merge commit SHA
+- Confirm branch hierarchy preserved
+
+**Step 6: Confirm Next Milestone Branch Created**
+- Verify next milestone branch created from merged parent
+- Branch name: `milestone/<next-id>`
+- Confirm branching from correct parent (where previous milestone merged)
+
+---
+
+#### Milestone Closure Declaration Format
+
+When declaring milestone complete (Step 3), HQ Chat MUST use this structured format:
+
+```markdown
+# MILESTONE CLOSURE DECLARATION — M<id>
+
+**Milestone:** M<id> — <Milestone Name>
+**Status:** COMPLETE (awaiting consolidation) ✅
+**Completion Date:** YYYY-MM-DD
+**Declared By:** HQ Chat
+
+## Completion Verification
+
+✅ **All Epics complete:**
+- E<id>: <Epic Name> — merged to milestone/<id>
+- E<id>: <Epic Name> — merged to milestone/<id>
+- E<id>: <Epic Name> — merged to milestone/<id>
+[List all Epics]
+
+✅ **All Epics accepted:** Human review approved for all Epics
+
+✅ **Milestone criteria satisfied:**
+- [Criterion 1]: ✅ Satisfied
+- [Criterion 2]: ✅ Satisfied
+- [Criterion 3]: ✅ Satisfied
+[List all criteria from milestone spec]
+
+## Milestone Summary
+
+[2-4 sentence summary of what was delivered in this milestone]
+
+## Required Action: Consolidation
+
+**To fully close this milestone, consolidation is required:**
+
+1. Create Pull Request:
+   - Source: `milestone/<id>`
+   - Target: `<parent-branch>` [Identify: phase/<id> or develop or main]
+   - Title: "Milestone <id>: <Milestone Name>"
+   - Description: Include milestone summary and Epic list above
+
+2. Human reviews consolidation PR
+
+3. Merge PR (become milestone closure commit)
+
+4. Report merge commit SHA back to HQ
+
+**Next milestone (`milestone/<next-id>`) MUST branch from `<parent-branch>` after merge.**
+```
+
+After merge is confirmed, HQ Chat issues a **Fully Closed Declaration:**
+
+```markdown
+# MILESTONE FULLY CLOSED — M<id>
+
+**Milestone:** M<id> — <Milestone Name>
+**Status:** CLOSED ✅
+**Closure Date:** YYYY-MM-DD
+**Closed By:** HQ Chat
+**Merge Commit:** <sha>
+
+## Closure Confirmation
+
+✅ PR created: `milestone/<id>` → `<parent-branch>`
+✅ PR merged: Consolidation commit `<sha>`
+✅ Branch hierarchy preserved: Milestone work now in `<parent-branch>`
+✅ Milestone declared fully closed
+
+## Next Steps
+
+- Create `milestone/<next-id>` from `<parent-branch>` branch
+- Begin planning for Milestone <next-id>
+```
+
+---
+
+#### Completion Criteria Evaluation (Critical)
+
+HQ Chat MUST rigorously evaluate milestone completion criteria before declaring complete.
+
+**Required behavior:**
+1. Read milestone spec completion criteria section
+2. Evaluate EACH criterion individually
+3. Document verification for each criterion (satisfied or not)
+4. Only declare complete if ALL criteria satisfied
+5. If any criterion unsatisfied, do NOT declare complete — instead, identify missing work
+
+**Example evaluation:**
+
+```markdown
+## Completion Criteria Evaluation
+
+From milestone spec (P1-M5__milestone.md):
+
+1. ✅ **All 3 Epics complete:** E5.1, E5.2, E5.3 executed and accepted
+2. ✅ **Governance updated:** PROJECT-SYSTEM-GUIDELINES.md and AI-OPERATING-GUIDELINES.md include new sections
+3. ✅ **Real usage feedback integrated:** Governance gaps from M4 closure addressed
+4. ✅ **System refinement complete:** Templates and guidance improved based on M4 experience
+
+All criteria satisfied. Milestone M5 is complete.
+```
+
+**If criteria not satisfied:**
+
+```markdown
+## Completion Criteria Evaluation
+
+From milestone spec (P1-M5__milestone.md):
+
+1. ✅ **All 3 Epics complete:** E5.1, E5.2, E5.3 executed and accepted
+2. ❌ **Governance updated:** E5.3 not yet complete
+3. ⚠️ **Real usage feedback integrated:** Partially complete (E5.3 pending)
+
+Milestone M5 is NOT complete. E5.3 must be completed before milestone closure.
+```
+
+---
+
+#### Milestone Closure vs. Epic Closure (Parallel Structure)
+
+Milestone closure mirrors Epic closure:
+
+| Step | Epic Closure | Milestone Closure |
+|------|--------------|-------------------|
+| **Completion** | All DoD items verified | All Epics complete, criteria satisfied |
+| **Declaration** | Coding Agent declares execution complete | HQ declares milestone complete |
+| **Consolidation Prompt** | Coding Agent produces Delivery Notice | HQ prompts for PR and consolidation |
+| **Human Review** | Human reviews Epic work | Human reviews consolidation PR |
+| **Authorization** | HQ authorizes delivery | Human approves merge |
+| **Merge** | Epic branch → milestone branch | Milestone branch → parent branch |
+| **Closure** | Epic declared closed | Milestone declared fully closed |
+| **Next Step** | Next Epic can begin | Next milestone branches from parent |
+
+**Key parallel:** Both require explicit consolidation via PR, human review, and formal closure declaration.
+
+---
+
+#### Authority and Responsibility
+
+- **HQ Chat** owns milestone completion evaluation and closure declaration
+- **Human** owns consolidation PR review and approval
+- **Coding Agent** does NOT close milestones (out of scope for Coding Agents)
+
+**HQ Chat MUST NOT:**
+- Infer milestone complete without evaluating criteria
+- Skip consolidation step
+- Declare fully closed before merge confirmed
+- Create next milestone branch without confirming correct parent
+
+---
+
+#### Edge Cases and Clarifications
+
+**What if milestone has unmerged Epic branches?**
+- Milestone is NOT complete
+- HQ must ensure all Epic branches merged before declaring complete
+
+**What if phase branch does not exist?**
+- Milestone merges to `develop` or `main` (project-specific convention)
+- HQ must identify correct target and document decision
+
+**What if next milestone already exists?**
+- This indicates process failure (next milestone should not exist until previous milestone fully closed)
+- HQ must investigate and correct branch hierarchy
+
+**What if human rejects consolidation PR?**
+- Milestone remains "complete but not fully closed"
+- Human identifies issues
+- HQ creates follow-up Epic(s) to address issues
+- Consolidation retried after follow-ups complete
 
 ---
 
