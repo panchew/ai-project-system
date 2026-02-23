@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 1.4.0  
-**Effective Date:** 2026-02-18  
+**Version:** 1.4.1  
+**Effective Date:** 2026-02-22  
 **Status:** Current  
 
 ---
@@ -72,6 +72,47 @@ HQ chats:
 - Do NOT perform implementation
 
 HQ chats are **authoritative for intent**, not for code.
+
+#### 3.1.1 Epic Execution Chat Starter Format
+
+When HQ Chat produces an Epic Execution Chat Starter, it MUST:
+
+1. **Present in markdown code block:**
+   - Use four backticks (````) to fence the code block
+   - Ensures code blocks inside chat starter (triple backticks) are properly escaped
+   
+2. **Include filename in header:**
+   - Format: `name=<epic-id>-epic-execution-chat-starter.md`
+   - Example: `name=E5.1-epic-execution-chat-starter.md`
+   - Helps users identify and save the file if needed
+
+3. **Use markdown language identifier:**
+   - Specify `markdown` as language for proper syntax highlighting
+   - Full header format: ````markdown name=<epic-id>-epic-execution-chat-starter.md`
+
+4. **Provide brief instruction:**
+   - After code block, include: "Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
+   - Clear call-to-action for user
+
+**Rationale:** Code blocks provide clear visual boundaries, enable one-click copying, and prevent incomplete content selection. This significantly improves user experience when starting Epic execution.
+
+**Example:**
+
+`````markdown name=E5.1-epic-execution-chat-starter.md
+## EPIC EXECUTION CHAT STARTER
+
+### MANDATORY CONTEXT PACKET
+
+**Project:** ai-project-system
+[... full chat starter content ...]
+```
+`````
+
+Copy the entire chat starter above and paste into your Coding Agent chat to begin execution.
+
+**Scope:**
+- **Applies to:** Epic Execution Chat Starters produced by HQ Chat
+- **Does NOT apply to:** Normal HQ responses, Epic specs, Coding Agent outputs, or other governance documents
 
 ---
 
