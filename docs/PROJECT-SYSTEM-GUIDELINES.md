@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 1.3.0  
-**Effective Date:** 2026-01-17  
+**Version:** 1.5.0  
+**Effective Date:** 2026-02-18  
 **Status:** Current  
 
 ---
@@ -140,6 +140,141 @@ Execution context MUST be derivable from front-matter.
 
 ---
 
+## 5B. Milestone Closure
+
+Milestone closure is the process of consolidating a completed milestone's work into the parent branch and formally declaring the milestone fully closed.
+
+### Milestone Closure vs. Completion
+
+**Two distinct states:**
+
+- **Milestone complete:** All planned Epics for the milestone are executed, reviewed, accepted, and merged to the milestone branch. All milestone completion criteria (from milestone spec) are satisfied.
+
+- **Milestone fully closed:** Milestone complete AND consolidated into parent branch via merged PR. The milestone branch work is now part of the canonical branch hierarchy.
+
+**A milestone can be "complete" without being "fully closed."** Full closure requires consolidation.
+
+---
+
+### 7-Step Milestone Closure Process
+
+Milestone closure follows a structured process parallel to Epic closure:
+
+**Step 1: All Epics Complete**
+- All planned Epics for the milestone are executed
+- All Epics reviewed and accepted by HQ
+- All Epic branches merged to milestone branch
+- Milestone branch contains all milestone work
+
+**Step 2: HQ Declares Milestone Complete**
+- HQ Chat evaluates milestone completion criteria (from milestone spec)
+- Verifies each criterion is satisfied
+- Declares "Milestone <id> complete" with verification checklist
+- Documents milestone summary
+
+**Step 3: PR Created**
+- Create Pull Request: `milestone/<id>` → parent branch
+- Parent branch determined by branch hierarchy (see below)
+- PR title: "Milestone <id>: <Milestone Name>"
+- PR description includes milestone summary and Epic list
+
+**Step 4: Human Reviews Consolidation**
+- Human reviews PR to verify all milestone work is present
+- Confirms branch hierarchy is correct
+- Verifies no conflicts or missing work
+- Approves consolidation
+
+**Step 5: Merge Completes**
+- PR merged after human approval
+- Milestone work now consolidated into parent branch
+- Merge commit becomes milestone closure commit
+
+**Step 6: Milestone Declared Fully Closed**
+- HQ declares "Milestone <id> fully closed"
+- Records closure date and merge commit
+- Confirms branch hierarchy preserved
+
+**Step 7: Next Milestone Branch Created**
+- Next milestone branch created from merged parent branch
+- Ensures next milestone starts from clean baseline
+- Branch name: `milestone/<next-id>`
+
+---
+
+### Branch Hierarchy Consolidation
+
+Milestone closure consolidates work up the branch hierarchy:
+
+```
+epic/E<id> → milestone/M<id> → phase/P<id> → develop/main
+           (Epic closure)    (Milestone      (Phase
+                             closure)         closure)
+```
+
+**Consolidation rules:**
+- **Epic branches** merge to **milestone branches** (Epic closure)
+- **Milestone branches** merge to **phase branches** OR **develop/main** (Milestone closure)
+- **Phase branches** merge to **develop** or **main** (Phase closure - future work)
+
+**Each level requires explicit PR and human review.** No automatic promotion.
+
+---
+
+### Parent Branch Determination
+
+When closing a milestone, determine the parent branch:
+
+**If phase branch exists:**
+- Milestone merges to phase branch: `milestone/M<id>` → `phase/P<id>`
+- Next milestone branches from same phase branch
+
+**If no phase branch exists:**
+- Milestone merges to `develop` or `main` (project-specific)
+- Next milestone branches from same target (`develop` or `main`)
+
+**Rule:** Next milestone MUST branch from the same parent where previous milestone merged.
+
+---
+
+### Example: Milestone M4 Closure
+
+**Context:** Milestone M4 (System Refinement) completed 2026-02-17 with 4 Epics (E4.1-E4.4).
+
+**Closure workflow:**
+
+1. **All Epics complete:** E4.1, E4.2, E4.3, E4.4 executed, accepted, merged to `milestone/M4`
+2. **HQ declares M4 complete:** HQ evaluated M4 completion criteria, all satisfied
+3. **PR created:** `milestone/M4` → `phase/P1` (Phase 1 branch exists)
+4. **Human reviews:** Verified all M4 work present, no conflicts
+5. **Merge completes:** PR merged (commit `1784fe0`)
+6. **M4 declared fully closed:** Milestone M4 fully closed 2026-02-17
+7. **M5 branch created:** `milestone/M5` created from `phase/P1` (merged parent)
+
+**Key insight:** M4 closure exposed the need for explicit milestone closure process (this Epic formalizes that process).
+
+---
+
+### Milestone Closure Authority
+
+- **HQ Chat** declares milestone complete (evaluates criteria)
+- **Human** reviews and approves consolidation PR
+- **HQ Chat** declares milestone fully closed (after merge)
+- **Coding Agent** does NOT close milestones (authority belongs to HQ and human)
+
+---
+
+### No Uncommitted Work at Closure
+
+At milestone closure (Step 6), the milestone branch MUST have:
+- All Epic branches merged
+- All commits consolidated
+- No uncommitted changes
+- Clean working tree
+
+**Uncommitted work blocks closure.** All work must be committed and merged before milestone is declared fully closed.
+
+---
+
 ## 6. File Naming Conventions
 
 Epic-level files:
@@ -196,6 +331,81 @@ phase/*     → develop
 - If the correct target branch does not exist, execution MUST pause for clarification
 
 These rules override conventional Git workflows.
+
+---
+
+## 8A. Unplanned Progress Branches
+
+**Purpose:** Capture exploratory work, creative insights, and improvements that emerge during execution but fall outside current Epic scope, without breaking execution discipline.
+
+Unplanned Progress Branches provide a Git-native mechanism for preserving ideas and work that need planning integration before acceptance.
+
+### Branch Naming
+
+```
+unplanned/<descriptive-slug>
+```
+
+Branch names should be descriptive but not restrictive. Single-topic names (e.g., `unplanned/delivery-notice-improvements`) and multi-topic names (e.g., `unplanned/m5-explorations`, `unplanned/governance-clarifications`) are both valid. The slug helps identify the general area of work but does not constrain scope.
+
+Examples:
+- `unplanned/template-refinements`
+- `unplanned/governance-clarifications`
+- `unplanned/example-improvements`
+- `unplanned/m5-explorations`
+
+### Authority
+
+Unplanned branches are **proposals**, not accepted work.
+
+- Work in unplanned branches has no authority until explicitly integrated via Epic execution
+- Unplanned branches MUST NOT be merged directly to milestone, phase, or develop branches
+- Integration MUST occur through a planned Epic with explicit integration strategy
+
+### Lifecycle
+
+1. **Creation**: When insight or improvement emerges during execution, create `unplanned/<topic>` from a stable branch (develop, phase, or milestone)
+2. **Work**: Commits are made freely to capture ideas, prototypes, improvements across any topics. Multi-topic drift is allowed and expected. When ready to return to governance, organize commits by scope (via rebase, commit splitting, reordering, or clear commit messages) to facilitate cherry-picking during integration. Freedom during exploration, discipline during integration.
+3. **Planning Review**: During HQ planning sessions, unplanned branches are reviewed for potential integration
+4. **Integration**: HQ creates an Epic to integrate the work; Epic spec defines integration strategy
+5. **Closure**: After successful integration OR explicit rejection, the unplanned branch is deleted
+
+### Rules
+
+- MUST be created from a stable branch (develop, phase/*, or milestone/*)
+- MUST contain meaningful work (not a dumping ground for random unrelated commits)
+- MAY contain multi-topic exploratory work
+- Organization by scope happens before integration, not during exploration
+- MUST NOT merge directly to any governed branch
+- MUST be reviewed by HQ during planning
+- MUST be integrated via Epic execution only
+- MUST stay open until fully integrated or explicitly discarded (no automatic expiration)
+
+### Distinction from Epic Branches
+
+| Aspect | Epic Branch | Unplanned Branch |
+|--------|-------------|------------------|
+| **Authority** | Authoritative (spec-driven) | Proposal (needs planning) |
+| **Scope** | Defined in Epic spec | Exploratory, emergent |
+| **Entry** | Epic spec MUST exist first | Created when insight emerges |
+| **Integration** | Promoted via branch hierarchy | Integrated via Epic execution |
+| **Lifecycle** | Created → Execute → PR → Merge → Delete | Created → Review → Epic plans integration → Delete |
+
+### Example Workflow
+
+1. **During Epic E3.5 execution**, a developer notices template improvements that would help users
+2. **Insight is out of scope** for E3.5 (correctly — scope discipline is preserved)
+3. **Developer creates** `unplanned/template-refinements` from `milestone/M3`
+4. **Developer commits** improvements to unplanned branch (5 commits)
+   - (Branch may accumulate commits across multiple topics — this is expected)
+5. **During M4 planning**, HQ asks: "Are there any unplanned branches to review?"
+6. **Human reports** `unplanned/template-refinements` exists with template improvements
+7. **HQ reviews** commits and proposes integration
+   - (If branch contains multi-topic work, HQ may create multiple Epics, each cherry-picking relevant commits)
+8. **HQ creates Epic E4.3**: "Integrate Template Refinements"
+9. **Epic spec defines strategy**: Cherry-pick commits 2, 3, 5 from `unplanned/template-refinements`
+10. **Coding Agent executes E4.3**: Reads unplanned branch, cherry-picks specified commits to `epic/E4.3`
+11. **After E4.3 closes**: `unplanned/template-refinements` is deleted (work fully integrated)
 
 ---
 
