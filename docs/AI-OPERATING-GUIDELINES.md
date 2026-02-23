@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 1.2.0  
-**Effective Date:** 2026-01-17  
+**Version:** 1.4.1  
+**Effective Date:** 2026-02-22  
 **Status:** Current  
 
 ---
@@ -73,6 +73,47 @@ HQ chats:
 
 HQ chats are **authoritative for intent**, not for code.
 
+#### 3.1.1 Epic Execution Chat Starter Format
+
+When HQ Chat produces an Epic Execution Chat Starter, it MUST:
+
+1. **Present in markdown code block:**
+   - Use four backticks (````) to fence the code block
+   - Ensures code blocks inside chat starter (triple backticks) are properly escaped
+   
+2. **Include filename in header:**
+   - Format: `name=<epic-id>-epic-execution-chat-starter.md`
+   - Example: `name=E5.1-epic-execution-chat-starter.md`
+   - Helps users identify and save the file if needed
+
+3. **Use markdown language identifier:**
+   - Specify `markdown` as language for proper syntax highlighting
+   - Full header format: ````markdown name=<epic-id>-epic-execution-chat-starter.md`
+
+4. **Provide brief instruction:**
+   - After code block, include: "Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
+   - Clear call-to-action for user
+
+**Rationale:** Code blocks provide clear visual boundaries, enable one-click copying, and prevent incomplete content selection. This significantly improves user experience when starting Epic execution.
+
+**Example:**
+
+`````markdown name=E5.1-epic-execution-chat-starter.md
+## EPIC EXECUTION CHAT STARTER
+
+### MANDATORY CONTEXT PACKET
+
+**Project:** ai-project-system
+[... full chat starter content ...]
+```
+`````
+
+Copy the entire chat starter above and paste into your Coding Agent chat to begin execution.
+
+**Scope:**
+- **Applies to:** Epic Execution Chat Starters produced by HQ Chat
+- **Does NOT apply to:** Normal HQ responses, Epic specs, Coding Agent outputs, or other governance documents
+
 ---
 
 ### 3.2 Coding Agent Chats
@@ -84,6 +125,326 @@ Coding Agent chats:
 - Must conclude autonomously when work is complete
 
 Coding Agent chats are **authoritative for execution**, not for intent.
+
+---
+
+### 3.3 HQ Planning and Unplanned Progress Branches
+
+During milestone or phase planning, HQ Chats MUST check for and review unplanned progress branches.
+
+#### HQ Planning Behavior
+
+When conducting planning (milestone or phase scope), HQ MUST:
+
+1. **Ask about unplanned branches**: "Are there any unplanned progress branches to review?"
+2. **Request branch listing**: Ask human to provide `unplanned/*` branch names
+3. **Review each branch**:
+   - Ask human to describe the branch intent and key commits
+   - Review commits if branch content is accessible
+   - Assess alignment with project goals
+4. **Identify scope groupings**: If branch contains multi-topic work, identify logical commit groupings by scope. Propose separate Epics for distinct topics, each cherry-picking relevant commits.
+5. **Propose integration approach** for each branch:
+   - **Create Epic to integrate**: Define Epic with integration strategy
+   - **Defer**: Branch stays open for future planning cycle
+   - **Discard**: Branch is closed without integration (explicit decision documented)
+
+#### Epic Specification Requirements for Unplanned Branch Integration
+
+When an Epic is created to integrate work from an unplanned branch, the Epic spec MUST include:
+
+1. **Branch reference**: Explicit name of the unplanned branch (e.g., `unplanned/template-refinements`)
+2. **Integration strategy**: How the work will be integrated:
+   - **Cherry-pick**: List specific commits or commit ranges to cherry-pick
+   - **Full merge**: Merge entire branch history
+   - **Partial integration**: Describe what subset of work to extract and how
+   - **Reimplementation**: Reimplement concepts from scratch with reference to unplanned branch
+3. **Branch closure**: Specify whether unplanned branch should be deleted after Epic completion
+
+**For multi-topic unplanned branches:**
+- HQ may create multiple Epics to integrate different aspects
+- Each Epic cherry-picks commits relevant to its scope
+- Epic specs must clearly document which commits are integrated
+
+**Example (in Epic spec):**
+
+```markdown
+## Integration Strategy
+
+This Epic integrates work from `unplanned/template-refinements`.
+
+**Approach:** Cherry-pick commits from unplanned branch
+
+**Commits to integrate:**
+- `abc1234` — Add epic-review-seal.md template
+- `def5678` — Refine epic-completion-report.md structure
+- `ghi9012` — Add examples to epic-spec.md template
+
+**Branch closure:** Delete `unplanned/template-refinements` after Epic completion.
+```
+
+#### Coding Agent Integration Behavior
+
+When executing an Epic that integrates an unplanned branch, Coding Agents MUST:
+
+1. **Read unplanned branch**: Access commits and content from the specified unplanned branch
+2. **Follow integration strategy exactly**: Execute the strategy defined in the Epic spec
+   - If cherry-pick: Use `git cherry-pick` for specified commits
+   - If full merge: Merge branch (though this should be rare given promotion rules)
+   - If partial: Extract and implement specified subset
+   - If reimplementation: Reference unplanned branch but write new code
+3. **Work in Epic branch**: All integration work happens in the Epic branch (e.g., `epic/E4.3`)
+4. **Do NOT modify unplanned branch**: Unplanned branch remains unchanged during integration
+5. **Report integration**: Document which commits/work were integrated in Epic Delivery Notice
+6. **Branch closure**: Delete unplanned branch after Epic closes ONLY if Epic spec specifies deletion
+
+#### Branch Lifecycle
+
+Unplanned branches have an **explicit lifecycle**:
+
+- **Open**: Branch exists with commits; awaits planning review
+- **Under Review**: HQ is evaluating during planning
+- **Scheduled for Integration**: Epic created to integrate the work
+- **Integrated**: Work fully absorbed into governed branch; branch deleted
+- **Deferred**: Stays open for future planning cycle
+- **Discarded**: Explicitly rejected; branch deleted without integration
+
+**Critical Rule:** Unplanned branches MUST stay open until they are fully integrated OR explicitly discarded. There is no automatic expiration.
+
+---
+
+### 3.4 Milestone Closure
+
+Milestone closure is the process by which HQ Chat declares a milestone complete, prompts for consolidation, and confirms full closure after merge.
+
+**Key distinction:** Milestone closure is parallel to Epic closure but operates at the milestone level (consolidating Epic work into parent branch).
+
+---
+
+#### When Milestone Closure Begins
+
+Milestone closure begins when:
+- All planned Epics for the milestone are complete (executed, reviewed, accepted, merged)
+- All milestone completion criteria (from milestone spec) are satisfied
+- HQ Chat evaluates milestone status
+
+**Trigger:** HQ Chat SHOULD proactively check milestone status when the last planned Epic is closed.
+
+---
+
+#### HQ Chat Milestone Closure Behavior (6 Steps)
+
+When all milestone Epics are complete, HQ Chat MUST execute this process:
+
+**Step 1: Evaluate Completion Criteria**
+- Review milestone spec completion criteria section
+- Verify each criterion is satisfied
+- Document which criteria are met (or not met)
+- Do NOT proceed if any criterion unsatisfied
+
+**Step 2: Check Epic Status**
+- Verify all planned Epics are executed
+- Confirm all Epics reviewed and accepted
+- Confirm all Epic branches merged to milestone branch
+- List all completed Epics with status
+
+**Step 3: Declare Milestone Complete**
+- Issue explicit declaration: "Milestone <id> complete"
+- Provide structured verification checklist
+- Include milestone summary (brief description of what was delivered)
+
+**Step 4: Prompt for Consolidation**
+- Inform human that milestone consolidation is required
+- Provide PR guidance:
+  - Source branch: `milestone/<id>`
+  - Target branch: `<parent-branch>` (identify phase branch or develop/main)
+  - PR title suggestion: "Milestone <id>: <Milestone Name>"
+  - PR description guidance: Include milestone summary and Epic list
+- Do NOT create PR automatically (human owns this step)
+
+**Step 5: After Merge — Declare Fully Closed**
+- Once human confirms PR merged, declare "Milestone <id> fully closed"
+- Record closure date
+- Record merge commit SHA
+- Confirm branch hierarchy preserved
+
+**Step 6: Confirm Next Milestone Branch Created**
+- Verify next milestone branch created from merged parent
+- Branch name: `milestone/<next-id>`
+- Confirm branching from correct parent (where previous milestone merged)
+
+---
+
+#### Milestone Closure Declaration Format
+
+When declaring milestone complete (Step 3), HQ Chat MUST use this structured format:
+
+```markdown
+# MILESTONE CLOSURE DECLARATION — M<id>
+
+**Milestone:** M<id> — <Milestone Name>
+**Status:** COMPLETE (awaiting consolidation) ✅
+**Completion Date:** YYYY-MM-DD
+**Declared By:** HQ Chat
+
+## Completion Verification
+
+✅ **All Epics complete:**
+- E<id>: <Epic Name> — merged to milestone/<id>
+- E<id>: <Epic Name> — merged to milestone/<id>
+- E<id>: <Epic Name> — merged to milestone/<id>
+[List all Epics]
+
+✅ **All Epics accepted:** Human review approved for all Epics
+
+✅ **Milestone criteria satisfied:**
+- [Criterion 1]: ✅ Satisfied
+- [Criterion 2]: ✅ Satisfied
+- [Criterion 3]: ✅ Satisfied
+[List all criteria from milestone spec]
+
+## Milestone Summary
+
+[2-4 sentence summary of what was delivered in this milestone]
+
+## Required Action: Consolidation
+
+**To fully close this milestone, consolidation is required:**
+
+1. Create Pull Request:
+   - Source: `milestone/<id>`
+   - Target: `<parent-branch>` [Identify: phase/<id> or develop or main]
+   - Title: "Milestone <id>: <Milestone Name>"
+   - Description: Include milestone summary and Epic list above
+
+2. Human reviews consolidation PR
+
+3. Merge PR (become milestone closure commit)
+
+4. Report merge commit SHA back to HQ
+
+**Next milestone (`milestone/<next-id>`) MUST branch from `<parent-branch>` after merge.**
+```
+
+After merge is confirmed, HQ Chat issues a **Fully Closed Declaration:**
+
+```markdown
+# MILESTONE FULLY CLOSED — M<id>
+
+**Milestone:** M<id> — <Milestone Name>
+**Status:** CLOSED ✅
+**Closure Date:** YYYY-MM-DD
+**Closed By:** HQ Chat
+**Merge Commit:** <sha>
+
+## Closure Confirmation
+
+✅ PR created: `milestone/<id>` → `<parent-branch>`
+✅ PR merged: Consolidation commit `<sha>`
+✅ Branch hierarchy preserved: Milestone work now in `<parent-branch>`
+✅ Milestone declared fully closed
+
+## Next Steps
+
+- Create `milestone/<next-id>` from `<parent-branch>` branch
+- Begin planning for Milestone <next-id>
+```
+
+---
+
+#### Completion Criteria Evaluation (Critical)
+
+HQ Chat MUST rigorously evaluate milestone completion criteria before declaring complete.
+
+**Required behavior:**
+1. Read milestone spec completion criteria section
+2. Evaluate EACH criterion individually
+3. Document verification for each criterion (satisfied or not)
+4. Only declare complete if ALL criteria satisfied
+5. If any criterion unsatisfied, do NOT declare complete — instead, identify missing work
+
+**Example evaluation:**
+
+```markdown
+## Completion Criteria Evaluation
+
+From milestone spec (P1-M5__milestone.md):
+
+1. ✅ **All 3 Epics complete:** E5.1, E5.2, E5.3 executed and accepted
+2. ✅ **Governance updated:** PROJECT-SYSTEM-GUIDELINES.md and AI-OPERATING-GUIDELINES.md include new sections
+3. ✅ **Real usage feedback integrated:** Governance gaps from M4 closure addressed
+4. ✅ **System refinement complete:** Templates and guidance improved based on M4 experience
+
+All criteria satisfied. Milestone M5 is complete.
+```
+
+**If criteria not satisfied:**
+
+```markdown
+## Completion Criteria Evaluation
+
+From milestone spec (P1-M5__milestone.md):
+
+1. ✅ **All 3 Epics complete:** E5.1, E5.2, E5.3 executed and accepted
+2. ❌ **Governance updated:** E5.3 not yet complete
+3. ⚠️ **Real usage feedback integrated:** Partially complete (E5.3 pending)
+
+Milestone M5 is NOT complete. E5.3 must be completed before milestone closure.
+```
+
+---
+
+#### Milestone Closure vs. Epic Closure (Parallel Structure)
+
+Milestone closure mirrors Epic closure:
+
+| Step | Epic Closure | Milestone Closure |
+|------|--------------|-------------------|
+| **Completion** | All DoD items verified | All Epics complete, criteria satisfied |
+| **Declaration** | Coding Agent declares execution complete | HQ declares milestone complete |
+| **Consolidation Prompt** | Coding Agent produces Delivery Notice | HQ prompts for PR and consolidation |
+| **Human Review** | Human reviews Epic work | Human reviews consolidation PR |
+| **Authorization** | HQ authorizes delivery | Human approves merge |
+| **Merge** | Epic branch → milestone branch | Milestone branch → parent branch |
+| **Closure** | Epic declared closed | Milestone declared fully closed |
+| **Next Step** | Next Epic can begin | Next milestone branches from parent |
+
+**Key parallel:** Both require explicit consolidation via PR, human review, and formal closure declaration.
+
+---
+
+#### Authority and Responsibility
+
+- **HQ Chat** owns milestone completion evaluation and closure declaration
+- **Human** owns consolidation PR review and approval
+- **Coding Agent** does NOT close milestones (out of scope for Coding Agents)
+
+**HQ Chat MUST NOT:**
+- Infer milestone complete without evaluating criteria
+- Skip consolidation step
+- Declare fully closed before merge confirmed
+- Create next milestone branch without confirming correct parent
+
+---
+
+#### Edge Cases and Clarifications
+
+**What if milestone has unmerged Epic branches?**
+- Milestone is NOT complete
+- HQ must ensure all Epic branches merged before declaring complete
+
+**What if phase branch does not exist?**
+- Milestone merges to `develop` or `main` (project-specific convention)
+- HQ must identify correct target and document decision
+
+**What if next milestone already exists?**
+- This indicates process failure (next milestone should not exist until previous milestone fully closed)
+- HQ must investigate and correct branch hierarchy
+
+**What if human rejects consolidation PR?**
+- Milestone remains "complete but not fully closed"
+- Human identifies issues
+- HQ creates follow-up Epic(s) to address issues
+- Consolidation retried after follow-ups complete
 
 ---
 
