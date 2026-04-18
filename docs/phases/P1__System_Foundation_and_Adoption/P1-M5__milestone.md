@@ -3,8 +3,8 @@ project: ai-project-system
 phase: P1
 milestone: M5
 type: milestone
-status: planned
-last_updated: 2026-02-06
+status: fully_closed
+last_updated: 2026-04-18
 ---
 
 # Milestone M5 — System Refinement from Real Usage
