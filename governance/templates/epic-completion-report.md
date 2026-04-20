@@ -100,7 +100,7 @@ All deliverables are complete and ready for human review.
 <!-- Example:
 ### Deliverable 1: Integration Format Specification
 
-**File/Location:** `/docs/systems/project-tracker-integration.md`  
+**File/Location:** `/governance/systems/project-tracker-integration.md`  
 **Status:** ✅ Complete  
 **Description:** Documented standard format for Epic metadata in external trackers  
 **Notes:** Includes field mappings, status values, and metadata structure
@@ -156,7 +156,7 @@ Referencing the Epic <E#.#> spec Definition of Done:
 Referencing the Epic E1.1 spec Definition of Done:
 
 ✅ **Integration format specification is documented**
-- Created `/docs/systems/project-tracker-integration.md`
+- Created `/governance/systems/project-tracker-integration.md`
 - Document includes field mappings, status values, and metadata structure
 
 ✅ **GitHub Projects integration guide is complete**

@@ -19,7 +19,7 @@ Turn AI coding assistants into reliable project executors through structured spe
 **Phase P1 Closed:** 2026-02-23  
 **Consolidation PR:** [#21](https://github.com/panchew/ai-project-system/pull/21)
 
-👉 **[Start using the system now](docs/QUICK-START.md)**
+👉 **[Start using the system now](governance/guides/QUICK-START.md)**
 
 ---
 
@@ -134,7 +134,7 @@ Every Epic has explicit completion criteria:
 
 **New to the system?** Get started in 30 minutes:
 
-👉 **[Read the Quick Start Guide](docs/QUICK-START.md)**
+👉 **[Read the Quick Start Guide](governance/guides/QUICK-START.md)**
 
 The guide walks you through:
 1. Initializing repository structure
@@ -151,36 +151,36 @@ The guide walks you through:
 
 **Understand the system visually:**
 
-- 🔄 **[Epic Lifecycle Flow](docs/diagrams/epic-lifecycle-flow.md)** — How Epics move from idea to closure
-- 📊 **[Authority Hierarchy](docs/diagrams/authority-hierarchy.md)** — Which documents have precedence
-- 📁 **[Repository Structure](docs/diagrams/repository-structure.md)** — Where everything lives
+- 🔄 **[Epic Lifecycle Flow](governance/diagrams/epic-lifecycle-flow.md)** — How Epics move from idea to closure
+- 📊 **[Authority Hierarchy](governance/diagrams/authority-hierarchy.md)** — Which documents have precedence
+- 📁 **[Repository Structure](governance/diagrams/repository-structure.md)** — Where everything lives
 
 ---
 
 ## Documentation Map
 
 ### **New Users**
-- 🚀 [Quick Start Guide](docs/QUICK-START.md) — 30-minute walkthrough
-- 📖 [PROJECT-SYSTEM-GUIDELINES.md](docs/PROJECT-SYSTEM-GUIDELINES.md) — System structure and governance
-- 🤖 [AI-OPERATING-GUIDELINES.md](docs/AI-OPERATING-GUIDELINES.md) — Execution procedures
-- 🎨 [Visual Diagrams](docs/diagrams/) — Epic lifecycle, authority, structure
+- 🚀 [Quick Start Guide](governance/guides/QUICK-START.md) — 30-minute walkthrough
+- 📖 [PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md) — System structure and governance
+- 🤖 [AI-OPERATING-GUIDELINES.md](governance/AI-OPERATING-GUIDELINES.md) — Execution procedures
+- 🎨 [Visual Diagrams](governance/diagrams/) — Epic lifecycle, authority, structure
 
 ### **Creating Projects**
-- 🏗️ [How to Start a Project](docs/systems/start-a-project.md) — Initialize new projects
-- 📝 [Templates](docs/templates/) — Phase, Milestone, Epic templates
-- 📋 [Template Usage Guide](docs/templates/README.md) — How to use templates
+- 🏗️ [How to Start a Project](governance/systems/start-a-project.md) — Initialize new projects
+- 📝 [Templates](governance/templates/) — Phase, Milestone, Epic templates
+- 📋 [Template Usage Guide](governance/templates/README.md) — How to use templates
 
 ### **Executing Work**
-- ⚙️ [Epic Execution Chat Starter System](docs/systems/epic-execution-chat-starter.md) — How to run Epics
-- 👔 [HQ Chat Guide](docs/systems/hq-chat.md) — Human responsibilities
+- ⚙️ [Epic Execution Chat Starter System](governance/systems/epic-execution-chat-starter.md) — How to run Epics
+- 👔 [HQ Chat Guide](governance/systems/hq-chat.md) — Human responsibilities
 
 ### **Examples**
 - 📚 [Phase P1 Examples](docs/phases/P1__System_Foundation_and_Adoption/) — Real Epic specs and completions
 - 🔍 See how this system was built using itself
 
 ### **Reference**
-- 🏛️ [Governance Propagation](docs/systems/governance-propagation.md) — How governance flows
-- 🗺️ [Project Tracker Integration](docs/systems/PROJECT-TRACKER-INTEGRATION-SYSTEM.md) — Tracker usage
+- 🏛️ [Governance Propagation](governance/systems/governance-propagation.md) — How governance flows
+- 🗺️ [Project Tracker Integration](governance/systems/PROJECT-TRACKER-INTEGRATION-SYSTEM.md) — Tracker usage
 
 ---
 
@@ -262,17 +262,17 @@ Make decision:
 ## Getting Started (Recommended Path)
 
 **Option 1: Jump Right In (30 minutes)**
-- 👉 **[Quick Start Guide](docs/QUICK-START.md)** — Learn by doing
+- 👉 **[Quick Start Guide](governance/guides/QUICK-START.md)** — Learn by doing
 
 **Option 2: Understand First, Then Practice**
 1. **Read governance**
-   - [PROJECT-SYSTEM-GUIDELINES.md](docs/PROJECT-SYSTEM-GUIDELINES.md) — System structure (15 min)
-   - [AI-OPERATING-GUIDELINES.md](docs/AI-OPERATING-GUIDELINES.md) — Execution procedures (10 min)
+   - [PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md) — System structure (15 min)
+   - [AI-OPERATING-GUIDELINES.md](governance/AI-OPERATING-GUIDELINES.md) — Execution procedures (10 min)
 2. **See visual overview**
-   - [Epic Lifecycle Flow](docs/diagrams/epic-lifecycle-flow.md) — How Epics work (5 min)
-   - [Authority Hierarchy](docs/diagrams/authority-hierarchy.md) — Document precedence (5 min)
+   - [Epic Lifecycle Flow](governance/diagrams/epic-lifecycle-flow.md) — How Epics work (5 min)
+   - [Authority Hierarchy](governance/diagrams/authority-hierarchy.md) — Document precedence (5 min)
 3. **Start a project**
-   - [How to Start a Project](docs/systems/start-a-project.md) — Step-by-step initialization
+   - [How to Start a Project](governance/systems/start-a-project.md) — Step-by-step initialization
 
 **You don't need to read everything to begin.**  
 The system is designed to be learned incrementally.
@@ -297,8 +297,8 @@ This repository **dogfooded its own system** — the AI Project System was built
   - ✅ M5 — System Refinement from Real Usage
 
 **Governance:** 
-- PROJECT-SYSTEM-GUIDELINES.md v1.5.0 (effective 2026-02-18)
-- AI-OPERATING-GUIDELINES.md v1.4.1 (effective 2026-02-22)
+- PROJECT-SYSTEM-GUIDELINES.md v2.0.0 (effective 2026-04-20)
+- AI-OPERATING-GUIDELINES.md v2.0.0 (effective 2026-04-20)
 
 **Next Phase:** Phase P2 scope to be determined based on adoption feedback
 
@@ -328,8 +328,8 @@ If there is ever a conflict, **documentation wins**.
 
 **Authority Hierarchy (highest to lowest):**
 
-1. **[PROJECT-SYSTEM-GUIDELINES.md](docs/PROJECT-SYSTEM-GUIDELINES.md)** — System structure, file conventions, core concepts
-2. **[AI-OPERATING-GUIDELINES.md](docs/AI-OPERATING-GUIDELINES.md)** — Execution procedures, agent responsibilities
+1. **[PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md)** — System structure, file conventions, core concepts
+2. **[AI-OPERATING-GUIDELINES.md](governance/AI-OPERATING-GUIDELINES.md)** — Execution procedures, agent responsibilities
 3. **Epic Execution Chat Starter** — Epic-specific instructions
 4. **Epic Spec** — Problem statement, goals, deliverables
 5. **Execution Decisions** — Real-time implementation choices
@@ -338,7 +338,7 @@ If there is ever a conflict, **documentation wins**.
 
 **Golden Rule:** Documentation is authoritative. Chat is ephemeral. If there's conflict, **higher-level docs win**.
 
-See [Authority Hierarchy Diagram](docs/diagrams/authority-hierarchy.md) for visual explanation.
+See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) for visual explanation.
 
 ---
 
@@ -406,8 +406,8 @@ This system is designed to improve through real usage experience. We especially 
 
 ## Questions?
 
-- 📖 **Start here:** [Quick Start Guide](docs/QUICK-START.md)
-- ❓ **FAQ:** [Frequently Asked Questions](docs/FAQ.md)
-- 🎨 **Visualize:** [Diagrams](docs/diagrams/)
+- 📖 **Start here:** [Quick Start Guide](governance/guides/QUICK-START.md)
+- ❓ **FAQ:** [Frequently Asked Questions](governance/guides/FAQ.md)
+- 🎨 **Visualize:** [Diagrams](governance/diagrams/)
 - 🔍 **Examples:** [Phase P1 Epics](docs/phases/P1__System_Foundation_and_Adoption/)
 - 💬 **Ask:** [Open an issue](https://github.com/panchew/ai-project-system/issues)

@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 1.4.1  
-**Effective Date:** 2026-02-22  
+**Version:** 2.0.0  
+**Effective Date:** 2026-04-20  
 **Status:** Current  
 
 ---
@@ -656,7 +656,7 @@ The Epic Review Seal captures:
 - Issues identified (if any)
 - An explicit request for HQ decision: **Accept as-is**, **Accept with follow-up Epic(s)**, or **Reject and create new Epic(s)**
 
-Example Epic Review Seal structure (see docs/templates/epic-review-seal.md for canonical form):
+Example Epic Review Seal structure (see governance/templates/epic-review-seal.md for canonical form):
 
 ```
 ---
@@ -732,3 +732,12 @@ AI is a force multiplier only when it is constrained.
 
 Clarity is kindness.  
 Constraints enable autonomy.
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---|---|---|
+| 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated template path references. |
+| 1.4.1 | 2026-02-22 | Previous version — governance lived in `docs/`. |
