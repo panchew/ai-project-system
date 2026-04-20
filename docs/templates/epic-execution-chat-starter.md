@@ -9,7 +9,18 @@
   1. Copy this template
   2. Replace all <placeholders> with actual content
   3. Delete HTML comments (or keep for reference)
-  4. Paste into chat with Coding Agent
+  4. The entire filled-in content MUST be wrapped in a fenced markdown code block
+     when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
+
+         ````markdown name=<E#.#>-epic-execution-chat-starter.md
+         [filled-in content here]
+         ````
+
+     This preserves markdown formatting when the starter is copy-pasted into a
+     Coding Agent chat. The four-backtick fence escapes any triple-backtick code
+     blocks inside the content.
+  5. After the code block, add the canonical copy instruction:
+     "Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
   
   This template aligns with AI-OPERATING-GUIDELINES.md and PROJECT-SYSTEM-GUIDELINES.md.
 -->

@@ -5,22 +5,29 @@ milestone: null
 epic: null
 type: phase
 status: active
-last_updated: 2026-02-23
+last_updated: 2026-04-18
 ---
 
 # Phase P2 — Adoption Architecture & Multi-Project Support
 
 ## Purpose
 
-**Enable the AI Project System to be adopted, maintained, and evolved across multiple external projects.**
+**Enable the AI Project System to be adopted, maintained, and evolved across multiple external projects — with a CLI-backed, agent-driven experience from day one.**
 
 Phase P2 transforms the system from a **single-project governance framework** (dogfooded in `panchew/ai-project-system`) into a **multi-project infrastructure** that supports:
-- External project adoption with governance sync
-- Project-specific configuration and overrides
-- Canonical project initialization
+- Governance isolated from project documentation and referenceable via git submodule
+- Project-specific configuration and overrides via `.ai-project.yml`
+- Canonical project initialization via a `ai-project init` CLI tool
+- An HQ Chat agent (VS Code Copilot custom agent) that reads `.ai-project.yml` and instantiates itself as the project's control room
 - Hierarchical documentation that scales
 
-**Phase P1 proved the system works.** Phase P2 makes it adoptable.
+**Phase P1 proved the system works.** Phase P2 makes it adoptable and launchable in minutes.
+
+### North Star User Story
+
+> As a developer, I open GitHub Copilot Chat in VS Code and indicate that I want to start a project using the AI Project System governance method. This instantiates the current chat as an HQ Chat for that project — allowing me to start the project from scratch with full governance, hitting the ground running.
+
+The `ai-project init` CLI tool scaffolds the project structure and installs governance agent files so the HQ Chat agent is ready the moment VS Code opens.
 
 ---
 
@@ -42,16 +49,22 @@ Phase P1 governance was designed for dogfooding within `panchew/ai-project-syste
 ### **Problem 3: No Canonical Project Initialization**
 - No standardized way to spin up a new project
 - Manual setup is error-prone and tedious
-- No template for Coding Agents to initialize projects
+- No CLI tool to scaffold structure and install governance agent files
 - High friction for adoption
 
-### **Problem 4: No Override Mechanism**
+### **Problem 4: No HQ Chat Agent**
+- HQ Chat is a conceptual role, not a concrete VS Code agent
+- Developers must manually configure chat behavior and context
+- No automatic governance loading from `.ai-project.yml`
+- No canonical "start a project" entry point
+
+### **Problem 5: No Override Mechanism**
 - One-size-fits-all governance doesn't work
 - Projects need flexibility (branching strategy, naming conventions, merge strategy)
 - No way to override conventions without forking governance
 - Forces projects to abandon governance or ignore rules
 
-### **Problem 5: Flat Documentation Doesn't Scale**
+### **Problem 6: Flat Documentation Doesn't Scale**
 - Current structure: `docs/phases/P1-M1-E1.1__spec.md` (flat folder)
 - Deep projects create file explosion in single directory
 - Visual structure doesn't match logical hierarchy
@@ -71,26 +84,36 @@ By the end of Phase P2, the system must:
    - Clear distinction between system rules and project artifacts
 
 2. **Enable governance sync and versioning**
-   - Projects declare governance source and version
+   - Projects declare governance source and version in `.ai-project.yml`
    - Governance updates propagate to adopting projects
    - Governance version pinning prevents breaking changes
 
-3. **Provide canonical project initialization**
-   - Standardized project structure template
-   - Coding Agent can initialize new projects from chat starter
-   - Projects start with correct structure and governance reference
+3. **Provide canonical project initialization via CLI**
+   - `ai-project init` CLI scaffolds project structure and installs governance agent files
+   - Hierarchical documentation structure created automatically
+   - `.ai-project.yml` written with correct governance reference
+   - Project is ready to open HQ Chat immediately after init
 
-4. **Support project-specific overrides**
-   - Projects can override conventions (branching, naming, merge strategy)
+4. **Deliver a governance-aware HQ Chat agent**
+   - `hq.agent.md` shipped as part of the governance package
+   - HQ agent reads `.ai-project.yml` on startup: governance source, version, overrides
+   - HQ agent produces: Phase specs, Milestone specs, Epic specs, Chat Starters
+   - Selecting the `hq` agent in VS Code Copilot Chat instantiates HQ mode
+   - Canonical "start a project" prompt defined
+   - HQ agent tool access: read + write doc files only (no terminal, no code execution)
+
+5. **Support project-specific overrides**
+   - Projects can override conventions (branching, naming, merge strategy) via `.ai-project.yml`
    - Override precedence clearly defined (governance → config → local)
    - Override boundaries documented (what can vs. cannot be overridden)
+   - HQ agent reads and applies overrides
 
-5. **Implement hierarchical documentation structure**
+6. **Implement hierarchical documentation structure**
    - Phases contain milestones, milestones contain Epics (visual matches logical)
    - `docs/phases/P1/milestones/M1/epics/` folder hierarchy
    - Scales to deep projects without flat file explosion
 
-6. **Validate multi-project adoption**
+7. **Validate multi-project adoption**
    - At least 2 projects using Phase P2 architecture
    - Governance sync tested across projects
    - Adoption process documented and validated
@@ -101,15 +124,16 @@ By the end of Phase P2, the system must:
 
 Phase P2 explicitly does **not** aim to:
 
-- **Build CLI tooling** — Manual processes still validate concepts (deferred to future phase)
+- **Build Phase/Milestone chat agents** — HQ agent only; Phase and Milestone agents (with full handoff chains and terminal access) deferred to P3
 - **Create web UI** — Not needed for core adoption architecture
-- **Implement automation** — Validation, linting, CI/CD deferred to future work
+- **Implement automated validation** — Governance linting, CI/CD deferred to future work
 - **Support team collaboration** — Multi-user patterns deferred to future phase
 - **Integrate with external tools** — Jira, Linear, Notion sync deferred
 - **Build observability/metrics** — Project health dashboards deferred
 - **Create public adoption program** — Community case studies deferred
+- **Complete closure artifact model** — Phase/Milestone completion report templates and formal PR-merge-as-agent-responsibility deferred to P3
 
-**Focus:** Make the system architecturally sound for multi-project adoption. Tooling and community come later.
+**Focus:** Make the system architecturally sound and launchable for multi-project adoption. The full agent hierarchy (Phase/Milestone/Epic agents with handoffs) is P3.
 
 ---
 
@@ -118,14 +142,21 @@ Phase P2 explicitly does **not** aim to:
 ### **Governance Architecture**
 - Move governance files to `/governance` folder in source repository
 - Define git submodule pattern for external projects
-- Create `.ai-project.yml` specification
+- Create `.ai-project.yml` specification (governance source, version, overrides)
 - Update source repository structure
 
-### **Project Initialization**
-- Project initialization chat starter template
-- Hierarchical documentation structure (`phases/milestones/epics/`)
-- File naming conventions for hierarchy
-- Project structure validation
+### **CLI Initialization Tool**
+- `ai-project init` command scaffolds project structure
+- Installs `.github/agents/hq.agent.md` from governance source
+- Writes `.ai-project.yml` referencing governance
+- Creates hierarchical `docs/phases/milestones/epics/` structure
+
+### **HQ Chat Agent**
+- `hq.agent.md` shipped as part of governance package in `/governance/agents/`
+- Reads `.ai-project.yml` for governance source, version, active overrides
+- Produces Phase specs, Milestone specs, Epic specs, Chat Starters as doc files
+- Canonical "start a project" prompt that initializes HQ Chat context
+- Tool access: read files + create/write doc files only (no terminal)
 
 ### **Configuration & Overrides**
 - `.ai-project.yml` format and specification
@@ -135,13 +166,13 @@ Phase P2 explicitly does **not** aim to:
 
 ### **Adoption Validation**
 - Migrate `ai-project-system` to Phase P2 architecture
-- Adopt Phase P2 architecture in external project
+- Adopt Phase P2 architecture in at least one external project
 - Test governance sync and updates
 - Document adoption process
 
 ### **Documentation Updates**
 - PROJECT-SYSTEM-GUIDELINES.md v2.0.0 (breaking changes)
-- AI-OPERATING-GUIDELINES.md updates for overrides
+- AI-OPERATING-GUIDELINES.md updates for HQ agent behavior and overrides
 - Migration guide (Phase P1 → Phase P2 structure)
 - Adoption guide for new projects
 
@@ -149,8 +180,15 @@ Phase P2 explicitly does **not** aim to:
 
 ## Out of Scope
 
+### **Deferred to P3 — Execution Model Maturity**
+- Phase Chat agent (`phase.agent.md`) with terminal access for closures
+- Milestone Chat agent (`milestone.agent.md`) with terminal access for closures
+- Full handoff chain (HQ → Phase → Milestone → Epic agents)
+- Phase/Milestone completion report templates
+- PR merge formalized as agent responsibility at Phase and Milestone level
+- Parent-gating rules (phase chat only opens after HQ produces starter)
+
 ### **Deferred to Future Phases**
-- CLI tooling (`ai-project init`, `ai-project sync`)
 - Automated validation (governance health checks, lint rules)
 - Team collaboration (multi-user, concurrent Epics)
 - External integrations (project trackers, CI/CD)
@@ -165,61 +203,88 @@ Phase P2 explicitly does **not** aim to:
 
 ---
 
+## Execution Bootstrap Note
+
+> **Phase P2 is self-referential.** The Phase Execution Chat Starter and Milestone Execution Chat Starter are deliverables of this Phase (M6 — E6.6 and E6.7). They cannot be used to launch Phase P2 itself because they don't exist yet.
+
+**Governance exception for Phase P2:** Milestone M6 is executed under the prior-art model — HQ Chat produces Epic Execution Chat Starters directly, bypassing the Phase Chat and Milestone Chat layers. This is not a workaround; it is the correct and only coherent behavior when the tools being built are not yet available.
+
+**Starting with M7:** The full four-level hierarchy (HQ → Phase Chat → Milestone Chat → Coding Agent) is available and MUST be used for all milestones from M7 onward.
+
+This bootstrap exception is a documented precedent: any Phase that delivers new chat-layer infrastructure is permitted to execute under the previous layer's model for the milestone(s) that create that infrastructure.
+
+---
+
 ## Planned Milestones
 
-### **M6 — Governance Separation & External Reference Model**
-**Purpose:** Separate governance from project documentation, enable external projects to reference governance.
+### **M6 — Governance Separation & `.ai-project.yml`**
+**Purpose:** Separate governance from project documentation and define the project configuration contract.
 
 **Key deliverables:**
 - Governance files moved to `/governance` folder
-- `.ai-project.yml` specification
+- `.ai-project.yml` specification (governance source, version, overrides)
 - Git submodule setup instructions
-- Migration guide
+- Migration guide (P1 → P2 structure)
 - Source repository restructured
 
-**Exit criteria:** External project can reference governance via git submodule
+**Exit criteria:** External project can reference governance via git submodule; `.ai-project.yml` spec is complete
 
 ---
 
-### **M7 — Project Initialization & Hierarchical Documentation**
-**Purpose:** Enable canonical project initialization and implement hierarchical documentation structure.
+### **M7 — CLI Initialization Tool**
+**Purpose:** Enable one-command project initialization with governance and agent files ready.
 
 **Key deliverables:**
-- Project initialization chat starter template
-- Hierarchical `docs/phases/milestones/epics/` structure
-- Updated PROJECT-SYSTEM-GUIDELINES.md (section 3)
-- Migration scripts for flat → hierarchical
-- Tested project initialization
+- `ai-project init` CLI command (shell script or Node.js)
+- Scaffolds hierarchical `docs/` structure
+- Installs `.github/agents/hq.agent.md` from governance source
+- Writes `.ai-project.yml` referencing governance
+- Tested end-to-end on a new project
 
-**Exit criteria:** Coding Agent can initialize new project from chat starter with correct structure
+**Exit criteria:** `ai-project init my-project` produces a repo where HQ Chat agent is immediately usable
 
 ---
 
-### **M8 — Configuration & Override System**
-**Purpose:** Allow projects to override conventions without forking governance.
+### **M8 — HQ Chat Agent**
+**Purpose:** Deliver the governance-aware HQ Chat agent that fulfills the north star user story.
 
 **Key deliverables:**
-- Override system specification
-- Updated governance supporting override resolution
-- Override validation
-- Documentation of override boundaries
-- Example `.ai-project.yml` with all options
+- `hq.agent.md` in `/governance/agents/`
+- Agent reads `.ai-project.yml` on startup (governance source, version, overrides)
+- Agent produces Phase specs, Milestone specs, Epic specs, Chat Starters as doc files
+- Canonical "start a project" prompt documented
+- Tool access scoped: read + write doc files only (no terminal)
+- Shipped to projects via `ai-project init`
 
-**Exit criteria:** Project can override branching/naming conventions and AI agents respect overrides
+**Exit criteria:** Developer opens VS Code, selects `hq` agent, sends canonical prompt, and HQ Chat is live with correct governance context
 
 ---
 
-### **M9 — Adoption Validation & Documentation**
-**Purpose:** Validate multi-project governance works in practice, document adoption process.
+### **M9 — Configuration & Override System**
+**Purpose:** Allow projects to customize governance behavior without forking it.
+
+**Key deliverables:**
+- Complete `.ai-project.yml` override specification
+- Override precedence rules documented in governance
+- Override boundaries defined (what's overridable vs. core)
+- HQ agent reads and applies overrides
+- Example configurations for common project types
+
+**Exit criteria:** Project can override branching/naming conventions; HQ agent respects overrides during planning
+
+---
+
+### **M10 — Adoption Validation & Documentation**
+**Purpose:** Validate multi-project governance works in practice; document the full adoption path.
 
 **Key deliverables:**
 - At least 2 projects using Phase P2 architecture
-- Adoption guide (step-by-step)
+- Adoption guide (step-by-step from zero to HQ Chat live)
 - Troubleshooting FAQ
-- Governance sync validation
+- Governance sync validation across projects
 - Phase P2 completion report
 
-**Exit criteria:** External project successfully adopts Phase P2 architecture and syncs governance updates
+**Exit criteria:** External project successfully adopts P2 architecture, runs `ai-project init`, opens HQ Chat, and syncs governance updates
 
 ---
 
@@ -232,31 +297,38 @@ Phase P2 is complete when:
    - ✅ Projects reference governance via git submodule
    - ✅ `.ai-project.yml` specification exists and is documented
 
-2. **Projects can be initialized canonically**
-   - ✅ Project initialization chat starter exists
-   - ✅ Coding Agent can spin up new project from template
-   - ✅ Hierarchical documentation structure implemented
+2. **CLI initialization works**
+   - ✅ `ai-project init` scaffolds project structure and installs agent files
+   - ✅ Hierarchical documentation structure created automatically
+   - ✅ `.ai-project.yml` written with correct governance reference
 
-3. **Overrides work**
+3. **HQ Chat agent is operational**
+   - ✅ `hq.agent.md` shipped in governance package
+   - ✅ HQ agent reads `.ai-project.yml` and applies governance context
+   - ✅ Canonical "start a project" prompt produces Phase spec
+   - ✅ North star user story achievable end-to-end
+
+4. **Overrides work**
    - ✅ Projects can override conventions via `.ai-project.yml`
-   - ✅ AI agents respect overrides during execution
+   - ✅ HQ agent respects overrides during planning
    - ✅ Override boundaries are documented
 
-4. **Multi-project adoption validated**
+5. **Multi-project adoption validated**
    - ✅ At least 2 projects use Phase P2 architecture
    - ✅ Governance sync tested across projects
    - ✅ Adoption process documented
 
-5. **Governance updated**
+6. **Governance updated**
    - ✅ PROJECT-SYSTEM-GUIDELINES.md v2.0.0 published
-   - ✅ AI-OPERATING-GUIDELINES.md updated for overrides
+   - ✅ AI-OPERATING-GUIDELINES.md updated for HQ agent behavior and overrides
    - ✅ Migration guide available
 
-6. **All milestones complete**
-   - ✅ M6 — Governance Separation & External Reference Model
-   - ✅ M7 — Project Initialization & Hierarchical Documentation
-   - ✅ M8 — Configuration & Override System
-   - ✅ M9 — Adoption Validation & Documentation
+7. **All milestones complete**
+   - ✅ M6 — Governance Separation & `.ai-project.yml`
+   - ✅ M7 — CLI Initialization Tool
+   - ✅ M8 — HQ Chat Agent
+   - ✅ M9 — Configuration & Override System
+   - ✅ M10 — Adoption Validation & Documentation
 
 ---
 
