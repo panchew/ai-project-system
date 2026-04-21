@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 1.5.0  
-**Effective Date:** 2026-02-18  
+**Version:** 2.0.0  
+**Effective Date:** 2026-04-20  
 **Status:** Current  
 
 ---
@@ -69,23 +69,29 @@ All Epics MUST follow the single canonical happy path for closure:
 
 ```
 /
-├─ docs/
+├─ governance/
 │  ├─ README.md
 │  ├─ PROJECT-SYSTEM-GUIDELINES.md
 │  ├─ AI-OPERATING-GUIDELINES.md
+│  ├─ EPIC-EXECUTION-CHAT-STARTER.md
+│  ├─ agents/
+│  ├─ diagrams/
+│  ├─ guides/
+│  ├─ systems/
+│  └─ templates/
+├─ docs/
+│  ├─ README.md
 │  ├─ roadmap/
 │  ├─ phases/
 │  ├─ decisions/
 │  ├─ context/
-│  ├─ systems/
-│  ├─ templates/
 │  └─ _legacy/
 ├─ src/
 ├─ tests/
 └─ README.md
 ```
 
-All durable project knowledge lives under `docs/`.
+Governance files live under `governance/`. All project history and execution artifacts live under `docs/`.
 
 ---
 
@@ -505,7 +511,7 @@ Every Epic MUST include a structured Delivery Notice as a prerequisite for revie
 - Must be explicit, structured, and committed to the repository
 - Is referenced in the Epic Completion Report
 
-See `docs/templates/epic-completion-notice.md` for the canonical Delivery Notice template.
+See `governance/templates/epic-completion-notice.md` for the canonical Delivery Notice template.
 
 ---
 
@@ -536,7 +542,7 @@ Execution chats that omit delivery requirements are invalid.
 A canonical template is provided under:
 
 ```
-docs/templates/epic-execution-chat-starter.md
+governance/templates/epic-execution-chat-starter.md
 ```
 
 ---
@@ -552,7 +558,7 @@ Such integrations:
 
 Details are defined in the Project Tracker Integration System reference.
 
-Tracker integrations MUST be declared via a system reference under `docs/systems/` and MUST NOT be inferred from external tools or naming conventions.
+Tracker integrations MUST be declared via a system reference under `governance/systems/` and MUST NOT be inferred from external tools or naming conventions.
 
 ---
 
@@ -561,7 +567,7 @@ Tracker integrations MUST be declared via a system reference under `docs/systems
 All Epic specs MUST follow the canonical structure defined in:
 
 ```
-docs/templates/epic-spec.md
+governance/templates/epic-spec.md
 ```
 
 ---
@@ -596,3 +602,12 @@ This project system exists to:
 
 Structure is not bureaucracy.  
 Structure is leverage.
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---|---|---|
+| 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated canonical repository structure, template paths, and system reference paths. |
+| 1.5.0 | 2026-02-18 | Previous version — governance lived in `docs/`. |

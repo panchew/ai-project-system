@@ -73,7 +73,8 @@ In this walkthrough, you'll:
 In your repository, create:
 
 ```bash
-mkdir -p docs/phases docs/templates docs/diagrams docs/systems docs/roadmap docs/context docs/decisions docs/admin
+mkdir -p docs/phases docs/roadmap docs/context docs/decisions docs/admin
+mkdir -p governance/templates governance/diagrams governance/systems governance/guides
 ```
 
 ### 1.2 Copy governance documents
@@ -81,14 +82,14 @@ mkdir -p docs/phases docs/templates docs/diagrams docs/systems docs/roadmap docs
 Copy the following files from the [AI Project System repository](https://github.com/panchew/ai-project-system):
 
 **Required governance files:**
-- `docs/PROJECT-SYSTEM-GUIDELINES.md` (defines system structure)
-- `docs/AI-OPERATING-GUIDELINES.md` (defines execution procedures)
+- `governance/PROJECT-SYSTEM-GUIDELINES.md` (defines system structure)
+- `governance/AI-OPERATING-GUIDELINES.md` (defines execution procedures)
 
-**Copy them into your `docs/` folder.**
+**Copy them into your `governance/` folder.**
 
 ### 1.3 Copy templates
 
-Copy all files from [docs/templates/](https://github.com/panchew/ai-project-system/tree/master/docs/templates) into your `docs/templates/` folder:
+Copy all files from [governance/templates/](https://github.com/panchew/ai-project-system/tree/master/governance/templates) into your `governance/templates/` folder:
 
 - `phase-spec.md`
 - `milestone-spec.md`
@@ -105,13 +106,15 @@ Your repository should now look like:
 
 ```
 your-project/
-├── docs/
+├── governance/
 │   ├── PROJECT-SYSTEM-GUIDELINES.md
 │   ├── AI-OPERATING-GUIDELINES.md
-│   ├── phases/          (empty for now)
 │   ├── templates/       (all template files)
 │   ├── diagrams/        (empty for now)
 │   ├── systems/         (empty for now)
+│   └── guides/          (empty for now)
+├── docs/
+│   ├── phases/          (empty for now)
 │   ├── roadmap/         (empty for now)
 │   ├── context/         (empty for now)
 │   ├── decisions/       (empty for now)
@@ -131,7 +134,7 @@ A **Phase** is a major segment of work with a clear purpose and exit criteria.
 ### 2.1 Copy the template
 
 ```bash
-cp docs/templates/phase-spec.md docs/phases/P1__phase__my-first-phase.md
+cp governance/templates/phase-spec.md docs/phases/P1__phase__my-first-phase.md
 ```
 
 ### 2.2 Fill in the front-matter
@@ -212,7 +215,7 @@ mkdir -p docs/phases/P1__My_First_Phase
 ### 3.2 Copy the template
 
 ```bash
-cp docs/templates/milestone-spec.md docs/phases/P1__My_First_Phase/P1-M1__milestone.md
+cp governance/templates/milestone-spec.md docs/phases/P1__My_First_Phase/P1-M1__milestone.md
 ```
 
 ### 3.3 Fill in the front-matter
@@ -299,7 +302,7 @@ An **Epic** is a single unit of deliverable work with clear goals and acceptance
 ### 4.1 Copy the template
 
 ```bash
-cp docs/templates/epic-spec.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__spec__my-first-epic.md
+cp governance/templates/epic-spec.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__spec__my-first-epic.md
 ```
 
 ### 4.2 Fill in the front-matter
@@ -429,7 +432,7 @@ Now you'll execute the Epic using an AI Coding Agent.
 ### 5.1 Create the Epic Execution Chat Starter
 
 ```bash
-cp docs/templates/epic-execution-chat-starter.md temp-chat-starter.md
+cp governance/templates/epic-execution-chat-starter.md temp-chat-starter.md
 ```
 
 Open `temp-chat-starter.md` and fill in:
@@ -556,7 +559,7 @@ The AI has produced:
 ### 6.2 Create an Epic Review Seal (optional but recommended)
 
 ```bash
-cp docs/templates/epic-review-seal.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__review-seal__my-first-epic.md
+cp governance/templates/epic-review-seal.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__review-seal__my-first-epic.md
 ```
 
 Fill it in with your review findings:
@@ -718,13 +721,13 @@ git push origin milestone/M1
 
 | What | Where |
 |------|-------|
-| Governance | `docs/PROJECT-SYSTEM-GUIDELINES.md`, `docs/AI-OPERATING-GUIDELINES.md` |
-| Templates | `docs/templates/` |
+| Governance rules | `governance/PROJECT-SYSTEM-GUIDELINES.md`, `governance/AI-OPERATING-GUIDELINES.md` |
+| Templates | `governance/templates/` |
 | Phase Specs | `docs/phases/P<N>__phase__*.md` |
 | Milestone Specs | `docs/phases/P<N>__*/P<N>-M<N>__milestone.md` |
 | Epic Specs | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__spec__*.md` |
 | Completions | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__completion__*.md` |
-| Diagrams | `docs/diagrams/` |
+| Diagrams | `governance/diagrams/` |
 
 ### Key Concepts Glossary
 
@@ -800,7 +803,7 @@ Please wait for my accept/reject decision and merge authorization.
 
 - **Full Governance:** [PROJECT-SYSTEM-GUIDELINES.md](PROJECT-SYSTEM-GUIDELINES.md)
 - **Execution Procedures:** [AI-OPERATING-GUIDELINES.md](AI-OPERATING-GUIDELINES.md)
-- **Visual Guides:** [docs/diagrams/](diagrams/)
+- **Visual Guides:** [governance/diagrams/](../diagrams/)
 - **Examples:** [docs/phases/P1__System_Foundation_and_Adoption/](phases/P1__System_Foundation_and_Adoption/)
 
 **Still stuck?** File an issue in the [AI Project System repository](https://github.com/panchew/ai-project-system).

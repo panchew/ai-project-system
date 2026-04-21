@@ -6,7 +6,7 @@ This repository (`ai-project-system`) is the **authoritative source** for all go
 
 ## Reference-Based Adoption
 
-Governance does **not** propagate automatically or implicitly. Projects wishing to adopt AI Project System governance must do so by reference, using the provided template (`docs/governance-source.md`).
+Governance does **not** propagate automatically or implicitly. Projects wishing to adopt AI Project System governance must do so by reference, using the provided template (`governance/templates/governance-source.md`).
 
 - Adoption is explicit and intentional
 - Projects must declare their governance source in their own repository
@@ -32,7 +32,7 @@ Governance does **not** propagate automatically or implicitly. Projects wishing 
 
 ## Adoption Template
 
-Projects must use the template in `docs/governance-source.md` to declare their governance source.
+Projects must use the template in `governance/templates/governance-source.md` to declare their governance source.
 
 ---
 
