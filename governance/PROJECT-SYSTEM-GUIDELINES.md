@@ -562,6 +562,30 @@ Tracker integrations MUST be declared via a system reference under `governance/s
 
 ---
 
+## 14A. `.ai-project.yml` — Required Project Configuration Artifact
+
+Every project using the AI Project System MUST have a `.ai-project.yml` file at its repository root. This file is the **project configuration contract**: it declares the governance source, the pinned governance version, and optional project-specific overrides.
+
+`.ai-project.yml` is required before any HQ agent session or `ai-project init` scaffolding. It is the foundation for governance discovery (M8), CLI scaffolding (M7), and the override system (M9).
+
+### Required fields
+
+- `governance.source` — URL or relative path to the governance source repository
+- `governance.version` — Pinned governance version (semver string, quoted)
+- `governance.ref` — Git ref (tag, branch, or SHA) on the governance source
+- `project.name` — Project slug identifier
+- `project.description` — Short project description
+
+### Canonical specification
+
+Full field definitions, validation rules, HQ agent usage, and CLI scaffolding behavior are documented in:
+
+```
+governance/ai-project-yml-spec.md
+```
+
+---
+
 ## 15. Canonical Epic Spec Template
 
 All Epic specs MUST follow the canonical structure defined in:
