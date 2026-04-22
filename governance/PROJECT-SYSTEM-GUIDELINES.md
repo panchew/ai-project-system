@@ -586,6 +586,21 @@ governance/ai-project-yml-spec.md
 
 ---
 
+## 14B. Git Submodule Setup — External Project Reference Procedure
+
+External projects reference this governance package via git submodule. The canonical procedure for adding, pinning, updating, and cloning governance via submodule is documented in:
+
+```
+governance/submodule-setup.md
+```
+
+Key conventions:
+- The submodule MUST be installed at `.governance/` (hidden folder)
+- `governance.source` in `.ai-project.yml` corresponds to the submodule remote URL
+- `governance.ref` in `.ai-project.yml` corresponds to the checked-out ref inside `.governance/`
+
+---
+
 ## 15. Canonical Epic Spec Template
 
 All Epic specs MUST follow the canonical structure defined in:
