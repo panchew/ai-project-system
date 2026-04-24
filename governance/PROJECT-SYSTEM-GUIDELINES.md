@@ -547,6 +547,34 @@ governance/templates/epic-execution-chat-starter.md
 
 ---
 
+## 13A. Phase Execution Chat Starter (Planning Sessions)
+
+Phase-scoped planning sessions are launched using a **Phase Execution Chat Starter**.
+
+A Phase Chat is a finite planning session scoped to a single Phase. It is NOT an execution chat. Its purpose is to:
+- Review the Phase spec
+- Produce Milestone specs for all Milestones within the Phase
+- Produce a Milestone Execution Chat Starter for each Milestone
+- Issue Milestone Delivery Authorizations upon HQ acceptance
+
+**Communication scope:** A Phase Chat reports to HQ Chat and communicates downward to Milestone Chats only. It MUST NOT reach across to sibling phases or lateral epics.
+
+**Authority:** Phase Chat produces proposals. HQ Chat owns accept/reject decisions.
+
+The system document defining Phase Chat rules is:
+
+```
+governance/systems/phase-execution-chat-starter.md
+```
+
+The fillable template for launching a Phase Chat is:
+
+```
+governance/templates/phase-execution-chat-starter.md
+```
+
+---
+
 ## 14. Project Tracker Integration (Optional, Declarative)
 
 Projects **may declare integrations with external project trackers** (e.g. Jira, Azure DevOps, GitHub Projects, Pivotal Tracker) via **system references**.
