@@ -9,16 +9,51 @@ This diagram shows the canonical file and folder structure of an AI Project Syst
 ```
 ai-project-system/
 │
-├── README.md                           # Repository front door (enhanced in E4.2)
-├── LICENSE                             # Project license (future: E4.4)
+├── README.md                           # Repository front door
+├── LICENSE                             # Project license
 │
-├── docs/                               # All documentation lives here
+├── governance/                         # All governance files live here
 │   │
-│   ├── README.md                       # Documentation index
+│   ├── README.md                       # Governance folder overview
 │   │
 │   ├── PROJECT-SYSTEM-GUIDELINES.md    # Level 1 authority (system structure)
 │   ├── AI-OPERATING-GUIDELINES.md      # Level 2 authority (execution procedures)
-│   ├── QUICK-START.md                  # 30-minute onboarding guide (E4.2)
+│   ├── EPIC-EXECUTION-CHAT-STARTER.md  # Level 3 authority (chat starter format)
+│   │
+│   ├── agents/                         # AI agent definition files
+│   │   └── hq.agent.md                 # HQ Chat agent (M8 deliverable)
+│   │
+│   ├── diagrams/                       # Visual documentation
+│   │   ├── epic-lifecycle-flow.md      # How Epics move from idea → closure
+│   │   ├── authority-hierarchy.md      # Document precedence rules
+│   │   └── repository-structure.md     # This file
+│   │
+│   ├── guides/                         # Onboarding and FAQ for human adopters
+│   │   ├── QUICK-START.md              # 30-minute onboarding walkthrough
+│   │   └── FAQ.md                      # Frequently asked questions
+│   │
+│   ├── systems/                        # System operation guides
+│   │   ├── epic-execution-chat-starter.md
+│   │   ├── governance-propagation.md
+│   │   ├── hq-chat-opener.md
+│   │   ├── hq-chat.md
+│   │   ├── PROJECT-TRACKER-INTEGRATION-SYSTEM.md
+│   │   └── start-a-project.md
+│   │
+│   └── templates/                      # Reusable spec templates
+│       ├── README.md
+│       ├── phase-spec.md
+│       ├── milestone-spec.md
+│       ├── epic-spec.md
+│       ├── epic-execution-chat-starter.md
+│       ├── epic-completion-report.md
+│       ├── epic-completion-notice.md
+│       ├── epic-review-seal.md
+│       └── governance-source.md
+│
+├── docs/                               # Project history and execution artifacts
+│   │
+│   ├── README.md                       # Documentation index
 │   │
 │   ├── phases/                         # Phase–Milestone–Epic hierarchy
 │   │   ├── P0__phase__project-formalization.md
@@ -36,28 +71,6 @@ ai-project-system/
 │   │       ├── P1-M2-E2.1__completion__human-review-and-acceptance.md
 │   │       ├── [... additional Epics ...]
 │   │       └── P1-M4-E4.2__spec__quick-start-guide-and-visual-documentation.md
-│   │
-│   ├── templates/                      # Reusable spec templates (E4.1)
-│   │   ├── README.md
-│   │   ├── phase-spec.md
-│   │   ├── milestone-spec.md
-│   │   ├── epic-spec.md
-│   │   ├── epic-execution-chat-starter.md
-│   │   ├── epic-completion-report.md
-│   │   └── epic-review-seal.md
-│   │
-│   ├── diagrams/                       # Visual documentation (E4.2)
-│   │   ├── epic-lifecycle-flow.md      # How Epics move from idea → closure
-│   │   ├── authority-hierarchy.md      # Document precedence rules
-│   │   └── repository-structure.md     # This file
-│   │
-│   ├── systems/                        # System operation guides
-│   │   ├── epic-execution-chat-starter.md
-│   │   ├── governance-propagation.md
-│   │   ├── hq-chat-opener.md
-│   │   ├── hq-chat.md
-│   │   ├── PROJECT-TRACKER-INTEGRATION-SYSTEM.md
-│   │   └── start-a-project.md
 │   │
 │   ├── roadmap/                        # Project roadmap and planning
 │   │   └── overview.md
@@ -97,39 +110,47 @@ ai-project-system/
 
 ---
 
-### **`docs/` — Documentation Root**
+### **`governance/` — Governance Root**
 
-All documentation lives under `docs/` to keep root clean.
+All governance files live under `governance/` to keep them portable and separately referenceable.
 
-#### `docs/README.md`
-- **Purpose:** Documentation index and navigation hub
-- **Content:** Links to all major documentation sections
-- **Audience:** Users who have entered the documentation
+#### `governance/README.md`
+- **Purpose:** Governance folder overview and navigation hub
+- **Content:** Links to governance documents, authority hierarchy, adoption instructions
+- **Audience:** Users who have entered the governance folder
 
-#### `docs/PROJECT-SYSTEM-GUIDELINES.md`
+#### `governance/PROJECT-SYSTEM-GUIDELINES.md`
 - **Authority Level:** 1 (Highest)
 - **Purpose:** Defines system structure, governance, core concepts
 - **Immutability:** High (changes require governance process)
 - **Version:** Tracked and referenced in all Specs
 - **Key Content:** Phase-Milestone-Epic model, file conventions, repository structure
 
-#### `docs/AI-OPERATING-GUIDELINES.md`
+#### `governance/AI-OPERATING-GUIDELINES.md`
 - **Authority Level:** 2
 - **Purpose:** Execution procedures for AI agents
 - **Key Content:** Canonical happy path, agent responsibilities, HQ authority
 - **Relationship:** Implements PROJECT-SYSTEM-GUIDELINES.md procedures
 
-#### `docs/QUICK-START.md`
-- **Purpose:** 30-minute onboarding walkthrough
-- **Audience:** New users wanting to start quickly
-- **Created in:** Epic E4.2
-- **Content:** Step-by-step guide from initialization → first Epic closure
+#### `governance/EPIC-EXECUTION-CHAT-STARTER.md`
+- **Authority Level:** 3
+- **Purpose:** Canonical format reference for Epic Execution Chat Starters
+- **Audience:** HQ Chat when generating chat starters
+
+---
+
+### **`docs/` — Project History Root**
+
+Project history and execution artifacts live under `docs/`.
+
+#### `docs/README.md`
+- **Purpose:** Documentation index
+- **Content:** Links to project execution artifacts
+- **Audience:** Users navigating project history
 
 ---
 
 ### **`docs/phases/` — Project Execution Hierarchy**
-
-This is where your **actual project work** lives.
 
 #### **Structure:**
 ```
@@ -175,9 +196,9 @@ phases/
 
 ---
 
-### **`docs/templates/` — Reusable Templates**
+### **`governance/templates/` — Reusable Templates**
 
-Created in Epic E4.1 to enable consistent project scaffolding.
+Created in Epic E4.1, migrated to `/governance` in E6.2.
 
 #### **Template Files:**
 - `phase-spec.md` — Template for creating new Phase specs
@@ -186,6 +207,7 @@ Created in Epic E4.1 to enable consistent project scaffolding.
 - `epic-execution-chat-starter.md` — Template for AI execution instructions
 - `epic-completion-report.md` — Template for completion documentation
 - `epic-review-seal.md` — Template for human review documentation
+- `governance-source.md` — Template for governance adoption declaration
 - `README.md` — Template usage guide
 
 #### **Usage:**
@@ -196,9 +218,9 @@ Created in Epic E4.1 to enable consistent project scaffolding.
 
 ---
 
-### **`docs/diagrams/` — Visual Documentation**
+### **`governance/diagrams/` — Visual Documentation**
 
-Created in Epic E4.2 to provide visual learning aids.
+Created in Epic E4.2, migrated to `/governance` in E6.2.
 
 #### **Diagram Files:**
 - `epic-lifecycle-flow.md` — Visual flowchart of Epic execution
@@ -212,9 +234,9 @@ Created in Epic E4.2 to provide visual learning aids.
 
 ---
 
-### **`docs/systems/` — System Operation Guides**
+### **`governance/systems/` — System Operation Guides**
 
-Procedural guides for operating the system.
+Procedural guides for operating the system. Migrated to `/governance` in E6.2.
 
 #### **Key Files:**
 - `epic-execution-chat-starter.md` — How to use Chat Starters
@@ -225,8 +247,22 @@ Procedural guides for operating the system.
 
 #### **Purpose:**
 - Supplement governance with practical how-tos
-- Authority Level 6 (informative)
+- Authority Level 4 (operational guidance)
 - Not templates (these are guides, not blueprints)
+
+---
+
+### **`governance/guides/` — Onboarding Guides**
+
+Informational guides for humans adopting the system.
+
+#### **Key Files:**
+- `QUICK-START.md` — 30-minute onboarding walkthrough
+- `FAQ.md` — Frequently asked questions
+
+#### **Purpose:**
+- Help new adopters get started quickly
+- No authority — informational only
 
 ---
 
@@ -364,17 +400,17 @@ epic/E4.2 → milestone/M4 → phase/P1 → master
 
 #### **Understand the system quickly**
 1. Read `README.md`
-2. Read `docs/QUICK-START.md`
-3. Skim diagrams in `docs/diagrams/`
+2. Read `governance/guides/QUICK-START.md`
+3. Skim diagrams in `governance/diagrams/`
 
 #### **Learn the governance rules**
-1. Read `docs/PROJECT-SYSTEM-GUIDELINES.md`
-2. Read `docs/AI-OPERATING-GUIDELINES.md`
+1. Read `governance/PROJECT-SYSTEM-GUIDELINES.md`
+2. Read `governance/AI-OPERATING-GUIDELINES.md`
 
 #### **Start a new project**
-1. Read `docs/systems/start-a-project.md`
-2. Copy templates from `docs/templates/`
-3. Follow `docs/QUICK-START.md`
+1. Read `governance/systems/start-a-project.md`
+2. Copy templates from `governance/templates/`
+3. Follow `governance/guides/QUICK-START.md`
 
 #### **See an example Epic**
 1. Browse `docs/phases/P1__System_Foundation_and_Adoption/`
@@ -382,9 +418,9 @@ epic/E4.2 → milestone/M4 → phase/P1 → master
 3. Read corresponding `__completion__` file
 
 #### **Understand a specific concept**
-1. Check `docs/diagrams/` for visual explanation
-2. Reference `docs/PROJECT-SYSTEM-GUIDELINES.md` for authoritative definition
-3. Check `docs/systems/` for practical guides
+1. Check `governance/diagrams/` for visual explanation
+2. Reference `governance/PROJECT-SYSTEM-GUIDELINES.md` for authoritative definition
+3. Check `governance/systems/` for practical guides
 
 ---
 
@@ -392,14 +428,15 @@ epic/E4.2 → milestone/M4 → phase/P1 → master
 
 | Content Type | Location | Example |
 |--------------|----------|---------|
-| Governance | `docs/` root | `PROJECT-SYSTEM-GUIDELINES.md` |
-| Quick Start | `docs/` root | `QUICK-START.md` |
+| Governance rules | `governance/` root | `PROJECT-SYSTEM-GUIDELINES.md` |
+| Quick Start | `governance/guides/` | `QUICK-START.md` |
 | Phases | `docs/phases/` | `P1__phase.md` |
 | Milestones | `docs/phases/` | `P1-M4__milestone.md` |
 | Epics | `docs/phases/` | `P1-M4-E4.2__spec__*.md` |
-| Templates | `docs/templates/` | `epic-spec.md` |
-| Diagrams | `docs/diagrams/` | `epic-lifecycle-flow.md` |
-| System Guides | `docs/systems/` | `hq-chat.md` |
+| Templates | `governance/templates/` | `epic-spec.md` |
+| Diagrams | `governance/diagrams/` | `epic-lifecycle-flow.md` |
+| System Guides | `governance/systems/` | `hq-chat.md` |
+| Onboarding | `governance/guides/` | `QUICK-START.md` |
 | Roadmap | `docs/roadmap/` | `overview.md` |
 | Context | `docs/context/` | `project-tracker.md` |
 | Decisions | `docs/decisions/` | (future ADRs) |
@@ -418,8 +455,7 @@ This structure was formalized through:
 - **P1-M4 (Adoption):** Added templates (E4.1), documentation (E4.2)
 
 Future Milestones may add:
-- Example projects (`docs/examples/`)
-- FAQ (`docs/FAQ.md`)
+- Example projects
 - Troubleshooting guides
 - Team/org guides
 

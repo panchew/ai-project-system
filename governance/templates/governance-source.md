@@ -11,7 +11,7 @@
 **Governance Source:**
 This project formally adopts all governance rules, models, and resolutions from the authoritative source:
 
-    https://github.com/panchew/ai-project-system/blob/master/docs/systems/governance-propagation.md
+    https://github.com/panchew/ai-project-system/blob/master/governance/systems/governance-propagation.md
 
 **Date of Adoption:** [YYYY-MM-DD]
 

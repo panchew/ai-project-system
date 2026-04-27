@@ -82,7 +82,7 @@ The system is **scalable down**. You don't need to use every feature for every p
 **Three steps:**
 
 1. **Read the Quick Start Guide**
-   - [docs/QUICK-START.md](QUICK-START.md) walks you through creating your first Phase, Milestone, and Epic in ~30 minutes.
+   - [governance/guides/QUICK-START.md](QUICK-START.md) walks you through creating your first Phase, Milestone, and Epic in ~30 minutes.
 
 2. **Review the example project**
    - [examples/task-tracker-project/](../examples/task-tracker-project/) shows a complete project lifecycle (Phase P1, Milestones M1-M2, Epics E1.1-E2.4) with real specs, execution, and closure.
@@ -91,8 +91,8 @@ The system is **scalable down**. You don't need to use every feature for every p
    - Don't try to plan your entire project upfront. Create a Phase and Milestone, then write a spec for one Epic and execute it. Learn by doing.
 
 **See also:**
-- [docs/systems/start-a-project.md](systems/start-a-project.md) — Project initialization guide
-- [docs/templates/README.md](templates/README.md) — Template usage instructions
+- [governance/systems/start-a-project.md](../systems/start-a-project.md) — Project initialization guide
+- [governance/templates/README.md](../templates/README.md) — Template usage instructions
 
 ### Do I need to use all the phases/milestones/epics?
 
@@ -122,7 +122,7 @@ The system is **scalable down**. You don't need to use every feature for every p
 **Key principle:** Your project management tool tracks *status*. Your `docs/` folder tracks *specifications and decisions*. They're complementary.
 
 **See also:**
-- [docs/systems/PROJECT-TRACKER-INTEGRATION-SYSTEM.md](systems/PROJECT-TRACKER-INTEGRATION-SYSTEM.md) — Integration guidance
+- [governance/systems/PROJECT-TRACKER-INTEGRATION-SYSTEM.md](../systems/PROJECT-TRACKER-INTEGRATION-SYSTEM.md) — Integration guidance
 
 ### What if I don't use AI coding assistants?
 

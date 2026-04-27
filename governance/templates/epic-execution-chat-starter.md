@@ -9,7 +9,18 @@
   1. Copy this template
   2. Replace all <placeholders> with actual content
   3. Delete HTML comments (or keep for reference)
-  4. Paste into chat with Coding Agent
+  4. The entire filled-in content MUST be wrapped in a fenced markdown code block
+     when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
+
+         ````markdown name=<E#.#>-epic-execution-chat-starter.md
+         [filled-in content here]
+         ````
+
+     This preserves markdown formatting when the starter is copy-pasted into a
+     Coding Agent chat. The four-backtick fence escapes any triple-backtick code
+     blocks inside the content.
+  5. After the code block, add the canonical copy instruction:
+     "Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
   
   This template aligns with AI-OPERATING-GUIDELINES.md and PROJECT-SYSTEM-GUIDELINES.md.
 -->
@@ -31,14 +42,14 @@
 You are operating under the AI Project System governance framework.
 
 **Authoritative governance documents:**
-- [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/<owner>/<repo>/blob/<branch>/docs/PROJECT-SYSTEM-GUIDELINES.md) v<version> (Effective: <YYYY-MM-DD>)
-- [AI-OPERATING-GUIDELINES.md](https://github.com/<owner>/<repo>/blob/<branch>/docs/AI-OPERATING-GUIDELINES.md) v<version> (Effective: <YYYY-MM-DD>)
+- [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/<owner>/<repo>/blob/<branch>/governance/PROJECT-SYSTEM-GUIDELINES.md) v<version> (Effective: <YYYY-MM-DD>)
+- [AI-OPERATING-GUIDELINES.md](https://github.com/<owner>/<repo>/blob/<branch>/governance/AI-OPERATING-GUIDELINES.md) v<version> (Effective: <YYYY-MM-DD>)
 
 <!-- 
   Replace <owner>, <repo>, <branch>, and <version> with actual values.
   
   Example:
-  - [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/docs/PROJECT-SYSTEM-GUIDELINES.md) v1.3.0 (Effective: 2026-01-17)
+  - [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v2.0.0 (Effective: 2026-04-20)
 -->
 
 **Governance hierarchy:**
@@ -126,9 +137,9 @@ You must produce:
   Use checkboxes to track progress during execution.
   
   Example:
-  1. ✅ **Phase spec template** (`docs/templates/phase-spec.md`)
-  2. ✅ **Milestone spec template** (`docs/templates/milestone-spec.md`)
-  3. ✅ **Epic spec template** (`docs/templates/epic-spec.md`)
+  1. ✅ **Phase spec template** (`governance/templates/phase-spec.md`)
+  2. ✅ **Milestone spec template** (`governance/templates/milestone-spec.md`)
+  3. ✅ **Epic spec template** (`governance/templates/epic-spec.md`)
   4. ✅ **Epic Completion Report** (`docs/phases/P1__System_Foundation_and_Adoption/P1-M4-E4.1__completion__templates-and-scaffolding.md`)
 -->
 
@@ -190,7 +201,7 @@ You must produce:
 - **Comments:** Use HTML comment syntax `<!-- comment -->` for inline guidance
 - **Examples:** Must be placeholder/generic, not real project data
 - **Governance:** Must not contradict or modify governance documents
-- **Location:** All templates in `docs/templates/`
+- **Location:** All templates in `governance/templates/`
 -->
 
 ---

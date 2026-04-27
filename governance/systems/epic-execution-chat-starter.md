@@ -10,7 +10,7 @@ last_updated: 2026-01-17
 GOVERNANCE RESOLUTION
 
 - All governance for Epic Execution Chat Starters is resolved **by explicit reference** to the authoritative governance source.
-- The authoritative governance model is documented in [docs/systems/governance-propagation.md](governance-propagation.md).
+- The authoritative governance model is documented in [governance/systems/governance-propagation.md](governance-propagation.md).
 - Projects adopting this governance must include a `governance-source.md` file referencing the authoritative source.
 - **No live GitHub access or automatic governance syncing is available.** All governance enforcement is by reference and manual review.
 - If no `governance-source.md` is present, governance is not adopted for the project.
@@ -60,3 +60,18 @@ QUESTION POLICY
 
 - Ask only blocking questions.
 - Do not propose new features.
+
+DELIVERY FORMAT (MANDATORY)
+
+When HQ Chat produces an Epic Execution Chat Starter, the entire content MUST be
+wrapped in a fenced markdown code block using four backticks:
+
+    ````markdown name=<E#.#>-epic-execution-chat-starter.md
+    [starter content here]
+    ````
+
+This preserves markdown formatting when copy-pasted into a Coding Agent chat.
+After the code block, include:
+"Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
+
+Canonical rule: AI-OPERATING-GUIDELINES.md §3.1.1

@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 1.5.0  
-**Effective Date:** 2026-02-18  
+**Version:** 2.0.0  
+**Effective Date:** 2026-04-20  
 **Status:** Current  
 
 ---
@@ -69,23 +69,29 @@ All Epics MUST follow the single canonical happy path for closure:
 
 ```
 /
-├─ docs/
+├─ governance/
 │  ├─ README.md
 │  ├─ PROJECT-SYSTEM-GUIDELINES.md
 │  ├─ AI-OPERATING-GUIDELINES.md
+│  ├─ EPIC-EXECUTION-CHAT-STARTER.md
+│  ├─ agents/
+│  ├─ diagrams/
+│  ├─ guides/
+│  ├─ systems/
+│  └─ templates/
+├─ docs/
+│  ├─ README.md
 │  ├─ roadmap/
 │  ├─ phases/
 │  ├─ decisions/
 │  ├─ context/
-│  ├─ systems/
-│  ├─ templates/
 │  └─ _legacy/
 ├─ src/
 ├─ tests/
 └─ README.md
 ```
 
-All durable project knowledge lives under `docs/`.
+Governance files live under `governance/`. All project history and execution artifacts live under `docs/`.
 
 ---
 
@@ -505,7 +511,7 @@ Every Epic MUST include a structured Delivery Notice as a prerequisite for revie
 - Must be explicit, structured, and committed to the repository
 - Is referenced in the Epic Completion Report
 
-See `docs/templates/epic-completion-notice.md` for the canonical Delivery Notice template.
+See `governance/templates/epic-completion-notice.md` for the canonical Delivery Notice template.
 
 ---
 
@@ -520,7 +526,49 @@ Completion Reports are append-only and MUST NOT modify the original Epic spec.
 
 ---
 
-## 13. Epic Execution Chat Starter (Mandatory)
+## 13A. Phase Execution Chat Starter (Mandatory)
+
+Every Phase planning session MUST begin with a **complete Phase Execution Chat Starter**.
+
+The Phase Execution Chat Starter is a binding planning contract that defines:
+- Phase goals and scope
+- Complete list of Milestones to be planned
+- Governance versions in use
+- Phase Chat responsibilities and constraints
+- Session lifecycle and completion criteria
+
+A Phase Chat (planning session scoped to a single Phase) is launched by HQ Chat using this artifact. It produces Milestone specs and Milestone Execution Chat Starters.
+
+For full role and responsibility definitions, see:
+
+- **System reference:** `governance/systems/phase-execution-chat-starter.md`
+- **Fillable template:** `governance/templates/phase-execution-chat-starter.md`
+- **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 2)
+
+---
+
+## 13B. Milestone Execution Chat Starter (Mandatory)
+
+Every Milestone planning session MUST begin with a **complete Milestone Execution Chat Starter**.
+
+The Milestone Execution Chat Starter is a binding planning contract that defines:
+- Milestone goals and scope
+- Complete list of Epics to be planned
+- Governance versions in use
+- Milestone Chat responsibilities and constraints
+- Session lifecycle and completion criteria
+
+A Milestone Chat (planning session scoped to a single Milestone) is launched by Phase Chat (or HQ Chat during bootstrap) using this artifact. It produces Epic specs and Epic Execution Chat Starters.
+
+For full role and responsibility definitions, see:
+
+- **System reference:** `governance/systems/milestone-execution-chat-starter.md`
+- **Fillable template:** `governance/templates/milestone-execution-chat-starter.md`
+- **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 3)
+
+---
+
+## 13C. Epic Execution Chat Starter (Mandatory)
 
 Every Epic execution chat MUST begin with a **complete Epic Execution Chat Starter**.
 
@@ -536,7 +584,35 @@ Execution chats that omit delivery requirements are invalid.
 A canonical template is provided under:
 
 ```
-docs/templates/epic-execution-chat-starter.md
+governance/templates/epic-execution-chat-starter.md
+```
+
+---
+
+## 13A. Phase Execution Chat Starter (Planning Sessions)
+
+Phase-scoped planning sessions are launched using a **Phase Execution Chat Starter**.
+
+A Phase Chat is a finite planning session scoped to a single Phase. It is NOT an execution chat. Its purpose is to:
+- Review the Phase spec
+- Produce Milestone specs for all Milestones within the Phase
+- Produce a Milestone Execution Chat Starter for each Milestone
+- Issue Milestone Delivery Authorizations upon HQ acceptance
+
+**Communication scope:** A Phase Chat reports to HQ Chat and communicates downward to Milestone Chats only. It MUST NOT reach across to sibling phases or lateral epics.
+
+**Authority:** Phase Chat produces proposals. HQ Chat owns accept/reject decisions.
+
+The system document defining Phase Chat rules is:
+
+```
+governance/systems/phase-execution-chat-starter.md
+```
+
+The fillable template for launching a Phase Chat is:
+
+```
+governance/templates/phase-execution-chat-starter.md
 ```
 
 ---
@@ -552,7 +628,46 @@ Such integrations:
 
 Details are defined in the Project Tracker Integration System reference.
 
-Tracker integrations MUST be declared via a system reference under `docs/systems/` and MUST NOT be inferred from external tools or naming conventions.
+Tracker integrations MUST be declared via a system reference under `governance/systems/` and MUST NOT be inferred from external tools or naming conventions.
+
+---
+
+## 14A. `.ai-project.yml` — Required Project Configuration Artifact
+
+Every project using the AI Project System MUST have a `.ai-project.yml` file at its repository root. This file is the **project configuration contract**: it declares the governance source, the pinned governance version, and optional project-specific overrides.
+
+`.ai-project.yml` is required before any HQ agent session or `ai-project init` scaffolding. It is the foundation for governance discovery (M8), CLI scaffolding (M7), and the override system (M9).
+
+### Required fields
+
+- `governance.source` — URL or relative path to the governance source repository
+- `governance.version` — Pinned governance version (semver string, quoted)
+- `governance.ref` — Git ref (tag, branch, or SHA) on the governance source
+- `project.name` — Project slug identifier
+- `project.description` — Short project description
+
+### Canonical specification
+
+Full field definitions, validation rules, HQ agent usage, and CLI scaffolding behavior are documented in:
+
+```
+governance/ai-project-yml-spec.md
+```
+
+---
+
+## 14B. Git Submodule Setup — External Project Reference Procedure
+
+External projects reference this governance package via git submodule. The canonical procedure for adding, pinning, updating, and cloning governance via submodule is documented in:
+
+```
+governance/submodule-setup.md
+```
+
+Key conventions:
+- The submodule MUST be installed at `.governance/` (hidden folder)
+- `governance.source` in `.ai-project.yml` corresponds to the submodule remote URL
+- `governance.ref` in `.ai-project.yml` corresponds to the checked-out ref inside `.governance/`
 
 ---
 
@@ -561,7 +676,7 @@ Tracker integrations MUST be declared via a system reference under `docs/systems
 All Epic specs MUST follow the canonical structure defined in:
 
 ```
-docs/templates/epic-spec.md
+governance/templates/epic-spec.md
 ```
 
 ---
@@ -596,3 +711,12 @@ This project system exists to:
 
 Structure is not bureaucracy.  
 Structure is leverage.
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---|---|---|
+| 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated canonical repository structure, template paths, and system reference paths. |
+| 1.5.0 | 2026-02-18 | Previous version — governance lived in `docs/`. |
