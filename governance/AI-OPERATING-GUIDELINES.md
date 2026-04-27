@@ -32,7 +32,7 @@ All AI agents (Coding Agents and HQ Chats) MUST enforce the single canonical hap
 3. **Human Review**: HQ Chat requests and receives human review findings in plain language.
 4. **Epic Review Seal**: AI (Coding Agent or HQ Chat) structures findings into an Epic Review Seal for human confirmation.
 5. **HQ Decision**: HQ Chat issues an explicit delivery authorization (accept, accept-with-follow-ups, or reject).
-6. **HQ Delivery Authorization**: Only after explicit HQ authorization may a PR be created and merged.
+6. **Epic Delivery Authorization**: Only after explicit Epic Delivery Authorization may a PR be created and merged.
 7. **PR and Merge**: Coding Agent opens a PR to the correct branch and merges only after HQ authorization. No Epic may close with uncommitted changes or without merge.
 8. **Stop**: Execution stops immediately after merge. No further actions are taken.
 
@@ -590,7 +590,7 @@ AI must always prefer the most recent version.
 **Critical distinction:** Execution completion is NOT the same as acceptance.
 
 - **Execution Completion:** The Epic is technically correct, all Definition of Done items are verified, code is delivered, and tests pass.
-- **Delivery Notice:** A structured, explicit notice produced by the Coding Agent upon execution completion. This is a mandatory artifact and a prerequisite for human review and HQ authorization. No Epic may proceed to review or closure without a Delivery Notice.
+- **Delivery Notice:** A structured, explicit notice produced by the Coding Agent upon execution completion. This is a mandatory artifact and a prerequisite for human review and Epic Delivery Authorization decision. No Epic may proceed to review or closure without a Delivery Notice.
 - **Acceptance:** A human (Layer 8) has reviewed the execution, made a judgment about correctness and fitness, and HQ Chat has made an explicit accept/reject decision.
 
 
@@ -630,7 +630,7 @@ HQ Chat (human) MUST:
 
 **HQ Chat enforcement and closure rules:**
 - HQ Chat MUST require a Delivery Notice before review.
-- HQ Chat MUST issue explicit delivery authorization before PR/merge.
+- HQ Chat MUST issue explicit Epic Delivery Authorization before PR/merge.
 - HQ Chat MUST decide resolution for any uncommitted changes before closure.
 - HQ Chat MUST declare Epics closed only after merge.
 
