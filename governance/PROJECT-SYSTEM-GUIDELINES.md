@@ -526,7 +526,49 @@ Completion Reports are append-only and MUST NOT modify the original Epic spec.
 
 ---
 
-## 13. Epic Execution Chat Starter (Mandatory)
+## 13A. Phase Execution Chat Starter (Mandatory)
+
+Every Phase planning session MUST begin with a **complete Phase Execution Chat Starter**.
+
+The Phase Execution Chat Starter is a binding planning contract that defines:
+- Phase goals and scope
+- Complete list of Milestones to be planned
+- Governance versions in use
+- Phase Chat responsibilities and constraints
+- Session lifecycle and completion criteria
+
+A Phase Chat (planning session scoped to a single Phase) is launched by HQ Chat using this artifact. It produces Milestone specs and Milestone Execution Chat Starters.
+
+For full role and responsibility definitions, see:
+
+- **System reference:** `governance/systems/phase-execution-chat-starter.md`
+- **Fillable template:** `governance/templates/phase-execution-chat-starter.md`
+- **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 2)
+
+---
+
+## 13B. Milestone Execution Chat Starter (Mandatory)
+
+Every Milestone planning session MUST begin with a **complete Milestone Execution Chat Starter**.
+
+The Milestone Execution Chat Starter is a binding planning contract that defines:
+- Milestone goals and scope
+- Complete list of Epics to be planned
+- Governance versions in use
+- Milestone Chat responsibilities and constraints
+- Session lifecycle and completion criteria
+
+A Milestone Chat (planning session scoped to a single Milestone) is launched by Phase Chat (or HQ Chat during bootstrap) using this artifact. It produces Epic specs and Epic Execution Chat Starters.
+
+For full role and responsibility definitions, see:
+
+- **System reference:** `governance/systems/milestone-execution-chat-starter.md`
+- **Fillable template:** `governance/templates/milestone-execution-chat-starter.md`
+- **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 3)
+
+---
+
+## 13C. Epic Execution Chat Starter (Mandatory)
 
 Every Epic execution chat MUST begin with a **complete Epic Execution Chat Starter**.
 
