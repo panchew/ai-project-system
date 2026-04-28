@@ -1,0 +1,484 @@
+#!/bin/bash
+
+################################################################################
+# ai-project init - AI Project System initialization CLI
+#
+# Usage: ai-project init <project-name> [options]
+#
+# This script scaffolds a new AI Project System (P2) project with all required
+# folders, git initialization, and configuration files.
+################################################################################
+
+set -u  # Exit on undefined variable
+# Note: Not using set -e because we want controlled error handling
+
+# ============================================================================
+# Configuration & Defaults
+# ============================================================================
+
+readonly VERSION="1.0.0"
+readonly SCRIPT_NAME="ai-project init"
+readonly DEFAULT_GOVERNANCE_SOURCE="https://github.com/panchew/ai-project-system"
+readonly DEFAULT_GOVERNANCE_VERSION="v2.0.0"
+
+# Color codes for output
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly NC='\033[0m'  # No Color
+
+# ============================================================================
+# Utility Functions
+# ============================================================================
+
+# Print error message and exit
+error() {
+  printf "${RED}✗ Error: %s${NC}\n" "$1" >&2
+  exit 1
+}
+
+# Print success message
+success() {
+  printf "${GREEN}✓ %s${NC}\n" "$1"
+}
+
+# Print info message
+info() {
+  printf "  %s\n" "$1"
+}
+
+# Print usage help
+print_help() {
+  cat << 'EOF'
+Usage: ai-project init <project-name> [options]
+
+Create a new AI Project System project with governance and standard structure.
+
+Arguments:
+  project-name              Name of the project (lowercase, dashes, numbers only)
+
+Options:
+  --dir <path>              Directory where project will be created (default: current directory)
+  --governance-source <url> Git repository URL for governance (default: https://github.com/panchew/ai-project-system)
+  --governance-version <tag> Git tag/branch for governance (default: v2.0.0)
+  --skip-git                Initialize directory without creating git repository
+  --skip-submodule          Skip adding governance submodule (E7.3 will handle)
+  --help                    Show this help text
+  --version                 Show CLI version
+
+Examples:
+  ai-project init my-new-project
+  ai-project init my-project --dir ~/projects
+  ai-project init my-project --governance-source https://github.com/myorg/governance
+
+For more information, visit: https://github.com/panchew/ai-project-system
+EOF
+}
+
+# Print version
+print_version() {
+  echo "ai-project init version ${VERSION}"
+}
+
+# ============================================================================
+# Validation Functions
+# ============================================================================
+
+# Validate project name format
+validate_project_name() {
+  local name="$1"
+  
+  # Check if empty
+  if [[ -z "$name" ]]; then
+    error "Project name is required"
+  fi
+  
+  # Check for valid characters: lowercase letters, numbers, dashes
+  if ! [[ "$name" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]]; then
+    error "Invalid project name: '$name'
+    
+Project names must:
+  - Start and end with lowercase letters or numbers
+  - Contain only lowercase letters, numbers, and dashes
+  
+Examples of valid names:
+  - my-project
+  - project1
+  - my-awesome-project
+  
+Please use a valid project name and try again."
+  fi
+  
+  # Check for reserved names (common reserved words)
+  local reserved=("test" "lib" "bin" "docs" "tmp" "var" "etc" "usr")
+  for reserved_name in "${reserved[@]}"; do
+    if [[ "$name" == "$reserved_name" ]]; then
+      error "Project name '$name' is reserved. Please choose a different name."
+    fi
+  done
+}
+
+# Validate that target directory doesn't exist or is empty
+validate_target_directory() {
+  local target_dir="$1"
+  
+  if [[ -e "$target_dir" ]]; then
+    if [[ ! -d "$target_dir" ]]; then
+      error "Target path exists but is not a directory: $target_dir"
+    fi
+    
+    # Check if directory is empty
+    if [[ -n "$(ls -A "$target_dir" 2>/dev/null)" ]]; then
+      error "Directory already exists and is not empty: $target_dir
+      
+Use --dir to specify a different location:
+  ai-project init $project_name --dir /path/to/other/location"
+    fi
+  fi
+}
+
+# Check if git is available
+check_git_available() {
+  if ! command -v git &> /dev/null; then
+    error "git is not installed or not in PATH
+
+Please install git 2.20 or later:
+  - macOS: brew install git
+  - Ubuntu/Debian: sudo apt-get install git
+  - Fedora/CentOS: sudo yum install git
+  
+Visit: https://git-scm.com/download"
+  fi
+}
+
+# ============================================================================
+# Project Creation Functions
+# ============================================================================
+
+# Create folder structure
+create_folder_structure() {
+  local project_dir="$1"
+  
+  # Create main project directory if it doesn't exist
+  if [[ ! -d "$project_dir" ]]; then
+    mkdir -p "$project_dir" || error "Failed to create directory: $project_dir"
+  fi
+  
+  success "Creating folder structure"
+  
+  # Create docs subdirectories
+  mkdir -p "$project_dir/docs/phases"
+  mkdir -p "$project_dir/docs/context"
+  mkdir -p "$project_dir/docs/roadmap"
+  mkdir -p "$project_dir/docs/decisions"
+  mkdir -p "$project_dir/docs/_legacy"
+  mkdir -p "$project_dir/docs/admin"
+  
+  # Create .github/agents directory
+  mkdir -p "$project_dir/.github/agents"
+  
+  # Create stub files
+  create_stub_file "$project_dir/docs/README.md" "# Project Documentation
+
+This folder contains all project documentation including phases, roadmap, and decisions.
+
+## Structure
+
+- **phases/**: Project phase artifacts
+- **context/**: Project context and tracker information
+- **roadmap/**: Project roadmap and planning
+- **decisions/**: Architecture decision records (ADRs)
+- **_legacy/**: Historical artifacts and deprecated content
+- **admin/**: Administrative notes and records
+"
+  
+  create_stub_file "$project_dir/docs/context/project-tracker.md" "# Project Tracker
+
+This document tracks the current state of the project.
+
+## Overview
+
+[Add project overview here]
+
+## Current Status
+
+[Add current status here]
+
+## Key Metrics
+
+[Add key metrics here]
+"
+  
+  create_stub_file "$project_dir/docs/roadmap/overview.md" "# Project Roadmap
+
+This document outlines the project roadmap and milestones.
+
+## Vision
+
+[Add vision here]
+
+## Phases
+
+[Add phases here]
+
+## Timeline
+
+[Add timeline here]
+"
+  
+  create_stub_file "$project_dir/README.md" "# PROJECT_NAME
+
+Brief description of the project.
+
+## Getting Started
+
+1. Review the documentation in \`docs/\`
+2. Check the roadmap in \`docs/roadmap/\`
+3. Explore phases in \`docs/phases/\`
+
+## Development
+
+[Add development instructions here]
+
+## Documentation
+
+All project documentation is in the \`docs/\` folder.
+"
+  
+  create_stub_file "$project_dir/.gitignore" "# Python
+__pycache__/
+*.py[cod]
+*\$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Project
+.ai-project.local.yml
+"
+}
+
+# Create a stub file with content
+create_stub_file() {
+  local file_path="$1"
+  local content="$2"
+  
+  cat > "$file_path" << 'CONTENT_EOF'
+CONTENT_EOF
+  echo "$content" > "$file_path"
+}
+
+# Create .ai-project.yml configuration file
+create_ai_project_yml() {
+  local project_dir="$1"
+  local project_name="$2"
+  local governance_source="$3"
+  local governance_version="$4"
+  local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  
+  local yml_file="$project_dir/.ai-project.yml"
+  
+  cat > "$yml_file" << EOF
+project:
+  name: $project_name
+  created_at: $timestamp
+
+governance:
+  source: $governance_source
+  version: $governance_version
+  submodule_path: governance/
+EOF
+  
+  success "Created .ai-project.yml"
+}
+
+# Initialize git repository
+init_git_repo() {
+  local project_dir="$1"
+  
+  cd "$project_dir" || error "Failed to enter directory: $project_dir"
+  
+  success "Initializing git repository"
+  
+  # Initialize git
+  if ! git init > /dev/null 2>&1; then
+    error "Failed to initialize git repository"
+  fi
+  
+  # Add all files
+  if ! git add . > /dev/null 2>&1; then
+    error "Failed to stage files with git"
+  fi
+  
+  # Create initial commit
+  if ! git commit -m "Initial project scaffold by ai-project init" > /dev/null 2>&1; then
+    error "Failed to create initial git commit"
+  fi
+  
+  cd - > /dev/null || error "Failed to return to previous directory"
+}
+
+# ============================================================================
+# Main Function
+# ============================================================================
+
+main() {
+  local project_name=""
+  local target_dir="."
+  local governance_source="$DEFAULT_GOVERNANCE_SOURCE"
+  local governance_version="$DEFAULT_GOVERNANCE_VERSION"
+  local skip_git=false
+  local skip_submodule=false
+  
+  # Parse command line arguments
+  if [[ $# -eq 0 ]]; then
+    print_help
+    exit 0
+  fi
+  
+  # First argument must be project name (unless it's a flag)
+  if [[ "$1" == "--help" ]]; then
+    print_help
+    exit 0
+  elif [[ "$1" == "--version" ]]; then
+    print_version
+    exit 0
+  elif [[ "$1" == -* ]]; then
+    error "Project name must be provided as first argument
+    
+Usage: ai-project init <project-name> [options]
+
+Use --help for more information."
+  else
+    project_name="$1"
+    shift
+  fi
+  
+  # Parse remaining arguments
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --dir)
+        if [[ -z "${2:-}" ]]; then
+          error "--dir requires an argument"
+        fi
+        target_dir="$2"
+        shift 2
+        ;;
+      --governance-source)
+        if [[ -z "${2:-}" ]]; then
+          error "--governance-source requires an argument"
+        fi
+        governance_source="$2"
+        shift 2
+        ;;
+      --governance-version)
+        if [[ -z "${2:-}" ]]; then
+          error "--governance-version requires an argument"
+        fi
+        governance_version="$2"
+        shift 2
+        ;;
+      --skip-git)
+        skip_git=true
+        shift
+        ;;
+      --skip-submodule)
+        skip_submodule=true
+        shift
+        ;;
+      --help)
+        print_help
+        exit 0
+        ;;
+      --version)
+        print_version
+        exit 0
+        ;;
+      *)
+        error "Unknown option: $1
+
+Use --help for available options."
+        ;;
+    esac
+  done
+  
+  # Resolve target directory
+  target_dir="${target_dir%/}"  # Remove trailing slash
+  if [[ "$target_dir" != "." && "$target_dir" != "./" ]]; then
+    target_dir="$target_dir/$project_name"
+  else
+    target_dir="$project_name"
+  fi
+  
+  # Validation phase
+  validate_project_name "$project_name"
+  success "Validating project name: $project_name"
+  
+  # Check git availability before proceeding
+  if [[ "$skip_git" == false ]]; then
+    check_git_available
+  fi
+  
+  validate_target_directory "$target_dir"
+  success "Validating target directory"
+  
+  # Create project
+  create_folder_structure "$target_dir"
+  create_ai_project_yml "$target_dir" "$project_name" "$governance_source" "$governance_version"
+  
+  # Initialize git if not skipped
+  if [[ "$skip_git" == false ]]; then
+    init_git_repo "$target_dir"
+  fi
+  
+  # Print success message
+  echo ""
+  success "Project created successfully!"
+  echo ""
+  echo "Next steps:"
+  info "cd $target_dir"
+  info "git log           # View initial commit"
+  info "cat README.md     # See project overview"
+  echo ""
+  info "Documentation: https://github.com/panchew/ai-project-system/docs/"
+  echo ""
+  
+  exit 0
+}
+
+# ============================================================================
+# Entry Point
+# ============================================================================
+
+main "$@"
