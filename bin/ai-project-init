@@ -30,23 +30,10 @@ readonly NC='\033[0m'  # No Color
 # Utility Functions
 # ============================================================================
 
-# Print error message and exit
-error() {
-  printf "${RED}✗ Error: %s${NC}\n" "$1" >&2
-  exit 1
-}
+error() { printf "${RED}✗ Error: %s${NC}\n" "$1" >&2; exit 1; }
+success() { printf "${GREEN}✓ %s${NC}\n" "$1"; }
+info() { printf "  %s\n" "$1"; }
 
-# Print success message
-success() {
-  printf "${GREEN}✓ %s${NC}\n" "$1"
-}
-
-# Print info message
-info() {
-  printf "  %s\n" "$1"
-}
-
-# Print usage help
 print_help() {
   cat << 'EOF'
 Usage: ai-project init <project-name> [options]
@@ -61,7 +48,7 @@ Options:
   --governance-source <url> Git repository URL for governance (default: https://github.com/panchew/ai-project-system)
   --governance-version <tag> Git tag/branch for governance (default: v2.0.0)
   --skip-git                Initialize directory without creating git repository
-  --skip-submodule          Skip adding governance submodule (E7.3 will handle)
+  --skip-submodule          Do not add governance submodule (offline/testing)
   --help                    Show this help text
   --version                 Show CLI version
 
@@ -74,79 +61,62 @@ For more information, visit: https://github.com/panchew/ai-project-system
 EOF
 }
 
-# Print version
-print_version() {
-  echo "ai-project init version ${VERSION}"
-}
+print_version() { echo "ai-project init version ${VERSION}"; }
 
 # ============================================================================
 # Validation Functions
 # ============================================================================
 
-# Validate project name format
 validate_project_name() {
   local name="$1"
-  
-  # Check if empty
-  if [[ -z "$name" ]]; then
-    error "Project name is required"
-  fi
-  
-  # Check for valid characters: lowercase letters, numbers, dashes
+  [[ -z "$name" ]] && error "Project name is required"
   if ! [[ "$name" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]]; then
-    error "Invalid project name: '$name'
-    
-Project names must:
-  - Start and end with lowercase letters or numbers
-  - Contain only lowercase letters, numbers, and dashes
-  
-Examples of valid names:
-  - my-project
-  - project1
-  - my-awesome-project
-  
-Please use a valid project name and try again."
+    error "Invalid project name: '$name'\n\nProject names must:\n  - Start and end with lowercase letters or numbers\n  - Contain only lowercase letters, numbers, and dashes\n\nExamples of valid names:\n  - my-project\n  - project1\n  - my-awesome-project\n\nPlease use a valid project name and try again."
   fi
-  
-  # Check for reserved names (common reserved words)
   local reserved=("test" "lib" "bin" "docs" "tmp" "var" "etc" "usr")
   for reserved_name in "${reserved[@]}"; do
-    if [[ "$name" == "$reserved_name" ]]; then
-      error "Project name '$name' is reserved. Please choose a different name."
-    fi
+    [[ "$name" == "$reserved_name" ]] && error "Project name '$name' is reserved. Please choose a different name."
   done
 }
 
-# Validate that target directory doesn't exist or is empty
 validate_target_directory() {
   local target_dir="$1"
-  
   if [[ -e "$target_dir" ]]; then
-    if [[ ! -d "$target_dir" ]]; then
-      error "Target path exists but is not a directory: $target_dir"
-    fi
-    
-    # Check if directory is empty
+    [[ ! -d "$target_dir" ]] && error "Target path exists but is not a directory: $target_dir"
     if [[ -n "$(ls -A "$target_dir" 2>/dev/null)" ]]; then
-      error "Directory already exists and is not empty: $target_dir
-      
-Use --dir to specify a different location:
-  ai-project init $project_name --dir /path/to/other/location"
+      error "Directory already exists and is not empty: $target_dir\n\nUse --dir to specify a different location:\n  ai-project init $project_name --dir /path/to/other/location"
     fi
   fi
 }
 
-# Check if git is available
-check_git_available() {
-  if ! command -v git &> /dev/null; then
-    error "git is not installed or not in PATH
+validate_governance_source() {
+  local url="$1"
+  [[ "$url" =~ ^https?://.+ ]] || error "Invalid governance source URL: '$url'\n\nMust start with http:// or https:// and be a valid git repository URL.\nExample: https://github.com/panchew/ai-project-system"
+}
 
-Please install git 2.20 or later:
-  - macOS: brew install git
-  - Ubuntu/Debian: sudo apt-get install git
-  - Fedora/CentOS: sudo yum install git
-  
-Visit: https://git-scm.com/download"
+validate_git_ref() {
+  local ref="$1"
+  [[ "$ref" =~ ^[a-zA-Z0-9._/-]+$ ]] || error "Invalid governance version/ref: '$ref'\n\nAllowed characters: letters, numbers, dot, underscore, slash, dash.\nExamples: v2.0.0, main, release/2.0"
+}
+
+validate_iso8601_utc() {
+  local ts="$1"
+  [[ "$ts" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$ ]] || error "Internal error: generated timestamp is not ISO-8601 UTC: '$ts'"
+}
+
+validate_ai_project_yml_content() {
+  local content="$1"
+  grep -q "^project:" <<< "$content" || error ".ai-project.yml validation failed: missing 'project' section"
+  grep -q "^governance:" <<< "$content" || error ".ai-project.yml validation failed: missing 'governance' section"
+  grep -q "^[[:space:]]\{2\}name:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'project.name'"
+  grep -q "^[[:space:]]\{2\}created_at:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'project.created_at'"
+  grep -q "^[[:space:]]\{2\}source:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'governance.source'"
+  grep -q "^[[:space:]]\{2\}version:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'governance.version'"
+}
+
+check_git_available() {
+  if ! command -v git >/dev/null 2>&1; then
+    error "git is not installed or not in PATH\n\nPlease install git 2.20 or later:\n  - macOS: brew install git\n  - Ubuntu/Debian: sudo apt-get install git\n  - Fedora/CentOS: sudo yum install git\n\nVisit: https://git-scm.com/download"
   fi
 }
 
@@ -154,29 +124,14 @@ Visit: https://git-scm.com/download"
 # Project Creation Functions
 # ============================================================================
 
-# Create folder structure
 create_folder_structure() {
   local project_dir="$1"
-  
-  # Create main project directory if it doesn't exist
-  if [[ ! -d "$project_dir" ]]; then
-    mkdir -p "$project_dir" || error "Failed to create directory: $project_dir"
-  fi
-  
+  [[ -d "$project_dir" ]] || mkdir -p "$project_dir" || error "Failed to create directory: $project_dir"
   success "Creating folder structure"
-  
-  # Create docs subdirectories
-  mkdir -p "$project_dir/docs/phases"
-  mkdir -p "$project_dir/docs/context"
-  mkdir -p "$project_dir/docs/roadmap"
-  mkdir -p "$project_dir/docs/decisions"
-  mkdir -p "$project_dir/docs/_legacy"
-  mkdir -p "$project_dir/docs/admin"
-  
-  # Create .github/agents directory
+  mkdir -p "$project_dir/docs/phases" "$project_dir/docs/context" "$project_dir/docs/roadmap" \
+           "$project_dir/docs/decisions" "$project_dir/docs/_legacy" "$project_dir/docs/admin"
   mkdir -p "$project_dir/.github/agents"
-  
-  # Create stub files
+
   create_stub_file "$project_dir/docs/README.md" "# Project Documentation
 
 This folder contains all project documentation including phases, roadmap, and decisions.
@@ -190,7 +145,7 @@ This folder contains all project documentation including phases, roadmap, and de
 - **_legacy/**: Historical artifacts and deprecated content
 - **admin/**: Administrative notes and records
 "
-  
+
   create_stub_file "$project_dir/docs/context/project-tracker.md" "# Project Tracker
 
 This document tracks the current state of the project.
@@ -207,7 +162,7 @@ This document tracks the current state of the project.
 
 [Add key metrics here]
 "
-  
+
   create_stub_file "$project_dir/docs/roadmap/overview.md" "# Project Roadmap
 
 This document outlines the project roadmap and milestones.
@@ -224,7 +179,7 @@ This document outlines the project roadmap and milestones.
 
 [Add timeline here]
 "
-  
+
   create_stub_file "$project_dir/README.md" "# PROJECT_NAME
 
 Brief description of the project.
@@ -243,7 +198,7 @@ Brief description of the project.
 
 All project documentation is in the \`docs/\` folder.
 "
-  
+
   create_stub_file "$project_dir/.gitignore" "# Python
 __pycache__/
 *.py[cod]
@@ -289,27 +244,14 @@ yarn-error.log
 "
 }
 
-# Create a stub file with content
-create_stub_file() {
-  local file_path="$1"
-  local content="$2"
-  
-  cat > "$file_path" << 'CONTENT_EOF'
-CONTENT_EOF
-  echo "$content" > "$file_path"
-}
+create_stub_file() { local file_path="$1"; local content="$2"; printf "%s\n" "$content" > "$file_path"; }
 
-# Create .ai-project.yml configuration file
 create_ai_project_yml() {
-  local project_dir="$1"
-  local project_name="$2"
-  local governance_source="$3"
-  local governance_version="$4"
-  local timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-  
-  local yml_file="$project_dir/.ai-project.yml"
-  
-  cat > "$yml_file" << EOF
+  local project_dir="$1" project_name="$2" governance_source="$3" governance_version="$4"
+  local timestamp; timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  validate_iso8601_utc "$timestamp"; validate_governance_source "$governance_source"; validate_git_ref "$governance_version"
+  local yml_content
+  yml_content=$(cat << EOF
 project:
   name: $project_name
   created_at: $timestamp
@@ -319,33 +261,53 @@ governance:
   version: $governance_version
   submodule_path: governance/
 EOF
-  
+)
+  validate_ai_project_yml_content "$yml_content"
+  printf "%s\n" "$yml_content" > "$project_dir/.ai-project.yml"
   success "Created .ai-project.yml"
 }
 
-# Initialize git repository
-init_git_repo() {
-  local project_dir="$1"
-  
+add_governance_submodule() {
+  local project_dir="$1" governance_source="$2" governance_version="$3"
   cd "$project_dir" || error "Failed to enter directory: $project_dir"
-  
+  info "Adding governance submodule (branch/ref: $governance_version)"
+  if ! git submodule add --branch "$governance_version" "$governance_source" governance > /dev/null 2>&1; then
+    info "Primary add failed; attempting fallback add + manual checkout"
+    # Fallback: add without branch, then set desired ref and branch config
+    rm -rf governance || true
+    if ! git submodule add "$governance_source" governance > /dev/null 2>&1; then
+      error "Failed to add governance submodule from $governance_source"
+    fi
+    # Ensure tags/refs are available, then checkout requested ref
+    if ! git -C governance fetch --tags --quiet; then
+      error "Failed to fetch tags for governance submodule"
+    fi
+    if ! git -C governance checkout -q "$governance_version"; then
+      error "Failed to checkout governance ref '$governance_version'"
+    fi
+    # Persist desired branch/ref hint in .gitmodules for tooling parity
+    git config -f .gitmodules submodule.governance.branch "$governance_version" || true
+  fi
+  if ! git submodule update --init --recursive > /dev/null 2>&1; then
+    error "Failed to initialize governance submodule"
+  fi
+  if [[ ! -d "governance" ]] || [[ -z "$(ls -A governance 2>/dev/null)" ]]; then
+    error "Governance submodule appears empty or missing after initialization"
+  fi
+  cd - > /dev/null || error "Failed to return to previous directory"
+  success "Governance submodule added and initialized"
+}
+
+init_git_repo() {
+  local project_dir="$1" do_submodule="$2" governance_source="$3" governance_version="$4"
+  cd "$project_dir" || error "Failed to enter directory: $project_dir"
   success "Initializing git repository"
-  
-  # Initialize git
-  if ! git init > /dev/null 2>&1; then
-    error "Failed to initialize git repository"
+  git init > /dev/null 2>&1 || error "Failed to initialize git repository"
+  if [[ "$do_submodule" == true ]]; then
+    add_governance_submodule "." "$governance_source" "$governance_version"
   fi
-  
-  # Add all files
-  if ! git add . > /dev/null 2>&1; then
-    error "Failed to stage files with git"
-  fi
-  
-  # Create initial commit
-  if ! git commit -m "Initial project scaffold by ai-project init" > /dev/null 2>&1; then
-    error "Failed to create initial git commit"
-  fi
-  
+  git add . > /dev/null 2>&1 || error "Failed to stage files with git"
+  git commit -m "Initial project scaffold by ai-project init" > /dev/null 2>&1 || error "Failed to create initial git commit"
   cd - > /dev/null || error "Failed to return to previous directory"
 }
 
@@ -354,115 +316,47 @@ init_git_repo() {
 # ============================================================================
 
 main() {
-  local project_name=""
-  local target_dir="."
-  local governance_source="$DEFAULT_GOVERNANCE_SOURCE"
-  local governance_version="$DEFAULT_GOVERNANCE_VERSION"
-  local skip_git=false
-  local skip_submodule=false
-  
-  # Parse command line arguments
-  if [[ $# -eq 0 ]]; then
-    print_help
-    exit 0
-  fi
-  
-  # First argument must be project name (unless it's a flag)
-  if [[ "$1" == "--help" ]]; then
-    print_help
-    exit 0
-  elif [[ "$1" == "--version" ]]; then
-    print_version
-    exit 0
-  elif [[ "$1" == -* ]]; then
-    error "Project name must be provided as first argument
-    
-Usage: ai-project init <project-name> [options]
+  local project_name="" target_dir="." governance_source="$DEFAULT_GOVERNANCE_SOURCE" governance_version="$DEFAULT_GOVERNANCE_VERSION"
+  local skip_git=false skip_submodule=false
 
-Use --help for more information."
-  else
-    project_name="$1"
-    shift
-  fi
-  
-  # Parse remaining arguments
+  if [[ $# -eq 0 ]]; then print_help; exit 0; fi
+
+  if [[ "$1" == "--help" ]]; then print_help; exit 0; elif [[ "$1" == "--version" ]]; then print_version; exit 0; elif [[ "$1" == -* ]]; then
+    error "Project name must be provided as first argument\n\nUsage: ai-project init <project-name> [options]\n\nUse --help for more information."
+  else project_name="$1"; shift; fi
+
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --dir)
-        if [[ -z "${2:-}" ]]; then
-          error "--dir requires an argument"
-        fi
-        target_dir="$2"
-        shift 2
-        ;;
-      --governance-source)
-        if [[ -z "${2:-}" ]]; then
-          error "--governance-source requires an argument"
-        fi
-        governance_source="$2"
-        shift 2
-        ;;
-      --governance-version)
-        if [[ -z "${2:-}" ]]; then
-          error "--governance-version requires an argument"
-        fi
-        governance_version="$2"
-        shift 2
-        ;;
-      --skip-git)
-        skip_git=true
-        shift
-        ;;
-      --skip-submodule)
-        skip_submodule=true
-        shift
-        ;;
-      --help)
-        print_help
-        exit 0
-        ;;
-      --version)
-        print_version
-        exit 0
-        ;;
-      *)
-        error "Unknown option: $1
-
-Use --help for available options."
-        ;;
+      --dir) [[ -n "${2:-}" ]] || error "--dir requires an argument"; target_dir="$2"; shift 2 ;;
+      --governance-source) [[ -n "${2:-}" ]] || error "--governance-source requires an argument"; governance_source="$2"; shift 2 ;;
+      --governance-version) [[ -n "${2:-}" ]] || error "--governance-version requires an argument"; governance_version="$2"; shift 2 ;;
+      --skip-git) skip_git=true; shift ;;
+      --skip-submodule) skip_submodule=true; shift ;;
+      --help) print_help; exit 0 ;;
+      --version) print_version; exit 0 ;;
+      *) error "Unknown option: $1\n\nUse --help for available options." ;;
     esac
   done
-  
-  # Resolve target directory
-  target_dir="${target_dir%/}"  # Remove trailing slash
-  if [[ "$target_dir" != "." && "$target_dir" != "./" ]]; then
-    target_dir="$target_dir/$project_name"
-  else
-    target_dir="$project_name"
-  fi
-  
-  # Validation phase
-  validate_project_name "$project_name"
-  success "Validating project name: $project_name"
-  
-  # Check git availability before proceeding
-  if [[ "$skip_git" == false ]]; then
-    check_git_available
-  fi
-  
-  validate_target_directory "$target_dir"
-  success "Validating target directory"
-  
-  # Create project
+
+  target_dir="${target_dir%/}"
+  if [[ "$target_dir" != "." && "$target_dir" != "./" ]]; then target_dir="$target_dir/$project_name"; else target_dir="$project_name"; fi
+
+  validate_project_name "$project_name"; success "Validating project name: $project_name"
+  if [[ "$skip_git" == false ]]; then check_git_available; fi
+  validate_target_directory "$target_dir"; success "Validating target directory"
+
   create_folder_structure "$target_dir"
   create_ai_project_yml "$target_dir" "$project_name" "$governance_source" "$governance_version"
-  
-  # Initialize git if not skipped
+
   if [[ "$skip_git" == false ]]; then
-    init_git_repo "$target_dir"
+    if [[ "$skip_submodule" == true ]]; then
+      info "Skipping governance submodule as requested (--skip-submodule)"
+      init_git_repo "$target_dir" false "" ""
+    else
+      init_git_repo "$target_dir" true "$governance_source" "$governance_version"
+    fi
   fi
-  
-  # Print success message
+
   echo ""
   success "Project created successfully!"
   echo ""
@@ -473,8 +367,6 @@ Use --help for available options."
   echo ""
   info "Documentation: https://github.com/panchew/ai-project-system/docs/"
   echo ""
-  
-  exit 0
 }
 
 # ============================================================================
