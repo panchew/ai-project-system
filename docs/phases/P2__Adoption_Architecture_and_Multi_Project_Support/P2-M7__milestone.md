@@ -3,8 +3,8 @@ project: ai-project-system
 phase: P2
 milestone: M7
 type: milestone
-status: planned
-last_updated: 2026-04-27
+status: completed
+last_updated: 2026-05-02
 ---
 
 # Milestone M7 — CLI Initialization Tool
@@ -89,14 +89,14 @@ Extend the CLI to:
 
 ## Definition of Done
 
-- [ ] E7.1 Epic spec and Execution Chat Starter complete and accepted
-- [ ] E7.2 Epic spec and Execution Chat Starter complete and accepted
-- [ ] E7.3 Epic spec and Execution Chat Starter complete and accepted
-- [ ] E7.4 Epic spec and Execution Chat Starter complete and accepted
-- [ ] All 4 Epics have been executed and merged to `milestone/M7`
-- [ ] CLI command is deployed to the repository (at least in `/bin/` or similar)
-- [ ] End-to-end test passed: `ai-project init test-project` produces a usable P2 project
-- [ ] Completion notice and phase delivery authorization produced
+- [x] E7.1 Epic spec and Execution Chat Starter complete and accepted
+- [x] E7.2 Epic spec and Execution Chat Starter complete and accepted
+- [x] E7.3 Epic spec and Execution Chat Starter complete and accepted
+- [x] E7.4 Epic spec and Execution Chat Starter complete and accepted
+- [x] All 4 Epics have been executed and merged to `milestone/M7`
+- [x] CLI command is deployed to the repository (at least in `/bin/` or similar)
+- [x] End-to-end test passed: `ai-project init test-project` produces a usable P2 project
+- [x] Completion notice and phase delivery authorization produced
 
 ---
 
@@ -122,6 +122,8 @@ Milestone M7 is complete when:
 4. ✅ CLI is documented (help text, usage examples, troubleshooting)
 5. ✅ Governance version is pinned and correctly referenced in generated projects
 6. ✅ M7 completion artifacts are produced (completion report, phase delivery authorization)
+
+> Milestone M7 is complete and production-ready for governance-driven planning with the HQ agent as of 2026-05-02.
 
 ---
 
