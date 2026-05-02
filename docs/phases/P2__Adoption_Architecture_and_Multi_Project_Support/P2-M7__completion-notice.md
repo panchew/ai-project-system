@@ -1,9 +1,10 @@
 # MILESTONE CLOSURE DECLARATION — M7
 
 **Milestone:** M7 — CLI Initialization Tool
-**Status:** COMPLETE (awaiting consolidation) ✅
+**Status:** COMPLETE (Phase Chat authorized consolidation) ✅
 **Completion Date:** 2026-05-02
 **Declared By:** HQ Chat
+**Phase Authorization:** 2026-05-02 (Phase Execution Chat)
 
 ## Completion Verification
 
@@ -26,15 +27,19 @@
 
 Milestone M7 delivered a production-ready CLI initialization tool supporting governance-driven planning with the HQ agent. The system now scaffolds new projects, installs governance, writes `.ai-project.yml`, installs `.github/agents/hq.agent.md`, and provides immediate guidance for HQ-driven planning.
 
-## Required Action: Consolidation
+## Phase Authorization: Consolidation
 
-**To fully close this milestone, consolidation is required:**
+**Phase Execution Chat authorized consolidation on 2026-05-02.**
+
+**Authorization file:** `docs/admin/2026-05-02__phase-acceptance__M7-complete.md`
+
+**Consolidation steps:**
 
 1. **Create Pull Request:**
    - Source: `milestone/M7`
    - Target: `phase/P2`
-   - Title: "Milestone M7: CLI Initialization Tool"
-   - Description: Include the summary above, Epic list, and verification status.
+   - Title: "Milestone M7: CLI Initialization Tool — Consolidation"
+   - Description: Reference the Phase authorization file above
 
 2. **Human reviews consolidation PR:**
    - Verify milestone work is complete and all merges are present
