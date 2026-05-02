@@ -49,6 +49,16 @@ Then create a `governance-source.md` at your project root declaring the adoption
 
 See `guides/QUICK-START.md` for the full onboarding walkthrough.
 
+### Prefer the CLI (Recommended)
+
+The repository provides a CLI that automates project scaffolding, adds this governance as a submodule, creates `.ai-project.yml`, and installs the HQ agent file:
+
+```sh
+ai-project init <project-name>
+```
+
+See docs/systems/cli-usage-guide.md for details.
+
 ---
 
 ## Governance Version
