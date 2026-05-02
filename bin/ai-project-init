@@ -16,7 +16,7 @@ set -u  # Exit on undefined variable
 # Configuration & Defaults
 # ============================================================================
 
-readonly VERSION="1.0.0"
+readonly VERSION="1.1.0"
 readonly SCRIPT_NAME="ai-project init"
 readonly DEFAULT_GOVERNANCE_SOURCE="https://github.com/panchew/ai-project-system"
 readonly DEFAULT_GOVERNANCE_VERSION="v2.0.0"
@@ -273,17 +273,26 @@ add_governance_submodule() {
   info "Adding governance submodule (branch/ref: $governance_version)"
   if ! git submodule add --branch "$governance_version" "$governance_source" governance > /dev/null 2>&1; then
     info "Primary add failed; attempting fallback add + manual checkout"
-    # Fallback: add without branch, then set desired ref and branch config
+    # Fallback strategy:
+    # 1) Fresh clone at desired ref (tag/branch) into governance/
+    # 2) Adopt the cloned repo as a submodule with --force
     rm -rf governance || true
-    if ! git submodule add "$governance_source" governance > /dev/null 2>&1; then
-      error "Failed to add governance submodule from $governance_source"
+    # Try shallow clone at ref, else full fetch + checkout
+    if ! git clone --depth 1 --branch "$governance_version" "$governance_source" governance > /dev/null 2>&1; then
+      info "Shallow clone failed; attempting full clone + checkout"
+      if ! git clone "$governance_source" governance > /dev/null 2>&1; then
+        error "Failed to clone governance source $governance_source"
+      fi
+      if ! git -C governance fetch --tags --quiet; then
+        error "Failed to fetch tags for governance source"
+      fi
+      if ! git -C governance checkout -q "$governance_version"; then
+        error "Failed to checkout governance ref '$governance_version'"
+      fi
     fi
-    # Ensure tags/refs are available, then checkout requested ref
-    if ! git -C governance fetch --tags --quiet; then
-      error "Failed to fetch tags for governance submodule"
-    fi
-    if ! git -C governance checkout -q "$governance_version"; then
-      error "Failed to checkout governance ref '$governance_version'"
+    # Adopt as submodule (requires matching URL); force to accept existing path
+    if ! git submodule add -f "$governance_source" governance > /dev/null 2>&1; then
+      error "Failed to register governance as a git submodule"
     fi
     # Persist desired branch/ref hint in .gitmodules for tooling parity
     git config -f .gitmodules submodule.governance.branch "$governance_version" || true
@@ -309,6 +318,39 @@ init_git_repo() {
   git add . > /dev/null 2>&1 || error "Failed to stage files with git"
   git commit -m "Initial project scaffold by ai-project init" > /dev/null 2>&1 || error "Failed to create initial git commit"
   cd - > /dev/null || error "Failed to return to previous directory"
+}
+
+install_hq_agent() {
+  # Install the HQ Chat agent file into the generated project.
+  # If the governance agent file is unavailable, create a stub placeholder.
+  local project_dir="$1"
+  local agents_dir="$project_dir/.github/agents"
+  local src_file="$project_dir/governance/agents/hq.agent.md"
+  local dest_file="$agents_dir/hq.agent.md"
+
+  mkdir -p "$agents_dir" || error "Failed to create agents directory at $agents_dir"
+
+  if [[ -f "$src_file" ]]; then
+    cp -f "$src_file" "$dest_file" || error "Failed to copy HQ agent from governance"
+  else
+    # Create stub when governance agent is not yet available (e.g., during M8 work)
+    cat > "$dest_file" << 'EOF'
+# HQ Chat Agent
+
+This agent is under development in Milestone M8.
+
+For now, use this as a placeholder for the governance-aware HQ Chat agent.
+
+When M8 is complete, this file will be replaced with the full HQ agent implementation.
+EOF
+  fi
+
+  # Basic validation: file exists, readable, non-empty, and starts with a Markdown header or frontmatter
+  [[ -r "$dest_file" ]] || error "HQ agent file is not readable at $dest_file"
+  [[ -s "$dest_file" ]] || error "HQ agent file is empty at $dest_file"
+  if ! head -n 1 "$dest_file" | grep -Eq '^(#|---)'; then
+    error "HQ agent file at $dest_file does not appear to contain valid Markdown header"
+  fi
 }
 
 # ============================================================================
@@ -357,15 +399,43 @@ main() {
     fi
   fi
 
+  # Install HQ agent file after structure (and submodule if present) is ready
+  install_hq_agent "$target_dir"
+
+  # If a git repo exists, include the agent file in the initial commit (amend) to keep history tidy
+  if [[ "$skip_git" == false ]]; then
+    cd "$target_dir" || error "Failed to enter directory: $target_dir"
+    git add .github/agents/hq.agent.md > /dev/null 2>&1 || error "Failed to stage HQ agent file"
+    # Prefer amending the initial commit; if that fails (edge cases), fall back to a new commit
+    if ! git commit --amend --no-edit > /dev/null 2>&1; then
+      git commit -m "Add HQ agent file" > /dev/null 2>&1 || error "Failed to commit HQ agent file"
+    fi
+    cd - > /dev/null || error "Failed to return to previous directory"
+  fi
+
   echo ""
   success "Project created successfully!"
   echo ""
   echo "Next steps:"
-  info "cd $target_dir"
-  info "git log           # View initial commit"
-  info "cat README.md     # See project overview"
+  info "1. Navigate to the project:"
+  info "   cd $target_dir"
   echo ""
-  info "Documentation: https://github.com/panchew/ai-project-system/docs/"
+  info "2. View the initial git commit:"
+  info "   git log"
+  echo ""
+  info "3. Open in VS Code:"
+  info "   code ."
+  echo ""
+  info "4. Start planning with HQ Chat:"
+  info "   - Open GitHub Copilot Chat in VS Code"
+  info "   - Select the \"hq\" custom agent"
+  info "   - Send this prompt:"
+  info "     \"I'm starting a new project using the AI Project System governance framework. Initialize HQ Chat and help me create a Phase 0 project formalization.\""
+  echo ""
+  info "5. Read more:"
+  info "   - Project documentation: docs/README.md"
+  info "   - Governance: governance/PROJECT-SYSTEM-GUIDELINES.md"
+  info "   - AI System Guidelines: governance/AI-OPERATING-GUIDELINES.md"
   echo ""
 }
 
