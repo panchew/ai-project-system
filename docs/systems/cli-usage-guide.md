@@ -46,6 +46,21 @@ code .
 
 Then open GitHub Copilot Chat, pick the "hq" custom agent, and use the canonical prompt from the HQ Startup Prompt guide.
 
+## HQ Agent Usage
+
+Once your project is initialized and opened in VS Code:
+
+1. Open GitHub Copilot Chat.
+2. Select the custom agent named "hq".
+3. Paste the Canonical Prompt from the HQ Startup Prompt guide.
+4. Review the agent's governance discovery output (it should read `.ai-project.yml` and confirm `governance/` files).
+5. Approve file creations when prompted; the agent writes only Markdown into `docs/**`.
+
+Expected initial outputs:
+- Phase 0 formalization draft in `docs/phases/`
+- Milestone and Epic planning stubs per governance templates
+- Checklist for adoption and governance validation
+
 ## End-to-End Verification Checklist
 
 ```bash
@@ -82,6 +97,10 @@ git log --oneline -n 1
       printf "# HQ Chat Agent\n\nThis agent is under development in Milestone M8.\n" > .github/agents/hq.agent.md
     fi
     ```
+- HQ agent cannot find `.ai-project.yml` or `governance/`:
+  - Ensure the repo root includes `.ai-project.yml` (see governance/ai-project-yml-spec.md)
+  - Verify `governance/` exists with required files (PROJECT-SYSTEM-GUIDELINES.md, AI-OPERATING-GUIDELINES.md)
+  - If missing, re-run init or restore submodule per governance/submodule-setup.md
 - `git status` shows changes after init:
   - The CLI amends the initial commit to include the HQ agent file. If it failed (rare), you may see a second commit; this is acceptable.
 
