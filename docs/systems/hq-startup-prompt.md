@@ -17,6 +17,18 @@ Replace `[project-name]` with your project name.
 - Reads `.ai-project.yml` for project configuration
 - Loads governance rules from the `governance/` submodule
 - Begins Phase 0 planning and produces initial formalization notes
+- Limits writes to `docs/**` (Markdown only); never edits `governance/**`
+
+## Initial Outputs
+
+- Phase 0 formalization draft in `docs/phases/`
+- Milestone and Epic scaffolds as per templates
+- Adoption checklist and governance validation notes
+
+## Fallbacks
+
+- If `.ai-project.yml` is missing/invalid: the agent explains required fields (see governance/ai-project-yml-spec.md) and pauses artifact creation until fixed
+- If `governance/` is absent: the agent reports missing key files and suggests restoring the submodule or re-running the CLI
 
 ## How To Use in VS Code
 
