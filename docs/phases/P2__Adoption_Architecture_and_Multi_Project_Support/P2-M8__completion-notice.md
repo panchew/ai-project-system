@@ -30,22 +30,12 @@ Milestone M8 delivered guidance and validation for adopting the system across ne
 
 ## Required Action: Consolidation
 
-To fully close this milestone, consolidate `milestone/M8` back into `phase/P2`:
+Consolidation has been completed per governance:
 
-1. **Create Pull Request:**
-   - Source: `milestone/M8`
-   - Target: `phase/P2`
-   - Title: "Milestone M8: Adoption Architecture and Multi-Project Support"
-   - Description: Include this notice, links to epic completion reports, and verification status.
-
-2. **Human review the consolidation PR:**
-   - Verify all Epic merges are present and documented
-   - Confirm branch hierarchy is preserved
-   - Confirm no regressions or incomplete artifacts remain
-
-3. **Merge PR** to `phase/P2`.
-
-4. **Report merge commit SHA back to HQ/Phase Chat.**
+- PR: https://github.com/panchew/ai-project-system/pull/39 — MERGED
+- Merge commit: `201b9e88c7ff01381350789bf3ac6a0aea549a91`
+- Base: `phase/P2`; Head: `milestone/M8`
+- Remote branch `milestone/M8` deleted after merge
 
 ## References
 
