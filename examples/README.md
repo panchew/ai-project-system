@@ -51,8 +51,8 @@ These examples serve as:
 1. **Review an example** to understand structure
 2. **Copy the directory structure** for your own project
 3. **Adapt the artifacts** to your problem domain
-4. **Reference templates** in [../docs/templates/](../docs/templates/) for blank starting points
-5. **Follow governance** from [../docs/PROJECT-SYSTEM-GUIDELINES.md](../docs/PROJECT-SYSTEM-GUIDELINES.md)
+4. **Reference templates** in [../governance/templates/](../governance/templates/) for blank starting points
+5. **Follow governance** from [../governance/PROJECT-SYSTEM-GUIDELINES.md](../governance/PROJECT-SYSTEM-GUIDELINES.md)
 
 ### For Validation
 
@@ -115,10 +115,10 @@ Want to add an example? Examples should:
 
 ## Related Resources
 
-- [Quick Start Guide](../docs/QUICK-START.md) — Step-by-step instructions for starting a project
-- [Templates](../docs/templates/) — Blank templates for all artifact types
-- [PROJECT-SYSTEM-GUIDELINES.md](../docs/PROJECT-SYSTEM-GUIDELINES.md) — Authoritative governance
-- [AI-OPERATING-GUIDELINES.md](../docs/AI-OPERATING-GUIDELINES.md) — AI execution procedures
+- [Quick Start Guide](../governance/guides/QUICK-START.md) — Step-by-step instructions for starting a project
+- [Templates](../governance/templates/) — Blank templates for all artifact types
+- [PROJECT-SYSTEM-GUIDELINES.md](../governance/PROJECT-SYSTEM-GUIDELINES.md) — Authoritative governance
+- [AI-OPERATING-GUIDELINES.md](../governance/AI-OPERATING-GUIDELINES.md) — AI execution procedures
 
 ---
 
@@ -126,8 +126,8 @@ Want to add an example? Examples should:
 
 If examples are unclear or you need help:
 
-1. Review the [Quick Start Guide](../docs/QUICK-START.md)
-2. Check [PROJECT-SYSTEM-GUIDELINES.md](../docs/PROJECT-SYSTEM-GUIDELINES.md)
+1. Review the [Quick Start Guide](../governance/guides/QUICK-START.md)
+2. Check [PROJECT-SYSTEM-GUIDELINES.md](../governance/PROJECT-SYSTEM-GUIDELINES.md)
 3. Open an issue in the repository
 
 ---

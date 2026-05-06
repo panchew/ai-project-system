@@ -76,7 +76,7 @@ Before submitting a pull request, **open an issue** to discuss:
 ### 2. Reference Relevant Governance
 
 When proposing changes:
-- Reference specific sections of [PROJECT-SYSTEM-GUIDELINES.md](docs/PROJECT-SYSTEM-GUIDELINES.md) or [AI-OPERATING-GUIDELINES.md](docs/AI-OPERATING-GUIDELINES.md)
+- Reference specific sections of [PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md) or [AI-OPERATING-GUIDELINES.md](governance/AI-OPERATING-GUIDELINES.md)
 - Explain how your change aligns with or improves existing governance
 - If your change conflicts with governance, explain why the rule should change
 
@@ -177,7 +177,7 @@ See [LICENSE](LICENSE) and [docs/LICENSE](docs/LICENSE) for full license texts.
 
 ## Questions or Concerns?
 
-- **Usage questions:** See [docs/FAQ.md](docs/FAQ.md) or open an issue
+- **Usage questions:** See [governance/guides/FAQ.md](governance/guides/FAQ.md) or open an issue
 - **Contribution process questions:** Open an issue with the `question` label
 - **Governance questions:** Reference specific governance sections in an issue
 

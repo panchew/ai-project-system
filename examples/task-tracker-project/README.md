@@ -64,8 +64,8 @@ This example shows:
 1. **Use this structure as a template** for your own project repository
 2. **Adapt the roadmap** to your problem domain
 3. **Follow the same artifact patterns** for your Epics
-4. **Reference templates** in [../../docs/templates/](../../docs/templates/)
-5. **Follow governance** from [../../docs/PROJECT-SYSTEM-GUIDELINES.md](../../docs/PROJECT-SYSTEM-GUIDELINES.md)
+4. **Reference templates** in [../../governance/templates/](../../governance/templates/)
+5. **Follow governance** from [../../governance/PROJECT-SYSTEM-GUIDELINES.md](../../governance/PROJECT-SYSTEM-GUIDELINES.md)
 
 ## Project Context: Personal Task Tracker CLI
 
@@ -151,17 +151,17 @@ examples/task-tracker-project/
 
 After reviewing this example:
 
-1. **Read the [Quick Start Guide](../../docs/QUICK-START.md)** for step-by-step instructions
-2. **Review the [templates](../../docs/templates/)** to see blank starting points
+1. **Read the [Quick Start Guide](../../governance/guides/QUICK-START.md)** for step-by-step instructions
+2. **Review the [templates](../../governance/templates/)** to see blank starting points
 3. **Start your own project** using this structure as a reference
-4. **Follow governance** from [PROJECT-SYSTEM-GUIDELINES.md](../../docs/PROJECT-SYSTEM-GUIDELINES.md)
+4. **Follow governance** from [PROJECT-SYSTEM-GUIDELINES.md](../../governance/PROJECT-SYSTEM-GUIDELINES.md)
 
 ## References
 
-- [AI Project System Governance](../../docs/PROJECT-SYSTEM-GUIDELINES.md)
-- [AI Operating Guidelines](../../docs/AI-OPERATING-GUIDELINES.md)
-- [Quick Start Guide](../../docs/QUICK-START.md)
-- [Templates](../../docs/templates/)
+- [AI Project System Governance](../../governance/PROJECT-SYSTEM-GUIDELINES.md)
+- [AI Operating Guidelines](../../governance/AI-OPERATING-GUIDELINES.md)
+- [Quick Start Guide](../../governance/guides/QUICK-START.md)
+- [Templates](../../governance/templates/)
 
 ---
 

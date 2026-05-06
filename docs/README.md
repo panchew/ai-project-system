@@ -1,10 +1,11 @@
 # Documentation System
 
-This directory is the **canonical, authoritative knowledge system** for this project.
+This directory contains the **project history and execution artifacts** for this project.
 
-All durable project knowledge lives here:
-- Governance
-- Plans
+Governance files (rules, templates, system references) live in `/governance/`.
+
+All project execution history lives here:
+- Plans and phases
 - Specifications
 - Decisions
 - Context
@@ -19,8 +20,6 @@ Code does **not** replace documentation.
 ```
 docs/
 ├─ README.md
-├─ PROJECT-SYSTEM-GUIDELINES.md
-├─ AI-OPERATING-GUIDELINES.md
 ├─ roadmap/
 ├─ phases/
 ├─ decisions/
@@ -28,27 +27,11 @@ docs/
 └─ _legacy/
 ```
 
-This structure is intentional and enforced going forward.
+Governance documents are in `/governance/`. See [`/governance/README.md`](../governance/README.md) for the governance structure.
 
 ---
 
 ## Folder Responsibilities
-
-### `PROJECT-SYSTEM-GUIDELINES.md`
-Authoritative rules for:
-- Repository structure
-- Naming conventions
-- Branching strategy
-- Documentation organization
-
-### `AI-OPERATING-GUIDELINES.md`
-Authoritative rules for:
-- HQ chats
-- Execution chats
-- Coding agents
-- Context handling
-
----
 
 ### `roadmap/`
 High-level planning and forward-looking documents.
@@ -104,7 +87,7 @@ Historical documentation retained for reference.
 ## Enforcement Rules
 
 - New documentation **must** be placed in the correct folder
-- Files at the root of `docs/` are limited to governance and indexes
+- Governance files belong in `/governance/`, not `docs/`
 - Execution work requires an Epic spec with valid front-matter
 - Meaning is preserved; structure may evolve
 

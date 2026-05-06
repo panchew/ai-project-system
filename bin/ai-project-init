@@ -1,0 +1,446 @@
+#!/bin/bash
+
+################################################################################
+# ai-project init - AI Project System initialization CLI
+#
+# Usage: ai-project init <project-name> [options]
+#
+# This script scaffolds a new AI Project System (P2) project with all required
+# folders, git initialization, and configuration files.
+################################################################################
+
+set -u  # Exit on undefined variable
+# Note: Not using set -e because we want controlled error handling
+
+# ============================================================================
+# Configuration & Defaults
+# ============================================================================
+
+readonly VERSION="1.1.0"
+readonly SCRIPT_NAME="ai-project init"
+readonly DEFAULT_GOVERNANCE_SOURCE="https://github.com/panchew/ai-project-system"
+readonly DEFAULT_GOVERNANCE_VERSION="v2.0.0"
+
+# Color codes for output
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly NC='\033[0m'  # No Color
+
+# ============================================================================
+# Utility Functions
+# ============================================================================
+
+error() { printf "${RED}✗ Error: %s${NC}\n" "$1" >&2; exit 1; }
+success() { printf "${GREEN}✓ %s${NC}\n" "$1"; }
+info() { printf "  %s\n" "$1"; }
+
+print_help() {
+  cat << 'EOF'
+Usage: ai-project init <project-name> [options]
+
+Create a new AI Project System project with governance and standard structure.
+
+Arguments:
+  project-name              Name of the project (lowercase, dashes, numbers only)
+
+Options:
+  --dir <path>              Directory where project will be created (default: current directory)
+  --governance-source <url> Git repository URL for governance (default: https://github.com/panchew/ai-project-system)
+  --governance-version <tag> Git tag/branch for governance (default: v2.0.0)
+  --skip-git                Initialize directory without creating git repository
+  --skip-submodule          Do not add governance submodule (offline/testing)
+  --help                    Show this help text
+  --version                 Show CLI version
+
+Examples:
+  ai-project init my-new-project
+  ai-project init my-project --dir ~/projects
+  ai-project init my-project --governance-source https://github.com/myorg/governance
+
+For more information, visit: https://github.com/panchew/ai-project-system
+EOF
+}
+
+print_version() { echo "ai-project init version ${VERSION}"; }
+
+# ============================================================================
+# Validation Functions
+# ============================================================================
+
+validate_project_name() {
+  local name="$1"
+  [[ -z "$name" ]] && error "Project name is required"
+  if ! [[ "$name" =~ ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$ ]]; then
+    error "Invalid project name: '$name'\n\nProject names must:\n  - Start and end with lowercase letters or numbers\n  - Contain only lowercase letters, numbers, and dashes\n\nExamples of valid names:\n  - my-project\n  - project1\n  - my-awesome-project\n\nPlease use a valid project name and try again."
+  fi
+  local reserved=("test" "lib" "bin" "docs" "tmp" "var" "etc" "usr")
+  for reserved_name in "${reserved[@]}"; do
+    [[ "$name" == "$reserved_name" ]] && error "Project name '$name' is reserved. Please choose a different name."
+  done
+}
+
+validate_target_directory() {
+  local target_dir="$1"
+  if [[ -e "$target_dir" ]]; then
+    [[ ! -d "$target_dir" ]] && error "Target path exists but is not a directory: $target_dir"
+    if [[ -n "$(ls -A "$target_dir" 2>/dev/null)" ]]; then
+      error "Directory already exists and is not empty: $target_dir\n\nUse --dir to specify a different location:\n  ai-project init $project_name --dir /path/to/other/location"
+    fi
+  fi
+}
+
+validate_governance_source() {
+  local url="$1"
+  [[ "$url" =~ ^https?://.+ ]] || error "Invalid governance source URL: '$url'\n\nMust start with http:// or https:// and be a valid git repository URL.\nExample: https://github.com/panchew/ai-project-system"
+}
+
+validate_git_ref() {
+  local ref="$1"
+  [[ "$ref" =~ ^[a-zA-Z0-9._/-]+$ ]] || error "Invalid governance version/ref: '$ref'\n\nAllowed characters: letters, numbers, dot, underscore, slash, dash.\nExamples: v2.0.0, main, release/2.0"
+}
+
+validate_iso8601_utc() {
+  local ts="$1"
+  [[ "$ts" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$ ]] || error "Internal error: generated timestamp is not ISO-8601 UTC: '$ts'"
+}
+
+validate_ai_project_yml_content() {
+  local content="$1"
+  grep -q "^project:" <<< "$content" || error ".ai-project.yml validation failed: missing 'project' section"
+  grep -q "^governance:" <<< "$content" || error ".ai-project.yml validation failed: missing 'governance' section"
+  grep -q "^[[:space:]]\{2\}name:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'project.name'"
+  grep -q "^[[:space:]]\{2\}created_at:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'project.created_at'"
+  grep -q "^[[:space:]]\{2\}source:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'governance.source'"
+  grep -q "^[[:space:]]\{2\}version:[[:space:]]\S" <<< "$content" || error ".ai-project.yml validation failed: missing 'governance.version'"
+}
+
+check_git_available() {
+  if ! command -v git >/dev/null 2>&1; then
+    error "git is not installed or not in PATH\n\nPlease install git 2.20 or later:\n  - macOS: brew install git\n  - Ubuntu/Debian: sudo apt-get install git\n  - Fedora/CentOS: sudo yum install git\n\nVisit: https://git-scm.com/download"
+  fi
+}
+
+# ============================================================================
+# Project Creation Functions
+# ============================================================================
+
+create_folder_structure() {
+  local project_dir="$1"
+  [[ -d "$project_dir" ]] || mkdir -p "$project_dir" || error "Failed to create directory: $project_dir"
+  success "Creating folder structure"
+  mkdir -p "$project_dir/docs/phases" "$project_dir/docs/context" "$project_dir/docs/roadmap" \
+           "$project_dir/docs/decisions" "$project_dir/docs/_legacy" "$project_dir/docs/admin"
+  mkdir -p "$project_dir/.github/agents"
+
+  create_stub_file "$project_dir/docs/README.md" "# Project Documentation
+
+This folder contains all project documentation including phases, roadmap, and decisions.
+
+## Structure
+
+- **phases/**: Project phase artifacts
+- **context/**: Project context and tracker information
+- **roadmap/**: Project roadmap and planning
+- **decisions/**: Architecture decision records (ADRs)
+- **_legacy/**: Historical artifacts and deprecated content
+- **admin/**: Administrative notes and records
+"
+
+  create_stub_file "$project_dir/docs/context/project-tracker.md" "# Project Tracker
+
+This document tracks the current state of the project.
+
+## Overview
+
+[Add project overview here]
+
+## Current Status
+
+[Add current status here]
+
+## Key Metrics
+
+[Add key metrics here]
+"
+
+  create_stub_file "$project_dir/docs/roadmap/overview.md" "# Project Roadmap
+
+This document outlines the project roadmap and milestones.
+
+## Vision
+
+[Add vision here]
+
+## Phases
+
+[Add phases here]
+
+## Timeline
+
+[Add timeline here]
+"
+
+  create_stub_file "$project_dir/README.md" "# PROJECT_NAME
+
+Brief description of the project.
+
+## Getting Started
+
+1. Review the documentation in \`docs/\`
+2. Check the roadmap in \`docs/roadmap/\`
+3. Explore phases in \`docs/phases/\`
+
+## Development
+
+[Add development instructions here]
+
+## Documentation
+
+All project documentation is in the \`docs/\` folder.
+"
+
+  create_stub_file "$project_dir/.gitignore" "# Python
+__pycache__/
+*.py[cod]
+*\$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Project
+.ai-project.local.yml
+"
+}
+
+create_stub_file() { local file_path="$1"; local content="$2"; printf "%s\n" "$content" > "$file_path"; }
+
+create_ai_project_yml() {
+  local project_dir="$1" project_name="$2" governance_source="$3" governance_version="$4"
+  local timestamp; timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  validate_iso8601_utc "$timestamp"; validate_governance_source "$governance_source"; validate_git_ref "$governance_version"
+  local yml_content
+  yml_content=$(cat << EOF
+project:
+  name: $project_name
+  created_at: $timestamp
+
+governance:
+  source: $governance_source
+  version: $governance_version
+  submodule_path: governance/
+EOF
+)
+  validate_ai_project_yml_content "$yml_content"
+  printf "%s\n" "$yml_content" > "$project_dir/.ai-project.yml"
+  success "Created .ai-project.yml"
+}
+
+add_governance_submodule() {
+  local project_dir="$1" governance_source="$2" governance_version="$3"
+  cd "$project_dir" || error "Failed to enter directory: $project_dir"
+  info "Adding governance submodule (branch/ref: $governance_version)"
+  if ! git submodule add --branch "$governance_version" "$governance_source" governance > /dev/null 2>&1; then
+    info "Primary add failed; attempting fallback add + manual checkout"
+    # Fallback strategy:
+    # 1) Fresh clone at desired ref (tag/branch) into governance/
+    # 2) Adopt the cloned repo as a submodule with --force
+    rm -rf governance || true
+    # Try shallow clone at ref, else full fetch + checkout
+    if ! git clone --depth 1 --branch "$governance_version" "$governance_source" governance > /dev/null 2>&1; then
+      info "Shallow clone failed; attempting full clone + checkout"
+      if ! git clone "$governance_source" governance > /dev/null 2>&1; then
+        error "Failed to clone governance source $governance_source"
+      fi
+      if ! git -C governance fetch --tags --quiet; then
+        error "Failed to fetch tags for governance source"
+      fi
+      if ! git -C governance checkout -q "$governance_version"; then
+        error "Failed to checkout governance ref '$governance_version'"
+      fi
+    fi
+    # Adopt as submodule (requires matching URL); force to accept existing path
+    if ! git submodule add -f "$governance_source" governance > /dev/null 2>&1; then
+      error "Failed to register governance as a git submodule"
+    fi
+    # Persist desired branch/ref hint in .gitmodules for tooling parity
+    git config -f .gitmodules submodule.governance.branch "$governance_version" || true
+  fi
+  if ! git submodule update --init --recursive > /dev/null 2>&1; then
+    error "Failed to initialize governance submodule"
+  fi
+  if [[ ! -d "governance" ]] || [[ -z "$(ls -A governance 2>/dev/null)" ]]; then
+    error "Governance submodule appears empty or missing after initialization"
+  fi
+  cd - > /dev/null || error "Failed to return to previous directory"
+  success "Governance submodule added and initialized"
+}
+
+init_git_repo() {
+  local project_dir="$1" do_submodule="$2" governance_source="$3" governance_version="$4"
+  cd "$project_dir" || error "Failed to enter directory: $project_dir"
+  success "Initializing git repository"
+  git init > /dev/null 2>&1 || error "Failed to initialize git repository"
+  if [[ "$do_submodule" == true ]]; then
+    add_governance_submodule "." "$governance_source" "$governance_version"
+  fi
+  git add . > /dev/null 2>&1 || error "Failed to stage files with git"
+  git commit -m "Initial project scaffold by ai-project init" > /dev/null 2>&1 || error "Failed to create initial git commit"
+  cd - > /dev/null || error "Failed to return to previous directory"
+}
+
+install_hq_agent() {
+  # Install the HQ Chat agent file into the generated project.
+  # If the governance agent file is unavailable, create a stub placeholder.
+  local project_dir="$1"
+  local agents_dir="$project_dir/.github/agents"
+  local src_file="$project_dir/governance/agents/hq.agent.md"
+  local dest_file="$agents_dir/hq.agent.md"
+
+  mkdir -p "$agents_dir" || error "Failed to create agents directory at $agents_dir"
+
+  if [[ -f "$src_file" ]]; then
+    cp -f "$src_file" "$dest_file" || error "Failed to copy HQ agent from governance"
+  else
+    # Create stub when governance agent is not yet available (e.g., during M8 work)
+    cat > "$dest_file" << 'EOF'
+# HQ Chat Agent
+
+This agent is under development in Milestone M8.
+
+For now, use this as a placeholder for the governance-aware HQ Chat agent.
+
+When M8 is complete, this file will be replaced with the full HQ agent implementation.
+EOF
+  fi
+
+  # Basic validation: file exists, readable, non-empty, and starts with a Markdown header or frontmatter
+  [[ -r "$dest_file" ]] || error "HQ agent file is not readable at $dest_file"
+  [[ -s "$dest_file" ]] || error "HQ agent file is empty at $dest_file"
+  if ! head -n 1 "$dest_file" | grep -Eq '^(#|---)'; then
+    error "HQ agent file at $dest_file does not appear to contain valid Markdown header"
+  fi
+}
+
+# ============================================================================
+# Main Function
+# ============================================================================
+
+main() {
+  local project_name="" target_dir="." governance_source="$DEFAULT_GOVERNANCE_SOURCE" governance_version="$DEFAULT_GOVERNANCE_VERSION"
+  local skip_git=false skip_submodule=false
+
+  if [[ $# -eq 0 ]]; then print_help; exit 0; fi
+
+  if [[ "$1" == "--help" ]]; then print_help; exit 0; elif [[ "$1" == "--version" ]]; then print_version; exit 0; elif [[ "$1" == -* ]]; then
+    error "Project name must be provided as first argument\n\nUsage: ai-project init <project-name> [options]\n\nUse --help for more information."
+  else project_name="$1"; shift; fi
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --dir) [[ -n "${2:-}" ]] || error "--dir requires an argument"; target_dir="$2"; shift 2 ;;
+      --governance-source) [[ -n "${2:-}" ]] || error "--governance-source requires an argument"; governance_source="$2"; shift 2 ;;
+      --governance-version) [[ -n "${2:-}" ]] || error "--governance-version requires an argument"; governance_version="$2"; shift 2 ;;
+      --skip-git) skip_git=true; shift ;;
+      --skip-submodule) skip_submodule=true; shift ;;
+      --help) print_help; exit 0 ;;
+      --version) print_version; exit 0 ;;
+      *) error "Unknown option: $1\n\nUse --help for available options." ;;
+    esac
+  done
+
+  target_dir="${target_dir%/}"
+  if [[ "$target_dir" != "." && "$target_dir" != "./" ]]; then target_dir="$target_dir/$project_name"; else target_dir="$project_name"; fi
+
+  validate_project_name "$project_name"; success "Validating project name: $project_name"
+  if [[ "$skip_git" == false ]]; then check_git_available; fi
+  validate_target_directory "$target_dir"; success "Validating target directory"
+
+  create_folder_structure "$target_dir"
+  create_ai_project_yml "$target_dir" "$project_name" "$governance_source" "$governance_version"
+
+  if [[ "$skip_git" == false ]]; then
+    if [[ "$skip_submodule" == true ]]; then
+      info "Skipping governance submodule as requested (--skip-submodule)"
+      init_git_repo "$target_dir" false "" ""
+    else
+      init_git_repo "$target_dir" true "$governance_source" "$governance_version"
+    fi
+  fi
+
+  # Install HQ agent file after structure (and submodule if present) is ready
+  install_hq_agent "$target_dir"
+
+  # If a git repo exists, include the agent file in the initial commit (amend) to keep history tidy
+  if [[ "$skip_git" == false ]]; then
+    cd "$target_dir" || error "Failed to enter directory: $target_dir"
+    git add .github/agents/hq.agent.md > /dev/null 2>&1 || error "Failed to stage HQ agent file"
+    # Prefer amending the initial commit; if that fails (edge cases), fall back to a new commit
+    if ! git commit --amend --no-edit > /dev/null 2>&1; then
+      git commit -m "Add HQ agent file" > /dev/null 2>&1 || error "Failed to commit HQ agent file"
+    fi
+    cd - > /dev/null || error "Failed to return to previous directory"
+  fi
+
+  echo ""
+  success "Project created successfully!"
+  echo ""
+  echo "Next steps:"
+  info "1. Navigate to the project:"
+  info "   cd $target_dir"
+  echo ""
+  info "2. View the initial git commit:"
+  info "   git log"
+  echo ""
+  info "3. Open in VS Code:"
+  info "   code ."
+  echo ""
+  info "4. Start planning with HQ Chat:"
+  info "   - Open GitHub Copilot Chat in VS Code"
+  info "   - Select the \"hq\" custom agent"
+  info "   - Send this prompt:"
+  info "     \"I'm starting a new project using the AI Project System governance framework. Initialize HQ Chat and help me create a Phase 0 project formalization.\""
+  echo ""
+  info "5. Read more:"
+  info "   - Project documentation: docs/README.md"
+  info "   - Governance: governance/PROJECT-SYSTEM-GUIDELINES.md"
+  info "   - AI System Guidelines: governance/AI-OPERATING-GUIDELINES.md"
+  echo ""
+}
+
+# ============================================================================
+# Entry Point
+# ============================================================================
+
+main "$@"
