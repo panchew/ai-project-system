@@ -15,6 +15,8 @@ Scope: upgrades within the same governance repository (default: `https://github.
 
 Note: Upgrades are explicit, operator-initiated actions. No automatic upgrades.
 
+Related: For when it is appropriate to promote governance to `master` during an active phase, see `docs/governance/guides/release-governance.md`.
+
 ## Prerequisites
 
 - A clean working tree: no uncommitted changes or staged files

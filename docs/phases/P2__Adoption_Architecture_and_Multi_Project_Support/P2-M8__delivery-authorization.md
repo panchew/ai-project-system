@@ -76,6 +76,12 @@ Use this checklist:
 
 - If the completion date in the notice predates this authorization or appears ahead of local time, align the final reported milestone completion date with the actual merge date/time when reporting back to HQ/Phase Chat.
 
+### Communication Template
+
+When posting status to the parent Phase Chat, use the canonical template:
+
+- `docs/governance/templates/awaiting-delivery-authorization.md` (Milestone → Phase section)
+
 ## Audit
 
 - Authorization: GRANTED by HQ/Phase Chat on 2026-05-04
