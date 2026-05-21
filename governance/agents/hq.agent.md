@@ -156,6 +156,65 @@ If `governance/` is missing or unreadable:
 - Validate governance installation:
   - “Verify `.ai-project.yml` and governance submodule; report issues and fixes.”
 
+## Override Integration
+
+The HQ agent is responsible for reading, caching, and applying override values from `.ai-project.yml`. This section defines the override integration contract. Actual implementation is deferred to **Epic E9.3**.
+
+### Startup Read
+
+On startup, the HQ agent MUST:
+
+1. Read the `overrides` block from `.ai-project.yml`
+2. Validate each field against the rules in `governance/ai-project-yml-spec.md` §4
+3. Produce a warning for unknown override keys
+4. Produce an error for invalid field values (prevents agent startup)
+5. If no overrides block is present, use governance defaults for all dimensions
+
+### Session Caching
+
+After validation, the HQ agent MUST cache resolved override values in session context:
+
+```
+session.overrides = {
+  epic_prefix: "<resolved value>",
+  merge_strategy: "<resolved value>",
+  branch_strategy: "<resolved value>"
+}
+```
+
+Resolution follows the three-level precedence hierarchy defined in `PROJECT-SYSTEM-GUIDELINES.md` §14C (local decision > `.ai-project.yml` > governance default).
+
+### Artifact Generation
+
+The HQ agent MUST consult cached overrides when generating:
+
+- **Phase specs:** Branch naming references, merge strategy references, branch strategy description
+- **Milestone specs:** Epic branch references, PR merge instructions, branch promotion flow
+- **Epic specs:** Epic branch name (`<epic_prefix>E<id>`), merge instructions, branch target
+- **Chat Starters:** Branch creation instructions, merge method instructions, execution context
+
+### Implementation Placeholders (E9.3)
+
+The following placeholder logic is reserved for E9.3 implementation:
+
+```
+// E9.3 TODO: Implement override caching
+// session.overrides = resolveOverrides(aiProjectYml.overrides, governanceDefaults)
+
+// E9.3 TODO: Implement override application during artifact generation
+// function applyOverrides(template, overrides) -> resolvedArtifact
+
+// E9.3 TODO: Implement precedence resolution
+// function resolvePrecedence(localDecision, aiProjectOverrides, governanceDefault) -> resolvedValue
+```
+
+### Reference Documents
+
+- Override boundaries (which dimensions are overridable): `governance/override-boundaries.md`
+- Override system integration (full override flow): `docs/systems/override-system-integration.md`
+- Override field definitions and validation: `governance/ai-project-yml-spec.md` §3.3, §4
+- Precedence hierarchy: `governance/PROJECT-SYSTEM-GUIDELINES.md` §14C
+
 ## Notes
 
 - If `governance/agents/hq.agent.md` is not present in the generated project, this file serves as the canonical source for the HQ agent definition.
