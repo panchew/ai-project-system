@@ -764,6 +764,16 @@ Override values are validated when the HQ agent reads `.ai-project.yml`:
 
 See `governance/ai-project-yml-spec.md` Section 4 for the complete validation rule set.
 
+### Override Boundaries
+
+The formal Override Boundaries document enumerates all overridable and non-overridable governance dimensions with detailed rationale, constraints, and examples. It is the authoritative reference for understanding which governance dimensions may be customized.
+
+```
+governance/override-boundaries.md
+```
+
+The Override Boundaries document is a companion to this section. It provides per-dimension detail that is summarized here.
+
 ---
 
 ## 15. Canonical Epic Spec Template
