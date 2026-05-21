@@ -25,7 +25,9 @@ Common issues encountered during AI Project System adoption and their resolution
 5. [Override Configuration Problems](#5-override-configuration-problems)
 6. [Governance Sync/Update Failures](#6-governance-syncupdate-failures)
 7. [CLI Init Failures](#7-cli-init-failures)
-8. [General Governance Questions](#8-general-governance-questions)
+8. [Existing Project Adoption](#8-existing-project-adoption)
+9. [Governance Version Tag Issues](#9-governance-version-tag-issues)
+10. [General Governance Questions](#10-general-governance-questions)
 
 ---
 
@@ -327,6 +329,35 @@ Running `git submodule update` returns errors, or pulling governance changes cau
 
 ---
 
+### Problem: `@panchew/ai-project` package not found on npm
+
+`npm install -g @panchew/ai-project` returns a 404 error.
+
+**Cause:** The CLI package has not been published to the npm registry, or the package name is incorrect.
+
+**Solution:**
+
+1. **Use the local script** from the governance source:
+   ```bash
+   # After adding governance submodule
+   ./governance/bin/ai-project-init init my-project
+   ```
+   
+   Or clone the governance source directly:
+   ```bash
+   git clone https://github.com/panchew/ai-project-system /tmp/ai-project-system
+   /tmp/ai-project-system/bin/ai-project-init init my-project
+   ```
+
+2. **Set up governance manually** if the script is not available:
+   - Add the submodule: `git submodule add https://github.com/panchew/ai-project-system governance`
+   - Create `.ai-project.yml` manually with your project name and governance reference
+   - Copy the HQ agent: `cp governance/agents/hq.agent.md .github/agents/hq.agent.md`
+
+**Prevention:** Check the [governance source repository](https://github.com/panchew/ai-project-system) for the latest CLI availability. The local script at `bin/ai-project-init` is always available.
+
+---
+
 ## 7. CLI Init Failures
 
 ### Problem: `ai-project init` fails with permission errors, missing dependencies, or network errors
@@ -385,13 +416,119 @@ The CLI command does not complete successfully.
    ai-project init my-project --force
    ```
 
-**Prevention:** Ensure Node.js v18+ and npm are installed before running `ai-project init`. Configure npm for user directory to avoid permission issues. Clone the project first, then run `init` inside it.
+6. **Node.js version below v18:**
+   ```bash
+   node --version
+   # Must be v18+, you have v16 or lower
+   ```
+   **Solution:** Use `nvm` to install and manage Node.js versions:
+   ```bash
+   nvm install 18
+   nvm use 18
+   ```
+   If Node.js upgrade is not possible, skip the CLI and set up governance manually:
+   - Add the governance submodule directly: `git submodule add https://github.com/panchew/ai-project-system governance`
+   - Create `.ai-project.yml` manually (see Step 2 verification example)
+   - Copy the HQ agent: `cp governance/agents/hq.agent.md .github/agents/hq.agent.md`
+   
+   Governance itself is language-agnostic — Node.js is only required for the CLI tool.
+
+**Prevention:** Ensure Node.js v18+ and npm are installed before running `ai-project init`. Use `nvm` to manage Node.js versions. Configure npm for user directory to avoid permission issues. Clone the project first, then run `init` inside it.
 
 **See also:** [ADOPTION-GUIDE.md Prerequisites](ADOPTION-GUIDE.md#prerequisites)
 
 ---
 
-## 8. General Governance Questions
+## 8. Existing Project Adoption
+
+### Problem: I have an existing project with code and history — `ai-project init` requires an empty directory
+
+The adoption guide targets greenfield projects, but you need to add governance to an existing repository.
+
+**Cause:** The `ai-project init` CLI scaffold creates a new project skeleton and refuses to run in a non-empty directory to avoid overwriting existing content.
+
+**Solution:**
+
+1. **Use the Legacy Migration Guide** — it provides a "Governance Install" workflow (Workflow B) specifically for existing projects:
+   - [Legacy Migration Guide: Governance Install](legacy-project-migration.md#workflow-b-governance-install)
+   
+2. **Manual governance install** (summary):
+   ```bash
+   # Add governance submodule
+   git submodule add https://github.com/panchew/ai-project-system governance
+   cd governance
+   git fetch
+   git checkout milestone/M10   # or current stable branch
+   cd ..
+   
+   # Create .ai-project.yml
+   cat > .ai-project.yml << EOF
+   governance:
+     source: https://github.com/panchew/ai-project-system
+     version: "2.0.0"
+     ref: milestone/M10
+   project:
+     name: my-project
+     description: "My project description"
+   EOF
+   
+   # Install HQ agent
+   mkdir -p .github/agents
+   cp governance/agents/hq.agent.md .github/agents/hq.agent.md
+   
+   # Commit
+   git add .ai-project.yml .gitmodules governance .github
+   git commit -m "chore: adopt AI Project System governance"
+   ```
+
+**Prevention:** When starting a new project from scratch, use `ai-project init` before adding any code. For existing projects, always use the migration guide.
+
+**See also:** [Legacy Migration Guide](legacy-project-migration.md#workflow-b-governance-install), [ADOPTION-GUIDE.md Step 1](ADOPTION-GUIDE.md#step-1-initialize-your-project)
+
+---
+
+## 9. Governance Version Tag Issues
+
+### Problem: `v2.0.0` tag not found when adding governance submodule
+
+The guide says to use `v2.0.0` but `git checkout v2.0.0` fails with `pathspec 'v2.0.0' did not match any file(s) known to git`.
+
+**Cause:** The git tag `v2.0.0` may not have been created yet in the governance source repository. Only the conceptual version number exists in `.ai-project.yml`.
+
+**Solution:**
+
+1. **Check available branches and tags:**
+   ```bash
+   cd governance
+   git branch -r          # List remote branches
+   git tag                # List tags
+   cd ..
+   ```
+
+2. **Use a branch ref instead of a tag:**
+   ```bash
+   cd governance
+   git fetch origin
+   git checkout milestone/M10   # or: develop, master
+   cd ..
+   git add governance
+   ```
+
+3. **Update `.ai-project.yml` to match:**
+   ```yaml
+   governance:
+     source: https://github.com/panchew/ai-project-system
+     version: "milestone/M10"
+     ref: milestone/M10
+   ```
+
+**Prevention:** Use tags for stability once they are created (`v2.0.0`, `v2.0.1`, etc.). During active development, branch refs (`milestone/M10`, `develop`) are acceptable but may change.
+
+**See also:** [ADOPTION-GUIDE.md Step 2](ADOPTION-GUIDE.md#step-2-verify-governance-submodule)
+
+---
+
+## 10. General Governance Questions
 
 ### Problem: I do not understand the governance architecture, authority hierarchy, or process flow
 
