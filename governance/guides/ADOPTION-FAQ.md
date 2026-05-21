@@ -6,6 +6,7 @@ epic: E10.1
 type: reference
 status: active
 last_updated: 2026-05-21
+updated_by: E10.3-governance-sync-validation
 ---
 
 # Adoption Troubleshooting FAQ
@@ -288,7 +289,7 @@ The HQ agent is not applying project-specific overrides (branch strategy, merge 
 
 Running `git submodule update` returns errors, or pulling governance changes causes conflicts.
 
-**Cause:** Network issues, submodule URL mismatch, dirty submodule state, or conflicting changes.
+**Cause:** Network issues, submodule URL mismatch, dirty submodule state, tag not found, or conflicting changes.
 
 **Solution:**
 
@@ -307,13 +308,14 @@ Running `git submodule update` returns errors, or pulling governance changes cau
    git submodule update --init --recursive
    ```
 
-3. For merge conflicts in submodule pointers:
+3. For merge conflicts in `.gitmodules`:
    ```bash
-   # The conflict is in the submodule commit pointer, not in files
-   git checkout --theirs .governance   # accept incoming submodule version
-   git add .governance
-   git commit -m "chore: resolve governance submodule conflict"
+   # The conflict is typically in the .gitmodules file, not in submodule files
+   git checkout --theirs .gitmodules   # accept incoming version
+   git add .gitmodules
+   git commit -m "chore: resolve governance .gitmodules conflict"
    ```
+   **Note:** Modern git (v2.43+) automatically resolves conflicts in the submodule pointer (SHA). Content-level conflicts only occur in `.gitmodules` or other tracked files.
 
 4. For dirty submodule state (unstaged changes inside `.governance/`):
    ```bash
@@ -323,9 +325,32 @@ Running `git submodule update` returns errors, or pulling governance changes cau
    git submodule update
    ```
 
-**Prevention:** Treat `.governance/` as read-only. Never make changes inside the submodule directory. Always use `git submodule update` after pulling.
+5. For submodule checkout failures when a tag does not exist:
+   ```bash
+   # Error message: pathspec 'vX.X.X' did not match any file(s) known to git
+   # List available tags
+   cd .governance
+   git fetch
+   git tag --list 'v*'
+   # Checkout the correct existing tag
+   git checkout v2.0.0
+   cd ..
+   ```
 
-**See also:** [Submodule Setup Guide §9](../submodule-setup.md#9-edge-cases-and-gotchas)
+6. For rollback to a previous governance version:
+   ```bash
+   cd .governance
+   git fetch
+   git checkout v2.0.0            # rollback target
+   cd ..
+   git add .governance
+   git commit -m "chore: rollback governance to v2.0.0"
+   # Update .ai-project.yml version and ref to match
+   ```
+
+**Prevention:** Treat `.governance/` as read-only. Never make changes inside the submodule directory. Always use `git submodule update` after pulling. Use tags for stability (`v2.0.0`), not branches. Verify the target tag exists before starting a sync.
+
+**See also:** [Governance Sync Guide](GOVERNANCE-SYNC-GUIDE.md), [Submodule Setup Guide §9](../submodule-setup.md#9-edge-cases-and-gotchas)
 
 ---
 
