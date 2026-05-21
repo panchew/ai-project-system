@@ -6,18 +6,21 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 Phase P1 Complete — Production Ready!
+## 🎉 Phase P1 Complete — Phase P2 Active
 
-**The AI Project System has completed Phase P1** (System Foundation & Adoption) and is now **production-ready** for adoption in other projects.
+**The AI Project System has completed Phase P1** (System Foundation & Adoption) and is now in **Phase P2** (Adoption Architecture & Multi-Project Support).
 
-✅ **5 Milestones completed** (M1-M5)  
-✅ **12 Epics delivered**  
-✅ **Governance stable** (v1.5.0 / v1.4.1)  
-✅ **Battle-tested** through dogfooding  
-✅ **Ready to reference** from `panchew/ai-project-system` master  
+### Phase P1 — System Foundation (Complete)
+✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
 
-**Phase P1 Closed:** 2026-02-23  
-**Consolidation PR:** [#21](https://github.com/panchew/ai-project-system/pull/21)
+### Phase P2 — Adoption Architecture (Active)
+| Milestone | Status | Key Deliverables |
+|-----------|--------|------------------|
+| **M6** — Governance Separation | ✅ Complete | `/governance` folder, `.ai-project.yml` spec, submodule setup |
+| **M7** — CLI Initialization Tool | ✅ Complete | `ai-project init` command, hierarchical docs scaffolding |
+| **M8** — HQ Chat Agent | ✅ Complete | `hq.agent.md`, project onboarding, governance upgrade workflow |
+| **M9** — Configuration & Override System | ❌ Pending | Override precedence, boundaries, HQ agent integration |
+| **M10** — Adoption Validation & Documentation | ❌ Pending | Multi-project validation, adoption guide, P2 closure |
 
 👉 **[Start using the system now](governance/guides/QUICK-START.md)**
 
@@ -283,24 +286,21 @@ The system is designed to be learned incrementally.
 
 This repository **dogfooded its own system** — the AI Project System was built using the AI Project System.
 
-**Phase P1 Status:**
-- ✅ **Phase P1 COMPLETE** — System Foundation & Adoption (closed 2026-02-23)
-- ✅ **All 5 Milestones closed:** M1, M2, M3, M4, M5
-- ✅ **All 12 Epics delivered and merged**
-- ✅ **Production-ready** — Stable baseline for adoption
+### Phase P1 — Complete (closed 2026-02-23)
+✅ **5 Milestones:** M1 (Genesis), M2 (Execution Ergonomics), M3 (Governance Distribution), M4 (Adoption Readiness), M5 (System Refinement)
+✅ **12 Epics delivered and merged**
+✅ **Production-ready baseline**
 
-**Completed Milestones:**
-  - ✅ M1 — Genesis & Integration Baseline
-  - ✅ M2 — Execution Ergonomics & Validation
-  - ✅ M3 — Governance Distribution & Adoption
-  - ✅ M4 — Adoption Readiness & Practical Enablement
-  - ✅ M5 — System Refinement from Real Usage
+### Phase P2 — Active (started 2026-02-23)
+✅ **M6** — Governance Separation & `.ai-project.yml` (7 Epics)
+✅ **M7** — CLI Initialization Tool (4 Epics)
+✅ **M8** — HQ Chat Agent (4 Epics)
+⏳ **M9** — Configuration & Override System — not started
+⏳ **M10** — Adoption Validation & Documentation — not started
 
-**Governance:** 
+### Governance
 - PROJECT-SYSTEM-GUIDELINES.md v2.0.0 (effective 2026-04-20)
 - AI-OPERATING-GUIDELINES.md v2.0.0 (effective 2026-04-20)
-
-**Next Phase:** Phase P2 scope to be determined based on adoption feedback
 
 ---
 
@@ -346,20 +346,24 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 
 **Current State:**
 - ✅ **Phase P1 Complete** — System Foundation & Adoption (5 milestones, 12 Epics)
+- ✅ **Phase P2 Active** — Adoption Architecture & Multi-Project Support (3 of 5 milestones complete)
 - ✅ **Production-ready** — Stable baseline for adoption in other projects
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
-- ✅ **Governance stable** — v1.5.0 / v1.4.1 (effective 2026-02-18 / 2026-02-22)
+- ✅ **Governance stable** — v2.0.0 (effective 2026-04-20)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
+- ✅ **CLI tool** — `ai-project init` for one-command project setup
+- ✅ **HQ Chat agent** — VS Code Copilot custom agent shipped with governance
 - ✅ **Licensed for adoption** — MIT + CC BY-SA 4.0 dual license
+
+**What's Next (Phase P2 Remaining):**
+- **M9** — Configuration & Override System (override precedence, boundaries, HQ agent integration)
+- **M10** — Adoption Validation & Documentation (multi-project validation, adoption guide, P2 closure)
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively
-- No CLI (not needed yet — manual process validates concepts)
 - No web UI (not needed yet)
-- No automation tooling (intentionally deferred)
+- No automation tooling beyond CLI (intentionally deferred)
 - Single-user focus (team/org features deferred to future phases)
-
-**Future Work:** Phase P2 scope will be determined based on adoption feedback and real usage patterns from other projects.
 
 ---
 
