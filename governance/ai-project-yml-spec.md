@@ -173,6 +173,12 @@ The `overrides` block is **optional**. When absent, all governance defaults appl
 
 Each field in the `overrides` block customizes a specific governance dimension. Override values take precedence over governance defaults but are overridden by local project conventions (see [Precedence](#precedence)).
 
+For a complete enumeration of all overridable and non-overridable governance dimensions with rationale, constraints, and boundary rules, see the Override Boundaries document:
+
+```
+governance/override-boundaries.md
+```
+
 | Field | Type | Default | Allowed Values | Constraint | Behavioral Effect |
 |-------|------|---------|----------------|------------|-------------------|
 | `branch_strategy` | String | `trunk-based` | `trunk-based`, `gitflow` | Must be one of the allowed values | Controls branch naming and promotion strategy. `trunk-based`: standard `epic/*` → `milestone/*` → `phase/*` → `develop` hierarchy. `gitflow`: an additional long-lived `develop` branch is expected between `phase/*` and `main`. |
@@ -292,6 +298,8 @@ Override resolution follows a three-level hierarchy:
 **Resolution rule:** When a conflict exists, the highest-level source wins. If no override exists at a given level, the next level down applies.
 
 For full precedence documentation and core non-overridable dimensions, see `PROJECT-SYSTEM-GUIDELINES.md` (Section: Override System).
+
+For the formal enumeration of all overridable and non-overridable dimensions with rationale and boundary rules, see `governance/override-boundaries.md`.
 
 ---
 
