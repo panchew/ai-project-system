@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 1.0.0  
+**Version:** 2.0.0  
 **Status:** Active  
-**Effective Date:** 2026-04-20  
-**Introduced In:** Epic E6.3 (P2-M6)
+**Effective Date:** 2026-05-21  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9)
 
 ---
 
@@ -171,15 +171,127 @@ description: "AI Project System governance source repository"
 
 The `overrides` block is **optional**. When absent, all governance defaults apply.
 
-> **Note:** Full override specification is deferred to M9. The fields below are stubbed to establish the schema contract. Values other than the listed options are not yet defined.
+Each field in the `overrides` block customizes a specific governance dimension. Override values take precedence over governance defaults but are overridden by local project conventions (see [Precedence](#precedence)).
 
-| Field | Type | Default | Allowed Values (M6) | Description |
-|-------|------|---------|---------------------|-------------|
-| `branch_strategy` | String | `trunk-based` | `trunk-based`, `gitflow` | Branch naming and promotion strategy |
-| `merge_strategy` | String | `merge` | `merge`, `squash`, `rebase` | Default PR merge method |
-| `epic_prefix` | String | `epic/` | Any string ending in `/` | Prefix for epic branch names |
+| Field | Type | Default | Allowed Values | Constraint | Behavioral Effect |
+|-------|------|---------|----------------|------------|-------------------|
+| `branch_strategy` | String | `trunk-based` | `trunk-based`, `gitflow` | Must be one of the allowed values | Controls branch naming and promotion strategy. `trunk-based`: standard `epic/*` → `milestone/*` → `phase/*` → `develop` hierarchy. `gitflow`: an additional long-lived `develop` branch is expected between `phase/*` and `main`. |
+| `merge_strategy` | String | `merge` | `merge`, `squash`, `rebase` | Must be one of the allowed values | Sets the default PR merge method. `merge`: standard merge commit. `squash`: squash all commits into one. `rebase`: rebase onto target before merge (fast-forward). Individual PRs may override at merge time. |
+| `epic_prefix` | String | `epic/` | Any string ending with `/` | Must end with `/`; must not be empty | Customizes the prefix for epic branch names. The HQ agent generates branches as `<prefix>E<id>` (e.g., `feature/E9.1`). Affects all epic branch creation and references in generated artifacts. |
 
-When `overrides` is present, only listed keys are recognized. Unknown override keys MUST be ignored by tooling in M6/M7/M8; validation of unknown keys is reserved for M9.
+#### Field Details
+
+##### `overrides.branch_strategy`
+
+| Property | Value |
+|----------|-------|
+| Type | String |
+| Required | No |
+| Default | `trunk-based` |
+| Allowed Values | `trunk-based`, `gitflow` |
+| Constraint | Must be one of the allowed values. Case-sensitive. |
+| Validation Error | `"Invalid branch_strategy: '<value>'. Must be one of: trunk-based, gitflow."` |
+
+When set to `trunk-based`, the standard branch hierarchy (`epic/*` → `milestone/*` → `phase/*` → `develop`) applies. When set to `gitflow`, the system expects an additional long-lived `develop` branch between `phase/*` and `main`, and promotes milestone branches to `develop` before merging to `main`.
+
+**Valid examples:**
+```yaml
+branch_strategy: trunk-based
+branch_strategy: gitflow
+```
+
+**Invalid:**
+```yaml
+branch_strategy: git-flow    # hyphen instead of underscore
+branch_strategy: trunk       # not an allowed value
+```
+
+---
+
+##### `overrides.merge_strategy`
+
+| Property | Value |
+|----------|-------|
+| Type | String |
+| Required | No |
+| Default | `merge` |
+| Allowed Values | `merge`, `squash`, `rebase` |
+| Constraint | Must be one of the allowed values. Case-sensitive. |
+| Validation Error | `"Invalid merge_strategy: '<value>'. Must be one of: merge, squash, rebase."` |
+
+Sets the default merge method for pull requests across the project. Individual PRs may override at merge time. The HQ agent references this value when generating PR descriptions and merge instructions.
+
+**Valid examples:**
+```yaml
+merge_strategy: merge
+merge_strategy: squash
+merge_strategy: rebase
+```
+
+**Invalid:**
+```yaml
+merge_strategy: fast-forward-only  # not an allowed value
+merge_strategy: MERGE              # case-sensitive
+```
+
+---
+
+##### `overrides.epic_prefix`
+
+| Property | Value |
+|----------|-------|
+| Type | String |
+| Required | No |
+| Default | `epic/` |
+| Allowed Values | Any non-empty string ending with `/` |
+| Constraint | Must end with `/`. Must not be empty. |
+| Validation Error | `"Invalid epic_prefix: '<value>'. Must end with '/' and must not be empty."` |
+
+Customizes the prefix used for epic branch names. The HQ agent applies this prefix when generating epic branches, milestone specs, epic specs, and chat starters. All generated branch references use the custom prefix instead of the default `epic/`.
+
+The prefix is used in branch names as `<prefix>E<id>` (e.g., with `feature/` the branch for Epic E9.1 becomes `feature/E9.1`).
+
+**Valid examples:**
+```yaml
+epic_prefix: feature/
+epic_prefix: topic/
+epic_prefix: epic/
+```
+
+**Invalid:**
+```yaml
+epic_prefix: feature      # missing trailing /
+epic_prefix: ""            # empty string
+epic_prefix: /epic         # leading / is allowed but unusual; missing trailing /
+```
+
+---
+
+#### Unknown Override Keys
+
+When the `overrides` block is present, only the three recognized keys (`branch_strategy`, `merge_strategy`, `epic_prefix`) are valid. Unknown keys:
+
+- **MUST produce a validation warning** (not an error) during tooling validation
+- **MUST be ignored** by the HQ agent during override resolution
+- **MUST NOT** affect governance behavior
+
+This forward-compatibility rule allows future versions of the spec to add new override fields without breaking existing configurations.
+
+---
+
+#### Precedence
+
+Override resolution follows a three-level hierarchy:
+
+| Level | Source | Authority | Example |
+|-------|--------|-----------|---------|
+| 1 (highest) | Local project convention | Documented in `docs/decisions/` | A decision document that explicitly overrides a governance convention for exceptional circumstances |
+| 2 (medium) | `.ai-project.yml` overrides | Declared in the `overrides` block | `overrides.epic_prefix: feature/` |
+| 3 (lowest) | Governance defaults | Defined in `PROJECT-SYSTEM-GUIDELINES.md` | Default `epic_prefix: epic/` |
+
+**Resolution rule:** When a conflict exists, the highest-level source wins. If no override exists at a given level, the next level down applies.
+
+For full precedence documentation and core non-overridable dimensions, see `PROJECT-SYSTEM-GUIDELINES.md` (Section: Override System).
 
 ---
 
@@ -196,7 +308,18 @@ A `.ai-project.yml` file is **valid** when all of the following are true:
 7. `project.name` matches `^[a-z][a-z0-9-]*$`
 8. `project.description` is a non-empty string
 
-A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, or the file is not valid YAML.
+When the `overrides` block is present, the following additional validation rules apply:
+
+9. The `overrides` block must be valid YAML (covered by rule 2)
+10. Each recognized override field must contain an allowed value per its constraint (see Section 3.3):
+    - `overrides.branch_strategy` must be one of: `trunk-based`, `gitflow`
+    - `overrides.merge_strategy` must be one of: `merge`, `squash`, `rebase`
+    - `overrides.epic_prefix` must end with `/` and must not be empty
+11. Unknown keys in the `overrides` block MUST produce a validation warning (not an error)
+12. Invalid values for known override fields MUST produce a validation error
+13. At least one override value is NOT required — the block is fully optional
+
+A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, or the file is not valid YAML.
 
 ---
 
@@ -297,4 +420,5 @@ overrides:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.0.0 | 2026-05-21 | Complete override specification: Section 3.3 expanded from stub to full field definitions with types, defaults, allowed values, constraints, behavioral effects, and precedence hierarchy. Added override validation rules to Section 4. (Epic E9.1, P2-M9) |
 | 1.0.0 | 2026-04-20 | Initial specification (Epic E6.3, P2-M6) |

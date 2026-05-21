@@ -671,6 +671,101 @@ Key conventions:
 
 ---
 
+## 14C. Override System
+
+The override system allows projects to customize select governance conventions without forking the governance source. Overrides are declared in the `.ai-project.yml` `overrides` block and affect how the HQ agent generates branches, artifacts, and planning documents.
+
+Override resolution follows a strict precedence hierarchy. Core governance dimensions are immutable and cannot be overridden.
+
+### Override Precedence Hierarchy
+
+Override values are resolved using a three-level hierarchy. When a value is requested, the system checks each level in order and uses the first value found:
+
+| Level | Source | Authority | When It Applies |
+|-------|--------|-----------|-----------------|
+| 1 (highest) | Local project convention | Documented in `docs/decisions/` | Rare — used only for exceptional circumstances requiring deviation beyond `.ai-project.yml` overrides. Must be explicitly documented in a decision record. |
+| 2 (medium) | `.ai-project.yml` overrides | Declared in `overrides` block | Standard customization mechanism. Takes effect when the HQ agent reads the file at startup. |
+| 3 (lowest) | Governance defaults | Defined in this document (`PROJECT-SYSTEM-GUIDELINES.md`) | Baseline. Applies when no override is present at Level 1 or Level 2. |
+
+**Resolution rule:** When a conflict exists, the highest-level source wins. If no override exists at a given level, the next level down applies.
+
+#### Precedence Resolution Example
+
+| Scenario | Local Decision | `.ai-project.yml` Override | Governance Default | Result |
+|----------|---------------|---------------------------|-------------------|--------|
+| No overrides set | None | None | `epic_prefix: epic/` | `epic/` (Level 3) |
+| Only `.ai-project.yml` override | None | `epic_prefix: feature/` | `epic_prefix: epic/` | `feature/` (Level 2) |
+| Full override stack | `epic_prefix: custom/` | `epic_prefix: feature/` | `epic_prefix: epic/` | `custom/` (Level 1) |
+| Partial stack (Level 1 silent) | `branch_strategy: gitflow` (in decision) | `merge_strategy: squash` | `branch_strategy: trunk-based`, `merge_strategy: merge` | `branch_strategy: gitflow`, `merge_strategy: squash` |
+
+### Overridable Fields
+
+The following governance dimensions may be customized via `.ai-project.yml` overrides:
+
+- **Branch naming strategy** (`overrides.branch_strategy`): Choose between `trunk-based` and `gitflow` conventions
+- **Merge strategy** (`overrides.merge_strategy`): Choose default PR merge method (`merge`, `squash`, or `rebase`)
+- **Epic branch prefix** (`overrides.epic_prefix`): Customize the prefix for epic branch names (e.g., `feature/`, `topic/`)
+
+Full field definitions, constraints, and allowed values are documented in:
+```
+governance/ai-project-yml-spec.md
+```
+See Section 3.3 — Optional Fields (`overrides`).
+
+### Core (Non-Overridable) Governance Dimensions
+
+The following governance dimensions are **immutable** and **cannot be altered** by any override mechanism. Attempting to override these dimensions (via `.ai-project.yml`, local decisions, or any other mechanism) is invalid.
+
+| Dimension | Why It Is Non-Overridable | Consequence of Allowing Overrides |
+|-----------|--------------------------|-----------------------------------|
+| **Canonical happy path** (8 steps: execution → delivery notice → human review → epic review seal → HQ decision → HQ authorization → PR & merge → stop) | The happy path is the foundational execution contract. Every Epic must follow it. Skipping or reordering steps breaks the governance model. | Epics would skip review or merge without authorization, breaking the audit trail and authority hierarchy. |
+| **Authority hierarchy** (HQ Chat → Milestone Chat → Coding Agent) | Establishes clear decision boundaries. Restructuring would create ambiguity about who decides what. | Unclear ownership of decisions, conflicting instructions, loss of accountability. |
+| **Epic lifecycle** (spec → execute → deliver → review → accept → merge) | The lifecycle guarantees that every Epic has a spec before execution, delivery before review, and acceptance before merge. | Epics could be executed without specs, merged without review, or accepted without explicit authorization. |
+| **Definition of DoD requirements** | DoD is the minimum bar for completion. Reducing DoD scope undermines quality. | Epics could declare completion without meeting all requirements. |
+| **Documentation front-matter conventions** | Front-matter is how the system mechanically derives execution context. Changing the format would break tooling. | Tooling (HQ agent, CLI) could not parse artifacts; context would not be derivable. |
+| **Branch hierarchy** (`epic/*` → `milestone/*` → `phase/*`) | The hierarchy enforces promotion discipline. Branches must follow this structure to maintain traceability. | Branches could merge in any order, skipping hierarchy levels, breaking the audit trail. (Note: **prefixes** are overridable via `epic_prefix` — the structural hierarchy itself is not.) |
+
+### Adding Overrides to a Project
+
+To add overrides to an existing project:
+
+1. Create or edit `.ai-project.yml` at the repository root
+2. Add an `overrides` block with the desired fields
+3. Validate the file against the rules in `governance/ai-project-yml-spec.md` Section 4
+4. Commit and push the change
+5. The HQ agent reads and applies overrides on next startup
+
+**Example `.ai-project.yml` with overrides:**
+
+```yaml
+governance:
+  source: https://github.com/panchew/ai-project-system
+  version: "2.0.0"
+  ref: v2.0.0
+
+project:
+  name: acme-payments
+  description: "Payment processing service for ACME Corp"
+
+overrides:
+  branch_strategy: gitflow
+  merge_strategy: squash
+  epic_prefix: feature/
+```
+
+### Validation
+
+Override values are validated when the HQ agent reads `.ai-project.yml`:
+
+- Unknown override keys produce a warning and are ignored
+- Invalid values for known keys produce an error and prevent agent startup
+- The `overrides` block must be valid YAML
+- No override values are required — the block is fully optional
+
+See `governance/ai-project-yml-spec.md` Section 4 for the complete validation rule set.
+
+---
+
 ## 15. Canonical Epic Spec Template
 
 All Epic specs MUST follow the canonical structure defined in:
