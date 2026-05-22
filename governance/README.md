@@ -13,7 +13,7 @@ This folder contains all governance files for the AI Project System.
 | `PROJECT-SYSTEM-GUIDELINES.md` | Authoritative project structure and execution rules |
 | `AI-OPERATING-GUIDELINES.md` | Authoritative AI agent behavior rules |
 | `EPIC-EXECUTION-CHAT-STARTER.md` | Canonical Epic Execution Chat Starter format reference |
-| `agents/` | AI agent definition files (VS Code Copilot custom agents) |
+| `agents/` | AI agent definition files (tool-agnostic) |
 | `diagrams/` | Visual documentation of the governance system |
 | `guides/` | Onboarding and FAQ for human adopters |
 | `systems/` | Operational system reference documents |

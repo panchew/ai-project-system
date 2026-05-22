@@ -4,8 +4,8 @@ phase: P2
 milestone: null
 epic: null
 type: phase
-status: active
-last_updated: 2026-04-18
+status: completed
+last_updated: 2026-05-21
 ---
 
 # Phase P2 — Adoption Architecture & Multi-Project Support
@@ -181,9 +181,8 @@ Phase P2 explicitly does **not** aim to:
 ## Out of Scope
 
 ### **Deferred to P3 — Execution Model Maturity**
-- Phase Chat agent (`phase.agent.md`) with terminal access for closures
-- Milestone Chat agent (`milestone.agent.md`) with terminal access for closures
-- Full handoff chain (HQ → Phase → Milestone → Epic agents)
+- ~~Separate agent files per level~~ (resolved: replaced by unified `governance.agent.md` with 4 modes)
+- Full handoff chain (HQ → Phase → Milestone → Epic modes)
 - Phase/Milestone completion report templates
 - PR merge formalized as agent responsibility at Phase and Milestone level
 - Parent-gating rules (phase chat only opens after HQ produces starter)

@@ -3,7 +3,7 @@
 <!-- 
   EPIC EXECUTION CHAT STARTER TEMPLATE
   
-  Purpose: Provide a Coding Agent with complete context to execute an Epic.
+  Purpose: Provide the Governance Agent (Epic mode) with complete context to execute an Epic.
   
   Usage:
   1. Copy this template
@@ -17,10 +17,10 @@
          ````
 
      This preserves markdown formatting when the starter is copy-pasted into a
-     Coding Agent chat. The four-backtick fence escapes any triple-backtick code
-     blocks inside the content.
+     new Governance Agent session (Epic mode). The four-backtick fence escapes
+     any triple-backtick code blocks inside the content.
   5. After the code block, add the canonical copy instruction:
-     "Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
+     "Copy the entire chat starter above and paste into the Governance Agent (Epic mode) to begin execution."
   
   This template aligns with AI-OPERATING-GUIDELINES.md and PROJECT-SYSTEM-GUIDELINES.md.
 -->

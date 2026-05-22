@@ -6,21 +6,21 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 Phase P1 Complete — Phase P2 Active
+## 🎉 Both Phases Complete — Production Ready
 
-**The AI Project System has completed Phase P1** (System Foundation & Adoption) and is now in **Phase P2** (Adoption Architecture & Multi-Project Support).
+**The AI Project System is fully built using its own governance.** Both Phase P1 (foundation) and Phase P2 (multi-project infrastructure) are complete and production-ready.
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
 
-### Phase P2 — Adoption Architecture (Active)
-| Milestone | Status | Key Deliverables |
-|-----------|--------|------------------|
-| **M6** — Governance Separation | ✅ Complete | `/governance` folder, `.ai-project.yml` spec, submodule setup |
-| **M7** — CLI Initialization Tool | ✅ Complete | `ai-project init` command, hierarchical docs scaffolding |
-| **M8** — HQ Chat Agent | ✅ Complete | `hq.agent.md`, project onboarding, governance upgrade workflow |
-| **M9** — Configuration & Override System | ❌ Pending | Override precedence, boundaries, HQ agent integration |
-| **M10** — Adoption Validation & Documentation | ❌ Pending | Multi-project validation, adoption guide, P2 closure |
+### Phase P2 — Adoption Architecture (Complete)
+| Milestone | Epics | Status | Key Deliverables |
+|-----------|-------|--------|------------------|
+| **M6** — Governance Separation | E6.1–E6.7 | ✅ Complete | `/governance` folder, `.ai-project.yml` spec, submodule setup |
+| **M7** — CLI Initialization Tool | E7.1–E7.4 | ✅ Complete | `ai-project init` command, hierarchical docs scaffolding |
+| **M8** — HQ Chat Agent | E8.1–E8.4 | ✅ Complete | `hq.agent.md`, project onboarding, governance upgrade workflow |
+| **M9** — Configuration & Override System | E9.1–E9.4 | ✅ Complete | Override spec, precedence rules, HQ agent integration |
+| **M10** — Adoption Validation & Documentation | E10.1–E10.4 | ✅ Complete | Adoption guide, FAQ, onboarded projects, P2 closure |
 
 👉 **[Start using the system now](governance/guides/QUICK-START.md)**
 
@@ -72,12 +72,12 @@ It is a **system for managing projects**.
 ## Who This Is For
 
 This system is designed for:
-- **Engineers using AI tools** (ChatGPT, GitHub Copilot, Cursor, Claude, etc.)
+- **Engineers using AI tools** (ChatGPT, Claude, Cursor, etc.)
 - **Projects where context, scope, and delivery matter** (not throwaway prototypes)
 - **People who want repeatability, not improvisation** (structure over chaos)
 
 **Prerequisites:**
-- Git and GitHub (basic familiarity)
+- Git (basic familiarity)
 - Markdown editing
 - AI chat tool access
 - Willingness to trade upfront planning for execution clarity
@@ -99,8 +99,8 @@ Hierarchical structure that breaks work into manageable, deliverable units:
 
 ### 🤖 **AI-First Execution**
 Purpose-built for AI coding assistants:
-- Epic Execution Chat Starters provide complete context
-- AI agents execute autonomously within guardrails
+- Chat Starters provide complete context for each level (Phase, Milestone, Epic)
+- Governance Agent self-configures its mode from the Chat Starter
 - Documentation preserves context across sessions
 
 ### 👤 **Human Governance**
@@ -141,8 +141,8 @@ Every Epic has explicit completion criteria:
 
 The guide walks you through:
 1. Initializing repository structure
-2. Creating your first Phase, Milestone, and Epic
-3. Executing an Epic with AI assistance
+2. Starting HQ Mode to create a Phase
+3. Launching Phase/Milestone/Epic modes via Chat Starters
 4. Reviewing and closing your first Epic
 
 **Time:** 30 minutes  
@@ -168,17 +168,24 @@ The guide walks you through:
 - 🤖 [AI-OPERATING-GUIDELINES.md](governance/AI-OPERATING-GUIDELINES.md) — Execution procedures
 - 🎨 [Visual Diagrams](governance/diagrams/) — Epic lifecycle, authority, structure
 
-### **Creating Projects**
+### **Adopting the System**
 - 🏗️ [How to Start a Project](governance/systems/start-a-project.md) — Initialize new projects
+- 📖 [Adoption Guide](governance/guides/ADOPTION-GUIDE.md) — Step-by-step from zero to HQ Chat live
+- ❓ [Adoption FAQ](governance/guides/ADOPTION-FAQ.md) — Troubleshooting common issues
+- 🔄 [Governance Sync Guide](governance/guides/GOVERNANCE-SYNC-GUIDE.md) — Updating governance across projects
+
+### **Creating Projects**
 - 📝 [Templates](governance/templates/) — Phase, Milestone, Epic templates
 - 📋 [Template Usage Guide](governance/templates/README.md) — How to use templates
+- ⚙️ [Override Boundaries](governance/override-boundaries.md) — What can be customized vs. immutable
 
 ### **Executing Work**
 - ⚙️ [Epic Execution Chat Starter System](governance/systems/epic-execution-chat-starter.md) — How to run Epics
-- 👔 [HQ Chat Guide](governance/systems/hq-chat.md) — Human responsibilities
+- 👔 [HQ Chat Guide](governance/systems/hq-chat.md) — HQ mode responsibilities
 
 ### **Examples**
 - 📚 [Phase P1 Examples](docs/phases/P1__System_Foundation_and_Adoption/) — Real Epic specs and completions
+- 📚 [Phase P2 Examples](docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/) — Multi-project adoption artifacts
 - 🔍 See how this system was built using itself
 
 ### **Reference**
@@ -291,12 +298,16 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **12 Epics delivered and merged**
 ✅ **Production-ready baseline**
 
-### Phase P2 — Active (started 2026-02-23)
+### Phase P2 — Complete (closed 2026-05-21)
+✅ **23 Epics** across 5 milestones — Closed via [#51](https://github.com/panchew/ai-project-system/pull/51)
 ✅ **M6** — Governance Separation & `.ai-project.yml` (7 Epics)
 ✅ **M7** — CLI Initialization Tool (4 Epics)
 ✅ **M8** — HQ Chat Agent (4 Epics)
-⏳ **M9** — Configuration & Override System — not started
-⏳ **M10** — Adoption Validation & Documentation — not started
+✅ **M9** — Configuration & Override System (4 Epics)
+✅ **M10** — Adoption Validation & Documentation (4 Epics)
+
+### Totals (P1 + P2)
+✅ **35 Epics** delivered across **10 milestones** over **2 phases**
 
 ### Governance
 - PROJECT-SYSTEM-GUIDELINES.md v2.0.0 (effective 2026-04-20)
@@ -346,18 +357,21 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 
 **Current State:**
 - ✅ **Phase P1 Complete** — System Foundation & Adoption (5 milestones, 12 Epics)
-- ✅ **Phase P2 Active** — Adoption Architecture & Multi-Project Support (3 of 5 milestones complete)
+- ✅ **Phase P2 Complete** — Adoption Architecture & Multi-Project Support (5 milestones, 23 Epics)
+- ✅ **35 total Epics** delivered across 10 milestones, 2 phases
 - ✅ **Production-ready** — Stable baseline for adoption in other projects
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
 - ✅ **Governance stable** — v2.0.0 (effective 2026-04-20)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
-- ✅ **HQ Chat agent** — VS Code Copilot custom agent shipped with governance
+- ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
+- ✅ **Override system** — Customizable branching, naming, and merge conventions
+- ✅ **Adoption guide** — Step-by-step path from zero to HQ Chat live
 - ✅ **Licensed for adoption** — MIT + CC BY-SA 4.0 dual license
 
-**What's Next (Phase P2 Remaining):**
-- **M9** — Configuration & Override System (override precedence, boundaries, HQ agent integration)
-- **M10** — Adoption Validation & Documentation (multi-project validation, adoption guide, P2 closure)
+**What's Next (Future Phases):**
+- **P3** — Execution Model Maturity (Phase/Milestone chat agents, full handoff chain, automated PR merge)
+- **Future** — Team collaboration, external integrations, observability, automation tooling
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively
@@ -413,5 +427,6 @@ This system is designed to improve through real usage experience. We especially 
 - 📖 **Start here:** [Quick Start Guide](governance/guides/QUICK-START.md)
 - ❓ **FAQ:** [Frequently Asked Questions](governance/guides/FAQ.md)
 - 🎨 **Visualize:** [Diagrams](governance/diagrams/)
-- 🔍 **Examples:** [Phase P1 Epics](docs/phases/P1__System_Foundation_and_Adoption/)
+- 🔍 **Examples:** [Phase P1](docs/phases/P1__System_Foundation_and_Adoption/) | [Phase P2](docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/)
+- 📖 **Adoption Guide:** [Step-by-step walkthrough](governance/guides/ADOPTION-GUIDE.md)
 - 💬 **Ask:** [Open an issue](https://github.com/panchew/ai-project-system/issues)

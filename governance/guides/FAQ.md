@@ -2,6 +2,9 @@
 
 Common questions about the AI Project System, organized by category.
 
+> **New to adoption?** See [ADOPTION-FAQ.md](ADOPTION-FAQ.md) for troubleshooting during setup.
+> **Following the adoption guide?** See [ADOPTION-GUIDE.md](ADOPTION-GUIDE.md) for step-by-step instructions.
+
 ---
 
 ## Table of Contents

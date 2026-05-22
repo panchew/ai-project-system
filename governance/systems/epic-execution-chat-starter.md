@@ -72,6 +72,6 @@ wrapped in a fenced markdown code block using four backticks:
 
 This preserves markdown formatting when copy-pasted into a Coding Agent chat.
 After the code block, include:
-"Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
+"Copy the entire chat starter above and paste into the Governance Agent (Epic mode) to begin execution."
 
 Canonical rule: AI-OPERATING-GUIDELINES.md §3.1.1
