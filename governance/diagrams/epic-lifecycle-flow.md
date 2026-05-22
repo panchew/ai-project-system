@@ -10,11 +10,11 @@ This diagram shows the complete lifecycle of an Epic in the AI Project System, f
 flowchart TD
     Start([Identified Problem or Opportunity]) --> Planning
     
-    Planning[HQ Planning Session]
+    Planning[Milestone Chat Planning]
     Planning --> SpecCreation[Create Epic Spec]
     SpecCreation --> ChatStarter[Create Epic Execution Chat Starter]
     
-    ChatStarter --> Execution[Coding Agent Executes Epic]
+    ChatStarter --> Execution[Epic Mode Executes Epic]
     Execution --> SelfCheck{All Deliverables Complete?}
     
     SelfCheck -->|No| Execution
@@ -22,25 +22,25 @@ flowchart TD
     
     DeliveryNotice --> HumanReview[Human Reviews Deliverables]
     HumanReview --> ReviewSeal[Epic Review Seal Created]
-    ReviewSeal --> HQDecision{HQ Decision}
+    ReviewSeal --> Decision{Parent Chat Decision}
     
-    HQDecision -->|Reject| Rejection[Document Rejection Rationale]
+    Decision -->|Reject| Rejection[Document Rejection Rationale]
     Rejection --> NewEpic{Create New Epic?}
     NewEpic -->|Yes| Planning
     NewEpic -->|No| End1([Epic Abandoned])
     
-    HQDecision -->|Request Changes| Iteration[Create Iteration Epic]
+    Decision -->|Request Changes| Iteration[Create Iteration Epic]
     Iteration --> Planning
     
-    HQDecision -->|Accept| Authorization[HQ Authorizes Merge]
-    Authorization --> Merge[Agent Merges PR]
+    Decision -->|Accept| Authorization[Parent Chat Authorizes Merge]
+    Authorization --> Merge[Epic Mode Merges PR]
     Merge --> Complete[Epic Marked Complete]
     Complete --> End2([Epic Closed])
     
     style Planning fill:#e1f5ff
     style Execution fill:#fff4e1
     style HumanReview fill:#f0e1ff
-    style HQDecision fill:#ffe1e1
+    style Decision fill:#ffe1e1
     style Complete fill:#e1ffe1
 ```
 
@@ -48,18 +48,18 @@ flowchart TD
 
 ## Key Stages Explained
 
-### **1. Planning (HQ)**
-- Human identifies problem or opportunity
+### **1. Planning (Milestone Chat)**
+- Milestone Chat reviews the Milestone spec
 - Creates Epic Spec defining goals, deliverables, DoD
 - Creates Epic Execution Chat Starter with execution instructions
 
-### **2. Execution (Coding Agent)**
+### **2. Execution (Epic Mode)**
 - Agent receives Chat Starter
 - Executes work according to Epic Spec
 - Creates all required deliverables
 - Self-validates against Definition of Done
 
-### **3. Delivery (Coding Agent)**
+### **3. Delivery (Epic Mode)**
 - Agent produces Epic Delivery Notice (chat message, not committed)
 - Summarizes work, lists deliverables, confirms DoD completion
 - Opens PR and **stops** (does not merge)
@@ -70,15 +70,16 @@ flowchart TD
 - Validates against acceptance criteria
 - Creates Epic Review Seal documenting findings
 
-### **5. Decision (HQ)**
+### **5. Decision (Parent Chat)**
+Evaluated by Milestone Chat (or Phase Chat / HQ during bootstrap).
 Three possible outcomes:
 - **Accept:** Work meets requirements → proceed to authorization
 - **Reject:** Work fundamentally flawed → create new Epic or abandon
 - **Request Changes:** Work needs iteration → create iteration Epic
 
-### **6. Authorization & Closure (HQ + Agent)**
-- HQ authorizes merge (explicit instruction required)
-- Agent merges PR
+### **6. Authorization & Closure (Parent Chat + Epic Mode)**
+- Parent chat authorizes merge (explicit instruction required)
+- Epic mode merges PR
 - Epic marked complete
 - Agent **stops immediately** after merge
 
@@ -105,14 +106,14 @@ Three possible outcomes:
 
 | Stage | Responsible Party | Authority Level |
 |-------|------------------|-----------------|
-| Planning | HQ (Human) | Creates Epic Spec |
-| Execution | Coding Agent | Executes according to spec |
-| Delivery Notice | Coding Agent | Documents completion |
+| Planning | Milestone Chat | Creates Epic Spec and Chat Starter |
+| Execution | Epic mode | Executes according to spec |
+| Delivery Notice | Epic mode | Documents completion |
 | Review | Human | Evaluates deliverables |
-| Review Seal | HQ or Human | Documents findings |
-| Decision | HQ (Human) | Accept/Reject/Iterate |
-| Authorization | HQ (Human) | Explicit merge approval |
-| Merge | Coding Agent | Executes authorized merge |
+| Review Seal | Human | Documents findings |
+| Decision | Parent chat (Milestone/Phase/HQ) | Accept/Reject/Iterate |
+| Authorization | Parent chat | Explicit merge approval |
+| Merge | Epic mode | Executes authorized merge |
 
 ---
 
@@ -120,17 +121,17 @@ Three possible outcomes:
 
 The ideal flow is:
 
-1. HQ creates Epic Spec
-2. HQ creates Chat Starter
-3. Agent executes Epic
-4. Agent produces Delivery Notice
+1. Milestone Chat creates Epic Spec
+2. Milestone Chat creates Epic Execution Chat Starter
+3. Epic mode executes Epic
+4. Epic mode produces Delivery Notice
 5. Human reviews
-6. HQ accepts
-7. HQ authorizes merge
-8. Agent merges PR
+6. Parent chat accepts
+7. Parent chat authorizes merge
+8. Epic mode merges PR
 9. Epic closed
 
-**Agent stops at step 4 and awaits HQ instruction.**
+**Epic mode stops at step 4 and awaits parent chat instruction.**
 
 ---
 
@@ -138,21 +139,21 @@ The ideal flow is:
 
 ### Fast Iteration Loop
 If minor changes needed:
-- HQ may provide inline correction instructions
-- Agent makes changes, updates Delivery Notice
+- Parent chat may provide inline correction instructions
+- Epic mode makes changes, updates Delivery Notice
 - Review cycle repeats
 
 ### Rejection with Pivot
 If Epic fundamentally misaligned:
-- HQ rejects with rationale
-- HQ creates new Epic with revised goals
+- Parent chat rejects with rationale
+- Milestone Chat creates new Epic with revised goals
 - Original Epic closed without merge
 
 ### Multi-Phase Review
 For complex Epics:
 - Human may request intermediate reviews
-- Agent produces draft deliverables
-- HQ provides feedback before final delivery
+- Epic mode produces draft deliverables
+- Parent chat provides feedback before final delivery
 
 ---
 

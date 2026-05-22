@@ -117,11 +117,11 @@ Version-controlled, authoritative specs:
 
 ### 🔄 **Canonical Happy Path**
 Defined Epic lifecycle prevents chaos:
-1. HQ creates Epic Spec
-2. AI executes Epic
+1. Milestone Chat creates Epic Spec and Execution Chat Starter
+2. AI executes the Epic
 3. AI produces Delivery Notice and stops
 4. Human reviews deliverables
-5. HQ accepts/rejects/requests changes
+5. Parent chat (Milestone/Phase/HQ) accepts/rejects/requests changes
 6. HQ authorizes merge (if accepted)
 7. AI merges and stops
 
@@ -196,19 +196,19 @@ The guide walks you through:
 
 ## How It Works (5-Minute Overview)
 
-### **1. Plan (Human)**
-Create an Epic Spec defining:
+### **1. Plan (Human + Milestone Chat)**
+Milestone Chat creates an Epic Spec and Epic Execution Chat Starter defining:
 - Problem statement
 - Goals and deliverables
 - Definition of Done
 - Acceptance criteria
 
-### **2. Execute (AI)**
-Launch AI Coding Agent with Epic Execution Chat Starter:
-- Agent creates branch
-- Agent builds deliverables
-- Agent self-validates against DoD
-- Agent produces Delivery Notice and **stops**
+### **2. Execute (Epic Mode)**
+Epic mode receives the Chat Starter and executes:
+- Creates branch
+- Builds deliverables
+- Self-validates against DoD
+- Produces Delivery Notice and **stops**
 
 ### **3. Review (Human)**
 Evaluate deliverables:
@@ -218,9 +218,9 @@ Evaluate deliverables:
 
 ### **4. Close (Human + AI)**
 Make decision:
-- **Accept:** HQ authorizes merge → AI merges → Epic closed
+- **Accept:** HQ authorizes merge → Epic mode merges → Epic closed
 - **Reject:** Document rationale → create new Epic or abandon
-- **Request Changes:** Define iteration → AI updates
+- **Request Changes:** Define iteration → Epic mode updates
 
 ---
 
