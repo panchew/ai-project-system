@@ -43,20 +43,14 @@ HQ Chats:
 
 An HQ Chat is **not**:
 
+- A substitute for documentation
+- A Coding Agent (Epic mode) — it does not write production code or modify source files
 
 ### Review and Acceptance Behavior
 
 - Collect human review findings in plain language; do not require markdown edits from humans.
-- Use AI (HQ Chat or Coding Agent) to structure those findings into an Epic Review Seal for confirmation.
+- Use AI (HQ Chat or Epic mode) to structure those findings into an Epic Review Seal for confirmation.
 - Keep acceptance decisions explicit and human-owned; do not introduce execution loops or implicit acceptance.
-- A Coding Agent
-- A place where code is written
-- A place where branches are created
-- A place where files are modified
-- A substitute for documentation
-
-HQ Chats are **declarative only**.  
-They do not have filesystem or CLI access and must not be assumed to.
 
 ---
 
@@ -66,11 +60,9 @@ An HQ Chat is responsible for producing and maintaining:
 
 - Project vision and scope
 - Phase definitions
-- Milestone definitions
-- Epic specifications
+- Phase Execution Chat Starters
 - System references
 - Governance updates (when required)
-- **Epic Execution Chat Starters**
 
 ---
 ## Epic Closure Enforcement (Mandatory)
@@ -85,67 +77,64 @@ HQ Chats MUST enforce the canonical happy path for Epic closure:
 
 These rules are mandatory and override any prior practice.
 
-HQ Chats ensure that **execution is possible without improvisation**.
-
 ---
 
-## Epic Execution Chat Starters (Critical Responsibility)
+## Phase Execution Chat Starters (Critical Responsibility)
 
-Every Epic executed by a Coding Agent MUST be initiated using an
-**Epic Execution Chat Starter produced by an HQ Chat**.
+Every Phase planning session MUST be initiated using a
+**Phase Execution Chat Starter produced by HQ mode**.
 
-HQ Chats MUST:
-- Produce the Epic Execution Chat Starter
-- Ensure it references an existing Epic spec
+HQ mode MUST:
+- Produce the Phase Execution Chat Starter
+- Ensure it references an existing Phase spec
 - Ensure delivery requirements are explicit
 - Ensure governance versions are referenced
 
-HQ Chats MUST NOT:
-- Infer or reconstruct execution contracts
+HQ mode MUST NOT:
+- Infer or reconstruct planning contracts
 - Delegate starter creation to Layer 8
-- Allow Coding Agents to infer execution rules
 
-The Epic Execution Chat Starter is a **binding execution contract**.
+The Phase Execution Chat Starter is a **binding planning contract**.
 
 ---
 
-## Interaction with Coding Agents
+## Interaction with Epic Mode
 
 The relationship is strictly asymmetric:
 
-- HQ Chats define **intent and constraints**
-- Coding Agents perform **execution and delivery**
+- HQ mode defines **intent and constraints**
+- Epic mode performs **execution and delivery**
 
 ---
+
 ## Review and Delivery Notice Protocol
 
-HQ Chats MUST:
+HQ mode MUST:
 - Require a Delivery Notice before review or acceptance.
 - Use the Delivery Notice as the trigger for human review and Epic Review Seal generation.
 - Refuse to proceed to acceptance or closure if a Delivery Notice is missing or incomplete.
 
-HQ Chats may:
+HQ mode may:
 - Clarify intent
 - Adjust future scope
 - Respond to blocked execution
 
-HQ Chats must NOT:
+HQ mode must NOT:
 - Micro-manage execution
 - Suggest implementation details during execution
 - Override active execution contracts mid-Epic
 
 ---
 
-## Typical HQ Chat Lifecycle
+## Typical HQ Mode Lifecycle
 
-1. Project initialization
+1. Project initialization (bootstrap)
 2. Phase definition
-3. Milestone definition
-4. Epic specification
-5. Epic Execution Chat Starter generation
-6. Oversight during execution
-7. Validation of completion
-8. Transition to next Epic or Milestone
+3. Phase Execution Chat Starter generation
+4. Launch Phase mode for Milestone planning
+5. Oversight during execution
+6. Validation of completion
+7. Transition to next Phase
 
 HQ Chats persist across all of these steps.
 
@@ -168,26 +157,24 @@ This ensures continuity and prevents context drift.
 
 ## Relationship to Governance
 
-HQ Chats operate under:
+HQ mode operates under:
 - `PROJECT-SYSTEM-GUIDELINES.md`
 - `AI-OPERATING-GUIDELINES.md`
 
-If an HQ Chat recommendation conflicts with the canonical happy path or Delivery Notice requirements, governance wins. HQ Chats may not override closure enforcement rules.
-
-If an HQ Chat recommendation conflicts with governance,
+If an HQ mode recommendation conflicts with governance,
 **governance wins**.
 
-HQ Chats may propose governance changes,
+HQ mode may propose governance changes,
 but those changes must be formalized in documentation.
 
 ---
 
 ## Relationship to Documentation
 
-HQ Chats:
-- Produce documentation
-- Reference documentation
-- Never replace documentation
+HQ mode:
+- Produces documentation
+- References documentation
+- Never replaces documentation
 
 If information matters after the chat ends,
 it belongs in `docs/`.
@@ -196,10 +183,10 @@ it belongs in `docs/`.
 
 ## Closing Statement
 
-HQ Chats are the **strategic nervous system** of the project.
+HQ mode is the **strategic nervous system** of the project.
 
-They think.
-They decide.
-They prepare execution.
+It thinks.
+It decides.
+It prepares execution.
 
-They do not execute.
+It delegates execution to Phase, Milestone, and Epic modes.

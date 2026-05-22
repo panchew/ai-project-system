@@ -72,12 +72,12 @@ It is a **system for managing projects**.
 ## Who This Is For
 
 This system is designed for:
-- **Engineers using AI tools** (ChatGPT, GitHub Copilot, Cursor, Claude, etc.)
+- **Engineers using AI tools** (ChatGPT, Claude, Cursor, etc.)
 - **Projects where context, scope, and delivery matter** (not throwaway prototypes)
 - **People who want repeatability, not improvisation** (structure over chaos)
 
 **Prerequisites:**
-- Git and GitHub (basic familiarity)
+- Git (basic familiarity)
 - Markdown editing
 - AI chat tool access
 - Willingness to trade upfront planning for execution clarity
@@ -99,8 +99,8 @@ Hierarchical structure that breaks work into manageable, deliverable units:
 
 ### 🤖 **AI-First Execution**
 Purpose-built for AI coding assistants:
-- Epic Execution Chat Starters provide complete context
-- AI agents execute autonomously within guardrails
+- Chat Starters provide complete context for each level (Phase, Milestone, Epic)
+- Governance Agent self-configures its mode from the Chat Starter
 - Documentation preserves context across sessions
 
 ### 👤 **Human Governance**
@@ -141,8 +141,8 @@ Every Epic has explicit completion criteria:
 
 The guide walks you through:
 1. Initializing repository structure
-2. Creating your first Phase, Milestone, and Epic
-3. Executing an Epic with AI assistance
+2. Starting HQ Mode to create a Phase
+3. Launching Phase/Milestone/Epic modes via Chat Starters
 4. Reviewing and closing your first Epic
 
 **Time:** 30 minutes  
@@ -181,7 +181,7 @@ The guide walks you through:
 
 ### **Executing Work**
 - ⚙️ [Epic Execution Chat Starter System](governance/systems/epic-execution-chat-starter.md) — How to run Epics
-- 👔 [HQ Chat Guide](governance/systems/hq-chat.md) — Human responsibilities
+- 👔 [HQ Chat Guide](governance/systems/hq-chat.md) — HQ mode responsibilities
 
 ### **Examples**
 - 📚 [Phase P1 Examples](docs/phases/P1__System_Foundation_and_Adoption/) — Real Epic specs and completions
@@ -364,7 +364,7 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Governance stable** — v2.0.0 (effective 2026-04-20)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
-- ✅ **HQ Chat agent** — VS Code Copilot custom agent shipped with governance
+- ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
 - ✅ **Override system** — Customizable branching, naming, and merge conventions
 - ✅ **Adoption guide** — Step-by-step path from zero to HQ Chat live
 - ✅ **Licensed for adoption** — MIT + CC BY-SA 4.0 dual license

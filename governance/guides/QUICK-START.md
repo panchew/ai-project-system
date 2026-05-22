@@ -38,13 +38,13 @@ This system is designed for:
 - People who want structure without sacrificing AI speed
 
 **Prerequisites:**
-- Git and GitHub (basic familiarity)
+- Git (basic familiarity)
 - Markdown editing
-- AI chat tool access (ChatGPT, GitHub Copilot Chat, Claude, etc.)
+- AI chat tool access (ChatGPT, Claude, etc.)
 
 **What you'll need:**
 - 30 minutes of focused time
-- A GitHub repository (new or existing)
+- A git repository (new or existing)
 - An AI assistant to act as your "Coding Agent"
 
 ---
@@ -55,7 +55,7 @@ This system is designed for:
 
 In this walkthrough, you'll:
 1. Initialize the AI Project System structure (using `ai-project init`)
-2. Open HQ Chat and create a Phase spec
+2. Start HQ Mode and create a Phase spec
 3. Plan and create a Milestone spec
 4. Create an Epic spec within that Milestone
 5. Execute that Epic with an AI Coding Agent
@@ -81,7 +81,7 @@ This creates:
 - **Canonical `docs/` hierarchy** (phases, roadmap, context, decisions, admin)
 - **Governance submodule** pinned to the current version
 - **`.ai-project.yml`** with correct governance reference
-- **HQ Chat agent files** in `.github/agents/hq.agent.md`
+- **Governance Agent file** at `.github/agents/governance.agent.md`
 
 ### 1.2 Install the CLI (if needed)
 
@@ -132,7 +132,7 @@ your-project/
 │   └── admin/
 ├── .github/
 │   └── agents/
-│       └── hq.agent.md         # HQ Chat agent definition
+│       └── governance.agent.md # Governance Agent (all modes)
 └── [your existing project files]
 ```
 
@@ -140,32 +140,40 @@ your-project/
 
 ---
 
-## Step 2: Create Your First Phase Spec with HQ Chat
+## Step 2: Create Your First Phase Spec (HQ Mode)
+
 **Time: 3 minutes**
 
-A **Phase** is a major segment of work with a clear purpose and exit criteria. Use the **HQ Chat agent** to create it.
+A **Phase** is a major segment of work with a clear purpose and exit criteria. Use the **Governance Agent in HQ mode** to create it.
 
-### 2.1 Open HQ Chat
+### 2.1 Start HQ Mode
 
-1. Open your project in VS Code
-2. Open GitHub Copilot Chat
-3. Select the `hq` custom agent (installed at `.github/agents/hq.agent.md`)
-4. Send the canonical prompt:
+1. Open your project in your AI chat tool that supports agent instructions from a markdown file.
+2. Ensure the tool has access to `.github/agents/governance.agent.md` (the unified Governance Agent).
+3. Select the agent (named `hq` in the front-matter) if your tool supports agent selection.
+4. Send the canonical prompt to activate **HQ mode**:
 
+**For a new project:**
 ```
 I'm starting a new project using the AI Project System governance framework.
 Initialize HQ Chat for my-project and help me create a Phase 0 project formalization.
 ```
 
-### 2.2 Follow HQ Chat guidance
+**For an existing project (adoption):**
+```
+I want to adopt the AI Project System governance framework for my existing project at [repository-path].
+Initialize HQ Chat for this project, help me assess what's needed for adoption, and create a migration plan.
+```
 
-The HQ agent will:
+### 2.2 Follow HQ mode guidance
+
+The agent (in HQ mode) will:
 1. Read `.ai-project.yml` to discover governance context
 2. Present a structured Phase 0 spec
 3. Guide you through approving it
 4. Save the Phase spec to `docs/phases/`
 
-**If you don't have the HQ agent available**, you can create the spec manually from the template:
+**If you don't have the Governance Agent available**, you can create the spec manually from the template:
 
 ```bash
 cp governance/templates/phase-spec.md docs/phases/P1__phase__my-first-phase.md
@@ -487,9 +495,9 @@ Copy from your Epic spec.
 - ❌ Do NOT continue without instruction
 ```
 
-### 5.2 Launch your AI Coding Agent
+### 5.2 Launch Epic Mode
 
-Open your AI chat tool (ChatGPT, GitHub Copilot Chat, Claude, etc.) and paste the entire Chat Starter you just created.
+Open your AI chat tool (ChatGPT, Claude, etc.) with the Governance Agent selected and paste the entire Chat Starter you just created.
 
 **The AI will:**
 1. Create the `milestone/M1` and `epic/E1.1` branches
@@ -708,7 +716,7 @@ cd governance && git fetch && git checkout v2.0.0 && cd ..
 | Project configuration | `.ai-project.yml` (repository root) |
 | Governance rules | `governance/PROJECT-SYSTEM-GUIDELINES.md`, `governance/AI-OPERATING-GUIDELINES.md` |
 | Templates | `governance/templates/` |
-| HQ Chat agent | `.github/agents/hq.agent.md` |
+| Governance Agent | `.github/agents/governance.agent.md` |
 | Phase Specs | `docs/phases/P<N>__phase__*.md` |
 | Milestone Specs | `docs/phases/P<N>__*/P<N>-M<N>__milestone.md` |
 | Epic Specs | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__spec__*.md` |

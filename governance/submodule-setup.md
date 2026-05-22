@@ -212,29 +212,27 @@ Once `.governance/` is populated, all governance files are available at their fu
 | AI Operating Guidelines | `.governance/governance/AI-OPERATING-GUIDELINES.md` |
 | `.ai-project.yml` spec | `.governance/governance/ai-project-yml-spec.md` |
 | Submodule setup guide (this file) | `.governance/governance/submodule-setup.md` |
-| HQ agent definition | `.governance/governance/agents/hq.agent.md` |
+| Governance Agent definition | `.governance/governance/agents/governance.agent.md` |
 | Epic spec template | `.governance/governance/templates/epic-spec.md` |
 | All governance templates | `.governance/governance/templates/` |
 
-### VS Code agent files
+### Agent deployment
 
-The HQ agent file lives in `.governance/governance/agents/hq.agent.md`. VS Code loads agent files from `.github/agents/`. Copy or symlink the file to activate it:
+The Governance Agent file lives in `.governance/governance/agents/governance.agent.md`. Copy it to `.github/agents/` for your AI tool to detect it:
 
 ```bash
-# Copy (simpler, requires re-copy on governance update)
 mkdir -p .github/agents
-cp .governance/governance/agents/hq.agent.md .github/agents/hq.agent.md
-
-# Symlink (automatically reflects governance updates; check OS/tooling compatibility)
-mkdir -p .github/agents
-ln -s ../../.governance/governance/agents/hq.agent.md .github/agents/hq.agent.md
+cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
 ```
 
-Commit whichever you choose:
+> **Note:** The single `governance.agent.md` replaces the previous separate `hq.agent.md`, `phase.agent.md`, and `milestone.agent.md` files. Remove any old `hq.agent.md` from `.github/agents/` if present.
+
+Commit the agent:
 
 ```bash
-git add .github/agents/hq.agent.md
-git commit -m "chore: activate HQ agent from governance submodule"
+git add .github/agents/governance.agent.md
+git rm --ignore-unmatch .github/agents/hq.agent.md  # remove old version if present
+git commit -m "chore: activate Governance Agent"
 ```
 
 ---

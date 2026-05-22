@@ -87,17 +87,15 @@ git log --oneline -n 1
 - Governance submodule fails to add:
   - Ensure network access to GitHub and correct `--governance-version`.
   - CLI falls back to clone+adopt; check `.gitmodules` for `submodule.governance.branch`.
-- Agent file missing or empty:
-  - Re-run "Install HQ Agent" step manually:
+- Governance Agent file missing or empty:
+  - Install the agent manually:
     ```bash
     mkdir -p .github/agents
-    if [[ -f governance/agents/hq.agent.md ]]; then
-      cp governance/agents/hq.agent.md .github/agents/hq.agent.md
-    else
-      printf "# HQ Chat Agent\n\nThis agent is under development in Milestone M8.\n" > .github/agents/hq.agent.md
+    if [[ -f governance/agents/governance.agent.md ]]; then
+      cp governance/agents/governance.agent.md .github/agents/governance.agent.md
     fi
     ```
-- HQ agent cannot find `.ai-project.yml` or `governance/`:
+- Governance Agent cannot find `.ai-project.yml` or `governance/`:
   - Ensure the repo root includes `.ai-project.yml` (see governance/ai-project-yml-spec.md)
   - Verify `governance/` exists with required files (PROJECT-SYSTEM-GUIDELINES.md, AI-OPERATING-GUIDELINES.md)
   - If missing, re-run init or restore submodule per governance/submodule-setup.md

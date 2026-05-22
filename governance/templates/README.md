@@ -20,7 +20,7 @@
 
 | Template | File | When to Use |
 |----------|------|-------------|
-| **Epic Execution Chat Starter** | [epic-execution-chat-starter.md](epic-execution-chat-starter.md) | Providing execution context to a Coding Agent |
+| **Epic Execution Chat Starter** | [epic-execution-chat-starter.md](epic-execution-chat-starter.md) | Providing execution context to the Governance Agent (Epic mode) |
 | **Epic Completion Report** | [epic-completion-report.md](epic-completion-report.md) | Documenting Epic execution results and verification |
 | **Epic Review Seal** | [epic-review-seal.md](epic-review-seal.md) | Capturing human review findings before acceptance |
 | **Epic Completion Notice** | [epic-completion-notice.md](epic-completion-notice.md) | Notifying stakeholders that an Epic has closed |
@@ -54,10 +54,10 @@
 1. **Create Epic Execution Chat Starter**
    - Copy [epic-execution-chat-starter.md](epic-execution-chat-starter.md)
    - Fill in Epic context and references
-   - Provide to Coding Agent
+   - Provide to Governance Agent (Epic mode)
 
 2. **After Execution Completes**
-   - Coding Agent creates Epic Completion Report using [epic-completion-report.md](epic-completion-report.md)
+   - Epic mode creates Epic Completion Report using [epic-completion-report.md](epic-completion-report.md)
    - Human reviews deliverables and tests results
 
 3. **Human Review**

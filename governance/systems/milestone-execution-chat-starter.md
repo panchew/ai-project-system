@@ -130,10 +130,12 @@ A Milestone Chat session follows this sequence:
 
 ## Reference
 
+- **Agent definition:** `governance/agents/governance.agent.md` (Milestone mode)
 - **System document:** `governance/systems/milestone-execution-chat-starter.md` (this file)
 - **Template:** `governance/templates/milestone-execution-chat-starter.md`
-- **Peer system (parent level):** `governance/systems/phase-execution-chat-starter.md`
-- **Peer system (child level):** `governance/systems/epic-execution-chat-starter.md`
+- **Parent mode:** Phase mode (in `governance/agents/governance.agent.md`)
+- **Parent system:** `governance/systems/phase-execution-chat-starter.md`
+- **Child system:** `governance/systems/epic-execution-chat-starter.md`
 - **Hierarchy reference:** `governance/systems/chat-hierarchy.md`
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13B
 - **Delivery wrapping rule:** `governance/AI-OPERATING-GUIDELINES.md` §3.1.1

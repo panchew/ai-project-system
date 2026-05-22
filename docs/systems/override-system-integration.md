@@ -174,5 +174,5 @@ For full precedence documentation, see `governance/PROJECT-SYSTEM-GUIDELINES.md`
 - **Override field definitions:** `governance/ai-project-yml-spec.md` §3.3
 - **Override validation rules:** `governance/ai-project-yml-spec.md` §4
 - **Precedence hierarchy:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §14C
-- **HQ agent implementation:** `governance/agents/hq.agent.md` (Override Integration)
+- **Governance Agent implementation:** `governance/agents/governance.agent.md` (Override Integration)
 - **Project configuration schema:** `governance/ai-project-yml-spec.md`

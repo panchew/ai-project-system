@@ -130,8 +130,10 @@ A Phase Chat session follows this sequence:
 
 ## Reference
 
+- **Agent definition:** `governance/agents/governance.agent.md` (Phase mode)
 - **System document:** `governance/systems/phase-execution-chat-starter.md` (this file)
 - **Template:** `governance/templates/phase-execution-chat-starter.md`
-- **Peer system:** `governance/systems/epic-execution-chat-starter.md`
+- **Parent mode:** HQ mode (in `governance/agents/governance.agent.md`)
+- **Child mode:** Milestone mode (in `governance/agents/governance.agent.md`)
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13A
 - **Delivery wrapping rule:** `governance/AI-OPERATING-GUIDELINES.md` §3.1.1

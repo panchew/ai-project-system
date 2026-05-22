@@ -21,7 +21,7 @@ Common issues encountered during AI Project System adoption and their resolution
 
 1. [Governance Submodule Issues](#1-governance-submodule-issues)
 2. [.ai-project.yml Validation Errors](#2-ai-projectyml-validation-errors)
-3. [HQ Agent Not Appearing in VS Code](#3-hq-agent-not-appearing-in-vs-code)
+3. [Governance Agent Not Appearing](#3-governance-agent-not-appearing)
 4. [Branch Naming Conflicts](#4-branch-naming-conflicts)
 5. [Override Configuration Problems](#5-override-configuration-problems)
 6. [Governance Sync/Update Failures](#6-governance-syncupdate-failures)
@@ -150,24 +150,24 @@ The project config file fails validation.
 
 ---
 
-## 3. HQ Agent Not Appearing in VS Code
+## 3. Governance Agent Not Appearing
 
-### Problem: The "hq" agent does not show up in the GitHub Copilot agent selector
+### Problem: The agent is not available in the AI tool's agent selector
 
-After following the adoption guide, the HQ agent is not available in VS Code.
+After following the adoption guide, the Governance Agent is not available.
 
-**Cause:** The agent file is missing, has incorrect YAML front-matter, or VS Code has not reloaded the agent configuration.
+**Cause:** The agent file is missing, has incorrect YAML front-matter, or the tool has not reloaded the agent configuration.
 
 **Solution:**
 
 1. Verify the agent file exists:
    ```bash
-   cat .github/agents/hq.agent.md
+   cat .github/agents/governance.agent.md
    ```
    If missing, copy it from governance:
    ```bash
    mkdir -p .github/agents
-   cp .governance/governance/agents/hq.agent.md .github/agents/hq.agent.md
+   cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
    ```
 
 2. Check the front-matter has correct `name` field:
@@ -175,24 +175,20 @@ After following the adoption guide, the HQ agent is not available in VS Code.
    ---
    name: hq
    version: 2.0.0
-   description: Governance-aware HQ Chat agent for planning and artifact generation
+   description: Unified Governance Agent — operates as HQ, Phase, Milestone, or Epic mode based on the Chat Starter delivered
    type: custom-agent
    ---
    ```
-   The `name` field must be lowercase `hq`.
 
-3. Reload VS Code:
-   - Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
-   - Run **"Developer: Reload Window"**
+3. Restart your AI tool / reload the agent configuration.
 
-4. Verify agent selector:
-   - Open Copilot Chat
-   - Click agent selector (bottom of chat panel)
-   - "hq" should appear in the list
+4. Verify the agent is selectable in your tool's agent selector (look for **"hq"** or the name you configured).
 
-**Prevention:** Ensure `.github/agents/hq.agent.md` is committed to the repository. Run `git status` to verify it is tracked.
+**Prevention:** Ensure `.github/agents/governance.agent.md` is committed to the repository. Run `git status` to verify it is tracked.
 
-**See also:** [ADOPTION-GUIDE.md Step 3](ADOPTION-GUIDE.md#step-3-configure-hq-agent-in-vs-code)
+> **Old `hq.agent.md`?** Remove any old `.github/agents/hq.agent.md` — it has been replaced by the unified `governance.agent.md`.
+
+**See also:** [ADOPTION-GUIDE.md Step 3](ADOPTION-GUIDE.md#step-3-configure-hq-agent)
 
 ---
 
@@ -271,9 +267,9 @@ The HQ agent is not applying project-specific overrides (branch strategy, merge 
    python -c "import yaml; d=yaml.safe_load(open('.ai-project.yml')); print(d.get('overrides', {}))"
    ```
 
-4. If overrides are correctly formatted but not applied, verify the HQ agent version is M9+ (override-aware):
+4. If overrides are correctly formatted but not applied, verify the Governance Agent version is v2.0.0+:
    ```bash
-   head -5 .governance/governance/agents/hq.agent.md
+   head -5 .governance/governance/agents/governance.agent.md
    ```
    Expected: `version: 2.0.0` or later.
 
@@ -377,7 +373,7 @@ Running `git submodule update` returns errors, or pulling governance changes cau
 2. **Set up governance manually** if the script is not available:
    - Add the submodule: `git submodule add https://github.com/panchew/ai-project-system governance`
    - Create `.ai-project.yml` manually with your project name and governance reference
-   - Copy the HQ agent: `cp governance/agents/hq.agent.md .github/agents/hq.agent.md`
+   - Copy the Governance Agent: `cp governance/agents/governance.agent.md .github/agents/governance.agent.md`
 
 **Prevention:** Check the [governance source repository](https://github.com/panchew/ai-project-system) for the latest CLI availability. The local script at `bin/ai-project-init` is always available.
 
@@ -454,7 +450,7 @@ The CLI command does not complete successfully.
    If Node.js upgrade is not possible, skip the CLI and set up governance manually:
    - Add the governance submodule directly: `git submodule add https://github.com/panchew/ai-project-system governance`
    - Create `.ai-project.yml` manually (see Step 2 verification example)
-   - Copy the HQ agent: `cp governance/agents/hq.agent.md .github/agents/hq.agent.md`
+   - Copy the Governance Agent: `cp governance/agents/governance.agent.md .github/agents/governance.agent.md`
    
    Governance itself is language-agnostic — Node.js is only required for the CLI tool.
 
@@ -497,18 +493,24 @@ The adoption guide targets greenfield projects, but you need to add governance t
      description: "My project description"
    EOF
    
-   # Install HQ agent
-   mkdir -p .github/agents
-   cp governance/agents/hq.agent.md .github/agents/hq.agent.md
-   
-   # Commit
-   git add .ai-project.yml .gitmodules governance .github
-   git commit -m "chore: adopt AI Project System governance"
+    # Install Governance Agent
+    mkdir -p .github/agents
+    cp governance/agents/governance.agent.md .github/agents/governance.agent.md
+    
+    # Commit
+    git add .ai-project.yml .gitmodules governance .github
+    git commit -m "chore: adopt AI Project System governance"
+   ```
+
+3. **Use the adoption startup prompt** once governance is installed:
+   ```
+   I want to adopt the AI Project System governance framework for my existing project at [repository-path].
+   Initialize HQ Chat for this project, help me assess what's needed for adoption, and create a migration plan.
    ```
 
 **Prevention:** When starting a new project from scratch, use `ai-project init` before adding any code. For existing projects, always use the migration guide.
 
-**See also:** [Legacy Migration Guide](legacy-project-migration.md#workflow-b-governance-install), [ADOPTION-GUIDE.md Step 1](ADOPTION-GUIDE.md#step-1-initialize-your-project)
+**See also:** [Legacy Migration Guide](legacy-project-migration.md#workflow-b-governance-install), [ADOPTION-GUIDE.md Step 1](ADOPTION-GUIDE.md#step-1-initialize-your-project), [ADOPTION-GUIDE.md Step 4](ADOPTION-GUIDE.md#step-4-send-canonical-startup-prompt)
 
 ---
 

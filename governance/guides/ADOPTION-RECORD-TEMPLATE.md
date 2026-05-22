@@ -36,9 +36,8 @@ last_updated: <YYYY-MM-DD>
 | Prerequisite | Status | Notes |
 |---|---|---|
 | Git (v2.30+) | ✅ / ❌ / ⚠️ | <version or issue> |
-| GitHub account | ✅ / ❌ / ⚠️ | <account status> |
-| VS Code (1.85+) | ✅ / ❌ / ⚠️ | <version> |
-| GitHub Copilot extension | ✅ / ❌ / ⚠️ | <installed/active> |
+| Repository host (GitHub, GitLab, etc.) | ✅ / ❌ / ⚠️ | <account status> |
+| AI chat tool with agent support | ✅ / ❌ / ⚠️ | <tool name> |
 | Node.js (v18+) | ✅ / ❌ / ⚠️ | <version> |
 | `ai-project` CLI installed | ✅ / ❌ / ⚠️ | <version or fallback> |
 

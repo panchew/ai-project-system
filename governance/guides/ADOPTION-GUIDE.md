@@ -11,7 +11,7 @@
 
 ## Overview
 
-This guide walks you through adopting the AI Project System governance framework for a new project. By the end, you will have a fully scaffolded project with an active HQ Chat agent ready to help you plan and execute work.
+This guide walks you through adopting the AI Project System governance framework for a new project. By the end, you will have a fully scaffolded project with an active Governance Agent ready to help you plan and execute work.
 
 **Time budget:** 25–30 minutes total.
 
@@ -21,7 +21,7 @@ This guide walks you through adopting the AI Project System governance framework
 flowchart LR
     A[Prerequisites] --> B[Step 1: ai-project init]
     B --> C[Step 2: Verify Governance Submodule]
-    C --> D[Step 3: Configure HQ Agent in VS Code]
+    C --> D[Step 3: Configure HQ Agent]
     D --> E[Step 4: Send Canonical Startup Prompt]
     E --> F[Step 5: Create Phase 0 Spec]
     F --> G[Step 6: Plan First Milestone]
@@ -33,7 +33,7 @@ If Mermaid is not rendered, here is the ASCII equivalent:
 ```
 ┌────────────────────────────────────────────┐
 │           PREREQUISITES                     │
-│  git, GitHub, VS Code, Copilot, CLI        │
+│  git, repository host, AI chat, CLI        │
 └────────────────┬───────────────────────────┘
                  ▼
         ┌──────────────────┐
@@ -82,9 +82,8 @@ Before starting, ensure you have:
 | Item | Required | Check |
 |------|----------|-------|
 | **Git** (v2.30+) | Yes | `git --version` |
-| **GitHub account** | Yes | Access to create repositories |
-| **VS Code** (1.85+) | Yes | `code --version` |
-| **GitHub Copilot** (VS Code extension) | Yes | Check extensions panel |
+| **Code repository host** (GitHub, GitLab, etc.) | Yes | Repository created and accessible |
+| **AI chat tool** with custom agent/file context support | Yes | Supports agent instructions via markdown |
 | **`ai-project` CLI** | Yes | See installation below |
 | **Node.js** (v18+, for CLI) | Yes | `node --version` |
 
@@ -166,7 +165,7 @@ Provide the values and confirm. The CLI output will show:
 ```
 ✅ Created .ai-project.yml
 ✅ Created docs/phases/
-✅ Created .github/agents/hq.agent.md
+✅ Created .github/agents/governance.agent.md
 ✅ Created governance submodule at .governance/
 ✅ Project initialized successfully
 ```
@@ -255,59 +254,45 @@ Expected output:
 
 ---
 
-## Step 3: Configure HQ Agent in VS Code
+## Step 3: Configure HQ Agent
 
 **Time:** ~3 minutes
 
-### 3.1 Activate the HQ Agent File
+### 3.1 Install the Governance Agent
 
-The `ai-project init` command creates `.github/agents/hq.agent.md` from governance automatically.
-If you are setting up governance manually (e.g., via the migration guide or for the governance
-source repository itself), you must copy it:
+The `ai-project init` command may create an older `hq.agent.md`. Replace it with the unified Governance Agent:
 
 ```bash
 mkdir -p .github/agents
-cp governance/agents/hq.agent.md .github/agents/hq.agent.md
+cp governance/agents/governance.agent.md .github/agents/governance.agent.md
+# Remove old separate agent file if present
+rm -f .github/agents/hq.agent.md
 ```
 
 Verify the file exists:
 
 ```bash
-cat .github/agents/hq.agent.md
+cat .github/agents/governance.agent.md
 ```
 
-Expected: YAML front-matter and agent definition.
+Expected: YAML front-matter and agent definition describing all four modes.
 
 > **Note for governance source repositories:** If your project IS the governance source
 > (e.g., `ai-project-system` itself), governance is at `./governance` locally rather than
-> as a submodule. Use `cp ./governance/agents/hq.agent.md .github/agents/hq.agent.md`
+> as a submodule. Use `cp ./governance/agents/governance.agent.md .github/agents/governance.agent.md`
 > instead of the submodule path.
 
-[SCREENSHOT: VS Code Explorer showing .github/agents/hq.agent.md in the file tree]
+### 3.2 Register the Agent in Your AI Tool
 
-### 3.2 Open Project in VS Code
-
-```bash
-code my-project
-```
-
-### 3.3 Select the HQ Agent
-
-1. Open VS Code Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`)
-2. Type **"GitHub Copilot: Select Agent"** and select it
-3. Choose **"hq"** from the agent list
-
-[SCREENSHOT: GitHub Copilot agent selector dropdown showing "hq" option]
-
-### 3.4 Verify Agent Is Active
-
-The Copilot Chat panel should show **"hq"** in the agent selector dropdown at the bottom of the chat panel.
+- **VS Code + GitHub Copilot:** Detects `.github/agents/*.agent.md` automatically. Select **"hq"** from the agent selector (`Ctrl+Shift+P` → "GitHub Copilot: Select Agent"). The single agent handles all four modes.
+- **Other IDEs / chat tools:** Consult your tool's documentation for registering custom agent instructions. The key requirement is that the tool makes the full contents of the agent file and the governance directory available as context.
+- **Manual / copy-paste:** If your tool does not support agent files, open `governance.agent.md` and copy the entire file contents into a new chat session.
 
 ### Verification Check
 
-The agent selector in VS Code Copilot Chat displays **"hq"** and is selected.
+Your AI chat tool is configured with the Governance Agent.
 
-> **Troubleshooting:** If "hq" does not appear, ensure `.github/agents/hq.agent.md` exists with correct YAML front-matter. Restart VS Code and try again. See [FAQ: HQ Agent Not Appearing](ADOPTION-FAQ.md#hq-agent-not-appearing-in-vs-code).
+> **Troubleshooting:** If the agent instructions are not available, ensure `.github/agents/governance.agent.md` exists with correct YAML front-matter and that your tool is referencing it. See [FAQ: Governance Agent Not Appearing](ADOPTION-FAQ.md#3-governance-agent-not-appearing).
 
 ---
 
@@ -315,25 +300,30 @@ The agent selector in VS Code Copilot Chat displays **"hq"** and is selected.
 
 **Time:** ~2 minutes
 
-With the **hq** agent selected, send this prompt in VS Code Copilot Chat:
+With the **Governance Agent** active, send one of these prompts to activate **HQ mode**:
 
+**For a new project:**
 ```
 I'm starting a new project using the AI Project System governance framework.
 Initialize HQ Chat for my-project and help me create a Phase 0 project formalization.
 ```
 
-The HQ agent will:
+**For an existing project (adoption):**
+```
+I want to adopt the AI Project System governance framework for my existing project at [repository-path].
+Initialize HQ Chat for this project, help me assess what's needed for adoption, and create a migration plan.
+```
+
+The agent (in HQ mode) will:
 
 1. Read `.ai-project.yml` to discover governance source and version
 2. Load governance files from `.governance/`
 3. Confirm governance is valid
-4. Propose a plan for Phase 0 creation
+4. Propose a plan for Phase 0 creation (new project) or a migration plan (existing project)
 
 ### Verification Check
 
-The HQ agent responds with a confirmation that governance was loaded successfully, and proposes a Phase 0 structure.
-
-[SCREENSHOT: HQ Chat agent responding after canonical prompt, showing governance context loaded]
+The agent responds with a confirmation that governance was loaded successfully, and proposes next steps.
 
 > **Troubleshooting:** If the agent does not respond or reports missing governance, verify Step 2 (submodule) and Step 3 (agent selection). The agent will provide recovery guidance if `.ai-project.yml` is missing or invalid.
 
@@ -343,13 +333,13 @@ The HQ agent responds with a confirmation that governance was loaded successfull
 
 **Time:** ~10 minutes
 
-Follow the HQ agent's guidance to create a Phase 0 spec. The agent will typically ask:
+Follow the Governance Agent's guidance (in HQ mode) to create a Phase 0 spec. The agent will typically ask:
 
 - What is the project's purpose?
 - What are the major phases (Phase 0 is the project formalization)?
 - What milestones are expected in Phase 0?
 
-Answer these questions in natural language. The HQ agent will produce:
+Answer these questions in natural language. The Governance Agent (in HQ mode) will produce:
 
 - `docs/phases/P0__phase__project-formalization.md` — Phase 0 spec
 - A Milestone M1 spec outline
@@ -376,7 +366,7 @@ ls docs/phases/
 
 Expected: `docs/phases/` contains at least one Phase spec file.
 
-> **Troubleshooting:** If the agent is unable to write files, ensure it has the correct write permissions. The HQ agent writes only to `docs/`. Files can also be created manually from templates at `.governance/governance/templates/`.
+> **Troubleshooting:** If the agent is unable to write files, ensure it has the correct write permissions. The Governance Agent writes only to its allowed scope per mode (e.g., HQ mode writes to `docs/`). Files can also be created manually from templates at `.governance/governance/templates/`.
 
 ---
 
@@ -384,7 +374,7 @@ Expected: `docs/phases/` contains at least one Phase spec file.
 
 **Time:** ~5 minutes
 
-After Phase 0 is created, ask the HQ agent:
+After Phase 0 is created, ask the Governance Agent (still in HQ mode):
 
 ```
 Let's plan Milestone M1 for Phase 0. What Epics should we include?
@@ -460,16 +450,13 @@ ai-project init my-project --dir ~/projects  # specify target directory
 git submodule status
 git submodule update --init --recursive
 
-# Open in VS Code
-code my-project
-
 # Verify governance files (path depends on CLI version)
 ls governance/governance/          # new path
 ls .governance/governance/         # legacy path (older CLI versions)
 
-# Install HQ agent manually (if not done by CLI)
+# Install Governance Agent manually (if not done by CLI)
 mkdir -p .github/agents
-cp governance/agents/hq.agent.md .github/agents/hq.agent.md
+cp governance/agents/governance.agent.md .github/agents/governance.agent.md
 ```
 
 ### File Locations
@@ -478,7 +465,7 @@ cp governance/agents/hq.agent.md .github/agents/hq.agent.md
 |----------|------|
 | Project config | `.ai-project.yml` |
 | Governance submodule | `governance/` (or `.governance/` in older versions) |
-| HQ agent definition | `.github/agents/hq.agent.md` |
+| Governance Agent definition | `.github/agents/governance.agent.md` |
 | Governance guidelines | `governance/governance/PROJECT-SYSTEM-GUIDELINES.md` |
 | Operating guidelines | `governance/governance/AI-OPERATING-GUIDELINES.md` |
 | CLI script (local) | `governance/bin/ai-project-init` |

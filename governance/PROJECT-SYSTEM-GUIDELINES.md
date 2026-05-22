@@ -541,6 +541,7 @@ A Phase Chat (planning session scoped to a single Phase) is launched by HQ Chat 
 
 For full role and responsibility definitions, see:
 
+- **Agent definition:** `governance/agents/governance.agent.md` (Phase mode)
 - **System reference:** `governance/systems/phase-execution-chat-starter.md`
 - **Fillable template:** `governance/templates/phase-execution-chat-starter.md`
 - **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 2)
@@ -562,6 +563,7 @@ A Milestone Chat (planning session scoped to a single Milestone) is launched by 
 
 For full role and responsibility definitions, see:
 
+- **Agent definition:** `governance/agents/governance.agent.md` (Milestone mode)
 - **System reference:** `governance/systems/milestone-execution-chat-starter.md`
 - **Fillable template:** `governance/templates/milestone-execution-chat-starter.md`
 - **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 3)
@@ -603,13 +605,19 @@ A Phase Chat is a finite planning session scoped to a single Phase. It is NOT an
 
 **Authority:** Phase Chat produces proposals. HQ Chat owns accept/reject decisions.
 
-The system document defining Phase Chat rules is:
+The agent definition governing Phase mode behavior is:
+
+```
+governance/agents/governance.agent.md
+```
+
+The system document defining Phase mode rules is:
 
 ```
 governance/systems/phase-execution-chat-starter.md
 ```
 
-The fillable template for launching a Phase Chat is:
+The fillable template for launching a Phase session is:
 
 ```
 governance/templates/phase-execution-chat-starter.md
@@ -719,7 +727,7 @@ The following governance dimensions are **immutable** and **cannot be altered** 
 | Dimension | Why It Is Non-Overridable | Consequence of Allowing Overrides |
 |-----------|--------------------------|-----------------------------------|
 | **Canonical happy path** (8 steps: execution → delivery notice → human review → epic review seal → HQ decision → HQ authorization → PR & merge → stop) | The happy path is the foundational execution contract. Every Epic must follow it. Skipping or reordering steps breaks the governance model. | Epics would skip review or merge without authorization, breaking the audit trail and authority hierarchy. |
-| **Authority hierarchy** (HQ Chat → Milestone Chat → Coding Agent) | Establishes clear decision boundaries. Restructuring would create ambiguity about who decides what. | Unclear ownership of decisions, conflicting instructions, loss of accountability. |
+| **Authority hierarchy** (HQ Chat → Phase Chat → Milestone Chat → Coding Agent) | Establishes clear decision boundaries. Restructuring would create ambiguity about who decides what. | Unclear ownership of decisions, conflicting instructions, loss of accountability. |
 | **Epic lifecycle** (spec → execute → deliver → review → accept → merge) | The lifecycle guarantees that every Epic has a spec before execution, delivery before review, and acceptance before merge. | Epics could be executed without specs, merged without review, or accepted without explicit authorization. |
 | **Definition of DoD requirements** | DoD is the minimum bar for completion. Reducing DoD scope undermines quality. | Epics could declare completion without meeting all requirements. |
 | **Documentation front-matter conventions** | Front-matter is how the system mechanically derives execution context. Changing the format would break tooling. | Tooling (HQ agent, CLI) could not parse artifacts; context would not be derivable. |
