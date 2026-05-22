@@ -54,9 +54,9 @@ This system is designed for:
 ### Overview: What We'll Build
 
 In this walkthrough, you'll:
-1. Initialize the AI Project System structure
-2. Create a Phase spec for your project
-3. Create a Milestone spec within that Phase
+1. Initialize the AI Project System structure (using `ai-project init`)
+2. Open HQ Chat and create a Phase spec
+3. Plan and create a Milestone spec
 4. Create an Epic spec within that Milestone
 5. Execute that Epic with an AI Coding Agent
 6. Complete and close your first Epic
@@ -66,136 +66,112 @@ In this walkthrough, you'll:
 ---
 
 ## Step 1: Initialize Repository Structure
-**Time: 3 minutes**
+**Time: 1 minute**
 
-### 1.1 Create the documentation folder structure
+### 1.1 Run the CLI
 
-In your repository, create:
+Use the `ai-project init` command to scaffold your project in seconds:
 
 ```bash
-mkdir -p docs/phases docs/roadmap docs/context docs/decisions docs/admin
-mkdir -p governance/templates governance/diagrams governance/systems governance/guides
+ai-project init my-project
+cd my-project
 ```
 
-### 1.2 Copy governance documents
+This creates:
+- **Canonical `docs/` hierarchy** (phases, roadmap, context, decisions, admin)
+- **Governance submodule** pinned to the current version
+- **`.ai-project.yml`** with correct governance reference
+- **HQ Chat agent files** in `.github/agents/hq.agent.md`
 
-Copy the following files from the [AI Project System repository](https://github.com/panchew/ai-project-system):
+### 1.2 Install the CLI (if needed)
 
-**Required governance files:**
-- `governance/PROJECT-SYSTEM-GUIDELINES.md` (defines system structure)
-- `governance/AI-OPERATING-GUIDELINES.md` (defines execution procedures)
+If you don't have the CLI installed, grab it from the [AI Project System repository](https://github.com/panchew/ai-project-system):
 
-**Copy them into your `governance/` folder.**
+```bash
+# Clone the system repository
+git clone https://github.com/panchew/ai-project-system.git
+# Copy the CLI to your PATH
+cp ai-project-system/bin/ai-project-init /usr/local/bin/
+```
 
-### 1.3 Copy templates
+Or use the git submodule approach directly:
 
-Copy all files from [governance/templates/](https://github.com/panchew/ai-project-system/tree/master/governance/templates) into your `governance/templates/` folder:
+```bash
+cd your-project
+mkdir -p docs/phases docs/roadmap docs/context docs/decisions docs/admin
+git submodule add https://github.com/panchew/ai-project-system.git governance
+git submodule update --init --recursive
+cat > .ai-project.yml << EOF
+governance:
+  source: ./governance
+  version: "2.0.0"
+  ref: v2.0.0
+project:
+  name: your-project
+  description: "Your project description"
+EOF
+```
 
-- `phase-spec.md`
-- `milestone-spec.md`
-- `epic-spec.md`
-- `epic-execution-chat-starter.md`
-- `epic-completion-report.md`
-- `epic-review-seal.md`
-- `epic-completion-notice.md`
-- `README.md`
-
-### 1.4 Verify structure
-
-Your repository should now look like:
+### 1.3 Verify structure
 
 ```
 your-project/
-├── governance/
+├── .ai-project.yml             # Project configuration contract
+├── governance/                 # Git submodule (pinned version)
 │   ├── PROJECT-SYSTEM-GUIDELINES.md
 │   ├── AI-OPERATING-GUIDELINES.md
-│   ├── templates/       (all template files)
-│   ├── diagrams/        (empty for now)
-│   ├── systems/         (empty for now)
-│   └── guides/          (empty for now)
+│   ├── templates/
+│   ├── diagrams/
+│   ├── systems/
+│   └── guides/
 ├── docs/
-│   ├── phases/          (empty for now)
-│   ├── roadmap/         (empty for now)
-│   ├── context/         (empty for now)
-│   ├── decisions/       (empty for now)
-│   └── admin/           (empty for now)
+│   ├── phases/                 # Phase → Milestone → Epic artifacts
+│   ├── roadmap/
+│   ├── context/
+│   ├── decisions/
+│   └── admin/
+├── .github/
+│   └── agents/
+│       └── hq.agent.md         # HQ Chat agent definition
 └── [your existing project files]
 ```
 
-✅ **Checkpoint:** You now have the AI Project System structure in place.
+✅ **Checkpoint:** Your project is initialized with governance, ready for HQ Chat.
 
 ---
 
-## Step 2: Create Your First Phase Spec
-**Time: 5 minutes**
+## Step 2: Create Your First Phase Spec with HQ Chat
+**Time: 3 minutes**
 
-A **Phase** is a major segment of work with a clear purpose and exit criteria.
+A **Phase** is a major segment of work with a clear purpose and exit criteria. Use the **HQ Chat agent** to create it.
 
-### 2.1 Copy the template
+### 2.1 Open HQ Chat
+
+1. Open your project in VS Code
+2. Open GitHub Copilot Chat
+3. Select the `hq` custom agent (installed at `.github/agents/hq.agent.md`)
+4. Send the canonical prompt:
+
+```
+I'm starting a new project using the AI Project System governance framework.
+Initialize HQ Chat for my-project and help me create a Phase 0 project formalization.
+```
+
+### 2.2 Follow HQ Chat guidance
+
+The HQ agent will:
+1. Read `.ai-project.yml` to discover governance context
+2. Present a structured Phase 0 spec
+3. Guide you through approving it
+4. Save the Phase spec to `docs/phases/`
+
+**If you don't have the HQ agent available**, you can create the spec manually from the template:
 
 ```bash
 cp governance/templates/phase-spec.md docs/phases/P1__phase__my-first-phase.md
 ```
 
-### 2.2 Fill in the front-matter
-
-Open `docs/phases/P1__phase__my-first-phase.md` and edit:
-
-```yaml
----
-project: my-project-name          # Your project name
-phase: P1                          # Phase number (start with P1)
-type: phase
-status: planned                    # planned | active | complete
-last_updated: 2026-01-29          # Today's date
----
-```
-
-### 2.3 Complete the Phase spec
-
-Fill in these sections:
-
-**Phase Title:**
-```markdown
-# Phase P1 — My First Phase
-```
-
-**Purpose:**
-```markdown
-## Purpose
-
-This Phase establishes [describe what this phase accomplishes].
-
-Example:
-This Phase establishes the foundation for the AI-assisted development workflow, 
-including documentation structure and initial Epic execution.
-```
-
-**Scope:**
-```markdown
-## In Scope
-- Item 1
-- Item 2
-
-## Out of Scope
-- Item A
-- Item B
-```
-
-**Milestones:**
-```markdown
-## Milestones
-
-- **M1** — [Milestone name] ([planned/active/complete])
-  - [Brief description]
-```
-
-### 2.4 Save and commit
-
-```bash
-git add docs/phases/P1__phase__my-first-phase.md
-git commit -m "Add Phase P1 spec"
-```
+Then fill in the front-matter and sections per the template instructions.
 
 ✅ **Checkpoint:** You've created your first Phase specification.
 
@@ -632,11 +608,9 @@ You've completed your first Epic using the AI Project System!
 
 Now that you've completed your first Epic, explore:
 
-1. **See a Complete Example**
-   - Walk through the [Task Tracker CLI example project](../examples/task-tracker-project/)
-   - See all artifact types in context (spec, completion, delivery, review, chat starter)
-   - Understand the full Epic lifecycle in ~30 minutes
-   - Copy structure for your own projects
+1. **Follow the Adoption Guide**
+   - [ADOPTION-GUIDE.md](ADOPTION-GUIDE.md) — Step-by-step from zero to HQ Chat live
+   - [ADOPTION-FAQ.md](ADOPTION-FAQ.md) — Troubleshooting common issues
 
 2. **Understand Governance**
    - Read [PROJECT-SYSTEM-GUIDELINES.md](PROJECT-SYSTEM-GUIDELINES.md) for system structure
@@ -648,36 +622,36 @@ Now that you've completed your first Epic, explore:
    - Review [Repository Structure](diagrams/repository-structure.md) diagram
 
 4. **See Examples**
-   - Browse [docs/phases/P1__System_Foundation_and_Adoption/](phases/P1__System_Foundation_and_Adoption/) for real Epic examples
+   - Browse [Phase P1](phases/P1__System_Foundation_and_Adoption/) for real Epic specs and completions
+   - Browse [Phase P2](phases/P2__Adoption_Architecture_and_Multi_Project_Support/) for multi-project adoption artifacts
    - Study how this system was built using itself
 
 5. **System References**
    - [How to Start a Project](systems/start-a-project.md)
    - [HQ Chat Guide](systems/hq-chat.md)
    - [Governance Propagation](systems/governance-propagation.md)
+   - [Override Boundaries](../override-boundaries.md) — Customizing conventions
 
 ### Plan Your Next Epic
 
 Ready to create your next Epic?
 
 1. **Identify a problem or opportunity** in your project
-2. **Create an Epic spec** defining goals and deliverables
-3. **Create a Chat Starter** with execution instructions
-4. **Launch your AI agent** and let it execute
-5. **Review and close** following the canonical happy path
+2. **Use HQ Chat** to create an Epic spec and Epic Execution Chat Starter
+3. **Launch your Coding Agent** with the Chat Starter
+4. **Review and close** following the canonical happy path
 
 ### Common Next Steps
 
 **If you're starting a new project:**
-- Create Phase P1 for your project foundation
-- Define 2-3 Milestones covering initial development
-- Create Epic specs for highest-priority work
+- Run `ai-project init` to scaffold (see [Adoption Guide](ADOPTION-GUIDE.md))
+- Use HQ Chat to create Phase 0 project formalization
+- Define milestones and Epics with HQ Chat guidance
 
 **If you're integrating into an existing project:**
-- Create Phase P1 for "AI Project System Integration"
-- Milestone M1: Documentation structure
-- Milestone M2: First AI-assisted feature
-- Milestone M3: Team adoption
+- Follow the [Legacy Project Migration Guide](legacy-project-migration.md)
+- Create a transition Phase for "Governance Adoption"
+- Prioritize Epics that document existing structure first
 
 **If you're experimenting:**
 - Create small, low-risk Epics
@@ -689,6 +663,11 @@ Ready to create your next Epic?
 ## Quick Reference
 
 ### Common Commands
+
+**Initialize a new project:**
+```bash
+ai-project init my-project
+```
 
 **Create branches:**
 ```bash
@@ -717,16 +696,24 @@ git merge epic/E1.1
 git push origin milestone/M1
 ```
 
+**Update governance reference:**
+```bash
+cd governance && git fetch && git checkout v2.0.0 && cd ..
+```
+
 ### File Locations
 
 | What | Where |
 |------|-------|
+| Project configuration | `.ai-project.yml` (repository root) |
 | Governance rules | `governance/PROJECT-SYSTEM-GUIDELINES.md`, `governance/AI-OPERATING-GUIDELINES.md` |
 | Templates | `governance/templates/` |
+| HQ Chat agent | `.github/agents/hq.agent.md` |
 | Phase Specs | `docs/phases/P<N>__phase__*.md` |
 | Milestone Specs | `docs/phases/P<N>__*/P<N>-M<N>__milestone.md` |
 | Epic Specs | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__spec__*.md` |
 | Completions | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__completion__*.md` |
+| Adoption records | `governance/adoption-records/` |
 | Diagrams | `governance/diagrams/` |
 
 ### Key Concepts Glossary
@@ -744,7 +731,7 @@ git push origin milestone/M1
 | **Epic Review Seal** | Document capturing human review findings |
 | **Canonical Happy Path** | Standard Epic lifecycle: Plan → Execute → Deliver → Review → Accept → Merge → Close |
 
-### Branch Naming
+### Branch Naming (Defaults)
 
 ```
 master                  (production)
@@ -752,6 +739,8 @@ master                  (production)
       └── milestone/M1 (long-lived)
           └── epic/E1.1 (short-lived)
 ```
+
+Prefixes (`epic/`, `milestone/`, `phase/`) are configurable via `.ai-project.yml` overrides. See [Override Boundaries](../override-boundaries.md).
 
 ### File Naming
 
@@ -803,8 +792,10 @@ Please wait for my accept/reject decision and merge authorization.
 
 - **Full Governance:** [PROJECT-SYSTEM-GUIDELINES.md](PROJECT-SYSTEM-GUIDELINES.md)
 - **Execution Procedures:** [AI-OPERATING-GUIDELINES.md](AI-OPERATING-GUIDELINES.md)
+- **Adoption Guide:** [ADOPTION-GUIDE.md](ADOPTION-GUIDE.md)
+- **Adoption FAQ:** [ADOPTION-FAQ.md](ADOPTION-FAQ.md)
 - **Visual Guides:** [governance/diagrams/](../diagrams/)
-- **Examples:** [docs/phases/P1__System_Foundation_and_Adoption/](phases/P1__System_Foundation_and_Adoption/)
+- **Examples:** [Phase P1](phases/P1__System_Foundation_and_Adoption/) | [Phase P2](phases/P2__Adoption_Architecture_and_Multi_Project_Support/)
 
 **Still stuck?** File an issue in the [AI Project System repository](https://github.com/panchew/ai-project-system).
 
