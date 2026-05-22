@@ -2,6 +2,25 @@
 
 This diagram shows the complete lifecycle of an Epic in the AI Project System, from initial ideation through closure.
 
+## Where This Fits
+
+The Epic lifecycle is the fourth and most granular level of the planning cascade. Before an Epic is planned, the following must already exist:
+
+```
+HQ Chat ──→ Phase spec + Phase Execution Chat Starter
+               │
+               ▼
+          Phase Chat ──→ Milestone spec + Milestone Execution Chat Starter
+                            │
+                            ▼
+                       Milestone Chat ──→ Epic spec + Epic Execution Chat Starter  ←─ YOU ARE HERE
+                                               │
+                                               ▼
+                                          Epic mode executes
+```
+
+Each level is planned by its parent and accepted before the next begins. This diagram focuses on the Epic level — steps 4-6 of the full cascade.
+
 ---
 
 ## Lifecycle Stages

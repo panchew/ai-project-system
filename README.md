@@ -97,6 +97,21 @@ Hierarchical structure that breaks work into manageable, deliverable units:
 - **Milestones:** Cohesive increments (collection of related Epics)
 - **Epics:** Atomic deliverable work (complete, reviewable, mergeable)
 
+Each level is planned by its parent and feeds into the next:
+
+```
+HQ Chat ──creates──→ Phase specs + Phase Execution Chat Starter
+                        │
+                        ▼
+                   Phase Chat ──creates──→ Milestone specs + Milestone Execution Chat Starter
+                                               │
+                                               ▼
+                                          Milestone Chat ──creates──→ Epic specs + Epic Execution Chat Starter
+                                                                          │
+                                                                          ▼
+                                                                     Epic mode ──executes──→ Code, PRs, deliverables
+```
+
 ### 🤖 **AI-First Execution**
 Purpose-built for AI coding assistants:
 - Chat Starters provide complete context for each level (Phase, Milestone, Epic)
@@ -196,28 +211,32 @@ The guide walks you through:
 
 ## How It Works (5-Minute Overview)
 
-### **1. Plan (Human + Milestone Chat)**
-Milestone Chat creates an Epic Spec and Epic Execution Chat Starter defining:
-- Problem statement
-- Goals and deliverables
-- Definition of Done
-- Acceptance criteria
+Work cascades through four levels, each planned by the level above and executed by the level below:
 
-### **2. Execute (Epic Mode)**
-Epic mode receives the Chat Starter and executes:
+### **1. HQ Plans the Phase**
+HQ Chat defines the Phase scope, goals, and milestones, then produces a **Phase Execution Chat Starter** to launch a Phase Chat session.
+
+### **2. Phase Plans the Milestones**
+Phase Chat reviews the Phase spec, produces **Milestone specs** and **Milestone Execution Chat Starters** for each milestone, then returns them to HQ for acceptance.
+
+### **3. Milestone Plans the Epics**
+Milestone Chat reviews the Milestone spec, produces **Epic specs** and **Epic Execution Chat Starters** for each epic, then returns them to Phase Chat for acceptance.
+
+### **4. Epic Executes**
+Epic mode receives the Epic Execution Chat Starter and executes:
 - Creates branch
 - Builds deliverables
-- Self-validates against DoD
+- Self-validates against Definition of Done
 - Produces Delivery Notice and **stops**
 
-### **3. Review (Human)**
-Evaluate deliverables:
+### **5. Review (Human)**
+Human evaluates deliverables:
 - Does it meet acceptance criteria?
 - Does it solve the stated problem?
 - Is quality acceptable?
 
-### **4. Close (Human + AI)**
-Make decision:
+### **6. Close**
+Parent chat (Milestone/Phase/HQ) makes decision:
 - **Accept:** HQ authorizes merge → Epic mode merges → Epic closed
 - **Reject:** Document rationale → create new Epic or abandon
 - **Request Changes:** Define iteration → Epic mode updates
