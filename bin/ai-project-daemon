@@ -7,12 +7,17 @@ import errno
 import tempfile
 import unittest
 import io
+import subprocess
 from pathlib import Path
 
 # Paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "daemon.pid"
 LOG_FILE = PROJECT_ROOT / ".ai-project" / "logs" / "daemon.log"
+QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
+POLL_INTERVAL = 2
 
 def check_pid_alive(pid):
     """Check if process with pid is running."""
@@ -125,6 +130,72 @@ def daemonize():
     except Exception:
         sys.exit(1)
 
+def check_execution_locked():
+    """Checks if there is an active execution lock and if the process is alive."""
+    if not EXECUTION_LOCK.exists():
+        return False
+    try:
+        with open(EXECUTION_LOCK, 'r') as f:
+            content = f.read().strip()
+        if not content:
+            return False
+        pid = int(content)
+        if pid > 0:
+            return check_pid_alive(pid)
+    except Exception:
+        pass
+    return False
+
+def process_queue():
+    """Polls the queue directory, orders active triggers, and schedules execution."""
+    if not QUEUE_DIR.exists():
+        return
+
+    try:
+        files = [f.name for f in QUEUE_DIR.iterdir() if f.is_file() and f.suffix == '.json']
+    except Exception as e:
+        print(f"[ERROR] Failed to list queue directory: {e}", flush=True)
+        return
+
+    if not files:
+        return
+
+    # Order active JSON triggers lexicographically
+    files.sort()
+
+    for file_name in files:
+        # Respect execution lock
+        if check_execution_locked():
+            print(f"[INFO] Active execution lock blocks secondary execution. Deferring {file_name}.", flush=True)
+            break
+
+        print(f"[INFO] Discovered trigger: {file_name}. Invoking orchestrator...", flush=True)
+        cmd = [sys.executable, str(ORCHESTRATOR_BIN), file_name]
+        try:
+            # High-integrity crash isolation: run as subprocess, capture outputs cleanly
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                cwd=str(PROJECT_ROOT)
+            )
+
+            # Stream outputs prefix-redirected with [ORCHESTRATOR] markers
+            for line in process.stdout:
+                print(f"[ORCHESTRATOR] {line.rstrip()}", flush=True)
+
+            process.wait()
+            rc = process.returncode
+            if rc == 0:
+                print(f"[INFO] Orchestrator successfully completed trigger: {file_name}", flush=True)
+            else:
+                print(f"[WARNING] Orchestrator exited with code {rc} for trigger: {file_name}", flush=True)
+        except Exception as e:
+            # Crash isolation: orchestrator failures do not stop the daemon
+            print(f"[ERROR] Subprocess invocation of orchestrator failed for trigger {file_name}: {e}", flush=True)
+
 def run_daemon_loop():
     """Runs the background loop of the daemon."""
     # Register signal handlers for clean lock file removal
@@ -133,9 +204,16 @@ def run_daemon_loop():
 
     print(f"[*] Daemon loop started (PID: {os.getpid()})", flush=True)
     try:
+        heartbeat_counter = 0
         while True:
-            print("[INFO] Daemon heartbeat...", flush=True)
-            time.sleep(10)
+            process_queue()
+            
+            # Print heartbeat every 15 iterations (approx 30 seconds with 2s poll interval)
+            if heartbeat_counter % 15 == 0:
+                print("[INFO] Daemon heartbeat...", flush=True)
+            heartbeat_counter += 1
+            
+            time.sleep(POLL_INTERVAL)
     except Exception as e:
         print(f"[!] Unexpected error in daemon loop: {e}", file=sys.stderr, flush=True)
         if LOCK_FILE.exists():
@@ -252,26 +330,37 @@ def main():
 
         class TestDaemon(unittest.TestCase):
             def setUp(self):
-                global PROJECT_ROOT, LOCK_FILE, LOG_FILE
+                global PROJECT_ROOT, LOCK_FILE, LOG_FILE, QUEUE_DIR, EXECUTION_LOCK, ORCHESTRATOR_BIN
                 self.temp_dir = tempfile.TemporaryDirectory()
                 self.project_root_path = Path(self.temp_dir.name)
                 
                 self.orig_project_root = PROJECT_ROOT
                 self.orig_lock_file = LOCK_FILE
                 self.orig_log_file = LOG_FILE
+                self.orig_queue_dir = QUEUE_DIR
+                self.orig_execution_lock = EXECUTION_LOCK
+                self.orig_orchestrator_bin = ORCHESTRATOR_BIN
                 
                 PROJECT_ROOT = self.project_root_path
                 LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "daemon.pid"
                 LOG_FILE = PROJECT_ROOT / ".ai-project" / "logs" / "daemon.log"
+                QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+                EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+                ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
                 
                 LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
                 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+                QUEUE_DIR.mkdir(parents=True, exist_ok=True)
+                EXECUTION_LOCK.parent.mkdir(parents=True, exist_ok=True)
 
             def tearDown(self):
-                global PROJECT_ROOT, LOCK_FILE, LOG_FILE
+                global PROJECT_ROOT, LOCK_FILE, LOG_FILE, QUEUE_DIR, EXECUTION_LOCK, ORCHESTRATOR_BIN
                 PROJECT_ROOT = self.orig_project_root
                 LOCK_FILE = self.orig_lock_file
                 LOG_FILE = self.orig_log_file
+                QUEUE_DIR = self.orig_queue_dir
+                EXECUTION_LOCK = self.orig_execution_lock
+                ORCHESTRATOR_BIN = self.orig_orchestrator_bin
                 self.temp_dir.cleanup()
 
             def test_get_daemon_pid_none(self):
@@ -403,6 +492,88 @@ def main():
                 with self.assertRaises(SystemExit):
                     handle_signal(signal.SIGTERM, None)
                 self.assertFalse(LOCK_FILE.exists())
+
+            def test_queue_sorting_lexicographical(self):
+                # Create a few JSON files with varying prefix names
+                (QUEUE_DIR / "03_c.json").touch()
+                (QUEUE_DIR / "01_a.json").touch()
+                (QUEUE_DIR / "02_b.json").touch()
+                # Create a non-json file to ensure it's filtered out
+                (QUEUE_DIR / "readme.txt").touch()
+
+                # List files using the same logic as process_queue
+                files = [f.name for f in QUEUE_DIR.iterdir() if f.is_file() and f.suffix == '.json']
+                files.sort()
+                self.assertEqual(files, ["01_a.json", "02_b.json", "03_c.json"])
+
+            @patch('os.kill')
+            def test_lock_detection_active(self, mock_kill):
+                mock_kill.return_value = None
+                # Write running PID to EXECUTION_LOCK
+                EXECUTION_LOCK.parent.mkdir(parents=True, exist_ok=True)
+                with open(EXECUTION_LOCK, 'w') as f:
+                    f.write("12345")
+                self.assertTrue(check_execution_locked())
+                mock_kill.assert_called_once_with(12345, 0)
+
+            @patch('os.kill')
+            def test_lock_detection_inactive(self, mock_kill):
+                mock_kill.side_effect = OSError(errno.ESRCH, "No such process")
+                EXECUTION_LOCK.parent.mkdir(parents=True, exist_ok=True)
+                with open(EXECUTION_LOCK, 'w') as f:
+                    f.write("12345")
+                self.assertFalse(check_execution_locked())
+
+            def test_lock_detection_no_file(self):
+                if EXECUTION_LOCK.exists():
+                    EXECUTION_LOCK.unlink()
+                self.assertFalse(check_execution_locked())
+
+            @patch('subprocess.Popen')
+            @patch('sys.stdout', new_callable=io.StringIO)
+            def test_subprocess_management_and_logging(self, mock_stdout, mock_popen):
+                # Setup trigger
+                (QUEUE_DIR / "01_a.json").touch()
+
+                # Setup mock subprocess
+                mock_process = MagicMock()
+                mock_process.stdout = io.StringIO("Line 1 from orchestrator\nLine 2 from orchestrator\n")
+                mock_process.returncode = 0
+                mock_popen.return_value = mock_process
+
+                # Run process_queue
+                process_queue()
+
+                # Check Popen args
+                mock_popen.assert_called_once()
+                args, kwargs = mock_popen.call_args
+                self.assertIn(str(ORCHESTRATOR_BIN), args[0])
+                self.assertIn("01_a.json", args[0])
+
+                # Check stdout output has markers
+                output = mock_stdout.getvalue()
+                self.assertIn("[ORCHESTRATOR] Line 1 from orchestrator", output)
+                self.assertIn("[ORCHESTRATOR] Line 2 from orchestrator", output)
+                self.assertIn("[INFO] Orchestrator successfully completed trigger: 01_a.json", output)
+
+            @patch('subprocess.Popen')
+            @patch('sys.stdout', new_callable=io.StringIO)
+            def test_orchestrator_failure_crash_isolation(self, mock_stdout, mock_popen):
+                # Setup trigger
+                (QUEUE_DIR / "01_a.json").touch()
+
+                # Setup mock subprocess to raise an exception
+                mock_popen.side_effect = Exception("Subprocess crashed on start")
+
+                # Run process_queue - should not crash or raise exception
+                try:
+                    process_queue()
+                except Exception as e:
+                    self.fail(f"process_queue raised exception unexpectedly: {e}")
+
+                # Check error is logged and daemon continues
+                output = mock_stdout.getvalue()
+                self.assertIn("[ERROR] Subprocess invocation of orchestrator failed for trigger 01_a.json", output)
 
         suite = unittest.TestLoader().loadTestsFromTestCase(TestDaemon)
         runner = unittest.TextTestRunner(verbosity=2)
