@@ -313,7 +313,7 @@ run_scenario_4() {
     
     # Create the lockfile manually before running orchestrator
     mkdir -p "$LOCKS_DIR"
-    touch "$LOCK_FILE"
+    echo "$$" > "$LOCK_FILE"
     
     # Write trigger
     write_trigger "./tests/mocks/mock_qa.sh always_success" "./tests/mocks/mock_dev.sh" "false"
@@ -363,11 +363,67 @@ run_scenario_4() {
     log_success "Scenario 4: Lockfile Guard verified successfully!"
 }
 
+# ==============================================================================
+# SCENARIO 5: Dead PID Recovery (Orchestrator auto-recovers if lock contains a dead PID)
+# ==============================================================================
+run_scenario_5() {
+    log_info "------------------------------------------------------------"
+    log_info "Running Scenario 5: Dead PID Recovery"
+    log_info "------------------------------------------------------------"
+    
+    # Clean up state
+    cleanup_workspace
+    setup_permissions
+    
+    # Start a dummy process and let it die to get a guaranteed dead PID
+    sleep 0.1 &
+    local DUMMY_PID=$!
+    wait $DUMMY_PID || true
+    
+    # Write dead PID to lock file
+    mkdir -p "$LOCKS_DIR"
+    echo "$DUMMY_PID" > "$LOCK_FILE"
+    
+    # Setup trigger where QA validation always succeeds
+    write_trigger "./tests/mocks/mock_qa.sh always_success" "./tests/mocks/mock_dev.sh" "false"
+    
+    # Record commit hash before run
+    local pre_run_hash=$(git rev-parse HEAD)
+    
+    # Execute orchestrator (expecting failure to lock to recover, proceed, and succeed with exit code 0)
+    log_info "Executing orchestrator with dead PID $DUMMY_PID in lockfile..."
+    set +e
+    python3 "$ORCHESTRATOR"
+    local exit_code=$?
+    set -e
+    
+    log_info "Orchestrator finished with exit code: $exit_code"
+    
+    # Assertions
+    if [ $exit_code -ne 0 ]; then
+        log_error "Scenario 5 failed: orchestrator exited with code $exit_code, expected 0"
+        exit 1
+    fi
+    
+    if [ -f "$QUEUE_DIR/04_epic.json" ]; then
+        log_error "Scenario 5 failed: trigger file was not deleted"
+        exit 1
+    fi
+    
+    if [ -f "$LOCK_FILE" ]; then
+        log_error "Scenario 5 failed: lockfile was not cleaned up after success"
+        exit 1
+    fi
+    
+    log_success "Scenario 5: Dead PID Recovery verified successfully!"
+}
+
 # Run all scenarios
 run_scenario_1
 run_scenario_2
 run_scenario_3
 run_scenario_4
+run_scenario_5
 
 # Cleanup the workspace at the very end
 cleanup_workspace

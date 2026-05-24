@@ -21,15 +21,40 @@ DEFAULT_MODELS = {
     "epic_qa": "local:qwen2.5-coder:7b"
 }
 
+ACTIVE_CONTAINERS = []
+
 def signal_handler(signum, frame):
     print(f"\n[!] Received signal {signum}. Cleaning up and exiting...", file=sys.stderr)
+    
+    # Kill any active docker sandbox containers spawned by this orchestrator instance
+    for container in list(ACTIVE_CONTAINERS):
+        print(f"[*] Stopping/killing sandbox container: {container}", file=sys.stderr)
+        try:
+            subprocess.run(["docker", "kill", container], capture_output=True)
+        except Exception:
+            pass
+            
+    # Label-based container cleanup safety net
+    try:
+        res = subprocess.run([
+            "docker", "ps", "-q",
+            "--filter", f"label=orchestrator-pid={os.getpid()}"
+        ], capture_output=True, text=True)
+        if res.returncode == 0:
+            for cid in res.stdout.strip().split():
+                if cid:
+                    print(f"[*] Killing container ID by label: {cid}", file=sys.stderr)
+                    subprocess.run(["docker", "kill", cid], capture_output=True)
+    except Exception as e:
+        print(f"[!] Label-based container cleanup failed: {e}", file=sys.stderr)
+
     if LOCK_FILE.exists():
         try:
             LOCK_FILE.unlink()
             print("[✓] Lockfile removed successfully.", file=sys.stderr)
         except Exception as e:
             print(f"[!] Failed to remove lockfile: {e}", file=sys.stderr)
-    sys.exit(128 + signum)
+    sys.exit(130)
 
 # Register signals for clean lockfile removal
 signal.signal(signal.SIGINT, signal_handler)
@@ -63,27 +88,127 @@ def load_json_trigger(file_name):
         print(f"[!] Error reading trigger file {file_name}: {e}", file=sys.stderr)
         return None
 
+def validate_paths(host_path_str, container_path_str):
+    """
+    Validates that:
+    - The host path being mounted is strictly inside or equal to the host's project root directory.
+    - The container path being mounted maps only to /workspace or a subpath of it.
+    """
+    try:
+        host_path = Path(host_path_str).resolve()
+        proj_root = Path(PROJECT_ROOT).resolve()
+    except Exception as e:
+        raise ValueError(f"Invalid host path: {host_path_str}. Error: {e}")
+
+    # Check that host_path is within or equal to PROJECT_ROOT
+    if host_path != proj_root and proj_root not in host_path.parents:
+        raise ValueError(f"Security Boundary Violation: Mount source path '{host_path_str}' is outside the project root '{PROJECT_ROOT}'")
+
+    # Validate target directory inside the container maps only to /workspace or a subpath of it
+    try:
+        container_path = Path(container_path_str)
+        target_root = Path("/workspace")
+        # Ensure container_path is either exactly /workspace or starts with /workspace/
+        if container_path != target_root and target_root not in container_path.parents:
+            raise ValueError(f"Security Boundary Violation: Mount destination path '{container_path_str}' is outside '/workspace'")
+    except Exception as e:
+        raise ValueError(f"Invalid container path: {container_path_str}. Error: {e}")
+
+def validate_volume_mounts(docker_cmd):
+    """
+    Scans docker_cmd arguments for volume mounts (-v, --volume, --mount)
+    and verifies that they satisfy path boundaries.
+    """
+    i = 0
+    while i < len(docker_cmd):
+        arg = docker_cmd[i]
+        
+        # Check -v / --volume
+        if arg in ("-v", "--volume"):
+            if i + 1 >= len(docker_cmd):
+                raise ValueError("Incomplete volume mount argument")
+            mount_str = docker_cmd[i + 1]
+            parts = mount_str.split(':')
+            if len(parts) < 2:
+                raise ValueError(f"Invalid volume mount format: {mount_str}")
+            validate_paths(parts[0], parts[1])
+            i += 2
+        elif arg.startswith("--volume="):
+            mount_str = arg[len("--volume="):]
+            parts = mount_str.split(':')
+            if len(parts) < 2:
+                raise ValueError(f"Invalid volume mount format: {arg}")
+            validate_paths(parts[0], parts[1])
+            i += 1
+        elif arg == "--mount":
+            if i + 1 >= len(docker_cmd):
+                raise ValueError("Incomplete mount argument")
+            mount_str = docker_cmd[i + 1]
+            validate_mount_options(mount_str)
+            i += 2
+        elif arg.startswith("--mount="):
+            mount_str = arg[len("--mount="):]
+            validate_mount_options(mount_str)
+            i += 1
+        else:
+            i += 1
+
+def validate_mount_options(mount_str):
+    # Parse comma-separated key-value pairs
+    parts = mount_str.split(',')
+    options = {}
+    for part in parts:
+        if '=' in part:
+            k, v = part.split('=', 1)
+            options[k.strip()] = v.strip()
+            
+    host_path_str = options.get("source") or options.get("src")
+    container_path_str = options.get("target") or options.get("dst") or options.get("destination")
+    
+    if host_path_str and container_path_str:
+        validate_paths(host_path_str, container_path_str)
+
 def run_in_sandbox(image, command, active_model):
     """Mounts the project root inside an isolated Docker sandbox container, injecting active model metadata."""
+    import uuid
+    container_name = f"ai-project-sandbox-{os.getpid()}-{uuid.uuid4().hex[:8]}"
+    ACTIVE_CONTAINERS.append(container_name)
+    
     # Pass active model as an environment variable to allow the container scripts to route appropriately
     docker_cmd = [
         "docker", "run", "--rm",
+        "--name", container_name,
+        "--label", f"orchestrator-pid={os.getpid()}",
         "-e", f"AI_PROJECT_ACTIVE_MODEL={active_model}",
         "-v", f"{PROJECT_ROOT}:/workspace",
         "-w", "/workspace",
         image,
         "sh", "-c", command
     ]
+    
+    # Enforce file boundaries and volume mount validations
     try:
-        result = subprocess.run(docker_cmd, capture_output=True, text=True)
-        return result.returncode, result.stdout, result.stderr
-    except FileNotFoundError:
-        # Fallback to local execution if Docker is not available in current environment
-        print("[!] Docker is not installed or available. Executing locally with model environment...")
-        env = os.environ.copy()
-        env["AI_PROJECT_ACTIVE_MODEL"] = active_model
-        result = subprocess.run(command, shell=True, env=env, capture_output=True, text=True)
-        return result.returncode, result.stdout, result.stderr
+        validate_volume_mounts(docker_cmd)
+    except ValueError as e:
+        print(f"[!] Security Boundary Exception: {e}", file=sys.stderr)
+        if container_name in ACTIVE_CONTAINERS:
+            ACTIVE_CONTAINERS.remove(container_name)
+        raise
+
+    try:
+        try:
+            result = subprocess.run(docker_cmd, capture_output=True, text=True)
+            return result.returncode, result.stdout, result.stderr
+        except FileNotFoundError:
+            # Fallback to local execution if Docker is not available in current environment
+            print("[!] Docker is not installed or available. Executing locally with model environment...")
+            env = os.environ.copy()
+            env["AI_PROJECT_ACTIVE_MODEL"] = active_model
+            result = subprocess.run(command, shell=True, env=env, capture_output=True, text=True)
+            return result.returncode, result.stdout, result.stderr
+    finally:
+        if container_name in ACTIVE_CONTAINERS:
+            ACTIVE_CONTAINERS.remove(container_name)
 
 def handle_epic_execution(trigger, models_config):
     epic_id = trigger.get("epic_id", "unknown")
@@ -314,6 +439,24 @@ def main():
                 self.assertIn("docker", called_args)
                 self.assertIn("AI_PROJECT_ACTIVE_MODEL=mock-model", called_args)
 
+            def test_validate_volume_mounts_success(self):
+                cmd = ["docker", "run", "-v", f"{PROJECT_ROOT}:/workspace", "alpine", "ls"]
+                validate_volume_mounts(cmd)
+
+            def test_validate_volume_mounts_outside_host(self):
+                cmd = ["docker", "run", "-v", "/etc:/workspace", "alpine", "ls"]
+                with self.assertRaises(ValueError) as ctx:
+                    validate_volume_mounts(cmd)
+                self.assertIn("Security Boundary Violation", str(ctx.exception))
+                self.assertIn("outside the project root", str(ctx.exception))
+
+            def test_validate_volume_mounts_outside_container(self):
+                cmd = ["docker", "run", "-v", f"{PROJECT_ROOT}:/tmp", "alpine", "ls"]
+                with self.assertRaises(ValueError) as ctx:
+                    validate_volume_mounts(cmd)
+                self.assertIn("Security Boundary Violation", str(ctx.exception))
+                self.assertIn("outside '/workspace'", str(ctx.exception))
+
             @patch('subprocess.run')
             @patch('sys.exit')
             def test_handle_epic_execution_success(self, mock_exit, mock_run):
@@ -416,8 +559,42 @@ def main():
         sys.exit(0 if result.wasSuccessful() else 1)
 
     if LOCK_FILE.exists():
-        print("[!] Orchestration execution is locked. Another agent is running. Exiting.")
-        sys.exit(1)
+        import errno
+        try:
+            with open(LOCK_FILE, 'r') as f:
+                content = f.read().strip()
+            if not content:
+                raise ValueError("Lockfile is empty")
+            pid = int(content)
+            
+            is_running = False
+            if pid > 0:
+                try:
+                    os.kill(pid, 0)
+                    is_running = True
+                except OSError as err:
+                    if err.errno == errno.EPERM:
+                        is_running = True
+                    elif err.errno == errno.ESRCH:
+                        is_running = False
+                    else:
+                        raise
+            
+            if is_running:
+                print(f"[!] Orchestration execution is locked. Active process with PID {pid} is running. Exiting.", file=sys.stderr)
+                sys.exit(1)
+            else:
+                print(f"[!] Warning: Stale lockfile found with dead PID {pid}. Recovering and deleting stale lock...", file=sys.stderr)
+                try:
+                    LOCK_FILE.unlink()
+                except Exception:
+                    pass
+        except Exception as e:
+            print(f"[!] Warning: Recovering from invalid/corrupted lockfile. Error: {e}", file=sys.stderr)
+            try:
+                LOCK_FILE.unlink()
+            except Exception:
+                pass
         
     os.makedirs(QUEUE_DIR, exist_ok=True)
     os.makedirs(LOCK_FILE.parent, exist_ok=True)
@@ -429,7 +606,13 @@ def main():
     # Check for Epic triggers
     epic_trigger = load_json_trigger("04_epic.json")
     if epic_trigger:
-        LOCK_FILE.touch()
+        # Write active PID to lockfile
+        try:
+            with open(LOCK_FILE, 'w') as f:
+                f.write(str(os.getpid()))
+        except Exception as e:
+            print(f"[!] Failed to write PID to lockfile: {e}", file=sys.stderr)
+            sys.exit(1)
         try:
             handle_epic_execution(epic_trigger, models_config)
         finally:
