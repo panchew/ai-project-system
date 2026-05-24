@@ -1,0 +1,30 @@
+# Dockerfile.sandbox
+# Dedicated, secure, multi-runtime execution environment for isolated sandbox operations.
+
+FROM alpine:3.18
+
+# Install required tools and multi-runtime engines
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    nodejs \
+    npm \
+    git \
+    bash \
+    curl \
+    build-base
+
+# Create sandbox group and user
+RUN addgroup -g 1000 sandbox && \
+    adduser -u 1000 -G sandbox -D -s /bin/bash sandbox
+
+# Establish the workspace directory and configure ownership
+RUN mkdir -p /workspace && \
+    chown -R sandbox:sandbox /workspace
+
+# Set default execution user and working directory
+USER sandbox
+WORKDIR /workspace
+
+# Default command
+CMD ["/bin/bash"]
