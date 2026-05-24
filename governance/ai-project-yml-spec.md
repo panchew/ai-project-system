@@ -50,6 +50,13 @@ overrides:               # OPTIONAL. Project-specific governance overrides. Full
   branch_strategy: <string>   # default: trunk-based
   merge_strategy: <string>    # default: merge
   epic_prefix: <string>       # default: epic/
+
+models:                  # OPTIONAL. Hybrid model routing maps for autonomous clusters.
+  hq: <string>           # default: remote:gpt-4o
+  phase: <string>        # default: remote:claude-3-5-sonnet
+  milestone: <string>    # default: remote:claude-3-5-sonnet
+  epic_dev: <string>     # default: local:llama3:8b
+  epic_qa: <string>      # default: local:qwen2.5-coder:7b
 ```
 
 ---
@@ -303,6 +310,25 @@ For the formal enumeration of all overridable and non-overridable dimensions wit
 
 ---
 
+### 3.4 Optional Fields — `models` (Hybrid Model Routing)
+
+The `models` block is **optional**. When present, it configures the local/remote hybrid model selection for unattended 24/7 autonomous cluster execution.
+
+| Field | Type | Default | Allowed Formats / Examples | Role |
+|-------|------|---------|---------------------------|------|
+| `hq` | String | `remote:gpt-4o` | `remote:gpt-4o`, `remote:claude-3-5-sonnet` | Product Owner (High-level vision & Requirements) |
+| `phase` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Phase Milestone planning) |
+| `milestone` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Milestone Epic planning) |
+| `epic_dev` | String | `local:llama3:8b` | `local:llama3:8b`, `local:qwen2.5-coder` | Developer Agent (Code implementation) |
+| `epic_qa` | String | `local:qwen2.5-coder:7b` | `local:qwen2.5-coder:7b`, `local:llama3` | QA Tester Agent (Verification & Test runner) |
+
+#### Format Constraints
+Model configuration values must follow one of these formats:
+- **Remote Models:** Prefix with `remote:` followed by the provider and model name (e.g., `remote:gpt-4o`, `remote:claude-3-5-sonnet`, `remote:gemini-1.5-pro`).
+- **Local Models:** Prefix with `local:` followed by the model identifier (e.g., `local:llama3:8b`, `local:qwen2.5-coder:7b`).
+
+---
+
 ## 4. Validation Rules
 
 A `.ai-project.yml` file is **valid** when all of the following are true:
@@ -326,6 +352,13 @@ When the `overrides` block is present, the following additional validation rules
 11. Unknown keys in the `overrides` block MUST produce a validation warning (not an error)
 12. Invalid values for known override fields MUST produce a validation error
 13. At least one override value is NOT required — the block is fully optional
+
+When the `models` block is present, the following additional validation rules apply:
+
+14. The `models` block must be valid YAML (covered by rule 2)
+15. Each recognized model routing field (`hq`, `phase`, `milestone`, `epic_dev`, `epic_qa`) must be a string matching `^(remote|local):[a-zA-Z0-9.:_-]+$`
+16. Unknown keys in the `models` block MUST produce a validation warning
+17. Invalid values or formats in the `models` block MUST produce a validation error
 
 A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, or the file is not valid YAML.
 

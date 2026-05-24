@@ -1,12 +1,20 @@
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
-# Spec: governance/ai-project-yml-spec.md v1.0.0
+# Spec: governance/ai-project-yml-spec.md v2.0.0
 
 governance:
   source: ./governance
-  version: "2.0.0"
-  ref: v2.0.0
+  version: "3.0.0"
+  ref: master
 
 project:
   name: ai-project-system
   description: "AI Project System governance source repository"
+
+# Hybrid model mapping for unattended 24/7 autonomous cluster execution
+models:
+  hq: remote:gpt-4o
+  phase: remote:claude-3-5-sonnet
+  milestone: remote:claude-3-5-sonnet
+  epic_dev: local:llama3:8b
+  epic_qa: local:qwen2.5-coder:7b

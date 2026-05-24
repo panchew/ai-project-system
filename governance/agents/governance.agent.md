@@ -206,6 +206,7 @@ When operating inside an unattended, 24/7 autonomous development cluster, the Go
    - When **Phase Mode** planning is accepted, write `03_milestone.json` downstream to trigger Milestone planning.
    - When **Milestone Mode** planning is accepted, write `04_epic.json` downstream to trigger the Epic execution sandbox loop.
 3. **Execution Guardrails:** Epic mode operates purely inside the containerized sandbox directed by the orchestrator daemon. All outputs (commits, reports) are generated with a strict tracking audit trail.
+4. **Hybrid Model Routing:** Respect the model mapping declared under the first-level `models` block in `.ai-project.yml`. Strategic planning modes (HQ, Phase, Milestone) are routed to premium remote models (e.g. `remote:gpt-4o`, `remote:claude-3-5-sonnet`) while iterative execution modes (Epic Dev, Epic QA) are routed to local or low-cost models (e.g. `local:llama3`, `local:qwen2.5-coder`).
 
 ## Agent behavior rules
 

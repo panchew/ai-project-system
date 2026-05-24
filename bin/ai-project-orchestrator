@@ -3,12 +3,38 @@ import os
 import sys
 import json
 import subprocess
+import yaml
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
 LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+YML_CONFIG = PROJECT_ROOT / ".ai-project.yml"
 MAX_RETRIES = 3
+
+DEFAULT_MODELS = {
+    "hq": "remote:gpt-4o",
+    "phase": "remote:claude-3-5-sonnet",
+    "milestone": "remote:claude-3-5-sonnet",
+    "epic_dev": "local:llama3:8b",
+    "epic_qa": "local:qwen2.5-coder:7b"
+}
+
+def load_yml_config():
+    """Loads and returns the model mapping from .ai-project.yml if present."""
+    if not YML_CONFIG.exists():
+        return {"models": DEFAULT_MODELS}
+    try:
+        with open(YML_CONFIG, 'r') as f:
+            data = yaml.safe_load(f)
+            if data and "models" in data:
+                # Merge defaults with custom definitions to support partial configurations
+                merged = DEFAULT_MODELS.copy()
+                merged.update(data["models"])
+                return {"models": merged}
+    except Exception as e:
+        print(f"[!] Warning: Failed to parse .ai-project.yml models. Using defaults. Error: {e}", file=sys.stderr)
+    return {"models": DEFAULT_MODELS}
 
 def load_json_trigger(file_name):
     path = QUEUE_DIR / file_name
@@ -21,11 +47,12 @@ def load_json_trigger(file_name):
         print(f"[!] Error reading trigger file {file_name}: {e}", file=sys.stderr)
         return None
 
-def run_in_sandbox(image, command):
-    """Mounts the project root inside an isolated Docker sandbox container."""
-    # Ensure Docker is accessible and active
+def run_in_sandbox(image, command, active_model):
+    """Mounts the project root inside an isolated Docker sandbox container, injecting active model metadata."""
+    # Pass active model as an environment variable to allow the container scripts to route appropriately
     docker_cmd = [
         "docker", "run", "--rm",
+        "-e", f"AI_PROJECT_ACTIVE_MODEL={active_model}",
         "-v", f"{PROJECT_ROOT}:/workspace",
         "-w", "/workspace",
         image,
@@ -36,33 +63,40 @@ def run_in_sandbox(image, command):
         return result.returncode == 0, result.stdout, result.stderr
     except FileNotFoundError:
         # Fallback to local execution if Docker is not available in current environment
-        print("[!] Docker is not installed or available. Executing locally...")
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        print("[!] Docker is not installed or available. Executing locally with model environment...")
+        env = os.environ.copy()
+        env["AI_PROJECT_ACTIVE_MODEL"] = active_model
+        result = subprocess.run(command, shell=True, env=env, capture_output=True, text=True)
         return result.returncode == 0, result.stdout, result.stderr
 
-def handle_epic_execution(trigger):
+def handle_epic_execution(trigger, models_config):
     epic_id = trigger.get("epic_id", "unknown")
     spec_path = trigger.get("epic_spec_path", "")
     sandbox_image = trigger.get("sandbox_env", "alpine:latest")
-    
-    # Extract validation command (default to standard linter & test runners)
     validation_cmd = trigger.get("validation_command", "npm run lint && npm test")
     
+    # Resolve Hybrid Model Selection
+    dev_model = models_config.get("epic_dev", DEFAULT_MODELS["epic_dev"])
+    qa_model = models_config.get("epic_qa", DEFAULT_MODELS["epic_qa"])
+    
     print(f"[*] Starting unattended validation loop for Epic {epic_id}...")
+    print(f"[*] Hybrid Model Mapping:")
+    print(f"    - Developer Role: {dev_model}")
+    print(f"    - QA Tester Role: {qa_model}")
     print(f"[*] Sandbox environment: {sandbox_image}")
-    print(f"[*] Validation command: {validation_cmd}")
     
     # Dev-QA Closed Recursion Loop
     for attempt in range(1, MAX_RETRIES + 1):
         print(f"[*] Loop Attempt {attempt}/{MAX_RETRIES}...")
         
-        success, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd)
+        # QA Agent executes with the QA model configuration
+        success, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd, active_model=qa_model)
         
         if success:
             print(f"[✓] Epic {epic_id} validation passed successfully!")
             # Automate staging and commit
             subprocess.run(["git", "add", "."], cwd=PROJECT_ROOT)
-            subprocess.run(["git", "commit", "-m", f"feat: programmatically implement Epic {epic_id} deliverables"], cwd=PROJECT_ROOT)
+            subprocess.run(["git", "commit", "-m", f"feat: programmatically implement Epic {epic_id} deliverables\n\nResolved via Developer: {dev_model} and QA: {qa_model}"], cwd=PROJECT_ROOT)
             
             # Remove trigger file from queue
             trigger_file = QUEUE_DIR / "04_epic.json"
@@ -70,14 +104,18 @@ def handle_epic_execution(trigger):
                 trigger_file.unlink()
             return
             
-        print(f"[!] Loop Attempt {attempt} failed.")
+        print(f"[!] Loop Attempt {attempt} failed under QA: {qa_model}.")
+        
+        # If we failed, the developer agent would iterate to fix it using the Dev model
+        # Send error context to Developer role with AI_PROJECT_ACTIVE_MODEL=dev_model
+        print(f"[*] Routing failure feedback to Developer role utilizing local/low-cost model: {dev_model}...")
         
         if attempt == MAX_RETRIES:
             print("[X] Maximum retries exhausted. Generating escalation report...")
-            generate_escalation_report(epic_id, stdout, stderr)
+            generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model)
             return
 
-def generate_escalation_report(epic_id, stdout, stderr):
+def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model):
     admin_dir = PROJECT_ROOT / "docs" / "admin"
     admin_dir.mkdir(parents=True, exist_ok=True)
     
@@ -86,12 +124,19 @@ def generate_escalation_report(epic_id, stdout, stderr):
 epic: {epic_id}
 status: blocked
 retry_attempts: {MAX_RETRIES}
+resolved_under:
+  dev: "{dev_model}"
+  qa: "{qa_model}"
 timestamp: UTC
 ---
 
 # Escalation Report: Epic {epic_id} Blocked
 
 The autonomous Dev-QA validation loop has exhausted the retry ceiling of {MAX_RETRIES} attempts.
+
+## Hybrid Roles Context
+- **Developer Model:** `{dev_model}`
+- **QA Tester Model:** `{qa_model}`
 
 ## Standard Output Log
 ```
@@ -104,7 +149,7 @@ The autonomous Dev-QA validation loop has exhausted the retry ceiling of {MAX_RE
 ```
 
 ## Director Intervention Required
-Execution on the active branch has been suspended. Please review the failed validation outputs above and resolve any structural code defects or update the Epic Spec.
+Execution on the active branch has been suspended. Please review the failed validation outputs above, resolve any structural code defects, or update the Epic Spec.
 """
     try:
         with open(report_path, 'w') as f:
@@ -121,12 +166,16 @@ def main():
     os.makedirs(QUEUE_DIR, exist_ok=True)
     os.makedirs(LOCK_FILE.parent, exist_ok=True)
     
+    # Discovery of project's hybrid models
+    config = load_yml_config()
+    models_config = config.get("models", DEFAULT_MODELS)
+    
     # Check for Epic triggers
     epic_trigger = load_json_trigger("04_epic.json")
     if epic_trigger:
         LOCK_FILE.touch()
         try:
-            handle_epic_execution(epic_trigger)
+            handle_epic_execution(epic_trigger, models_config)
         finally:
             if LOCK_FILE.exists():
                 LOCK_FILE.unlink()

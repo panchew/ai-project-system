@@ -827,6 +827,13 @@ The local orchestrator loop is strictly bounded to three (3) compilation/test ex
 ### 18C. Strict Sandbox Isolation
 All code implementation (Epic execution) and validation (QA runs) MUST execute within ephemeral, volume-mounted containers (such as Docker) to prevent host filesystem contamination, security vulnerabilities, or package installation drift.
 
+### 18D. Hybrid Model Routing (Token Optimization)
+To optimize the intelligence-to-token-spend ratio during unattended operations:
+- **Strategic Roles (HQ, Phase, Milestone Mode):** Planning, requirement modeling, and architecture mapping MUST use premium, remote models (e.g. `remote:gpt-4o`, `remote:claude-3-5-sonnet`) to ensure rigorous compliance with constraints and structural preservation.
+- **Implementation & Assurance Roles (Developer, QA Tester Mode):** High-frequency tasks like code implementation, file editing, test execution, and linter debugging SHOULD use local or low-cost models (e.g. `local:llama3`, `local:qwen2.5-coder`) to manage operational expenses while keeping code execution secure.
+
+All model assignments MUST be explicitly declared in the `.ai-project.yml` configuration under the `models` block.
+
 ---
 
 ## Closing Statement
