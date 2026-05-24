@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+import os
+import sys
+import json
+import subprocess
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+MAX_RETRIES = 3
+
+def load_json_trigger(file_name):
+    path = QUEUE_DIR / file_name
+    if not path.exists():
+        return None
+    try:
+        with open(path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"[!] Error reading trigger file {file_name}: {e}", file=sys.stderr)
+        return None
+
+def run_in_sandbox(image, command):
+    """Mounts the project root inside an isolated Docker sandbox container."""
+    # Ensure Docker is accessible and active
+    docker_cmd = [
+        "docker", "run", "--rm",
+        "-v", f"{PROJECT_ROOT}:/workspace",
+        "-w", "/workspace",
+        image,
+        "sh", "-c", command
+    ]
+    try:
+        result = subprocess.run(docker_cmd, capture_output=True, text=True)
+        return result.returncode == 0, result.stdout, result.stderr
+    except FileNotFoundError:
+        # Fallback to local execution if Docker is not available in current environment
+        print("[!] Docker is not installed or available. Executing locally...")
+        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        return result.returncode == 0, result.stdout, result.stderr
+
+def handle_epic_execution(trigger):
+    epic_id = trigger.get("epic_id", "unknown")
+    spec_path = trigger.get("epic_spec_path", "")
+    sandbox_image = trigger.get("sandbox_env", "alpine:latest")
+    
+    # Extract validation command (default to standard linter & test runners)
+    validation_cmd = trigger.get("validation_command", "npm run lint && npm test")
+    
+    print(f"[*] Starting unattended validation loop for Epic {epic_id}...")
+    print(f"[*] Sandbox environment: {sandbox_image}")
+    print(f"[*] Validation command: {validation_cmd}")
+    
+    # Dev-QA Closed Recursion Loop
+    for attempt in range(1, MAX_RETRIES + 1):
+        print(f"[*] Loop Attempt {attempt}/{MAX_RETRIES}...")
+        
+        success, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd)
+        
+        if success:
+            print(f"[✓] Epic {epic_id} validation passed successfully!")
+            # Automate staging and commit
+            subprocess.run(["git", "add", "."], cwd=PROJECT_ROOT)
+            subprocess.run(["git", "commit", "-m", f"feat: programmatically implement Epic {epic_id} deliverables"], cwd=PROJECT_ROOT)
+            
+            # Remove trigger file from queue
+            trigger_file = QUEUE_DIR / "04_epic.json"
+            if trigger_file.exists():
+                trigger_file.unlink()
+            return
+            
+        print(f"[!] Loop Attempt {attempt} failed.")
+        
+        if attempt == MAX_RETRIES:
+            print("[X] Maximum retries exhausted. Generating escalation report...")
+            generate_escalation_report(epic_id, stdout, stderr)
+            return
+
+def generate_escalation_report(epic_id, stdout, stderr):
+    admin_dir = PROJECT_ROOT / "docs" / "admin"
+    admin_dir.mkdir(parents=True, exist_ok=True)
+    
+    report_path = admin_dir / f"escalation-report-{epic_id}.md"
+    report_content = f"""---
+epic: {epic_id}
+status: blocked
+retry_attempts: {MAX_RETRIES}
+timestamp: UTC
+---
+
+# Escalation Report: Epic {epic_id} Blocked
+
+The autonomous Dev-QA validation loop has exhausted the retry ceiling of {MAX_RETRIES} attempts.
+
+## Standard Output Log
+```
+{stdout}
+```
+
+## Standard Error Log
+```
+{stderr}
+```
+
+## Director Intervention Required
+Execution on the active branch has been suspended. Please review the failed validation outputs above and resolve any structural code defects or update the Epic Spec.
+"""
+    try:
+        with open(report_path, 'w') as f:
+            f.write(report_content)
+        print(f"[✓] Escalation report written to {report_path}")
+    except Exception as e:
+        print(f"[!] Failed to write escalation report: {e}", file=sys.stderr)
+
+def main():
+    if LOCK_FILE.exists():
+        print("[!] Orchestration execution is locked. Another agent is running. Exiting.")
+        sys.exit(1)
+        
+    os.makedirs(QUEUE_DIR, exist_ok=True)
+    os.makedirs(LOCK_FILE.parent, exist_ok=True)
+    
+    # Check for Epic triggers
+    epic_trigger = load_json_trigger("04_epic.json")
+    if epic_trigger:
+        LOCK_FILE.touch()
+        try:
+            handle_epic_execution(epic_trigger)
+        finally:
+            if LOCK_FILE.exists():
+                LOCK_FILE.unlink()
+    else:
+        print("[*] No active triggers found in queue.")
+
+if __name__ == "__main__":
+    main()

@@ -814,6 +814,21 @@ Such tasks are:
 
 ---
 
+## 18. Unattended Cluster Execution Rules (Optional, Agentic)
+
+Projects may declare autonomous execution loops by enabling `"unattended_cluster": true` under `.ai-project.yml`.
+
+### 18A. File-Driven Communication
+All agent-to-agent communication inside the cluster MUST proceed via JSON/YAML files under `.ai-project/queue/`. No agent may initiate direct memory-sharing or network communication outside the repository bounds.
+
+### 18B. The Recursion Limit
+The local orchestrator loop is strictly bounded to three (3) compilation/test execution attempts per Epic. If validation fails on the third attempt, the loop MUST freeze the branch, produce a structured markdown escalation report under `docs/admin/`, and suspend execution until a Human Director unblocks it.
+
+### 18C. Strict Sandbox Isolation
+All code implementation (Epic execution) and validation (QA runs) MUST execute within ephemeral, volume-mounted containers (such as Docker) to prevent host filesystem contamination, security vulnerabilities, or package installation drift.
+
+---
+
 ## Closing Statement
 
 This project system exists to:
@@ -831,5 +846,6 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---|---|---|
+| 3.0.0 | 2026-05-22 | Phase P3: Agentic Execution Model Maturity. Added Section 18 defining rules for 24/7 unattended development clusters, Docker sandboxing, and file-driven Dev-QA recursion queues. |
 | 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated canonical repository structure, template paths, and system reference paths. |
 | 1.5.0 | 2026-02-18 | Previous version — governance lived in `docs/`. |

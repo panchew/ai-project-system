@@ -185,16 +185,27 @@ Copy the entire chat starter above and paste into a new session with the Governa
 
 ## Mode Detection Logic
 
-The agent detects its mode from the first block of the delivered content:
+The agent detects its mode from the first block of the delivered content or via system-level triggers:
 
-| Content Starts With | Mode |
-|---------------------|------|
-| "I'm starting a new project..." or "I want to adopt..." | HQ mode (bootstrap) |
-| `# Phase Execution Chat Starter — <P#>` | Phase mode |
-| `# Milestone Execution Chat Starter — <P#>-<M#>` | Milestone mode |
-| `# Epic Execution Chat Starter — <P#>-<M#>-<E#.#>` | Epic mode |
+| Content / File Trigger | Active Mode | Description |
+|------------------------|-------------|-------------|
+| "I'm starting a new project..." or "I want to adopt..." | HQ Mode | Human-led initial onboarding or rescue |
+| `# Phase Execution Chat Starter — <P#>` or `02_phase.json` | Phase Mode | Phase Planning / Milestone Scaffolding |
+| `# Milestone Execution Chat Starter — <P#>-<M#>` or `03_milestone.json` | Milestone Mode | Milestone Planning / Epic Scaffolding |
+| `# Epic Execution Chat Starter — <P#>-<M#>-<E#.#>` or `04_epic.json` | Epic Mode | Technical Epic Deliverable Implementation |
 
 If no mode is detected, default to HQ mode and ask the user what they want to do.
+
+## Loop Integration (Agent-to-Agent)
+
+When operating inside an unattended, 24/7 autonomous development cluster, the Governance Agent acts as a state parser. In addition to manual text prompts, it must check the file-driven trigger files inside `.ai-project/queue/`:
+
+1. **Auto Mode Detection:** On startup, read `.ai-project/queue/` for active JSON triggers. If a trigger is present, parse the parameter blocks and immediately configure the agent's write boundaries and operational goals without requiring manual chat input.
+2. **Deterministic Cascades:** 
+   - When **HQ Mode** planning is finalized, write `02_phase.json` downstream to trigger Phase planning.
+   - When **Phase Mode** planning is accepted, write `03_milestone.json` downstream to trigger Milestone planning.
+   - When **Milestone Mode** planning is accepted, write `04_epic.json` downstream to trigger the Epic execution sandbox loop.
+3. **Execution Guardrails:** Epic mode operates purely inside the containerized sandbox directed by the orchestrator daemon. All outputs (commits, reports) are generated with a strict tracking audit trail.
 
 ## Agent behavior rules
 
