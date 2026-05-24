@@ -4,6 +4,7 @@ import sys
 import json
 import subprocess
 import yaml
+import signal
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -19,6 +20,46 @@ DEFAULT_MODELS = {
     "epic_dev": "local:llama3:8b",
     "epic_qa": "local:qwen2.5-coder:7b"
 }
+
+ACTIVE_CONTAINERS = []
+
+def signal_handler(signum, frame):
+    print(f"\n[!] Received signal {signum}. Cleaning up and exiting...", file=sys.stderr)
+    
+    # Kill any active docker sandbox containers spawned by this orchestrator instance
+    for container in list(ACTIVE_CONTAINERS):
+        print(f"[*] Stopping/killing sandbox container: {container}", file=sys.stderr)
+        try:
+            subprocess.run(["docker", "kill", container], capture_output=True)
+        except Exception:
+            pass
+            
+    # Label-based container cleanup safety net
+    try:
+        res = subprocess.run([
+            "docker", "ps", "-q",
+            "--filter", f"label=orchestrator-pid={os.getpid()}"
+        ], capture_output=True, text=True)
+        if res.returncode == 0:
+            for cid in res.stdout.strip().split():
+                if cid:
+                    print(f"[*] Killing container ID by label: {cid}", file=sys.stderr)
+                    subprocess.run(["docker", "kill", cid], capture_output=True)
+    except Exception as e:
+        print(f"[!] Label-based container cleanup failed: {e}", file=sys.stderr)
+
+    if LOCK_FILE.exists():
+        try:
+            LOCK_FILE.unlink()
+            print("[✓] Lockfile removed successfully.", file=sys.stderr)
+        except Exception as e:
+            print(f"[!] Failed to remove lockfile: {e}", file=sys.stderr)
+    sys.exit(130)
+
+# Register signals for clean lockfile removal
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
+
 
 def load_yml_config():
     """Loads and returns the model mapping from .ai-project.yml if present."""
@@ -47,33 +88,135 @@ def load_json_trigger(file_name):
         print(f"[!] Error reading trigger file {file_name}: {e}", file=sys.stderr)
         return None
 
+def validate_paths(host_path_str, container_path_str):
+    """
+    Validates that:
+    - The host path being mounted is strictly inside or equal to the host's project root directory.
+    - The container path being mounted maps only to /workspace or a subpath of it.
+    """
+    try:
+        host_path = Path(host_path_str).resolve()
+        proj_root = Path(PROJECT_ROOT).resolve()
+    except Exception as e:
+        raise ValueError(f"Invalid host path: {host_path_str}. Error: {e}")
+
+    # Check that host_path is within or equal to PROJECT_ROOT
+    if host_path != proj_root and proj_root not in host_path.parents:
+        raise ValueError(f"Security Boundary Violation: Mount source path '{host_path_str}' is outside the project root '{PROJECT_ROOT}'")
+
+    # Validate target directory inside the container maps only to /workspace or a subpath of it
+    try:
+        container_path = Path(container_path_str)
+        target_root = Path("/workspace")
+        # Ensure container_path is either exactly /workspace or starts with /workspace/
+        if container_path != target_root and target_root not in container_path.parents:
+            raise ValueError(f"Security Boundary Violation: Mount destination path '{container_path_str}' is outside '/workspace'")
+    except Exception as e:
+        raise ValueError(f"Invalid container path: {container_path_str}. Error: {e}")
+
+def validate_volume_mounts(docker_cmd):
+    """
+    Scans docker_cmd arguments for volume mounts (-v, --volume, --mount)
+    and verifies that they satisfy path boundaries.
+    """
+    i = 0
+    while i < len(docker_cmd):
+        arg = docker_cmd[i]
+        
+        # Check -v / --volume
+        if arg in ("-v", "--volume"):
+            if i + 1 >= len(docker_cmd):
+                raise ValueError("Incomplete volume mount argument")
+            mount_str = docker_cmd[i + 1]
+            parts = mount_str.split(':')
+            if len(parts) < 2:
+                raise ValueError(f"Invalid volume mount format: {mount_str}")
+            validate_paths(parts[0], parts[1])
+            i += 2
+        elif arg.startswith("--volume="):
+            mount_str = arg[len("--volume="):]
+            parts = mount_str.split(':')
+            if len(parts) < 2:
+                raise ValueError(f"Invalid volume mount format: {arg}")
+            validate_paths(parts[0], parts[1])
+            i += 1
+        elif arg == "--mount":
+            if i + 1 >= len(docker_cmd):
+                raise ValueError("Incomplete mount argument")
+            mount_str = docker_cmd[i + 1]
+            validate_mount_options(mount_str)
+            i += 2
+        elif arg.startswith("--mount="):
+            mount_str = arg[len("--mount="):]
+            validate_mount_options(mount_str)
+            i += 1
+        else:
+            i += 1
+
+def validate_mount_options(mount_str):
+    # Parse comma-separated key-value pairs
+    parts = mount_str.split(',')
+    options = {}
+    for part in parts:
+        if '=' in part:
+            k, v = part.split('=', 1)
+            options[k.strip()] = v.strip()
+            
+    host_path_str = options.get("source") or options.get("src")
+    container_path_str = options.get("target") or options.get("dst") or options.get("destination")
+    
+    if host_path_str and container_path_str:
+        validate_paths(host_path_str, container_path_str)
+
 def run_in_sandbox(image, command, active_model):
     """Mounts the project root inside an isolated Docker sandbox container, injecting active model metadata."""
+    import uuid
+    container_name = f"ai-project-sandbox-{os.getpid()}-{uuid.uuid4().hex[:8]}"
+    ACTIVE_CONTAINERS.append(container_name)
+    
     # Pass active model as an environment variable to allow the container scripts to route appropriately
     docker_cmd = [
         "docker", "run", "--rm",
+        "--name", container_name,
+        "--label", f"orchestrator-pid={os.getpid()}",
         "-e", f"AI_PROJECT_ACTIVE_MODEL={active_model}",
         "-v", f"{PROJECT_ROOT}:/workspace",
         "-w", "/workspace",
         image,
         "sh", "-c", command
     ]
+    
+    # Enforce file boundaries and volume mount validations
     try:
-        result = subprocess.run(docker_cmd, capture_output=True, text=True)
-        return result.returncode == 0, result.stdout, result.stderr
-    except FileNotFoundError:
-        # Fallback to local execution if Docker is not available in current environment
-        print("[!] Docker is not installed or available. Executing locally with model environment...")
-        env = os.environ.copy()
-        env["AI_PROJECT_ACTIVE_MODEL"] = active_model
-        result = subprocess.run(command, shell=True, env=env, capture_output=True, text=True)
-        return result.returncode == 0, result.stdout, result.stderr
+        validate_volume_mounts(docker_cmd)
+    except ValueError as e:
+        print(f"[!] Security Boundary Exception: {e}", file=sys.stderr)
+        if container_name in ACTIVE_CONTAINERS:
+            ACTIVE_CONTAINERS.remove(container_name)
+        raise
+
+    try:
+        try:
+            result = subprocess.run(docker_cmd, capture_output=True, text=True)
+            return result.returncode, result.stdout, result.stderr
+        except FileNotFoundError:
+            # Fallback to local execution if Docker is not available in current environment
+            print("[!] Docker is not installed or available. Executing locally with model environment...")
+            env = os.environ.copy()
+            env["AI_PROJECT_ACTIVE_MODEL"] = active_model
+            result = subprocess.run(command, shell=True, env=env, capture_output=True, text=True)
+            return result.returncode, result.stdout, result.stderr
+    finally:
+        if container_name in ACTIVE_CONTAINERS:
+            ACTIVE_CONTAINERS.remove(container_name)
 
 def handle_epic_execution(trigger, models_config):
     epic_id = trigger.get("epic_id", "unknown")
     spec_path = trigger.get("epic_spec_path", "")
     sandbox_image = trigger.get("sandbox_env", "alpine:latest")
     validation_cmd = trigger.get("validation_command", "npm run lint && npm test")
+    dev_cmd = trigger.get("dev_command", "./bin/run-dev-agent")
+    run_dev_initially = trigger.get("run_dev_initially", False) or trigger.get("dev_initially", False)
     
     # Resolve Hybrid Model Selection
     dev_model = models_config.get("epic_dev", DEFAULT_MODELS["epic_dev"])
@@ -84,36 +227,98 @@ def handle_epic_execution(trigger, models_config):
     print(f"    - Developer Role: {dev_model}")
     print(f"    - QA Tester Role: {qa_model}")
     print(f"[*] Sandbox environment: {sandbox_image}")
+    print(f"[*] Developer Command: {dev_cmd}")
+    print(f"[*] Validation Command: {validation_cmd}")
+    print(f"[*] Run Dev Initially: {run_dev_initially}")
     
     # Dev-QA Closed Recursion Loop
+    feedback_file = PROJECT_ROOT / ".ai-project" / "feedback.json"
     for attempt in range(1, MAX_RETRIES + 1):
         print(f"[*] Loop Attempt {attempt}/{MAX_RETRIES}...")
         
-        # QA Agent executes with the QA model configuration
-        success, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd, active_model=qa_model)
+        # Run dev_command (only if attempt > 1 OR if explicitly flagged to run initially)
+        if (attempt > 1) or run_dev_initially:
+            print(f"[*] Running developer command inside sandbox (active model: {dev_model}): {dev_cmd}")
+            dev_code, dev_out, dev_err = run_in_sandbox(sandbox_image, dev_cmd, active_model=dev_model)
+            print(f"[*] Developer command finished with exit code: {dev_code}")
+            if dev_code != 0:
+                print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
         
-        if success:
-            print(f"[✓] Epic {epic_id} validation passed successfully!")
+        # Run validation_command inside sandbox under epic_qa model configuration
+        print(f"[*] Running validation command inside sandbox (active model: {qa_model}): {validation_cmd}")
+        val_code, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd, active_model=qa_model)
+        
+        if val_code == 0:
+            print(f"[✓] Epic {epic_id} validation passed successfully on attempt {attempt}!")
+            
+            # Clean up .ai-project/feedback.json
+            if feedback_file.exists():
+                try:
+                    feedback_file.unlink()
+                    print("[✓] Cleaned up feedback.json")
+                except Exception as e:
+                    print(f"[!] Failed to clean up feedback.json: {e}", file=sys.stderr)
+            
             # Automate staging and commit
+            print("[*] Staging and committing changes...")
             subprocess.run(["git", "add", "."], cwd=PROJECT_ROOT)
             subprocess.run(["git", "commit", "-m", f"feat: programmatically implement Epic {epic_id} deliverables\n\nResolved via Developer: {dev_model} and QA: {qa_model}"], cwd=PROJECT_ROOT)
             
             # Remove trigger file from queue
             trigger_file = QUEUE_DIR / "04_epic.json"
             if trigger_file.exists():
-                trigger_file.unlink()
-            return
+                try:
+                    trigger_file.unlink()
+                    print("[✓] Removed trigger file 04_epic.json")
+                except Exception as e:
+                    print(f"[!] Failed to remove trigger file: {e}", file=sys.stderr)
             
-        print(f"[!] Loop Attempt {attempt} failed under QA: {qa_model}.")
+            # Exit successfully
+            sys.exit(0)
+            
+        print(f"[!] Loop Attempt {attempt} failed under QA: {qa_model} with exit code {val_code}.")
         
-        # If we failed, the developer agent would iterate to fix it using the Dev model
-        # Send error context to Developer role with AI_PROJECT_ACTIVE_MODEL=dev_model
-        print(f"[*] Routing failure feedback to Developer role utilizing local/low-cost model: {dev_model}...")
-        
-        if attempt == MAX_RETRIES:
-            print("[X] Maximum retries exhausted. Generating escalation report...")
-            generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model)
-            return
+        # Write .ai-project/feedback.json on failure
+        feedback_data = {
+            "epic_id": epic_id,
+            "attempt": attempt,
+            "max_attempts": MAX_RETRIES,
+            "validation_command": validation_cmd,
+            "exit_code": val_code,
+            "stdout": stdout,
+            "stderr": stderr
+        }
+        try:
+            feedback_file.parent.mkdir(parents=True, exist_ok=True)
+            with open(feedback_file, 'w') as f:
+                json.dump(feedback_data, f, indent=2)
+            print(f"[✓] Feedback written to {feedback_file}")
+        except Exception as e:
+            print(f"[!] Failed to write feedback.json: {e}", file=sys.stderr)
+            
+        # Run dev_command inside sandbox under epic_dev model configuration
+        print(f"[*] Running developer command on failure inside sandbox (active model: {dev_model}): {dev_cmd}")
+        dev_code, dev_out, dev_err = run_in_sandbox(sandbox_image, dev_cmd, active_model=dev_model)
+        print(f"[*] Developer command on failure finished with exit code: {dev_code}")
+        if dev_code != 0:
+            print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
+            
+    # If all MAX_RETRIES attempts fail
+    print(f"[X] Maximum attempts ({MAX_RETRIES}) exhausted. Generating escalation report...")
+    generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model)
+    
+    # Retain (or archive) the trigger file to prevent duplicate runs
+    trigger_file = QUEUE_DIR / "04_epic.json"
+    if trigger_file.exists():
+        archived_file = QUEUE_DIR / "04_epic.json.failed"
+        try:
+            trigger_file.rename(archived_file)
+            print(f"[✓] Archived trigger file to {archived_file} to prevent duplicate runs.")
+        except Exception as e:
+            print(f"[!] Failed to archive trigger file: {e}", file=sys.stderr)
+    
+    # Exit with status code 1
+    sys.exit(1)
 
 def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model):
     admin_dir = PROJECT_ROOT / "docs" / "admin"
@@ -159,9 +364,237 @@ Execution on the active branch has been suspended. Please review the failed vali
         print(f"[!] Failed to write escalation report: {e}", file=sys.stderr)
 
 def main():
+    if len(sys.argv) > 1 and sys.argv[1] == "--test":
+        import unittest
+        from unittest.mock import patch, MagicMock
+        import tempfile
+        import shutil
+
+        class TestOrchestrator(unittest.TestCase):
+            def setUp(self):
+                global PROJECT_ROOT, QUEUE_DIR, LOCK_FILE, YML_CONFIG
+                
+                # Create a temporary directory structure
+                self.temp_dir = tempfile.TemporaryDirectory()
+                self.project_root_path = Path(self.temp_dir.name)
+                
+                # Patch the global paths
+                self.orig_project_root = PROJECT_ROOT
+                self.orig_queue_dir = QUEUE_DIR
+                self.orig_lock_file = LOCK_FILE
+                self.orig_yml_config = YML_CONFIG
+                
+                PROJECT_ROOT = self.project_root_path
+                QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+                LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+                YML_CONFIG = PROJECT_ROOT / ".ai-project.yml"
+                
+                # Ensure directories exist
+                QUEUE_DIR.mkdir(parents=True, exist_ok=True)
+                LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+            def tearDown(self):
+                # Restore the original global paths
+                global PROJECT_ROOT, QUEUE_DIR, LOCK_FILE, YML_CONFIG
+                PROJECT_ROOT = self.orig_project_root
+                QUEUE_DIR = self.orig_queue_dir
+                LOCK_FILE = self.orig_lock_file
+                YML_CONFIG = self.orig_yml_config
+                
+                self.temp_dir.cleanup()
+
+            def test_load_yml_config_default(self):
+                config = load_yml_config()
+                self.assertEqual(config["models"], DEFAULT_MODELS)
+
+            def test_load_yml_config_custom(self):
+                custom_config = {
+                    "models": {
+                        "epic_dev": "custom_dev_model"
+                    }
+                }
+                with open(YML_CONFIG, 'w') as f:
+                    yaml.dump(custom_config, f)
+                    
+                config = load_yml_config()
+                self.assertEqual(config["models"]["epic_dev"], "custom_dev_model")
+                self.assertEqual(config["models"]["epic_qa"], DEFAULT_MODELS["epic_qa"])
+
+            def test_load_json_trigger(self):
+                trigger_data = {"epic_id": "test-epic"}
+                trigger_file = QUEUE_DIR / "04_epic.json"
+                with open(trigger_file, 'w') as f:
+                    json.dump(trigger_data, f)
+                    
+                loaded = load_json_trigger("04_epic.json")
+                self.assertEqual(loaded, trigger_data)
+
+            @patch('subprocess.run')
+            def test_run_in_sandbox(self, mock_run):
+                mock_run.return_value = MagicMock(returncode=0, stdout="success_out", stderr="")
+                code, out, err = run_in_sandbox("mock-image", "test-cmd", "mock-model")
+                self.assertEqual(code, 0)
+                self.assertEqual(out, "success_out")
+                called_args = mock_run.call_args[0][0]
+                self.assertIn("docker", called_args)
+                self.assertIn("AI_PROJECT_ACTIVE_MODEL=mock-model", called_args)
+
+            def test_validate_volume_mounts_success(self):
+                cmd = ["docker", "run", "-v", f"{PROJECT_ROOT}:/workspace", "alpine", "ls"]
+                validate_volume_mounts(cmd)
+
+            def test_validate_volume_mounts_outside_host(self):
+                cmd = ["docker", "run", "-v", "/etc:/workspace", "alpine", "ls"]
+                with self.assertRaises(ValueError) as ctx:
+                    validate_volume_mounts(cmd)
+                self.assertIn("Security Boundary Violation", str(ctx.exception))
+                self.assertIn("outside the project root", str(ctx.exception))
+
+            def test_validate_volume_mounts_outside_container(self):
+                cmd = ["docker", "run", "-v", f"{PROJECT_ROOT}:/tmp", "alpine", "ls"]
+                with self.assertRaises(ValueError) as ctx:
+                    validate_volume_mounts(cmd)
+                self.assertIn("Security Boundary Violation", str(ctx.exception))
+                self.assertIn("outside '/workspace'", str(ctx.exception))
+
+            @patch('subprocess.run')
+            @patch('sys.exit')
+            def test_handle_epic_execution_success(self, mock_exit, mock_run):
+                mock_exit.side_effect = SystemExit
+                trigger = {
+                    "epic_id": "EPIC-101",
+                    "sandbox_env": "mock-sandbox",
+                    "validation_command": "run-validation",
+                    "dev_command": "run-dev",
+                    "run_dev_initially": False
+                }
+                trigger_file = QUEUE_DIR / "04_epic.json"
+                with open(trigger_file, 'w') as f:
+                    json.dump(trigger, f)
+                
+                mock_run.return_value = MagicMock(returncode=0, stdout="All tests passed", stderr="")
+                with self.assertRaises(SystemExit):
+                    handle_epic_execution(trigger, DEFAULT_MODELS)
+                self.assertFalse(trigger_file.exists())
+                mock_exit.assert_called_once_with(0)
+
+            @patch('subprocess.run')
+            @patch('sys.exit')
+            def test_handle_epic_execution_failure_then_success(self, mock_exit, mock_run):
+                mock_exit.side_effect = SystemExit
+                trigger = {
+                    "epic_id": "EPIC-102",
+                    "sandbox_env": "mock-sandbox",
+                    "validation_command": "run-validation",
+                    "dev_command": "run-dev",
+                    "run_dev_initially": False
+                }
+                trigger_file = QUEUE_DIR / "04_epic.json"
+                with open(trigger_file, 'w') as f:
+                    json.dump(trigger, f)
+                    
+                feedback_file = PROJECT_ROOT / ".ai-project" / "feedback.json"
+                
+                # Mock run returns:
+                # 1. Validation fails
+                # 2. Dev cmd on failure
+                # 3. Dev cmd at start of Attempt 2
+                # 4. Validation succeeds
+                # 5. Git add
+                # 6. Git commit
+                run_returns = [
+                    MagicMock(returncode=1, stdout="Test fail", stderr="Error log"),
+                    MagicMock(returncode=0, stdout="Dev fixed", stderr=""),
+                    MagicMock(returncode=0, stdout="Dev ran", stderr=""),
+                    MagicMock(returncode=0, stdout="All tests passed", stderr=""),
+                    MagicMock(returncode=0, stdout="", stderr=""),
+                    MagicMock(returncode=0, stdout="", stderr=""),
+                ]
+                mock_run.side_effect = run_returns
+                
+                with self.assertRaises(SystemExit):
+                    handle_epic_execution(trigger, DEFAULT_MODELS)
+                self.assertFalse(feedback_file.exists())
+                self.assertFalse(trigger_file.exists())
+                mock_exit.assert_called_once_with(0)
+
+            @patch('subprocess.run')
+            @patch('sys.exit')
+            def test_handle_epic_execution_max_attempts_exhausted(self, mock_exit, mock_run):
+                mock_exit.side_effect = SystemExit
+                trigger = {
+                    "epic_id": "EPIC-103",
+                    "sandbox_env": "mock-sandbox",
+                    "validation_command": "run-validation",
+                    "dev_command": "run-dev"
+                }
+                trigger_file = QUEUE_DIR / "04_epic.json"
+                with open(trigger_file, 'w') as f:
+                    json.dump(trigger, f)
+                    
+                mock_run.return_value = MagicMock(returncode=1, stdout="Validation failed", stderr="Traceback...")
+                
+                with self.assertRaises(SystemExit):
+                    handle_epic_execution(trigger, DEFAULT_MODELS)
+                self.assertFalse(trigger_file.exists())
+                archived_file = QUEUE_DIR / "04_epic.json.failed"
+                self.assertTrue(archived_file.exists())
+                
+                report_file = PROJECT_ROOT / "docs" / "admin" / "escalation-report-EPIC-103.md"
+                self.assertTrue(report_file.exists())
+                
+                feedback_file = PROJECT_ROOT / ".ai-project" / "feedback.json"
+                self.assertTrue(feedback_file.exists())
+                with open(feedback_file, 'r') as f:
+                    feedback = json.load(f)
+                    self.assertEqual(feedback["epic_id"], "EPIC-103")
+                    self.assertEqual(feedback["attempt"], 3)
+                    self.assertEqual(feedback["exit_code"], 1)
+                    
+                mock_exit.assert_called_once_with(1)
+
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestOrchestrator)
+        runner = unittest.TextTestRunner(verbosity=2)
+        result = runner.run(suite)
+        sys.exit(0 if result.wasSuccessful() else 1)
+
     if LOCK_FILE.exists():
-        print("[!] Orchestration execution is locked. Another agent is running. Exiting.")
-        sys.exit(1)
+        import errno
+        try:
+            with open(LOCK_FILE, 'r') as f:
+                content = f.read().strip()
+            if not content:
+                raise ValueError("Lockfile is empty")
+            pid = int(content)
+            
+            is_running = False
+            if pid > 0:
+                try:
+                    os.kill(pid, 0)
+                    is_running = True
+                except OSError as err:
+                    if err.errno == errno.EPERM:
+                        is_running = True
+                    elif err.errno == errno.ESRCH:
+                        is_running = False
+                    else:
+                        raise
+            
+            if is_running:
+                print(f"[!] Orchestration execution is locked. Active process with PID {pid} is running. Exiting.", file=sys.stderr)
+                sys.exit(1)
+            else:
+                print(f"[!] Warning: Stale lockfile found with dead PID {pid}. Recovering and deleting stale lock...", file=sys.stderr)
+                try:
+                    LOCK_FILE.unlink()
+                except Exception:
+                    pass
+        except Exception as e:
+            print(f"[!] Warning: Recovering from invalid/corrupted lockfile. Error: {e}", file=sys.stderr)
+            try:
+                LOCK_FILE.unlink()
+            except Exception:
+                pass
         
     os.makedirs(QUEUE_DIR, exist_ok=True)
     os.makedirs(LOCK_FILE.parent, exist_ok=True)
@@ -173,7 +606,13 @@ def main():
     # Check for Epic triggers
     epic_trigger = load_json_trigger("04_epic.json")
     if epic_trigger:
-        LOCK_FILE.touch()
+        # Write active PID to lockfile
+        try:
+            with open(LOCK_FILE, 'w') as f:
+                f.write(str(os.getpid()))
+        except Exception as e:
+            print(f"[!] Failed to write PID to lockfile: {e}", file=sys.stderr)
+            sys.exit(1)
         try:
             handle_epic_execution(epic_trigger, models_config)
         finally:
