@@ -210,7 +210,7 @@ def run_in_sandbox(image, command, active_model):
         if container_name in ACTIVE_CONTAINERS:
             ACTIVE_CONTAINERS.remove(container_name)
 
-def handle_epic_execution(trigger, models_config):
+def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.json"):
     epic_id = trigger.get("epic_id", "unknown")
     spec_path = trigger.get("epic_spec_path", "")
     sandbox_image = trigger.get("sandbox_env", "alpine:latest")
@@ -265,11 +265,11 @@ def handle_epic_execution(trigger, models_config):
             subprocess.run(["git", "commit", "-m", f"feat: programmatically implement Epic {epic_id} deliverables\n\nResolved via Developer: {dev_model} and QA: {qa_model}"], cwd=PROJECT_ROOT)
             
             # Remove trigger file from queue
-            trigger_file = QUEUE_DIR / "04_epic.json"
+            trigger_file = QUEUE_DIR / trigger_file_name
             if trigger_file.exists():
                 try:
                     trigger_file.unlink()
-                    print("[✓] Removed trigger file 04_epic.json")
+                    print(f"[✓] Removed trigger file {trigger_file_name}")
                 except Exception as e:
                     print(f"[!] Failed to remove trigger file: {e}", file=sys.stderr)
             
@@ -308,9 +308,9 @@ def handle_epic_execution(trigger, models_config):
     generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model)
     
     # Retain (or archive) the trigger file to prevent duplicate runs
-    trigger_file = QUEUE_DIR / "04_epic.json"
+    trigger_file = QUEUE_DIR / trigger_file_name
     if trigger_file.exists():
-        archived_file = QUEUE_DIR / "04_epic.json.failed"
+        archived_file = QUEUE_DIR / f"{trigger_file_name}.failed"
         try:
             trigger_file.rename(archived_file)
             print(f"[✓] Archived trigger file to {archived_file} to prevent duplicate runs.")
@@ -603,8 +603,13 @@ def main():
     config = load_yml_config()
     models_config = config.get("models", DEFAULT_MODELS)
     
+    # Determine trigger file name from command line arguments
+    trigger_file_name = "04_epic.json"
+    if len(sys.argv) > 1 and sys.argv[1] != "--test":
+        trigger_file_name = sys.argv[1]
+
     # Check for Epic triggers
-    epic_trigger = load_json_trigger("04_epic.json")
+    epic_trigger = load_json_trigger(trigger_file_name)
     if epic_trigger:
         # Write active PID to lockfile
         try:
@@ -614,12 +619,12 @@ def main():
             print(f"[!] Failed to write PID to lockfile: {e}", file=sys.stderr)
             sys.exit(1)
         try:
-            handle_epic_execution(epic_trigger, models_config)
+            handle_epic_execution(epic_trigger, models_config, trigger_file_name)
         finally:
             if LOCK_FILE.exists():
                 LOCK_FILE.unlink()
     else:
-        print("[*] No active triggers found in queue.")
+        print(f"[*] No active triggers found in queue for: {trigger_file_name}")
 
 if __name__ == "__main__":
     main()
