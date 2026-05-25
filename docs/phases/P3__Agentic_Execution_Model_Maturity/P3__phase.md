@@ -4,8 +4,8 @@ phase: P3
 milestone: null
 epic: null
 type: phase
-status: active
-last_updated: 2026-05-22
+status: fully_closed
+last_updated: 2026-05-24
 ---
 
 # Phase P3: Agentic Execution Model Maturity
@@ -27,6 +27,6 @@ Phase P3 is complete when:
 
 ## Roadmap and Milestones
 
-- **M11: File-Driven Bus & State Triggers** (Active / Implementation Complete) — Establish directory-level queues, write the Python orchestrator script, integrate mode triggers in `governance.agent.md`, and spec the `models` routing.
-- **M12: Containerized Sandbox & Loop Verification** (Planned) — Deploy `Dockerfile.sandbox` and write the loop recursion scripts.
-- **M13: Orchestrator CLI Daemon** (Planned) — Implement CLI state validation commands and auto-merge hooks.
+- **M11: File-Driven Bus & State Triggers** (Completed) — Established directory-level queues, Python orchestrator script, mode triggers in `governance.agent.md`, and `models` routing.
+- **M12: Containerized Sandbox & Loop Verification** (Completed) — Deployed `Dockerfile.sandbox`, loop recursion scripts, mock harness, and security boundaries.
+- **M13: Orchestrator CLI Daemon** (Completed) — Implemented CLI daemon, auto-merge hooks, and lifecycle integration tests.

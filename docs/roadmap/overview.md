@@ -12,76 +12,113 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ---
 
-## Phases
+## Completed Phases
 
-### P1 – System Foundation & Adoption *(Active)*
+### P0 – Project Formalization *(Retired)*
+
+**Goal**: Bootstrap the repository and formalize the initial system contract.
+
+**Status**: Retired (Completed 2026-01-25)
+
+**Milestone**:
+- **M0.1** – Repository Bootstrap *(Completed)*
+
+---
+
+### P1 – System Foundation & Adoption *(Fully Closed)*
 
 **Goal**: Establish the AI Project System as a stable, adoptable, and self-hosting system.
 
-**Status**: Active (Started 2026-01-14)
+**Status**: Fully Closed (Started 2026-01-14, Completed 2026-04-18)
 
 **Milestones**:
-- **M1** – Genesis & Integration Baseline *(Completed 2026-01-25)*
-- **M2** – Execution Ergonomics & Validation *(Active)*
-- **M3** – Governance Distribution & Adoption *(Active)*
-- **M4** – Adoption Readiness & Practical Enablement *(Planned)*
+- **M1** – Genesis & Integration Baseline *(Completed)*
+- **M2** – Execution Ergonomics & Validation *(Completed)*
+- **M3** – Governance Distribution & Adoption *(Completed)*
+- **M4** – Adoption Readiness & Practical Enablement *(Completed)*
+- **M5** – System Refinement from Real Usage *(Completed)*
 
-**Deliverables**:
+**Key Deliverables**:
 - ✅ Repository structure aligned with PROJECT-SYSTEM-GUIDELINES.md
 - ✅ Authoritative governance documents published
-- ✅ Complete phase/milestone/epic documentation
-- ✅ Project tracker integration system (optional)
+- ✅ Complete phase/milestone/epic documentation framework
+- ✅ Project tracker integration system
 - ✅ Human review and acceptance framework
 - ✅ Governance propagation model
-- 📋 Templates and scaffolding
-- 📋 Quick-start guide and visual documentation
-- 📋 Example project and walkthrough
-- 📋 FAQ, licensing, and community readiness
+- ✅ Templates and scaffolding
+- ✅ Quick-start guide and visual documentation
+- ✅ Example project and walkthrough
+- ✅ FAQ, licensing, and community readiness
+- ✅ Milestone/epic closure process specification
+- ✅ Unplanned progress branch model
+- ✅ Epic Execution Chat Starter format
 
 ---
 
-### P2 – Tooling and Automation *(Future)*
+### P2 – Adoption, Architecture & Multi-Project Support *(Completed)*
 
-**Goal**: Build tooling to support and enforce the project system.
+**Goal**: Evolve the governance model for multi-project support, CLI tooling, override boundaries, and adoption readiness.
 
-**Status**: Not Started
+**Status**: Completed (Consolidated to master 2026-05-22)
 
-**Potential Tools**:
-- Context packet generator
-- Front-matter validator
-- Epic → GitHub Issue sync
-- Branch → Epic alignment checker
-- Documentation linter
+**Milestones**:
+- **M6** – Governance Folder Restructure *(Completed)*
+- **M7** – CLI Initialization Tool *(Completed)*
+- **M8** – HQ Agent & End-to-End Validation *(Completed)*
+- **M9** – Override Boundaries & System Refinement *(Completed)*
+- **M10** – Adoption & Phase P2 Closure *(Completed)*
 
-**Philosophy**: Automation should **enforce**, not replace, the system.
-
----
-
-### P3 – Collaboration Model *(Future)*
-
-**Goal**: Extend the system for team collaboration.
-
-**Status**: Not Started
-
-**Considerations**:
-- Multi-contributor workflows
-- Code review integration
-- Shared context management
-- Role definitions (HQ vs. execution)
+**Key Deliverables**:
+- ✅ Restructured governance directory (`governance/`) with guides and templates
+- ✅ `.ai-project.yml` configuration spec (v2.0.0+)
+- ✅ Submodule support for multi-project governance distribution
+- ✅ Migration guide for legacy users
+- ✅ CLI initialization tool (`bin/ai-project-init`)
+- ✅ HQ Agent deployment and end-to-end validation
+- ✅ Override spec and precedence rules
+- ✅ Adoption guides, FAQ, and multi-project onboarding
 
 ---
 
-### P4 – Public Release *(Future)*
+### P3 – Agentic Execution Model Maturity *(Completed)*
 
-**Goal**: Publish the system as a public reference for others.
+**Goal**: Transform the AI Project System from a human-mediated documentation framework into an unattended, 24/7 autonomous development cluster with file-driven state machines, sandboxing, and hybrid model routing.
 
-**Status**: Not Started
+**Status**: Completed (Consolidated to master 2026-05-24)
 
-**Deliverables**:
-- Cleaned and polished documentation
-- Example projects
-- Onboarding guides
-- Community contribution model (if desired)
+**Milestones**:
+- **M11** – File-Driven Bus & State Triggers *(Completed)*
+- **M12** – Containerized Sandbox & Loop Verification *(Completed)*
+- **M13** – Orchestrator CLI Daemon *(Completed)*
+
+**Key Deliverables**:
+- ✅ `.ai-project/queue/` — File-driven message bus with JSON trigger schemas
+- ✅ `bin/ai-project-orchestrator` — Core orchestration engine with 3-attempt Dev-QA loop
+- ✅ `Dockerfile.sandbox` — Isolated container runtime for execution and validation
+- ✅ `bin/ai-project-daemon` — Background service for continuous queue monitoring
+- ✅ `bin/ai-project-git-merge` — Automated branch promotion and merge utility
+- ✅ `bin/verify-loop.sh` — 5-scenario closed-loop verification harness (all passing)
+- ✅ `bin/verify-daemon.sh` — Daemon lifecycle and integration test suite
+- ✅ `bin/build-sandbox.sh` — Sandbox image builder
+- ✅ Hybrid model routing (remote for planning, local for execution)
+- ✅ Closed-loop execution with self-healing, 3-attempt ceiling, escalation reports
+- ✅ Stale lock recovery and signal-based cleanup
+- ✅ PROJECT-SYSTEM-GUIDELINES.md Sections 18A–18D (cluster execution rules)
+
+---
+
+## Future
+
+### P4 – Unplanned *(Open for Discussion)*
+
+**Goal**: TBD — options under consideration:
+
+1. **System Operations** — Monitor, observe, and refine the autonomous cluster built in P3; create runbooks, dashboards, and operational maturity.
+2. **Public Release** — Polish documentation, create reference example projects, prepare community contribution model per original roadmap vision.
+3. **Team Collaboration** — Extend the system for multi-contributor workflows, access controls, shared contexts, multi-agent orchestration.
+4. **Other** — As directed by project needs.
+
+**Status**: Not started. Awaiting HQ Chat direction.
 
 ---
 
@@ -97,15 +134,11 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Current Focus
 
-**Active Phase**: P1 – System Foundation & Adoption
-**Active Milestones**: 
-- M2 — Execution Ergonomics & Validation (1/3 Epics complete)
-- M3 — Governance Distribution & Adoption (1/? Epics complete)
+All planned phases (P1, P2, P3) are **completed and consolidated to master**.
 
-**Planned Milestone**: M4 — Adoption Readiness & Practical Enablement
+No phase is currently active. The project is at a decision point: define and scope **Phase 4**.
 
-**Next Epics (candidates)**:
-- M2: E2.2 (Human-Language Review Capture) or E2.3 (Happy-Path Enforcement)
-- M4: E4.1 (Templates & Scaffolding)
-
-See [docs/phases/P1__System_Foundation_and_Adoption/](../phases/P1__System_Foundation_and_Adoption/) for detailed specs.
+See individual phase directories for detailed specs:
+- [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
+- [`docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/`](../phases/P2__Adoption_Architecture_and_Multi_Project_Support/)
+- [`docs/phases/P3__Agentic_Execution_Model_Maturity/`](../phases/P3__Agentic_Execution_Model_Maturity/)
