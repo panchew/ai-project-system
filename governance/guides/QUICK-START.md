@@ -4,6 +4,11 @@
 
 This guide walks you through creating your first Phase, Milestone, and Epic—from initialization to closure. By the end, you'll understand the system through practice, not just theory.
 
+> **Two execution modes available:** This guide teaches **manual mode** (copy-paste Chat Starters — no infrastructure needed).  
+> The system also supports **agentic mode** (file-driven autonomous cluster with Docker and daemon).  
+> See [`README.md`](../../README.md) for the agentic mode overview, or jump directly to the tools:  
+> `bin/ai-project-orchestrator`, `bin/ai-project-daemon`, `Dockerfile.sandbox`, `bin/verify-loop.sh`.
+
 ---
 
 ## What is the AI Project System?
@@ -104,8 +109,8 @@ git submodule update --init --recursive
 cat > .ai-project.yml << EOF
 governance:
   source: ./governance
-  version: "2.0.0"
-  ref: v2.0.0
+  version: "3.0.0"
+  ref: v3.0.0
 project:
   name: your-project
   description: "Your project description"
@@ -706,7 +711,7 @@ git push origin milestone/M1
 
 **Update governance reference:**
 ```bash
-cd governance && git fetch && git checkout v2.0.0 && cd ..
+cd governance && git fetch && git checkout v3.0.0 && cd ..
 ```
 
 ### File Locations

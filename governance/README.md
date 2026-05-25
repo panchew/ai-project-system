@@ -42,7 +42,7 @@ To reference this governance folder from an external project:
 git submodule add https://github.com/panchew/ai-project-system.git governance
 
 # Pin to a specific governance version
-cd governance && git checkout v2.0.0
+cd governance && git checkout v3.0.0
 ```
 
 Then create a `governance-source.md` at your project root declaring the adoption (use `governance/templates/governance-source.md` as the template).
@@ -63,4 +63,4 @@ See docs/systems/cli-usage-guide.md for details.
 
 ## Governance Version
 
-This governance folder is versioned at `v2.0.0` as of Milestone M6 (the migration that created this folder).
+This governance folder is versioned at `v3.0.0` as of Phase P3 (Agentic Execution Model Maturity).

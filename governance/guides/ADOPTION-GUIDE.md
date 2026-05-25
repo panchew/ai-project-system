@@ -201,10 +201,10 @@ git submodule status
 Expected output (a leading space indicates initialized, `-` indicates uninitialized):
 
 ```
- v2.0.0 governance
+ v3.0.0 governance
 ```
 
-The commit SHA should match the governance tag `v2.0.0`.
+The commit SHA should match the governance tag `v3.0.0`.
 
 > **Note on submodule paths:** The CLI may create the submodule at `governance/`
 > or `.governance/` depending on the version. Both paths are valid — verify
@@ -225,8 +225,8 @@ Expected: Both files exist and are readable.
 # .ai-project.yml
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "2.0.0"
-  ref: v2.0.0
+  version: "3.0.0"
+  ref: v3.0.0
 ```
 
 ```bash
@@ -243,10 +243,10 @@ cd governance && git log --oneline -1 && cd ..
 
 Expected output:
 ```
-<sha> (HEAD -> v2.0.0, tag: v2.0.0) Release v2.0.0
+<sha> (HEAD -> v3.0.0, tag: v3.0.0) Release v3.0.0
 ```
 
-> **Note:** If the git tag `v2.0.0` does not exist in the governance source repository,
+> **Note:** If the git tag `v3.0.0` does not exist in the governance source repository,
 > the submodule may default to `master` or an older tag. In that case, use the branch
 > `milestone/M10` or `develop` as the ref instead, and update `.ai-project.yml` accordingly.
 

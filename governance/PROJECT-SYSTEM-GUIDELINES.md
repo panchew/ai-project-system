@@ -748,8 +748,8 @@ To add overrides to an existing project:
 ```yaml
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "2.0.0"
-  ref: v2.0.0
+  version: "3.0.0"
+  ref: v3.0.0
 
 project:
   name: acme-payments

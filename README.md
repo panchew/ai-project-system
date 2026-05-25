@@ -6,9 +6,9 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 Both Phases Complete — Production Ready
+## 🎉 All Phases Complete — Autonomous Cluster Ready
 
-**The AI Project System is fully built using its own governance.** Both Phase P1 (foundation) and Phase P2 (multi-project infrastructure) are complete and production-ready.
+**The AI Project System was built using its own governance.** All three planned phases (P1, P2, P3) are complete and consolidated to `master`.
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -22,7 +22,14 @@ Turn AI coding assistants into reliable project executors through structured spe
 | **M9** — Configuration & Override System | E9.1–E9.4 | ✅ Complete | Override spec, precedence rules, HQ agent integration |
 | **M10** — Adoption Validation & Documentation | E10.1–E10.4 | ✅ Complete | Adoption guide, FAQ, onboarded projects, P2 closure |
 
-👉 **[Start using the system now](governance/guides/QUICK-START.md)**
+### Phase P3 — Agentic Execution Model Maturity (Complete)
+| Milestone | Epics | Status | Key Deliverables |
+|-----------|-------|--------|------------------|
+| **M11** — File-Driven Bus & State Triggers | 4 | ✅ Complete | `.ai-project/queue/`, Python orchestrator, queue schemas |
+| **M12** — Containerized Sandbox & Loop Verification | 4 | ✅ Complete | `Dockerfile.sandbox`, 3-retry recursion engine, mock harness |
+| **M13** — Orchestrator CLI Daemon | 4 | ✅ Complete | `ai-project-daemon`, auto-merge hooks, lifecycle tests |
+
+👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
 
 ---
 
@@ -112,11 +119,21 @@ HQ Chat ──creates──→ Phase specs + Phase Execution Chat Starter
                                                                      Epic mode ──executes──→ Code, PRs, deliverables
 ```
 
-### 🤖 **AI-First Execution**
+### 🤖 **AI-First Execution** (Two Modes)
 Purpose-built for AI coding assistants:
+
+**Manual Mode** (no infrastructure required):
 - Chat Starters provide complete context for each level (Phase, Milestone, Epic)
-- Governance Agent self-configures its mode from the Chat Starter
-- Documentation preserves context across sessions
+- You copy-paste starters between sessions — handoffs are explicit and documented
+
+**Agentic Mode** (Docker + daemon):
+- File-driven queue (`.ai-project/queue/`) replaces copy-paste handoffs
+- `ai-project-orchestrator` detects triggers, dispatches work, runs Dev-QA loops
+- `ai-project-daemon` monitors the queue 24/7
+- `Dockerfile.sandbox` provides isolated, reproducible runtime
+- Auto-merge promotes branches automatically via `ai-project-git-merge`
+
+Both modes use the same specs, same artifacts, same governance. Start manual, graduate to agentic.
 
 ### 👤 **Human Governance**
 Clear separation of responsibilities:
@@ -194,13 +211,22 @@ The guide walks you through:
 - 📋 [Template Usage Guide](governance/templates/README.md) — How to use templates
 - ⚙️ [Override Boundaries](governance/override-boundaries.md) — What can be customized vs. immutable
 
-### **Executing Work**
+### **Executing Work (Manual)**
 - ⚙️ [Epic Execution Chat Starter System](governance/systems/epic-execution-chat-starter.md) — How to run Epics
 - 👔 [HQ Chat Guide](governance/systems/hq-chat.md) — HQ mode responsibilities
 
+### **Executing Work (Agentic/Autonomous)**
+- 🤖 [`bin/ai-project-orchestrator`](bin/ai-project-orchestrator) — Core orchestration engine
+- 🤖 [`bin/ai-project-daemon`](bin/ai-project-daemon) — Background queue monitor
+- 🤖 [`Dockerfile.sandbox`](Dockerfile.sandbox) — Sandbox container runtime
+- 🤖 [`bin/verify-loop.sh`](bin/verify-loop.sh) — Dev-QA loop verification (5 scenarios)
+- 🤖 [`bin/ai-project-git-merge`](bin/ai-project-git-merge) — Auto-merge utility
+- 📋 [PROJECT-SYSTEM-GUIDELINES.md §18](governance/PROJECT-SYSTEM-GUIDELINES.md) — Unattended cluster rules
+
 ### **Examples**
-- 📚 [Phase P1 Examples](docs/phases/P1__System_Foundation_and_Adoption/) — Real Epic specs and completions
-- 📚 [Phase P2 Examples](docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/) — Multi-project adoption artifacts
+- 📚 [Phase P1](docs/phases/P1__System_Foundation_and_Adoption/) — Foundation and adoption artifacts
+- 📚 [Phase P2](docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/) — Multi-project adoption artifacts
+- 📚 [Phase P3](docs/phases/P3__Agentic_Execution_Model_Maturity/) — Autonomous cluster artifacts
 - 🔍 See how this system was built using itself
 
 ### **Reference**
@@ -211,23 +237,93 @@ The guide walks you through:
 
 ## How It Works (5-Minute Overview)
 
-Work cascades through four levels, each planned by the level above and executed by the level below:
+Work cascades through four governance levels, each planned by the level above and executed by the level below. The system supports **two execution modes**:
+
+---
+
+### Mode 1: Manual (Chat Starter Copy-Paste)
+
+The original governance model. No infrastructure needed beyond Git and an AI chat tool.
+
+```
+HQ Chat ──creates──→ Phase specs + Phase Execution Chat Starter
+                        │  (copy-paste)
+                        ▼
+                   Phase Chat ──creates──→ Milestone specs + Milestone Execution Chat Starter
+                                               │  (copy-paste)
+                                               ▼
+                                          Milestone Chat ──creates──→ Epic specs + Epic Execution Chat Starter
+                                                                          │  (copy-paste)
+                                                                          ▼
+                                                                     Epic Mode  ──executes──→ Code, PRs, deliverables
+```
+
+**Flow:** Human copy-pastes Chat Starters → AI executes → Human reviews → HQ authorizes merge.
+
+---
+
+### Mode 2: Agentic (File-Driven Autonomous Cluster)
+
+The P3 infrastructure automates handoffs. Requires Docker and the daemon process.
+
+```
+
+                               ┌─────────────────────────┐
+                               │   .ai-project/queue/    │
+                               │   File-Driven Triggers   │
+                               └────┬────────────────────┘
+                                    │ poll / write
+                                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│              ai-project-daemon (background)                  │
+│  Polls queue → dispatches to orchestrator → monitors result │
+└─────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│           ai-project-orchestrator (per-job)                  │
+│  • Reads trigger JSON                                        │
+│  • Launches Docker sandbox                                   │
+│  • Runs Dev → QA loop (3 attempts max)                       │
+│  • Produces completion / escalation report                    │
+│  • Writes result back to queue                               │
+└─────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────┐
+│              Dockerfile.sandbox (ephemeral)                   │
+│  • Isolated runtime with Node, Python, Go                     │
+│  • Executes work, captures stdout/stderr                      │
+│  • Secure filesystem with write-restricted volumes            │
+│  • Self-destructs after completion                            │
+└─────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+                    ai-project-git-merge (auto-promotion)
+                    Branch: epic/ → milestone/ → phase/
+```
+
+**Flow:** Trigger file appears in queue → daemon detects it → orchestrator runs sandboxed Dev-QA loop → result written → auto-merge promotes accepted work.
+
+---
+
+### The Governance Hierarchy (same for both modes)
 
 ### **1. HQ Plans the Phase**
-HQ Chat defines the Phase scope, goals, and milestones, then produces a **Phase Execution Chat Starter** to launch a Phase Chat session.
+HQ Chat defines the Phase scope, goals, and milestones, then issues the Phase spec.
 
 ### **2. Phase Plans the Milestones**
-Phase Chat reviews the Phase spec, produces **Milestone specs** and **Milestone Execution Chat Starters** for each milestone, then returns them to HQ for acceptance.
+Phase Chat reviews the Phase spec, produces **Milestone specs** for each milestone, then returns them to HQ for acceptance.
 
 ### **3. Milestone Plans the Epics**
-Milestone Chat reviews the Milestone spec, produces **Epic specs** and **Epic Execution Chat Starters** for each epic, then returns them to Phase Chat for acceptance.
+Milestone Chat reviews the Milestone spec, produces **Epic specs** for each epic, then returns them to Phase for acceptance.
 
 ### **4. Epic Executes**
-Epic mode receives the Epic Execution Chat Starter and executes:
+Epic mode receives an Epic Execution Chat Starter (manual) or a trigger file (agentic) and executes:
 - Creates branch
 - Builds deliverables
 - Self-validates against Definition of Done
-- Produces Delivery Notice and **stops**
+- Produces Delivery Notice and **stops** (manual) or writes completion to queue (agentic)
 
 ### **5. Review (Human)**
 Human evaluates deliverables:
@@ -236,8 +332,8 @@ Human evaluates deliverables:
 - Is quality acceptable?
 
 ### **6. Close**
-Parent chat (Milestone/Phase/HQ) makes decision:
-- **Accept:** HQ authorizes merge → Epic mode merges → Epic closed
+HQ makes decision:
+- **Accept:** Authorize merge → branch promoted → Epic closed
 - **Reject:** Document rationale → create new Epic or abandon
 - **Request Changes:** Define iteration → Epic mode updates
 
@@ -290,10 +386,15 @@ Parent chat (Milestone/Phase/HQ) makes decision:
 
 ## Getting Started (Recommended Path)
 
-**Option 1: Jump Right In (30 minutes)**
-- 👉 **[Quick Start Guide](governance/guides/QUICK-START.md)** — Learn by doing
+**Option 1: Jump Right In (30 minutes) — Manual Mode**
+- 👉 **[Quick Start Guide](governance/guides/QUICK-START.md)** — Learn the governance model by hand
 
-**Option 2: Understand First, Then Practice**
+**Option 2: Go Autonomous — Agentic Mode**
+- Requires Docker. See [`Dockerfile.sandbox`](Dockerfile.sandbox) and [`bin/ai-project-daemon`](bin/ai-project-daemon)
+- Read Section 18 of [PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md) for cluster rules
+- Use [`bin/verify-loop.sh`](bin/verify-loop.sh) to test the Dev-QA loop
+
+**Option 3: Understand First, Then Practice**
 1. **Read governance**
    - [PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md) — System structure (15 min)
    - [AI-OPERATING-GUIDELINES.md](governance/AI-OPERATING-GUIDELINES.md) — Execution procedures (10 min)
@@ -304,7 +405,7 @@ Parent chat (Milestone/Phase/HQ) makes decision:
    - [How to Start a Project](governance/systems/start-a-project.md) — Step-by-step initialization
 
 **You don't need to read everything to begin.**  
-The system is designed to be learned incrementally.
+The system is designed to be learned incrementally. Start manual, graduate to agentic.
 
 ---
 
@@ -325,11 +426,11 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2)
-✅ **35 Epics** delivered across **10 milestones** over **2 phases**
+### Totals (P1 + P2 + P3)
+✅ **47 Epics** delivered across **13 milestones** over **3 phases**
 
 ### Governance
-- PROJECT-SYSTEM-GUIDELINES.md v2.0.0 (effective 2026-04-20)
+- PROJECT-SYSTEM-GUIDELINES.md v3.0.0 (effective 2026-05-22)
 - AI-OPERATING-GUIDELINES.md v2.0.0 (effective 2026-04-20)
 
 ---
@@ -377,26 +478,29 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 **Current State:**
 - ✅ **Phase P1 Complete** — System Foundation & Adoption (5 milestones, 12 Epics)
 - ✅ **Phase P2 Complete** — Adoption Architecture & Multi-Project Support (5 milestones, 23 Epics)
-- ✅ **35 total Epics** delivered across 10 milestones, 2 phases
-- ✅ **Production-ready** — Stable baseline for adoption in other projects
+- ✅ **Phase P3 Complete** — Agentic Execution Model Maturity (3 milestones, 12 Epics)
+- ✅ **47 total Epics** delivered across 13 milestones, 3 phases
+- ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
-- ✅ **Governance stable** — v2.0.0 (effective 2026-04-20)
+- ✅ **Governance stable** — v3.0.0 (effective 2026-05-22)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
 - ✅ **Override system** — Customizable branching, naming, and merge conventions
 - ✅ **Adoption guide** — Step-by-step path from zero to HQ Chat live
+- ✅ **Autonomous cluster** — File-driven queue, orchestrator, daemon, sandbox, auto-merge
+- ✅ **Self-healing Dev-QA loops** — 3-attempt recursion with escalation on exhaustion
+- ✅ **Hybrid model routing** — Remote for planning, local for execution
 - ✅ **Licensed for adoption** — MIT + CC BY-SA 4.0 dual license
 
 **What's Next (Future Phases):**
-- **P3** — Execution Model Maturity (Phase/Milestone chat agents, full handoff chain, automated PR merge)
-- **Future** — Team collaboration, external integrations, observability, automation tooling
+- **P4** — Unplanned. Options: System Operations & Observability, Public Release, Team Collaboration, or as directed.
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively
 - No web UI (not needed yet)
-- No automation tooling beyond CLI (intentionally deferred)
-- Single-user focus (team/org features deferred to future phases)
+- Supports both manual and agentic execution — meet users where they are
+- Hybrid model routing reduces token spend on repetitive Dev-QA loops
 
 ---
 
@@ -435,7 +539,6 @@ This system is designed to improve through real usage experience. We especially 
 **Not accepting (without discussion):**
 - Speculative features (no real usage motivation)
 - Major redesigns (prove concepts first)
-- Tooling/automation (intentionally deferred)
 
 👉 **[Read the full contributing guide](CONTRIBUTING.md)**
 
@@ -446,6 +549,6 @@ This system is designed to improve through real usage experience. We especially 
 - 📖 **Start here:** [Quick Start Guide](governance/guides/QUICK-START.md)
 - ❓ **FAQ:** [Frequently Asked Questions](governance/guides/FAQ.md)
 - 🎨 **Visualize:** [Diagrams](governance/diagrams/)
-- 🔍 **Examples:** [Phase P1](docs/phases/P1__System_Foundation_and_Adoption/) | [Phase P2](docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/)
+- 🔍 **Examples:** [Phase P1](docs/phases/P1__System_Foundation_and_Adoption/) | [Phase P2](docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/) | [Phase P3](docs/phases/P3__Agentic_Execution_Model_Maturity/)
 - 📖 **Adoption Guide:** [Step-by-step walkthrough](governance/guides/ADOPTION-GUIDE.md)
 - 💬 **Ask:** [Open an issue](https://github.com/panchew/ai-project-system/issues)

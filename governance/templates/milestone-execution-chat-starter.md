@@ -50,7 +50,7 @@ You are operating under the AI Project System governance framework as a **Milest
   Replace <owner>, <repo>, <branch>, and <version> with actual values.
 
   Example:
-  - [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v2.0.0 (Effective: 2026-04-23)
+  - [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v3.0.0 (Effective: 2026-05-22)
 -->
 
 **Governance hierarchy (for this session):**

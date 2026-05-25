@@ -149,7 +149,7 @@ Every mode has these capabilities:
 
 ## Governance Framework
 
-- Authoritative: governance/PROJECT-SYSTEM-GUIDELINES.md (v2.0.0)
+- Authoritative: governance/PROJECT-SYSTEM-GUIDELINES.md (v3.0.0)
 - Operating: governance/AI-OPERATING-GUIDELINES.md (v2.0.0)
 - Chat hierarchy: governance/systems/chat-hierarchy.md
 - Override boundaries: governance/override-boundaries.md
