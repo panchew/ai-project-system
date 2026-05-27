@@ -311,14 +311,43 @@ def print_help():
     print("""ai-project-daemon - CLI Daemon Process & Control Suite
 
 Usage:
-  ai-project-daemon start   - Starts the background daemon process
-  ai-project-daemon stop    - Stops the running background daemon process
-  ai-project-daemon status  - Displays the running status of the daemon
-  ai-project-daemon logs    - Outputs the background daemon logs
-  ai-project-daemon --test  - Runs the embedded test suite
+  ai-project-daemon [--project-root <path>] start    - Starts the background daemon process
+  ai-project-daemon [--project-root <path>] stop     - Stops the running background daemon process
+  ai-project-daemon [--project-root <path>] status   - Displays the running status of the daemon
+  ai-project-daemon [--project-root <path>] logs     - Outputs the background daemon logs
+  ai-project-daemon --test                            - Runs the embedded test suite
+
+Options:
+  --project-root <path>   Override the project root directory (default: parent of bin/)
+                          Used when the daemon is run from a governance submodule,
+                          e.g. governance/bin/ai-project-daemon --project-root .
 """)
 
+def apply_project_root_override():
+    """Parses --project-root from sys.argv and overrides globals if provided.
+
+    If --project-root <path> is found, it is consumed from argv and the
+    global path constants are recalculated against the given root.
+    """
+    global PROJECT_ROOT, LOCK_FILE, LOG_FILE, QUEUE_DIR, EXECUTION_LOCK, ORCHESTRATOR_BIN
+    args = sys.argv[1:]
+    for i, arg in enumerate(args):
+        if arg == "--project-root" and i + 1 < len(args):
+            root = Path(args[i + 1]).resolve()
+            PROJECT_ROOT = root
+            LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "daemon.pid"
+            LOG_FILE = PROJECT_ROOT / ".ai-project" / "logs" / "daemon.log"
+            QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+            EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+            ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
+            # Consume the flag and its value from argv
+            del sys.argv[i + 1]
+            del sys.argv[i]
+            break
+
 def main():
+    apply_project_root_override()
+
     if len(sys.argv) < 2:
         print_help()
         sys.exit(1)
