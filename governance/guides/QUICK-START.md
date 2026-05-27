@@ -7,7 +7,9 @@ This guide walks you through creating your first Phase, Milestone, and Epic—fr
 > **Two execution modes available:** This guide teaches **manual mode** (copy-paste Chat Starters — no infrastructure needed).  
 > The system also supports **agentic mode** (file-driven autonomous cluster with Docker and daemon).  
 > See [`README.md`](../../README.md) for the agentic mode overview, or jump directly to the tools:  
-> `bin/ai-project-orchestrator`, `bin/ai-project-daemon`, `Dockerfile.sandbox`, `bin/verify-loop.sh`.
+> `bin/ai-project-orchestrator`, `bin/ai-project-daemon`, `Dockerfile.sandbox`, `bin/verify-loop.sh`.  
+> When using the daemon from a submodule consumer project, pass `--project-root .`:  
+> `governance/bin/ai-project-daemon --project-root . start`.
 
 ---
 

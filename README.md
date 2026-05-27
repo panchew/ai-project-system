@@ -390,9 +390,24 @@ HQ makes decision:
 - 👉 **[Quick Start Guide](governance/guides/QUICK-START.md)** — Learn the governance model by hand
 
 **Option 2: Go Autonomous — Agentic Mode**
-- Requires Docker. See [`Dockerfile.sandbox`](Dockerfile.sandbox) and [`bin/ai-project-daemon`](bin/ai-project-daemon)
-- Read Section 18 of [PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md) for cluster rules
-- Use [`bin/verify-loop.sh`](bin/verify-loop.sh) to test the Dev-QA loop
+
+Requires Docker. Each project runs its own daemon to watch its `.ai-project/queue/`:
+
+```bash
+# From the ai-project-system repo itself (no flag needed):
+bin/ai-project-daemon start
+
+# From a project that has governance as a submodule:
+cd ~/MyProject
+governance/bin/ai-project-daemon --project-root . start
+
+# Check status, stop:
+ai-project-daemon status
+ai-project-daemon stop
+```
+
+See [`bin/ai-project-daemon`](bin/ai-project-daemon) (daemon), [`Dockerfile.sandbox`](Dockerfile.sandbox) (sandbox), and [`bin/verify-loop.sh`](bin/verify-loop.sh) (test harness).  
+Read Section 18 of [PROJECT-SYSTEM-GUIDELINES.md](governance/PROJECT-SYSTEM-GUIDELINES.md) for cluster execution rules.
 
 **Option 3: Understand First, Then Practice**
 1. **Read governance**
