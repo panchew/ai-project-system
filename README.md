@@ -339,6 +339,74 @@ HQ makes decision:
 
 ---
 
+## Choosing an Execution Mode
+
+### How It Works
+
+You don't "set" a mode at the project level. **Each Epic picks its delivery mechanism** at launch time. They share the same planning (Phase → Milestone → Epic specs), same branch strategy, same review gates, and same merge process.
+
+```
+                         Epic E2.1 ──manual──→ Chat Starter → AI session
+                        /
+Milestone M2 spec ─────┤
+                        \
+                         Epic E2.2 ──agentic──→ trigger JSON → daemon + sandbox
+```
+
+### When to Use Manual Mode
+
+| Situation | Why |
+|-----------|-----|
+| **First Epic in a project** | No queue infrastructure set up yet; planning is still fluid |
+| **Exploratory / ambiguous work** | Tight human feedback loop is more efficient than automated retries |
+| **Debugging a complex issue** | You want to watch each step in the AI session |
+| **No Docker available** | Only Git is required |
+
+**How to launch:** Create an Epic Execution Chat Starter → copy-paste into an AI session → Epic mode executes → delivers notice as chat message.
+
+### When to Use Agentic Mode
+
+| Situation | Why |
+|-----------|-----|
+| **Repetitive Dev-QA cycles** | 3-attempt self-healing loop runs unattended |
+| **Standardized work** (docs, refactors, tests) | Clear DoD, low ambiguity, high automation value |
+| **24/7 execution** | Daemon polls queue continuously — drop a trigger file and walk away |
+| **Multi-project scale** | Each project runs its own daemon independently |
+
+**How to launch:** Write a JSON trigger file into `.ai-project/queue/` → daemon detects it → orchestrator runs Dev-QA loop → result written back to queue.
+
+### Switching Mid-Project
+
+There is no switch. Both mechanisms work simultaneously:
+
+```bash
+# Project structure — both modes coexist
+my-project/
+├── .ai-project/queue/
+│   ├── 04_epic.json          ← agentic trigger (daemon processes this)
+│   └── readme.txt            ← ignored (not .json)
+├── .ai-project/queue/06_epic.json   ← another agentic trigger
+├── docs/phases/
+│   └── P1-M2-E2.3__spec__...       ← also launched manually via Chat Starter
+└── governance/bin/ai-project-daemon --project-root . start   ← daemon running
+```
+
+- Daemon **on** → agentic triggers get processed; manual Chat Starters still work.
+- Daemon **off** → agentic triggers sit in queue (processed when daemon restarts); manual mode unaffected.
+- You can even launch the **same Epic both ways** — but don't. Pick one per Epic.
+
+### Decision Flow
+
+```
+Is Docker available and configured?
+├── NO  → Use manual mode (Chat Starter)
+└── YES → Is the Epic's work well-defined with clear DoD?
+          ├── NO  → Use manual mode (tighter feedback)
+          └── YES → Consider agentic mode (trigger file + daemon)
+```
+
+---
+
 ## System vs Traditional PM
 
 | Traditional Project Management | AI Project System |
