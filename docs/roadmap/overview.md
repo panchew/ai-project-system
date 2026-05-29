@@ -109,16 +109,53 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Future
 
-### P4 – Unplanned *(Open for Discussion)*
+### P4 – Team Collaboration & Artifact-Driven Communication *(Planned)*
 
-**Goal**: TBD — options under consideration:
+**Goal**: Extend the AI Project System from solo developer execution to full team collaboration, with artifact-driven communication, role-based authorization, and explicit production deployment gates.
 
-1. **System Operations** — Monitor, observe, and refine the autonomous cluster built in P3; create runbooks, dashboards, and operational maturity.
-2. **Public Release** — Polish documentation, create reference example projects, prepare community contribution model per original roadmap vision.
-3. **Team Collaboration** — Extend the system for multi-contributor workflows, access controls, shared contexts, multi-agent orchestration.
-4. **Other** — As directed by project needs.
+**Status**: Planned (design spec complete 2026-05-29, awaiting implementation decision)
 
-**Status**: Not started. Awaiting HQ Chat direction.
+**Scope** (3 pillars):
+1. **P4.1 – Artifact-Driven Communication** (Complete ✓)
+   - Canonical artifact formats: Completion Notice, Review Decision, Delivery Notice
+   - Predictable hand-offs between chats (no manual copy-paste)
+   - YAML frontmatter for programmatic parsing + markdown body for readability
+   - Manual mode: copy-paste artifacts between chats; Agentic mode: route via queue system
+   - CFO audit trail: all project progress visible via artifacts
+
+2. **P4.2 – Bugfix Epic Workflow** (Complete ✓)
+   - Lightweight path for unplanned, time-sensitive issues
+   - Bypass Milestone planning ceremony; direct to HQ Chat approval
+   - Expedited 4-hour SLA for Completion Notice review
+   - Production deployment gate: CFO must authorize all prod deploys
+   - Post-mortems for Critical/High severity bugfixes
+
+3. **P4.3 – Roles, Authorization & Team Governance** (Complete ✓)
+   - 7 named roles: CFO, HQ Agent, Phase Lead, Milestone Agent, Epic Agent, Reviewer, Contributor
+   - Explicit decision authorities and constraints (decision matrix)
+   - Delegation hierarchy: decisions flow down, escalations flow up
+   - Async-first communication norms
+   - Production deployment gate: CFO explicit approval required
+   - Gradual autonomy: manual → agentic → full autonomy
+
+**Key Deliverables**:
+- ✅ `governance/systems/artifact-communication-protocol.md` — Canonical artifact schemas & workflows
+- ✅ `governance/templates/completion-notice-epic.md` — Completion Notice template
+- ✅ `governance/templates/review-decision.md` — Review Decision template
+- ✅ `governance/templates/delivery-notice.md` — Delivery Notice template
+- ✅ `governance/EPIC-EXECUTION-CHAT-STARTER.md` (updated) — References Completion Notice artifact requirement
+- ✅ `governance/systems/milestone-execution-chat-starter.md` (updated) — Explains Completion Notice handling and aggregation
+- ✅ `governance/systems/bugfix-epic-workflow.md` — Bugfix Epic workflow with expedited SLA & production gate
+- ✅ `governance/systems/roles-authorization-team-governance.md` — Role definitions, decision matrices, authorization rules, escalation paths
+
+**Next Steps**:
+- Implement artifact parsing and routing in agentic mode daemon
+- Create integration tests for multi-artifact workflows (Planning → Completion → Review → Delivery)
+- Create team collaboration example project (3-person team, 2-3 concurrent Epics)
+- Update HQ Chat Starter to reference new artifact system
+- Document CFO dashboard/briefing view (aggregating artifacts from all projects)
+
+**Status**: Not started (design complete, awaiting implementation).
 
 ---
 
@@ -136,9 +173,12 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 All planned phases (P1, P2, P3) are **completed and consolidated to master**.
 
-No phase is currently active. The project is at a decision point: define and scope **Phase 4**.
+**Phase 4** design is complete (P4.1, P4.2, P4.3). Implementation awaiting decision.
+
+The project is at a checkpoint: P4 has been defined. Next decision: implement P4 or define P5?
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
 - [`docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/`](../phases/P2__Adoption_Architecture_and_Multi_Project_Support/)
 - [`docs/phases/P3__Agentic_Execution_Model_Maturity/`](../phases/P3__Agentic_Execution_Model_Maturity/)
+- P4 governance docs (see roadmap above)
