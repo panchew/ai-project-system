@@ -18,7 +18,7 @@ These schemas are defined programmatically in `lib/artifact_schemas.py` and enfo
 | `artifact_type` | `string` | Yes | Must be `"completion_notice"`. | Exact match |
 | `artifact_version` | `string` | Yes | Artifact format version (e.g., `"1.0"`). | Auto-coerced to string |
 | `timestamp` | `iso8601` | Yes | ISO-8601 UTC timestamp of creation. | `YYYY-MM-DDTHH:MM:SSZ` |
-| `issuer_chat` | `string` | Yes | Source chat (e.g., `"Epic Agent (P4-M1-E1.1)"`). | String type |
+| `issuer_chat` | `string` | Yes | Source chat (e.g., `"Epic Agent (P4-M14-E14.1)"`). | String type |
 | `issuer_role` | `string` | Yes | Creator's role (e.g., `"Epic Agent"`). | String type |
 | `status` | `string` | Yes | Must be `"ready_for_review"`. | Exact match |
 | `epic_id` | `string` | Yes | Target Epic ID. | Format: `P#-M#-E#.#` or `B#.#` |
@@ -57,7 +57,7 @@ The `pr_details` dictionary must contain:
 | `artifact_type` | `string` | Yes | Must be `"review_decision"`. | Exact match |
 | `artifact_version` | `string` | Yes | Artifact format version (e.g., `"1.0"`). | Auto-coerced to string |
 | `timestamp` | `iso8601` | Yes | ISO-8601 UTC timestamp of review decision. | `YYYY-MM-DDTHH:MM:SSZ` |
-| `issuer_chat` | `string` | Yes | Source chat (e.g., `"Milestone Agent (P4-M1)"`). | String type |
+| `issuer_chat` | `string` | Yes | Source chat (e.g., `"Milestone Agent (P4-M14)"`). | String type |
 | `issuer_role` | `string` | Yes | Creator's role (e.g., `"Milestone Agent"`). | String type |
 | `decision` | `string` | Yes | Decision. | Must be `"accept"` or `"reject"` |
 | `epic_id` | `string` | No | Reference Epic ID (optional at milestone level).| Format: `P#-M#-E#.#` or `B#.#` |
@@ -88,7 +88,7 @@ The `authorization` dictionary must contain:
 | `artifact_type` | `string` | Yes | Must be `"delivery_notice"`. | Exact match |
 | `artifact_version` | `string` | Yes | Artifact format version (e.g., `"1.0"`). | Auto-coerced to string |
 | `timestamp` | `iso8601` | Yes | ISO-8601 UTC timestamp of delivery. | `YYYY-MM-DDTHH:MM:SSZ` |
-| `issuer_chat` | `string` | Yes | Source chat (e.g., `"Epic Agent (P4-M1-E1.1)"`). | String type |
+| `issuer_chat` | `string` | Yes | Source chat (e.g., `"Epic Agent (P4-M14-E14.1)"`). | String type |
 | `issuer_role` | `string` | Yes | Creator's role (e.g., `"Epic Agent"`). | String type |
 | `status` | `string` | Yes | Must be `"delivered"`. | Exact match |
 | `epic_id` | `string` | No | Target Epic reference ID. | Format: `P#-M#-E#.#` or `B#.#` |

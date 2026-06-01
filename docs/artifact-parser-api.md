@@ -80,15 +80,15 @@ Initializes an `ArtifactParser` instance with empty in-memory indices.
 - **`get_artifact_by_epic(epic_id: str, artifact_type: Optional[str] = None) -> Optional[Artifact]`**
   Retrieves the latest parsed artifact for a specific epic ID.
   - **Parameters:**
-    - `epic_id` - Target epic reference (e.g., `P4-M1-E1.1` or `B1.1`).
+    - `epic_id` - Target epic reference (e.g., `P4-M14-E14.1` or `B1.1`).
     - `artifact_type` - Optional filter for artifact type.
   - **Returns:** The latest matching `Artifact`, or `None` if not found.
-
+ 
 - **`get_artifacts_by_epic(epic_id: str) -> List[Artifact]`**
   Retrieves all parsed artifacts for a specific epic ID, sorted with newest first.
-
+ 
 - **`get_artifact_by_milestone(milestone_id: str, artifact_type: Optional[str] = None) -> Optional[Artifact]`**
-  Retrieves the latest parsed artifact for a specific milestone ID (e.g., `P4-M1`).
+  Retrieves the latest parsed artifact for a specific milestone ID (e.g., `P4-M14`).
 
 - **`get_artifacts_by_milestone(milestone_id: str) -> List[Artifact]`**
   Retrieves all parsed artifacts for a specific milestone ID, sorted with newest first.
@@ -123,11 +123,11 @@ parser = ArtifactParser()
 
 try:
     # Parse a single artifact file
-    artifact = parser.parse_file("/path/to/artifacts/completion-notices/2026-05-29__P4-M1-E1.1__completion_notice.md")
+    artifact = parser.parse_file("/path/to/artifacts/completion-notices/2026-05-29__P4-M14-E14.1__completion_notice.md")
     print(f"Parsed {artifact.artifact_type} for {artifact.get_epic_id()}")
     
     # Retrieve using index
-    latest_cn = parser.get_artifact_by_epic("P4-M1-E1.1", artifact_type="completion_notice")
+    latest_cn = parser.get_artifact_by_epic("P4-M14-E14.1", artifact_type="completion_notice")
     if latest_cn:
         print(f"Latest status: {latest_cn.get_status()}")
         
