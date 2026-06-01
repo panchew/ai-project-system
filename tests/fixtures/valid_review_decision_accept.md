@@ -32,4 +32,4 @@ Excellent work. The parser implementation is spec-compliant, tests are comprehen
 You are authorized to merge this work. Follow these steps:
 1. Ensure PR #1 passes all CI/CD checks
 2. Merge PR #1 to milestone/M1 using squash-and-merge strategy
-3. Delete the epic/P4-M1-E1.1 branch after merge
+3. Delete the epic/P4-M14-E14.1 branch after merge
