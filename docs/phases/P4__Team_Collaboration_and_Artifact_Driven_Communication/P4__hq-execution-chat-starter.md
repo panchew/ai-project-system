@@ -14,18 +14,18 @@ PHASE OVERVIEW
 Phase P4 transforms the AI Project System from a solo-developer framework (P1-P3) into a team-capable governance system.
 
 **Three Pillars:**
-1. **P4.1 – Artifact-Driven Communication** (Milestones M1, partial M2)
+1. **P4.1 – Artifact-Driven Communication** (Milestones M14, partial M15)
    - Canonical artifact formats: Completion Notice, Review Decision, Delivery Notice
    - Daemon routing between chats
    - Integration tests for multi-artifact workflows
 
-2. **P4.2 – Bugfix Epic Workflow** (Milestones M2)
+2. **P4.2 – Bugfix Epic Workflow** (Milestones M15)
    - Expedited path for unplanned production issues
    - HQ Chat creation of minimal Bugfix Epic
    - 4-hour SLA for Completion Notice review
    - Production deployment gate (CFO authorization required)
 
-3. **P4.3 – Roles & Authorization** (Milestone M3, M4)
+3. **P4.3 – Roles & Authorization** (Milestone M16, M17)
    - Team collaboration example project
    - Documentation for roles, decision matrices, escalation paths
    - CFO dashboard and tools
@@ -44,24 +44,24 @@ PLANNING INSTRUCTIONS
 
 Produce 4 Milestone Execution Chat Starters:
 
-1. **Milestone M1: Artifact System Implementation**
-   - 3 Epics (E1.1, E1.2, E1.3)
+1. **Milestone M14: Artifact System Implementation**
+   - 3 Epics (E14.1, E14.2, E14.3)
    - Focus: Artifact parsing, daemon routing, integration tests
-   - Spec: `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M1-E1.1__spec__...`
+   - Spec: `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14-E14.1__spec__...`
    - Duration: 2-3 weeks
 
-2. **Milestone M2: Bugfix Epic Workflow**
-   - 3 Epics (E2.1, E2.2, E2.3)
+2. **Milestone M15: Bugfix Epic Workflow**
+   - 3 Epics (E15.1, E15.2, E15.3)
    - Focus: Bugfix handling, expedited SLA, production gate
    - Duration: 1-2 weeks
 
-3. **Milestone M3: Team Collaboration Example**
-   - 2 Epics (E3.1, E3.2)
+3. **Milestone M16: Team Collaboration Example**
+   - 2 Epics (E16.1, E16.2)
    - Focus: Example project, documentation
    - Duration: 3-5 days
 
-4. **Milestone M4: Bug Fixes & Polish**
-   - 2 Epics (E4.1, E4.2)
+4. **Milestone M17: Bug Fixes & Polish**
+   - 2 Epics (E17.1, E17.2)
    - Focus: Daemon path fix, starters update, CFO dashboard
    - Duration: 2-3 days
 
@@ -71,13 +71,13 @@ COMPLETION REQUIREMENTS
 - All 11 Epics specified with full requirements
 - Acceptance criteria clear
 - Dependencies documented
-- Ready to begin M1.E1.1 execution
+- Ready to begin M14.E14.1 execution
 
 NEXT STEPS
 
 1. Accept this HQ Chat Starter
-2. Produce Milestone M1 Execution Chat Starter (use template)
-3. Begin Epic E1.1 execution once M1 accepted by CFO
+2. Produce Milestone M14 Execution Chat Starter (use template)
+3. Begin Epic E14.1 execution once M14 accepted by CFO
 
 REFERENCE
 

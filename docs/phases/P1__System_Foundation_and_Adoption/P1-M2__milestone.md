@@ -3,8 +3,8 @@ project: ai-project-system
 phase: P1
 milestone: M2
 type: milestone
-status: fully_closed
-last_updated: 2026-02-23
+status: planned
+last_updated: 2026-01-18
 ---
 
 # Milestone M2 — Execution Ergonomics & Validation
@@ -93,28 +93,3 @@ Milestone M2 is considered complete when:
 Milestone M2 prioritizes **human-system interaction quality** over feature expansion.
 
 Progress under this milestone is expected to be deliberate and paced, with changes driven exclusively by real usage feedback.
-
----
-
-## Administrative Note (2026-02-23)
-
-**Milestone M2 Status:** Fully Closed
-
-**Epics Completed:**
-- ✅ E2.1 — Human Review, Acceptance & Review Seals (PR #3, merged 2026-01-23)
-- ✅ E2.2 — Human-Language Review Capture & Structured Artifact Generation (PR #4, merged 2026-01-24)
-
-**Epics Not Executed:**
-- ❌ E2.3 — Project Tracker Adoption & Usage Conventions (intentionally not executed)
-
-**E2.3 Decision:**
-
-Epic E2.3 "Project Tracker Adoption & Usage Conventions" was planned in the original M2 spec but was not executed. This Epic was intentionally dropped based on the following assessment:
-
-- **E1.1 already addressed** project tracker integration fundamentals (PROJECT-TRACKER-INTEGRATION-SYSTEM.md)
-- **No practical need emerged** during M2 execution for additional tracker adoption conventions
-- **M2 goals achieved** without E2.3 (execution ergonomics and validation were satisfied by E2.1 and E2.2)
-
-Milestone M2 was consolidated to Phase P1 via PR #6 (merged 2026-01-25) with E2.1 and E2.2 complete. Future project tracker needs can be addressed in later phases if they emerge.
-
-**Consolidation:** PR #6 "Milestone M2 → Phase P1: Execution Ergonomics & Validation" (merged 2026-01-25)

@@ -32,10 +32,10 @@ This system eliminates the chaos of ephemeral chats and lost context.
 **Status**: Fully Closed (Started 2026-01-14, Completed 2026-04-18)
 
 **Milestones**:
-- **M1** – Genesis & Integration Baseline *(Completed)*
-- **M2** – Execution Ergonomics & Validation *(Completed)*
-- **M3** – Governance Distribution & Adoption *(Completed)*
-- **M4** – Adoption Readiness & Practical Enablement *(Completed)*
+- **M14** – Genesis & Integration Baseline *(Completed)*
+- **M15** – Execution Ergonomics & Validation *(Completed)*
+- **M16** – Governance Distribution & Adoption *(Completed)*
+- **M17** – Adoption Readiness & Practical Enablement *(Completed)*
 - **M5** – System Refinement from Real Usage *(Completed)*
 
 **Key Deliverables**:
