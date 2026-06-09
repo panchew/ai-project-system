@@ -40,3 +40,6 @@ htmlcov/
 # Temporary files
 *.tmp
 *.bak
+
+# Runtime logs (daemon, orchestrator)
+.ai-project/logs/

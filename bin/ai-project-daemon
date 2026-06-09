@@ -1,0 +1,626 @@
+#!/usr/bin/env python3
+import os
+import sys
+import signal
+import time
+import errno
+import tempfile
+import unittest
+import io
+import subprocess
+from pathlib import Path
+
+# Paths
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "daemon.pid"
+LOG_FILE = PROJECT_ROOT / ".ai-project" / "logs" / "daemon.log"
+QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
+POLL_INTERVAL = 2
+
+def check_pid_alive(pid):
+    """Check if process with pid is running."""
+    if pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+        return True
+    except OSError as err:
+        if err.errno == errno.EPERM:
+            return True
+        elif err.errno == errno.ESRCH:
+            return False
+        else:
+            raise
+
+def get_daemon_pid():
+    """Reads and returns the PID from the lock file if it exists."""
+    if not LOCK_FILE.exists():
+        return None
+    try:
+        with open(LOCK_FILE, 'r') as f:
+            content = f.read().strip()
+        if not content:
+            return None
+        return int(content)
+    except Exception:
+        return None
+
+def handle_signal(signum, frame):
+    """Signal handler for graceful shutdown."""
+    print(f"\n[!] Daemon received signal {signum}. Cleaning up and exiting...", flush=True)
+    if LOCK_FILE.exists():
+        try:
+            LOCK_FILE.unlink()
+            print("[✓] Daemon PID lockfile removed successfully.", flush=True)
+        except Exception as e:
+            print(f"[!] Failed to remove PID lockfile: {e}", file=sys.stderr, flush=True)
+    sys.exit(0)
+
+def daemonize():
+    """Double-fork daemonization with pipe synchronization."""
+    sys.stdout.flush()
+    sys.stderr.flush()
+
+    pipe_r, pipe_w = os.pipe()
+
+    try:
+        pid = os.fork()
+        if pid > 0:
+            # First parent
+            os.close(pipe_w)
+            try:
+                grandchild_bytes = os.read(pipe_r, 16)
+                if grandchild_bytes:
+                    grandchild_pid = int(grandchild_bytes.decode().strip())
+                    print(f"[✓] Daemon started (PID: {grandchild_pid})")
+                    sys.exit(0)
+                else:
+                    print("[!] Daemon startup failed during initialization.", file=sys.stderr)
+                    sys.exit(1)
+            except Exception as e:
+                print(f"[!] Daemon startup failed: {e}", file=sys.stderr)
+                sys.exit(1)
+    except OSError as e:
+        sys.stderr.write(f"Fork #1 failed: {e}\n")
+        sys.exit(1)
+
+    # First child
+    os.close(pipe_r)
+    os.setsid()
+    os.umask(0)
+
+    try:
+        pid = os.fork()
+        if pid > 0:
+            sys.exit(0)
+    except OSError as e:
+        sys.stderr.write(f"Fork #2 failed: {e}\n")
+        sys.exit(1)
+
+    # Second child (Daemon)
+    LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
+    LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+
+    my_pid = os.getpid()
+
+    # Write PID to lock file
+    try:
+        with open(LOCK_FILE, 'w') as f:
+            f.write(str(my_pid))
+    except Exception as e:
+        sys.exit(1)
+
+    # Notify parent of the PID
+    try:
+        os.write(pipe_w, f"{my_pid}".encode())
+    except Exception:
+        pass
+    finally:
+        os.close(pipe_w)
+
+    # Redirect standard streams
+    try:
+        log_fd = os.open(LOG_FILE, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
+        dev_null_fd = os.open(os.devnull, os.O_RDONLY)
+        os.dup2(dev_null_fd, 0)
+        os.dup2(log_fd, 1)
+        os.dup2(log_fd, 2)
+    except Exception:
+        sys.exit(1)
+
+def check_execution_locked():
+    """Checks if there is an active execution lock and if the process is alive."""
+    if not EXECUTION_LOCK.exists():
+        return False
+    try:
+        with open(EXECUTION_LOCK, 'r') as f:
+            content = f.read().strip()
+        if not content:
+            return False
+        pid = int(content)
+        if pid > 0:
+            return check_pid_alive(pid)
+    except Exception:
+        pass
+    return False
+
+def process_queue():
+    """Polls the queue directory, orders active triggers, and schedules execution."""
+    if not QUEUE_DIR.exists():
+        return
+
+    try:
+        files = [f.name for f in QUEUE_DIR.iterdir() if f.is_file() and f.suffix == '.json']
+    except Exception as e:
+        print(f"[ERROR] Failed to list queue directory: {e}", flush=True)
+        return
+
+    if not files:
+        return
+
+    # Order active JSON triggers lexicographically
+    files.sort()
+
+    for file_name in files:
+        # Respect execution lock
+        if check_execution_locked():
+            print(f"[INFO] Active execution lock blocks secondary execution. Deferring {file_name}.", flush=True)
+            break
+
+        print(f"[INFO] Discovered trigger: {file_name}. Invoking orchestrator...", flush=True)
+        cmd = [sys.executable, str(ORCHESTRATOR_BIN), file_name]
+        try:
+            # High-integrity crash isolation: run as subprocess, capture outputs cleanly
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                bufsize=1,
+                cwd=str(PROJECT_ROOT)
+            )
+
+            # Stream outputs prefix-redirected with [ORCHESTRATOR] markers
+            for line in process.stdout:
+                print(f"[ORCHESTRATOR] {line.rstrip()}", flush=True)
+
+            process.wait()
+            rc = process.returncode
+            if rc == 0:
+                print(f"[INFO] Orchestrator successfully completed trigger: {file_name}", flush=True)
+            else:
+                print(f"[WARNING] Orchestrator exited with code {rc} for trigger: {file_name}", flush=True)
+        except Exception as e:
+            # Crash isolation: orchestrator failures do not stop the daemon
+            print(f"[ERROR] Subprocess invocation of orchestrator failed for trigger {file_name}: {e}", flush=True)
+
+def run_daemon_loop():
+    """Runs the background loop of the daemon."""
+    # Register signal handlers for clean lock file removal
+    signal.signal(signal.SIGINT, handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
+
+    print(f"[*] Daemon loop started (PID: {os.getpid()})", flush=True)
+    try:
+        heartbeat_counter = 0
+        while True:
+            process_queue()
+            
+            # Print heartbeat every 15 iterations (approx 30 seconds with 2s poll interval)
+            if heartbeat_counter % 15 == 0:
+                print("[INFO] Daemon heartbeat...", flush=True)
+            heartbeat_counter += 1
+            
+            time.sleep(POLL_INTERVAL)
+    except Exception as e:
+        print(f"[!] Unexpected error in daemon loop: {e}", file=sys.stderr, flush=True)
+        if LOCK_FILE.exists():
+            try:
+                LOCK_FILE.unlink()
+            except Exception:
+                pass
+        sys.exit(1)
+
+def cmd_start():
+    pid = get_daemon_pid()
+    if pid is not None and check_pid_alive(pid):
+        print(f"[!] Daemon is already running (PID: {pid}).", file=sys.stderr)
+        sys.exit(1)
+    elif pid is not None:
+        print(f"[!] Warning: Stale lockfile found with dead PID {pid}. Recovering and deleting stale lock...", file=sys.stderr)
+        try:
+            LOCK_FILE.unlink()
+        except Exception:
+            pass
+
+    print("[*] Starting background daemon...")
+    daemonize()
+    run_daemon_loop()
+
+def cmd_stop():
+    pid = get_daemon_pid()
+    if pid is None or not check_pid_alive(pid):
+        if LOCK_FILE.exists():
+            print("[!] Daemon is not running, but stale lockfile found. Cleaning up lockfile.", file=sys.stderr)
+            try:
+                LOCK_FILE.unlink()
+            except Exception:
+                pass
+            sys.exit(0)
+        else:
+            print("[!] Daemon is not running.", file=sys.stderr)
+            sys.exit(1)
+
+    print(f"[*] Stopping daemon (PID: {pid})...")
+    try:
+        os.kill(pid, signal.SIGTERM)
+    except OSError as e:
+        print(f"[!] Failed to send SIGTERM to daemon: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # Wait for the daemon to terminate and clean up its lock file (up to 5 seconds)
+    stopped = False
+    for _ in range(50):
+        if not check_pid_alive(pid) and not LOCK_FILE.exists():
+            stopped = True
+            break
+        time.sleep(0.1)
+
+    if stopped:
+        print("[✓] Daemon stopped.")
+        sys.exit(0)
+    else:
+        print("[!] Daemon did not stop within 5 seconds. Forcing shutdown...", file=sys.stderr)
+        try:
+            os.kill(pid, signal.SIGKILL)
+            if LOCK_FILE.exists():
+                LOCK_FILE.unlink()
+            print("[✓] Daemon force killed.")
+            sys.exit(0)
+        except Exception as e:
+            print(f"[!] Failed to force kill daemon: {e}", file=sys.stderr)
+            sys.exit(1)
+
+def cmd_status():
+    pid = get_daemon_pid()
+    if pid is not None and check_pid_alive(pid):
+        print(f"Daemon is running (PID: {pid})")
+        sys.exit(0)
+    elif pid is not None:
+        print("Daemon is dead but stale PID lock file exists.")
+        sys.exit(0)
+    else:
+        print("Daemon is stopped")
+        sys.exit(0)
+
+def cmd_logs():
+    if not LOG_FILE.exists():
+        print("[*] No log file found.")
+        sys.exit(0)
+    try:
+        with open(LOG_FILE, 'r') as f:
+            print(f.read(), end="")
+        sys.exit(0)
+    except Exception as e:
+        print(f"[!] Failed to read log file: {e}", file=sys.stderr)
+        sys.exit(1)
+
+def print_help():
+    print("""ai-project-daemon - CLI Daemon Process & Control Suite
+
+Usage:
+  ai-project-daemon [--project-root <path>] start    - Starts the background daemon process
+  ai-project-daemon [--project-root <path>] stop     - Stops the running background daemon process
+  ai-project-daemon [--project-root <path>] status   - Displays the running status of the daemon
+  ai-project-daemon [--project-root <path>] logs     - Outputs the background daemon logs
+  ai-project-daemon --test                            - Runs the embedded test suite
+
+Options:
+  --project-root <path>   Override the project root directory (default: parent of bin/)
+                          Used when the daemon is run from a governance submodule,
+                          e.g. governance/bin/ai-project-daemon --project-root .
+""")
+
+def apply_project_root_override():
+    """Parses --project-root from sys.argv and overrides globals if provided.
+
+    If --project-root <path> is found, it is consumed from argv and the
+    global path constants are recalculated against the given root.
+    """
+    global PROJECT_ROOT, LOCK_FILE, LOG_FILE, QUEUE_DIR, EXECUTION_LOCK, ORCHESTRATOR_BIN
+    args = sys.argv[1:]
+    for i, arg in enumerate(args):
+        if arg == "--project-root" and i + 1 < len(args):
+            root = Path(args[i + 1]).resolve()
+            PROJECT_ROOT = root
+            LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "daemon.pid"
+            LOG_FILE = PROJECT_ROOT / ".ai-project" / "logs" / "daemon.log"
+            QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+            EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+            ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
+            # Consume the flag and its value from argv
+            del sys.argv[i + 1]
+            del sys.argv[i]
+            break
+
+def main():
+    apply_project_root_override()
+
+    if len(sys.argv) < 2:
+        print_help()
+        sys.exit(1)
+
+    command = sys.argv[1]
+
+    if command == "--test":
+        from unittest.mock import patch, MagicMock
+
+        class TestDaemon(unittest.TestCase):
+            def setUp(self):
+                global PROJECT_ROOT, LOCK_FILE, LOG_FILE, QUEUE_DIR, EXECUTION_LOCK, ORCHESTRATOR_BIN
+                self.temp_dir = tempfile.TemporaryDirectory()
+                self.project_root_path = Path(self.temp_dir.name)
+                
+                self.orig_project_root = PROJECT_ROOT
+                self.orig_lock_file = LOCK_FILE
+                self.orig_log_file = LOG_FILE
+                self.orig_queue_dir = QUEUE_DIR
+                self.orig_execution_lock = EXECUTION_LOCK
+                self.orig_orchestrator_bin = ORCHESTRATOR_BIN
+                
+                PROJECT_ROOT = self.project_root_path
+                LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "daemon.pid"
+                LOG_FILE = PROJECT_ROOT / ".ai-project" / "logs" / "daemon.log"
+                QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
+                EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+                ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
+                
+                LOCK_FILE.parent.mkdir(parents=True, exist_ok=True)
+                LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
+                QUEUE_DIR.mkdir(parents=True, exist_ok=True)
+                EXECUTION_LOCK.parent.mkdir(parents=True, exist_ok=True)
+
+            def tearDown(self):
+                global PROJECT_ROOT, LOCK_FILE, LOG_FILE, QUEUE_DIR, EXECUTION_LOCK, ORCHESTRATOR_BIN
+                PROJECT_ROOT = self.orig_project_root
+                LOCK_FILE = self.orig_lock_file
+                LOG_FILE = self.orig_log_file
+                QUEUE_DIR = self.orig_queue_dir
+                EXECUTION_LOCK = self.orig_execution_lock
+                ORCHESTRATOR_BIN = self.orig_orchestrator_bin
+                self.temp_dir.cleanup()
+
+            def test_get_daemon_pid_none(self):
+                self.assertIsNone(get_daemon_pid())
+
+            def test_get_daemon_pid_valid(self):
+                with open(LOCK_FILE, 'w') as f:
+                    f.write("12345")
+                self.assertEqual(get_daemon_pid(), 12345)
+
+            def test_get_daemon_pid_invalid(self):
+                with open(LOCK_FILE, 'w') as f:
+                    f.write("abc")
+                self.assertIsNone(get_daemon_pid())
+
+            @patch('os.kill')
+            def test_check_pid_alive_running(self, mock_kill):
+                mock_kill.return_value = None
+                self.assertTrue(check_pid_alive(12345))
+                mock_kill.assert_called_once_with(12345, 0)
+
+            @patch('os.kill')
+            def test_check_pid_alive_dead(self, mock_kill):
+                mock_kill.side_effect = OSError(errno.ESRCH, "No such process")
+                self.assertFalse(check_pid_alive(12345))
+
+            @patch('os.kill')
+            def test_check_pid_alive_permission(self, mock_kill):
+                mock_kill.side_effect = OSError(errno.EPERM, "Operation not permitted")
+                self.assertTrue(check_pid_alive(12345))
+
+            @patch('os.fork')
+            @patch('os.setsid')
+            @patch('os.umask')
+            @patch('os.open')
+            @patch('os.dup2')
+            @patch('os.close')
+            @patch('os.write')
+            @patch('os.read')
+            def test_daemonize_parent(self, mock_read, mock_write, mock_close, mock_dup2, mock_open, mock_umask, mock_setsid, mock_fork):
+                mock_fork.return_value = 5555
+                mock_read.return_value = b"5556"
+                
+                with self.assertRaises(SystemExit) as cm:
+                    daemonize()
+                self.assertEqual(cm.exception.code, 0)
+
+            @patch('os.fork')
+            @patch('os.setsid')
+            @patch('os.umask')
+            @patch('os.open')
+            @patch('os.dup2')
+            @patch('os.close')
+            @patch('os.write')
+            @patch('os.read')
+            def test_daemonize_child(self, mock_read, mock_write, mock_close, mock_dup2, mock_open, mock_umask, mock_setsid, mock_fork):
+                mock_fork.side_effect = [0, 0]
+                daemonize()
+                self.assertTrue(LOCK_FILE.exists())
+                with open(LOCK_FILE, 'r') as f:
+                    content = f.read()
+                self.assertEqual(int(content), os.getpid())
+
+            @patch('sys.exit')
+            def test_cmd_status_stopped(self, mock_exit):
+                with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+                    cmd_status()
+                    output = mock_stdout.getvalue()
+                    self.assertIn("Daemon is stopped", output)
+
+            @patch('sys.exit')
+            def test_cmd_status_running(self, mock_exit):
+                with open(LOCK_FILE, 'w') as f:
+                    f.write("99999")
+                with patch('os.kill') as mock_kill:
+                    mock_kill.return_value = None
+                    with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+                        cmd_status()
+                        output = mock_stdout.getvalue()
+                        self.assertIn("Daemon is running (PID: 99999)", output)
+
+            @patch('sys.exit')
+            def test_cmd_status_stale(self, mock_exit):
+                with open(LOCK_FILE, 'w') as f:
+                    f.write("99999")
+                with patch('os.kill') as mock_kill:
+                    mock_kill.side_effect = OSError(errno.ESRCH, "No such process")
+                    with patch('sys.stdout', new_callable=io.StringIO) as mock_stdout:
+                        cmd_status()
+                        output = mock_stdout.getvalue()
+                        self.assertIn("Daemon is dead but stale PID lock file exists", output)
+
+            @patch('sys.exit')
+            def test_cmd_stop_not_running(self, mock_exit):
+                def exit_side_effect(code=0):
+                    raise SystemExit(code)
+                mock_exit.side_effect = exit_side_effect
+                with self.assertRaises(SystemExit) as cm:
+                    cmd_stop()
+                self.assertEqual(cm.exception.code, 1)
+
+            @patch('sys.exit')
+            @patch('os.kill')
+            def test_cmd_stop_success(self, mock_kill, mock_exit):
+                def exit_side_effect(code=0):
+                    raise SystemExit(code)
+                mock_exit.side_effect = exit_side_effect
+
+                with open(LOCK_FILE, 'w') as f:
+                    f.write("88888")
+                
+                check_alive_mock = MagicMock(side_effect=[True, False])
+                
+                def kill_side_effect(pid, sig):
+                    if LOCK_FILE.exists():
+                        LOCK_FILE.unlink()
+                    return None
+                mock_kill.side_effect = kill_side_effect
+
+                with patch('__main__.check_pid_alive', check_alive_mock):
+                    with self.assertRaises(SystemExit) as cm:
+                        cmd_stop()
+                    self.assertEqual(cm.exception.code, 0)
+
+            def test_signal_handler(self):
+                with open(LOCK_FILE, 'w') as f:
+                    f.write("11111")
+                self.assertTrue(LOCK_FILE.exists())
+                with self.assertRaises(SystemExit):
+                    handle_signal(signal.SIGTERM, None)
+                self.assertFalse(LOCK_FILE.exists())
+
+            def test_queue_sorting_lexicographical(self):
+                # Create a few JSON files with varying prefix names
+                (QUEUE_DIR / "03_c.json").touch()
+                (QUEUE_DIR / "01_a.json").touch()
+                (QUEUE_DIR / "02_b.json").touch()
+                # Create a non-json file to ensure it's filtered out
+                (QUEUE_DIR / "readme.txt").touch()
+
+                # List files using the same logic as process_queue
+                files = [f.name for f in QUEUE_DIR.iterdir() if f.is_file() and f.suffix == '.json']
+                files.sort()
+                self.assertEqual(files, ["01_a.json", "02_b.json", "03_c.json"])
+
+            @patch('os.kill')
+            def test_lock_detection_active(self, mock_kill):
+                mock_kill.return_value = None
+                # Write running PID to EXECUTION_LOCK
+                EXECUTION_LOCK.parent.mkdir(parents=True, exist_ok=True)
+                with open(EXECUTION_LOCK, 'w') as f:
+                    f.write("12345")
+                self.assertTrue(check_execution_locked())
+                mock_kill.assert_called_once_with(12345, 0)
+
+            @patch('os.kill')
+            def test_lock_detection_inactive(self, mock_kill):
+                mock_kill.side_effect = OSError(errno.ESRCH, "No such process")
+                EXECUTION_LOCK.parent.mkdir(parents=True, exist_ok=True)
+                with open(EXECUTION_LOCK, 'w') as f:
+                    f.write("12345")
+                self.assertFalse(check_execution_locked())
+
+            def test_lock_detection_no_file(self):
+                if EXECUTION_LOCK.exists():
+                    EXECUTION_LOCK.unlink()
+                self.assertFalse(check_execution_locked())
+
+            @patch('subprocess.Popen')
+            @patch('sys.stdout', new_callable=io.StringIO)
+            def test_subprocess_management_and_logging(self, mock_stdout, mock_popen):
+                # Setup trigger
+                (QUEUE_DIR / "01_a.json").touch()
+
+                # Setup mock subprocess
+                mock_process = MagicMock()
+                mock_process.stdout = io.StringIO("Line 1 from orchestrator\nLine 2 from orchestrator\n")
+                mock_process.returncode = 0
+                mock_popen.return_value = mock_process
+
+                # Run process_queue
+                process_queue()
+
+                # Check Popen args
+                mock_popen.assert_called_once()
+                args, kwargs = mock_popen.call_args
+                self.assertIn(str(ORCHESTRATOR_BIN), args[0])
+                self.assertIn("01_a.json", args[0])
+
+                # Check stdout output has markers
+                output = mock_stdout.getvalue()
+                self.assertIn("[ORCHESTRATOR] Line 1 from orchestrator", output)
+                self.assertIn("[ORCHESTRATOR] Line 2 from orchestrator", output)
+                self.assertIn("[INFO] Orchestrator successfully completed trigger: 01_a.json", output)
+
+            @patch('subprocess.Popen')
+            @patch('sys.stdout', new_callable=io.StringIO)
+            def test_orchestrator_failure_crash_isolation(self, mock_stdout, mock_popen):
+                # Setup trigger
+                (QUEUE_DIR / "01_a.json").touch()
+
+                # Setup mock subprocess to raise an exception
+                mock_popen.side_effect = Exception("Subprocess crashed on start")
+
+                # Run process_queue - should not crash or raise exception
+                try:
+                    process_queue()
+                except Exception as e:
+                    self.fail(f"process_queue raised exception unexpectedly: {e}")
+
+                # Check error is logged and daemon continues
+                output = mock_stdout.getvalue()
+                self.assertIn("[ERROR] Subprocess invocation of orchestrator failed for trigger 01_a.json", output)
+
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestDaemon)
+        runner = unittest.TextTestRunner(verbosity=2)
+        result = runner.run(suite)
+        sys.exit(0 if result.wasSuccessful() else 1)
+
+    elif command == "start":
+        cmd_start()
+    elif command == "stop":
+        cmd_stop()
+    elif command == "status":
+        cmd_status()
+    elif command == "logs":
+        cmd_logs()
+    else:
+        print(f"[!] Unknown command: {command}", file=sys.stderr)
+        print_help()
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
