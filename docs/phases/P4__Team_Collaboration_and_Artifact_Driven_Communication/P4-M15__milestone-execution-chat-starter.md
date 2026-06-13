@@ -1,195 +1,275 @@
-# MILESTONE EXECUTION CHAT STARTER — P4-M15: Bugfix Epic Workflow
+# Milestone Execution Chat Starter — P4-M15
 
-MANDATORY CONTEXT PACKET
-
-Project: ai-project-system
-Phase: P4 — Team Collaboration and Artifact-Driven Communication
-Milestone: M15 — Bugfix Epic Implementation
-Status: Planning Milestone
-Governance: PROJECT-SYSTEM-GUIDELINES.md and AI-OPERATING-GUIDELINES.md enforced
-Execution Mode: Milestone planning (produces Epic Execution Chat Starters)
-Scope Rule: Create 3 Epic Execution Chat Starters for E15.1, E15.2, E15.3 only.
-
-MILESTONE OVERVIEW
-
-**Goal:** Implement expedited bugfix workflow with production deployment gate, 4-hour SLA for review, and post-mortem generation.
-
-**Deliverables:**
-- HQ Chat handler for bugfix issue detection and Epic creation
-- Escalation handler for SLA management
-- Post-mortem template and automation
-- Deployment Authorization artifact support
-- Integration with M14 artifact system
-
-**Dependencies:**
-- M14 (Artifact System) must be complete and integrated
-- Daemon and queue system from P3 (existing)
-- Artifact communication protocol (P4.1 design)
-
-**Duration:** 1-2 weeks
-
-EPIC STUBS (3 EPICS)
-
-### E15.1 – Bugfix Epic Creation in HQ Chat
-
-**Status:** Spec Complete (ready to execute)
-
-**Description:** Extend HQ Chat to evaluate production issues and create minimal Bugfix Epic specs with expedited authorization.
-
-**Key Requirements:**
-- Detect issue reports in HQ Chat messages
-- Evaluate severity (critical, high, medium, low)
-- Decide: Bugfix Epic vs. defer to next Phase
-- Create minimal Bugfix Epic spec (B#.# format)
-- Commit spec to `docs/bugfixes/B#.#__spec__...md`
-- Issue Epic Delivery Authorization directly (no Milestone intermediary)
-- Assign Bugfix ID and severity level
-
-**Deliverables:**
-- HQ Chat Handler for issue detection and evaluation
-- Bugfix Epic Creation Logic
-- Epic Delivery Authorization template
-- Documentation: HQ Agent decision flowchart
-
-**Spec:** `P4-M15-E15.1__spec__Bugfix_Epic_Creation_in_HQ_Chat.md`
+**Milestone:** P4-M15 — Cleanup and Salvage
+**Phase:** P4 — Team Collaboration and Artifact-Driven Communication
+**Project:** ai-project-system
+**Repository:** panchew/ai-project-system
+**Milestone Spec:** `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15__milestone-spec.md`
 
 ---
 
-### E15.2 – Expedited Review SLA & Production Gate
+## Governance References
 
-**Status:** Spec Complete (ready to execute)
+You are operating under the AI Project System governance framework as a **Milestone Chat**.
 
-**Description:** Track Completion Notices from bugfixes, enforce 4-hour SLA for review, and require CFO authorization before production deployment.
+**Authoritative governance documents:**
+- [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v3.0.0 (Effective: 2026-05-22)
+- [AI-OPERATING-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/AI-OPERATING-GUIDELINES.md) v2.0.0 (Effective: 2026-04-20)
 
-**Key Requirements:**
-- HQ Agent tracks Completion Notice arrival time
-- SLA clock: 4 hours from receipt to Review Decision
-- If SLA missed: escalate to CFO with urgency flag
-- Require Deployment Authorization artifact before prod deploy
-- CFO must explicitly approve/reject production deployment
-- No automatic merge-to-production without CFO authorization
-- Log all SLA decisions to audit trail
+**Governance hierarchy (for this session):**
+1. PROJECT-SYSTEM-GUIDELINES.md (highest authority)
+2. AI-OPERATING-GUIDELINES.md
+3. This Milestone Execution Chat Starter
+4. Milestone Spec (`P4-M15__milestone-spec.md`)
+5. Phase Execution Chat Starter (P4 re-instantiation, 2026-06-12) — authoritative on scope
+6. Decisions made during this session
+7. Chat messages (lowest authority)
 
-**Deliverables:**
-- SLA Tracker class in HQ Agent
-- Escalation handler for missed SLAs
-- Production Deployment Gate enforcement
-- Deployment Authorization artifact support
-- SLA monitoring dashboard (optional)
-
-**Spec:** `P4-M15-E15.2__spec__Expedited_Review_SLA_and_Production_Gate.md`
-
-**Depends On:** E15.1 (must identify bugfixes first)
-
----
-
-### E15.3 – Post-Mortem for Critical/High
-
-**Status:** Spec Complete (ready to execute)
-
-**Description:** Auto-generate post-mortem templates for Critical and High severity bugfixes, require root cause analysis, and commit to audit trail.
-
-**Key Requirements:**
-- Detect bugfix completion (Delivery Notice received)
-- Check severity level (Critical or High)
-- Auto-generate post-mortem template
-- Require: root cause analysis, resolution steps, prevention measures
-- Store post-mortem in `.ai-project/artifacts/bugfixes/`
-- Commit post-mortem to repository for audit trail
-- Report post-mortem completion to CFO dashboard
-
-**Deliverables:**
-- Post-Mortem Generator class
-- Post-Mortem artifact template
-- Storage and retrieval logic
-- Reporting to CFO dashboard
-
-**Spec:** `P4-M15-E15.3__spec__Post_Mortem_for_Critical_and_High_Bugfixes.md`
-
-**Depends On:** E15.1 (must know severity level)
+**Critical rules:**
+- Documentation is authoritative; chat is ephemeral
+- You are a **planning and oversight session** — you do not write code or commit files
+- You MUST NOT create branches, commit files, or open PRs directly
+- All file creation and git operations are performed by Coding Agents acting on your authorizations
+- You report to Phase Chat (P4); you communicate downward to Coding Agents only
+- You MUST NOT reach across to sibling milestones or lateral phases
+- Decisions belong to Phase Chat / HQ Chat; you produce proposals and authorizations only
 
 ---
 
-## ACCEPTANCE CRITERIA (MILESTONE LEVEL)
+## Milestone Context
 
-✅ **Bugfix Epic creation works end-to-end:**
-- Issue reported to HQ Chat
-- Bugfix Epic created (B#.#) with minimal spec
-- Epic Delivery Authorization issued directly
+**Milestone number:** P4-M15
+**Milestone name:** Cleanup and Salvage
+**Milestone spec path:** `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15__milestone-spec.md`
 
-✅ **SLA enforcement works:**
-- Completion Notice arrival triggers SLA clock
-- HQ Agent reviews within 4 hours
-- If SLA missed, escalation to CFO
+**Governance document versions in use:**
+- PROJECT-SYSTEM-GUIDELINES.md: v3.0.0
+- AI-OPERATING-GUIDELINES.md: v2.0.0
 
-✅ **Production gate works:**
-- Deployment Authorization artifact required before prod deploy
-- CFO explicitly approves/rejects production deployment
-- No automatic deployment without CFO authorization
+**Epics within this Milestone:**
 
-✅ **Post-mortems generated:**
-- Critical/High bugfixes auto-generate post-mortem template
-- Post-mortem commits to repository
-- CFO can view post-mortem reports
+| Epic | Name | Status | Parallelism |
+|------|------|--------|-------------|
+| E15.1 | Master Cleanup | Starter committed; awaiting authorization | May run concurrently with E15.2 |
+| E15.2 | M14 Branch Salvage | Starter committed; awaiting authorization | May run concurrently with E15.1 |
 
-✅ **All artifacts flow through M14 system:**
-- Completion Notices, Review Decisions, Delivery Notices use M14 format
-- Daemon routes all artifacts correctly
-- Manual mode (copy-paste) also works
+**Session objective:** The Phase Chat has pre-produced and committed the Epic Execution
+Chat Starters for both epics. Your tasks are:
 
----
-
-## KEY DECISIONS
-
-1. **Minimal spec vs. full spec:** Bugfix Epics use minimal 2-3 section specs, not full specs. Root cause and solution can be TBD.
-
-2. **Direct parent (HQ vs. Milestone):** Bugfix Epics report directly to HQ Chat, not Milestone Chat. This is expedited path.
-
-3. **4-hour SLA:** Bugfix Completion Notices must receive Review Decision within 4 hours or escalate to CFO. Standard Epics have 24-48 hour reviews.
-
-4. **CFO deployment gate:** ALL production deployments require CFO (Layer-8) authorization. This is non-negotiable.
-
-5. **Post-mortem only for C/H:** Only Critical and High severity bugfixes require post-mortem. Low/Medium are documented but not analyzed.
+1. **(Stage 1)** Review the pre-produced starters; accept or return for revision; issue
+   Epic Delivery Authorizations for accepted starters.
+2. **(Stage 2)** Oversee epic execution: receive Delivery Notices, accept/reject completed
+   epics, authorize PR merges to `milestone/M15`, and declare M15 complete once both
+   epics are merged and the milestone lifecycle is closed.
 
 ---
 
-## INTEGRATION WITH M14
+## Branch Strategy
 
-M15 Epics depend on M14 completion:
-- M14 provides artifact parsing and daemon routing
-- M15 uses Completion Notice, Review Decision, Delivery Notice formats from M14
-- M15 adds Deployment Authorization artifact (new artifact type)
-- M15 also adds Post-Mortem artifact (new artifact type)
+```
+master
+  └── phase/P4
+        └── milestone/M15          ← this session operates here
+              ├── epic/E15.1       (created by Coding Agent from milestone/M15)
+              └── epic/E15.2       (created by Coding Agent from milestone/M15)
+```
 
-M14 and M15 must be integrated before team adoption.
+**PR flow:**
+- `epic/E15.1` → PR to `milestone/M15` (Coding Agent opens; you authorize merge)
+- `epic/E15.2` → PR to `milestone/M15` (Coding Agent opens; you authorize merge)
+- `milestone/M15` → PR to `phase/P4` (you initiate after M15 is closed; Phase Chat authorizes)
 
----
-
-## DEPENDENCIES & BLOCKERS
-
-- ✅ M14 (Artifact System) must be complete
-- ✅ P4.2 Design (Bugfix Workflow) is complete
-- ✅ P4.1 Design (Artifact Communication) is complete
-- ✅ HQ Chat Starter exists and can be extended
-- ⏳ Daemon path resolution (E17.1) — may need fixing on fresh project init
+`milestone/M15` has been created from `phase/P4` before this session begins.
+Coding Agents do NOT need to create it.
 
 ---
 
-## NEXT STEPS
+## Pre-Produced Artifacts
 
-1. **Accept Milestone M15** — CFO approves milestone scope
-2. **Execute E15.1** — Create HQ Chat handler for bugfix creation
-3. **Execute E15.2** — Implement SLA enforcement and production gate
-4. **Execute E15.3** — Implement post-mortem automation
-5. **Integrate with M14** — Ensure artifact flow works end-to-end
-6. **Begin M16** — Team collaboration example project
+The following artifacts were produced by the Phase Chat and committed to `milestone/M15`:
+
+**Milestone spec:**
+- `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15__milestone-spec.md`
+
+**Epic Execution Chat Starters:**
+- `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15-E15.1__epic-execution-chat-starter.md`
+- `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15-E15.2__epic-execution-chat-starter.md`
+
+Read all three before beginning Stage 1 review.
 
 ---
 
-## REFERENCE
+## Spec Existence Requirement
 
-- **Phase Spec:** `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4__phase-spec.md`
-- **Bugfix Workflow Design:** `governance/systems/bugfix-epic-workflow.md`
-- **Artifact Protocol (M14):** `governance/systems/artifact-communication-protocol.md`
-- **Roles & Authorization (P4.3):** `governance/systems/roles-authorization-team-governance.md`
-- **M14 Milestone Starter:** `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14__milestone-execution-chat-starter.md`
+The M15 milestone spec MUST be accessible before any Stage 1 review begins.
+
+**If the M15 milestone spec is missing:** STOP. Report to Phase Chat. Do not proceed.
+**If a pre-produced epic starter is missing:** Report to Phase Chat before reviewing.
+
+---
+
+## Stage 1 — Review and Authorization
+
+For **each** pre-produced Epic Execution Chat Starter:
+
+1. Read the starter carefully against the M15 milestone spec
+2. Verify:
+   - Scope matches the milestone spec exactly (no additions, no omissions)
+   - DoD items are complete and testable
+   - Acceptance criteria are verifiable
+   - Branch strategy is correct (`epic/E15.#` from `milestone/M15`; PR to `milestone/M15`)
+   - "What you must NOT do" constraints are appropriate
+3. If accepted: issue an **Epic Delivery Authorization** (format below)
+4. If revisions needed: return to Phase Chat with specific concerns; do not authorize
+   until revisions are accepted
+
+E15.1 and E15.2 may be authorized and dispatched simultaneously — they have no file
+overlap and may execute in parallel.
+
+---
+
+## Stage 2 — Execution Oversight
+
+After Epic Delivery Authorizations are issued and Coding Agents begin:
+
+### Receiving Delivery Notices
+
+Each Coding Agent produces an **Epic Delivery Notice** upon completing execution.
+The notice is committed to the epic branch and reported back in chat.
+
+When you receive a Delivery Notice:
+
+1. Read it against the epic starter's DoD and Acceptance Criteria
+2. Check that the PR diff covers all expected changes
+3. Note any deviations reported in the Delivery Notice
+4. Issue a **Milestone-level accept or reject decision** (format below)
+
+### E15.1 Specific Checks
+
+- [ ] Exactly 7 files deleted (5 M1-nomenclature + 2 obsolete templates); no extras
+- [ ] `start-a-project.md` rewritten; no manual file-copy references remain
+- [ ] `P4__phase-spec.md` milestone table shows M15–M20
+- [ ] Delivery Notice contains a rename recommendation for `completion-notice-epic.md`
+- [ ] Cross-reference check results noted (no broken links left unaddressed)
+
+### E15.2 Specific Checks
+
+- [ ] `git log --oneline epic/E15.2` shows exactly 7 cherry-picked commits plus the
+      Delivery Notice commit
+- [ ] Original commit messages preserved verbatim
+- [ ] All 3 conflict files resolved per prescribed strategy
+- [ ] Test suite passes with 0 failures (command and output in Delivery Notice)
+- [ ] PR has no outstanding conflicts
+
+### Accepting an Epic
+
+If the Delivery Notice is satisfactory and the PR is clean:
+- Issue an accept decision (format below)
+- Authorize the PR merge: `epic/E15.# → milestone/M15`
+- Confirm merge completes before declaring the epic closed
+
+### Rejecting an Epic
+
+If the Delivery Notice reveals incomplete or incorrect work:
+- Issue a reject decision with specific, actionable feedback
+- Do NOT authorize the PR merge
+- Return the Coding Agent to rework and produce a revised Delivery Notice
+
+---
+
+## Milestone Closure
+
+After **both** E15.1 and E15.2 are merged to `milestone/M15`:
+
+1. Verify M15 Definition of Done is complete (check each item against merged state)
+2. Verify M15 Acceptance Criteria are met
+3. Produce a **Milestone Closure Declaration** using
+   `governance/templates/milestone-closure-declaration.md`
+4. Instruct the Coding Agent to commit the Closure Declaration to `milestone/M15`
+5. Open PR: `milestone/M15 → phase/P4`
+6. Report to Phase Chat that M15 is complete and the PR is ready for Phase-level review
+
+---
+
+## Output Summary
+
+| Stage | Output | Format |
+|-------|--------|--------|
+| Stage 1 | Epic Delivery Authorization × 2 | Structured block (below) |
+| Stage 2 | Milestone-level accept/reject decision × 2 | Structured block (below) |
+| Closure | Milestone Closure Declaration | Committed file (via Coding Agent) |
+| Closure | PR `milestone/M15 → phase/P4` | GitHub PR |
+
+---
+
+## Epic Delivery Authorization Format
+
+```
+EPIC DELIVERY AUTHORIZATION
+
+Issuer: Milestone Chat (P4-M15 — Cleanup and Salvage)
+Date: <YYYY-MM-DD>
+Epic Reference: P4-M15-<E#.#> — <Epic Name>
+Authorized Action: Proceed with Epic execution
+Merge Instruction: Merge epic/<E#.#> to milestone/M15 upon Epic completion and Milestone Chat acceptance
+```
+
+Do NOT issue without completing Stage 1 review of the epic starter.
+
+---
+
+## Epic Accept/Reject Decision Format
+
+```
+EPIC REVIEW DECISION
+
+Issuer: Milestone Chat (P4-M15 — Cleanup and Salvage)
+Date: <YYYY-MM-DD>
+Epic Reference: P4-M15-<E#.#> — <Epic Name>
+Decision: ACCEPT | REJECT
+PR Authorization: AUTHORIZED TO MERGE | NOT AUTHORIZED
+
+[If REJECT] Required changes:
+- <Specific item 1>
+- <Specific item 2>
+```
+
+---
+
+## Execution Instructions
+
+- Treat the M15 milestone spec as the source of truth for scope
+- Review both epic starters before authorizing either (full M15 context required)
+- Do not expand epic scope without Phase Chat authorization
+- Do not issue an Epic Delivery Authorization without reading the full starter
+- Do not authorize a PR merge without reading the full Delivery Notice
+- Escalate to Phase Chat for any decision outside your authority
+
+---
+
+## Completion Requirements
+
+This Milestone Chat session is complete when:
+
+- [ ] E15.1 Epic Execution Chat Starter reviewed and authorized
+- [ ] E15.2 Epic Execution Chat Starter reviewed and authorized
+- [ ] E15.1 Delivery Notice received, reviewed, and accepted
+- [ ] E15.2 Delivery Notice received, reviewed, and accepted
+- [ ] Both epics merged to `milestone/M15`
+- [ ] M15 Definition of Done confirmed complete
+- [ ] M15 Acceptance Criteria confirmed met
+- [ ] Milestone Closure Declaration produced and committed
+- [ ] PR `milestone/M15 → phase/P4` opened
+- [ ] Phase Chat has declared M15 closed
+
+Upon Phase Chat acceptance of the milestone PR, declare:
+"Milestone P4-M15 planning and execution complete. Both epics merged. PR raised to phase/P4. Session closed."
+
+---
+
+## Question Policy
+
+- Ask only blocking questions
+- Do not propose scope changes or new features
+- Do not ask for information already present in the M15 milestone spec or this Starter
+- If the milestone spec is silent on a topic, escalate to Phase Chat
