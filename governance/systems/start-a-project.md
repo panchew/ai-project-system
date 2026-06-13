@@ -1,11 +1,11 @@
 ---
 project: ai-project-system
-phase: P1
-milestone: M1
-epic: null
+phase: P4
+milestone: M15
+epic: E15.1
 type: system
 status: active
-last_updated: 2026-01-17
+last_updated: 2026-06-13
 ---
 
 # Starting a New Project Under the AI Project System
@@ -22,82 +22,89 @@ Its goal is to ensure:
 
 ---
 
+## Overview
+
+Projects are initialized using the `ai-project init` CLI command. Governance documents live in
+a dedicated governance submodule (`.governance/`) — they are **not** copied into the project
+repository. The Genesis / Creation Chat is the entry point for defining the project's intent
+before any execution begins.
+
+---
+
 ## Step 1 — Create the Repository
 
 Create a new Git repository using your preferred tooling.
 
-At minimum, the repository MUST contain:
-- A `docs/` directory
-- A project-level `README.md`
-
-No code is required at this stage.
+The repository needs only a project-level `README.md` to begin — `ai-project init` will
+create all required structure.
 
 ---
 
-## Step 2 — Install Governance Documents
+## Step 2 — Run `ai-project init`
 
-Copy the following governance documents into `docs/`:
+Run the project scaffolding command from the repository root:
 
-- `PROJECT-SYSTEM-GUIDELINES.md`
-- `AI-OPERATING-GUIDELINES.md`
+```bash
+ai-project init <project-name>
+```
 
-These documents become **authoritative** for the project.
+This command:
+- Adds the `ai-project-system` governance repository as a Git submodule at `.governance/`
+- Creates `.ai-project.yml` declaring the governance source and pinned ref
+- Installs the HQ agent file
+- Creates the baseline documentation structure under `docs/`
 
-They MUST NOT be modified unless governance evolution is explicitly intended.
+The submodule model means governance documents are always sourced from `.governance/`, keeping
+every project aligned to a versioned, auditable governance source. See
+[`governance/submodule-setup.md`](../submodule-setup.md) for submodule details.
 
 ---
 
-## Step 3 — Initialize Documentation Structure
+## Step 3 — Open the Genesis / Creation Chat
 
-Create the baseline documentation structure:
+Open [`governance/templates/genesis.md`](../templates/genesis.md) and use it as the prompt for
+a new Creation Chat session. The Genesis template collects:
 
-```
-docs/
-├─ README.md
-├─ context/
-├─ systems/
-├─ phases/
-├─ decisions/
-└─ templates/
-```
+- Project name and purpose
+- Stakeholders and roles (CFO, Phase Leads, Contributors)
+- Initial phase and milestone intent
+- Governance alignment declaration
 
-
-This structure enables all future work.
+The Creation Chat produces the first structured artifacts — the project's initial HQ Chat
+context and Phase 1 scope — before any code or execution begins.
 
 ---
 
 ## Step 4 — Declare System Alignment
 
-Create:
+The `ai-project init` command creates `.ai-project.yml` with the governance source and ref.
+Verify that `governance.ref` in `.ai-project.yml` matches the pinned submodule commit.
 
+For manual verification:
+
+```bash
+git -C .governance rev-parse HEAD
 ```
-docs/context/system-alignment.md
-```
 
-
-Declare:
-- Governance versions in use
-- Date of alignment
-
-This allows drift detection across projects.
+This allows drift detection across projects and ensures every team member is working from
+the same governance version.
 
 ---
 
 ## Step 5 — Spawn the HQ Chat
 
-Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface.
+Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface, using
+the HQ Execution Chat Starter produced by the Creation Chat.
 
-The HQ Chat becomes the **strategic control plane** for the project.
-
-HQ Chats:
-- Define Phases, Milestones, and Epics
-- Produce Epic specs
-- Produce Epic Execution Chat Starters
-- Never execute code
+The HQ Chat becomes the **strategic control plane** for the project:
+- Defines Phases, Milestones, and Epics
+- Produces Epic specs and Epic Execution Chat Starters
+- Issues Review Decisions and Delivery Authorizations
+- Never executes code
 
 ---
 
-## Step 6 — Define Phase 0 or Phase 1
+## Step 6 — Define Phase 1
 
 Using the HQ Chat:
 - Define the first Phase
