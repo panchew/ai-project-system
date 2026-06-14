@@ -223,10 +223,22 @@ The guide walks you through:
 - 🤖 [`bin/ai-project-git-merge`](bin/ai-project-git-merge) — Auto-merge utility
 - 📋 [PROJECT-SYSTEM-GUIDELINES.md §18](governance/PROJECT-SYSTEM-GUIDELINES.md) — Unattended cluster rules
 
+### **Team Collaboration**
+- 👥 [Team Onboarding Guide](docs/team-collaboration/team-onboarding-guide.md) — All roles, authority matrix, escalation path, your first week
+- 👤 [CFO Quick Start](docs/team-collaboration/cfo-quick-start.md) — Strategic authority, typical week, production gate (5 min read)
+- 🛠️ [Contributor Guide](docs/team-collaboration/contributor-guide.md) — Full Epic workflow for developers
+- 🔎 [Reviewer Guide](docs/team-collaboration/reviewer-guide.md) — Review checklist and process
+- 📋 [Phase Lead Guide](docs/team-collaboration/phase-lead-guide.md) — Milestone planning and escalation
+- 📊 [Decision Matrices](docs/team-collaboration/decision-matrices.md) — Who decides what, in table format
+- 🚶 [Example Walkthrough](docs/team-collaboration/example-walkthrough.md) — Real Epic cycle using Taskflow example project
+- ❓ [Team FAQ](docs/team-collaboration/faq.md) — 15 answered questions
+- 🔧 [Troubleshooting Guide](docs/team-collaboration/troubleshooting-guide.md) — Common problems with solutions
+
 ### **Examples**
 - 📚 [Phase P1](docs/phases/P1__System_Foundation_and_Adoption/) — Foundation and adoption artifacts
 - 📚 [Phase P2](docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/) — Multi-project adoption artifacts
 - 📚 [Phase P3](docs/phases/P3__Agentic_Execution_Model_Maturity/) — Autonomous cluster artifacts
+- 👥 [Taskflow Team Example](examples/team-project-example/) — Team project example with real artifacts (E16.1)
 - 🔍 See how this system was built using itself
 
 ### **Reference**
