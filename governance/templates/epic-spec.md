@@ -220,7 +220,7 @@ This Epic must produce:
 - [ ] [Deliverable 2: Specific file or artifact]
 - [ ] [Deliverable 3: Specific file or artifact]
 - [ ] [Deliverable 4: Specific file or artifact]
-- [ ] [Epic Completion Report]
+- [ ] [Delivery Notice]
 
 <!-- Example:
 This Epic must produce:
@@ -228,7 +228,7 @@ This Epic must produce:
 - [ ] Integration format specification document
 - [ ] GitHub Projects integration guide
 - [ ] Example project configuration
-- [ ] Epic Completion Report
+- [ ] Delivery Notice
 -->
 
 ---
@@ -248,7 +248,7 @@ This Epic must produce:
   - Documentation updated
   - No known blockers
   
-  DoD is verified by the Coding Agent in the Epic Completion Report.
+  DoD is verified by the Coding Agent in the Delivery Notice.
 -->
 
 Epic <E#.#> is complete when:
@@ -257,7 +257,7 @@ Epic <E#.#> is complete when:
 - [ ] [DoD item 2: Quality check]
 - [ ] [DoD item 3: Documentation check]
 - [ ] [DoD item 4: Integration check]
-- [ ] [Epic Completion Report produced and committed]
+- [ ] [Delivery Notice produced and committed]
 - [ ] [Pull request opened to milestone branch]
 
 <!-- Example:
@@ -267,7 +267,7 @@ Epic E1.1 is complete when:
 - [ ] GitHub Projects integration guide is complete
 - [ ] Example configuration is tested and verified
 - [ ] All documentation is committed to the repository
-- [ ] Epic Completion Report produced and committed
+- [ ] Delivery Notice produced and committed
 - [ ] Pull request opened to milestone/M1 branch
 -->
 
@@ -399,7 +399,7 @@ Execution order:
 1. Define integration format first
 2. Create GitHub Projects guide second
 3. Test integration with example project
-4. Document findings in Completion Report
+4. Document findings in Delivery Notice
 -->
 
 ---

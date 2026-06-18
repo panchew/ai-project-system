@@ -112,7 +112,7 @@ New projects must reverse-engineer spec structure from existing files, creating 
 4. [Goal 4]
 
 <!-- Example:
-1. Provide templates for all major spec types (Phase, Milestone, Epic, Completion Report, Chat Starter)
+1. Provide templates for all major spec types (Phase, Milestone, Epic, Delivery Notice, Chat Starter)
 2. Include inline guidance and examples within templates
 3. Ensure templates align with current governance (v1.3.0)
 4. Make front-matter self-documenting
@@ -227,7 +227,7 @@ You must produce:
   - Implement deliverables
   - Write tests (if applicable)
   - Update documentation
-  - Create Completion Report
+  - Create Delivery Notice
   - Open PR
   - Stop and await review
 -->
