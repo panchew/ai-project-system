@@ -4,7 +4,7 @@ name: Team Collaboration and Artifact-Driven Communication
 status: active
 start_date: 2026-05-29
 planned_end_date: 2026-07-31
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Phase P4: Team Collaboration and Artifact-Driven Communication
@@ -115,97 +115,98 @@ implementation from its stranded branch.
 
 ---
 
-### M16: Inception Artifacts (1-2 Epics)
+### M16: Team Collaboration Example & Documentation (2 Epics) ✅ COMPLETE
 
-**Goal:** Define and implement the Creation Chat / Genesis layer for new project onboarding.
+**Goal:** Create a working example project and role-based documentation to make the P4
+team collaboration model tangible for new adopters.
 
-**Epics:**
-- **E16.1 – Genesis Template and Creation Chat**
-  - Create `governance/templates/genesis.md` — entry point for new project setup
-  - Define Creation Chat role and what it produces (HQ context, Phase 1 scope)
-  - Update `start-a-project.md` to reference the Creation Chat flow
-  - Validate with a real new-project walkthrough
-
----
-
-### M17: Two-Stage Lifecycle (1-2 Epics)
-
-**Goal:** Formalize the two-stage artifact lifecycle (Completion Notice → Review Decision)
-and make it the documented default for all Epic closures.
-
-**Epics:**
-- **E17.1 – Two-Stage Lifecycle Documentation and Enforcement**
-  - Document the bidirectional artifact flow as the canonical happy path
-  - Update Epic Execution Chat Starter to require Completion Notice at close
-  - Update Milestone Chat Starter to require Review Decision before merge
-  - Add lifecycle diagram to governance documentation
+**Epics (delivered 2026-06-16, merged to phase/P4):**
+- **E16.1 – Example Project Setup & Walkthrough**
+  - `examples/team-project-example/` with Phase P1, 3 Milestones, 9 Epic specs
+  - 5-role TEAM_SETUP; 10 sample artifacts; WALKTHROUGH.md
+  - Validation test suite: `tests/test_example_project_artifacts.py`
+- **E16.2 – Team Collaboration Documentation**
+  - 10 role guides in `docs/team-collaboration/`
+  - CFO Quick Start, Team Onboarding, Contributor, Reviewer, Phase Lead guides
+  - Decision Matrices, FAQ, Troubleshooting Guide
 
 ---
 
-### M18: Bugfix Workflow (2-3 Epics)
+### M17: Bug Fixes & Polish (2 Epics) ✅ COMPLETE
+
+**Goal:** Fix the daemon orchestrator path issue blocking submodule users; bring all
+starters, templates, and governance documents current with P4.
+
+**Epics (delivered 2026-06-18, merged to phase/P4):**
+- **E17.1 – Fix Daemon Orchestrator Path Resolution**
+  - Root cause: path derived from PROJECT_ROOT rather than daemon's own directory
+  - Ordered cached fallback search; `--check` flag; 17 new unit tests
+- **E17.2 – Update Starters and Documentation**
+  - HQ Execution Chat Starter created (completes the four-level starter set)
+  - Three governance templates: merge-authorization, epic-closure-notice, escalation-notice
+  - P4 Governance System Guide; FAQ (23 questions); Troubleshooting (16 entries)
+  - Starter branch-name lint check; "Epic Completion Report" term fully retired
+  - Two-Stage Lifecycle flow documented in starters (partial delivery of original M17 scope)
+
+---
+
+### M18: Inception Artifacts (1 Epic)
+
+**Goal:** Define and implement the Creation Chat / Genesis layer for new project
+onboarding — the foundational entry point that tells a new user (or agent) exactly how
+to begin a project under the governance system.
+
+**Epics:**
+- **E18.1 – Genesis Template and Creation Chat**
+  - Create `governance/templates/genesis.md` — canonical entry point for new project setup
+  - Define Creation Chat role: what context it receives, what it produces
+    (HQ context packet, Phase 1 scope, first milestone plan)
+  - Update `start-a-project.md` to reference the Creation Chat flow end-to-end
+  - Validate with a real new-project walkthrough (run the flow, confirm outputs)
+
+---
+
+### M19: Two-Stage Lifecycle (1 Epic)
+
+**Goal:** Formally declare the Completion Notice → Review Decision flow as the canonical
+default for all Epic closures, and add the lifecycle diagram that makes the flow
+self-evident in the governance documentation. The starters were updated in M17; this
+milestone produces the diagram and the formal enforcement declaration.
+
+**Epics:**
+- **E19.1 – Lifecycle Diagram and Canonical Declaration**
+  - Add a lifecycle diagram to governance documentation showing the full bidirectional
+    artifact flow (Epic → Completion Notice → Milestone review → Review Decision →
+    Epic merges → Delivery Notice)
+  - Produce a formal "canonical happy path" declaration document
+  - Verify all Epic starters and Milestone starters enforce the two-stage flow end-to-end
+
+---
+
+### M20: Bugfix Workflow (2-3 Epics)
 
 **Goal:** Implement the expedited Bugfix Epic path with SLA tracking and production gate.
 
 **Epics:**
-- **E18.1 – Bugfix Epic Creation in HQ Chat**
+- **E20.1 – Bugfix Epic Creation in HQ Chat**
   - HQ Agent detects issue report in HQ Chat
   - Decision: "Bugfix Epic" vs "Defer to next Phase"
   - Create minimal Bugfix Epic spec (B#.#)
   - Commit spec and issue Epic Delivery Authorization
   - Assign Bugfix ID and severity level
 
-- **E18.2 – Expedited Review SLA & Production Gate**
+- **E20.2 – Expedited Review SLA & Production Gate**
   - HQ Agent tracks Completion Notice arrival time (SLA clock starts)
   - 4-hour SLA timer: review and issue Review Decision
   - If SLA missed, escalate to CFO (urgency indicator)
   - Require Deployment Authorization artifact before prod deploy
   - CFO explicitly approves/rejects production deployment
 
-- **E18.3 – Post-Mortem for Critical/High**
+- **E20.3 – Post-Mortem for Critical/High**
   - Auto-generate post-mortem template on Bugfix Epic completion
   - Require root cause analysis, resolution, prevention steps
   - Commit post-mortem to `docs/bugfixes/` for audit trail
   - Report Critical/High to CFO dashboard
-
----
-
-### M19: Team Collaboration Example (1-2 Epics)
-
-**Goal:** Create and document a real-world 3-person team scenario with concurrent Epics.
-
-**Epics:**
-- **E19.1 – Example Project Setup & Walkthrough**
-  - Create example project: `examples/team-project-example/`
-  - Phase P1 with 3 Milestones
-  - Each Milestone has 2-3 Epics
-  - Assign roles: CFO, Phase Lead, 2 Contributors, 1 Reviewer
-  - Document decision flow: who decides what
-  - Show how artifacts flow between chats
-
-- **E19.2 – Team Collaboration Documentation**
-  - Create "Team Onboarding Guide" (role assignment, authority matrix, when-to-escalate)
-  - Create "CFO Quick Start" (1-3 decisions per week, reviewing Completion Notices)
-  - Create "Contributor Guide" (implement Epic, ask if blocked, await Review Decision)
-  - Create "Example Run-Through" (walkthrough one full Epic from start to delivery)
-
----
-
-### M20: Polish and Known Bugs (1-2 Epics)
-
-**Goal:** Fix known issues, polish documentation, prepare for team adoption.
-
-**Epics:**
-- **E20.1 – Fix Daemon Orchestrator Path Resolution**
-  - Issue: v2.0.0 submodules don't have orchestrator binary
-  - Solution: Make daemon search in `governance/bin/` as fallback
-  - Or: Update submodule version to v3.0.0+ (includes orchestrator)
-  - Test on fresh submodule checkout
-
-- **E20.2 – Update Starters & Documentation**
-  - Update HQ Chat Starter to reference artifact system
-  - Update Milestone Chat Starter to reference bugfix handling
-  - Create "CFO Dashboard" view (aggregated progress from multiple projects)
-  - Polish all P4 governance documents
 
 ---
 
@@ -339,23 +340,16 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 
 ### Estimate: 10-14 Epics, 5-7 weeks (solo), 3-4 weeks (2-person team)
 
-**Solo Developer Path:**
-- M14 (Artifact system): 2-3 weeks
-- M15 (Cleanup and Salvage): 2-3 days
-- M16 (Inception Artifacts): 3-5 days
-- M17 (Two-Stage Lifecycle): 3-5 days
-- M18 (Bugfix Workflow): 1-2 weeks
-- M19 (Team example): 3-5 days
-- M20 (Polish & known bugs): 2-3 days
-- **Total: 5-7 weeks**
+**Delivered:**
+- M14 (Artifact system): ✅ complete
+- M15 (Cleanup and Salvage): ✅ complete
+- M16 (Team Collaboration Example & Documentation): ✅ complete
+- M17 (Bug Fixes & Polish): ✅ complete
 
-**Team Path (2-3 people):**
-- M14: 1.5 weeks (parallel work on E14.1 & E14.2)
-- M15: 2 days (sequential cleanup)
-- M16-M17: 1 week (parallel)
-- M18: 1 week (E18.1 & E18.2 in parallel)
-- M19-M20: 1 week (parallel)
-- **Total: 3-4 weeks**
+**Remaining:**
+- M18 (Inception Artifacts): 3-5 days
+- M19 (Two-Stage Lifecycle): 2-3 days
+- M20 (Bugfix Workflow): 1-2 weeks
 
 ---
 
@@ -398,3 +392,4 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 |---------|------|--------|
 | 1.0.0 | 2026-05-29 | Phase P4 specification. Design complete (P4.1, P4.2, P4.3). 4 milestones, 6-8 estimated Epics. |
 | 1.1.0 | 2026-06-13 | Updated milestone numbering to global M15–M20. Added M16 (Inception Artifacts), M17 (Two-Stage Lifecycle), M18 (Bugfix Workflow). Renamed former M15/M16/M17 to M15/M19/M20 with authoritative names. (E15.1 — Master Cleanup) |
+| 1.2.0 | 2026-06-18 | Reconciled executed milestone plan with original spec. M16 and M17 were delivered with different scopes than planned (team example and bug fixes / polish vs. inception artifacts and two-stage lifecycle). M18–M20 renumbered to preserve the undelivered original M16–M18 work: M18 = Inception Artifacts, M19 = Two-Stage Lifecycle, M20 = Bugfix Workflow. Phase continues. |
