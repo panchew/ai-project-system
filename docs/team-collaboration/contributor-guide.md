@@ -2,6 +2,8 @@
 
 **For developers implementing Epics in the AI Project System.**
 
+> 📍 Part of the **[P4 Governance System Guide](P4-governance-system-guide.md)** — the entry point to all team-collaboration docs.
+
 This guide covers the full Epic lifecycle from the moment you receive an Epic assignment to the moment your PR is merged. Read this top to bottom before starting your first Epic.
 
 ---

@@ -2,6 +2,8 @@
 
 **A full Epic cycle, traced through real artifacts.**
 
+> 📍 Part of the **[P4 Governance System Guide](P4-governance-system-guide.md)** — the entry point to all team-collaboration docs.
+
 This walkthrough follows the Taskflow example project through one complete Epic cycle — from Phase authorization to Delivery Notice. You will see every artifact, every decision, and every handoff in sequence.
 
 All artifact files referenced here exist in `examples/team-project-example/` and can be opened in your editor to read the full content.

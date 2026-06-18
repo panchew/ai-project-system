@@ -48,7 +48,7 @@ See [Contributor Guide](contributor-guide.md) for the complete step-by-step.
 
 **Q6: My Epic was rejected. How many times can I resubmit?**
 
-Up to 3 attempts. After 3 failed Completion Notices, the Epic Agent must produce an Escalation Report to the Milestone Agent explaining why the work cannot be completed. The Milestone Agent then decides: escalate to Phase Lead, adjust the spec, or reassign the Epic.
+Up to 3 attempts. After 3 failed Completion Notices, the Epic Agent must produce an Escalation Notice (template: `governance/templates/escalation-notice.md`) to the Milestone Agent explaining why the work cannot be completed. The Milestone Agent then decides: escalate to Phase Lead, adjust the spec, or reassign the Epic.
 
 The 3-attempt limit resets if the Milestone Agent explicitly grants an extension in writing.
 
@@ -149,8 +149,59 @@ See [Example Walkthrough](example-walkthrough.md) for a side-by-side comparison 
 
 ---
 
+## P4: Completion, Review & Production
+
+**Q16: How do I know when my work is complete?**
+
+Work is complete only when every item in the Epic's **Definition of Done** is satisfied — deliverables built, tests passing, PR opened against the correct branch — *and* the parent chat has issued a Review Decision (Accept). Self-declaring "done" is not enough; completion is confirmed by the accepting Review Decision, not by your own judgment. See the [Contributor Guide](contributor-guide.md).
+
+---
+
+**Q17: How do I read a Completion Notice?**
+
+A Completion Notice has YAML front-matter (`epic_id`, `pr_details`, `qa_status`) and a body. Read the front-matter first to confirm the Epic, the PR, and that QA passed; then read the body for deliverables, the Definition-of-Done checklist, and any noted deviations or risks. If `qa_status` is not `passed` or the DoD has gaps, that is your signal to Reject. The schema is defined in [Artifact Communication Protocol](../../governance/systems/artifact-communication-protocol.md).
+
+---
+
+**Q18: What is a Review Decision?**
+
+A Review Decision is the artifact a reviewing chat (Milestone, Phase, or HQ) issues in response to a Completion Notice. It records one binding outcome — **Accept** (authorize merge) or **Reject** (require rework) — with feedback explaining why. Like every decision in the system, it is committed to the repository; a verdict given only in chat is not authoritative. Template: `governance/templates/review-decision.md`.
+
+---
+
+**Q19: When do I escalate, and to whom?**
+
+Escalate **upward** (Epic → Milestone → Phase → HQ; never to a sibling) when you cannot resolve something within your authority: a blocking dependency, an out-of-scope finding, a missing or contradictory spec, or 3 exhausted rework attempts. Produce an **Escalation Notice** (template: `governance/templates/escalation-notice.md`) stating the blocker, what you tried, the decision you need, and the impact. Don't proceed on the blocked path until the parent responds.
+
+---
+
+**Q20: How do I authorize a production deployment?**
+
+Only the **CFO** can authorize production deployment, and only by issuing a committed **Deployment Authorization** artifact — naming the build/commit, confirming verification (tests green, review accepted, Delivery Notice present), and stating a rollback plan. This gate applies to every path, including urgent bugfixes; urgency never waives it. See [CFO Quick Start](cfo-quick-start.md).
+
+---
+
+**Q21: What happens if a review SLA is missed?**
+
+Regular Epics carry a 24-hour review SLA; Bugfix Epics carry 4 hours. If it's missed, first re-confirm the Completion Notice actually reached the reviewer (in manual mode, that it was pasted into the parent chat, not just committed). If there's still no response, escalate to the next level up (Milestone → Phase → HQ/CFO) and quantify the impact. A missed SLA is an escalation trigger, not a license to self-approve and merge. See the [Troubleshooting Guide](troubleshooting-guide.md).
+
+---
+
+**Q22: Can I skip the Definition of Done if I'm in a hurry?**
+
+No. The Definition of Done is the contract between the spec and the merge — there is no fast path that skips it, and no role (not even the CFO) "waives" it for convenience. If a DoD item is genuinely wrong or impossible, that is a spec problem: escalate to amend the spec, don't silently drop the item. Bugfix Epics have a *smaller* DoD, not *no* DoD.
+
+---
+
+**Q23: How do I onboard a new team to the system?**
+
+Start everyone with the [P4 Governance System Guide](P4-governance-system-guide.md), then have each person read their role guide ([CFO](cfo-quick-start.md), [Phase Lead](phase-lead-guide.md), [Contributor](contributor-guide.md), [Reviewer](reviewer-guide.md)). Run your first 3–5 Epics in **manual mode** using the [Taskflow example](../../examples/team-project-example/README.md) and [Example Walkthrough](example-walkthrough.md) as a reference, then consider agentic mode. The governance is identical in both modes, so switching later changes infrastructure, not process.
+
+---
+
 ## Cross-References
 
+- [P4 Governance System Guide](P4-governance-system-guide.md) — start here / entry point
 - [Team Onboarding Guide](team-onboarding-guide.md) — full system overview
 - [Contributor Guide](contributor-guide.md) — Epic workflow for developers
 - [Reviewer Guide](reviewer-guide.md) — code review process
