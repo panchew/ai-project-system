@@ -149,7 +149,7 @@ last_updated: <YYYY-MM-DD>        # Date of last modification
 - `status`: Lifecycle state — `planned`, `active`, or `completed`
 - `last_updated`: ISO 8601 date of last edit
 
-### Epic Completion Report Front-Matter
+### Delivery Notice Front-Matter
 
 ```yaml
 ---
@@ -157,17 +157,20 @@ project: <project-name>           # Unique project identifier (kebab-case)
 phase: <P#>                        # Parent phase ID (e.g., P1)
 milestone: <M#>                    # Parent milestone ID (e.g., M1)
 epic: <E#.#>                       # Epic ID (e.g., E1.1)
-type: completion                   # Identifies this as a completion report
-status: completed                  # Always 'completed' for completion reports
+type: completion                   # Identifies this as a Delivery Notice / completion artifact
+status: completed                  # Always 'completed' for delivered Epics
 last_updated: <YYYY-MM-DD>        # Date of last modification
 ---
 ```
 
 **Field Descriptions:**
 - `project`, `phase`, `milestone`, `epic`: Must match corresponding epic spec
-- `type`: Always `completion` for completion reports
-- `status`: Always `completed` for completion reports (Epic is finished)
-- `last_updated`: ISO 8601 date of completion report creation or last edit
+- `type`: Always `completion` for the Delivery Notice / completion artifact
+- `status`: Always `completed` (the Epic is finished)
+- `last_updated`: ISO 8601 date of the Delivery Notice's creation or last edit
+
+> The artifact-protocol Completion Notice / Review Decision / Delivery Notice schemas
+> (P4) are defined in [`../systems/artifact-communication-protocol.md`](../systems/artifact-communication-protocol.md).
 
 ---
 
