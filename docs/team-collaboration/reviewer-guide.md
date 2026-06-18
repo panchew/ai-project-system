@@ -2,6 +2,8 @@
 
 **For team members performing code review on Epic pull requests.**
 
+> 📍 Part of the **[P4 Governance System Guide](P4-governance-system-guide.md)** — the entry point to all team-collaboration docs.
+
 The Reviewer is the technical quality gate for Epic deliverables. Your approval signals that the implementation is correct, spec-compliant, and safe to accept. This guide covers your checklist, your authority, and how to interact with the Review Decision process.
 
 ---

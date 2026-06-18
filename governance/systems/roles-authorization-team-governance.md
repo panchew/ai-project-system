@@ -178,7 +178,7 @@ Contributors ← Code Implementation
 
 **Decision Artifacts:**
 - Issues **Completion Notice** (ready for parent review)
-- Issues **Escalation Report** (max retries exhausted)
+- Issues **Escalation Notice** (max retries exhausted; template `governance/templates/escalation-notice.md`)
 
 ---
 
@@ -533,7 +533,7 @@ The system supports **gradually increasing autonomy** as the team matures:
 - **AI Operating Guidelines:** `governance/AI-OPERATING-GUIDELINES.md` §3 (Agent Responsibilities)
 - **Artifact Communication Protocol (P4.1):** `governance/systems/artifact-communication-protocol.md`
 - **Bugfix Epic Workflow (P4.2):** `governance/systems/bugfix-epic-workflow.md`
-- **HQ Chat Starter:** `governance/systems/hq-execution-chat-starter.md` (reference)
+- **HQ Chat Starter:** `governance/systems/hq-execution-chat-starter.md`
 - **Governance Agent Definition:** `governance/agents/governance.agent.md`
 
 ---

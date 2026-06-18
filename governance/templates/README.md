@@ -21,9 +21,18 @@
 | Template | File | When to Use |
 |----------|------|-------------|
 | **Epic Execution Chat Starter** | [epic-execution-chat-starter.md](epic-execution-chat-starter.md) | Providing execution context to the Governance Agent (Epic mode) |
-| **Epic Completion Report** | [epic-completion-report.md](epic-completion-report.md) | Documenting Epic execution results and verification |
 | **Epic Review Seal** | [epic-review-seal.md](epic-review-seal.md) | Capturing human review findings before acceptance |
-| **Epic Completion Notice** | [epic-completion-notice.md](epic-completion-notice.md) | Notifying stakeholders that an Epic has closed |
+
+### Artifact Communication Templates (P4)
+
+| Template | File | When to Use |
+|----------|------|-------------|
+| **Completion Notice (Epic)** | [completion-notice-epic.md](completion-notice-epic.md) | Epic Agent signals work is finished and ready for Milestone review |
+| **Review Decision** | [review-decision.md](review-decision.md) | Reviewing chat issues Accept or Reject on a Completion Notice |
+| **Delivery Notice** | [delivery-notice.md](delivery-notice.md) | Epic Agent records the merge after acceptance |
+| **Merge Authorization** | [merge-authorization.md](merge-authorization.md) | Phase/HQ Chat authorizes a Coding Agent to merge an accepted Epic |
+| **Epic Closure Notice** | [epic-closure-notice.md](epic-closure-notice.md) | Coding Agent confirms a merge completed, to the Milestone Chat |
+| **Escalation Notice** | [escalation-notice.md](escalation-notice.md) | Any chat escalates a blocking or out-of-scope finding to its parent |
 
 ---
 
@@ -57,16 +66,16 @@
    - Provide to Governance Agent (Epic mode)
 
 2. **After Execution Completes**
-   - Epic mode creates Epic Completion Report using [epic-completion-report.md](epic-completion-report.md)
-   - Human reviews deliverables and tests results
+   - Epic mode produces a Completion Notice using [completion-notice-epic.md](completion-notice-epic.md)
+   - Human reviews deliverables and test results
 
 3. **Human Review**
    - Copy [epic-review-seal.md](epic-review-seal.md)
    - Fill in findings and recommendation
-   - Submit to HQ Chat for decision
+   - Submit to HQ Chat for decision; the reviewing chat issues a [review-decision.md](review-decision.md)
 
 4. **After Acceptance**
-   - Optionally create Epic Completion Notice using [epic-completion-notice.md](epic-completion-notice.md)
+   - Produce a Delivery Notice using [delivery-notice.md](delivery-notice.md) once the PR is merged
    - Announce completion to stakeholders
 
 ---
@@ -251,4 +260,4 @@ Create an issue or Epic to address template improvements.
 - [PROJECT-SYSTEM-GUIDELINES.md](../PROJECT-SYSTEM-GUIDELINES.md) — System governance and rules
 - [AI-OPERATING-GUIDELINES.md](../AI-OPERATING-GUIDELINES.md) — Agent behavior and execution contracts
 - [EPIC-EXECUTION-CHAT-STARTER.md](../EPIC-EXECUTION-CHAT-STARTER.md) — Example chat starter structure
-- [Phases Directory](../phases/) — Real-world spec examples
+- [Phases Directory](../../docs/phases/) — Real-world spec examples

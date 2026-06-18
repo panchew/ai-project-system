@@ -29,7 +29,22 @@ Turn AI coding assistants into reliable project executors through structured spe
 | **M12** — Containerized Sandbox & Loop Verification | 4 | ✅ Complete | `Dockerfile.sandbox`, 3-retry recursion engine, mock harness |
 | **M13** — Orchestrator CLI Daemon | 4 | ✅ Complete | `ai-project-daemon`, auto-merge hooks, lifecycle tests |
 
+### Phase P4 — Team Collaboration & Artifact-Driven Communication
+Takes the system from solo to team. Work and decisions move between people as
+version-controlled **artifacts**, not chat messages.
+
+| Milestone | Focus | Key Deliverables |
+|-----------|-------|------------------|
+| **M14** — Artifact System | Canonical artifact formats + daemon routing | Completion Notice, Review Decision, Delivery Notice; artifact parser & router |
+| **M15** — Bugfix Epic Workflow | Expedited path for production issues | Minimal Bugfix Epics, 4-hour review SLA, CFO production gate |
+| **M16** — Team Collaboration Example | Learn-by-example project + role docs | [Taskflow example](examples/team-project-example/), role guides, decision matrices |
+| **M17** — Bug Fixes & Polish | Daemon path fix, starters & docs update | Updated HQ/Milestone starters, P4 guide, FAQ, troubleshooting, starter lint check |
+
+**P4 highlights:** artifact-driven communication · explicit team roles · a hard
+production-deployment gate (CFO-authorized) · a runnable example team project.
+
 👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
+👉 **[Get started with P4 (team mode)](docs/team-collaboration/P4-governance-system-guide.md)** · **[Run the example](examples/team-project-example/README.md)**
 
 ---
 
@@ -224,6 +239,7 @@ The guide walks you through:
 - 📋 [PROJECT-SYSTEM-GUIDELINES.md §18](governance/PROJECT-SYSTEM-GUIDELINES.md) — Unattended cluster rules
 
 ### **Team Collaboration**
+- 🧭 [P4 Governance System Guide](docs/team-collaboration/P4-governance-system-guide.md) — **Start here:** what P4 adds, key concepts, links to every guide
 - 👥 [Team Onboarding Guide](docs/team-collaboration/team-onboarding-guide.md) — All roles, authority matrix, escalation path, your first week
 - 👤 [CFO Quick Start](docs/team-collaboration/cfo-quick-start.md) — Strategic authority, typical week, production gate (5 min read)
 - 🛠️ [Contributor Guide](docs/team-collaboration/contributor-guide.md) — Full Epic workflow for developers
@@ -231,7 +247,7 @@ The guide walks you through:
 - 📋 [Phase Lead Guide](docs/team-collaboration/phase-lead-guide.md) — Milestone planning and escalation
 - 📊 [Decision Matrices](docs/team-collaboration/decision-matrices.md) — Who decides what, in table format
 - 🚶 [Example Walkthrough](docs/team-collaboration/example-walkthrough.md) — Real Epic cycle using Taskflow example project
-- ❓ [Team FAQ](docs/team-collaboration/faq.md) — 15 answered questions
+- ❓ [Team FAQ](docs/team-collaboration/faq.md) — 23 answered questions
 - 🔧 [Troubleshooting Guide](docs/team-collaboration/troubleshooting-guide.md) — Common problems with solutions
 
 ### **Examples**
@@ -589,7 +605,8 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Licensed for adoption** — MIT + CC BY-SA 4.0 dual license
 
 **What's Next (Future Phases):**
-- **P4** — Unplanned. Options: System Operations & Observability, Public Release, Team Collaboration, or as directed.
+- **P4 — Team Collaboration & Artifact-Driven Communication** (in progress) — artifact system, bugfix workflow, team roles, and a runnable example. See the [P4 Governance System Guide](docs/team-collaboration/P4-governance-system-guide.md).
+- **P5+** — Unplanned. Options: System Operations & Observability, Public Release, or as directed.
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively

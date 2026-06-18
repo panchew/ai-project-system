@@ -408,7 +408,7 @@ timestamp: <ISO-8601 UTC>
 
 - **Artifact Protocol (P4.1):** `governance/systems/artifact-communication-protocol.md`
 - **Epic Execution Chat Starter:** `governance/EPIC-EXECUTION-CHAT-STARTER.md`
-- **HQ Chat Starter:** `governance/systems/hq-execution-chat-starter.md` (or equivalent)
+- **HQ Chat Starter:** `governance/systems/hq-execution-chat-starter.md`
 - **Production Deployment Guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §6 (Authorization & Approval)
 - **AI Operating Guidelines:** `governance/AI-OPERATING-GUIDELINES.md`
 

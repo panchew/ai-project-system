@@ -2,6 +2,8 @@
 
 **For the team member coordinating Milestones and Epics within a Phase.**
 
+> 📍 Part of the **[P4 Governance System Guide](P4-governance-system-guide.md)** — the entry point to all team-collaboration docs.
+
 The Phase Lead owns Phase execution: you plan milestones, coordinate contributors, issue Epic assignments, and escalate blockers to CFO. This guide covers your workflow, decision authorities, and how you interact with the governance hierarchy.
 
 ---
