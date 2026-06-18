@@ -243,6 +243,126 @@ Then the parent Phase Chat reviews and issues a Review Decision at the Milestone
 
 ---
 
+## Issuing Review Decisions — Worked Examples (P4.1)
+
+A Review Decision is the binding accept/reject artifact you issue after reading a
+Completion Notice. It is committed to the repository — a decision made only in chat is
+not authoritative. Use the template `governance/templates/review-decision.md`.
+
+### Example — Review Decision (ACCEPT)
+
+```markdown
+---
+artifact_type: review_decision
+artifact_version: 1.0
+timestamp: 2026-06-17T15:00:00Z
+issuer_chat: Milestone Agent (P4-M17)
+issuer_role: Milestone Agent
+decision: accept
+epic_id: P4-M17-E17.1
+milestone_id: P4-M17
+phase_id: P4
+completion_notice_timestamp: 2026-06-17T00:00:00Z
+authorization:
+  action: merge
+  merge_instruction: Merge PR #73 to milestone/M17; delete epic/P4-M17-E17.1 after merge.
+---
+
+# Review Decision: P4-M17-E17.1 — Fix Daemon Orchestrator Path Resolution
+
+## Decision: ACCEPT ✓
+
+## Feedback
+Spec compliance confirmed and independently verified: 17 new tests, full suite green,
+no regression. Root cause analysis correct. Authorized to merge.
+
+## Authorization
+Merge PR #73 to milestone/M17 using squash-and-merge, then delete the epic branch.
+```
+
+### Example — Review Decision (REJECT)
+
+```markdown
+---
+artifact_type: review_decision
+artifact_version: 1.0
+timestamp: 2026-06-17T15:00:00Z
+issuer_chat: Milestone Agent (P4-M17)
+issuer_role: Milestone Agent
+decision: reject
+epic_id: P4-M17-E17.9
+milestone_id: P4-M17
+phase_id: P4
+completion_notice_timestamp: 2026-06-17T14:00:00Z
+authorization:
+  action: rework
+  merge_instruction: null
+---
+
+# Review Decision: P4-M17-E17.9 — Example Rejected Epic
+
+## Decision: REJECT ✗
+
+## Feedback
+Rework required before this can merge:
+1. **Test coverage:** 62% — spec requires 80%. Add error-path tests.
+2. **CI:** 3 linter checks failing. Fix all before resubmission.
+3. **Scope:** PR touches files outside the Epic spec. Remove them or escalate.
+
+## Authorization
+Not authorized to merge. Address the items above, create a new Completion Notice
+(v1.1), and resubmit. This counts as attempt 1 of 3 (see Rework Cycle below).
+```
+
+---
+
+## Rework Cycle (P4.1)
+
+When you issue a **Reject**, the Epic enters the rework cycle:
+
+1. The Epic Agent reads your feedback and addresses every item.
+2. It produces a **new Completion Notice** (increment the version: v1.1, v1.2, …) and
+   resubmits.
+3. You review again and issue a fresh Review Decision.
+
+**Maximum 3 attempts.** If a third Completion Notice is still not acceptable, do **not**
+issue a fourth rejection-and-retry. Instead the Epic Agent produces an **Escalation
+Notice** and you escalate to the Phase Chat (see [Escalation Path](#escalation-path)).
+
+The 3-attempt limit resets only if you explicitly grant an extension in writing (as an
+artifact or a recorded decision). Silent fourth attempts are a governance violation.
+
+```
+Reject → Epic reworks → new Completion Notice (vN) → re-review
+   (attempt 1) → (attempt 2) → (attempt 3) → STILL failing? → Escalation Notice → Phase Chat
+```
+
+---
+
+## Escalation Path (P4.1)
+
+Escalate **upward to the Phase Chat** (never laterally) when you hit something you
+cannot resolve within your Milestone authority:
+
+| Trigger | Why it escalates |
+|---------|------------------|
+| 3 rework attempts exhausted | The Epic cannot complete as specified |
+| Out-of-scope finding | The fix requires work beyond this Milestone's scope |
+| Missing or contradictory spec | You cannot author a correct Epic spec / review against it |
+| Cross-milestone dependency | Resolution belongs above your Milestone (lateral contact is prohibited) |
+| Authority conflict | A decision exceeds Milestone authority (e.g., production, Phase scope) |
+
+To escalate, produce an **Escalation Notice** using
+`governance/templates/escalation-notice.md`: state the blocker, what you already tried,
+the decision you need, and the impact (who/what is blocked). Commit it and submit it to
+the Phase Chat. Do not proceed on the blocked path until the Phase Chat responds.
+
+**Reference:** Escalation Notice template `governance/templates/escalation-notice.md`;
+[Troubleshooting Guide](../../docs/team-collaboration/troubleshooting-guide.md) for
+escalation problems; [Phase Lead Guide](../../docs/team-collaboration/phase-lead-guide.md).
+
+---
+
 ## Session Lifecycle
 
 A Milestone Chat session follows this sequence:
@@ -274,5 +394,10 @@ A Milestone Chat session follows this sequence:
   - Completion Notice template: `governance/templates/completion-notice-epic.md`
   - Review Decision template: `governance/templates/review-decision.md`
   - Delivery Notice template: `governance/templates/delivery-notice.md`
+  - Merge Authorization template: `governance/templates/merge-authorization.md`
+  - Epic Closure Notice template: `governance/templates/epic-closure-notice.md`
+  - Escalation Notice template: `governance/templates/escalation-notice.md`
+- **Parent system:** `governance/systems/hq-execution-chat-starter.md` (HQ level)
+- **P4 entry point:** [P4 Governance System Guide](../../docs/team-collaboration/P4-governance-system-guide.md)
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13B
 - **Delivery wrapping rule:** `governance/AI-OPERATING-GUIDELINES.md` §3.1.1

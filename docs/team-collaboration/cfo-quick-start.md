@@ -2,6 +2,8 @@
 
 **Your job in under 5 minutes.**
 
+> 📍 Part of the **[P4 Governance System Guide](P4-governance-system-guide.md)** — the entry point to all team-collaboration docs.
+
 ---
 
 ## Your Role

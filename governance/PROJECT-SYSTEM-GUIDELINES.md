@@ -443,7 +443,7 @@ The Definition of Done:
 Execution chats MUST:
 - Validate all Definition of Done items
 - Open a PR against the **correct milestone branch**
-- Produce an Epic Completion Report
+- Produce a Delivery Notice
 - Declare completion explicitly and stop
 
 Delivery readiness includes verified commits and an explicit pull request handoff when automated PR creation is unavailable.
@@ -477,7 +477,7 @@ AI Structures review into Epic Review Seal (human approval, no markdown authorin
   ↓
 HQ Chat Makes Decision: Accept | Accept-with-Followups | Reject
   ↓
-Acceptance Recorded in Completion Report
+Acceptance Recorded in Review Decision
 ```
 
 ### Key Rules
@@ -488,7 +488,7 @@ Acceptance Recorded in Completion Report
 3. **HQ Chat OWNS acceptance decisions.** Acceptance is recorded explicitly and becomes immutable.
 4. **HQ Chat MUST issue explicit delivery authorization before PR/merge.** Coding Agents must await this authorization and refuse to proceed without it.
 4. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
-5. **Acceptance decisions are recorded in the Epic Completion Report.** The report captures human findings, the decision, and any follow-up actions.
+5. **Acceptance decisions are recorded in the Review Decision** (and Epic Review Seal). It captures human findings, the decision, and any follow-up actions.
 6. **Structured review artifacts are AI-generated.** Humans provide plain-language findings; Coding Agents or HQ Chat produce the Epic Review Seal from that input. Humans may approve or correct AI-structured text but are not required to author or edit markdown.
 
 7. **No Epic may close with uncommitted changes.** The working tree must be clean before merge and closure.
@@ -498,31 +498,23 @@ Acceptance Recorded in Completion Report
 
 ---
 
-## 12. Epic Completion Reports (Mandatory)
+## 12. Delivery Notice (Mandatory)
 
-Every Epic MUST conclude with an **Epic Completion Report**.
+Every Epic MUST conclude with a structured **Delivery Notice**, produced by the Coding Agent upon execution completion. It is a prerequisite for review and closure — no Epic may proceed to review or closure without one.
 
----
-## 12A. Delivery Notice (Mandatory)
-
-Every Epic MUST include a structured Delivery Notice as a prerequisite for review and closure. The Delivery Notice:
+The Delivery Notice:
 - Is produced by the Coding Agent immediately upon execution completion
 - Is required before human review or HQ authorization
 - Must be explicit, structured, and committed to the repository
-- Is referenced in the Epic Completion Report
-
-See `governance/templates/epic-completion-notice.md` for the canonical Delivery Notice template.
-
----
-
-The Epic Completion Report:
-- Is created once, at Epic completion
-- Is stored alongside the Epic spec under `docs/phases/`
+- Is created once, at Epic completion, and stored alongside the Epic spec under `docs/phases/`
 - Records what was delivered, verified, and deferred
 - Serves as the durable closure artifact for the Epic
-- **Includes the acceptance decision and human review findings** (if applicable)
 
-Completion Reports are append-only and MUST NOT modify the original Epic spec.
+Delivery Notices are append-only and MUST NOT modify the original Epic spec.
+
+The acceptance decision and human review findings are recorded separately in the **Review Decision** (and **Epic Review Seal**), not in the Delivery Notice — see §11.5.
+
+See `governance/templates/delivery-notice.md` for the canonical template.
 
 ---
 

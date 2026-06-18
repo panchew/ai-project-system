@@ -2,6 +2,8 @@
 
 **Reference tables for "who decides?" — answer in under 30 seconds.**
 
+> 📍 Part of the **[P4 Governance System Guide](P4-governance-system-guide.md)** — the entry point to all team-collaboration docs.
+
 ---
 
 ## Matrix 1: Decision Authority by Type

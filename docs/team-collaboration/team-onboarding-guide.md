@@ -2,6 +2,8 @@
 
 **Welcome to the AI Project System.**
 
+> 📍 Part of the **[P4 Governance System Guide](P4-governance-system-guide.md)** — the entry point to all team-collaboration docs.
+
 This guide helps every new team member understand their role, how the team makes decisions, and how work flows from idea to merged code. Read your role section first, then skim the others for context.
 
 ---

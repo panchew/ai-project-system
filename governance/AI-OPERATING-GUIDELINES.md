@@ -176,7 +176,7 @@ This Epic integrates work from `unplanned/template-refinements`.
 
 **Commits to integrate:**
 - `abc1234` — Add epic-review-seal.md template
-- `def5678` — Refine epic-completion-report.md structure
+- `def5678` — Refine delivery-notice.md structure
 - `ghi9012` — Add examples to epic-spec.md template
 
 **Branch closure:** Delete `unplanned/template-refinements` after Epic completion.
@@ -602,7 +602,7 @@ Human review (plain language) → AI-generated Epic Review Seal → HQ decision
 **HQ Chat review behavior:**
 - Ask humans for plain-language findings only; do not require markdown editing.
 - Generate or request AI-generated Epic Review Seals from human input, then confirm accuracy with the human before deciding.
-- Keep acceptance decisions explicit and record them in the Epic Completion Report; do not introduce execution or acceptance loops.
+- Keep acceptance decisions explicit and record them in the Review Decision; do not introduce execution or acceptance loops.
 
 **Coding Agent support during review:**
 - When asked, generate Epic Review Seal drafts from human-provided natural language without altering intent.
@@ -691,7 +691,7 @@ HQ Chat makes explicit acceptance decisions using one of three outcomes:
 2. **Accept with follow-up Epic(s):** Epic is accepted, but new Epics must be created to address findings.
 3. **Reject:** Epic does not meet requirements; new Epic(s) must be created.
 
-Acceptance is documented in the Epic Completion Report and becomes immutable.
+Acceptance is documented in the Review Decision and becomes immutable.
 
 ---
 
@@ -701,10 +701,9 @@ A Coding Agent chat concludes ONLY when:
 
 1. All Definition of Done items are satisfied
 2. Delivery requirements are fulfilled
-3. Epic Completion Report is produced and committed
+3. A structured Delivery Notice has been produced and committed
 4. AI explicitly declares the Epic complete
-5. A structured Delivery Notice has been produced and committed
-6. HQ authorization for PR/merge has been received and executed
+5. HQ authorization for PR/merge has been received and executed
 7. The working tree is clean (no uncommitted changes)
 8. Execution stops immediately after merge
 

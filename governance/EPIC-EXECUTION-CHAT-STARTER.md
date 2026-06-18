@@ -29,8 +29,8 @@ COMPLETION REQUIREMENTS
 
 - Definition of Done satisfied
 - PR opened against correct milestone branch
-- Epic Completion Report produced and committed
 - **Completion Notice artifact** produced (see `governance/templates/completion-notice-epic.md`)
+- **Delivery Notice** produced and committed after merge (see `governance/templates/delivery-notice.md`)
 - Agent declares Epic complete and stops
 
 ## Artifact-Driven Communication (P4.1)

@@ -45,11 +45,11 @@
 **Cause:** The Epic has exhausted the Dev-QA retry limit (3 attempts).
 
 **Solution:**
-1. The Epic Agent (or Contributor) produces an **Escalation Report** explaining:
+1. The Epic Agent (or Contributor) produces an **Escalation Notice** (template: `governance/templates/escalation-notice.md`) explaining:
    - What was attempted in each of the 3 attempts
    - What the blocking issue is (spec gap, ambiguity, dependency)
    - What decision is needed to unblock
-2. Submit the Escalation Report to the Milestone Chat
+2. Submit the Escalation Notice to the Milestone Chat
 3. The Milestone Agent evaluates:
    - **Spec gap:** Amend the spec, reset retry counter, reauthorize
    - **Scope issue:** Reduce Epic scope, split into two Epics
@@ -178,8 +178,103 @@ This is the most serious governance violation in the system. It must be escalate
 
 ---
 
+## P4 System & Tooling Issues
+
+### Problem: Daemon reports "Orchestrator not found" on a fresh checkout
+
+**Cause:** The daemon could not locate the `ai-project-orchestrator` binary. The root
+cause fixed in **E17.1 (PR #73, merge commit `f19ca36`)** was a *path-derivation* bug,
+**not** a missing binary: the daemon derived the orchestrator path strictly from
+`PROJECT_ROOT` (`<PROJECT_ROOT>/bin/ai-project-orchestrator`). When the daemon runs from a
+governance submodule with `--project-root .` pointing at the *consuming* project, the
+orchestrator is not under that project's `bin/` — it ships inside the governance package,
+next to the daemon. The binary was present all along; the daemon was looking in the wrong
+place. This is **not** a "v2.0.0 is missing the binary" problem.
+
+**Solution:**
+1. Make sure you are on a build that includes the E17.1 fix (merged to `milestone/M17`).
+   The daemon now searches an ordered set of locations and falls back to its own
+   directory, which always contains the orchestrator.
+2. Verify resolution without running a job: `governance/bin/ai-project-daemon --project-root . --check`. It prints `Orchestrator found at …` on success.
+3. If `--check` still fails, it lists every path it tried — confirm the governance
+   submodule is actually checked out (not an empty submodule dir) and that
+   `governance/bin/ai-project-orchestrator` exists and is executable.
+4. As a temporary unblock, run in manual mode (copy-paste artifacts) until the daemon
+   resolves.
+
+---
+
+### Problem: An Epic starter references the wrong milestone branch (e.g., `milestone/M144`)
+
+**Cause:** A copy-paste typo in an Epic Execution Chat Starter — the milestone branch name
+in the body does not match the Epic's actual milestone (an `M14`→`M144` / `M14x` slip).
+This recurred across M15 and M17 and, if followed literally, sends a PR to a branch that
+does not exist.
+
+**Solution:**
+1. Run the lint check: `pytest tests/test_starter_lint.py -v`. It scans every
+   `*epic-execution-chat-starter.md` under `docs/`, derives the expected milestone from the
+   file's name/context, and fails on any `milestone/M#` reference that doesn't match.
+2. Fix each flagged occurrence so the branch matches the Epic's milestone (e.g.,
+   `milestone/M144` → `milestone/M14`).
+3. Re-run the check until it passes. The test is wired into the suite, so CI will catch
+   regressions on future starters automatically.
+
+---
+
+### Problem: SLA shows "missed" but the review was actually on time (timezone drift)
+
+**Cause:** SLA elapsed time is computed from artifact timestamps. If a Completion Notice
+or Review Decision timestamp is written in local time, or without the `Z`/offset, the
+calculation compares values in different zones and reports a false miss (or a false
+"on track").
+
+**Solution:**
+1. Confirm every artifact timestamp is **ISO-8601 UTC** with the trailing `Z`
+   (e.g., `2026-06-17T14:32:00Z`) — this is the schema requirement.
+2. Recompute the elapsed time in UTC: `review_decision.timestamp − completion_notice.timestamp`. Compare against the SLA (24h regular, 4h bugfix).
+3. Fix any non-UTC timestamps in the affected artifacts and re-evaluate. If the corrected
+   delta is within SLA, note the correction in the chat; the miss was a measurement error,
+   not a process failure.
+
+---
+
+### Problem: An Epic is labeled "Spec Complete" but the spec is not actually actionable
+
+**Cause:** A status of "Spec Complete" was recorded before the spec was genuinely
+reviewed — it is missing a Definition of Done, acceptance criteria, or deliverables, so
+the Epic Agent cannot execute against it. "Status said done" is not the same as "done."
+
+**Solution:**
+1. Treat documentation as authoritative over status labels: open the spec and verify it
+   has a problem statement, deliverables, a Definition of Done, and acceptance criteria.
+2. If any are missing, the spec is **not** complete regardless of the label. Do not start
+   execution.
+3. The Milestone Agent amends the spec (or the Epic Agent raises an **Escalation Notice**
+   for a missing/contradictory spec) before work begins. Correct the status only once the
+   spec is actually actionable.
+
+---
+
+### Problem: A team member is unsure where to escalate or which path to use
+
+**Cause:** The escalation path was unclear — the person didn't know escalation is strictly
+upward, or which artifact to use.
+
+**Solution:**
+1. Escalation is always **upward**: Epic → Milestone → Phase → HQ/CFO. Never escalate to a
+   sibling (lateral escalation is prohibited).
+2. Use an **Escalation Notice** (`governance/templates/escalation-notice.md`): state the
+   blocker, what was tried, the decision needed, and the impact. Commit it.
+3. Match the trigger to the level — rework exhaustion and spec gaps go to the parent chat;
+   production and Phase-scope decisions go to HQ/CFO. See the
+   [Decision Matrices](decision-matrices.md) and [FAQ Q19](faq.md).
+
+---
+
 ## Cross-References
 
+- [P4 Governance System Guide](P4-governance-system-guide.md) — start here / entry point
 - [FAQ](faq.md) — common questions answered
 - [Contributor Guide](contributor-guide.md) — correct Epic workflow
 - [Reviewer Guide](reviewer-guide.md) — review process

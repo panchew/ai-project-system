@@ -192,7 +192,7 @@ Epic mode is an execution session scoped to a single Epic. It:
 - Opens with an Epic Execution Chat Starter from Milestone mode
 - Executes all Definition of Done items
 - Produces code, commits, and pull requests
-- Creates a Completion Report
+- Creates a Delivery Notice
 - Requests human review
 - Responds to HQ Chat (either directly or via Phase/Milestone Chat per bootstrap mode)
 
@@ -206,7 +206,7 @@ Epic mode is an execution session scoped to a single Epic. It:
 
 - **Code and commits** — implementation of all DoD items
 - **Pull request** — proposed merge to the target branch
-- **Completion Report** — structured summary of deliverables
+- **Delivery Notice** — structured summary of deliverables
 - **Epic Review Seal** (structured) — findings for human review
 
 ### What It Issues

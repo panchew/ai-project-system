@@ -2,7 +2,9 @@
 
 **Documentation for adopting the AI Project System as a team.**
 
-Start here. Pick your role and read your guide first.
+New to P4? Start with the **[P4 Governance System Guide](P4-governance-system-guide.md)** —
+the entry point that explains what P4 adds and links to everything here. Then pick your
+role below and read your guide first.
 
 ---
 
@@ -20,6 +22,10 @@ Start here. Pick your role and read your guide first.
 
 ## All Guides
 
+### Start Here
+
+- [P4 Governance System Guide](P4-governance-system-guide.md) — Entry point: what P4 is, key concepts, and links to every guide
+
 ### Role Guides
 
 - [Team Onboarding Guide](team-onboarding-guide.md) — System overview, all roles, authority matrix, your first week
@@ -31,7 +37,7 @@ Start here. Pick your role and read your guide first.
 ### Reference
 
 - [Decision Matrices](decision-matrices.md) — Who decides what, in table format
-- [FAQ](faq.md) — 15 answered "How do I...?" questions
+- [FAQ](faq.md) — 23 answered "How do I...?" questions
 - [Troubleshooting Guide](troubleshooting-guide.md) — Common problems with problem → cause → solution structure
 
 ### Tutorial

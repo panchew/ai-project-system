@@ -46,8 +46,9 @@ ai-project-system/
 │       ├── milestone-spec.md
 │       ├── epic-spec.md
 │       ├── epic-execution-chat-starter.md
-│       ├── epic-completion-report.md
-│       ├── epic-completion-notice.md
+│       ├── delivery-notice.md
+│       ├── completion-notice-epic.md
+│       ├── review-decision.md
 │       ├── epic-review-seal.md
 │       └── governance-source.md
 │
@@ -205,7 +206,7 @@ Created in Epic E4.1, migrated to `/governance` in E6.2.
 - `milestone-spec.md` — Template for creating new Milestone specs
 - `epic-spec.md` — Template for creating new Epic specs
 - `epic-execution-chat-starter.md` — Template for AI execution instructions
-- `epic-completion-report.md` — Template for completion documentation
+- `delivery-notice.md` — Template for Epic delivery/completion documentation
 - `epic-review-seal.md` — Template for human review documentation
 - `governance-source.md` — Template for governance adoption declaration
 - `README.md` — Template usage guide

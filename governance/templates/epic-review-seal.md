@@ -21,7 +21,7 @@
   
   - The seal captures findings and recommendations
   - HQ Chat makes the final acceptance decision
-  - The decision is recorded in the Epic Completion Report
+  - The decision is recorded in the Review Decision
   
   See AI-OPERATING-GUIDELINES.md Section 11 for full context.
 -->
@@ -85,7 +85,7 @@
   - Verified governance updates in PROJECT-SYSTEM-GUIDELINES.md
   - Verified AI-OPERATING-GUIDELINES.md updates
   - Confirmed Epic Review Seal template was created
-  - Reviewed Completion Report structure
+  - Reviewed Delivery Notice structure
 -->
 
 **Findings:**
@@ -146,7 +146,7 @@ Based on the findings above, should this Epic be:
 - Verified governance updates in PROJECT-SYSTEM-GUIDELINES.md
 - Verified AI-OPERATING-GUIDELINES.md updates
 - Confirmed Epic Review Seal template was created
-- Reviewed Completion Report structure
+- Reviewed Delivery Notice structure
 
 **Findings:**
 - Governance documentation correctly separates execution from acceptance
@@ -174,7 +174,7 @@ Based on the findings above, should this Epic be:
 
 - The Epic Review Seal is **human-centric**. It's designed to capture natural language findings without forcing premature structure.
 - The seal is **NOT a blocker**. It's a lightweight mechanism for communicating findings to HQ Chat.
-- HQ Chat makes the final acceptance decision, which is recorded in the Epic Completion Report.
+- HQ Chat makes the final acceptance decision, which is recorded in the Review Decision.
 - If the recommendation is "Accept with follow-ups" or "Reject", new Epic(s) must be created to address findings.
 
 ---
@@ -187,5 +187,5 @@ Based on the findings above, should this Epic be:
 
 - [AI-OPERATING-GUIDELINES.md Section 11](../AI-OPERATING-GUIDELINES.md) — Human Review and Epic Review Seal process
 - [PROJECT-SYSTEM-GUIDELINES.md Section 11.5](../PROJECT-SYSTEM-GUIDELINES.md) — Execution vs Acceptance
-- [Epic Completion Report Template](epic-completion-report.md) — Where acceptance decisions are recorded
+- [Review Decision Template](review-decision.md) — Where acceptance decisions are recorded
 - [Epic E2.1 Spec](../phases/P1__System_Foundation_and_Adoption/P1-M2-E2.1__spec__human-review-and-acceptance.md) — Original Epic that created this template
