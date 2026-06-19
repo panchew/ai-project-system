@@ -26,8 +26,14 @@ Its goal is to ensure:
 
 Projects are initialized using the `ai-project init` CLI command. Governance documents live in
 a dedicated governance submodule (`.governance/`) — they are **not** copied into the project
-repository. The Genesis / Creation Chat is the entry point for defining the project's intent
-before any execution begins.
+repository.
+
+The **Creation Chat** is the entry point that turns a project brief into the first structured
+artifact: a committed `genesis.md`. It runs once, right after `ai-project init`, and scopes
+only project identity, Phase 1 boundaries, and team composition. It does not plan milestones
+or epics and does not execute work — that begins with the Phase Chat. The full Creation Chat
+role (inputs, authority, outputs, stopping condition) is defined in
+[`chat-hierarchy.md`](chat-hierarchy.md#level-0-creation-chat-project-bootstrap).
 
 ---
 
@@ -60,18 +66,31 @@ every project aligned to a versioned, auditable governance source. See
 
 ---
 
-## Step 3 — Open the Genesis / Creation Chat
+## Step 3 — Run the Creation Chat (produce and commit `genesis.md`)
 
-Open [`governance/templates/genesis.md`](../templates/genesis.md) and use it as the prompt for
-a new Creation Chat session. The Genesis template collects:
+Copy [`governance/templates/genesis.md`](../templates/genesis.md) into the project and fill it
+out in a Creation Chat session. The genesis template collects:
 
-- Project name and purpose
-- Stakeholders and roles (CFO, Phase Leads, Contributors)
-- Initial phase and milestone intent
-- Governance alignment declaration
+- Project name and purpose (Project Brief)
+- Stakeholders and roles — CFO, Phase Lead, Contributors (Initial Team)
+- The HQ Context Packet that opens the next chat
+- Phase 1 name, goal, and milestone stubs (Phase 1 Scope)
+- The decisions the Creation Chat settled (Creation Chat Decisions)
 
-The Creation Chat produces the first structured artifacts — the project's initial HQ Chat
-context and Phase 1 scope — before any code or execution begins.
+When every section is filled, set `status: complete` in the front-matter and **commit
+`genesis.md` to the repository**. A committed `genesis.md` is the single artifact required
+before a Phase Chat can open.
+
+There are **no manual governance file-copy steps** — governance is sourced from the
+`.governance/` submodule, and `genesis.md` is the only artifact you author by hand at this
+stage. For a completed reference, see
+[`examples/genesis-walkthrough/genesis.md`](../../examples/genesis-walkthrough/genesis.md).
+
+**Next step:** with `genesis.md` committed, open a Phase Chat using
+[`governance/templates/phase-execution-chat-starter.md`](../templates/phase-execution-chat-starter.md),
+passing `genesis.md` (its HQ Context Packet and Phase 1 Scope) as the mandatory context
+packet. The remaining steps below describe the ongoing HQ-level control plane that governs
+the project after Phase 1 planning begins.
 
 ---
 
@@ -93,8 +112,8 @@ the same governance version.
 
 ## Step 5 — Spawn the HQ Chat
 
-Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface, using
-the HQ Execution Chat Starter produced by the Creation Chat.
+Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface, opened
+from the HQ Context Packet recorded in the committed `genesis.md`.
 
 The HQ Chat becomes the **strategic control plane** for the project:
 - Defines Phases, Milestones, and Epics
