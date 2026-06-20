@@ -40,6 +40,17 @@
 | **Epic Closure Notice** | [epic-closure-notice.md](epic-closure-notice.md) | Coding Agent confirms a merge completed, to the Milestone Chat |
 | **Escalation Notice** | [escalation-notice.md](escalation-notice.md) | Any chat escalates a blocking or out-of-scope finding to its parent |
 
+### Bugfix Workflow Templates (P4.2)
+
+| Template | File | When to Use |
+|----------|------|-------------|
+| **Deployment Authorization** | [deployment-authorization.md](deployment-authorization.md) | CFO authorizes (or rejects) deploying an Epic or Bugfix Epic to production/staging — the production deployment gate's record |
+| **Post-Mortem** | [post-mortem.md](post-mortem.md) | Incident analysis after a Critical/High severity Bugfix Epic resolves (required for Critical/High, optional for Medium/Low) |
+
+> Bugfix Epic specs themselves live in `docs/bugfixes/` under the `B#.#` convention — see
+> [`docs/bugfixes/README.md`](../../docs/bugfixes/README.md) and the
+> [Bugfix Epic Workflow](../systems/bugfix-epic-workflow.md).
+
 ---
 
 ## Quick Start Workflow
