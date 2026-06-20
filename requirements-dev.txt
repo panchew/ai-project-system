@@ -1,0 +1,5 @@
+# Development dependencies for the AI Project System.
+# Install with: pip install -r requirements-dev.txt
+
+# Test runner for the governance/template validation suite under tests/.
+pytest>=7.0
