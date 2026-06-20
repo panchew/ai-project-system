@@ -7,7 +7,7 @@ date: 2026-06-20
 status: open
 ---
 
-# Escalation Notice: Two process gaps surfaced during M19 execution (non-blocking, for future-work hardening)
+# Escalation Notice: Process gaps surfaced during M19 execution (non-blocking, for future-work hardening)
 
 ## Trigger
 
@@ -48,6 +48,18 @@ working tree can switch the branch under each other and commit to the wrong plac
 clobber each other's uncommitted/untracked work. There is currently no convention assigning
 working-tree ownership per chat.
 
+### Gap 3 — Creation Chat / CFO scope direction entered an Epic out-of-band
+
+Mid-execution, the CFO (Layer 8, operating Creation Chat) added new scope to E19.2 — a "CFO
+PR review gate" — by having Creation Chat produce a *revised Epic Execution Chat Starter*
+with a new binding "Constraint 2," which was pasted into the already-running E19.2 Epic chat.
+The Epic Agent implemented it faithfully. The directive is legitimate top-level authority,
+but the channel bypassed the artifact cascade (Steering Note → HQ → Phase → Milestone spec
+amendment) and the Milestone Chat that owns epic starters, and left no audit trail. On first
+review the addition was indistinguishable from an Epic Agent self-authorizing scope — exactly
+the ambiguity a proper trail prevents. (This is the same class of out-of-band intervention
+that the E19.2 Bouncer-Work-Log → Steering-Note loop exists to capture.)
+
 ## What Was Attempted
 
 - **Gap 1:** Resolved for M19 in-flight by committing the reference Steering Note so the
@@ -57,6 +69,11 @@ working-tree ownership per chat.
   E19.2 runs and switching to read-only review of the epic branch (`git show`/`git diff`)
   instead of checking out the epic branch. This avoids further collisions; it does not
   establish a durable isolation convention.
+- **Gap 3:** Formalized after the fact rather than rejecting correct, CFO-wanted work:
+  Creation Chat issued Steering Note SN-9 (`2026-06-20__creation-chat__steering-note.md`)
+  recording the decision; the Milestone Chat amended the E19.2 spec to v1.1 (Constraint 2 +
+  Functional Requirement 5, with a provenance note) adopting it; E19.2 was then accepted
+  against v1.1. This restores the audit trail; it does not establish the routing rule.
 
 ## Decision Needed
 
@@ -74,14 +91,19 @@ For Phase Chat (and forward the system-level items to HQ Chat):
    `milestone/M19` (cherry-picked) rather than only arriving via the E19.2 merge, or
    whether arriving via the merge is acceptable. (Milestone Chat's view: arriving via the
    merge is acceptable; no action needed.)
+4. **Ratify the routing rule** (Gap 3): scope direction from Creation Chat / the CFO MUST
+   flow as a Steering Note + spec amendment (and, for an in-flight Epic, a Milestone-Chat
+   re-issued starter), never as a pasted starter edit. Confirm the after-the-fact
+   formalization of the E19.2 CFO PR review gate is the correct remedy, and document the
+   rule in the operating guidelines / `chat-hierarchy.md`.
 
 ## Impact
 
-Non-blocking for M19. E19.1 is merged and closed; E19.2 is in progress with its
-prerequisite present. The cost of inaction is future recurrence: silent false-green
-prerequisite checks and silent wrong-branch/clobbered-work commits, both of which become
-more likely and more damaging as more chats run concurrently and as execution moves toward
-agentic mode.
+Non-blocking for M19. E19.1 is merged and closed; E19.2 is accepted (against spec v1.1) and
+authorized to merge. The cost of inaction is future recurrence: silent false-green
+prerequisite checks, silent wrong-branch/clobbered-work commits, and out-of-band scope
+changes with no audit trail — all of which become more likely and more damaging as more
+chats run concurrently and as execution moves toward agentic mode.
 
 ## Resolution
 
