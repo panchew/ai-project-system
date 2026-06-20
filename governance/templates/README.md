@@ -8,6 +8,12 @@
 
 ## Available Templates
 
+### Project Bootstrap Template
+
+| Template | File | When to Use |
+|----------|------|-------------|
+| **Genesis** | [genesis.md](genesis.md) | Starting a brand-new project — the Creation Chat fills this out to produce the committed `genesis.md` that lets a Phase Chat open (see [`../systems/start-a-project.md`](../systems/start-a-project.md)) |
+
 ### Core Specification Templates
 
 | Template | File | When to Use |
@@ -83,6 +89,27 @@
 ## Front-Matter Field Reference
 
 All specs use YAML front-matter to enable programmatic parsing and validation.
+
+### Genesis Front-Matter
+
+```yaml
+---
+type: genesis                      # Identifies this as a genesis artifact
+project: <project-slug>            # Project name (kebab-case)
+created_by: <role or person>       # Creation Chat role or person
+date: <YYYY-MM-DD>                 # ISO date the genesis was completed
+phase_1_name: <Phase 1 name>      # Short human name of Phase 1
+status: <draft|complete>           # draft while filling in; complete when ready to hand off
+---
+```
+
+**Field Descriptions:**
+- `type`: Always `genesis` for genesis artifacts
+- `project`: Project identifier (kebab-case, e.g., `taskflow`)
+- `created_by`: The role or person acting as Creation Chat
+- `date`: ISO 8601 date the genesis was completed
+- `phase_1_name`: Short name of Phase 1 (e.g., `Core Task Management`)
+- `status`: `draft` while in progress, `complete` once committed and ready for the Phase Chat
 
 ### Phase Spec Front-Matter
 
