@@ -328,11 +328,10 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 - M15 (Cleanup and Salvage): ✅ complete
 - M16 (Team Collaboration Example & Documentation): ✅ complete
 - M17 (Bug Fixes & Polish): ✅ complete
+- M18 (Inception Artifacts): ✅ complete
 
 **Remaining:**
-- M18 (Inception Artifacts): 3-5 days
-- M19 (Two-Stage Lifecycle): 2-3 days
-- M20 (Bugfix Workflow): 1-2 weeks
+- M19 (Creation Chat Completion and Bugfix Workflow) — final P4 milestone: 3-5 days
 
 ---
 
