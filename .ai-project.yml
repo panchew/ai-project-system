@@ -11,6 +11,13 @@ project:
   name: ai-project-system
   description: "AI Project System governance source repository"
 
+# CFO PR review gate — Layer 8 sees PR changes before a merge happens.
+# enabled (default): merge-ready PRs surface in the Progress Digest's Open Decisions
+#   section for CFO diff review before merge.
+# disabled: merges proceed automatically (agentic auto-merge), no gate.
+# See governance/systems/creation-chat-guide.md (CFO PR Review Gate).
+cfo_review_gate: enabled
+
 # Hybrid model mapping for unattended 24/7 autonomous cluster execution
 models:
   hq: remote:gpt-4o

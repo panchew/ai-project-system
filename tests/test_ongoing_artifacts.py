@@ -22,6 +22,7 @@ STEERING_NOTE_TEMPLATE = TEMPLATES / "steering-note.md"
 PROGRESS_DIGEST_TEMPLATE = TEMPLATES / "progress-digest.md"
 BOUNCER_WORK_LOG_TEMPLATE = TEMPLATES / "bouncer-work-log.md"
 CREATION_CHAT_GUIDE = REPO_ROOT / "governance" / "systems" / "creation-chat-guide.md"
+AI_PROJECT_YML = REPO_ROOT / ".ai-project.yml"
 REFERENCE_STEERING_NOTE = (
     REPO_ROOT
     / ".ai-project"
@@ -230,3 +231,29 @@ class TestCreationChatGuide:
         assert "When to Write a Steering Note" in content
         assert "When to Expect a Progress Digest" in content
         assert "Bouncer Work Log" in content
+
+    def test_documents_cfo_review_gate(self):
+        content = CREATION_CHAT_GUIDE.read_text(encoding="utf-8")
+        assert "CFO PR Review Gate" in content
+        assert "cfo_review_gate" in content
+        # Both gate states must be documented.
+        assert "enabled" in content and "disabled" in content
+
+
+# ---------------------------------------------------------------------------
+# CFO PR review gate (Constraint 2)
+# ---------------------------------------------------------------------------
+
+class TestCfoReviewGate:
+    def test_progress_digest_surfaces_merge_ready_prs(self):
+        # Open Decisions must surface merge-ready PRs awaiting CFO review.
+        content = PROGRESS_DIGEST_TEMPLATE.read_text(encoding="utf-8")
+        assert "cfo_review_gate" in content or "CFO" in content
+        assert "merge-ready" in content.lower() or "merge review" in content.lower()
+
+    def test_ai_project_yml_has_gate_setting(self):
+        config = yaml.safe_load(AI_PROJECT_YML.read_text(encoding="utf-8"))
+        assert config.get("cfo_review_gate") in {"enabled", "disabled"}, (
+            f".ai-project.yml cfo_review_gate must be enabled|disabled, "
+            f"got: {config.get('cfo_review_gate')}"
+        )

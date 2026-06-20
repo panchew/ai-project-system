@@ -108,6 +108,53 @@ the project stands — if they do, the digest has failed its purpose.
 
 ---
 
+## CFO PR Review Gate
+
+Layer 8 (the CFO / human operator) must be able to see PR changes before a merge
+happens. This is a **configurable gate** — ON by default, disableable per project
+when the CFO trusts the process to merge automatically. The gate is additive: it
+does not replace or rename the existing merge-authorization artifacts, it adds a
+human review step ahead of them.
+
+### Configuration
+
+The toggle is a project-level setting in `.ai-project.yml`:
+
+```yaml
+cfo_review_gate: enabled   # or: disabled
+```
+
+- **`enabled`** (default) — every merge-ready PR must be surfaced for CFO diff
+  review before it merges.
+- **`disabled`** — merges proceed automatically (agentic auto-merge); behavior is
+  unchanged from a system with no gate.
+
+A project that omits the key is treated as `enabled` (gate ON by default).
+
+### Behavior when the gate is ON
+
+```
+PR becomes merge-ready
+  → surfaced in the Progress Digest "Open Decisions" section
+    (PR number, source → target branch, one-line change summary)
+      → CFO reviews the diff
+        → CFO approves
+          → merge proceeds (existing merge-authorization flow)
+```
+
+The Progress Digest is the single visible surface, so the merge-ready PR appears
+there — showing **what will merge**, not merely that something is ready. This keeps
+the gate consistent with the single-visible-interface constraint: the CFO never has
+to leave the Creation Chat surface to know a merge is pending.
+
+### Behavior when the gate is OFF
+
+The current automated merge behavior is unchanged. Merge-ready PRs do **not** appear
+in the Progress Digest's Open Decisions section, and merges complete without a human
+review step.
+
+---
+
 ## Bouncer Work Log → Steering Note Loop
 
 Bouncer work is Layer-8 manual intervention triggered by operating a live system:

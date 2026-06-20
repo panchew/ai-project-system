@@ -54,10 +54,17 @@ period_covered: <ISO-date range, e.g. 2026-06-14 to 2026-06-20>
 ## Open Decisions
 
 <!-- Decisions the user must make or confirm. Numbered. Each item states the
-     question AND the deadline or trigger. Write "None." if there are none. -->
+     question AND the deadline or trigger. Write "None." if there are none.
+
+     CFO PR review gate (when cfo_review_gate is ON — the default): this section
+     MUST surface every merge-ready PR awaiting CFO review. Show what will merge —
+     PR number, source → target branch, and a one-line summary of the change — not
+     just that something is ready. The CFO reviews the diff here, then approves and
+     the merge proceeds. When the gate is OFF, merges are automated and merge-ready
+     PRs do NOT appear here. See governance/systems/creation-chat-guide.md. -->
 
 1. <The decision/question the user must resolve.> — <deadline or trigger>
-2. <The decision/question the user must resolve.> — <deadline or trigger>
+2. **Merge review (CFO gate):** PR #<n> `<source>` → `<target>` — <one-line change summary>. Approve to merge.
 
 ## Next Actions
 
