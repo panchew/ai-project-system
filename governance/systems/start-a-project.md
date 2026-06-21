@@ -1,11 +1,11 @@
 ---
 project: ai-project-system
-phase: P1
-milestone: M1
-epic: null
+phase: P4
+milestone: M15
+epic: E15.1
 type: system
 status: active
-last_updated: 2026-01-17
+last_updated: 2026-06-13
 ---
 
 # Starting a New Project Under the AI Project System
@@ -22,82 +22,108 @@ Its goal is to ensure:
 
 ---
 
+## Overview
+
+Projects are initialized using the `ai-project init` CLI command. Governance documents live in
+a dedicated governance submodule (`.governance/`) — they are **not** copied into the project
+repository.
+
+The **Creation Chat** is the entry point that turns a project brief into the first structured
+artifact: a committed `genesis.md`. It runs once, right after `ai-project init`, and scopes
+only project identity, Phase 1 boundaries, and team composition. It does not plan milestones
+or epics and does not execute work — that begins with the Phase Chat. The full Creation Chat
+role (inputs, authority, outputs, stopping condition) is defined in
+[`chat-hierarchy.md`](chat-hierarchy.md#level-0-creation-chat-project-bootstrap).
+
+---
+
 ## Step 1 — Create the Repository
 
 Create a new Git repository using your preferred tooling.
 
-At minimum, the repository MUST contain:
-- A `docs/` directory
-- A project-level `README.md`
-
-No code is required at this stage.
+The repository needs only a project-level `README.md` to begin — `ai-project init` will
+create all required structure.
 
 ---
 
-## Step 2 — Install Governance Documents
+## Step 2 — Run `ai-project init`
 
-Copy the following governance documents into `docs/`:
+Run the project scaffolding command from the repository root:
 
-- `PROJECT-SYSTEM-GUIDELINES.md`
-- `AI-OPERATING-GUIDELINES.md`
+```bash
+ai-project init <project-name>
+```
 
-These documents become **authoritative** for the project.
+This command:
+- Adds the `ai-project-system` governance repository as a Git submodule at `.governance/`
+- Creates `.ai-project.yml` declaring the governance source and pinned ref
+- Installs the HQ agent file
+- Creates the baseline documentation structure under `docs/`
 
-They MUST NOT be modified unless governance evolution is explicitly intended.
+The submodule model means governance documents are always sourced from `.governance/`, keeping
+every project aligned to a versioned, auditable governance source. See
+[`governance/submodule-setup.md`](../submodule-setup.md) for submodule details.
 
 ---
 
-## Step 3 — Initialize Documentation Structure
+## Step 3 — Run the Creation Chat (produce and commit `genesis.md`)
 
-Create the baseline documentation structure:
+Copy [`governance/templates/genesis.md`](../templates/genesis.md) into the project and fill it
+out in a Creation Chat session. The genesis template collects:
 
-```
-docs/
-├─ README.md
-├─ context/
-├─ systems/
-├─ phases/
-├─ decisions/
-└─ templates/
-```
+- Project name and purpose (Project Brief)
+- Stakeholders and roles — CFO, Phase Lead, Contributors (Initial Team)
+- The HQ Context Packet that opens the next chat
+- Phase 1 name, goal, and milestone stubs (Phase 1 Scope)
+- The decisions the Creation Chat settled (Creation Chat Decisions)
 
+When every section is filled, set `status: complete` in the front-matter and **commit
+`genesis.md` to the repository**. A committed `genesis.md` is the single artifact required
+before a Phase Chat can open.
 
-This structure enables all future work.
+There are **no manual governance file-copy steps** — governance is sourced from the
+`.governance/` submodule, and `genesis.md` is the only artifact you author by hand at this
+stage. For a completed reference, see
+[`examples/genesis-walkthrough/genesis.md`](../../examples/genesis-walkthrough/genesis.md).
+
+**Next step:** with `genesis.md` committed, open a Phase Chat using
+[`governance/templates/phase-execution-chat-starter.md`](../templates/phase-execution-chat-starter.md),
+passing `genesis.md` (its HQ Context Packet and Phase 1 Scope) as the mandatory context
+packet. The remaining steps below describe the ongoing HQ-level control plane that governs
+the project after Phase 1 planning begins.
 
 ---
 
 ## Step 4 — Declare System Alignment
 
-Create:
+The `ai-project init` command creates `.ai-project.yml` with the governance source and ref.
+Verify that `governance.ref` in `.ai-project.yml` matches the pinned submodule commit.
 
+For manual verification:
+
+```bash
+git -C .governance rev-parse HEAD
 ```
-docs/context/system-alignment.md
-```
 
-
-Declare:
-- Governance versions in use
-- Date of alignment
-
-This allows drift detection across projects.
+This allows drift detection across projects and ensures every team member is working from
+the same governance version.
 
 ---
 
 ## Step 5 — Spawn the HQ Chat
 
-Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface.
+Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface, opened
+from the HQ Context Packet recorded in the committed `genesis.md`.
 
-The HQ Chat becomes the **strategic control plane** for the project.
-
-HQ Chats:
-- Define Phases, Milestones, and Epics
-- Produce Epic specs
-- Produce Epic Execution Chat Starters
-- Never execute code
+The HQ Chat becomes the **strategic control plane** for the project:
+- Defines Phases, Milestones, and Epics
+- Produces Epic specs and Epic Execution Chat Starters
+- Issues Review Decisions and Delivery Authorizations
+- Never executes code
 
 ---
 
-## Step 6 — Define Phase 0 or Phase 1
+## Step 6 — Define Phase 1
 
 Using the HQ Chat:
 - Define the first Phase

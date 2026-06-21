@@ -61,6 +61,42 @@ HQ mode
 
 All levels are served by a single **Governance Agent** (`governance/agents/governance.agent.md`). The Chat Starter header determines which mode activates — see [Mode Detection Logic](governance.agent.md#mode-detection-logic) in the agent definition.
 
+## Level 0: Creation Chat (Project Bootstrap)
+
+The Creation Chat is the **entry point** for a new project — the step before the four-level hierarchy begins. It runs once per project, immediately after `ai-project init`, and exists to turn a project brief into the single artifact that lets a Phase Chat open: a committed `genesis.md`. It is not one of the Governance Agent's four execution modes; it is a one-time bootstrap session (a human or an AI agent acting as Creation Chat).
+
+### Role
+
+Creation Chat scopes only **project identity, Phase 1 boundaries, and team composition**. It produces `genesis.md` from the genesis template, then hands off to the first Phase Chat. It never plans milestones or epics and never executes work.
+
+### What It Consumes
+
+- A **project brief** — goal, problem, rough Phase 1 scope, and the initial team (roles)
+- The **governance repo path** (`.governance/`, established by `ai-project init`)
+
+### What It Produces
+
+- A completed **`genesis.md`** (`status: complete`), committed to the repository
+- A **ready-to-open Phase Chat context** — the HQ Context Packet and Phase 1 Scope inside `genesis.md` are sufficient to open a Phase Chat with no further questions
+
+### Authority
+
+- **May** define and name Phase 1 scope
+- **May** assign initial team roles (CFO, Phase Lead, Contributors)
+- **May NOT** authorize execution, plan milestones/epics, or create branches, commits, or PRs — those belong to the Phase Chat and below
+
+### Stopping Condition
+
+Creation Chat is complete when `genesis.md` is committed (`status: complete`) and the user has been handed the Phase Chat starter to open next.
+
+### Documentation
+
+- **Template:** `governance/templates/genesis.md`
+- **Walkthrough example:** `examples/genesis-walkthrough/genesis.md`
+- **Process guide:** `governance/systems/start-a-project.md`
+
+---
+
 ## Level 1: HQ Mode
 
 ### Role
@@ -192,7 +228,7 @@ Epic mode is an execution session scoped to a single Epic. It:
 - Opens with an Epic Execution Chat Starter from Milestone mode
 - Executes all Definition of Done items
 - Produces code, commits, and pull requests
-- Creates a Completion Report
+- Creates a Delivery Notice
 - Requests human review
 - Responds to HQ Chat (either directly or via Phase/Milestone Chat per bootstrap mode)
 
@@ -206,7 +242,7 @@ Epic mode is an execution session scoped to a single Epic. It:
 
 - **Code and commits** — implementation of all DoD items
 - **Pull request** — proposed merge to the target branch
-- **Completion Report** — structured summary of deliverables
+- **Delivery Notice** — structured summary of deliverables
 - **Epic Review Seal** (structured) — findings for human review
 
 ### What It Issues
@@ -342,6 +378,9 @@ Each level has well-defined decision authority:
 
 ## Reference
 
+- **Creation Chat template (genesis):** `governance/templates/genesis.md`
+- **Genesis walkthrough example:** `examples/genesis-walkthrough/genesis.md`
+- **Start a project guide:** `governance/systems/start-a-project.md`
 - **Governance Agent:** `governance/agents/governance.agent.md` (all modes)
 - **HQ Chat system:** `governance/systems/hq-chat.md`
 - **Phase Execution Chat Starter:** `governance/systems/phase-execution-chat-starter.md`

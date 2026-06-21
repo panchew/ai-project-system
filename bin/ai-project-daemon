@@ -12,12 +12,83 @@ from pathlib import Path
 
 # Paths
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
+# DAEMON_DIR is the directory this script lives in. The orchestrator binary is
+# always shipped alongside the daemon, so the daemon's own directory is the
+# canonical fallback location regardless of where PROJECT_ROOT points.
+DAEMON_DIR = Path(__file__).resolve().parent
 LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "daemon.pid"
 LOG_FILE = PROJECT_ROOT / ".ai-project" / "logs" / "daemon.log"
 QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
 EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
+# Primary orchestrator location (self-referential repo / project that vendors
+# the orchestrator under its own bin/). Kept as a module global for backward
+# compatibility; resolve_orchestrator_bin() treats it as the first candidate.
 ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
+ORCHESTRATOR_NAME = "ai-project-orchestrator"
 POLL_INTERVAL = 2
+
+# Cache for the resolved orchestrator path (NFR: resolve once, then reuse).
+_orchestrator_cache = None
+
+
+def orchestrator_search_paths():
+    """Returns the ordered list of candidate orchestrator paths.
+
+    The orchestrator binary ships inside the governance package alongside the
+    daemon. When the daemon runs from a governance submodule with
+    ``--project-root .`` pointing at the consuming project, the orchestrator is
+    NOT under ``<project>/bin/`` — it lives next to the daemon in the submodule.
+    We therefore search several conventional locations and fall back to the
+    daemon's own directory, which is always correct.
+
+    Search order:
+      1. ``<PROJECT_ROOT>/bin/``            — self-referential repo / vendored
+      2. ``<PROJECT_ROOT>/governance/bin/`` — legacy ``governance/`` convention
+      3. ``<PROJECT_ROOT>/.governance/bin/`` — canonical ``.governance/`` submodule
+      4. ``<DAEMON_DIR>/``                  — orchestrator shipped beside daemon
+    """
+    candidates = [
+        Path(ORCHESTRATOR_BIN),
+        PROJECT_ROOT / "governance" / "bin" / ORCHESTRATOR_NAME,
+        PROJECT_ROOT / ".governance" / "bin" / ORCHESTRATOR_NAME,
+        DAEMON_DIR / ORCHESTRATOR_NAME,
+    ]
+    # De-duplicate while preserving order (handles the self-referential case
+    # where candidate 1 and candidate 4 are identical).
+    seen = set()
+    ordered = []
+    for c in candidates:
+        key = str(c)
+        if key not in seen:
+            seen.add(key)
+            ordered.append(c)
+    return ordered
+
+
+def resolve_orchestrator_bin(use_cache=True):
+    """Returns the first existing orchestrator path, or None if none exist.
+
+    The result is cached after the first successful lookup so that repeated
+    queue polls do not re-stat the filesystem (NFR: performance neutral).
+    """
+    global _orchestrator_cache
+    if use_cache and _orchestrator_cache is not None:
+        return _orchestrator_cache
+    for candidate in orchestrator_search_paths():
+        if candidate.exists():
+            _orchestrator_cache = candidate
+            return candidate
+    return None
+
+
+def reset_orchestrator_cache():
+    """Clears the cached orchestrator path.
+
+    Called whenever PROJECT_ROOT changes (e.g. ``--project-root`` override) so a
+    stale resolution is never reused across different roots.
+    """
+    global _orchestrator_cache
+    _orchestrator_cache = None
 
 def check_pid_alive(pid):
     """Check if process with pid is running."""
@@ -163,6 +234,17 @@ def process_queue():
     # Order active JSON triggers lexicographically
     files.sort()
 
+    orchestrator = resolve_orchestrator_bin()
+    if orchestrator is None:
+        tried = "\n  ".join(str(p) for p in orchestrator_search_paths())
+        print(
+            "[ERROR] Orchestrator not found. Searched the following paths:\n  "
+            f"{tried}\n[ERROR] Cannot process triggers until the orchestrator is "
+            "available. Deferring queue processing.",
+            flush=True,
+        )
+        return
+
     for file_name in files:
         # Respect execution lock
         if check_execution_locked():
@@ -170,7 +252,7 @@ def process_queue():
             break
 
         print(f"[INFO] Discovered trigger: {file_name}. Invoking orchestrator...", flush=True)
-        cmd = [sys.executable, str(ORCHESTRATOR_BIN), file_name]
+        cmd = [sys.executable, str(orchestrator), file_name]
         try:
             # High-integrity crash isolation: run as subprocess, capture outputs cleanly
             process = subprocess.Popen(
@@ -235,9 +317,34 @@ def cmd_start():
         except Exception:
             pass
 
+    # Pre-flight: resolve the orchestrator so a misconfigured checkout fails
+    # loudly here instead of silently deferring every trigger later.
+    orchestrator = resolve_orchestrator_bin()
+    if orchestrator is None:
+        tried = "\n  ".join(str(p) for p in orchestrator_search_paths())
+        print(
+            "[!] Orchestrator not found. Searched:\n  "
+            f"{tried}\n[!] The daemon will start but cannot process triggers "
+            "until the orchestrator is available.",
+            file=sys.stderr,
+        )
+    else:
+        print(f"[✓] Orchestrator found at {orchestrator}")
+
     print("[*] Starting background daemon...")
     daemonize()
     run_daemon_loop()
+
+
+def cmd_check():
+    """Resolves the orchestrator and reports the result. Exit 0 if found."""
+    orchestrator = resolve_orchestrator_bin()
+    if orchestrator is not None:
+        print(f"Orchestrator found at {orchestrator}")
+        sys.exit(0)
+    tried = "\n  ".join(str(p) for p in orchestrator_search_paths())
+    print(f"Orchestrator not found. Searched:\n  {tried}", file=sys.stderr)
+    sys.exit(1)
 
 def cmd_stop():
     pid = get_daemon_pid()
@@ -315,6 +422,7 @@ Usage:
   ai-project-daemon [--project-root <path>] stop     - Stops the running background daemon process
   ai-project-daemon [--project-root <path>] status   - Displays the running status of the daemon
   ai-project-daemon [--project-root <path>] logs     - Outputs the background daemon logs
+  ai-project-daemon [--project-root <path>] --check  - Verifies the orchestrator can be located
   ai-project-daemon --test                            - Runs the embedded test suite
 
 Options:
@@ -340,6 +448,8 @@ def apply_project_root_override():
             QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
             EXECUTION_LOCK = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
             ORCHESTRATOR_BIN = PROJECT_ROOT / "bin" / "ai-project-orchestrator"
+            # PROJECT_ROOT changed; drop any cached orchestrator resolution.
+            reset_orchestrator_cache()
             # Consume the flag and its value from argv
             del sys.argv[i + 1]
             del sys.argv[i]
@@ -381,9 +491,11 @@ def main():
                 LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
                 QUEUE_DIR.mkdir(parents=True, exist_ok=True)
                 EXECUTION_LOCK.parent.mkdir(parents=True, exist_ok=True)
+                reset_orchestrator_cache()
 
             def tearDown(self):
                 global PROJECT_ROOT, LOCK_FILE, LOG_FILE, QUEUE_DIR, EXECUTION_LOCK, ORCHESTRATOR_BIN
+                reset_orchestrator_cache()
                 PROJECT_ROOT = self.orig_project_root
                 LOCK_FILE = self.orig_lock_file
                 LOG_FILE = self.orig_log_file
@@ -563,6 +675,11 @@ def main():
             def test_subprocess_management_and_logging(self, mock_stdout, mock_popen):
                 # Setup trigger
                 (QUEUE_DIR / "01_a.json").touch()
+                # Provide an orchestrator at the primary candidate path so the
+                # resolver finds it under the temp project root.
+                ORCHESTRATOR_BIN.parent.mkdir(parents=True, exist_ok=True)
+                ORCHESTRATOR_BIN.touch()
+                reset_orchestrator_cache()
 
                 # Setup mock subprocess
                 mock_process = MagicMock()
@@ -590,6 +707,10 @@ def main():
             def test_orchestrator_failure_crash_isolation(self, mock_stdout, mock_popen):
                 # Setup trigger
                 (QUEUE_DIR / "01_a.json").touch()
+                # Orchestrator must resolve for the subprocess call to be reached.
+                ORCHESTRATOR_BIN.parent.mkdir(parents=True, exist_ok=True)
+                ORCHESTRATOR_BIN.touch()
+                reset_orchestrator_cache()
 
                 # Setup mock subprocess to raise an exception
                 mock_popen.side_effect = Exception("Subprocess crashed on start")
@@ -609,6 +730,8 @@ def main():
         result = runner.run(suite)
         sys.exit(0 if result.wasSuccessful() else 1)
 
+    elif command == "--check":
+        cmd_check()
     elif command == "start":
         cmd_start()
     elif command == "stop":

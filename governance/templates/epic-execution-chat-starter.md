@@ -64,7 +64,7 @@ You are operating under the AI Project System governance framework.
 **Critical rules:**
 - Documentation is authoritative, chat is ephemeral
 - You must follow the canonical happy path for Epic closure
-- You must produce an Epic Completion Report upon execution completion
+- You must produce a Delivery Notice upon execution completion
 - You must stop after PR creation and await HQ authorization for merge
 - Accept/reject decisions are made by HQ Chat (human), not by you
 
@@ -112,7 +112,7 @@ New projects must reverse-engineer spec structure from existing files, creating 
 4. [Goal 4]
 
 <!-- Example:
-1. Provide templates for all major spec types (Phase, Milestone, Epic, Completion Report, Chat Starter)
+1. Provide templates for all major spec types (Phase, Milestone, Epic, Delivery Notice, Chat Starter)
 2. Include inline guidance and examples within templates
 3. Ensure templates align with current governance (v1.3.0)
 4. Make front-matter self-documenting
@@ -129,7 +129,7 @@ You must produce:
 2. [✅/❌] **[Deliverable 2]** (`<file-path>`)
 3. [✅/❌] **[Deliverable 3]** (`<file-path>`)
 4. [✅/❌] **[Deliverable 4]** (`<file-path>`)
-5. [✅/❌] **Epic Completion Report** (`<file-path>`)
+5. [✅/❌] **Delivery Notice** (`<file-path>`)
 
 <!-- 
   List all deliverables from Epic spec.
@@ -140,7 +140,7 @@ You must produce:
   1. ✅ **Phase spec template** (`governance/templates/phase-spec.md`)
   2. ✅ **Milestone spec template** (`governance/templates/milestone-spec.md`)
   3. ✅ **Epic spec template** (`governance/templates/epic-spec.md`)
-  4. ✅ **Epic Completion Report** (`docs/phases/P1__System_Foundation_and_Adoption/P1-M4-E4.1__completion__templates-and-scaffolding.md`)
+  4. ✅ **Delivery Notice** (`docs/phases/P1__System_Foundation_and_Adoption/P1-M4-E4.1__completion__templates-and-scaffolding.md`)
 -->
 
 ---
@@ -152,7 +152,7 @@ You must produce:
 - [ ] [DoD item 3 from Epic spec]
 - [ ] [DoD item 4 from Epic spec]
 - [ ] [DoD item 5 from Epic spec]
-- [ ] Epic Completion Report produced and committed
+- [ ] Delivery Notice produced and committed
 - [ ] All changes committed to `epic/<E#.#>` branch
 - [ ] Pull request opened to `milestone/<M#>` branch
 
@@ -213,7 +213,7 @@ You must produce:
 1. **Create branch** `epic/<E#.#>` from current `<base-branch>`
 2. **Implement all deliverables** per Epic spec
 3. **Verify governance alignment** (templates must reflect current governance)
-4. **Create Epic Completion Report** verifying all DoD items
+4. **Verify all DoD items** are satisfied and recorded in the Delivery Notice
 5. **Commit all changes** to `epic/<E#.#>` branch
 6. **Open pull request** to `milestone/<M#>` branch
 7. **Produce Epic Delivery Notice** upon completion
@@ -227,7 +227,7 @@ You must produce:
   - Implement deliverables
   - Write tests (if applicable)
   - Update documentation
-  - Create Completion Report
+  - Create Delivery Notice
   - Open PR
   - Stop and await review
 -->
@@ -368,7 +368,7 @@ delivery_date: <YYYY-MM-DD>
 - [ ] [Deliverable 1]
 - [ ] [Deliverable 2]
 - [ ] [Deliverable 3]
-- [ ] [Epic Completion Report]
+- [ ] [Delivery Notice]
 
 ## Definition of Done Status
 
@@ -405,7 +405,6 @@ This Epic is delivered and awaiting:
 
 **You MUST stop execution when:**
 - ✅ All deliverables are completed and committed
-- ✅ Epic Completion Report is created
 - ✅ Pull request is opened to `milestone/<M#>`
 - ✅ Epic Delivery Notice is produced
 

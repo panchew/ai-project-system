@@ -4,7 +4,7 @@ name: Team Collaboration and Artifact-Driven Communication
 status: active
 start_date: 2026-05-29
 planned_end_date: 2026-07-31
-version: 1.0.0
+version: 1.3.0
 ---
 
 # Phase P4: Team Collaboration and Artifact-Driven Communication
@@ -69,25 +69,25 @@ Define roles, decision authorities, and escalation paths for teams.
 
 ## Milestones
 
-### M1: Artifact System Implementation (2-3 Epics)
+### M14: Artifact System Implementation (2-3 Epics)
 
 **Goal:** Implement artifact parsing, routing, and integration in daemon and agents.
 
 **Epics:**
-- **E1.1 – Artifact Parsing & Schema Validation**
+- **E14.1 – Artifact Parsing & Schema Validation**
   - Parse YAML frontmatter from Completion Notice files
   - Validate artifact schema (required fields, types, references)
   - Route artifacts to correct parent chat based on epic_id/milestone_id
   - Test on all three artifact types (Completion Notice, Review Decision, Delivery Notice)
 
-- **E1.2 – Daemon Queue Integration**
+- **E14.2 – Daemon Queue Integration**
   - Extend daemon to detect Completion Notice files in `.ai-project/artifacts/completion-notices/`
   - Route to parent Milestone Chat or HQ Chat
   - Detect Review Decision files, route back to Epic Chat
   - Detect Delivery Notice files, route to parent for acknowledgment
   - Handle race conditions (file written while being read)
 
-- **E1.3 – Integration Tests**
+- **E14.3 – Integration Tests**
   - Test end-to-end: Epic completes → Completion Notice → Milestone reviews → Review Decision → Epic merges → Delivery Notice
   - Test rework cycle: Rejection → Epic reworks → new Completion Notice (v1.1) → Review Decision Accept
   - Test escalation: Milestone cannot decide → escalate to Phase/HQ
@@ -95,70 +95,101 @@ Define roles, decision authorities, and escalation paths for teams.
 
 ---
 
-### M2: Bugfix Epic Implementation (2-3 Epics)
+### M15: Cleanup and Salvage (1-2 Epics)
 
-**Goal:** Implement bugfix workflow with expedited SLA and production gate.
+**Goal:** Make master honest, canonical, and coherent before any P4 feature work begins.
+Remove stale artifacts, correct governance documentation, and recover the complete M14
+implementation from its stranded branch.
 
 **Epics:**
-- **E2.1 – Bugfix Epic Creation in HQ Chat**
-  - HQ Agent detects issue report in HQ Chat
-  - Decision: "Bugfix Epic" vs "Defer to next Phase"
-  - Create minimal Bugfix Epic spec (B#.#)
-  - Commit spec and issue Epic Delivery Authorization
-  - Assign Bugfix ID and severity level
+- **E15.1 – Master Cleanup**
+  - Delete M1-nomenclature planning artifacts that misrepresent M14 as "not yet started"
+  - Remove obsolete completion templates; identify canonical template
+  - Rewrite `start-a-project.md` to reflect current `ai-project init` + submodule flow
+  - Update P4 phase spec to global M15–M20 milestone numbering
 
-- **E2.2 – Expedited Review SLA & Production Gate**
-  - HQ Agent tracks Completion Notice arrival time (SLA clock starts)
-  - 4-hour SLA timer: review and issue Review Decision
-  - If SLA missed, escalate to CFO (urgency indicator)
-  - Require Deployment Authorization artifact before prod deploy
-  - CFO explicitly approves/rejects production deployment
-
-- **E2.3 – Post-Mortem for Critical/High**
-  - Auto-generate post-mortem template on Bugfix Epic completion
-  - Require root cause analysis, resolution, prevention steps
-  - Commit post-mortem to `docs/bugfixes/` for audit trail
-  - Report Critical/High to CFO dashboard
+- **E15.2 – M14 Salvage**
+  - Recover M14 artifact system implementation from stranded branch
+  - Merge complete M14 work (E14.1, E14.2, E14.3) to master
+  - Verify integration tests pass on master
 
 ---
 
-### M3: Team Collaboration Example (1-2 Epics)
+### M16: Team Collaboration Example & Documentation (2 Epics) ✅ COMPLETE
 
-**Goal:** Create and document a real-world 3-person team scenario with concurrent Epics.
+**Goal:** Create a working example project and role-based documentation to make the P4
+team collaboration model tangible for new adopters.
 
-**Epics:**
-- **E3.1 – Example Project Setup & Walkthrough**
-  - Create example project: `examples/team-project-example/`
-  - Phase P1 with 3 Milestones
-  - Each Milestone has 2-3 Epics
-  - Assign roles: CFO, Phase Lead, 2 Contributors, 1 Reviewer
-  - Document decision flow: who decides what
-  - Show how artifacts flow between chats
-
-- **E3.2 – Team Collaboration Documentation**
-  - Create "Team Onboarding Guide" (role assignment, authority matrix, when-to-escalate)
-  - Create "CFO Quick Start" (1-3 decisions per week, reviewing Completion Notices)
-  - Create "Contributor Guide" (implement Epic, ask if blocked, await Review Decision)
-  - Create "Example Run-Through" (walkthrough one full Epic from start to delivery)
+**Epics (delivered 2026-06-16, merged to phase/P4):**
+- **E16.1 – Example Project Setup & Walkthrough**
+  - `examples/team-project-example/` with Phase P1, 3 Milestones, 9 Epic specs
+  - 5-role TEAM_SETUP; 10 sample artifacts; WALKTHROUGH.md
+  - Validation test suite: `tests/test_example_project_artifacts.py`
+- **E16.2 – Team Collaboration Documentation**
+  - 10 role guides in `docs/team-collaboration/`
+  - CFO Quick Start, Team Onboarding, Contributor, Reviewer, Phase Lead guides
+  - Decision Matrices, FAQ, Troubleshooting Guide
 
 ---
 
-### M4: Bug Fixes & Polish (1-2 Epics)
+### M17: Bug Fixes & Polish (2 Epics) ✅ COMPLETE
 
-**Goal:** Fix known issues, polish documentation, prepare for team adoption.
+**Goal:** Fix the daemon orchestrator path issue blocking submodule users; bring all
+starters, templates, and governance documents current with P4.
+
+**Epics (delivered 2026-06-18, merged to phase/P4):**
+- **E17.1 – Fix Daemon Orchestrator Path Resolution**
+  - Root cause: path derived from PROJECT_ROOT rather than daemon's own directory
+  - Ordered cached fallback search; `--check` flag; 17 new unit tests
+- **E17.2 – Update Starters and Documentation**
+  - HQ Execution Chat Starter created (completes the four-level starter set)
+  - Three governance templates: merge-authorization, epic-closure-notice, escalation-notice
+  - P4 Governance System Guide; FAQ (23 questions); Troubleshooting (16 entries)
+  - Starter branch-name lint check; "Epic Completion Report" term fully retired
+  - Two-Stage Lifecycle flow documented in starters (partial delivery of original M17 scope)
+
+> **Deferred:** The Two-Stage Lifecycle *lifecycle diagram* planned in the original M17
+> scope was not delivered. M17 (executed) provided documentation coverage of the flow in
+> the starters; the diagram remains **deferred** to a future phase.
+
+---
+
+### M18: Inception Artifacts (1 Epic)
+
+**Goal:** Define and implement the Creation Chat / Genesis layer for new project
+onboarding — the foundational entry point that tells a new user (or agent) exactly how
+to begin a project under the governance system.
 
 **Epics:**
-- **E4.1 – Fix Daemon Orchestrator Path Resolution**
-  - Issue: v2.0.0 submodules don't have orchestrator binary
-  - Solution: Make daemon search in `governance/bin/` as fallback
-  - Or: Update submodule version to v3.0.0+ (includes orchestrator)
-  - Test on fresh submodule checkout
+- **E18.1 – Genesis Template and Creation Chat**
+  - Create `governance/templates/genesis.md` — canonical entry point for new project setup
+  - Define Creation Chat role: what context it receives, what it produces
+    (HQ context packet, Phase 1 scope, first milestone plan)
+  - Update `start-a-project.md` to reference the Creation Chat flow end-to-end
+  - Validate with a real new-project walkthrough (run the flow, confirm outputs)
 
-- **E4.2 – Update Starters & Documentation**
-  - Update HQ Chat Starter to reference artifact system
-  - Update Milestone Chat Starter to reference bugfix handling
-  - Create "CFO Dashboard" view (aggregated progress from multiple projects)
-  - Polish all P4 governance documents
+---
+
+### M19: Creation Chat Completion and Bugfix Workflow (2 Epics) — **Final P4 milestone**
+
+**Goal:** Close the two remaining P4 success criteria — the Creation Chat onboarding
+surface and the end-to-end Bugfix Workflow — in a single final milestone. M19 consolidates
+the previously separate M19 (Two-Stage Lifecycle) and M20 (Bugfix Workflow) plans; the
+original M19 lifecycle *diagram* is deferred (see the note under M17).
+
+**Epics:**
+- **E19.1 – Bugfix Workflow**
+  - `docs/bugfixes/` with the B#.# naming convention
+  - HQ Chat "Handling Production Issues" handler (evaluate → spec → authorize → SLA →
+    escalate)
+  - Deployment Authorization and Post-Mortem templates
+  - SLA tracking (4-hour window) and escalation documented in the bugfix workflow
+  - Carry-overs: roadmap update, pytest dependency, this phase-spec update to v1.3.0
+
+- **E19.2 – Creation Chat Completion**
+  - Complete the Creation Chat ongoing-artifacts surface begun in M18
+
+This is the **final P4 milestone**; P4 closes when M19 is delivered.
 
 ---
 
@@ -219,14 +250,14 @@ The CFO (Layer-8) will accept P4 complete when:
 ```
 .ai-project/artifacts/
 ├── completion-notices/
-│   ├── 2026-05-30T14-32-00Z__P1-M1-E1.1__completion_notice.md
-│   ├── 2026-05-30T14-35-00Z__P1-M1-E1.2__completion_notice.md
+│   ├── 2026-05-30T14-32-00Z__P1-M14-E1.1__completion_notice.md
+│   ├── 2026-05-30T14-35-00Z__P1-M14-E1.2__completion_notice.md
 │   └── ...
 ├── review-decisions/
-│   ├── 2026-05-30T15-00-00Z__P1-M1-E1.1__review_decision.md
+│   ├── 2026-05-30T15-00-00Z__P1-M14-E1.1__review_decision.md
 │   └── ...
 ├── delivery-notices/
-│   ├── 2026-05-30T16-00-00Z__P1-M1-E1.1__delivery_notice.md
+│   ├── 2026-05-30T16-00-00Z__P1-M14-E1.1__delivery_notice.md
 │   └── ...
 └── bugfixes/
     ├── 2026-05-31T09-00-00Z__B1.1__bugfix_postmortem.md
@@ -266,11 +297,11 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 
 | Risk | Likelihood | Mitigation |
 |------|------------|-----------|
-| **Artifact parsing bugs** | Medium | Comprehensive unit tests (E1.3), manual review of artifacts |
+| **Artifact parsing bugs** | Medium | Comprehensive unit tests (E14.3), manual review of artifacts |
 | **Race conditions in queue** | Medium | File locking mechanism, atomic writes, idempotent re-processing |
 | **4-hour SLA missed** | Medium | Escalation alert to CFO, re-route to Phase Lead if available |
-| **Team gets confused by roles** | Medium | Example project (M3), role playbook, clear decision matrix |
-| **Daemon path bug blocks submodule users** | High | Fix immediately (E4.1), blocking all team adoption |
+| **Team gets confused by roles** | Medium | Example project (M16), role playbook, clear decision matrix |
+| **Daemon path bug blocks submodule users** | High | Fix immediately (E17.1), blocking all team adoption |
 
 ---
 
@@ -290,21 +321,17 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 
 ## Timeline & Staffing
 
-### Estimate: 6-8 Epics, 3-4 weeks (solo), 2-3 weeks (2-person team)
+### Estimate: 10-14 Epics, 5-7 weeks (solo), 3-4 weeks (2-person team)
 
-**Solo Developer Path:**
-- M1 (Artifact system): 2-3 weeks
-- M2 (Bugfix workflow): 1-2 weeks
-- M3 (Team example): 3-5 days
-- M4 (Polish & bug fixes): 2-3 days
-- **Total: 4-5 weeks**
+**Delivered:**
+- M14 (Artifact system): ✅ complete
+- M15 (Cleanup and Salvage): ✅ complete
+- M16 (Team Collaboration Example & Documentation): ✅ complete
+- M17 (Bug Fixes & Polish): ✅ complete
+- M18 (Inception Artifacts): ✅ complete
 
-**Team Path (2-3 people):**
-- M1: 1.5 weeks (parallel work on E1.1 & E1.2)
-- M2: 1 week (E2.1 & E2.2 in parallel)
-- M3: 3 days (E3.1 & E3.2 in parallel)
-- M4: 2 days (E4.1 & E4.2 in parallel)
-- **Total: 2-3 weeks**
+**Remaining:**
+- M19 (Creation Chat Completion and Bugfix Workflow) — final P4 milestone: 3-5 days
 
 ---
 
@@ -334,10 +361,10 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 
 ## Next Steps (Execution Phase)
 
-1. **Create Milestone M1 Specs** — detailed Epic specs for E1.1, E1.2, E1.3
-2. **Begin M1.E1.1** — artifact parsing & schema validation
+1. **Create Milestone M14 Specs** — detailed Epic specs for E14.1, E14.2, E14.3
+2. **Begin M14.E14.1** — artifact parsing & schema validation
 3. **Establish daily standup** — sync on artifact parsing design
-4. **Plan M2** — bugfix handling once M1 artifacts are flowing
+4. **Plan M15** — bugfix handling once M14 artifacts are flowing
 
 ---
 
@@ -346,3 +373,6 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-05-29 | Phase P4 specification. Design complete (P4.1, P4.2, P4.3). 4 milestones, 6-8 estimated Epics. |
+| 1.1.0 | 2026-06-13 | Updated milestone numbering to global M15–M20. Added M16 (Inception Artifacts), M17 (Two-Stage Lifecycle), M18 (Bugfix Workflow). Renamed former M15/M16/M17 to M15/M19/M20 with authoritative names. (E15.1 — Master Cleanup) |
+| 1.2.0 | 2026-06-18 | Reconciled executed milestone plan with original spec. M16 and M17 were delivered with different scopes than planned (team example and bug fixes / polish vs. inception artifacts and two-stage lifecycle). M18–M20 renumbered to preserve the undelivered original M16–M18 work: M18 = Inception Artifacts, M19 = Two-Stage Lifecycle, M20 = Bugfix Workflow. Phase continues. |
+| 1.3.0 | 2026-06-20 | M19 and M20 consolidated into single final milestone M19 (Creation Chat Completion and Bugfix Workflow). Original M19 Two-Stage Lifecycle diagram deferred. M19 marked as final P4 milestone. |

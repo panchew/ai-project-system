@@ -365,7 +365,7 @@ Example:
 The following artifacts will be produced:
 
 1. ✅ `README.md` — Project overview and navigation
-2. ✅ `P1-M1-E1.1__completion__my-first-epic.md` — Epic Completion Report
+2. ✅ `P1-M1-E1.1__completion__my-first-epic.md` — Delivery Notice
 
 (Checkboxes help track progress during execution)
 ```
@@ -378,7 +378,7 @@ This Epic is complete when:
 
 - [ ] README.md created in repository root
 - [ ] README includes project purpose, structure, and getting started
-- [ ] Epic Completion Report created and committed
+- [ ] Delivery Notice created and committed
 - [ ] All changes committed to `epic/E1.1` branch
 - [ ] Pull request opened to `milestone/M1` branch
 ```
@@ -392,7 +392,7 @@ Success criteria for human review:
 - README clearly explains project purpose
 - README is well-formatted and professional
 - All links work correctly
-- Epic Completion Report verifies DoD completion
+- Delivery Notice verifies DoD completion
 ```
 
 **Technical Constraints:**
@@ -455,7 +455,7 @@ Link to your Epic spec:
 You must produce:
 
 1. ✅ `README.md` — Project overview
-2. ✅ `P1-M1-E1.1__completion__my-first-epic.md` — Epic Completion Report
+2. ✅ `P1-M1-E1.1__completion__my-first-epic.md` — Delivery Notice
 ```
 
 **Branch Creation:**
@@ -489,7 +489,7 @@ Copy from your Epic spec.
 1. Create branch `epic/E1.1` from `milestone/M1`
 2. Create the deliverables listed above
 3. Verify Definition of Done
-4. Create Epic Completion Report
+4. Create Delivery Notice
 5. Commit all changes to `epic/E1.1` branch
 6. Open pull request to `milestone/M1` branch
 7. Produce Epic Delivery Notice (as chat message)
@@ -509,7 +509,7 @@ Open your AI chat tool (ChatGPT, Claude, etc.) with the Governance Agent selecte
 **The AI will:**
 1. Create the `milestone/M1` and `epic/E1.1` branches
 2. Create the README
-3. Create the Epic Completion Report
+3. Create the Delivery Notice
 4. Commit changes
 5. Open a PR
 6. Produce an Epic Delivery Notice
@@ -538,12 +538,12 @@ Now you perform the human review and close the Epic.
 
 The AI has produced:
 - README.md (in repository root)
-- Epic Completion Report (in `docs/phases/P1__My_First_Phase/`)
+- Delivery Notice (in `docs/phases/P1__My_First_Phase/`)
 - A pull request from `epic/E1.1` → `milestone/M1`
 
 **Review checklist:**
 - [ ] Does the README meet the goals stated in the Epic spec?
-- [ ] Is the Epic Completion Report complete?
+- [ ] Is the Delivery Notice complete?
 - [ ] Are all Definition of Done items checked off?
 - [ ] Does the work meet acceptance criteria?
 

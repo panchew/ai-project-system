@@ -138,8 +138,7 @@ Every mode has these capabilities:
 - Code, configuration, and documentation changes per the Epic spec
 - Git branches (`epic/<id>` from its parent milestone branch)
 - Pull request to parent milestone branch
-- Epic Completion Report
-- Epic Delivery Notice (chat message)
+- Epic Delivery Notice (committed artifact)
 
 **Reports to:** Milestone Chat (or Phase Chat / HQ Chat during bootstrap)
 

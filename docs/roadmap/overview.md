@@ -32,10 +32,10 @@ This system eliminates the chaos of ephemeral chats and lost context.
 **Status**: Fully Closed (Started 2026-01-14, Completed 2026-04-18)
 
 **Milestones**:
-- **M1** – Genesis & Integration Baseline *(Completed)*
-- **M2** – Execution Ergonomics & Validation *(Completed)*
-- **M3** – Governance Distribution & Adoption *(Completed)*
-- **M4** – Adoption Readiness & Practical Enablement *(Completed)*
+- **M14** – Genesis & Integration Baseline *(Completed)*
+- **M15** – Execution Ergonomics & Validation *(Completed)*
+- **M16** – Governance Distribution & Adoption *(Completed)*
+- **M17** – Adoption Readiness & Practical Enablement *(Completed)*
 - **M5** – System Refinement from Real Usage *(Completed)*
 
 **Key Deliverables**:
@@ -107,13 +107,24 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ---
 
-## Future
+## In Progress
 
-### P4 – Team Collaboration & Artifact-Driven Communication *(Planned)*
+### P4 – Team Collaboration & Artifact-Driven Communication *(In Progress)*
 
 **Goal**: Extend the AI Project System from solo developer execution to full team collaboration, with artifact-driven communication, role-based authorization, and explicit production deployment gates.
 
-**Status**: Planned (design spec complete 2026-05-29, awaiting implementation decision)
+**Status**: In Progress (design spec complete 2026-05-29; implementation underway — M14–M18 delivered, M19 final milestone in progress)
+
+**Milestone Status**:
+
+| Milestone | Name | Status | Completed |
+|-----------|------|--------|-----------|
+| **M14** | Artifact System Implementation | ✅ Complete | 2026-06-09 |
+| **M15** | Cleanup and Salvage | ✅ Complete | 2026-06-13 |
+| **M16** | Team Collaboration Example & Documentation | ✅ Complete | 2026-06-16 |
+| **M17** | Bug Fixes & Polish | ✅ Complete | 2026-06-18 |
+| **M18** | Inception Artifacts | ✅ Complete | 2026-06-19 |
+| **M19** | Creation Chat Completion and Bugfix Workflow *(final P4 milestone)* | ⏳ In Progress | — |
 
 **Scope** (3 pillars):
 1. **P4.1 – Artifact-Driven Communication** (Complete ✓)
@@ -148,14 +159,10 @@ This system eliminates the chaos of ephemeral chats and lost context.
 - ✅ `governance/systems/bugfix-epic-workflow.md` — Bugfix Epic workflow with expedited SLA & production gate
 - ✅ `governance/systems/roles-authorization-team-governance.md` — Role definitions, decision matrices, authorization rules, escalation paths
 
-**Next Steps**:
-- Implement artifact parsing and routing in agentic mode daemon
-- Create integration tests for multi-artifact workflows (Planning → Completion → Review → Delivery)
-- Create team collaboration example project (3-person team, 2-3 concurrent Epics)
-- Update HQ Chat Starter to reference new artifact system
-- Document CFO dashboard/briefing view (aggregating artifacts from all projects)
-
-**Status**: Not started (design complete, awaiting implementation).
+**Remaining Work** (M19 — final P4 milestone):
+- Creation Chat completion (E19.2)
+- Bugfix Workflow: HQ handler, Deployment Authorization and Post-Mortem templates, SLA
+  tracking, `docs/bugfixes/` convention (E19.1)
 
 ---
 
@@ -171,11 +178,10 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Current Focus
 
-All planned phases (P1, P2, P3) are **completed and consolidated to master**.
+All earlier phases (P1, P2, P3) are **completed and consolidated to master**.
 
-**Phase 4** design is complete (P4.1, P4.2, P4.3). Implementation awaiting decision.
-
-The project is at a checkpoint: P4 has been defined. Next decision: implement P4 or define P5?
+**Phase 4** is **in progress**. Milestones M14–M18 are delivered; **M19 (Creation Chat
+Completion and Bugfix Workflow)** is the final P4 milestone, now underway.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)

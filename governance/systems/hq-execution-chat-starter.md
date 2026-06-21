@@ -1,0 +1,360 @@
+---
+type: system
+status: active
+effective_date: 2026-06-17
+---
+
+# HQ Execution Chat Starter — System Reference
+
+## Purpose
+
+This document defines the role, responsibilities, and operating rules for an HQ
+Execution Chat session in the AI Project System.
+
+An HQ Chat is the top of the four-level chat hierarchy (HQ → Phase → Milestone →
+Epic). It owns project intent, scope, and the strategic accept/reject authority. It
+produces Phase Execution Chat Starters and, in team mode, supervises the artifact
+system, the bugfix path, and the production deployment gate.
+
+HQ Chat does **not** execute work. It defines *what* should be done and *how
+execution is governed*, then delegates execution downward.
+
+For the full HQ role definition see [`hq-chat.md`](hq-chat.md). This document is the
+launch/operating contract that pairs with the
+[Phase](phase-execution-chat-starter.md),
+[Milestone](milestone-execution-chat-starter.md), and
+[Epic](epic-execution-chat-starter.md) execution chat starters.
+
+---
+
+## What an HQ Chat Is
+
+An **HQ Chat** is a long-lived planning, governance, and coordination surface. It is:
+
+- **Persistent** — it accumulates strategic context across the whole project and does
+  not close at the end of a single Phase
+- **The control room** — it defines intent, establishes structure, and produces
+  authoritative artifacts that enable execution
+- **Read-only with respect to the project** — it does NOT execute work; the Coding
+  Agent commits all files on HQ's instruction
+- **The final strategic authority** — production deployment and Phase scope changes are
+  authorized here (held by the CFO; see [Production Deployment Gate](#production-deployment-gate))
+
+---
+
+## Responsibilities
+
+1. **Define project vision and scope** — establish intent and constraints
+2. **Produce Phase specs and Phase Execution Chat Starters** — launch each Phase with a
+   binding planning contract
+3. **Review and accept deliverables returned by Phase Chats** — issue accept / reject /
+   request-changes decisions
+4. **Create and dispatch Bugfix Epics** — handle unplanned production issues on the
+   expedited path (see [Handling Production Issues](#handling-production-issues-bugfix-epics))
+5. **Authorize production deployment** — the CFO production gate; no deployment proceeds
+   without it (see [Production Deployment Gate](#production-deployment-gate))
+6. **Oversee the artifact system** — ensure Completion Notices, Review Decisions, and
+   Delivery Notices flow correctly between layers (see [Artifact System](#artifact-system-p4))
+
+An HQ Chat enforces the canonical happy path for Epic closure and never skips, infers,
+or collapses a step.
+
+---
+
+## Communication Scope
+
+| Direction | Permitted | Notes |
+|-----------|-----------|-------|
+| Downward | Phase Chats (and, on the bugfix path, a Coding Agent directly) | Issues Phase Execution Chat Starters, Bugfix Epic approvals, Deployment Authorizations |
+| Upward | The human CFO / Project Owner | HQ surfaces decisions that require human authority |
+| Lateral | N/A | HQ is the root; there are no siblings |
+
+---
+
+## Governance Authority Chain
+
+1. `PROJECT-SYSTEM-GUIDELINES.md` (highest authority)
+2. `AI-OPERATING-GUIDELINES.md`
+3. HQ Execution Chat Starter (this instance) and the Phase spec
+4. Decisions made during the session
+5. System references
+6. Chat messages (lowest authority)
+
+Documentation is authoritative. Chat is ephemeral.
+
+---
+
+## Artifact System (P4)
+
+**New in P4.** Work and decisions move between the four layers as **artifacts** —
+structured Markdown files (YAML front-matter + body) committed to the repository. Chat
+is ephemeral; the artifact file is the record of truth.
+
+Three artifacts carry the core review cycle:
+
+| Artifact | Produced by | Direction | Meaning |
+|----------|-------------|-----------|---------|
+| **Completion Notice** | Epic Agent | Epic → Milestone | "Work is finished and ready for your review" |
+| **Review Decision** | Reviewing chat (Milestone/Phase/HQ) | parent → child | "Accept" (merge) or "Reject" (rework) |
+| **Delivery Notice** | Epic Agent | Epic → Milestone | "PR merged; here is the merge record. Chat closed." |
+
+Several supporting artifacts have canonical templates in `governance/templates/`:
+**Merge Authorization** (parent authorizes the Coding Agent to merge), **Epic Closure
+Notice** (Coding Agent confirms the branch merge completed), and **Escalation Notice**
+(any chat escalates a blocking or out-of-scope finding to its parent).
+
+### How artifacts flow between layers
+
+```
+   HQ Chat
+     │  Phase Execution Chat Starter ▼        ▲ Milestone Completion Notice → Review Decision
+   Phase Chat
+     │  Milestone Execution Chat Starter ▼    ▲ Epic Completion Notice → Review Decision
+   Milestone Chat
+     │  Epic Execution Chat Starter +         ▲ Completion Notice
+     │  Epic Delivery Authorization ▼         │ Delivery Notice (after merge)
+   Epic Agent (Coding Agent)
+     │  Branch · PR · code ▼
+   Repository
+```
+
+Downward: each layer launches the layer below with a Chat Starter and a Delivery
+Authorization. Upward: each layer reports completion with a Completion Notice and
+receives a Review Decision; after merge it produces a Delivery Notice.
+
+**Reference:** [`artifact-communication-protocol.md`](artifact-communication-protocol.md)
+defines every artifact schema. Storage convention:
+`.ai-project/artifacts/<artifact-type>/<timestamp>__<id>__<artifact>.md`.
+
+### Example — Completion Notice (Epic → Milestone)
+
+```yaml
+---
+artifact_type: completion_notice
+artifact_version: 1.0
+timestamp: 2026-06-17T14:32:00Z
+issuer_chat: Epic Agent (P4-M17-E17.2)
+status: ready_for_review
+epic_id: P4-M17-E17.2
+milestone_id: P4-M17
+phase_id: P4
+project_name: ai-project-system
+pr_details:
+  number: 74
+  title: "docs: Update starters & documentation (E17.2)"
+  target_branch: milestone/M17
+  url: "https://github.com/panchew/ai-project-system/pull/74"
+qa_status: passed
+---
+# Completion Notice: P4-M17-E17.2 — Update Starters and Documentation
+All Definition of Done items satisfied. Tests pass; no regression.
+```
+
+### Example — Review Decision (Milestone → Epic)
+
+```yaml
+---
+artifact_type: review_decision
+artifact_version: 1.0
+timestamp: 2026-06-17T15:00:00Z
+issuer_chat: Milestone Agent (P4-M17)
+issuer_role: Milestone Agent
+decision: accept
+epic_id: P4-M17-E17.2
+milestone_id: P4-M17
+phase_id: P4
+completion_notice_timestamp: 2026-06-17T14:32:00Z
+authorization:
+  action: merge
+  merge_instruction: Merge PR #74 to milestone/M17; delete the epic branch after merge.
+---
+# Review Decision: P4-M17-E17.2 — Update Starters and Documentation
+## Decision: ACCEPT ✓
+Spec compliance confirmed, examples present, links resolve, lint check passes.
+```
+
+### Example — Delivery Notice (after merge)
+
+```yaml
+---
+artifact_type: delivery_notice
+artifact_version: 1.0
+timestamp: 2026-06-17T15:30:00Z
+issuer_chat: Epic Agent (P4-M17-E17.2)
+issuer_role: Epic Agent
+status: delivered
+epic_id: P4-M17-E17.2
+milestone_id: P4-M17
+phase_id: P4
+merge_details:
+  pr_number: 74
+  merge_commit: <hash>
+  target_branch: milestone/M17
+  merge_strategy: squash
+---
+# Delivery Notice: P4-M17-E17.2 — Update Starters and Documentation
+PR #74 merged to milestone/M17. Chat closed.
+```
+
+---
+
+## Handling Production Issues (Bugfix Epics)
+
+**New in P4.2.** Production issues do not wait for the next planning cycle. HQ Chat
+creates a minimal **Bugfix Epic** and dispatches it directly to a Coding Agent on an
+expedited path with a **4-hour Completion Notice review SLA**.
+
+This section is the HQ Chat **handler** for an inbound production issue — it is
+self-contained: an HQ Agent can run a report end-to-end from here without opening another
+document.
+
+### Six-step handler
+
+When a production issue lands in HQ Chat, the HQ Agent runs these six steps in order:
+
+1. **Evaluate** — Is this a Bugfix Epic, or does it defer to a planned Epic?
+   - It is a **Bugfix Epic** when the issue is an *unplanned defect in already-delivered
+     or production work* **and** it needs a fix before the next planned Epic cycle (use
+     the decision tree below).
+   - Otherwise **defer**: queue it as a normal Epic in the next Milestone, or escalate if
+     it needs investigation, architectural, or security review. Reply to the reporter with
+     the decision and stop.
+
+2. **Create the minimal Bugfix Epic spec** — title, severity
+   (Critical / High / Medium / Low), a one-paragraph description, affected systems, and a
+   proposed fix direction. Severity sets the `B#.#` class (see
+   [`docs/bugfixes/README.md`](../../docs/bugfixes/README.md): B1=Critical, B2=High,
+   B3=Medium, B4=Low).
+
+3. **Commit the spec** to `docs/bugfixes/B#.#__spec__<slug>.md`. The committed file — not
+   the chat message — is the record of the Bugfix Epic.
+
+4. **Issue an Epic Delivery Authorization** directly to the executing Coding Agent (the
+   bugfix path skips the Phase/Milestone layers). The agent fixes on a `bugfix/B#.#`
+   branch.
+
+5. **Track the SLA** — start a **4-hour clock from the timestamp of the Completion
+   Notice** and review within that window. The clock measures HQ's review latency, not the
+   developer's fix time.
+
+6. **Escalate on miss** — if HQ cannot decide within 4 hours, flag the Bugfix as urgent
+   and notify the CFO. **The review is never skipped**, and production deployment still
+   requires a CFO Deployment Authorization
+   ([template](../templates/deployment-authorization.md)) regardless of urgency.
+
+For Critical and High severity bugfixes, a **post-mortem**
+([template](../templates/post-mortem.md)) is required before the Bugfix Epic closes.
+
+### Is this a Bugfix Epic? (decision tree)
+
+```
+Is the issue an unplanned defect in already-delivered/production work?
+├── NO  → It is feature work. Plan it as a normal Epic (Phase → Milestone → Epic).
+└── YES → Does it need a fix before the next planned Epic cycle?
+          ├── NO  → Queue as a normal Epic in the next Milestone.
+          └── YES → BUGFIX EPIC:
+                    1. Reporter sends HQ: severity, affected component, scope estimate
+                    2. HQ writes a minimal spec → docs/bugfixes/B#.#__spec__...md
+                    3. HQ issues a Bugfix Epic Approval directly to the Coding Agent
+                    4. Agent fixes on a bugfix/B#.# branch
+                    5. HQ reviews the Completion Notice within 4 hours (SLA)
+                    6. On Accept → merge to hotfix branch
+                    7. Production deploy → requires CFO Deployment Authorization (always)
+```
+
+| | Regular Epic | Bugfix Epic |
+|---|---|---|
+| ID | `E#.#` | `B#.#` |
+| Planning | Phase → Milestone → Epic | Direct from HQ |
+| Spec | Full | Minimal (problem, fix, DoD) |
+| Review SLA | 24 hours | **4 hours** |
+| Branch | `epic/E#.#` → `milestone/M#` | `bugfix/B#.#` → hotfix |
+
+**Reference:** [`bugfix-epic-workflow.md`](bugfix-epic-workflow.md).
+
+---
+
+## Production Deployment Gate
+
+**New in P4.2.** **No code reaches production without an explicit CFO Deployment
+Authorization artifact.** This holds for every path — regular Epic and expedited bugfix
+alike. Urgency never waives the gate.
+
+- Only the **CFO** (the single human strategic authority) may authorize production
+  deployment. The HQ Agent may prepare the authorization but cannot self-authorize.
+- The authorization is an artifact, committed to the repository — a deployment approved
+  only in chat did not happen.
+- Bypassing the gate is the most serious governance violation in the system; see the
+  [Troubleshooting Guide](../../docs/team-collaboration/troubleshooting-guide.md).
+
+### Deployment Authorization format
+
+```
+PRODUCTION DEPLOYMENT AUTHORIZATION
+
+Issuer: CFO (<name>)
+Date: <YYYY-MM-DD>
+Scope: <what is being deployed — Epic / Milestone / Bugfix reference>
+Build / Commit: <commit hash or release tag>
+Verification: <tests green, review accepted, Delivery Notice present>
+Authorized Action: Deploy to production
+Rollback Plan: <how to revert if needed>
+```
+
+**Reference:** [CFO Quick Start](../../docs/team-collaboration/cfo-quick-start.md) ·
+[`roles-authorization-team-governance.md`](roles-authorization-team-governance.md).
+
+---
+
+## Team Roles & Decision Matrix
+
+**New in P4.3.** In team mode the four chat layers map onto human and agent roles —
+CFO, Phase Lead, Contributor, Reviewer, Milestone/Epic Agents. Each role has bounded
+authority; the decision matrix records who decides what.
+
+Do not duplicate role definitions here. Use the role guides:
+
+- [Team Onboarding Guide](../../docs/team-collaboration/team-onboarding-guide.md) — all roles, authority matrix, first week
+- [CFO Quick Start](../../docs/team-collaboration/cfo-quick-start.md) — strategic authority and the production gate
+- [Phase Lead Guide](../../docs/team-collaboration/phase-lead-guide.md) — milestone planning and escalation
+- [Contributor Guide](../../docs/team-collaboration/contributor-guide.md) — the Epic workflow for developers
+- [Reviewer Guide](../../docs/team-collaboration/reviewer-guide.md) — review checklist and how to block
+- [Decision Matrices](../../docs/team-collaboration/decision-matrices.md) — who decides what, in table form
+
+---
+
+## Example Project (M16)
+
+A complete, ready-to-reference team project built on this system — including real
+Completion Notices, Review Decisions, Delivery Notices, a rejected-then-reworked Epic,
+and a Bugfix Epic — lives at
+[`examples/team-project-example/`](../../examples/team-project-example/README.md).
+Walk through it with the
+[Example Walkthrough](../../docs/team-collaboration/example-walkthrough.md).
+
+---
+
+## Session Lifecycle
+
+1. **Open** — establish project context (name, repo, governance versions, current Phase)
+2. **Plan** — produce Phase specs and Phase Execution Chat Starters
+3. **Authorize** — issue Phase Delivery Authorizations for accepted Phase plans
+4. **Oversee** — receive Completion Notices, issue Review Decisions, supervise the
+   artifact flow; create Bugfix Epics as needed
+5. **Gate** — authorize production deployments (CFO)
+6. **Persist** — HQ Chat remains open across Phases for continuity
+
+---
+
+## Reference
+
+- **Agent definition:** `governance/agents/governance.agent.md` (HQ mode)
+- **HQ role definition:** [`hq-chat.md`](hq-chat.md)
+- **System document:** `governance/systems/hq-execution-chat-starter.md` (this file)
+- **Child system:** [`phase-execution-chat-starter.md`](phase-execution-chat-starter.md)
+- **Hierarchy reference:** [`chat-hierarchy.md`](chat-hierarchy.md)
+- **Artifact Protocol (P4.1):** [`artifact-communication-protocol.md`](artifact-communication-protocol.md)
+- **Bugfix Workflow (P4.2):** [`bugfix-epic-workflow.md`](bugfix-epic-workflow.md)
+- **Roles & Authorization (P4.3):** [`roles-authorization-team-governance.md`](roles-authorization-team-governance.md)
+- **P4 entry point:** [P4 Governance System Guide](../../docs/team-collaboration/P4-governance-system-guide.md)
+- **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13, §18

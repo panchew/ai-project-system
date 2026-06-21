@@ -180,7 +180,7 @@ When conflicts arise:
 ### **Step 3: Document the Resolution**
 If significant:
 - Note in commit message
-- Include in Epic Completion Report
+- Include in Delivery Notice
 - Consider whether governance needs clarification
 
 ### **Step 4: Escalate if Ambiguous**
