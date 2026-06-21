@@ -50,7 +50,7 @@ An **HQ Chat** is a long-lived planning, governance, and coordination surface. I
 3. **Review and accept deliverables returned by Phase Chats** — issue accept / reject /
    request-changes decisions
 4. **Create and dispatch Bugfix Epics** — handle unplanned production issues on the
-   expedited path (see [Bugfix Epic Workflow](#bugfix-epic-workflow))
+   expedited path (see [Handling Production Issues](#handling-production-issues-bugfix-epics))
 5. **Authorize production deployment** — the CFO production gate; no deployment proceeds
    without it (see [Production Deployment Gate](#production-deployment-gate))
 6. **Oversee the artifact system** — ensure Completion Notices, Review Decisions, and
@@ -198,11 +198,52 @@ PR #74 merged to milestone/M17. Chat closed.
 
 ---
 
-## Bugfix Epic Workflow
+## Handling Production Issues (Bugfix Epics)
 
 **New in P4.2.** Production issues do not wait for the next planning cycle. HQ Chat
 creates a minimal **Bugfix Epic** and dispatches it directly to a Coding Agent on an
 expedited path with a **4-hour Completion Notice review SLA**.
+
+This section is the HQ Chat **handler** for an inbound production issue — it is
+self-contained: an HQ Agent can run a report end-to-end from here without opening another
+document.
+
+### Six-step handler
+
+When a production issue lands in HQ Chat, the HQ Agent runs these six steps in order:
+
+1. **Evaluate** — Is this a Bugfix Epic, or does it defer to a planned Epic?
+   - It is a **Bugfix Epic** when the issue is an *unplanned defect in already-delivered
+     or production work* **and** it needs a fix before the next planned Epic cycle (use
+     the decision tree below).
+   - Otherwise **defer**: queue it as a normal Epic in the next Milestone, or escalate if
+     it needs investigation, architectural, or security review. Reply to the reporter with
+     the decision and stop.
+
+2. **Create the minimal Bugfix Epic spec** — title, severity
+   (Critical / High / Medium / Low), a one-paragraph description, affected systems, and a
+   proposed fix direction. Severity sets the `B#.#` class (see
+   [`docs/bugfixes/README.md`](../../docs/bugfixes/README.md): B1=Critical, B2=High,
+   B3=Medium, B4=Low).
+
+3. **Commit the spec** to `docs/bugfixes/B#.#__spec__<slug>.md`. The committed file — not
+   the chat message — is the record of the Bugfix Epic.
+
+4. **Issue an Epic Delivery Authorization** directly to the executing Coding Agent (the
+   bugfix path skips the Phase/Milestone layers). The agent fixes on a `bugfix/B#.#`
+   branch.
+
+5. **Track the SLA** — start a **4-hour clock from the timestamp of the Completion
+   Notice** and review within that window. The clock measures HQ's review latency, not the
+   developer's fix time.
+
+6. **Escalate on miss** — if HQ cannot decide within 4 hours, flag the Bugfix as urgent
+   and notify the CFO. **The review is never skipped**, and production deployment still
+   requires a CFO Deployment Authorization
+   ([template](../templates/deployment-authorization.md)) regardless of urgency.
+
+For Critical and High severity bugfixes, a **post-mortem**
+([template](../templates/post-mortem.md)) is required before the Bugfix Epic closes.
 
 ### Is this a Bugfix Epic? (decision tree)
 
@@ -317,5 +358,3 @@ Walk through it with the
 - **Roles & Authorization (P4.3):** [`roles-authorization-team-governance.md`](roles-authorization-team-governance.md)
 - **P4 entry point:** [P4 Governance System Guide](../../docs/team-collaboration/P4-governance-system-guide.md)
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13, §18
-</content>
-</invoke>

@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-05-29
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Bugfix Epic Workflow (P4.2)
@@ -220,6 +220,44 @@ status: open
 
 HQ Chat MUST review Completion Notice within 4 hours of receipt. If unable to decide within 4 hours, escalate decision to product/engineering leadership.
 
+See [SLA Tracking and Escalation](#sla-tracking-and-escalation) below for the precise
+measurement and escalation rules.
+
+---
+
+## SLA Tracking and Escalation
+
+The Bugfix Epic review SLA is a **4-hour window**, measured precisely as follows:
+
+- **Clock start:** the `timestamp` recorded in the **Completion Notice** artifact when the
+  Coding Agent signals the fix is ready for review. The clock measures HQ's review
+  latency, *not* the developer's fix time.
+- **Clock target:** HQ Chat issues a Review Decision (Accept or Reject) within 4 hours of
+  that timestamp.
+- **Tracking:** the SLA due time is recorded in the Open Bugfixes dashboard (`SLA Due`
+  column) so its status is visible at a glance.
+
+### On SLA Miss
+
+If HQ Chat has not issued a Review Decision within the 4-hour window:
+
+1. **HQ Chat issues an urgent flag to the CFO** — the bugfix is surfaced as overdue, with
+   its current state and the reason review is blocked.
+2. **The review is still required** — a missed SLA never permits skipping review or
+   self-merging. Escalation expedites a decision; it does not waive one.
+3. **The production gate still holds** — deployment continues to require a CFO
+   [Deployment Authorization](../templates/deployment-authorization.md). Urgency never
+   waives the gate.
+
+### Deployment Authorization Is Mandatory
+
+**Every Bugfix Epic that touches production requires a CFO Deployment Authorization**
+before the production push — see the [Production Deployment Gate](#production-deployment-gate)
+section and the canonical
+[Deployment Authorization template](../templates/deployment-authorization.md). This holds
+on the expedited path exactly as it does for a normal Epic; the bugfix workflow shortens
+*review*, never the *production gate*.
+
 ---
 
 ## Merge Strategy
@@ -239,7 +277,9 @@ HQ Chat MUST review Completion Notice within 4 hours of receipt. If unable to de
 
 **IMPORTANT:** All production deployments MUST be authorized by Layer-8 (CFO).
 
-The HQ Chat produces a **Deployment Authorization** artifact:
+The CFO produces a **Deployment Authorization** artifact using the canonical
+[Deployment Authorization template](../templates/deployment-authorization.md) (the HQ
+Agent may prepare it but cannot self-authorize production). Minimal inline form:
 
 ```markdown
 ---
@@ -352,36 +392,23 @@ HQ Chat should maintain visibility of open bugfixes:
 
 ### Post-Mortem (Critical/High Only)
 
-For Critical and High severity bugfixes, produce a post-mortem:
+For **Critical and High** severity bugfixes, produce a post-mortem using the canonical
+[Post-Mortem template](../templates/post-mortem.md). It is **required** for Critical/High
+and **optional** for Medium/Low. A Critical/High Bugfix Epic does not close until its
+post-mortem is committed.
 
-```markdown
+The template covers Incident Summary, Timeline, Root Cause, Resolution, Prevention, and
+Action Items (with owners and due dates), and carries this front-matter:
+
+```yaml
 ---
-artifact_type: bugfix_postmortem
-bugfix_id: B#.#
-timestamp: <ISO-8601 UTC>
+type: post-mortem
+epic: <B#.#>
+severity: <critical | high>
+incident_date: <YYYY-MM-DD>
+resolved_date: <YYYY-MM-DD>
+authored_by: <role>
 ---
-
-# Post-Mortem: B#.# — <Issue Title>
-
-## Timeline
-- Discovered: <time>
-- Reported: <time>
-- Fix Deployed: <time>
-- Impact: <X minutes of downtime / Y users affected>
-
-## Root Cause
-<Detailed analysis>
-
-## Resolution
-<What was fixed>
-
-## Prevention
-<What changes to make to prevent recurrence>
-
-## Owners
-- On-call: <name>
-- Developer: <name>
-- Reviewer: <name>
 ```
 
 ---
@@ -406,6 +433,9 @@ timestamp: <ISO-8601 UTC>
 
 ## Reference
 
+- **Bugfix Epic specs location:** `docs/bugfixes/` (see [`docs/bugfixes/README.md`](../../docs/bugfixes/README.md) for the B#.# naming convention)
+- **Deployment Authorization template:** [`governance/templates/deployment-authorization.md`](../templates/deployment-authorization.md)
+- **Post-Mortem template:** [`governance/templates/post-mortem.md`](../templates/post-mortem.md)
 - **Artifact Protocol (P4.1):** `governance/systems/artifact-communication-protocol.md`
 - **Epic Execution Chat Starter:** `governance/EPIC-EXECUTION-CHAT-STARTER.md`
 - **HQ Chat Starter:** `governance/systems/hq-execution-chat-starter.md`
@@ -419,3 +449,4 @@ timestamp: <ISO-8601 UTC>
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-05-29 | Initial release. Defines lightweight Bugfix Epic workflow for unplanned, time-sensitive issues. Includes minimal spec template, expedited review SLA, and production deployment gate requiring CFO authorization. |
+| 1.1.0 | 2026-06-20 | Added the SLA Tracking and Escalation section (4-hour window measured from the Completion Notice timestamp; miss → urgent flag to CFO, review never skipped). Referenced the canonical Deployment Authorization and Post-Mortem templates, and the `docs/bugfixes/` location. (P4-M19-E19.1) |

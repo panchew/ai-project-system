@@ -4,7 +4,7 @@ name: Team Collaboration and Artifact-Driven Communication
 status: active
 start_date: 2026-05-29
 planned_end_date: 2026-07-31
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Phase P4: Team Collaboration and Artifact-Driven Communication
@@ -148,6 +148,10 @@ starters, templates, and governance documents current with P4.
   - Starter branch-name lint check; "Epic Completion Report" term fully retired
   - Two-Stage Lifecycle flow documented in starters (partial delivery of original M17 scope)
 
+> **Deferred:** The Two-Stage Lifecycle *lifecycle diagram* planned in the original M17
+> scope was not delivered. M17 (executed) provided documentation coverage of the flow in
+> the starters; the diagram remains **deferred** to a future phase.
+
 ---
 
 ### M18: Inception Artifacts (1 Epic)
@@ -166,47 +170,26 @@ to begin a project under the governance system.
 
 ---
 
-### M19: Two-Stage Lifecycle (1 Epic)
+### M19: Creation Chat Completion and Bugfix Workflow (2 Epics) — **Final P4 milestone**
 
-**Goal:** Formally declare the Completion Notice → Review Decision flow as the canonical
-default for all Epic closures, and add the lifecycle diagram that makes the flow
-self-evident in the governance documentation. The starters were updated in M17; this
-milestone produces the diagram and the formal enforcement declaration.
-
-**Epics:**
-- **E19.1 – Lifecycle Diagram and Canonical Declaration**
-  - Add a lifecycle diagram to governance documentation showing the full bidirectional
-    artifact flow (Epic → Completion Notice → Milestone review → Review Decision →
-    Epic merges → Delivery Notice)
-  - Produce a formal "canonical happy path" declaration document
-  - Verify all Epic starters and Milestone starters enforce the two-stage flow end-to-end
-
----
-
-### M20: Bugfix Workflow (2-3 Epics)
-
-**Goal:** Implement the expedited Bugfix Epic path with SLA tracking and production gate.
+**Goal:** Close the two remaining P4 success criteria — the Creation Chat onboarding
+surface and the end-to-end Bugfix Workflow — in a single final milestone. M19 consolidates
+the previously separate M19 (Two-Stage Lifecycle) and M20 (Bugfix Workflow) plans; the
+original M19 lifecycle *diagram* is deferred (see the note under M17).
 
 **Epics:**
-- **E20.1 – Bugfix Epic Creation in HQ Chat**
-  - HQ Agent detects issue report in HQ Chat
-  - Decision: "Bugfix Epic" vs "Defer to next Phase"
-  - Create minimal Bugfix Epic spec (B#.#)
-  - Commit spec and issue Epic Delivery Authorization
-  - Assign Bugfix ID and severity level
+- **E19.1 – Bugfix Workflow**
+  - `docs/bugfixes/` with the B#.# naming convention
+  - HQ Chat "Handling Production Issues" handler (evaluate → spec → authorize → SLA →
+    escalate)
+  - Deployment Authorization and Post-Mortem templates
+  - SLA tracking (4-hour window) and escalation documented in the bugfix workflow
+  - Carry-overs: roadmap update, pytest dependency, this phase-spec update to v1.3.0
 
-- **E20.2 – Expedited Review SLA & Production Gate**
-  - HQ Agent tracks Completion Notice arrival time (SLA clock starts)
-  - 4-hour SLA timer: review and issue Review Decision
-  - If SLA missed, escalate to CFO (urgency indicator)
-  - Require Deployment Authorization artifact before prod deploy
-  - CFO explicitly approves/rejects production deployment
+- **E19.2 – Creation Chat Completion**
+  - Complete the Creation Chat ongoing-artifacts surface begun in M18
 
-- **E20.3 – Post-Mortem for Critical/High**
-  - Auto-generate post-mortem template on Bugfix Epic completion
-  - Require root cause analysis, resolution, prevention steps
-  - Commit post-mortem to `docs/bugfixes/` for audit trail
-  - Report Critical/High to CFO dashboard
+This is the **final P4 milestone**; P4 closes when M19 is delivered.
 
 ---
 
@@ -345,11 +328,10 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 - M15 (Cleanup and Salvage): ✅ complete
 - M16 (Team Collaboration Example & Documentation): ✅ complete
 - M17 (Bug Fixes & Polish): ✅ complete
+- M18 (Inception Artifacts): ✅ complete
 
 **Remaining:**
-- M18 (Inception Artifacts): 3-5 days
-- M19 (Two-Stage Lifecycle): 2-3 days
-- M20 (Bugfix Workflow): 1-2 weeks
+- M19 (Creation Chat Completion and Bugfix Workflow) — final P4 milestone: 3-5 days
 
 ---
 
@@ -393,3 +375,4 @@ All committed to git. CFO can browse history via `git log --all -- .ai-project/a
 | 1.0.0 | 2026-05-29 | Phase P4 specification. Design complete (P4.1, P4.2, P4.3). 4 milestones, 6-8 estimated Epics. |
 | 1.1.0 | 2026-06-13 | Updated milestone numbering to global M15–M20. Added M16 (Inception Artifacts), M17 (Two-Stage Lifecycle), M18 (Bugfix Workflow). Renamed former M15/M16/M17 to M15/M19/M20 with authoritative names. (E15.1 — Master Cleanup) |
 | 1.2.0 | 2026-06-18 | Reconciled executed milestone plan with original spec. M16 and M17 were delivered with different scopes than planned (team example and bug fixes / polish vs. inception artifacts and two-stage lifecycle). M18–M20 renumbered to preserve the undelivered original M16–M18 work: M18 = Inception Artifacts, M19 = Two-Stage Lifecycle, M20 = Bugfix Workflow. Phase continues. |
+| 1.3.0 | 2026-06-20 | M19 and M20 consolidated into single final milestone M19 (Creation Chat Completion and Bugfix Workflow). Original M19 Two-Stage Lifecycle diagram deferred. M19 marked as final P4 milestone. |

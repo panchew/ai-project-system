@@ -40,6 +40,25 @@
 | **Epic Closure Notice** | [epic-closure-notice.md](epic-closure-notice.md) | Coding Agent confirms a merge completed, to the Milestone Chat |
 | **Escalation Notice** | [escalation-notice.md](escalation-notice.md) | Any chat escalates a blocking or out-of-scope finding to its parent |
 
+### Creation Chat Ongoing Templates (P4-M19)
+
+| Template | File | When to Use |
+|----------|------|-------------|
+| **Steering Note** | [steering-note.md](steering-note.md) | A chat (typically Creation Chat) hands off open concerns and binding decisions to its parent (typically HQ) — at session end before a reset, or when a blocking concern arises (see [`../systems/creation-chat-guide.md`](../systems/creation-chat-guide.md)) |
+| **Progress Digest** | [progress-digest.md](progress-digest.md) | HQ Chat sends the Creation Chat a self-contained, high-signal summary of project state at the start of a new phase/milestone or on request |
+| **Bouncer Work Log** | [bouncer-work-log.md](bouncer-work-log.md) | Recording a Layer-8 manual intervention (data fix, direct user request, one-off console op) in under two minutes; feeds pattern detection toward a Steering Note |
+
+### Bugfix Workflow Templates (P4.2)
+
+| Template | File | When to Use |
+|----------|------|-------------|
+| **Deployment Authorization** | [deployment-authorization.md](deployment-authorization.md) | CFO authorizes (or rejects) deploying an Epic or Bugfix Epic to production/staging — the production deployment gate's record |
+| **Post-Mortem** | [post-mortem.md](post-mortem.md) | Incident analysis after a Critical/High severity Bugfix Epic resolves (required for Critical/High, optional for Medium/Low) |
+
+> Bugfix Epic specs themselves live in `docs/bugfixes/` under the `B#.#` convention — see
+> [`docs/bugfixes/README.md`](../../docs/bugfixes/README.md) and the
+> [Bugfix Epic Workflow](../systems/bugfix-epic-workflow.md).
+
 ---
 
 ## Quick Start Workflow
