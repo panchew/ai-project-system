@@ -1,13 +1,13 @@
 ---
-artifact_type: genesis
+artifact_type: seed
 artifact_version: 1.0
 framework_version: <FILL: e.g., 3.0.0>
 project_name: <FILL: or leave blank — the project does not exist yet>
 issued_by: AI Project System — governance framework
-purpose: Bootstrap the Creation Chat for a new project
+purpose: Initialize the Creation Chat for a new project
 ---
 
-# Genesis
+# Seed
 
 ## You Are the Creation Chat
 

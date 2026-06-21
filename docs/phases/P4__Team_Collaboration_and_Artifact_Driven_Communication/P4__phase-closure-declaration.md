@@ -62,7 +62,7 @@ add/add conflict discovered at merge time:
 
 - `cd044ab` — Restored `governance/templates/genesis.md` to the M18 project-setup
   template (226/226 tests pass). Preserved CFO's Creation Chat session opener at
-  `governance/systems/creation-chat-role.md`.
+  `governance/templates/seed.md`.
 - `8c6f96e` — Phase Chat Steering Note SN-10 committed (genesis.md placement question
   forwarded to HQ).
 
@@ -70,7 +70,7 @@ add/add conflict discovered at merge time:
 
 - `governance/templates/genesis.md` — the M18 fill-in project-setup form. Correct
   location. Referenced by `start-a-project.md` and `creation-chat-guide.md`. No change.
-- `governance/systems/creation-chat-role.md` — the CFO's Creation Chat session opener
+- `governance/templates/seed.md` — the CFO's Creation Chat session opener
   ("You are the Creation Chat"). Correct location. The gap is that `start-a-project.md`
   does not yet tell users to paste this file to open the Creation Chat before filling in
   `genesis.md`. This is a P5 carry-over item (low severity, no workflow is blocked).
