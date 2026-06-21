@@ -94,6 +94,7 @@ Additional items from SN-10 and Creation Chat review:
 |----|-------|----------|
 | P5-GH-4 | Add Creation Chat session opener step to `start-a-project.md` | Low |
 | P5-GH-5 | Platform agnosticism — decouple `.github/agents/` delivery path; add tool-specific integration guides (Claude Code, Cursor, Windsurf) alongside Copilot | Medium |
+| P5-GH-6 | Documentation clarity — `governance/` vs `.governance/` distinction not surfaced upfront in sync and adoption guides; adoption attempts blocked without knowing the self-referential vs submodule split | Medium-High |
 
 ---
 

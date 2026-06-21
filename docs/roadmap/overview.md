@@ -159,6 +159,7 @@ This system eliminates the chaos of ephemeral chats and lost context.
 | P5-GH-3 | Scope routing rule — CFO direction must flow through artifact cascade | Medium |
 | P5-GH-4 | Add Creation Chat session opener step to `start-a-project.md` | Low |
 | P5-GH-5 | Platform agnosticism — decouple `.github/agents/` path from governance delivery | Medium |
+| P5-GH-6 | Documentation clarity — `governance/` vs `.governance/` distinction not surfaced upfront in sync and adoption guides | Medium-High |
 | — | README/roadmap staleness (P4 now shown as complete — this update) | Done |
 | — | CFO Dashboard | Deferred by design |
 
