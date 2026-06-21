@@ -50,8 +50,8 @@ Your project's `.ai-project.yml` file (see [`governance/ai-project-yml-spec.md`]
 # .ai-project.yml
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "2.0.0"
-  ref: v2.0.0
+  version: "4.0.0"
+  ref: v4.0.0
 
 project:
   name: my-project
@@ -71,8 +71,8 @@ Instead, its `.ai-project.yml` uses a local relative path:
 ```yaml
 governance:
   source: ./governance
-  version: "2.0.0"
-  ref: v2.0.0
+  version: "4.0.0"
+  ref: master
 ```
 
 This `./governance` path points directly to the `governance/` folder within the same repository. This is the **self-referential pattern** — valid only for the governance source repository itself.
@@ -100,17 +100,17 @@ This clones `ai-project-system` into `.governance/` and creates a `.gitmodules` 
 ```bash
 cd .governance
 git fetch
-git checkout v2.0.0   # replace with your target version tag or ref
+git checkout v4.0.0   # replace with your target version tag or ref
 cd ..
 ```
 
-Governance releases are tagged with semver prefixed `v` (e.g., `v2.0.0`). Always pin to a tag for reproducibility. If pinning to a branch (e.g., `milestone/M6`) during development, note that the pinned commit will advance as the branch moves — use a SHA or tag for stability in production projects.
+Governance releases are tagged with semver prefixed `v` (e.g., `v4.0.0`). Always pin to a tag for reproducibility. If pinning to a branch (e.g., `milestone/M6`) during development, note that the pinned commit will advance as the branch moves — use a SHA or tag for stability in production projects.
 
 ### Step 3 — Commit the submodule and create `.ai-project.yml`
 
 ```bash
 git add .governance .gitmodules
-git commit -m "chore: add governance submodule pinned to v2.0.0"
+git commit -m "chore: add governance submodule pinned to v4.0.0"
 ```
 
 Then create `.ai-project.yml` at the repository root:
@@ -122,8 +122,8 @@ Then create `.ai-project.yml` at the repository root:
 
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "2.0.0"
-  ref: v2.0.0
+  version: "4.0.0"
+  ref: v4.0.0
 
 project:
   name: my-project
@@ -134,7 +134,7 @@ Commit it:
 
 ```bash
 git add .ai-project.yml
-git commit -m "chore: add .ai-project.yml pinned to governance v2.0.0"
+git commit -m "chore: add .ai-project.yml pinned to governance v4.0.0"
 ```
 
 ---
@@ -146,10 +146,10 @@ Run these commands from your project's repository root.
 ```bash
 cd .governance
 git fetch
-git checkout v2.1.0   # replace with the target version
+git checkout v4.1.0   # replace with the target version
 cd ..
 git add .governance
-git commit -m "chore: update governance submodule to v2.1.0"
+git commit -m "chore: update governance submodule to v4.1.0"
 ```
 
 Then update `.ai-project.yml` to reflect the new version:
@@ -157,13 +157,13 @@ Then update `.ai-project.yml` to reflect the new version:
 ```yaml
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "2.1.0"   # updated
-  ref: v2.1.0        # updated
+  version: "4.1.0"   # updated
+  ref: v4.1.0        # updated
 ```
 
 ```bash
 git add .ai-project.yml
-git commit -m "chore: update .ai-project.yml to governance v2.1.0"
+git commit -m "chore: update .ai-project.yml to governance v4.1.0"
 ```
 
 **Keep `.ai-project.yml` and the submodule pinned ref in sync.** A drift between `governance.ref` in `.ai-project.yml` and the actual checked-out commit in `.governance/` will be reported as a governance drift warning by the HQ agent.
@@ -276,14 +276,14 @@ Use HTTPS URLs (`https://github.com/panchew/ai-project-system`) for the submodul
 ```bash
 # --- Initial setup ---
 git submodule add https://github.com/panchew/ai-project-system .governance
-cd .governance && git fetch && git checkout v2.0.0 && cd ..
+cd .governance && git fetch && git checkout v4.0.0 && cd ..
 git add .governance .gitmodules
-git commit -m "chore: add governance submodule pinned to v2.0.0"
+git commit -m "chore: add governance submodule pinned to v4.0.0"
 
 # --- Update to new version ---
-cd .governance && git fetch && git checkout v2.1.0 && cd ..
+cd .governance && git fetch && git checkout v4.1.0 && cd ..
 git add .governance
-git commit -m "chore: update governance submodule to v2.1.0"
+git commit -m "chore: update governance submodule to v4.1.0"
 
 # --- New team member: clone ---
 git clone --recurse-submodules https://github.com/your-org/your-project

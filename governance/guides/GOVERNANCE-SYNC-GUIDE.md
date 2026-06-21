@@ -5,7 +5,7 @@ milestone: M10
 epic: E10.3
 type: guide
 status: active
-last_updated: 2026-05-21
+last_updated: 2026-06-21
 ---
 
 # Governance Sync Guide
@@ -25,9 +25,9 @@ This guide documents the procedure for synchronizing governance updates from the
 
 Governance releases are versioned using [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH) with a `v` prefix for git tags:
 
-- **Patch updates** (`v2.0.0` → `v2.0.1`): Bug fixes, documentation corrections, non-breaking template changes
-- **Minor updates** (`v2.0.0` → `v2.1.0`): New features, new governance policies, new templates (backward compatible)
-- **Major updates** (`v2.0.0` → `v3.0.0`): Breaking changes to governance structure or requirements
+- **Patch updates** (`v4.0.0` → `v4.0.1`): Bug fixes, documentation corrections, non-breaking template changes
+- **Minor updates** (`v4.0.0` → `v4.1.0`): New features, new governance policies, new templates (backward compatible)
+- **Major updates** (`v4.0.0` → `v5.0.0`): Breaking changes to governance structure or requirements
 
 Each governance release corresponds to a git tag in the source repository (e.g., `https://github.com/panchew/ai-project-system`). Adopted projects pin to a specific tag and update by checking out a newer tag.
 
@@ -58,7 +58,7 @@ Run these commands from your project's repository root.
 ```bash
 cd .governance
 git fetch
-git checkout v2.1.0        # replace with the target version
+git checkout v4.0.0        # replace with the target version
 cd ..
 ```
 
@@ -68,7 +68,7 @@ The submodule will be in detached HEAD state at the target tag. This is expected
 
 ```bash
 git add .governance
-git commit -m "chore: update governance submodule to v2.1.0"
+git commit -m "chore: update governance submodule to v4.0.0"
 ```
 
 #### Step 3 — Update `.ai-project.yml`
@@ -78,8 +78,8 @@ Edit `.ai-project.yml` to reflect the new version:
 ```yaml
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "2.1.0"        # updated
-  ref: v2.1.0             # updated
+  version: "4.0.0"        # updated
+  ref: v4.0.0             # updated
 ```
 
 Keep `version` and `ref` in sync. `version` is the semver string; `ref` is the git tag.
@@ -88,7 +88,7 @@ Keep `version` and `ref` in sync. `version` is the semver string; `ref` is the g
 
 ```bash
 git add .ai-project.yml
-git commit -m "chore: update .ai-project.yml to governance v2.1.0"
+git commit -m "chore: update .ai-project.yml to governance v4.0.0"
 ```
 
 ### What Happens After Sync
@@ -106,11 +106,11 @@ After syncing, confirm the update was successful:
 ```bash
 # Check submodule is at the expected tag
 git submodule status
-# Expected: leading space + SHA + (.governance) (v2.1.0)
+# Expected: leading space + SHA + (.governance) (v4.0.0)
 
 # Verify version in .ai-project.yml
 grep "version:" .ai-project.yml
-# Expected: version: "2.1.0"
+# Expected: version: "4.0.0"
 
 # Verify governance files are accessible
 ls .governance/governance/PROJECT-SYSTEM-GUIDELINES.md
@@ -151,7 +151,7 @@ cd ..
 
 # Checkout the correct existing tag
 cd .governance
-git checkout v2.0.0         # or the latest available tag
+git checkout v4.0.0         # or the latest available tag
 cd ..
 ```
 
@@ -221,19 +221,19 @@ Rolling back governance to a previous version follows the same procedure as upda
 # Step 1 — Checkout the previous version in the submodule
 cd .governance
 git fetch
-git checkout v2.0.0          # the version to roll back to
+git checkout v3.0.0          # the version to roll back to
 cd ..
 
 # Step 2 — Stage the submodule change
 git add .governance
-git commit -m "chore: rollback governance to v2.0.0"
+git commit -m "chore: rollback governance to v3.0.0"
 
 # Step 3 — Update .ai-project.yml
 # Edit to match the rollback target
-#   version: "2.0.0"
-#   ref: v2.0.0
+#   version: "3.0.0"
+#   ref: v3.0.0
 git add .ai-project.yml
-git commit -m "chore: update .ai-project.yml to governance v2.0.0"
+git commit -m "chore: update .ai-project.yml to governance v3.0.0"
 ```
 
 ### Rollback Verification
