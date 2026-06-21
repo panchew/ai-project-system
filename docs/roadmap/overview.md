@@ -107,13 +107,11 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ---
 
-## In Progress
-
-### P4 – Team Collaboration & Artifact-Driven Communication *(In Progress)*
+### P4 – Team Collaboration & Artifact-Driven Communication *(Completed)*
 
 **Goal**: Extend the AI Project System from solo developer execution to full team collaboration, with artifact-driven communication, role-based authorization, and explicit production deployment gates.
 
-**Status**: In Progress (design spec complete 2026-05-29; implementation underway — M14–M18 delivered, M19 final milestone in progress)
+**Status**: Completed (Consolidated to master 2026-06-20 — **v4.0.0**, 226/226 tests passing)
 
 **Milestone Status**:
 
@@ -124,45 +122,45 @@ This system eliminates the chaos of ephemeral chats and lost context.
 | **M16** | Team Collaboration Example & Documentation | ✅ Complete | 2026-06-16 |
 | **M17** | Bug Fixes & Polish | ✅ Complete | 2026-06-18 |
 | **M18** | Inception Artifacts | ✅ Complete | 2026-06-19 |
-| **M19** | Creation Chat Completion and Bugfix Workflow *(final P4 milestone)* | ⏳ In Progress | — |
-
-**Scope** (3 pillars):
-1. **P4.1 – Artifact-Driven Communication** (Complete ✓)
-   - Canonical artifact formats: Completion Notice, Review Decision, Delivery Notice
-   - Predictable hand-offs between chats (no manual copy-paste)
-   - YAML frontmatter for programmatic parsing + markdown body for readability
-   - Manual mode: copy-paste artifacts between chats; Agentic mode: route via queue system
-   - CFO audit trail: all project progress visible via artifacts
-
-2. **P4.2 – Bugfix Epic Workflow** (Complete ✓)
-   - Lightweight path for unplanned, time-sensitive issues
-   - Bypass Milestone planning ceremony; direct to HQ Chat approval
-   - Expedited 4-hour SLA for Completion Notice review
-   - Production deployment gate: CFO must authorize all prod deploys
-   - Post-mortems for Critical/High severity bugfixes
-
-3. **P4.3 – Roles, Authorization & Team Governance** (Complete ✓)
-   - 7 named roles: CFO, HQ Agent, Phase Lead, Milestone Agent, Epic Agent, Reviewer, Contributor
-   - Explicit decision authorities and constraints (decision matrix)
-   - Delegation hierarchy: decisions flow down, escalations flow up
-   - Async-first communication norms
-   - Production deployment gate: CFO explicit approval required
-   - Gradual autonomy: manual → agentic → full autonomy
+| **M19** | Creation Chat Completion and Bugfix Workflow | ✅ Complete | 2026-06-20 |
 
 **Key Deliverables**:
 - ✅ `governance/systems/artifact-communication-protocol.md` — Canonical artifact schemas & workflows
 - ✅ `governance/templates/completion-notice-epic.md` — Completion Notice template
 - ✅ `governance/templates/review-decision.md` — Review Decision template
 - ✅ `governance/templates/delivery-notice.md` — Delivery Notice template
-- ✅ `governance/EPIC-EXECUTION-CHAT-STARTER.md` (updated) — References Completion Notice artifact requirement
-- ✅ `governance/systems/milestone-execution-chat-starter.md` (updated) — Explains Completion Notice handling and aggregation
 - ✅ `governance/systems/bugfix-epic-workflow.md` — Bugfix Epic workflow with expedited SLA & production gate
 - ✅ `governance/systems/roles-authorization-team-governance.md` — Role definitions, decision matrices, authorization rules, escalation paths
+- ✅ `governance/templates/genesis.md` — Project bootstrap form (fill-in-the-blank)
+- ✅ `governance/templates/seed.md` — Creation Chat session opener (AI role definition)
+- ✅ `governance/systems/chat-hierarchy.md` — Level 0 (Creation Chat) through Level 4 (Epic)
+- ✅ `governance/templates/steering-note.md` — Creation Chat → HQ artifact
+- ✅ `governance/templates/progress-digest.md` — HQ → Creation Chat status artifact
+- ✅ `governance/templates/bouncer-work-log.md` — Layer 8 manual intervention log
+- ✅ `governance/systems/creation-chat-guide.md` — Re-instantiation ritual and ongoing usage
+- ✅ CFO PR review gate (`cfo_review_gate` in `.ai-project.yml`)
 
-**Remaining Work** (M19 — final P4 milestone):
-- Creation Chat completion (E19.2)
-- Bugfix Workflow: HQ handler, Deployment Authorization and Post-Mortem templates, SLA
-  tracking, `docs/bugfixes/` convention (E19.1)
+---
+
+## Upcoming
+
+### P5 – Governance Hardening & Platform Agnosticism *(Planned)*
+
+**Goal**: Address process gaps surfaced during P4 execution and decouple the governance framework from GitHub/Copilot-specific conventions.
+
+**Status**: Candidates identified — scoping via Creation Chat before phase spec is opened.
+
+**Registered Candidates**:
+
+| ID | Title | Priority |
+|----|-------|----------|
+| P5-GH-1 | Prerequisite git-tracking verification in starters (false-green "✅ committed") | Medium |
+| P5-GH-2 | Working-tree isolation convention for concurrent chats | High |
+| P5-GH-3 | Scope routing rule — CFO direction must flow through artifact cascade | Medium |
+| P5-GH-4 | Add Creation Chat session opener step to `start-a-project.md` | Low |
+| P5-GH-5 | Platform agnosticism — decouple `.github/agents/` path from governance delivery | Medium |
+| — | README/roadmap staleness (P4 now shown as complete — this update) | Done |
+| — | CFO Dashboard | Deferred by design |
 
 ---
 
@@ -178,13 +176,13 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Current Focus
 
-All earlier phases (P1, P2, P3) are **completed and consolidated to master**.
+All phases (P1–P4) are **completed and consolidated to master** at **v4.0.0**.
 
-**Phase 4** is **in progress**. Milestones M14–M18 are delivered; **M19 (Creation Chat
-Completion and Bugfix Workflow)** is the final P4 milestone, now underway.
+**P5** is in pre-scoping — candidates are registered above. The phase spec will open
+after a Creation Chat session establishes the theme and priorities.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
 - [`docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/`](../phases/P2__Adoption_Architecture_and_Multi_Project_Support/)
 - [`docs/phases/P3__Agentic_Execution_Model_Maturity/`](../phases/P3__Agentic_Execution_Model_Maturity/)
-- P4 governance docs (see roadmap above)
+- [`docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/`](../phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/)

@@ -6,9 +6,9 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — Autonomous Cluster Ready
+## 🎉 All Phases Complete — v4.0.0
 
-**The AI Project System was built using its own governance.** All three planned phases (P1, P2, P3) are complete and consolidated to `master`.
+**The AI Project System was built using its own governance.** All four phases (P1–P4) are complete and consolidated to `master` at **v4.0.0** with 226/226 tests passing.
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -29,19 +29,21 @@ Turn AI coding assistants into reliable project executors through structured spe
 | **M12** — Containerized Sandbox & Loop Verification | 4 | ✅ Complete | `Dockerfile.sandbox`, 3-retry recursion engine, mock harness |
 | **M13** — Orchestrator CLI Daemon | 4 | ✅ Complete | `ai-project-daemon`, auto-merge hooks, lifecycle tests |
 
-### Phase P4 — Team Collaboration & Artifact-Driven Communication
-Takes the system from solo to team. Work and decisions move between people as
-version-controlled **artifacts**, not chat messages.
+### Phase P4 — Team Collaboration & Artifact-Driven Communication (Complete)
+Takes the system from solo to team. Work and decisions move as version-controlled
+**artifacts**, not chat messages. Adds the Creation Chat as a permanent institution
+above HQ — the founder's office.
 
 | Milestone | Focus | Key Deliverables |
 |-----------|-------|------------------|
 | **M14** — Artifact System | Canonical artifact formats + daemon routing | Completion Notice, Review Decision, Delivery Notice; artifact parser & router |
-| **M15** — Bugfix Epic Workflow | Expedited path for production issues | Minimal Bugfix Epics, 4-hour review SLA, CFO production gate |
+| **M15** — Cleanup & Salvage | Recovered M14 deliverables, stranded branch resolved | Full artifact system on master |
 | **M16** — Team Collaboration Example | Learn-by-example project + role docs | [Taskflow example](examples/team-project-example/), role guides, decision matrices |
-| **M17** — Bug Fixes & Polish | Daemon path fix, starters & docs update | Updated HQ/Milestone starters, P4 guide, FAQ, troubleshooting, starter lint check |
+| **M17** — Bug Fixes & Polish | Daemon path fix, starters & docs update | Updated HQ/Milestone starters, P4 guide, FAQ, troubleshooting |
+| **M18** — Inception Artifacts | Project bootstrap and Creation Chat foundation | `genesis.md` project template, `chat-hierarchy.md` (Level 0) |
+| **M19** — Creation Chat Completion & Bugfix Workflow | Ongoing governance artifacts + expedited bugfix path | Steering Note, Progress Digest, Bouncer Work Log, re-instantiation ritual, CFO PR review gate |
 
-**P4 highlights:** artifact-driven communication · explicit team roles · a hard
-production-deployment gate (CFO-authorized) · a runnable example team project.
+**P4 highlights:** artifact-driven communication · Creation Chat institution (Level 0) · CFO PR review gate · explicit team roles · expedited Bugfix Workflow with 4-hour SLA · 226/226 tests.
 
 👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
 👉 **[Get started with P4 (team mode)](docs/team-collaboration/P4-governance-system-guide.md)** · **[Run the example](examples/team-project-example/README.md)**
@@ -122,16 +124,18 @@ Hierarchical structure that breaks work into manageable, deliverable units:
 Each level is planned by its parent and feeds into the next:
 
 ```
-HQ Chat ──creates──→ Phase specs + Phase Execution Chat Starter
-                        │
-                        ▼
-                   Phase Chat ──creates──→ Milestone specs + Milestone Execution Chat Starter
-                                               │
-                                               ▼
-                                          Milestone Chat ──creates──→ Epic specs + Epic Execution Chat Starter
-                                                                          │
-                                                                          ▼
-                                                                     Epic mode ──executes──→ Code, PRs, deliverables
+Creation Chat ──steering notes──→ HQ Chat (vision, pivots, concerns from real-life usage)
+                                       │
+                        ───creates──→ Phase specs + Phase Execution Chat Starter
+                                       │
+                                       ▼
+                                  Phase Chat ──creates──→ Milestone specs + Milestone Execution Chat Starter
+                                                              │
+                                                              ▼
+                                                         Milestone Chat ──creates──→ Epic specs + Epic Execution Chat Starter
+                                                                                         │
+                                                                                         ▼
+                                                                                    Epic mode ──executes──→ Code, PRs, deliverables
 ```
 
 ### 🤖 **AI-First Execution** (Two Modes)

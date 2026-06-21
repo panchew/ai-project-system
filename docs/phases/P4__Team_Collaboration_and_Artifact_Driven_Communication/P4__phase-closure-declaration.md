@@ -88,11 +88,12 @@ hardening candidates:
 | P5-GH-2 | Working-tree isolation convention for concurrent chats | High |
 | P5-GH-3 | Scope routing rule in chat-hierarchy + operating guidelines | Medium |
 
-One additional item from SN-10:
+Additional items from SN-10 and Creation Chat review:
 
 | ID | Title | Priority |
 |----|-------|----------|
 | P5-GH-4 | Add Creation Chat session opener step to `start-a-project.md` | Low |
+| P5-GH-5 | Platform agnosticism — decouple `.github/agents/` delivery path; add tool-specific integration guides (Claude Code, Cursor, Windsurf) alongside Copilot | Medium |
 
 ---
 
