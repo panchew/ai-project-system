@@ -106,13 +106,13 @@ Or use the git submodule approach directly:
 ```bash
 cd your-project
 mkdir -p docs/phases docs/roadmap docs/context docs/decisions docs/admin
-git submodule add https://github.com/panchew/ai-project-system.git governance
+git submodule add https://github.com/panchew/ai-project-system.git .governance
 git submodule update --init --recursive
 cat > .ai-project.yml << EOF
 governance:
-  source: ./governance
-  version: "3.0.0"
-  ref: v3.0.0
+  source: ./.governance
+  version: "4.0.0"
+  ref: v4.0.0
 project:
   name: your-project
   description: "Your project description"
@@ -124,13 +124,14 @@ EOF
 ```
 your-project/
 ├── .ai-project.yml             # Project configuration contract
-├── governance/                 # Git submodule (pinned version)
-│   ├── PROJECT-SYSTEM-GUIDELINES.md
-│   ├── AI-OPERATING-GUIDELINES.md
-│   ├── templates/
-│   ├── diagrams/
-│   ├── systems/
-│   └── guides/
+├── .governance/                # Git submodule (pinned version)
+│   └── governance/
+│       ├── PROJECT-SYSTEM-GUIDELINES.md
+│       ├── AI-OPERATING-GUIDELINES.md
+│       ├── templates/
+│       ├── diagrams/
+│       ├── systems/
+│       └── guides/
 ├── docs/
 │   ├── phases/                 # Phase → Milestone → Epic artifacts
 │   ├── roadmap/
@@ -157,7 +158,7 @@ A **Phase** is a major segment of work with a clear purpose and exit criteria. U
 
 1. Open your project in your AI chat tool that supports agent instructions from a markdown file.
 2. Ensure the tool has access to `.github/agents/governance.agent.md` (the unified Governance Agent).
-3. Select the agent (named `hq` in the front-matter) if your tool supports agent selection.
+3. Select the agent (named `governance` in the front-matter) if your tool supports agent selection.
 4. Send the canonical prompt to activate **HQ mode**:
 
 **For a new project:**
@@ -183,7 +184,7 @@ The agent (in HQ mode) will:
 **If you don't have the Governance Agent available**, you can create the spec manually from the template:
 
 ```bash
-cp governance/templates/phase-spec.md docs/phases/P1__phase__my-first-phase.md
+cp .governance/governance/templates/phase-spec.md docs/phases/P1__phase__my-first-phase.md
 ```
 
 Then fill in the front-matter and sections per the template instructions.
@@ -206,7 +207,7 @@ mkdir -p docs/phases/P1__My_First_Phase
 ### 3.2 Copy the template
 
 ```bash
-cp governance/templates/milestone-spec.md docs/phases/P1__My_First_Phase/P1-M1__milestone.md
+cp .governance/governance/templates/milestone-spec.md docs/phases/P1__My_First_Phase/P1-M1__milestone.md
 ```
 
 ### 3.3 Fill in the front-matter
@@ -293,7 +294,7 @@ An **Epic** is a single unit of deliverable work with clear goals and acceptance
 ### 4.1 Copy the template
 
 ```bash
-cp governance/templates/epic-spec.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__spec__my-first-epic.md
+cp .governance/governance/templates/epic-spec.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__spec__my-first-epic.md
 ```
 
 ### 4.2 Fill in the front-matter
@@ -423,7 +424,7 @@ Now you'll execute the Epic using an AI Coding Agent.
 ### 5.1 Create the Epic Execution Chat Starter
 
 ```bash
-cp governance/templates/epic-execution-chat-starter.md temp-chat-starter.md
+cp .governance/governance/templates/epic-execution-chat-starter.md temp-chat-starter.md
 ```
 
 Open `temp-chat-starter.md` and fill in:
@@ -550,7 +551,7 @@ The AI has produced:
 ### 6.2 Create an Epic Review Seal (optional but recommended)
 
 ```bash
-cp governance/templates/epic-review-seal.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__review-seal__my-first-epic.md
+cp .governance/governance/templates/epic-review-seal.md docs/phases/P1__My_First_Phase/P1-M1-E1.1__review-seal__my-first-epic.md
 ```
 
 Fill it in with your review findings:
@@ -713,7 +714,7 @@ git push origin milestone/M1
 
 **Update governance reference:**
 ```bash
-cd governance && git fetch && git checkout v3.0.0 && cd ..
+cd .governance && git fetch && git checkout v4.0.0 && cd ..
 ```
 
 ### File Locations
@@ -721,15 +722,15 @@ cd governance && git fetch && git checkout v3.0.0 && cd ..
 | What | Where |
 |------|-------|
 | Project configuration | `.ai-project.yml` (repository root) |
-| Governance rules | `governance/PROJECT-SYSTEM-GUIDELINES.md`, `governance/AI-OPERATING-GUIDELINES.md` |
-| Templates | `governance/templates/` |
+| Governance rules | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md`, `.governance/governance/AI-OPERATING-GUIDELINES.md` |
+| Templates | `.governance/governance/templates/` |
 | Governance Agent | `.github/agents/governance.agent.md` |
 | Phase Specs | `docs/phases/P<N>__phase__*.md` |
 | Milestone Specs | `docs/phases/P<N>__*/P<N>-M<N>__milestone.md` |
 | Epic Specs | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__spec__*.md` |
 | Completions | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__completion__*.md` |
-| Adoption records | `governance/adoption-records/` |
-| Diagrams | `governance/diagrams/` |
+| Adoption records | `.governance/governance/adoption-records/` |
+| Diagrams | `.governance/governance/diagrams/` |
 
 ### Key Concepts Glossary
 

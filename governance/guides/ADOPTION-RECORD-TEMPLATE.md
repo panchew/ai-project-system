@@ -24,7 +24,7 @@ last_updated: <YYYY-MM-DD>
 | **Repository URL** | <https://github.com/owner/repo> |
 | **Adoption date** | <YYYY-MM-DD> |
 | **Adopter name/role** | <Name> / <Role> |
-| **Governance version** | v2.0.0 |
+| **Governance version** | <FILL: e.g., 4.0.0> |
 
 ## 2. Prerequisites Status
 
@@ -54,7 +54,7 @@ last_updated: <YYYY-MM-DD>
 | 1 | Prerequisites Verification | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
 | 2 | Step 1: `ai-project init` | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
 | 3 | Step 2: Verify Governance Submodule | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
-| 4 | Step 3: Configure HQ Agent in VS Code | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
+| 4 | Step 3: Deploy Governance Agent | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
 | 5 | Step 4: Send Canonical Startup Prompt | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
 | 6 | Step 5: Create Phase 0 Spec | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
 | 7 | Step 6: Plan First Milestone | --:-- | --:-- | -- min | ✅ / ❌ / ⚠️ | <describe> |
@@ -120,4 +120,4 @@ last_updated: <YYYY-MM-DD>
 ---
 
 *Adoption record created using [ADOPTION-RECORD-TEMPLATE.md](ADOPTION-RECORD-TEMPLATE.md).*
-*Governance version: v2.0.0*
+*Governance version: <FILL: e.g., 4.0.0>*

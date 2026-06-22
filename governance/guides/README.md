@@ -12,7 +12,8 @@ This directory contains step-by-step guides for using and adopting the AI Projec
 | [ADOPTION-FAQ.md](ADOPTION-FAQ.md) | Troubleshooting FAQ covering common adoption issues with resolutions | All users |
 | [QUICK-START.md](QUICK-START.md) | Original quick-start walkthrough (Phase → Milestone → Epic lifecycle) | New users exploring the system |
 | [FAQ.md](FAQ.md) | General system FAQ — philosophy, architecture, technical questions | All users |
-| [legacy-project-migration.md](legacy-project-migration.md) | Migrating existing projects from P1 governance to P2 architecture | Existing project maintainers |
+| [legacy-project-migration.md](legacy-project-migration.md) | Migrating existing projects to adopt the governance framework | Existing project maintainers |
+| [GOVERNANCE-SYNC-GUIDE.md](GOVERNANCE-SYNC-GUIDE.md) | Keeping the governance submodule in sync with upstream releases | All adopters |
 
 ---
 
@@ -27,7 +28,7 @@ This directory contains step-by-step guides for using and adopting the AI Projec
 **I want to understand the governance philosophy:**
 → Read [FAQ.md](FAQ.md)
 
-**I have an existing project with P1 governance:**
+**I have an existing project without governance:**
 → Follow [legacy-project-migration.md](legacy-project-migration.md)
 
 **I want a quick walkthrough of the Epic lifecycle:**

@@ -1,14 +1,14 @@
 ---
 project: ai-project-system
 type: migration-guide
-version: 2.0.0
+version: 4.0.0
 status: Active
 effective_date: 2026-05-22
 ---
 
 # Legacy Project Migration Guide
 
-**Version:** 2.0.0  
+**Version:** 4.0.0  
 **Status:** Active  
 **Effective Date:** 2026-05-22
 
@@ -32,12 +32,12 @@ This guide gets an existing project — whether started with an early version of
 ### Step 1: Add Governance Submodule
 
 ```bash
-git submodule add https://github.com/panchew/ai-project-system governance
-cd governance
+git submodule add https://github.com/panchew/ai-project-system .governance
+cd .governance
 git fetch
-git checkout master
+git checkout v4.0.0
 cd ..
-git add governance .gitmodules
+git add .governance .gitmodules
 git commit -m "chore: add AI Project System governance"
 ```
 
@@ -48,8 +48,8 @@ Create `.ai-project.yml` at repository root:
 ```yaml
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "2.0.0"
-  ref: master
+  version: "4.0.0"
+  ref: v4.0.0
 project:
   name: <your-project-name>
   description: "<short description>"
@@ -64,7 +64,7 @@ git commit -m "chore: add project configuration"
 
 ```bash
 mkdir -p .github/agents
-cp governance/agents/governance.agent.md .github/agents/governance.agent.md
+cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
 git add .github/agents/governance.agent.md
 git commit -m "chore: install Governance Agent"
 ```
@@ -92,9 +92,9 @@ If anything goes wrong:
 # Reset to pre-migration state
 git checkout <your-feature-branch>
 git reset --hard HEAD~3   # undo the three migration commits
-git submodule deinit governance
-git rm governance
-rm -rf .git/modules/governance
+git submodule deinit .governance
+git rm .governance
+rm -rf .git/modules/.governance
 ```
 
 ---
@@ -103,9 +103,9 @@ rm -rf .git/modules/governance
 
 | Problem | Solution |
 |---------|----------|
-| `git submodule add` fails — `governance` already exists | `rm -rf governance && git rm -r governance && git commit -m "chore: remove conflicting folder"` then retry |
-| Submodule checkout fails — `master` not found | `cd governance && git fetch origin && git branch -r` to see available branches, then check out the correct one |
-| `.ai-project.yml` invalid | Validate with `python -c "import yaml; yaml.safe_load(open('.ai-project.yml'))"` and check against `governance/ai-project-yml-spec.md` |
+| `git submodule add` fails — `.governance` already exists | `rm -rf .governance && git rm -r .governance && git commit -m "chore: remove conflicting folder"` then retry |
+| Submodule checkout fails — tag not found | `cd .governance && git fetch origin && git tag` to see available tags, then check out the correct one |
+| `.ai-project.yml` invalid | Validate with `python -c "import yaml; yaml.safe_load(open('.ai-project.yml'))"` and check against `.governance/governance/ai-project-yml-spec.md` |
 | Agent not appearing | Ensure `.github/agents/governance.agent.md` exists with correct YAML front-matter. Restart your AI tool. See [ADOPTION-FAQ.md](ADOPTION-FAQ.md). |
 
 ---

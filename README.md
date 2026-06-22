@@ -541,12 +541,13 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2 + P3)
-✅ **47 Epics** delivered across **13 milestones** over **3 phases**
+### Totals (P1 + P2 + P3 + P4)
+✅ **59 Epics** delivered across **19 milestones** over **4 phases**
 
 ### Governance
-- PROJECT-SYSTEM-GUIDELINES.md v3.0.0 (effective 2026-05-22)
+- PROJECT-SYSTEM-GUIDELINES.md v2.0.0 (effective 2026-05-22)
 - AI-OPERATING-GUIDELINES.md v2.0.0 (effective 2026-04-20)
+- Framework version: v4.0.0
 
 ---
 
@@ -594,10 +595,11 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P1 Complete** — System Foundation & Adoption (5 milestones, 12 Epics)
 - ✅ **Phase P2 Complete** — Adoption Architecture & Multi-Project Support (5 milestones, 23 Epics)
 - ✅ **Phase P3 Complete** — Agentic Execution Model Maturity (3 milestones, 12 Epics)
-- ✅ **47 total Epics** delivered across 13 milestones, 3 phases
+- ✅ **Phase P4 Complete** — Team Collaboration & Artifact-Driven Communication (6 milestones, 12 Epics)
+- ✅ **59 total Epics** delivered across 19 milestones, 4 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
-- ✅ **Governance stable** — v3.0.0 (effective 2026-05-22)
+- ✅ **Governance stable** — v4.0.0 (effective 2026-05-22)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
@@ -609,8 +611,8 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Licensed for adoption** — MIT + CC BY-SA 4.0 dual license
 
 **What's Next (Future Phases):**
-- **P4 — Team Collaboration & Artifact-Driven Communication** (in progress) — artifact system, bugfix workflow, team roles, and a runnable example. See the [P4 Governance System Guide](docs/team-collaboration/P4-governance-system-guide.md).
-- **P5+** — Unplanned. Options: System Operations & Observability, Public Release, or as directed.
+- **P4 — Team Collaboration & Artifact-Driven Communication** — Complete. See the [P4 Governance System Guide](docs/team-collaboration/P4-governance-system-guide.md).
+- **P5** — Planned candidate. Direction TBD.
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively

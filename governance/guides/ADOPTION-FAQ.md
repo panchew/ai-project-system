@@ -89,13 +89,13 @@ The submodule points to a different ref than the one specified in `.ai-project.y
    ```bash
    cd .governance
    git fetch
-   git checkout v2.0.0     # or the ref from .ai-project.yml
+   git checkout v4.0.0     # or the ref from .ai-project.yml
    cd ..
    git add .governance
-   git commit -m "chore: sync governance submodule to v2.0.0"
+   git commit -m "chore: sync governance submodule to v4.0.0"
    ```
 
-**Prevention:** Keep `.ai-project.yml` and the submodule ref in sync. Use tags (`v2.0.0`) for stability, not branches.
+**Prevention:** Keep `.ai-project.yml` and the submodule ref in sync. Use tags (`v4.0.0`) for stability, not branches.
 
 **See also:** [Submodule Setup Guide](../submodule-setup.md#6-procedure-updating-to-a-new-governance-version)
 
@@ -129,7 +129,7 @@ The project config file fails validation.
    - `project.description`
 
 3. Check field constraints:
-   - `governance.version` must be a quoted semver string (e.g., `"2.0.0"`, not `2.0.0`)
+   - `governance.version` must be a quoted semver string (e.g., `"4.0.0"`, not `4.0.0`)
    - `project.name` must match `^[a-z][a-z0-9-]*$` (lowercase, hyphens only)
    - `governance.source` must be an HTTPS URL or relative path starting with `./` or `../`
 
@@ -137,8 +137,8 @@ The project config file fails validation.
    ```yaml
    governance:
      source: https://github.com/panchew/ai-project-system
-     version: "2.0.0"
-     ref: v2.0.0
+     version: "4.0.0"
+     ref: v4.0.0
    project:
      name: my-project
      description: "My project description"
@@ -173,8 +173,8 @@ After following the adoption guide, the Governance Agent is not available.
 2. Check the front-matter has correct `name` field:
    ```yaml
    ---
-   name: hq
-   version: 2.0.0
+   name: governance
+   version: 4.0.0
    description: Unified Governance Agent — operates as HQ, Phase, Milestone, or Epic mode based on the Chat Starter delivered
    type: custom-agent
    ---
@@ -182,7 +182,7 @@ After following the adoption guide, the Governance Agent is not available.
 
 3. Restart your AI tool / reload the agent configuration.
 
-4. Verify the agent is selectable in your tool's agent selector (look for **"hq"** or the name you configured).
+4. Verify the agent is selectable in your tool's agent selector (look for **"governance"** or the name you configured).
 
 **Prevention:** Ensure `.github/agents/governance.agent.md` is committed to the repository. Run `git status` to verify it is tracked.
 
@@ -267,11 +267,11 @@ The HQ agent is not applying project-specific overrides (branch strategy, merge 
    python -c "import yaml; d=yaml.safe_load(open('.ai-project.yml')); print(d.get('overrides', {}))"
    ```
 
-4. If overrides are correctly formatted but not applied, verify the Governance Agent version is v2.0.0+:
+4. If overrides are correctly formatted but not applied, verify the Governance Agent version is v4.0.0+:
    ```bash
    head -5 .governance/governance/agents/governance.agent.md
    ```
-   Expected: `version: 2.0.0` or later.
+   Expected: `version: 4.0.0` or later.
 
 **Prevention:** Start with no overrides (defaults apply). Add overrides only when you need to deviate from defaults. Document override changes in a decision record under `docs/decisions/`.
 
@@ -329,7 +329,7 @@ Running `git submodule update` returns errors, or pulling governance changes cau
    git fetch
    git tag --list 'v*'
    # Checkout the correct existing tag
-   git checkout v2.0.0
+   git checkout v4.0.0
    cd ..
    ```
 
@@ -337,14 +337,14 @@ Running `git submodule update` returns errors, or pulling governance changes cau
    ```bash
    cd .governance
    git fetch
-   git checkout v2.0.0            # rollback target
+   git checkout v4.0.0            # rollback target
    cd ..
    git add .governance
-   git commit -m "chore: rollback governance to v2.0.0"
+   git commit -m "chore: rollback governance to v4.0.0"
    # Update .ai-project.yml version and ref to match
    ```
 
-**Prevention:** Treat `.governance/` as read-only. Never make changes inside the submodule directory. Always use `git submodule update` after pulling. Use tags for stability (`v2.0.0`), not branches. Verify the target tag exists before starting a sync.
+**Prevention:** Treat `.governance/` as read-only. Never make changes inside the submodule directory. Always use `git submodule update` after pulling. Use tags for stability (`v4.0.0`), not branches. Verify the target tag exists before starting a sync.
 
 **See also:** [Governance Sync Guide](GOVERNANCE-SYNC-GUIDE.md), [Submodule Setup Guide §9](../submodule-setup.md#9-edge-cases-and-gotchas)
 
@@ -371,9 +371,9 @@ Running `git submodule update` returns errors, or pulling governance changes cau
    ```
 
 2. **Set up governance manually** if the script is not available:
-   - Add the submodule: `git submodule add https://github.com/panchew/ai-project-system governance`
+   - Add the submodule: `git submodule add https://github.com/panchew/ai-project-system .governance`
    - Create `.ai-project.yml` manually with your project name and governance reference
-   - Copy the Governance Agent: `cp governance/agents/governance.agent.md .github/agents/governance.agent.md`
+   - Copy the Governance Agent: `cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md`
 
 **Prevention:** Check the [governance source repository](https://github.com/panchew/ai-project-system) for the latest CLI availability. The local script at `bin/ai-project-init` is always available.
 
@@ -448,9 +448,9 @@ The CLI command does not complete successfully.
    nvm use 18
    ```
    If Node.js upgrade is not possible, skip the CLI and set up governance manually:
-   - Add the governance submodule directly: `git submodule add https://github.com/panchew/ai-project-system governance`
+   - Add the governance submodule directly: `git submodule add https://github.com/panchew/ai-project-system .governance`
    - Create `.ai-project.yml` manually (see Step 2 verification example)
-   - Copy the Governance Agent: `cp governance/agents/governance.agent.md .github/agents/governance.agent.md`
+   - Copy the Governance Agent: `cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md`
    
    Governance itself is language-agnostic — Node.js is only required for the CLI tool.
 
@@ -476,18 +476,18 @@ The adoption guide targets greenfield projects, but you need to add governance t
 2. **Manual governance install** (summary):
    ```bash
    # Add governance submodule
-   git submodule add https://github.com/panchew/ai-project-system governance
-   cd governance
+   git submodule add https://github.com/panchew/ai-project-system .governance
+   cd .governance
    git fetch
-   git checkout milestone/M10   # or current stable branch
+   git checkout v4.0.0
    cd ..
    
    # Create .ai-project.yml
    cat > .ai-project.yml << EOF
    governance:
      source: https://github.com/panchew/ai-project-system
-     version: "2.0.0"
-     ref: milestone/M10
+     version: "4.0.0"
+     ref: v4.0.0
    project:
      name: my-project
      description: "My project description"
@@ -495,10 +495,10 @@ The adoption guide targets greenfield projects, but you need to add governance t
    
     # Install Governance Agent
     mkdir -p .github/agents
-    cp governance/agents/governance.agent.md .github/agents/governance.agent.md
+    cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
     
     # Commit
-    git add .ai-project.yml .gitmodules governance .github
+    git add .ai-project.yml .gitmodules .governance .github
     git commit -m "chore: adopt AI Project System governance"
    ```
 
@@ -516,40 +516,40 @@ The adoption guide targets greenfield projects, but you need to add governance t
 
 ## 9. Governance Version Tag Issues
 
-### Problem: `v2.0.0` tag not found when adding governance submodule
+### Problem: Version tag not found when adding governance submodule
 
-The guide says to use `v2.0.0` but `git checkout v2.0.0` fails with `pathspec 'v2.0.0' did not match any file(s) known to git`.
+The guide says to use `v4.0.0` but `git checkout v4.0.0` fails with `pathspec 'v4.0.0' did not match any file(s) known to git`.
 
-**Cause:** The git tag `v2.0.0` may not have been created yet in the governance source repository. Only the conceptual version number exists in `.ai-project.yml`.
+**Cause:** The git tag may not yet be available locally. Run `git fetch` inside the submodule to pull tags from remote before checking out.
 
 **Solution:**
 
 1. **Check available branches and tags:**
    ```bash
-   cd governance
+   cd .governance
    git branch -r          # List remote branches
    git tag                # List tags
    cd ..
    ```
 
-2. **Use a branch ref instead of a tag:**
+2. **Fetch and checkout the tag:**
    ```bash
-   cd governance
+   cd .governance
    git fetch origin
-   git checkout milestone/M10   # or: develop, master
+   git checkout v4.0.0
    cd ..
-   git add governance
+   git add .governance
    ```
 
-3. **Update `.ai-project.yml` to match:**
+3. **If the tag genuinely does not exist, use a branch ref instead:**
    ```yaml
    governance:
      source: https://github.com/panchew/ai-project-system
-     version: "milestone/M10"
-     ref: milestone/M10
+     version: "4.0.0"
+     ref: master
    ```
 
-**Prevention:** Use tags for stability once they are created (`v2.0.0`, `v2.0.1`, etc.). During active development, branch refs (`milestone/M10`, `develop`) are acceptable but may change.
+**Prevention:** Use tags for stability (`v4.0.0`, `v4.1.0`, etc.). Always run `git fetch` inside the submodule before checking out a tag.
 
 **See also:** [ADOPTION-GUIDE.md Step 2](ADOPTION-GUIDE.md#step-2-verify-governance-submodule)
 

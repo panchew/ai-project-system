@@ -88,7 +88,7 @@ The system is **scalable down**. You don't need to use every feature for every p
    - [governance/guides/QUICK-START.md](QUICK-START.md) walks you through creating your first Phase, Milestone, and Epic in ~30 minutes.
 
 2. **Review the example project**
-   - [examples/task-tracker-project/](../examples/task-tracker-project/) shows a complete project lifecycle (Phase P1, Milestones M1-M2, Epics E1.1-E2.4) with real specs, execution, and closure.
+   - [examples/task-tracker-project/](../examples/task-tracker-project/) shows a complete project lifecycle with real specs, execution, and closure.
 
 3. **Start with a small Epic**
    - Don't try to plan your entire project upfront. Create a Phase and Milestone, then write a spec for one Epic and execute it. Learn by doing.
@@ -257,23 +257,18 @@ The Phase-Milestone-Epic hierarchy is **a default structure, not a rigid require
 
 ### Is there a CLI or automation tool?
 
-**Not yet.** The system is currently manual (Markdown files + Git + AI chat).
+**Yes.** The system ships with several automation layers built on top of the core Markdown + Git model.
 
 **What exists:**
-- Templates (copy-paste ready)
-- Documentation
-- Example project
+- **`ai-project init` CLI** — Scaffolds a new project in seconds (creates `docs/` hierarchy, adds governance submodule, generates `.ai-project.yml` and governance agent file)
+- **File-driven queue** — Agents pick up work from a structured queue directory; no polling or external services required
+- **`ai-project-orchestrator`** — Coordinates multi-Epic execution across the queue
+- **`ai-project-daemon`** — Background process that drives the orchestrator; supports `--project-root` for submodule consumer projects
+- **`Dockerfile.sandbox`** — Docker-based isolated execution environment for the agentic cluster
 
-**What doesn't exist (yet):**
-- CLI to generate specs or validate structure
-- GitHub Actions to enforce governance
-- Automated Phase/Milestone/Epic creation
+**Manual mode is still available** and is the recommended starting point for new adopters — no infrastructure required beyond Git and an AI chat tool.
 
-**Why manual?** The system is new. We're validating the model before building tooling.
-
-**Future possibility:** If the community adopts this, tooling could be built. But for now, it's intentionally low-tech (Markdown + Git).
-
-**Workaround:** Use your editor's snippet/template features to speed up file creation.
+**See also:** [`README.md`](../../README.md) for the agentic mode overview, or jump directly to `bin/ai-project-orchestrator`, `bin/ai-project-daemon`, `Dockerfile.sandbox`.
 
 ---
 
