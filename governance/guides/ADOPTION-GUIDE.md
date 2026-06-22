@@ -201,15 +201,16 @@ git submodule status
 Expected output (a leading space indicates initialized, `-` indicates uninitialized):
 
 ```
- v3.0.0 governance
+ <sha> .governance (v4.0.0)
 ```
 
-The commit SHA should match the governance tag `v3.0.0`.
+The commit SHA should match the governance tag `v4.0.0`.
 
-> **Note on submodule paths:** The CLI may create the submodule at `governance/`
-> or `.governance/` depending on the version. Both paths are valid — verify
-> against what your `.ai-project.yml` expects. Check the configured path with
-> `git config --file .gitmodules --get submodule.governance.path`.
+> **Note on submodule path:** The canonical submodule path is **`.governance/`** — a
+> hidden directory at the project root, following the same convention as `.git/` and
+> `.github/`. The governance source repository itself uses `governance/` (no dot) because
+> it references its own content directly, not via submodule. These are different by design.
+> External projects always use `.governance/`.
 
 ### Verify Governance Files Are Accessible
 
@@ -225,8 +226,8 @@ Expected: Both files exist and are readable.
 # .ai-project.yml
 governance:
   source: https://github.com/panchew/ai-project-system
-  version: "3.0.0"
-  ref: v3.0.0
+  version: "4.0.0"
+  ref: v4.0.0
 ```
 
 ```bash
@@ -238,17 +239,17 @@ Expected: `governance.ref` matches the checked-out commit in `.governance/`.
 ### Verification Check
 
 ```bash
-cd governance && git log --oneline -1 && cd ..
+cd .governance && git log --oneline -1 && cd ..
 ```
 
 Expected output:
 ```
-<sha> (HEAD -> v3.0.0, tag: v3.0.0) Release v3.0.0
+<sha> (HEAD, tag: v4.0.0) <commit message>
 ```
 
-> **Note:** If the git tag `v3.0.0` does not exist in the governance source repository,
-> the submodule may default to `master` or an older tag. In that case, use the branch
-> `milestone/M10` or `develop` as the ref instead, and update `.ai-project.yml` accordingly.
+> **Note:** If the git tag `v4.0.0` does not exist, run `git tag --list 'v*'` inside
+> `.governance/` to see available tags, then check out the latest one and update
+> `.ai-project.yml` to match.
 
 > **Troubleshooting:** If `governance/` is empty, run `git submodule update --init --recursive`. If the version is wrong, see the [FAQ](ADOPTION-FAQ.md#governance-submodule-issues).
 
@@ -264,7 +265,7 @@ The `ai-project init` command may create an older `hq.agent.md`. Replace it with
 
 ```bash
 mkdir -p .github/agents
-cp governance/agents/governance.agent.md .github/agents/governance.agent.md
+cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
 # Remove old separate agent file if present
 rm -f .github/agents/hq.agent.md
 ```
@@ -450,13 +451,12 @@ ai-project init my-project --dir ~/projects  # specify target directory
 git submodule status
 git submodule update --init --recursive
 
-# Verify governance files (path depends on CLI version)
-ls governance/governance/          # new path
-ls .governance/governance/         # legacy path (older CLI versions)
+# Verify governance files
+ls .governance/governance/PROJECT-SYSTEM-GUIDELINES.md
 
 # Install Governance Agent manually (if not done by CLI)
 mkdir -p .github/agents
-cp governance/agents/governance.agent.md .github/agents/governance.agent.md
+cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
 ```
 
 ### File Locations
@@ -464,11 +464,11 @@ cp governance/agents/governance.agent.md .github/agents/governance.agent.md
 | Artifact | Path |
 |----------|------|
 | Project config | `.ai-project.yml` |
-| Governance submodule | `governance/` (or `.governance/` in older versions) |
+| Governance submodule | `.governance/` |
 | Governance Agent definition | `.github/agents/governance.agent.md` |
-| Governance guidelines | `governance/governance/PROJECT-SYSTEM-GUIDELINES.md` |
-| Operating guidelines | `governance/governance/AI-OPERATING-GUIDELINES.md` |
-| CLI script (local) | `governance/bin/ai-project-init` |
+| Governance guidelines | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md` |
+| Operating guidelines | `.governance/governance/AI-OPERATING-GUIDELINES.md` |
+| CLI script (local) | `.governance/bin/ai-project-init` |
 | Phase specs | `docs/phases/*/` |
 | Milestone specs | `docs/phases/*/P*-M*__milestone.md` |
 | Epic specs | `docs/phases/*/P*-M*-E*__spec__*.md` |
