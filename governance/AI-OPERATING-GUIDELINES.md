@@ -1,15 +1,15 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.0.0  
-**Effective Date:** 2026-04-20  
+**Version:** 2.1.0  
+**Effective Date:** 2026-06-23  
 **Status:** Current  
 
 ---
 
 ## 1. Purpose
 
-This document defines how **AI agents (HQ chats and Coding Agents)** must operate within projects governed by the Project System.
+This document defines how **AI agents (Creation Chat, HQ Chat, Phase Chat, Milestone Chat, and Coding Agents)** must operate within projects governed by the Project System.
 
 It governs:
 - AI authority and scope
@@ -62,6 +62,20 @@ All AI agents (Coding Agents and HQ Chats) MUST enforce the single canonical hap
 ---
 
 ## 3. Types of AI Chats
+
+The AI Project System defines five chat types operating in a strict hierarchy:
+
+| Level | Chat Type | Role |
+|-------|-----------|------|
+| 0 | Creation Chat | Vision — permanent institution, authority-free |
+| 1 | HQ Chat | Intent — coordinates phases, owns phase-level decisions |
+| 2 | Phase Chat | Milestone planning — produces Milestone specs and Milestone Planning Chat Starters |
+| 3 | Milestone Chat | Epic planning — produces Epic specs and Epic Execution Chat Starters |
+| 4 | Coding Agent | Execution — writes code, tests, commits, and PRs |
+
+**Terminology rule:** "Execution" is reserved for Level 4 (Coding Agent). Levels 2 and 3 are **planning sessions**, not execution sessions. Phase and Milestone chats plan work; they do not execute it.
+
+---
 
 ### 3.1 HQ Chats
 
@@ -448,6 +462,63 @@ Milestone closure mirrors Epic closure:
 
 ---
 
+### 3.5 Creation Chat (Level 0)
+
+Creation Chat is a **permanent institution** above HQ Chat. It operates outside the phase/milestone lifecycle — it is never closed, never scoped to a phase, and holds no execution authority.
+
+Creation Chat:
+- Is initialized once by pasting `governance/templates/seed.md` into a fresh chat session
+- Produces **Steering Notes** addressed to HQ Chat (carry binding CFO intent)
+- Receives **Progress Digests** from HQ Chat
+- Holds no execution authority — it does not plan phases, produce specs, or dispatch agents
+- Captures vision and communicates it downward; HQ Chat interprets and acts on it
+
+Creation Chat is **authoritative for vision**, not for plans.
+
+---
+
+### 3.6 Phase Chat (Level 2)
+
+Phase Chat is a **finite planning session scoped to a single Phase**. It is launched by HQ Chat using a Phase Planning Chat Starter.
+
+Phase Chat:
+- Reviews the Phase spec
+- Produces Milestone specs for all Milestones in the Phase
+- Produces Milestone Planning Chat Starters for each Milestone
+- Issues Milestone Delivery Authorizations after HQ Chat acceptance
+- Reports completion to HQ Chat when all Milestones are accepted
+
+Phase Chat does NOT:
+- Write code or modify project infrastructure
+- Create branches or commit files (in the planning stage)
+- Dispatch Coding Agents — it dispatches Milestone Chats only
+- Make phase-level accept/reject decisions (those belong to HQ Chat)
+
+Phase Chat is **authoritative for milestone planning**, not for code or phase decisions.
+
+---
+
+### 3.7 Milestone Chat (Level 3)
+
+Milestone Chat is a **finite planning session scoped to a single Milestone**. It is launched by Phase Chat (or HQ Chat during bootstrap) using a Milestone Planning Chat Starter.
+
+Milestone Chat:
+- Reviews the Milestone spec
+- Produces Epic specs for all Epics in the Milestone
+- Produces Epic Execution Chat Starters for each Epic
+- Issues Epic Delivery Authorizations after parent chat acceptance
+- Reports completion to the parent chat (Phase Chat or HQ Chat) when all Epics are accepted
+
+Milestone Chat does NOT:
+- Write code or modify project infrastructure
+- Create branches or commit files (in the planning stage)
+- Dispatch Coding Agents directly — Epic Execution Chat Starters are delivered via the parent chat
+- Make milestone-level accept/reject decisions (those belong to the parent chat)
+
+Milestone Chat is **authoritative for epic planning**, not for code or milestone decisions.
+
+---
+
 ## 4. Authority Hierarchy
 
 AI must respect the following authority order:
@@ -738,5 +809,6 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.1.0 | 2026-06-23 | Added §3.5–3.7 definitions for Creation Chat, Phase Chat, and Milestone Chat. Added chat hierarchy table to §3 intro. Updated Purpose to name all five chat types. Fixes P5-GH-7: Phase/Milestone chat roles introduced in P4 were absent from this document, causing HQ Chat to use Epic-level rules when producing Phase/Milestone starters. |
 | 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated template path references. |
 | 1.4.1 | 2026-02-22 | Previous version — governance lived in `docs/`. |

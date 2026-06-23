@@ -13,7 +13,7 @@
   4. The entire filled-in content MUST be wrapped in a fenced markdown code block
      when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
 
-         ````markdown name=<P#>-phase-execution-chat-starter.md
+         ````markdown name=<P#>-phase-planning-chat-starter.md
          [filled-in content here]
          ````
 
@@ -28,7 +28,7 @@
 
 ---
 
-# Phase Execution Chat Starter — <P#>
+# Phase Planning Chat Starter — <P#>
 
 **Phase:** <P#> — <Phase Name>
 **Project:** <project-name>
@@ -48,14 +48,18 @@ You are operating under the AI Project System governance framework as a **Phase 
 <!--
   Replace <owner>, <repo>, <branch>, and <version> with actual values.
 
+  IMPORTANT: <owner>/<repo> MUST be the governance SOURCE repository (e.g., panchew/ai-project-system),
+  NOT the adopting project's repository. Governance files live in the source, not in the project.
+
   Example:
-  - [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v3.0.0 (Effective: 2026-05-22)
+  - [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v2.0.0 (Effective: 2026-04-20)
+  - [AI-OPERATING-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/AI-OPERATING-GUIDELINES.md) v2.0.0 (Effective: 2026-04-20)
 -->
 
 **Governance hierarchy (for this session):**
 1. PROJECT-SYSTEM-GUIDELINES.md (highest authority)
 2. AI-OPERATING-GUIDELINES.md
-3. This Phase Execution Chat Starter
+3. This Phase Planning Chat Starter
 4. Phase Spec
 5. Decisions made during this session
 6. System references
@@ -63,13 +67,13 @@ You are operating under the AI Project System governance framework as a **Phase 
 
 **Critical rules:**
 - Documentation is authoritative; chat is ephemeral
-- You are a **planning session**, NOT an execution session
-- You MUST NOT create branches, commit files, or open PRs
+- You are a **planning session** — your mandate is to plan Milestones, not execute them
+- In this planning stage: do not create branches, commit files, or open PRs — your outputs are in-chat artifacts submitted to HQ Chat for acceptance
 - You MUST NOT modify project code or infrastructure
-- All file creation is performed by the Coding Agent acting on your instructions
+- You produce Milestone specs and Milestone Planning Chat Starters — you do NOT dispatch Coding Agents
 - You report to HQ Chat; you communicate downward to Milestone Chats only
 - You MUST NOT reach across to sibling phases or lateral epics
-- Decisions belong to HQ Chat; you produce proposals only
+- Milestone-level planning decisions are within your authority; phase-level acceptance belongs to HQ Chat
 
 ---
 
@@ -129,8 +133,8 @@ You must produce the following deliverables, in order:
 2. **Milestone Execution Chat Starter** — a filled-in starter for each Milestone, using the Milestone Execution Chat Starter template, ready for HQ Chat to deliver to a Milestone Chat
 
 <!--
-  The Milestone spec files are committed to the repository by the Coding Agent.
-  The Milestone Execution Chat Starters are delivered as structured blocks in this chat.
+  The Milestone spec files are committed to the repository by a Coding Agent (coordinated separately, not by this Phase Chat).
+  The Milestone Planning Chat Starters are delivered as structured blocks in this chat.
   Do NOT produce both simultaneously — produce one Milestone's deliverables at a time
   and await HQ Chat acceptance before proceeding to the next.
 -->

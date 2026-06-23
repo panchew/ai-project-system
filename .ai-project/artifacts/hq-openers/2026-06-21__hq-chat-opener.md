@@ -5,8 +5,8 @@ timestamp: 2026-06-21T00:00:00Z
 issued_by: Creation Chat
 project_name: ai-project-system
 repo: https://github.com/panchew/ai-project-system
-governance_version: PROJECT-SYSTEM-GUIDELINES.md v2.0.0
-operating_version: AI-OPERATING-GUIDELINES.md v2.0.0
+governance_version: PROJECT-SYSTEM-GUIDELINES.md v2.1.0
+operating_version: AI-OPERATING-GUIDELINES.md v2.1.0
 framework_version: v4.0.0
 active_phase: none (P4 closed — P5 not yet open)
 instantiation: p5-scoping
@@ -41,8 +41,8 @@ Built using itself (dogfooded across P1–P4). Production-ready at v4.0.0.
 
 ## Governance
 
-- **PROJECT-SYSTEM-GUIDELINES.md** v2.0.0 (effective 2026-05-22) — authoritative
-- **AI-OPERATING-GUIDELINES.md** v2.0.0 (effective 2026-04-20) — authoritative
+- **PROJECT-SYSTEM-GUIDELINES.md** v2.1.0 (effective 2026-06-23) — authoritative
+- **AI-OPERATING-GUIDELINES.md** v2.1.0 (effective 2026-06-23) — authoritative
 - **Framework version:** v4.0.0 (master HEAD, 226/226 tests passing)
 
 ---
@@ -163,5 +163,5 @@ spec.
    something broader if VA-1 is included.
 4. **Draft the P5 phase spec** at
    `docs/phases/P5__<Phase_Name>/P5__phase-spec.md`.
-5. **Produce the Phase Chat Execution Starter** — so the Phase Chat can open and
+5. **Produce the Phase Planning Chat Starter** — so the Phase Chat can open and
    begin planning Milestones.

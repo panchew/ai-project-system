@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 2.0.0  
-**Effective Date:** 2026-04-20  
+**Version:** 2.1.0  
+**Effective Date:** 2026-06-23  
 **Status:** Current  
 
 ---
@@ -518,33 +518,34 @@ See `governance/templates/delivery-notice.md` for the canonical template.
 
 ---
 
-## 13A. Phase Execution Chat Starter (Mandatory)
+## 13A. Phase Planning Chat Starter (Mandatory)
 
-Every Phase planning session MUST begin with a **complete Phase Execution Chat Starter**.
+Every Phase planning session MUST begin with a **complete Phase Planning Chat Starter**.
 
-The Phase Execution Chat Starter is a binding planning contract that defines:
+The Phase Planning Chat Starter is a binding planning contract that defines:
 - Phase goals and scope
 - Complete list of Milestones to be planned
 - Governance versions in use
 - Phase Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Phase Chat (planning session scoped to a single Phase) is launched by HQ Chat using this artifact. It produces Milestone specs and Milestone Execution Chat Starters.
+A Phase Chat (planning session scoped to a single Phase) is launched by HQ Chat using this artifact. It produces Milestone specs and Milestone Planning Chat Starters.
+
+**Phase Chat role:** Phase Chat is a planning session — it plans Milestones, does not execute them. It does not dispatch Coding Agents. It reports to HQ Chat and communicates downward to Milestone Chats only. See AI-OPERATING-GUIDELINES.md §3.6 for full role definition.
 
 For full role and responsibility definitions, see:
 
 - **Agent definition:** `governance/agents/governance.agent.md` (Phase mode)
-- **System reference:** `governance/systems/phase-execution-chat-starter.md`
 - **Fillable template:** `governance/templates/phase-execution-chat-starter.md`
 - **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 2)
 
 ---
 
-## 13B. Milestone Execution Chat Starter (Mandatory)
+## 13B. Milestone Planning Chat Starter (Mandatory)
 
-Every Milestone planning session MUST begin with a **complete Milestone Execution Chat Starter**.
+Every Milestone planning session MUST begin with a **complete Milestone Planning Chat Starter**.
 
-The Milestone Execution Chat Starter is a binding planning contract that defines:
+The Milestone Planning Chat Starter is a binding planning contract that defines:
 - Milestone goals and scope
 - Complete list of Epics to be planned
 - Governance versions in use
@@ -553,10 +554,11 @@ The Milestone Execution Chat Starter is a binding planning contract that defines
 
 A Milestone Chat (planning session scoped to a single Milestone) is launched by Phase Chat (or HQ Chat during bootstrap) using this artifact. It produces Epic specs and Epic Execution Chat Starters.
 
+**Milestone Chat role:** Milestone Chat is a planning session — it plans Epics, does not execute them. It does not dispatch Coding Agents directly. Epic Execution Chat Starters are delivered via the parent chat. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
+
 For full role and responsibility definitions, see:
 
 - **Agent definition:** `governance/agents/governance.agent.md` (Milestone mode)
-- **System reference:** `governance/systems/milestone-execution-chat-starter.md`
 - **Fillable template:** `governance/templates/milestone-execution-chat-starter.md`
 - **Hierarchy reference:** `governance/systems/chat-hierarchy.md` (Level 3)
 
@@ -579,40 +581,6 @@ A canonical template is provided under:
 
 ```
 governance/templates/epic-execution-chat-starter.md
-```
-
----
-
-## 13A. Phase Execution Chat Starter (Planning Sessions)
-
-Phase-scoped planning sessions are launched using a **Phase Execution Chat Starter**.
-
-A Phase Chat is a finite planning session scoped to a single Phase. It is NOT an execution chat. Its purpose is to:
-- Review the Phase spec
-- Produce Milestone specs for all Milestones within the Phase
-- Produce a Milestone Execution Chat Starter for each Milestone
-- Issue Milestone Delivery Authorizations upon HQ acceptance
-
-**Communication scope:** A Phase Chat reports to HQ Chat and communicates downward to Milestone Chats only. It MUST NOT reach across to sibling phases or lateral epics.
-
-**Authority:** Phase Chat produces proposals. HQ Chat owns accept/reject decisions.
-
-The agent definition governing Phase mode behavior is:
-
-```
-governance/agents/governance.agent.md
-```
-
-The system document defining Phase mode rules is:
-
-```
-governance/systems/phase-execution-chat-starter.md
-```
-
-The fillable template for launching a Phase session is:
-
-```
-governance/templates/phase-execution-chat-starter.md
 ```
 
 ---
@@ -845,6 +813,7 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.1.0 | 2026-06-23 | Renamed §13A "Phase Planning Chat Starter" and §13B "Milestone Planning Chat Starter" (removed "Execution" misnomer). Added Phase/Milestone Chat role summaries to §13A/13B with references to AI-OPERATING-GUIDELINES.md §3.6–3.7. Removed duplicate §13A section. Fixes P5-GH-7: "Execution" terminology was being copied into Phase/Milestone starters, causing generated starters to carry Epic-level rules. |
 | 3.0.0 | 2026-05-22 | Phase P3: Agentic Execution Model Maturity. Added Section 18 defining rules for 24/7 unattended development clusters, Docker sandboxing, and file-driven Dev-QA recursion queues. |
 | 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated canonical repository structure, template paths, and system reference paths. |
 | 1.5.0 | 2026-02-18 | Previous version — governance lived in `docs/`. |
