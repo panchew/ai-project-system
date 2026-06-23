@@ -529,9 +529,9 @@ The Phase Execution Chat Starter is a binding execution contract that defines:
 - Phase Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Phase Execution Chat (autonomous execution session scoped to a single Phase) is launched by HQ Chat using this artifact. It produces Milestone specs and Milestone Execution Chat Starters, commits them to a phase branch, and opens a PR — treating planning artifacts as its deliverables exactly as a Coding Agent treats code.
+A Phase Execution Chat (autonomous execution and delivery agent scoped to a single Phase) is launched by HQ Chat using this artifact. In Stage 1 it produces Milestone specs and Milestone Execution Chat Starters, commits them to a phase branch, and opens a PR. In Stage 2 it oversees Milestone delivery, issues Review Decisions, and merges the phase branch when all Milestones are accepted.
 
-**Phase Execution Chat role:** Autonomous execution agent for Phase-level planning. It commits and PRs its deliverables; it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.6 for full role definition.
+**Phase Execution Chat role:** Execution and delivery agent for this Phase. It commits and PRs its deliverables and oversees delivery through to merge — it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.6 for full role definition.
 
 For full role and responsibility definitions, see:
 
@@ -552,9 +552,9 @@ The Milestone Execution Chat Starter is a binding execution contract that define
 - Milestone Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Milestone Execution Chat (autonomous execution session scoped to a single Milestone) is launched by Phase Chat (or HQ Chat during bootstrap) using this artifact. It produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR — treating planning artifacts as its deliverables exactly as a Coding Agent treats code.
+A Milestone Execution Chat (autonomous execution and delivery agent scoped to a single Milestone) is launched by Phase Execution Chat (or HQ Chat during bootstrap) using this artifact. In Stage 1 it produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR. In Stage 2 it oversees Epic delivery, issues Review Decisions, and merges the milestone branch when all Epics are accepted.
 
-**Milestone Execution Chat role:** Autonomous execution agent for Milestone-level planning. It commits and PRs its deliverables; it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
+**Milestone Execution Chat role:** Execution and delivery agent for this Milestone. It commits and PRs its deliverables and oversees delivery through to merge — it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
 
 For full role and responsibility definitions, see:
 

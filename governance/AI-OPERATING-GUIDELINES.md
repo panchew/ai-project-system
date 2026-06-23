@@ -69,11 +69,11 @@ The AI Project System defines five chat types operating in a strict hierarchy:
 |-------|-----------|------|
 | 0 | Creation Chat | Vision — permanent institution, authority-free |
 | 1 | HQ Chat | Intent — coordinates phases, owns phase-level decisions |
-| 2 | Phase Chat | Milestone planning — produces Milestone specs and Milestone Planning Chat Starters |
-| 3 | Milestone Chat | Epic planning — produces Epic specs and Epic Execution Chat Starters |
-| 4 | Coding Agent | Execution — writes code, tests, commits, and PRs |
+| 2 | Phase Execution Chat | Milestone planning and delivery — produces, commits, and PRs Milestone specs and starters; oversees Milestone delivery |
+| 3 | Milestone Execution Chat | Epic planning and delivery — produces, commits, and PRs Epic specs and starters; oversees Epic delivery |
+| 4 | Epic Execution Chat (Coding Agent) | Implementation — writes code, tests, commits, and PRs |
 
-**Terminology rule:** "Execution" is reserved for Level 4 (Coding Agent). Levels 2 and 3 are **planning sessions**, not execution sessions. Phase and Milestone chats plan work; they do not execute it.
+**Terminology rule:** All chat levels from 2 upward are execution agents — they call tools, commit artifacts, and open PRs autonomously. The distinction is *what* they execute: Levels 2 and 3 execute and deliver planning artifacts; Level 4 executes and delivers code. **Implementation** — writing project code — is reserved for Level 4.
 
 ---
 
@@ -479,43 +479,35 @@ Creation Chat is **authoritative for vision**, not for plans.
 
 ### 3.6 Phase Execution Chat (Level 2)
 
-Phase Execution Chat is a **finite autonomous execution session scoped to a single Phase**. It is launched by HQ Chat using a Phase Execution Chat Starter. Its deliverables are planning artifacts — Milestone specs and Milestone Execution Chat Starters — which it commits and PRs exactly as a Coding Agent commits code.
+Phase Execution Chat is a **finite autonomous execution and delivery agent scoped to a single Phase**. It is launched by HQ Chat using a Phase Execution Chat Starter.
 
-Phase Execution Chat:
-- Reviews the Phase spec
-- Produces Milestone specs for all Milestones in the Phase
-- Produces Milestone Execution Chat Starters for each Milestone
-- Creates a phase branch, commits all planning artifacts, and opens a PR
-- Issues Milestone Delivery Authorizations after HQ Chat PR acceptance
-- Reports completion to HQ Chat when all Milestones are accepted and the PR is merged
+**Stage 1 — Execution:** Reviews the Phase spec, produces Milestone specs and Milestone Execution Chat Starters, creates a phase branch, commits all planning artifacts, and opens a PR to HQ Chat for review.
+
+**Stage 2 — Delivery:** After HQ Chat accepts the PR, oversees Milestone execution — receives Milestone Completion Notices, issues Milestone Review Decisions, and when all Milestones are accepted, delivers the Phase by merging the phase branch.
 
 Phase Execution Chat does NOT:
-- Write project code or modify infrastructure
+- Implement project code or modify infrastructure
 - Dispatch Coding Agents — that is HQ Chat's authority after each Milestone Execution Chat Starter is accepted
 - Make phase-level accept/reject decisions (those belong to HQ Chat)
 
-Phase Execution Chat is **authoritative for milestone planning**, not for code or phase decisions.
+Phase Execution Chat is **authoritative for milestone planning and delivery**, not for implementation or phase decisions.
 
 ---
 
 ### 3.7 Milestone Execution Chat (Level 3)
 
-Milestone Execution Chat is a **finite autonomous execution session scoped to a single Milestone**. It is launched by Phase Chat (or HQ Chat during bootstrap) using a Milestone Execution Chat Starter. Its deliverables are planning artifacts — Epic specs and Epic Execution Chat Starters — which it commits and PRs exactly as a Coding Agent commits code.
+Milestone Execution Chat is a **finite autonomous execution and delivery agent scoped to a single Milestone**. It is launched by Phase Execution Chat (or HQ Chat during bootstrap) using a Milestone Execution Chat Starter.
 
-Milestone Execution Chat:
-- Reviews the Milestone spec
-- Produces Epic specs for all Epics in the Milestone
-- Produces Epic Execution Chat Starters for each Epic
-- Creates a milestone branch, commits all planning artifacts, and opens a PR
-- Issues Epic Delivery Authorizations after parent chat PR acceptance
-- Reports completion to the parent chat (Phase Chat or HQ Chat) when all Epics are accepted and the PR is merged
+**Stage 1 — Execution:** Reviews the Milestone spec, produces Epic specs and Epic Execution Chat Starters, creates a milestone branch, commits all planning artifacts, and opens a PR to the parent chat for review.
+
+**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), issues Epic Review Decisions, and when all Epics are accepted, delivers the Milestone by merging the milestone branch.
 
 Milestone Execution Chat does NOT:
-- Write project code or modify infrastructure
+- Implement project code or modify infrastructure
 - Dispatch Coding Agents directly — Epic Execution Chat Starters are delivered to the parent chat, which authorizes each Coding Agent launch
 - Make milestone-level accept/reject decisions (those belong to the parent chat)
 
-Milestone Execution Chat is **authoritative for epic planning**, not for code or milestone decisions.
+Milestone Execution Chat is **authoritative for epic planning and delivery**, not for implementation or milestone decisions.
 
 ---
 
