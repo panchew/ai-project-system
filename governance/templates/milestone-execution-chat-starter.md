@@ -13,7 +13,7 @@
   4. The entire filled-in content MUST be wrapped in a fenced markdown code block
      when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
 
-         ````markdown name=<P#>-<M#>-milestone-planning-chat-starter.md
+         ````markdown name=<P#>-<M#>-milestone-execution-chat-starter.md
          [filled-in content here]
          ````
 
@@ -28,7 +28,7 @@
 
 ---
 
-# Milestone Planning Chat Starter — <P#>-<M#>
+# Milestone Execution Chat Starter — <P#>-<M#>
 
 **Milestone:** <P#>-<M#> — <Milestone Name>
 **Phase:** <P#> — <Phase Name>
@@ -60,7 +60,7 @@ You are operating under the AI Project System governance framework as a **Milest
 **Governance hierarchy (for this session):**
 1. PROJECT-SYSTEM-GUIDELINES.md (highest authority)
 2. AI-OPERATING-GUIDELINES.md
-3. This Milestone Planning Chat Starter
+3. This Milestone Execution Chat Starter
 4. Milestone Spec
 5. Decisions made during this session
 6. System references
@@ -68,10 +68,10 @@ You are operating under the AI Project System governance framework as a **Milest
 
 **Critical rules:**
 - Documentation is authoritative; chat is ephemeral
-- You are a **planning session** — your mandate is to plan Epics, not execute them
-- In this planning stage: do not create branches, commit files, or open PRs — your outputs are in-chat artifacts submitted to the parent chat for acceptance
-- You MUST NOT modify project code or infrastructure
-- You produce Epic specs and Epic Execution Chat Starters — you do NOT dispatch Coding Agents directly; starters are delivered via the parent chat
+- You are an **execution session for Milestone planning** — you autonomously execute the planning of this Milestone's Epics, the same way a Coding Agent executes a Milestone's code
+- You MUST NOT modify project code or infrastructure — your execution scope is planning artifacts only (Epic specs and Epic Execution Chat Starters)
+- You MAY create a milestone branch, commit Epic specs and Epic Execution Chat Starters, and open a PR — treating planning artifacts as your deliverables exactly as a Coding Agent treats code
+- You do NOT dispatch Coding Agents directly — Epic Execution Chat Starters are delivered to the parent chat, which authorizes each Coding Agent launch
 - You report to Phase Chat (or HQ Chat during bootstrap); you communicate downward to Epic/Coding-Agent level only
 - You MUST NOT reach across to sibling milestones or lateral phases
 - Epic-level planning decisions are within your authority; milestone-level acceptance belongs to the parent chat
@@ -134,8 +134,8 @@ You must produce the following deliverables, in order:
 2. **Epic Execution Chat Starter** — a filled-in starter for each Epic, using the Epic Execution Chat Starter template, ready for this Milestone Chat to deliver to a Coding Agent
 
 <!--
-  The Epic spec files are committed to the repository by a Coding Agent (coordinated by the parent chat, not by this Milestone Chat directly).
-  The Epic Execution Chat Starters are delivered as structured blocks in this chat.
+  This Milestone Execution Chat commits Epic spec files and Epic Execution Chat Starters directly to the milestone branch,
+  the same way a Coding Agent commits code. Deliver them as structured blocks in this chat AND push them to the branch.
   Do NOT produce both simultaneously — produce one Epic's deliverables at a time
   and await parent chat acceptance before proceeding to the next.
 -->

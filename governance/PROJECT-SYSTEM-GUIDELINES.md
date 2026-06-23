@@ -518,20 +518,20 @@ See `governance/templates/delivery-notice.md` for the canonical template.
 
 ---
 
-## 13A. Phase Planning Chat Starter (Mandatory)
+## 13A. Phase Execution Chat Starter (Mandatory)
 
-Every Phase planning session MUST begin with a **complete Phase Planning Chat Starter**.
+Every Phase execution session MUST begin with a **complete Phase Execution Chat Starter**.
 
-The Phase Planning Chat Starter is a binding planning contract that defines:
+The Phase Execution Chat Starter is a binding execution contract that defines:
 - Phase goals and scope
 - Complete list of Milestones to be planned
 - Governance versions in use
-- Phase Chat responsibilities and constraints
+- Phase Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Phase Chat (planning session scoped to a single Phase) is launched by HQ Chat using this artifact. It produces Milestone specs and Milestone Planning Chat Starters.
+A Phase Execution Chat (autonomous execution session scoped to a single Phase) is launched by HQ Chat using this artifact. It produces Milestone specs and Milestone Execution Chat Starters, commits them to a phase branch, and opens a PR — treating planning artifacts as its deliverables exactly as a Coding Agent treats code.
 
-**Phase Chat role:** Phase Chat is a planning session — it plans Milestones, does not execute them. It does not dispatch Coding Agents. It reports to HQ Chat and communicates downward to Milestone Chats only. See AI-OPERATING-GUIDELINES.md §3.6 for full role definition.
+**Phase Execution Chat role:** Autonomous execution agent for Phase-level planning. It commits and PRs its deliverables; it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.6 for full role definition.
 
 For full role and responsibility definitions, see:
 
@@ -541,20 +541,20 @@ For full role and responsibility definitions, see:
 
 ---
 
-## 13B. Milestone Planning Chat Starter (Mandatory)
+## 13B. Milestone Execution Chat Starter (Mandatory)
 
-Every Milestone planning session MUST begin with a **complete Milestone Planning Chat Starter**.
+Every Milestone execution session MUST begin with a **complete Milestone Execution Chat Starter**.
 
-The Milestone Planning Chat Starter is a binding planning contract that defines:
+The Milestone Execution Chat Starter is a binding execution contract that defines:
 - Milestone goals and scope
 - Complete list of Epics to be planned
 - Governance versions in use
-- Milestone Chat responsibilities and constraints
+- Milestone Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Milestone Chat (planning session scoped to a single Milestone) is launched by Phase Chat (or HQ Chat during bootstrap) using this artifact. It produces Epic specs and Epic Execution Chat Starters.
+A Milestone Execution Chat (autonomous execution session scoped to a single Milestone) is launched by Phase Chat (or HQ Chat during bootstrap) using this artifact. It produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR — treating planning artifacts as its deliverables exactly as a Coding Agent treats code.
 
-**Milestone Chat role:** Milestone Chat is a planning session — it plans Epics, does not execute them. It does not dispatch Coding Agents directly. Epic Execution Chat Starters are delivered via the parent chat. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
+**Milestone Execution Chat role:** Autonomous execution agent for Milestone-level planning. It commits and PRs its deliverables; it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
 
 For full role and responsibility definitions, see:
 

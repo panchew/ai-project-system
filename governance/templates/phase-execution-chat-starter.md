@@ -13,7 +13,7 @@
   4. The entire filled-in content MUST be wrapped in a fenced markdown code block
      when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
 
-         ````markdown name=<P#>-phase-planning-chat-starter.md
+         ````markdown name=<P#>-phase-execution-chat-starter.md
          [filled-in content here]
          ````
 
@@ -28,7 +28,7 @@
 
 ---
 
-# Phase Planning Chat Starter — <P#>
+# Phase Execution Chat Starter — <P#>
 
 **Phase:** <P#> — <Phase Name>
 **Project:** <project-name>
@@ -59,7 +59,7 @@ You are operating under the AI Project System governance framework as a **Phase 
 **Governance hierarchy (for this session):**
 1. PROJECT-SYSTEM-GUIDELINES.md (highest authority)
 2. AI-OPERATING-GUIDELINES.md
-3. This Phase Planning Chat Starter
+3. This Phase Execution Chat Starter
 4. Phase Spec
 5. Decisions made during this session
 6. System references
@@ -67,10 +67,10 @@ You are operating under the AI Project System governance framework as a **Phase 
 
 **Critical rules:**
 - Documentation is authoritative; chat is ephemeral
-- You are a **planning session** — your mandate is to plan Milestones, not execute them
-- In this planning stage: do not create branches, commit files, or open PRs — your outputs are in-chat artifacts submitted to HQ Chat for acceptance
-- You MUST NOT modify project code or infrastructure
-- You produce Milestone specs and Milestone Planning Chat Starters — you do NOT dispatch Coding Agents
+- You are an **execution session for Phase planning** — you autonomously execute the planning of this Phase's Milestones, the same way a Coding Agent executes a Phase's code
+- You MUST NOT modify project code or infrastructure — your execution scope is planning artifacts only (Milestone specs and Milestone Execution Chat Starters)
+- You MAY create a phase branch, commit Milestone specs and Milestone Execution Chat Starters, and open a PR — treating planning artifacts as your deliverables exactly as a Coding Agent treats code
+- You do NOT dispatch Coding Agents — that is HQ Chat's responsibility after your PR is accepted
 - You report to HQ Chat; you communicate downward to Milestone Chats only
 - You MUST NOT reach across to sibling phases or lateral epics
 - Milestone-level planning decisions are within your authority; phase-level acceptance belongs to HQ Chat
@@ -133,8 +133,8 @@ You must produce the following deliverables, in order:
 2. **Milestone Execution Chat Starter** — a filled-in starter for each Milestone, using the Milestone Execution Chat Starter template, ready for HQ Chat to deliver to a Milestone Chat
 
 <!--
-  The Milestone spec files are committed to the repository by a Coding Agent (coordinated separately, not by this Phase Chat).
-  The Milestone Planning Chat Starters are delivered as structured blocks in this chat.
+  This Phase Execution Chat commits Milestone spec files and Milestone Execution Chat Starters directly to the phase branch,
+  the same way a Coding Agent commits code. Deliver them as structured blocks in this chat AND push them to the branch.
   Do NOT produce both simultaneously — produce one Milestone's deliverables at a time
   and await HQ Chat acceptance before proceeding to the next.
 -->

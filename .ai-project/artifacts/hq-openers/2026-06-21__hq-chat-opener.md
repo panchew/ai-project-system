@@ -163,5 +163,5 @@ spec.
    something broader if VA-1 is included.
 4. **Draft the P5 phase spec** at
    `docs/phases/P5__<Phase_Name>/P5__phase-spec.md`.
-5. **Produce the Phase Planning Chat Starter** — so the Phase Chat can open and
-   begin planning Milestones.
+5. **Produce the Phase Execution Chat Starter** — so the Phase Execution Chat can open and
+   begin executing Phase planning (producing Milestone specs, committing, and opening a PR).
