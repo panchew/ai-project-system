@@ -158,17 +158,25 @@ subsequent commit landed on the wrong branch silently.
 
 **M22 — Visual Artifacts** (SN-11 binding decisions apply in full)
 
-- **E22.1 — .ai-project.yml spec extension (VA-1 config):** Add `visual_artifacts` block
-  to `governance/ai-project-yml-spec.md`; schema validation; update this repo's
-  `.ai-project.yml` with `enabled: false` default
-- **E22.2 — Guidelines and templates (VA-1 governance):** Add "Visual Artifact Production"
-  section to AOG; update `governance/templates/seed.md` Rule 4 to elicit visual intent;
-  add `governance/guides/visual-artifacts.md` integration guide
+- **E22.1 — Configuration and spec (VA-1 config layer):** Add `visual_artifacts` block
+  to `governance/ai-project-yml-spec.md`; define `enabled`, `comfyui_url`, `types`
+  fields; schema validation and tests; update this repo's `.ai-project.yml` with
+  `enabled: false` default
+- **E22.2 — Guidelines, templates, and agent integration (VA-1 full implementation):**
+  Add "Visual Artifact Production" section to AOG; update `governance/templates/seed.md`
+  Rule 4 to elicit visual intent; implement ComfyUI API helper callable by any
+  tool-capable agent (`bin/ai-project-visual` or equivalent); add
+  `governance/guides/visual-artifacts.md` integration guide; add integration test against
+  the live ComfyUI endpoint (skipped when `enabled: false`)
 
 **Design constraint for M22 (binding, from SN-11):** Visual abstraction level mirrors
 chat level (Creation Chat → concept imagery; HQ → system architecture; Phase → scope
-diagram; Milestone → component/flow diagrams; Epic → UI mockups, before/after). Framework
-scope only — no ComfyUI agent code in P5.
+diagram; Milestone → component/flow diagrams; Epic → UI mockups, before/after).
+
+**Scope note:** Full implementation is in P5 scope. The ComfyUI instance availability
+is the CFO's responsibility. The framework delivers the integration; the CFO delivers
+a reachable endpoint. Integration tests must be written to skip gracefully when the
+endpoint is not configured (`enabled: false`).
 
 ---
 

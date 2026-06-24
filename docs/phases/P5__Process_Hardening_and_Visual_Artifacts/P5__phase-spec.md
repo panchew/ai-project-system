@@ -109,7 +109,7 @@ Establish the visual artifact capability in the governance framework. Scope is t
 framework layer only — spec, guidelines, and templates. The full agentic implementation
 (agent tool calls to ComfyUI, video pipeline) is deferred to the agentic app.
 
-**P5-VA-1 — Visual artifact spec and guidelines**
+**P5-VA-1 — Visual artifact production capability**
 
 Binding decisions from SN-11 (2026-06-21):
 - Opt-in via `visual_artifacts.enabled` in `.ai-project.yml` (same pattern as
@@ -118,8 +118,14 @@ Binding decisions from SN-11 (2026-06-21):
 - Tool-calling capability is the gate for visual production, not chat level label
 - Two visual modes: structural (Mermaid/PlantUML) and generative (ComfyUI API)
 - Visual intent originates at Creation Chat and propagates down the artifact cascade
-- Video output (ComfyUI video nodes) is in scope for the spec; excluded from P5 execution
+- Video output (ComfyUI video nodes) is in scope
 - `seed.md` must elicit "what does success look like visually?" before Project Brief
+
+**Scope clarification (2026-06-21):** Full implementation is in scope for P5. Agents
+already have tool-calling capability sufficient to call the ComfyUI API. The ComfyUI
+instance availability and readiness is the CFO's responsibility (to be managed via the
+ComfyUI project, which will adopt governance separately). P5 delivers a working visual
+artifact capability — spec, guidelines, and integration — not just documentation.
 
 | Chat level | Visual type |
 |------------|-------------|
@@ -193,20 +199,24 @@ visual_artifacts:
 can produce visuals when the feature is enabled. Framework layer only.
 
 **Epics:**
-- **E22.1 — .ai-project.yml spec extension** (VA-1 configuration layer)
+- **E22.1 — Configuration and spec** (VA-1 config layer)
   - Add `visual_artifacts` block to `.ai-project.yml` spec (`governance/ai-project-yml-spec.md`)
   - Define fields: `enabled`, `comfyui_url`, `types` (diagrams, infographics, video)
   - Add schema validation and test coverage for the new block
   - Update `.ai-project.yml` in this repo with `enabled: false` default
 
-- **E22.2 — Guidelines and templates** (VA-1 governance layer)
+- **E22.2 — Guidelines, templates, and agent integration** (VA-1 full implementation)
   - Add "Visual Artifact Production" section to `governance/AI-OPERATING-GUIDELINES.md`
     (when enabled: what each chat level produces, how to produce structural vs. generative,
-    what files to commit)
+    what files to commit and where)
   - Update `governance/templates/seed.md` Rule 4 to elicit visual intent before Project
     Brief: "What does success look like visually?"
-  - Add `governance/guides/visual-artifacts.md` integration guide (ComfyUI endpoint
-    configuration, structural diagram tooling, expected output formats)
+  - Implement ComfyUI API integration callable by any tool-capable agent: a helper
+    (`bin/ai-project-visual` or equivalent) that accepts a prompt, type, and output path,
+    calls the ComfyUI endpoint from `.ai-project.yml`, and writes the result
+  - Add `governance/guides/visual-artifacts.md`: endpoint configuration, structural
+    diagram tooling, output formats, and a worked example of each chat level's visual
+  - Add integration test against the ComfyUI endpoint (skipped when `enabled: false`)
 
 ---
 
@@ -217,8 +227,9 @@ can produce visuals when the feature is enabled. Framework layer only.
 1. ✅ **No false-green prerequisite checks** — starters mandate git-tracking verification
 2. ✅ **Concurrent chat safety documented** — worktree isolation rule in chat-hierarchy.md + AOG
 3. ✅ **Scope routing rule documented** — Steering Note channel mandatory in chat-hierarchy.md + AOG
-4. ✅ **Visual artifacts specced and governed** — `.ai-project.yml` extension validated;
-   AOG directs agents at every level; `seed.md` elicits visual intent
+4. ✅ **Visual artifacts fully implemented** — `.ai-project.yml` extension validated;
+   AOG directs agents at every level; `seed.md` elicits visual intent; ComfyUI helper
+   callable by any tool-capable agent; integration test passes against live endpoint
 5. ✅ **Platform-agnostic delivery** — no GitHub-specific paths required in governance delivery
 6. ✅ **Adoption clarity** — `governance/` vs `.governance/` explained upfront; Creation Chat
    opener step present in start-a-project.md
@@ -239,6 +250,8 @@ The CFO (Layer 8) will accept P5 complete when:
 - [ ] `governance/ai-project-yml-spec.md` documents the `visual_artifacts` block
 - [ ] AOG directs an agent to produce a Mermaid diagram when `visual_artifacts.enabled: true`
   and the agent is operating as a Phase Chat
+- [ ] `bin/ai-project-visual` (or equivalent) can be called from a tool-capable agent,
+  calls the configured ComfyUI endpoint, and writes a visual artifact to the repo
 
 ---
 
@@ -273,8 +286,8 @@ The CFO (Layer 8) will accept P5 complete when:
 
 ### Items Excluded from P5
 - CFO Dashboard — deferred by design (was excluded from P4 acceptance criteria)
-- ComfyUI agent implementation — deferred to future agentic app
 - GH-7 — closed as v4.0.1 emergency patch before P5 opened
+- ComfyUI instance readiness — CFO's responsibility (managed via ComfyUI project adopting governance)
 
 ---
 
