@@ -7,7 +7,7 @@ project_name: ai-project-system
 repo: https://github.com/panchew/ai-project-system
 governance_version: PROJECT-SYSTEM-GUIDELINES.md v2.1.0
 operating_version: AI-OPERATING-GUIDELINES.md v2.1.0
-framework_version: v4.0.0
+framework_version: v4.0.1
 active_phase: none (P4 closed — P5 not yet open)
 instantiation: p5-scoping
 ---
@@ -43,7 +43,7 @@ Built using itself (dogfooded across P1–P4). Production-ready at v4.0.0.
 
 - **PROJECT-SYSTEM-GUIDELINES.md** v2.1.0 (effective 2026-06-23) — authoritative
 - **AI-OPERATING-GUIDELINES.md** v2.1.0 (effective 2026-06-23) — authoritative
-- **Framework version:** v4.0.0 (master HEAD, 226/226 tests passing)
+- **Framework version:** v4.0.1 (master HEAD, 226/226 tests passing)
 
 ---
 
@@ -107,6 +107,9 @@ Process gaps and documentation fixes. Well-scoped, low design risk, executable n
 | P5-GH-4 | Add Creation Chat session opener step (`seed.md` paste) to `start-a-project.md` | Low |
 | P5-GH-5 | Platform agnosticism — decouple `.github/agents/` delivery path; add tool-specific guides (Claude Code, Cursor, Windsurf) | Medium |
 | P5-GH-6 | Documentation clarity — `governance/` vs `.governance/` split not explained upfront in sync/adoption guides; confirmed adoption blocker | Medium-High |
+| ~~P5-GH-7~~ | ~~Core guideline docs (AOG, PSG) missing Phase/Milestone/Creation Chat definitions — caused HQ to produce Phase/Milestone starters with Epic-level fossils~~ | ~~**High** — **already fixed in v4.0.1**~~ |
+
+> **Note:** GH-7 was diagnosed by the courtis Creation Chat during a live Phase execution and fixed as an emergency patch before P5 scoping opened. AOG and PSG are now v2.1.0. GH-7 does NOT need a P5 milestone — it is closed.
 
 ### Bucket B — Visual Artifacts (VA)
 
