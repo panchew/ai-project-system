@@ -95,7 +95,9 @@ Additional items from SN-10 and Creation Chat review:
 | P5-GH-4 | Add Creation Chat session opener step to `start-a-project.md` | Low |
 | P5-GH-5 | Platform agnosticism — decouple `.github/agents/` delivery path; add tool-specific integration guides (Claude Code, Cursor, Windsurf) alongside Copilot | Medium |
 | P5-GH-6 | Documentation clarity — `governance/` vs `.governance/` distinction not surfaced upfront in sync and adoption guides; adoption attempts blocked without knowing the self-referential vs submodule split | Medium-High |
-| P5-GH-7 | Core guideline docs (AI-OPERATING-GUIDELINES.md, PROJECT-SYSTEM-GUIDELINES.md) do not define Phase/Milestone/Creation Chat roles or their two-stage lifecycle — introduced in P4 but never back-ported to the docs agents read first; causes HQ to reach for the Epic template when producing Phase/Milestone starters, propagating Epic-specific rules ("Execution", "Coding Agent", "no branches/PRs") into planning-level chats | **High** |
+| P5-GH-7 | Core guideline docs (AI-OPERATING-GUIDELINES.md, PROJECT-SYSTEM-GUIDELINES.md) do not define Phase/Milestone/Creation Chat roles or their two-stage lifecycle — introduced in P4 but never back-ported to the docs agents read first; causes HQ to reach for the Epic template when producing Phase/Milestone starters, propagating Epic-specific rules ("Execution", "Coding Agent", "no branches/PRs") into planning-level chats | **High — fixed in v4.0.1** |
+| P5-GH-8 | Artifact scope adjacency — chats must not produce artifacts for non-adjacent levels; Phase Chat producing Epic starters bypasses Milestone Chat and collapses a review gate | Medium |
+| P5-GH-9 | Hierarchical communication — escalations travel upward one level at a time; directives travel downward via spec file amendment (not broadcasting); mid-flight updates escalate UP, not into running sessions; spec file is both planning artifact and live contract | Medium |
 
 ---
 

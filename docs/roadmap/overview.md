@@ -160,7 +160,9 @@ This system eliminates the chaos of ephemeral chats and lost context.
 | P5-GH-4 | Add Creation Chat session opener step to `start-a-project.md` | Low |
 | P5-GH-5 | Platform agnosticism — decouple `.github/agents/` path from governance delivery | Medium |
 | P5-GH-6 | Documentation clarity — `governance/` vs `.governance/` distinction not surfaced upfront in sync and adoption guides | Medium-High |
-| P5-GH-7 | Core guideline docs (AI-OPERATING-GUIDELINES.md, PROJECT-SYSTEM-GUIDELINES.md) don't define Phase/Milestone/Creation Chat roles — P4 introduced the full hierarchy but the docs agents read first still only know HQ Chats and Coding Agents; causes HQ to produce Phase/Milestone starters with Epic-level rules | **High** |
+| ~~P5-GH-7~~ | ~~Core guideline docs don't define Phase/Milestone/Creation Chat roles~~ | **Fixed in v4.0.1** |
+| P5-GH-8 | Artifact scope adjacency — chats must not produce artifacts for non-adjacent levels; Phase Chat producing Epic starters bypasses Milestone Chat and collapses a review gate | Medium |
+| P5-GH-9 | Hierarchical communication — escalations travel up one level at a time; directives travel down via spec file amendment; spec file is both planning artifact and live contract | Medium |
 | — | README/roadmap staleness (P4 now shown as complete — this update) | Done |
 | — | CFO Dashboard | Deferred by design |
 

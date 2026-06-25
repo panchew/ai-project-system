@@ -151,6 +151,7 @@ spec.
 | `docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4__phase-closure-declaration.md` | P4 closure — carry-forward items GH-1 through GH-6 registered here |
 | `docs/roadmap/overview.md` | P5 candidate table (GH-1 through GH-6, VA-1) |
 | `.ai-project/artifacts/steering-notes/2026-06-21__creation-chat__steering-note.md` | SN-11 — visual artifacts vision, binding decisions |
+| `.ai-project/artifacts/steering-notes/2026-06-25__creation-chat__steering-note.md` | SN-12 — artifact scope adjacency (GH-8) and hierarchical communication / spec-as-channel (GH-9), binding decisions |
 | `governance/templates/seed.md` | Creation Chat opener — requires visual intent elicitation update (VA-1) |
 | `governance/systems/chat-hierarchy.md` | Level 0–4 definition |
 | `governance/diagrams/artifact-flow.md` | Full artifact system picture |
