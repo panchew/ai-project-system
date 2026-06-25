@@ -56,7 +56,7 @@ You are operating under the AI Project System governance framework as a **Phase 
 
 | # | Milestone | Epics | Priority |
 |---|---|---|---|
-| M20 | Governance Process Hardening | E20.1, E20.2, E20.3 | Highest — execute first |
+| M20 | Governance Process Hardening | E20.1, E20.2, E20.3, E20.4, E20.5 | Highest — execute first |
 | M21 | Adoption Clarity and Platform Agnosticism | E21.1, E21.2 | Second |
 | M22 | Visual Artifacts | E22.1, E22.2 | Third |
 
@@ -72,12 +72,12 @@ Do not plan M21 until HQ has accepted M20's deliverables.
 
 ## M20 — Governance Process Hardening
 
-**Goal:** Eliminate the three process gaps (GH-1, GH-2, GH-3) that surfaced during P4 and
-will recur — with increasing cost — as concurrent chat usage grows.
+**Goal:** Eliminate the five process gaps (GH-1, GH-2, GH-3, GH-8, GH-9) that surfaced
+during P4 execution and will recur — with increasing cost — as concurrent chat usage grows.
 
 **Branch:** `milestone/M20` from `phase/P5` (which branches from master)
 
-**Epics (3):**
+**Epics (5):**
 
 ### E20.1 — Prerequisite git-tracking verification (GH-1)
 
@@ -139,6 +139,61 @@ subsequent commit landed on the wrong branch silently.
 **Acceptance criteria:**
 - `chat-hierarchy.md` has a "Scope Direction Protocol" section with the ratified rule
 - AOG §3 references the routing requirement
+
+### E20.4 — Artifact scope adjacency (GH-8)
+
+**Source:** SN-12a (2026-06-25)
+
+**Binding rule:** Each chat level produces artifacts only for its direct parent or
+direct children. No grandchild artifacts (e.g. Phase Chat must not produce Epic
+Execution Chat Starters). No grandparent artifacts.
+
+| Chat | May produce | Must NOT produce |
+|------|-------------|-----------------|
+| Phase Chat | Milestone Specs, Milestone Execution Chat Starters | Epic Specs, Epic Execution Chat Starters |
+| Milestone Chat | Epic Specs, Epic Execution Chat Starters | Milestone Specs (parent's job), code |
+| Epic Chat | Code, tests, PRs | Epic Specs (parent's job), Milestone Specs |
+
+**Deliverables:**
+- Add the adjacency rule and table to the Critical Rules section of
+  `governance/templates/phase-execution-chat-starter.md` and
+  `governance/templates/milestone-execution-chat-starter.md`
+- Add the rule to `governance/AI-OPERATING-GUIDELINES.md` §3.6 (Phase Chat) and §3.7
+  (Milestone Chat)
+- Add the adjacency table to `governance/systems/chat-hierarchy.md`
+
+**Acceptance criteria:**
+- Both starter templates contain the adjacency rule in Critical Rules
+- AOG §3.6 and §3.7 contain the rule
+- `chat-hierarchy.md` contains the table
+
+### E20.5 — Hierarchical communication protocol (GH-9)
+
+**Source:** SN-12b (2026-06-25)
+
+**Binding decisions (document verbatim):**
+1. Upward communication is always 1-to-1. Every level has exactly one parent. No level
+   skips its parent to reach a grandparent directly.
+2. Downward communication is solved by the spec file, not by broadcasting. A parent
+   amends its own spec; children — including those mid-execution — read from that spec
+   at any time.
+3. The level spec file has a dual role: planning artifact (what was planned) and live
+   contract (what governs execution, including amendments).
+4. Mid-flight updates: the parent amends the spec; if the change is blocking, it
+   escalates UP to its own parent. It does not reach into running child sessions.
+
+**Deliverables:**
+- Add "Communication Protocol" section to `governance/systems/chat-hierarchy.md`
+  covering all four rules above
+- Add corresponding rules to `governance/AI-OPERATING-GUIDELINES.md` §3 and
+  `governance/PROJECT-SYSTEM-GUIDELINES.md`
+- Add amendment guidance to Phase and Milestone Execution Chat Starter templates:
+  how to issue a mid-flight amendment (amend the spec, note the change, notify parent)
+
+**Acceptance criteria:**
+- `chat-hierarchy.md` has a "Communication Protocol" section with all four rules
+- AOG §3 and PSG both reference the protocol
+- Both starter templates contain amendment guidance
 
 ---
 
@@ -202,14 +257,18 @@ For M20, produce in order:
 
 4. **E20.3 Epic Execution Chat Starter** — same template
 
+5. **E20.4 Epic Execution Chat Starter** — same template
+
+6. **E20.5 Epic Execution Chat Starter** — same template
+
 Wrap each Epic starter in a four-backtick fence:
 
     ````markdown name=P5-M20-E20.1__epic-execution-chat-starter.md
     [content here]
     ````
 
-Deliver the Milestone spec first, then E20.1, E20.2, E20.3 in order.
-After all four, request HQ Review Decision before issuing Milestone Delivery Authorization.
+Deliver the Milestone spec first, then E20.1, E20.2, E20.3, E20.4, E20.5 in order.
+After all six, request HQ Review Decision before issuing Milestone Delivery Authorization.
 
 ---
 

@@ -48,7 +48,7 @@ By the end of P5:
 
 ### P5.1: Governance Process Hardening (M20)
 
-Close the three P4 execution gaps that will recur and compound with concurrency.
+Close the five governance gaps that will recur and compound with concurrency (three from P4 execution; two from SN-12 2026-06-25).
 
 **P5-GH-1 — Prerequisite git-tracking verification**
 
@@ -73,6 +73,23 @@ mandatory channel. The fix is a formal rule in `chat-hierarchy.md` and AOG: dire
 must flow as Steering Note → HQ Chat → spec amendment → Milestone Chat re-issues amended
 starter. The P0-emergency exception and its after-the-fact formalization requirement are
 also documented.
+
+**P5-GH-8 — Artifact scope adjacency** (SN-12a, 2026-06-25)
+
+Phase Execution Chats have been producing Epic Execution Chat Starters — skipping the
+Milestone Chat layer and bypassing its review gate. The rule: each chat level produces
+artifacts only for its direct parent or direct children. No grandchild or grandparent
+artifacts. The fix is an explicit adjacency rule in the Critical Rules section of Phase
+and Milestone Execution Chat Starter templates and in AOG §3.6 and §3.7.
+
+**P5-GH-9 — Hierarchical communication protocol** (SN-12b, 2026-06-25)
+
+The governance model defines upward artifact types (Escalation Notices, Completion
+Notices) but does not define how downward communication propagates when a parent needs
+to reach multiple concurrent children. The fix: document the spec-as-channel model —
+upward is 1-to-1 (one level at a time, no skipping); downward is via spec amendment
+(one write, many readers); the spec file is both a planning artifact and a live contract;
+mid-flight updates escalate UP, not into running child sessions.
 
 ### P5.2: Adoption Clarity and Platform Agnosticism (M21)
 
@@ -151,7 +168,7 @@ visual_artifacts:
 
 ## Milestones
 
-### M20: Governance Process Hardening (3 Epics)
+### M20: Governance Process Hardening (5 Epics)
 
 **Goal:** Eliminate the three P4 execution gaps that recur and worsen with concurrency.
 
@@ -173,6 +190,27 @@ visual_artifacts:
     mandatory Steering Note → HQ → spec amendment → re-issued starter channel
   - Add P0-emergency exception and formalization requirement
   - Add corresponding rule to `governance/AI-OPERATING-GUIDELINES.md` §3
+
+- **E20.4 — Artifact scope adjacency** (GH-8)
+  - Add explicit adjacency rule to the Critical Rules section of
+    `governance/templates/phase-execution-chat-starter.md` and
+    `governance/templates/milestone-execution-chat-starter.md`: each chat level produces
+    artifacts only for its direct parent or direct children; no grandchild or grandparent
+    artifacts
+  - Add corresponding rule to AOG §3.6 (Phase Chat) and §3.7 (Milestone Chat)
+  - Add the adjacency table to `governance/systems/chat-hierarchy.md`
+
+- **E20.5 — Hierarchical communication protocol** (GH-9)
+  - Add "Communication Protocol" section to `governance/systems/chat-hierarchy.md`:
+    - Upward: 1-to-1, one level at a time; no level skips its parent
+    - Downward: parent amends its own spec file; children read from that spec at any time
+    - Spec file dual role: planning artifact and live contract
+    - Mid-flight updates: amend the spec; escalate UP if blocking; never reach into running
+      child sessions
+  - Add corresponding rules to `governance/AI-OPERATING-GUIDELINES.md` §3 and
+    `governance/PROJECT-SYSTEM-GUIDELINES.md`
+  - Add guidance to Phase and Milestone Execution Chat Starter templates on how to issue
+    amendments (amend the spec, note the change, notify parent chat)
 
 ### M21: Adoption Clarity and Platform Agnosticism (2 Epics)
 
@@ -227,11 +265,13 @@ can produce visuals when the feature is enabled. Framework layer only.
 1. ✅ **No false-green prerequisite checks** — starters mandate git-tracking verification
 2. ✅ **Concurrent chat safety documented** — worktree isolation rule in chat-hierarchy.md + AOG
 3. ✅ **Scope routing rule documented** — Steering Note channel mandatory in chat-hierarchy.md + AOG
-4. ✅ **Visual artifacts fully implemented** — `.ai-project.yml` extension validated;
+4. ✅ **Artifact scope adjacency enforced** — adjacency rule in starters, AOG §3.6/§3.7, and chat-hierarchy.md
+5. ✅ **Hierarchical communication protocol defined** — 1-to-1 upward, spec-as-channel downward, mid-flight amendment protocol in AOG, PSG, and starters
+6. ✅ **Visual artifacts fully implemented** — `.ai-project.yml` extension validated;
    AOG directs agents at every level; `seed.md` elicits visual intent; ComfyUI helper
    callable by any tool-capable agent; integration test passes against live endpoint
-5. ✅ **Platform-agnostic delivery** — no GitHub-specific paths required in governance delivery
-6. ✅ **Adoption clarity** — `governance/` vs `.governance/` explained upfront; Creation Chat
+7. ✅ **Platform-agnostic delivery** — no GitHub-specific paths required in governance delivery
+8. ✅ **Adoption clarity** — `governance/` vs `.governance/` explained upfront; Creation Chat
    opener step present in start-a-project.md
 
 ---
@@ -269,17 +309,18 @@ The CFO (Layer 8) will accept P5 complete when:
 
 ## Timeline
 
-**Estimate:** 7 Epics across 3 Milestones
-- M20 (Governance Hardening): 3–5 days
+**Estimate:** 9 Epics across 3 Milestones
+- M20 (Governance Hardening): 5–7 days (5 epics)
 - M21 (Adoption Clarity): 5–7 days
 - M22 (Visual Artifacts): 5–7 days
-- **Total: ~2 weeks**
+- **Total: ~3 weeks**
 
 ---
 
 ## Reference
 
 ### Governing Steering Notes
+- SN-12: `2026-06-25__creation-chat__steering-note.md` — Artifact scope adjacency (GH-8) and hierarchical communication protocol (GH-9) (binding)
 - SN-11: `2026-06-21__creation-chat__steering-note.md` — Visual artifacts (binding)
 - SN-10: `2026-06-20__phase-chat__steering-note.md` — genesis.md placement (resolved)
 - P4 Escalation Notice: `2026-06-20T15_00_00Z__P4-M19__escalation_notice.md` — GH-1/2/3 source
@@ -296,3 +337,4 @@ The CFO (Layer 8) will accept P5 complete when:
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-06-21 | Initial P5 phase spec. Three milestones (M20–M22), 7 Epics. GH+VA scope authorized by HQ. |
+| 1.1.0 | 2026-06-25 | M20 expanded from 3 to 5 Epics. Added GH-8 (artifact scope adjacency, E20.4) and GH-9 (hierarchical communication protocol, E20.5) from SN-12 (2026-06-25). Total Epics: 9. |
