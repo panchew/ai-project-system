@@ -62,10 +62,12 @@ You are operating under the AI Project System governance framework as a **Milest
 - E20.1 — Prerequisite git-tracking verification (GH-1)
 - E20.2 — Working-tree isolation convention (GH-2)
 - E20.3 — Scope direction protocol (GH-3)
+- E20.4 — Artifact scope adjacency (GH-8)
+- E20.5 — Hierarchical communication protocol (GH-9)
 
 **Session objective:** Produce a complete Epic spec and an Epic Execution Chat Starter for
-each Epic listed above, then return all artifacts to the Phase Chat (P5) for review and
-acceptance.
+each of the five Epics listed above, then return all artifacts to the Phase Chat (P5) for
+review and acceptance.
 
 **Branch strategy:**
 
@@ -74,14 +76,19 @@ phase/P5
 └── milestone/M20            ← this Milestone Chat's branch (create from phase/P5)
     ├── epic/P5-M20-E20.1
     ├── epic/P5-M20-E20.2
-    └── epic/P5-M20-E20.3
+    ├── epic/P5-M20-E20.3
+    ├── epic/P5-M20-E20.4
+    └── epic/P5-M20-E20.5
 ```
 
 Epic PRs target `milestone/M20`. Consolidation PR (Stage 2): `milestone/M20 → phase/P5`.
 
-**Working-tree isolation (dogfood E20.2):** if more than one Epic runs concurrently, give
-each its own worktree — `git worktree add ../worktree-epic-E20.x epic/P5-M20-E20.x`. E20.2
-and E20.3 both edit `chat-hierarchy.md` and AOG §3; sequence them (E20.2 first) or rebase.
+**Working-tree isolation + serialization (dogfood E20.2):** if more than one Epic runs
+concurrently, give each its own worktree — `git worktree add ../worktree-epic-E20.x
+epic/P5-M20-E20.x`. **Four of five epics (E20.2, E20.3, E20.4, E20.5) edit
+`chat-hierarchy.md` and AOG §3**, and E20.1/E20.4/E20.5 all edit the starter templates —
+serialize edits to shared files (recommended order E20.1 → E20.2 → E20.3 → E20.4 → E20.5,
+rebasing each on the prior merge). See the Milestone spec "Dependencies and Sequencing".
 
 ---
 
@@ -103,7 +110,7 @@ intent or fill gaps without confirmation.
 
 You must produce the following deliverables, one Epic at a time:
 
-### For each Epic in this Milestone (E20.1, E20.2, E20.3):
+### For each Epic in this Milestone (E20.1–E20.5):
 
 1. **Epic spec** — `P5-M20-E20.<n>__spec__<epic-name>.md` covering:
    - Epic goals and scope
@@ -141,14 +148,16 @@ Chat** (out of level — Epic starters are a Milestone Chat deliverable per AOG 
 - `P5-M20-E20.2__epic-execution-chat-starter.md`
 - `P5-M20-E20.3__epic-execution-chat-starter.md`
 
-**No Epic _specs_ exist** (`P5-M20-E20.<n>__spec__*.md` are absent) — producing those is
-unambiguously your job regardless of the above.
+**No Epic _specs_ exist** for any epic (`P5-M20-E20.<n>__spec__*.md` are absent) — producing
+all five is unambiguously your job. **E20.4 and E20.5 have no draft starters at all** —
+consistent with the GH-8 rule E20.4 codifies, the Phase Chat did not produce them; you author
+their Epic Execution Chat Starters fresh.
 
-**Disposition — RESOLVED by HQ (2026-06-25): RETAIN (Option B).** The three Phase-produced
-starters are kept as **Phase-provided drafts**. Review and reconcile each against the Epic
-spec you author for it, then **re-issue it under your own authority** — at which point it
-becomes your (Milestone Chat) deliverable. They are reference input, not authoritative, until
-you re-issue them. Do not delete them.
+**Disposition of the three E20.1–E20.3 drafts — RESOLVED by HQ (2026-06-25): RETAIN
+(Option B).** They are kept as **Phase-provided drafts**. Review and reconcile each against
+the Epic spec you author for it, then **re-issue it under your own authority** — at which
+point it becomes your (Milestone Chat) deliverable. They are reference input, not
+authoritative, until you re-issue them. Do not delete them.
 
 ---
 
@@ -175,7 +184,7 @@ Do NOT issue authorization without explicit Phase Chat acceptance.
 - Treat the Milestone spec as the single source of truth for this Milestone
 - Produce Epic deliverables one Epic at a time; await acceptance before proceeding
 - Ask questions only if blocked — resolve ambiguities by referencing the Milestone spec first
-- Do not expand scope beyond the three Epics listed in the Milestone spec
+- Do not expand scope beyond the five Epics listed in the Milestone spec
 - Do not infer missing information; escalate to the Phase Chat (1-to-1, upward)
 
 ---
@@ -184,7 +193,7 @@ Do NOT issue authorization without explicit Phase Chat acceptance.
 
 This Milestone Chat session is complete when:
 
-- [ ] An Epic spec has been produced and accepted for every Epic (E20.1, E20.2, E20.3)
+- [ ] An Epic spec has been produced and accepted for every Epic (E20.1–E20.5)
 - [ ] An Epic Execution Chat Starter has been produced and accepted for every Epic
 - [ ] An Epic Delivery Authorization has been issued for every accepted Epic
 - [ ] The Phase Chat has declared the Milestone planning session complete
