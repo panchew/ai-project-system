@@ -86,6 +86,10 @@ You are operating under the AI Project System governance framework.
   **Commit:** `480a09a`
 -->
 
+### Prerequisite Verification (do this first)
+
+Before relying on the spec, confirm it is **git-tracked on the expected branch** — and likewise every prerequisite artifact this Epic declares — using `git ls-files --error-unmatch <path>` run on the expected branch, not a disk-existence check. Disk presence is not proof of commit: an untracked file passes a file-exists check but is absent from a fresh worktree clone, producing a false-green prerequisite. If any path is untracked, STOP and report to HQ before proceeding.
+
 ### Summary
 
 [Provide a 1-2 sentence summary of the Epic.]
