@@ -200,6 +200,12 @@ This milestone explicitly does **not** aim to:
 > may be issued verbally and formalized within the same session via a Steering Note and
 > retroactive spec amendment.
 
+**Worked example (this milestone):** the Phase Chat Stage-1 authority conflict (Starter vs
+AOG §3.6) was routed upward via Escalation Notice → HQ Ruling
+(`P5-M20__escalation-notice__phase-chat-commit-authority.md` →
+`P5-M20__hq-ruling__phase-chat-commit-authority.md`) instead of being silently self-resolved
+— a live demonstration of the escalate-up-don't-self-resolve principle this protocol codifies.
+
 **Deliverables:**
 
 1. **`governance/systems/chat-hierarchy.md`** — Add a "Scope Direction Protocol" section
