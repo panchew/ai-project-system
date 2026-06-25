@@ -144,14 +144,11 @@ Chat** (out of level — Epic starters are a Milestone Chat deliverable per AOG 
 **No Epic _specs_ exist** (`P5-M20-E20.<n>__spec__*.md` are absent) — producing those is
 unambiguously your job regardless of the above.
 
-Disposition of the three Phase-produced starters is an **HQ decision, pending**. Until HQ
-rules, treat them as **reference input only**:
-- If HQ has them **removed**, produce all three Epic Execution Chat Starters yourself as
-  canonical Milestone Chat deliverables.
-- If HQ has them **retained**, review, reconcile against your Epic specs, and **re-issue**
-  them under your authority (they become your deliverables).
-
-Do not delete or rely on them as authoritative until HQ confirms.
+**Disposition — RESOLVED by HQ (2026-06-25): RETAIN (Option B).** The three Phase-produced
+starters are kept as **Phase-provided drafts**. Review and reconcile each against the Epic
+spec you author for it, then **re-issue it under your own authority** — at which point it
+becomes your (Milestone Chat) deliverable. They are reference input, not authoritative, until
+you re-issue them. Do not delete them.
 
 ---
 
