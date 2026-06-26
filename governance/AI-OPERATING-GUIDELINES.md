@@ -511,6 +511,23 @@ Milestone Execution Chat is **authoritative for epic planning and delivery**, no
 
 ---
 
+### 3.8 Working-Tree Isolation
+
+When two or more chats are active simultaneously, each chat MUST operate in its own git
+working tree. A chat MUST NOT commit in a working tree that another concurrently-active
+chat may switch (check out a different branch in): a branch checkout by one chat silently
+re-targets the other chat's next commit, landing it on the wrong branch.
+
+Create a dedicated tree per active chat — `git worktree add ../worktree-<role>-<id> <branch>`
+— and work only in your own tree for the lifetime of the chat. This applies whenever two
+or more chats run concurrently; a single chat working alone does not need a separate
+worktree.
+
+See the **"Working-Tree Isolation"** section of `governance/systems/chat-hierarchy.md` for
+the full rule, practical guidance, and a worked `git worktree` example.
+
+---
+
 ## 4. Authority Hierarchy
 
 AI must respect the following authority order:
