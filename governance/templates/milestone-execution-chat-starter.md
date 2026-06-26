@@ -110,9 +110,9 @@ You are operating under the AI Project System governance framework as a **Milest
 
 ## Spec Existence Requirement
 
-The Milestone spec MUST exist at the path specified above before this session begins.
+The Milestone spec MUST be **git-tracked on the expected branch** at the path specified above before this session begins. Verify this — do not rely on disk presence — with `git ls-files --error-unmatch <path>` run on the expected branch. Disk presence is not proof of commit: an untracked file passes a file-exists check but is absent from a fresh worktree clone, producing a false-green prerequisite.
 
-**If the Milestone spec is missing:** STOP immediately. Report the missing spec to the parent chat (Phase Chat or HQ Chat). Do NOT proceed with planning or produce any artifacts until the Milestone spec is provided.
+**If the Milestone spec is missing or untracked:** STOP immediately. Report the missing spec to the parent chat (Phase Chat or HQ Chat). Do NOT proceed with planning or produce any artifacts until the Milestone spec is provided and git-tracked on the expected branch.
 
 **If the Milestone spec is incomplete or ambiguous:** Report the issue to the parent chat. Do NOT assume intent or fill gaps without parent chat confirmation.
 
