@@ -490,6 +490,8 @@ Phase Execution Chat does NOT:
 - Dispatch Coding Agents — that is HQ Chat's authority after each Milestone Execution Chat Starter is accepted
 - Make phase-level accept/reject decisions (those belong to HQ Chat)
 
+**Artifact scope (adjacency):** Phase Execution Chat produces artifacts only for its direct parent or direct children — Milestone specs and Milestone Execution Chat Starters. It MUST NOT produce Epic specs or Epic Execution Chat Starters (a grandchild artifact that bypasses the Milestone Chat's review gate), nor any grandparent artifact above its level. See the **"Artifact Scope Adjacency"** section of `governance/systems/chat-hierarchy.md` for the full rule and the adjacency table.
+
 Phase Execution Chat is **authoritative for milestone planning and delivery**, not for implementation or phase decisions.
 
 ---
@@ -506,6 +508,8 @@ Milestone Execution Chat does NOT:
 - Implement project code or modify infrastructure
 - Dispatch Coding Agents directly — Epic Execution Chat Starters are delivered to the parent chat, which authorizes each Coding Agent launch
 - Make milestone-level accept/reject decisions (those belong to the parent chat)
+
+**Artifact scope (adjacency):** Milestone Execution Chat produces artifacts only for its direct parent or direct children — Epic specs and Epic Execution Chat Starters. It MUST NOT produce Milestone specs (its parent's job) or code, tests, or PRs (its grandchildren's job). See the **"Artifact Scope Adjacency"** section of `governance/systems/chat-hierarchy.md` for the full rule and the adjacency table.
 
 Milestone Execution Chat is **authoritative for epic planning and delivery**, not for implementation or milestone decisions.
 

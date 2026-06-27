@@ -449,6 +449,37 @@ artifact this channel routes through.
 
 ---
 
+## Artifact Scope Adjacency
+
+Each chat produces artifacts only for the level directly adjacent to it. Producing an
+artifact for a non-adjacent level looks valid in isolation but is a process failure: it
+either skips a review gate or reaches into a level above the chat's authority.
+
+### Rule
+
+> Each chat level produces artifacts only for its **direct parent** or **direct children**.
+> No grandchild artifacts (e.g., a Phase Chat must not produce Epic Execution Chat Starters)
+> and no grandparent artifacts. A violation either bypasses a review gate (grandchild
+> production) or overreaches into a parent's authority (grandparent production).
+
+### Adjacency Table
+
+| Chat | May produce | Must NOT produce |
+|------|-------------|-----------------|
+| Phase Execution Chat | Milestone Specs, Milestone Execution Chat Starters | Epic Specs, Epic Execution Chat Starters |
+| Milestone Execution Chat | Epic Specs, Epic Execution Chat Starters | Milestone Specs (parent's job), code (grandchildren's job) |
+| Epic Execution Chat | Code, tests, PRs | Epic Specs (parent's job), Milestone Specs (grandparent's job) |
+
+A violation of this rule means a chat is either bypassing a review gate (grandchild
+production) or overreaching into its parent's authority (grandparent production). Both are
+process failures.
+
+This is the SN-12a binding decision (Creation Chat Steering Note, 2026-06-25). The Critical
+Rules of the Phase and Milestone Execution Chat Starter templates and AOG §3.6/§3.7 state the
+rule for their own level and cross-reference this table.
+
+---
+
 ## Reference
 
 - **Creation Chat template (genesis):** `governance/templates/genesis.md`
