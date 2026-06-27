@@ -528,6 +528,21 @@ the full rule, practical guidance, and a worked `git worktree` example.
 
 ---
 
+### 3.9 Scope Direction Protocol
+
+Scope direction from the Creation Chat or CFO to any in-flight Epic MUST flow through the
+mandatory channel: Steering Note → HQ Chat → spec amendment → Milestone Chat re-issues the
+amended starter. Scope MUST NOT change through any informal path — a chat message or a
+hand-edited starter pasted into a running session does not change an Epic's scope. The only
+exception is a P0 production emergency, where an unblocking directive may be issued verbally
+and MUST be formalized within the same session via a Steering Note and a retroactive spec
+amendment. An Epic executes only against its committed, re-issued starter.
+
+See the **"Scope Direction Protocol"** section of `governance/systems/chat-hierarchy.md`
+for the HQ-ratified rule verbatim, the P0 exception, and the rationale.
+
+---
+
 ## 4. Authority Hierarchy
 
 AI must respect the following authority order:
