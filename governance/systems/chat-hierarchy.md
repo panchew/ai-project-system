@@ -480,6 +480,64 @@ rule for their own level and cross-reference this table.
 
 ---
 
+## Communication Protocol
+
+Information moves through the hierarchy in two directions, and each direction has exactly one
+sanctioned channel. Upward information travels one level at a time; downward information
+travels through the level's spec file, never through a parent reaching into a running child
+session. This protocol makes that model binding (SN-12b, Creation Chat Steering Note,
+2026-06-25). It deepens the high-level **"Communication Flow Rules"** above by stating *how*
+each direction is carried.
+
+### Upward — 1-to-1, one level at a time
+
+Every level has exactly one parent. Escalations and completion notices travel **up one
+level**: an Epic Chat reports to its Milestone Chat, a Milestone Chat to its Phase Chat, a
+Phase Chat to HQ. The receiving level decides whether to absorb the issue or escalate it
+further. **No level skips its parent to reach a grandparent.**
+
+### Downward — the spec file is the channel, not broadcasting
+
+A parent communicates a directive, amendment, or correction by **amending its own spec
+file**. Children — including those already mid-execution — read from that same source at any
+time. One write, many readers: there is no separate message per child and no broadcast. This
+is how a parent with several concurrent children reaches all of them without addressing any of
+them individually.
+
+### The level spec file is dual-role
+
+Every level spec file serves two roles at once:
+
+- **Planning artifact** — what was planned at the start of the session.
+- **Live contract** — the authoritative state of scope, constraints, and directives,
+  including any amendments issued after child sessions began.
+
+Because the spec is the live contract, reading it at any moment yields the current governing
+state. That is what makes the downward channel reliable: a single canonical place always holds
+the latest directives.
+
+### Mid-flight updates escalate UP, never reach into running sessions
+
+If a directive changes after child sessions are already running, the parent does **not** reach
+into those sessions. It amends the spec and — if the change is blocking — escalates **up** to
+its own parent to decide whether to pause or cancel the affected children. Downward reach into
+a running session is not permitted: it is unauditable and race-prone, the very pattern this
+protocol exists to forbid.
+
+### Issuing an amendment
+
+To change scope or direction mid-flight: **amend the governing spec, note the change (e.g., an
+amendment-history entry), and notify the parent chat** — never reach into a running child
+session. The Phase and Milestone Execution Chat Starter templates carry this guidance for
+their own level.
+
+This is the SN-12b binding decision (Creation Chat Steering Note, 2026-06-25). AOG §3.10 and
+`PROJECT-SYSTEM-GUIDELINES.md` §13D state the same rule for their levels, and the **"Scope
+Direction Protocol"** above routes externally-originated scope changes through this same
+spec-amendment channel.
+
+---
+
 ## Reference
 
 - **Creation Chat template (genesis):** `governance/templates/genesis.md`

@@ -585,6 +585,35 @@ governance/templates/epic-execution-chat-starter.md
 
 ---
 
+## 13D. Hierarchical Communication Protocol (Mandatory)
+
+Information moves through the chat hierarchy in two directions, each with exactly one
+sanctioned channel.
+
+- **Upward communication is 1-to-1.** Every level has exactly one parent. Escalations and
+  completion notices travel up one level — Epic → Milestone → Phase → HQ — and the receiving
+  level decides whether to absorb the issue or escalate it further. No level skips its parent
+  to reach a grandparent.
+- **Downward communication is the spec file, not broadcasting.** A parent communicates a
+  directive, amendment, or correction by amending its own spec file; children — including
+  those already mid-execution — read from that same source at any time. One write, many
+  readers; no separate message per child.
+- **The level spec file is dual-role:** a planning artifact (what was planned) and a live
+  contract (the authoritative state of scope, constraints, and directives, including
+  amendments).
+- **Mid-flight updates escalate UP.** If a directive changes after child sessions are running,
+  the parent amends the spec and, if the change is blocking, escalates up to its own parent to
+  decide whether to pause or cancel affected children. Reaching downward into a running child
+  session is prohibited.
+
+This is the SN-12b binding decision (Creation Chat Steering Note, 2026-06-25). For the full
+protocol and worked guidance see the **"Communication Protocol"** section of
+`governance/systems/chat-hierarchy.md` and AI-OPERATING-GUIDELINES.md §3.10. The Phase and
+Milestone Execution Chat Starter templates carry the amendment-issuing guidance for their
+levels.
+
+---
+
 ## 14. Project Tracker Integration (Optional, Declarative)
 
 Projects **may declare integrations with external project trackers** (e.g. Jira, Azure DevOps, GitHub Projects, Pivotal Tracker) via **system references**.
