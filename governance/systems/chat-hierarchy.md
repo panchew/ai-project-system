@@ -376,6 +376,48 @@ Each level has well-defined decision authority:
 
 ---
 
+## Working-Tree Isolation
+
+When two or more chats are active simultaneously, each MUST operate in its own git
+working tree. Without this, one chat's branch checkout silently changes the branch
+another chat will commit to: the commit "succeeds" yet lands on the wrong branch and is
+expensive to unwind. (This is the M19 collision — and its live recurrence during E20.1,
+when the shared tree was found switched onto the epic branch under the Milestone Chat —
+that motivated this convention.)
+
+### Rule
+
+- **One `git worktree` per concurrently-active chat.** A chat never operates in a working
+  tree that another concurrent chat may switch (check out a different branch in).
+- Each chat owns its tree for the lifetime of its work; no single tree is shared by two
+  concurrent chats.
+
+### Practical Guidance
+
+Create a dedicated working tree per chat, named for the chat's role and identifier:
+
+```
+git worktree add ../worktree-<role>-<id> <branch>
+```
+
+Worked example — a Milestone Chat working on milestone M21:
+
+```
+git worktree add ../worktree-milestone-M21 milestone/M21
+```
+
+Each worktree has its own checked-out branch, so a checkout in one tree never moves the
+branch under another. Remove the tree with `git worktree remove` once the chat's work is
+complete.
+
+### Scope
+
+This convention applies **whenever two or more chats are active simultaneously** (for
+example, a Milestone Chat and one of its Epic Chats, or two sibling Epic Chats). A single
+chat working alone in the repository's primary tree does not require a separate worktree.
+
+---
+
 ## Reference
 
 - **Creation Chat template (genesis):** `governance/templates/genesis.md`
