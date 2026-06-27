@@ -547,6 +547,30 @@ for the HQ-ratified rule verbatim, the P0 exception, and the rationale.
 
 ---
 
+### 3.10 Communication Protocol
+
+Information moves through the hierarchy in two directions, each with exactly one sanctioned
+channel. **Upward communication is 1-to-1:** every level has exactly one parent; escalations
+and completion notices travel up one level, and the receiving level decides whether to absorb
+or escalate further. No level skips its parent to reach a grandparent. **Downward
+communication is the spec file, not broadcasting:** a parent amends its own spec, and children
+— including those mid-execution — read from that same source at any time (one write, many
+readers, no separate message per child). The level spec file is therefore **dual-role** — a
+planning artifact and a live contract holding the authoritative state of scope, constraints,
+and directives including amendments.
+
+**Mid-flight updates escalate UP.** If a directive changes after children are running, the
+parent amends the spec and, if the change is blocking, escalates up to its own parent to
+decide whether to pause or cancel affected children. A chat MUST NOT reach downward into a
+running child session.
+
+See the **"Communication Protocol"** section of `governance/systems/chat-hierarchy.md` for the
+four decisions in full and the amendment-issuing guidance, and §3.9 (Scope Direction Protocol)
+for the related channel that routes externally-originated scope changes through the same spec
+amendment.
+
+---
+
 ## 4. Authority Hierarchy
 
 AI must respect the following authority order:
