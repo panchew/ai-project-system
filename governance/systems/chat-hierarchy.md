@@ -376,6 +376,168 @@ Each level has well-defined decision authority:
 
 ---
 
+## Working-Tree Isolation
+
+When two or more chats are active simultaneously, each MUST operate in its own git
+working tree. Without this, one chat's branch checkout silently changes the branch
+another chat will commit to: the commit "succeeds" yet lands on the wrong branch and is
+expensive to unwind. (This is the M19 collision — and its live recurrence during E20.1,
+when the shared tree was found switched onto the epic branch under the Milestone Chat —
+that motivated this convention.)
+
+### Rule
+
+- **One `git worktree` per concurrently-active chat.** A chat never operates in a working
+  tree that another concurrent chat may switch (check out a different branch in).
+- Each chat owns its tree for the lifetime of its work; no single tree is shared by two
+  concurrent chats.
+
+### Practical Guidance
+
+Create a dedicated working tree per chat, named for the chat's role and identifier:
+
+```
+git worktree add ../worktree-<role>-<id> <branch>
+```
+
+Worked example — a Milestone Chat working on milestone M21:
+
+```
+git worktree add ../worktree-milestone-M21 milestone/M21
+```
+
+Each worktree has its own checked-out branch, so a checkout in one tree never moves the
+branch under another. Remove the tree with `git worktree remove` once the chat's work is
+complete.
+
+### Scope
+
+This convention applies **whenever two or more chats are active simultaneously** (for
+example, a Milestone Chat and one of its Epic Chats, or two sibling Epic Chats). A single
+chat working alone in the repository's primary tree does not require a separate worktree.
+
+---
+
+## Scope Direction Protocol
+
+Scope direction to an in-flight Epic must travel a single mandatory, auditable channel.
+The HQ-ratified rule (2026-06-20) is:
+
+> Scope direction from the Creation Chat or CFO (Layer 8) to any in-flight Epic must
+> flow as Steering Note → HQ Chat → spec amendment → Milestone Chat re-issues amended
+> starter. The only exception is a P0 production emergency, where an unblocking directive
+> may be issued verbally and formalized within the same session via a Steering Note and
+> retroactive spec amendment.
+
+### P0 Production Emergency Exception
+
+The single exception named in the rule is a **P0 production emergency**. In that case an
+unblocking directive **may** be issued verbally — but it is not exempt from the audit
+trail: it must be formalized **within the same session** via a Steering Note and a
+retroactive spec amendment. The verbal directive unblocks; the Steering Note and amendment
+make it a matter of record.
+
+### Why the channel matters
+
+Routing every scope change through Steering Note → HQ Chat → spec amendment → re-issued
+starter preserves an **audit trail** — each change is traceable to a Steering Note and a
+specific spec amendment, so it is always possible to reconstruct why an Epic's scope
+changed — and it prevents **ambiguity**: an Epic only ever executes against its committed,
+re-issued starter, never against direction that reached it informally and never made it
+into the record. The Steering Note (`governance/templates/steering-note.md`) is the
+artifact this channel routes through.
+
+---
+
+## Artifact Scope Adjacency
+
+Each chat produces artifacts only for the level directly adjacent to it. Producing an
+artifact for a non-adjacent level looks valid in isolation but is a process failure: it
+either skips a review gate or reaches into a level above the chat's authority.
+
+### Rule
+
+> Each chat level produces artifacts only for its **direct parent** or **direct children**.
+> No grandchild artifacts (e.g., a Phase Chat must not produce Epic Execution Chat Starters)
+> and no grandparent artifacts. A violation either bypasses a review gate (grandchild
+> production) or overreaches into a parent's authority (grandparent production).
+
+### Adjacency Table
+
+| Chat | May produce | Must NOT produce |
+|------|-------------|-----------------|
+| Phase Execution Chat | Milestone Specs, Milestone Execution Chat Starters | Epic Specs, Epic Execution Chat Starters |
+| Milestone Execution Chat | Epic Specs, Epic Execution Chat Starters | Milestone Specs (parent's job), code (grandchildren's job) |
+| Epic Execution Chat | Code, tests, PRs | Epic Specs (parent's job), Milestone Specs (grandparent's job) |
+
+A violation of this rule means a chat is either bypassing a review gate (grandchild
+production) or overreaching into its parent's authority (grandparent production). Both are
+process failures.
+
+This is the SN-12a binding decision (Creation Chat Steering Note, 2026-06-25). The Critical
+Rules of the Phase and Milestone Execution Chat Starter templates and AOG §3.6/§3.7 state the
+rule for their own level and cross-reference this table.
+
+---
+
+## Communication Protocol
+
+Information moves through the hierarchy in two directions, and each direction has exactly one
+sanctioned channel. Upward information travels one level at a time; downward information
+travels through the level's spec file, never through a parent reaching into a running child
+session. This protocol makes that model binding (SN-12b, Creation Chat Steering Note,
+2026-06-25). It deepens the high-level **"Communication Flow Rules"** above by stating *how*
+each direction is carried.
+
+### Upward — 1-to-1, one level at a time
+
+Every level has exactly one parent. Escalations and completion notices travel **up one
+level**: an Epic Chat reports to its Milestone Chat, a Milestone Chat to its Phase Chat, a
+Phase Chat to HQ. The receiving level decides whether to absorb the issue or escalate it
+further. **No level skips its parent to reach a grandparent.**
+
+### Downward — the spec file is the channel, not broadcasting
+
+A parent communicates a directive, amendment, or correction by **amending its own spec
+file**. Children — including those already mid-execution — read from that same source at any
+time. One write, many readers: there is no separate message per child and no broadcast. This
+is how a parent with several concurrent children reaches all of them without addressing any of
+them individually.
+
+### The level spec file is dual-role
+
+Every level spec file serves two roles at once:
+
+- **Planning artifact** — what was planned at the start of the session.
+- **Live contract** — the authoritative state of scope, constraints, and directives,
+  including any amendments issued after child sessions began.
+
+Because the spec is the live contract, reading it at any moment yields the current governing
+state. That is what makes the downward channel reliable: a single canonical place always holds
+the latest directives.
+
+### Mid-flight updates escalate UP, never reach into running sessions
+
+If a directive changes after child sessions are already running, the parent does **not** reach
+into those sessions. It amends the spec and — if the change is blocking — escalates **up** to
+its own parent to decide whether to pause or cancel the affected children. Downward reach into
+a running session is not permitted: it is unauditable and race-prone, the very pattern this
+protocol exists to forbid.
+
+### Issuing an amendment
+
+To change scope or direction mid-flight: **amend the governing spec, note the change (e.g., an
+amendment-history entry), and notify the parent chat** — never reach into a running child
+session. The Phase and Milestone Execution Chat Starter templates carry this guidance for
+their own level.
+
+This is the SN-12b binding decision (Creation Chat Steering Note, 2026-06-25). AOG §3.10 and
+`PROJECT-SYSTEM-GUIDELINES.md` §13D state the same rule for their levels, and the **"Scope
+Direction Protocol"** above routes externally-originated scope changes through this same
+spec-amendment channel.
+
+---
+
 ## Reference
 
 - **Creation Chat template (genesis):** `governance/templates/genesis.md`

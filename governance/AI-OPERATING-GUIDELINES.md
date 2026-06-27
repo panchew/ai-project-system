@@ -490,6 +490,8 @@ Phase Execution Chat does NOT:
 - Dispatch Coding Agents — that is HQ Chat's authority after each Milestone Execution Chat Starter is accepted
 - Make phase-level accept/reject decisions (those belong to HQ Chat)
 
+**Artifact scope (adjacency):** Phase Execution Chat produces artifacts only for its direct parent or direct children — Milestone specs and Milestone Execution Chat Starters. It MUST NOT produce Epic specs or Epic Execution Chat Starters (a grandchild artifact that bypasses the Milestone Chat's review gate), nor any grandparent artifact above its level. See the **"Artifact Scope Adjacency"** section of `governance/systems/chat-hierarchy.md` for the full rule and the adjacency table.
+
 Phase Execution Chat is **authoritative for milestone planning and delivery**, not for implementation or phase decisions.
 
 ---
@@ -507,7 +509,65 @@ Milestone Execution Chat does NOT:
 - Dispatch Coding Agents directly — Epic Execution Chat Starters are delivered to the parent chat, which authorizes each Coding Agent launch
 - Make milestone-level accept/reject decisions (those belong to the parent chat)
 
+**Artifact scope (adjacency):** Milestone Execution Chat produces artifacts only for its direct parent or direct children — Epic specs and Epic Execution Chat Starters. It MUST NOT produce Milestone specs (its parent's job) or code, tests, or PRs (its grandchildren's job). See the **"Artifact Scope Adjacency"** section of `governance/systems/chat-hierarchy.md` for the full rule and the adjacency table.
+
 Milestone Execution Chat is **authoritative for epic planning and delivery**, not for implementation or milestone decisions.
+
+---
+
+### 3.8 Working-Tree Isolation
+
+When two or more chats are active simultaneously, each chat MUST operate in its own git
+working tree. A chat MUST NOT commit in a working tree that another concurrently-active
+chat may switch (check out a different branch in): a branch checkout by one chat silently
+re-targets the other chat's next commit, landing it on the wrong branch.
+
+Create a dedicated tree per active chat — `git worktree add ../worktree-<role>-<id> <branch>`
+— and work only in your own tree for the lifetime of the chat. This applies whenever two
+or more chats run concurrently; a single chat working alone does not need a separate
+worktree.
+
+See the **"Working-Tree Isolation"** section of `governance/systems/chat-hierarchy.md` for
+the full rule, practical guidance, and a worked `git worktree` example.
+
+---
+
+### 3.9 Scope Direction Protocol
+
+Scope direction from the Creation Chat or CFO to any in-flight Epic MUST flow through the
+mandatory channel: Steering Note → HQ Chat → spec amendment → Milestone Chat re-issues the
+amended starter. Scope MUST NOT change through any informal path — a chat message or a
+hand-edited starter pasted into a running session does not change an Epic's scope. The only
+exception is a P0 production emergency, where an unblocking directive may be issued verbally
+and MUST be formalized within the same session via a Steering Note and a retroactive spec
+amendment. An Epic executes only against its committed, re-issued starter.
+
+See the **"Scope Direction Protocol"** section of `governance/systems/chat-hierarchy.md`
+for the HQ-ratified rule verbatim, the P0 exception, and the rationale.
+
+---
+
+### 3.10 Communication Protocol
+
+Information moves through the hierarchy in two directions, each with exactly one sanctioned
+channel. **Upward communication is 1-to-1:** every level has exactly one parent; escalations
+and completion notices travel up one level, and the receiving level decides whether to absorb
+or escalate further. No level skips its parent to reach a grandparent. **Downward
+communication is the spec file, not broadcasting:** a parent amends its own spec, and children
+— including those mid-execution — read from that same source at any time (one write, many
+readers, no separate message per child). The level spec file is therefore **dual-role** — a
+planning artifact and a live contract holding the authoritative state of scope, constraints,
+and directives including amendments.
+
+**Mid-flight updates escalate UP.** If a directive changes after children are running, the
+parent amends the spec and, if the change is blocking, escalates up to its own parent to
+decide whether to pause or cancel affected children. A chat MUST NOT reach downward into a
+running child session.
+
+See the **"Communication Protocol"** section of `governance/systems/chat-hierarchy.md` for the
+four decisions in full and the amendment-issuing guidance, and §3.9 (Scope Direction Protocol)
+for the related channel that routes externally-originated scope changes through the same spec
+amendment.
 
 ---
 
