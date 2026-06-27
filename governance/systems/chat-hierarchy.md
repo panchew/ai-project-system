@@ -418,6 +418,37 @@ chat working alone in the repository's primary tree does not require a separate 
 
 ---
 
+## Scope Direction Protocol
+
+Scope direction to an in-flight Epic must travel a single mandatory, auditable channel.
+The HQ-ratified rule (2026-06-20) is:
+
+> Scope direction from the Creation Chat or CFO (Layer 8) to any in-flight Epic must
+> flow as Steering Note → HQ Chat → spec amendment → Milestone Chat re-issues amended
+> starter. The only exception is a P0 production emergency, where an unblocking directive
+> may be issued verbally and formalized within the same session via a Steering Note and
+> retroactive spec amendment.
+
+### P0 Production Emergency Exception
+
+The single exception named in the rule is a **P0 production emergency**. In that case an
+unblocking directive **may** be issued verbally — but it is not exempt from the audit
+trail: it must be formalized **within the same session** via a Steering Note and a
+retroactive spec amendment. The verbal directive unblocks; the Steering Note and amendment
+make it a matter of record.
+
+### Why the channel matters
+
+Routing every scope change through Steering Note → HQ Chat → spec amendment → re-issued
+starter preserves an **audit trail** — each change is traceable to a Steering Note and a
+specific spec amendment, so it is always possible to reconstruct why an Epic's scope
+changed — and it prevents **ambiguity**: an Epic only ever executes against its committed,
+re-issued starter, never against direction that reached it informally and never made it
+into the record. The Steering Note (`governance/templates/steering-note.md`) is the
+artifact this channel routes through.
+
+---
+
 ## Reference
 
 - **Creation Chat template (genesis):** `governance/templates/genesis.md`
