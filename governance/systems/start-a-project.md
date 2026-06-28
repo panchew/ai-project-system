@@ -57,8 +57,14 @@ ai-project init <project-name>
 This command:
 - Adds the `ai-project-system` governance repository as a Git submodule at `.governance/`
 - Creates `.ai-project.yml` declaring the governance source and pinned ref
-- Installs the HQ agent file
+- Installs the Governance Agent file (canonical, tool-neutral path:
+  `.ai-project/agents/governance.agent.md`)
 - Creates the baseline documentation structure under `docs/`
+
+The Governance Agent is tool-neutral: to open it in your AI tool (Claude Code, Cursor, Windsurf,
+or GitHub Copilot), follow the matching guide in
+[`governance/guides/integrations/`](../guides/integrations/README.md). No tool-specific path is
+required.
 
 The submodule model means governance documents are always sourced from `.governance/`, keeping
 every project aligned to a versioned, auditable governance source. See
@@ -113,7 +119,10 @@ the same governance version.
 ## Step 5 — Spawn the HQ Chat
 
 Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface, opened
-from the HQ Context Packet recorded in the committed `genesis.md`.
+from the HQ Context Packet recorded in the committed `genesis.md`. To load the Governance Agent in
+your tool, follow the matching guide in
+[`governance/guides/integrations/`](../guides/integrations/README.md) (Claude Code, Cursor,
+Windsurf, or GitHub Copilot).
 
 The HQ Chat becomes the **strategic control plane** for the project:
 - Defines Phases, Milestones, and Epics

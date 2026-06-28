@@ -88,7 +88,9 @@ This creates:
 - **Canonical `docs/` hierarchy** (phases, roadmap, context, decisions, admin)
 - **Governance submodule** pinned to the current version
 - **`.ai-project.yml`** with correct governance reference
-- **Governance Agent file** at `.github/agents/governance.agent.md`
+- **Governance Agent file.** The canonical, tool-neutral location is
+  `.ai-project/agents/governance.agent.md`. (The CLI also writes a copy to `.github/agents/`, which
+  GitHub Copilot auto-detects — see [Tool Integration Guides](integrations/README.md).)
 
 ### 1.2 Install the CLI (if needed)
 
@@ -138,9 +140,12 @@ your-project/
 │   ├── context/
 │   ├── decisions/
 │   └── admin/
+├── .ai-project/
+│   └── agents/
+│       └── governance.agent.md # Governance Agent (canonical, tool-neutral; all modes)
 ├── .github/
 │   └── agents/
-│       └── governance.agent.md # Governance Agent (all modes)
+│       └── governance.agent.md # GitHub Copilot auto-detection copy (one tool's convention)
 └── [your existing project files]
 ```
 
@@ -157,8 +162,11 @@ A **Phase** is a major segment of work with a clear purpose and exit criteria. U
 ### 2.1 Start HQ Mode
 
 1. Open your project in your AI chat tool that supports agent instructions from a markdown file.
-2. Ensure the tool has access to `.github/agents/governance.agent.md` (the unified Governance Agent).
-3. Select the agent (named `governance` in the front-matter) if your tool supports agent selection.
+2. Ensure the tool has access to the unified Governance Agent at its canonical, tool-neutral path
+   `.ai-project/agents/governance.agent.md`. For the exact steps in your tool — Claude Code, Cursor,
+   Windsurf, or GitHub Copilot — follow the matching [Tool Integration Guide](integrations/README.md).
+3. Select or load the agent per that guide (e.g., select `hq` in Copilot; import or `@`-mention the
+   file in Claude Code / Cursor / Windsurf).
 4. Send the canonical prompt to activate **HQ mode**:
 
 **For a new project:**
@@ -724,7 +732,8 @@ cd .governance && git fetch && git checkout v4.0.0 && cd ..
 | Project configuration | `.ai-project.yml` (repository root) |
 | Governance rules | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md`, `.governance/governance/AI-OPERATING-GUIDELINES.md` |
 | Templates | `.governance/governance/templates/` |
-| Governance Agent | `.github/agents/governance.agent.md` |
+| Governance Agent (canonical, tool-neutral) | `.ai-project/agents/governance.agent.md` |
+| Governance Agent (GitHub Copilot auto-detection copy) | `.github/agents/governance.agent.md` |
 | Phase Specs | `docs/phases/P<N>__phase__*.md` |
 | Milestone Specs | `docs/phases/P<N>__*/P<N>-M<N>__milestone.md` |
 | Epic Specs | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__spec__*.md` |
