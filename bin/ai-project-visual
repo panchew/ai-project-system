@@ -1,0 +1,254 @@
+#!/usr/bin/env python3
+"""ai-project-visual — generate a single visual artifact via a configured ComfyUI endpoint.
+
+Part of Epic P5-M22-E22.2 (VA-1, full implementation). This helper is the callable
+prompt -> artifact path for any tool-capable agent. It reads the ``visual_artifacts``
+config (``enabled`` / ``comfyui_url`` / ``types``) through the **same single source** as
+the rest of the system — ``bin/ai-project-orchestrator``'s ``load_yml_config`` /
+``resolve_visual_artifacts`` (the contract E22.1 delivered) — rather than re-parsing
+``.ai-project.yml`` with a divergent validator.
+
+Scope (Milestone Non-Goal): one prompt -> one artifact. No queue, no batch, no UI.
+
+Usage:
+    ai-project-visual --prompt "system architecture, isometric" --type diagrams \\
+        --output .ai-project/visuals/hq/architecture.png
+
+    # custom graph (required for video / any non-default workflow); the prompt text is
+    # substituted wherever the placeholder %prompt% appears in the workflow JSON:
+    ai-project-visual --prompt "..." --type video --output out.mp4 --workflow graph.json
+
+Configuration lives in ``.ai-project.yml`` (read from the current working directory):
+
+    visual_artifacts:
+      enabled: true
+      comfyui_url: http://localhost:8188
+      types: [diagrams, infographics, video]
+
+Exit codes:
+    0  success — artifact written to --output
+    2  capability disabled (visual_artifacts.enabled is false / block absent)
+    3  configuration error (invalid endpoint, --type not in configured types, missing workflow)
+    4  runtime error (endpoint unreachable, generation failed, or no output produced)
+"""
+
+import argparse
+import importlib.util
+import json
+import sys
+import time
+from importlib.machinery import SourceFileLoader
+from pathlib import Path
+from urllib.error import URLError, HTTPError
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
+
+EXIT_OK = 0
+EXIT_DISABLED = 2
+EXIT_CONFIG = 3
+EXIT_RUNTIME = 4
+
+ORCH_PATH = Path(__file__).resolve().parent / "ai-project-orchestrator"
+PROMPT_PLACEHOLDER = "%prompt%"
+
+
+def fail(code, message):
+    """Print a clear error to stderr and exit non-zero."""
+    print(f"[ai-project-visual] {message}", file=sys.stderr)
+    sys.exit(code)
+
+
+def load_orchestrator():
+    """Load the extensionless sibling ``bin/ai-project-orchestrator`` as a module so we
+    reuse its config source (E22.1's single source of truth) rather than re-parsing YAML.
+    Mirrors the SourceFileLoader pattern in tests/test_visual_artifacts_config.py."""
+    if not ORCH_PATH.exists():
+        fail(EXIT_CONFIG, f"orchestrator not found at {ORCH_PATH}; cannot read visual_artifacts config.")
+    loader = SourceFileLoader("ai_project_orchestrator_for_visual", str(ORCH_PATH))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def default_workflow(prompt, checkpoint, width, height, seed):
+    """A minimal, standard ComfyUI text-to-image (txt2img) API-format graph with the
+    prompt injected. Suitable for still-image types (diagrams, infographics). Video and
+    any bespoke pipeline must supply their own graph via --workflow."""
+    return {
+        "3": {
+            "class_type": "KSampler",
+            "inputs": {
+                "seed": seed,
+                "steps": 20,
+                "cfg": 7.0,
+                "sampler_name": "euler",
+                "scheduler": "normal",
+                "denoise": 1.0,
+                "model": ["4", 0],
+                "positive": ["6", 0],
+                "negative": ["7", 0],
+                "latent_image": ["5", 0],
+            },
+        },
+        "4": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": checkpoint}},
+        "5": {"class_type": "EmptyLatentImage", "inputs": {"width": width, "height": height, "batch_size": 1}},
+        "6": {"class_type": "CLIPTextEncode", "inputs": {"text": prompt, "clip": ["4", 1]}},
+        "7": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": ["4", 1]}},
+        "8": {"class_type": "VAEDecode", "inputs": {"samples": ["3", 0], "vae": ["4", 2]}},
+        "9": {"class_type": "SaveImage", "inputs": {"filename_prefix": "ai-project", "images": ["8", 0]}},
+    }
+
+
+def load_custom_workflow(path, prompt):
+    """Load a ComfyUI API-format workflow JSON and substitute the prompt at any
+    %prompt% placeholder (string-level substitution, applied before JSON parsing)."""
+    p = Path(path)
+    if not p.exists():
+        fail(EXIT_CONFIG, f"--workflow file not found: {path}")
+    raw = p.read_text(encoding="utf-8")
+    raw = raw.replace(PROMPT_PLACEHOLDER, json.dumps(prompt)[1:-1])  # escape for inside a JSON string
+    try:
+        return json.loads(raw)
+    except json.JSONDecodeError as e:
+        fail(EXIT_CONFIG, f"--workflow file is not valid JSON after prompt substitution: {e}")
+
+
+def _post_json(url, payload, timeout):
+    body = json.dumps(payload).encode("utf-8")
+    req = Request(url, data=body, headers={"Content-Type": "application/json"}, method="POST")
+    with urlopen(req, timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def _get_json(url, timeout):
+    with urlopen(Request(url), timeout=timeout) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def submit(base_url, workflow, timeout):
+    data = _post_json(base_url.rstrip("/") + "/prompt", {"prompt": workflow}, timeout)
+    prompt_id = data.get("prompt_id")
+    if not prompt_id:
+        raise RuntimeError(f"ComfyUI accepted no prompt_id (response: {data}).")
+    return prompt_id
+
+
+def wait_for_outputs(base_url, prompt_id, timeout):
+    """Poll /history/<id> until the run reports outputs or the timeout elapses."""
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        history = _get_json(base_url.rstrip("/") + f"/history/{prompt_id}", min(30, timeout))
+        entry = history.get(prompt_id)
+        if entry and entry.get("outputs"):
+            return entry["outputs"]
+        time.sleep(1.5)
+    raise TimeoutError(f"timed out after {timeout}s waiting for ComfyUI to finish prompt {prompt_id}.")
+
+
+def first_output_ref(outputs):
+    """Return the first produced file reference ({filename, subfolder, type}) across the
+    common ComfyUI output keys (images, then animated/video outputs)."""
+    for node_output in outputs.values():
+        for key in ("images", "gifs", "videos"):
+            items = node_output.get(key)
+            if items:
+                return items[0]
+    return None
+
+
+def download(base_url, ref, output_path, timeout):
+    query = urlencode({
+        "filename": ref.get("filename", ""),
+        "subfolder": ref.get("subfolder", ""),
+        "type": ref.get("type", "output"),
+    })
+    with urlopen(Request(base_url.rstrip("/") + "/view?" + query), timeout=timeout) as resp:
+        data = resp.read()
+    out = Path(output_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_bytes(data)
+    return len(data)
+
+
+def parse_args(argv):
+    parser = argparse.ArgumentParser(
+        prog="ai-project-visual",
+        description="Generate one visual artifact via the configured ComfyUI endpoint.",
+    )
+    parser.add_argument("--prompt", required=True, help="Natural-language prompt for the visual.")
+    parser.add_argument("--type", required=True, dest="vtype",
+                        help="Visual type; must be one of the configured visual_artifacts.types.")
+    parser.add_argument("--output", required=True, help="Path to write the generated artifact.")
+    parser.add_argument("--workflow", help="Optional ComfyUI API-format workflow JSON "
+                                           "(required for non-image types such as video). "
+                                           "The literal token '%%prompt%%' in the file is replaced with --prompt.")
+    parser.add_argument("--checkpoint", default="v1-5-pruned-emaonly.safetensors",
+                        help="Checkpoint name for the default workflow (must exist on the server).")
+    parser.add_argument("--width", type=int, default=512, help="Default-workflow image width.")
+    parser.add_argument("--height", type=int, default=512, help="Default-workflow image height.")
+    parser.add_argument("--seed", type=int, default=0, help="Default-workflow sampler seed.")
+    parser.add_argument("--timeout", type=int, default=120, help="Generation timeout in seconds.")
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(sys.argv[1:] if argv is None else argv)
+
+    orch = load_orchestrator()
+    va = orch.load_yml_config()["visual_artifacts"]
+
+    # 1. Opt-in gate — capability disabled is a clear, distinct exit (not a crash).
+    if not va.get("enabled"):
+        fail(EXIT_DISABLED,
+             "visual_artifacts is disabled (enabled: false or the block is absent). "
+             "Set visual_artifacts.enabled: true in .ai-project.yml to use this helper. "
+             "See governance/ai-project-yml-spec.md §3.5.")
+
+    # 2. Endpoint must be a well-formed URL (reuse E22.1's validator).
+    url = va.get("comfyui_url")
+    if not url or not orch._is_well_formed_url(url):
+        fail(EXIT_CONFIG, f"no valid comfyui_url configured (got: {url!r}). "
+                          "Set visual_artifacts.comfyui_url to an http(s) URL.")
+
+    # 3. Requested type must be enabled.
+    configured = va.get("types") or []
+    if args.vtype not in configured:
+        fail(EXIT_CONFIG, f"type '{args.vtype}' is not in the configured visual_artifacts.types "
+                          f"({configured}). Enable it in .ai-project.yml or choose a configured type.")
+
+    # 4. Build the workflow: custom graph if supplied; otherwise the default txt2img graph
+    #    (images only — non-image types must supply --workflow).
+    if args.workflow:
+        workflow = load_custom_workflow(args.workflow, args.prompt)
+    elif args.vtype == "video":
+        fail(EXIT_CONFIG, "type 'video' has no built-in workflow; supply a ComfyUI graph via "
+                          "--workflow (use the %prompt% placeholder for the prompt text).")
+    else:
+        workflow = default_workflow(args.prompt, args.checkpoint, args.width, args.height, args.seed)
+
+    # 5. Generate.
+    try:
+        prompt_id = submit(url, workflow, args.timeout)
+        outputs = wait_for_outputs(url, prompt_id, args.timeout)
+    except (URLError, HTTPError) as e:
+        fail(EXIT_RUNTIME, f"ComfyUI endpoint at {url} is unreachable or returned an error: {e}")
+    except (TimeoutError, RuntimeError) as e:
+        fail(EXIT_RUNTIME, f"generation failed: {e}")
+
+    ref = first_output_ref(outputs)
+    if not ref:
+        fail(EXIT_RUNTIME, f"ComfyUI produced no downloadable output for prompt {prompt_id}.")
+
+    try:
+        written = download(url, ref, args.output, args.timeout)
+    except (URLError, HTTPError) as e:
+        fail(EXIT_RUNTIME, f"failed to download the generated artifact from {url}: {e}")
+
+    print(f"[ai-project-visual] wrote {written} bytes to {args.output} "
+          f"(type={args.vtype}, prompt_id={prompt_id}).")
+    return EXIT_OK
+
+
+if __name__ == "__main__":
+    sys.exit(main())
