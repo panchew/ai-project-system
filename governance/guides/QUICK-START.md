@@ -9,7 +9,7 @@ This guide walks you through creating your first Phase, Milestone, and Epic—fr
 > See [`README.md`](../../README.md) for the agentic mode overview, or jump directly to the tools:  
 > `bin/ai-project-orchestrator`, `bin/ai-project-daemon`, `Dockerfile.sandbox`, `bin/verify-loop.sh`.  
 > When using the daemon from a submodule consumer project, pass `--project-root .`:  
-> `governance/bin/ai-project-daemon --project-root . start`.
+> `.governance/bin/ai-project-daemon --project-root . start`.
 
 ---
 
