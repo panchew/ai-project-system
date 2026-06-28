@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.1.0  
-**Effective Date:** 2026-06-23  
+**Version:** 2.2.0  
+**Effective Date:** 2026-06-28  
 **Status:** Current  
 
 ---
@@ -490,6 +490,8 @@ Phase Execution Chat does NOT:
 - Dispatch Coding Agents — that is HQ Chat's authority after each Milestone Execution Chat Starter is accepted
 - Make phase-level accept/reject decisions (those belong to HQ Chat)
 
+**Artifact scope (adjacency):** Phase Execution Chat produces artifacts only for its direct parent or direct children — Milestone specs and Milestone Execution Chat Starters. It MUST NOT produce Epic specs or Epic Execution Chat Starters (a grandchild artifact that bypasses the Milestone Chat's review gate), nor any grandparent artifact above its level. See the **"Artifact Scope Adjacency"** section of `governance/systems/chat-hierarchy.md` for the full rule and the adjacency table.
+
 Phase Execution Chat is **authoritative for milestone planning and delivery**, not for implementation or phase decisions.
 
 ---
@@ -507,7 +509,65 @@ Milestone Execution Chat does NOT:
 - Dispatch Coding Agents directly — Epic Execution Chat Starters are delivered to the parent chat, which authorizes each Coding Agent launch
 - Make milestone-level accept/reject decisions (those belong to the parent chat)
 
+**Artifact scope (adjacency):** Milestone Execution Chat produces artifacts only for its direct parent or direct children — Epic specs and Epic Execution Chat Starters. It MUST NOT produce Milestone specs (its parent's job) or code, tests, or PRs (its grandchildren's job). See the **"Artifact Scope Adjacency"** section of `governance/systems/chat-hierarchy.md` for the full rule and the adjacency table.
+
 Milestone Execution Chat is **authoritative for epic planning and delivery**, not for implementation or milestone decisions.
+
+---
+
+### 3.8 Working-Tree Isolation
+
+When two or more chats are active simultaneously, each chat MUST operate in its own git
+working tree. A chat MUST NOT commit in a working tree that another concurrently-active
+chat may switch (check out a different branch in): a branch checkout by one chat silently
+re-targets the other chat's next commit, landing it on the wrong branch.
+
+Create a dedicated tree per active chat — `git worktree add ../worktree-<role>-<id> <branch>`
+— and work only in your own tree for the lifetime of the chat. This applies whenever two
+or more chats run concurrently; a single chat working alone does not need a separate
+worktree.
+
+See the **"Working-Tree Isolation"** section of `governance/systems/chat-hierarchy.md` for
+the full rule, practical guidance, and a worked `git worktree` example.
+
+---
+
+### 3.9 Scope Direction Protocol
+
+Scope direction from the Creation Chat or CFO to any in-flight Epic MUST flow through the
+mandatory channel: Steering Note → HQ Chat → spec amendment → Milestone Chat re-issues the
+amended starter. Scope MUST NOT change through any informal path — a chat message or a
+hand-edited starter pasted into a running session does not change an Epic's scope. The only
+exception is a P0 production emergency, where an unblocking directive may be issued verbally
+and MUST be formalized within the same session via a Steering Note and a retroactive spec
+amendment. An Epic executes only against its committed, re-issued starter.
+
+See the **"Scope Direction Protocol"** section of `governance/systems/chat-hierarchy.md`
+for the HQ-ratified rule verbatim, the P0 exception, and the rationale.
+
+---
+
+### 3.10 Communication Protocol
+
+Information moves through the hierarchy in two directions, each with exactly one sanctioned
+channel. **Upward communication is 1-to-1:** every level has exactly one parent; escalations
+and completion notices travel up one level, and the receiving level decides whether to absorb
+or escalate further. No level skips its parent to reach a grandparent. **Downward
+communication is the spec file, not broadcasting:** a parent amends its own spec, and children
+— including those mid-execution — read from that same source at any time (one write, many
+readers, no separate message per child). The level spec file is therefore **dual-role** — a
+planning artifact and a live contract holding the authoritative state of scope, constraints,
+and directives including amendments.
+
+**Mid-flight updates escalate UP.** If a directive changes after children are running, the
+parent amends the spec and, if the change is blocking, escalates up to its own parent to
+decide whether to pause or cancel affected children. A chat MUST NOT reach downward into a
+running child session.
+
+See the **"Communication Protocol"** section of `governance/systems/chat-hierarchy.md` for the
+four decisions in full and the amendment-issuing guidance, and §3.9 (Scope Direction Protocol)
+for the related channel that routes externally-originated scope changes through the same spec
+amendment.
 
 ---
 
@@ -788,6 +848,72 @@ Silent failure or guessing is prohibited.
 
 ---
 
+## 16. Visual Artifact Production
+
+Visual artifacts are an **opt-in** capability. Every chat level may produce a visual appropriate to
+its altitude — but only when the capability is enabled and the producing agent can call tools. This
+section governs *use*; the configuration schema is defined in `governance/ai-project-yml-spec.md` §3.5.
+
+### 16.1 Opt-in gating
+
+The capability is active only when `.ai-project.yml` carries `visual_artifacts.enabled: true`. An
+**absent block or `enabled: false` means the capability is off** — agents MUST NOT attempt
+generative visual production, and the integration test that exercises it MUST skip (not fail). The
+block's keys are `enabled` (bool), `comfyui_url` (URL), and `types` (a subset of `diagrams`,
+`infographics`, `video`), read through the single config source in `bin/ai-project-orchestrator`
+(`load_yml_config` / `resolve_visual_artifacts`).
+
+### 16.2 Per-level abstraction
+
+Each chat level produces visuals at its own level of abstraction. An agent produces the visual for
+**its** level — it does not reach up or down the cascade:
+
+| Chat level | Visual type |
+|------------|-------------|
+| Creation Chat | Concept / vision imagery |
+| HQ Chat | System architecture |
+| Phase Chat | Phase scope diagram |
+| Milestone Chat | Component + flow diagrams |
+| Epic Chat | UI mockups, before/after, implementation diagrams |
+
+Visual intent originates at the **Creation Chat** — elicited at inception via `seed.md` Rule 4 ("What
+does success look like visually?") — and propagates down the artifact cascade: each level translates
+the level above's vision into the visual appropriate to its own scope.
+
+### 16.3 Two modes
+
+- **Structural** — diagrams expressed as text (Mermaid / PlantUML), committed alongside the artifact
+  they illustrate. Structural visuals need no endpoint and no capability beyond writing a fenced code
+  block; prefer them for architecture, scope, component, and flow diagrams.
+- **Generative** — imagery or video produced from a natural-language prompt via the configured
+  ComfyUI endpoint, using the `bin/ai-project-visual` helper. Use generative mode for concept/vision
+  imagery, infographics, and UI mockups where a rendered image communicates better than a diagram.
+
+### 16.4 Tool-capability gating
+
+The gate is **capability, not the chat-level label.** An agent produces a generative visual only if
+it can call tools (run `bin/ai-project-visual` and reach the endpoint). A chat operating in a
+tool-less surface produces **structural** visuals only and MUST NOT claim to have generated imagery
+it cannot produce. When a level's visual requires generation and the agent lacks tool capability, it
+records the visual intent in its artifact and defers generation to a tool-capable agent rather than
+fabricating a result.
+
+### 16.5 What to commit, and where
+
+- **Structural** diagrams live inline in the governing artifact (spec, brief, guide) or as a sibling
+  `.mmd` / `.puml` file next to it.
+- **Generated** artifacts are written under the consuming project's `.ai-project/` namespace —
+  `.ai-project/visuals/<level>/<artifact-id>.<ext>` — and referenced from the governing artifact by
+  relative path. Commit the generated file together with the artifact that references it, so the
+  visual travels with its decision record.
+- The governance **source** repo keeps `visual_artifacts.enabled: false`; it ships the guidance, the
+  helper, and the test — not generated output.
+
+See `governance/guides/visual-artifacts.md` for endpoint configuration, structural-diagram tooling,
+output formats, and a worked example per chat level.
+
+---
+
 ## 15. Closing Statement
 
 AI is a force multiplier only when it is constrained.
@@ -801,6 +927,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.2.0 | 2026-06-28 | Added §16 "Visual Artifact Production": per-level abstraction table (SN-11), structural vs. generative modes, tool-capability gating, and commit guidance — opt-in on `visual_artifacts.enabled` (ai-project-yml-spec.md §3.5). Part of E22.2 (P5-M22), which completes VA-1 with `seed.md` Rule 4 visual-intent elicitation, the `bin/ai-project-visual` helper, `governance/guides/visual-artifacts.md`, and a skip-on-disabled integration test. |
 | 2.1.0 | 2026-06-23 | Added §3.5–3.7 definitions for Creation Chat, Phase Chat, and Milestone Chat. Added chat hierarchy table to §3 intro. Updated Purpose to name all five chat types. Fixes P5-GH-7: Phase/Milestone chat roles introduced in P4 were absent from this document, causing HQ Chat to use Epic-level rules when producing Phase/Milestone starters. |
 | 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated template path references. |
 | 1.4.1 | 2026-02-22 | Previous version — governance lived in `docs/`. |

@@ -17,6 +17,17 @@ last_updated: 2026-06-21
 
 ---
 
+> **Self-referential vs. submodule: how to read this guide**
+>
+> - `governance/` is the **framework SOURCE repo** (this repository) — used when dogfooding the
+>   framework on itself.
+> - `.governance/` is the **submodule path inside a consumer project** — where your governance lives
+>   after `ai-project init`.
+> - In a consumer project, read bare `governance/...` paths below as `.governance/governance/...`.
+>   If your project *is* the framework source, use `governance/...` as written.
+
+---
+
 ## 1. Overview
 
 This guide documents the procedure for synchronizing governance updates from the source repository to an adopted project. Governance sync is how projects receive updates to the AI Project System governance framework — bug fixes, new policies, improved templates, and version bumps.

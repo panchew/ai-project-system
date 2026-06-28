@@ -10,6 +10,15 @@ last_updated: 2026-06-13
 
 # Starting a New Project Under the AI Project System
 
+> **Self-referential vs. submodule: how to read this guide**
+>
+> - `governance/` is the **framework SOURCE repo** (this repository) — used when dogfooding the
+>   framework on itself.
+> - `.governance/` is the **submodule path inside a consumer project** — where your governance lives
+>   after `ai-project init`.
+> - In a consumer project, read bare `governance/...` paths below as `.governance/governance/...`.
+>   If your project *is* the framework source, use `governance/...` as written.
+
 ## Purpose
 
 This document defines the **canonical process** for starting a new project governed by the AI Project System.
@@ -37,6 +46,17 @@ role (inputs, authority, outputs, stopping condition) is defined in
 
 ---
 
+## Step 0 — Open the Creation Chat
+
+Before anything else, open the **Creation Chat** — the session that produces your first
+`genesis.md`. Paste [`governance/templates/seed.md`](../templates/seed.md) into a Claude session to
+open it (load the Governance Agent first — see the
+[integration guides](../guides/integrations/README.md) for your tool: Claude Code, Cursor, Windsurf,
+or GitHub Copilot). The Creation Chat you open here is the same one you use in **Step 3** to produce
+and commit `genesis.md`.
+
+---
+
 ## Step 1 — Create the Repository
 
 Create a new Git repository using your preferred tooling.
@@ -57,8 +77,14 @@ ai-project init <project-name>
 This command:
 - Adds the `ai-project-system` governance repository as a Git submodule at `.governance/`
 - Creates `.ai-project.yml` declaring the governance source and pinned ref
-- Installs the HQ agent file
+- Installs the Governance Agent file (canonical, tool-neutral path:
+  `.ai-project/agents/governance.agent.md`)
 - Creates the baseline documentation structure under `docs/`
+
+The Governance Agent is tool-neutral: to open it in your AI tool (Claude Code, Cursor, Windsurf,
+or GitHub Copilot), follow the matching guide in
+[`governance/guides/integrations/`](../guides/integrations/README.md). No tool-specific path is
+required.
 
 The submodule model means governance documents are always sourced from `.governance/`, keeping
 every project aligned to a versioned, auditable governance source. See
@@ -113,7 +139,10 @@ the same governance version.
 ## Step 5 — Spawn the HQ Chat
 
 Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface, opened
-from the HQ Context Packet recorded in the committed `genesis.md`.
+from the HQ Context Packet recorded in the committed `genesis.md`. To load the Governance Agent in
+your tool, follow the matching guide in
+[`governance/guides/integrations/`](../guides/integrations/README.md) (Claude Code, Cursor,
+Windsurf, or GitHub Copilot).
 
 The HQ Chat becomes the **strategic control plane** for the project:
 - Defines Phases, Milestones, and Epics
