@@ -1,6 +1,6 @@
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
-# Spec: governance/ai-project-yml-spec.md v2.0.0
+# Spec: governance/ai-project-yml-spec.md v2.1.0
 
 governance:
   source: ./governance
@@ -25,3 +25,16 @@ models:
   milestone: remote:claude-3-5-sonnet
   epic_dev: local:llama3:8b
   epic_qa: local:qwen2.5-coder:7b
+
+# Visual artifacts (M22, VA-1) — opt-in, default off. Absent block ⇒ disabled.
+# enabled: false keeps the capability off in the governance source repo (the suite
+# stays green without a live ComfyUI endpoint). comfyui_url/types document the
+# contract but are inert while enabled is false.
+# See governance/ai-project-yml-spec.md §3.5.
+visual_artifacts:
+  enabled: false
+  comfyui_url: http://localhost:8188
+  types:
+    - diagrams
+    - infographics
+    - video

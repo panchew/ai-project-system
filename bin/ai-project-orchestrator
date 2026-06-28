@@ -6,6 +6,7 @@ import subprocess
 import yaml
 import signal
 from pathlib import Path
+from urllib.parse import urlparse
 
 PROJECT_ROOT = Path.cwd()
 QUEUE_DIR = PROJECT_ROOT / ".ai-project" / "queue"
@@ -19,6 +20,17 @@ DEFAULT_MODELS = {
     "milestone": "remote:claude-3-5-sonnet",
     "epic_dev": "local:llama3:8b",
     "epic_qa": "local:qwen2.5-coder:7b"
+}
+
+# Visual artifacts (VA-1) config layer. The block is optional and opt-in: an absent
+# block (or enabled: false) means the capability is disabled. See
+# governance/ai-project-yml-spec.md §3.5 and §4 rules 18–24.
+VALID_VISUAL_ARTIFACT_TYPES = ("diagrams", "infographics", "video")
+
+DEFAULT_VISUAL_ARTIFACTS = {
+    "enabled": False,
+    "comfyui_url": "http://localhost:8188",
+    "types": list(VALID_VISUAL_ARTIFACT_TYPES),
 }
 
 ACTIVE_CONTAINERS = []
@@ -61,21 +73,108 @@ signal.signal(signal.SIGINT, signal_handler)
 signal.signal(signal.SIGTERM, signal_handler)
 
 
+def _is_well_formed_url(value):
+    """True when value is a parseable http/https URL with a host."""
+    if not isinstance(value, str):
+        return False
+    try:
+        parsed = urlparse(value)
+    except Exception:
+        return False
+    return parsed.scheme in ("http", "https") and bool(parsed.netloc)
+
+
+def validate_visual_artifacts(va):
+    """Validate the optional visual_artifacts block per ai-project-yml-spec.md §4
+    (rules 18–24).
+
+    - An absent block (``va is None``) is valid and means the capability is disabled
+      (no error, no warning).
+    - ``enabled`` (when present) must be a boolean.
+    - Each ``types`` entry (when present) must be one of VALID_VISUAL_ARTIFACT_TYPES.
+    - ``comfyui_url`` (when present) must be a well-formed http(s) URL.
+    - Unknown keys produce a warning (not an error), mirroring models/overrides.
+
+    Raises ValueError on any invalid value (a validation error).
+    """
+    if va is None:
+        return  # absent ⇒ disabled
+    if not isinstance(va, dict):
+        raise ValueError(f"Invalid visual_artifacts block: '{va}'. Must be a mapping.")
+
+    if "enabled" in va and not isinstance(va["enabled"], bool):
+        raise ValueError(
+            f"Invalid visual_artifacts.enabled: '{va['enabled']}'. Must be a boolean (true or false)."
+        )
+
+    if "types" in va and va["types"] is not None:
+        types = va["types"]
+        if not isinstance(types, list):
+            raise ValueError(
+                f"Invalid visual_artifacts.types: '{types}'. Must be a list of: "
+                f"{', '.join(VALID_VISUAL_ARTIFACT_TYPES)}."
+            )
+        for entry in types:
+            if entry not in VALID_VISUAL_ARTIFACT_TYPES:
+                raise ValueError(
+                    f"Invalid visual_artifacts.types entry: '{entry}'. Must be one of: "
+                    f"{', '.join(VALID_VISUAL_ARTIFACT_TYPES)}."
+                )
+
+    if "comfyui_url" in va and va["comfyui_url"] is not None:
+        if not _is_well_formed_url(va["comfyui_url"]):
+            raise ValueError(
+                f"Invalid visual_artifacts.comfyui_url: '{va['comfyui_url']}'. "
+                f"Must be a well-formed http(s) URL."
+            )
+
+    for key in va:
+        if key not in DEFAULT_VISUAL_ARTIFACTS:
+            print(
+                f"[!] Warning: Unknown key in visual_artifacts block: '{key}'. Ignored.",
+                file=sys.stderr,
+            )
+
+
+def resolve_visual_artifacts(va):
+    """Resolve the effective visual_artifacts config, merging documented defaults.
+    An absent block (None) ⇒ disabled. Assumes va has already passed
+    validate_visual_artifacts."""
+    resolved = DEFAULT_VISUAL_ARTIFACTS.copy()
+    resolved["enabled"] = False  # opt-in: absent or unset ⇒ disabled
+    if isinstance(va, dict):
+        for key in DEFAULT_VISUAL_ARTIFACTS:
+            if key in va and va[key] is not None:
+                resolved[key] = va[key]
+    return resolved
+
+
 def load_yml_config():
-    """Loads and returns the model mapping from .ai-project.yml if present."""
+    """Loads the model mapping and visual_artifacts config from .ai-project.yml if present.
+
+    Validation errors in the visual_artifacts block (ai-project-yml-spec.md §4 rules 19–21)
+    propagate as ValueError; YAML parse failures fall back to defaults with a warning.
+    """
+    result = {"models": DEFAULT_MODELS.copy(), "visual_artifacts": resolve_visual_artifacts(None)}
     if not YML_CONFIG.exists():
-        return {"models": DEFAULT_MODELS}
+        return result
     try:
         with open(YML_CONFIG, 'r') as f:
             data = yaml.safe_load(f)
-            if data and "models" in data:
-                # Merge defaults with custom definitions to support partial configurations
-                merged = DEFAULT_MODELS.copy()
-                merged.update(data["models"])
-                return {"models": merged}
     except Exception as e:
-        print(f"[!] Warning: Failed to parse .ai-project.yml models. Using defaults. Error: {e}", file=sys.stderr)
-    return {"models": DEFAULT_MODELS}
+        print(f"[!] Warning: Failed to parse .ai-project.yml. Using defaults. Error: {e}", file=sys.stderr)
+        return result
+
+    if data and "models" in data:
+        # Merge defaults with custom definitions to support partial configurations
+        merged = DEFAULT_MODELS.copy()
+        merged.update(data["models"])
+        result["models"] = merged
+
+    va = data.get("visual_artifacts") if isinstance(data, dict) else None
+    validate_visual_artifacts(va)  # raises ValueError on invalid value (a §4 validation error)
+    result["visual_artifacts"] = resolve_visual_artifacts(va)
+    return result
 
 def load_json_trigger(file_name):
     path = QUEUE_DIR / file_name
@@ -420,6 +519,51 @@ def main():
                 self.assertEqual(config["models"]["epic_dev"], "custom_dev_model")
                 self.assertEqual(config["models"]["epic_qa"], DEFAULT_MODELS["epic_qa"])
 
+            def test_visual_artifacts_absent_is_disabled(self):
+                # No .ai-project.yml at all ⇒ disabled, no error.
+                config = load_yml_config()
+                self.assertFalse(config["visual_artifacts"]["enabled"])
+
+            def test_visual_artifacts_absent_block_is_disabled(self):
+                # File present but visual_artifacts omitted ⇒ disabled, no error.
+                with open(YML_CONFIG, 'w') as f:
+                    yaml.dump({"models": {"epic_dev": "x"}}, f)
+                config = load_yml_config()
+                self.assertFalse(config["visual_artifacts"]["enabled"])
+
+            def test_visual_artifacts_valid_block(self):
+                with open(YML_CONFIG, 'w') as f:
+                    yaml.dump({"visual_artifacts": {
+                        "enabled": True,
+                        "comfyui_url": "http://localhost:8188",
+                        "types": ["diagrams", "infographics"],
+                    }}, f)
+                config = load_yml_config()
+                va = config["visual_artifacts"]
+                self.assertTrue(va["enabled"])
+                self.assertEqual(va["comfyui_url"], "http://localhost:8188")
+                self.assertEqual(va["types"], ["diagrams", "infographics"])
+
+            def test_visual_artifacts_invalid_enabled(self):
+                with self.assertRaises(ValueError):
+                    validate_visual_artifacts({"enabled": "yes"})
+
+            def test_visual_artifacts_invalid_types_member(self):
+                with self.assertRaises(ValueError):
+                    validate_visual_artifacts({"types": ["diagrams", "bogus"]})
+
+            def test_visual_artifacts_malformed_comfyui_url(self):
+                with self.assertRaises(ValueError):
+                    validate_visual_artifacts({"comfyui_url": "not a url"})
+
+            def test_visual_artifacts_unknown_key_warns_not_errors(self):
+                import io
+                from contextlib import redirect_stderr
+                buf = io.StringIO()
+                with redirect_stderr(buf):
+                    validate_visual_artifacts({"enabled": False, "frame_rate": 30})
+                self.assertIn("Unknown key", buf.getvalue())
+
             def test_load_json_trigger(self):
                 trigger_data = {"epic_id": "test-epic"}
                 trigger_file = QUEUE_DIR / "04_epic.json"
@@ -599,8 +743,12 @@ def main():
     os.makedirs(QUEUE_DIR, exist_ok=True)
     os.makedirs(LOCK_FILE.parent, exist_ok=True)
     
-    # Discovery of project's hybrid models
-    config = load_yml_config()
+    # Discovery of project's hybrid models (and visual_artifacts validation per §4)
+    try:
+        config = load_yml_config()
+    except ValueError as e:
+        print(f"[!] .ai-project.yml validation failed: {e}", file=sys.stderr)
+        sys.exit(1)
     models_config = config.get("models", DEFAULT_MODELS)
     
     # Determine trigger file name from command line arguments
