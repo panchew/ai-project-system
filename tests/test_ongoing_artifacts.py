@@ -257,3 +257,20 @@ class TestCfoReviewGate:
             f".ai-project.yml cfo_review_gate must be enabled|disabled, "
             f"got: {config.get('cfo_review_gate')}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Visual artifacts config layer (Epic P5-M22-E22.1, VA-1)
+# ---------------------------------------------------------------------------
+
+class TestVisualArtifactsRepoConfig:
+    def test_ai_project_yml_carries_visual_artifacts_disabled(self):
+        # This repo opts the capability OFF (keep the suite green without a live endpoint).
+        config = yaml.safe_load(AI_PROJECT_YML.read_text(encoding="utf-8"))
+        va = config.get("visual_artifacts")
+        assert isinstance(va, dict), (
+            f".ai-project.yml must carry a visual_artifacts block, got: {va!r}"
+        )
+        assert va.get("enabled") is False, (
+            f".ai-project.yml visual_artifacts.enabled must be false, got: {va.get('enabled')!r}"
+        )

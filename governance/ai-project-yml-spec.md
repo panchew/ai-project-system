@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.0.0  
+**Version:** 2.1.0  
 **Status:** Active  
-**Effective Date:** 2026-05-21  
-**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9)
+**Effective Date:** 2026-06-28  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22)
 
 ---
 
@@ -57,6 +57,14 @@ models:                  # OPTIONAL. Hybrid model routing maps for autonomous cl
   milestone: <string>    # default: remote:claude-3-5-sonnet
   epic_dev: <string>     # default: local:llama3:8b
   epic_qa: <string>      # default: local:qwen2.5-coder:7b
+
+visual_artifacts:        # OPTIONAL. Opt-in visual-artifact generation. Absent ⇒ disabled. Full spec: M22.
+  enabled: <bool>        # default: false. Opt-in switch for the capability.
+  comfyui_url: <string>  # default: http://localhost:8188. Generative endpoint (well-formed URL when present).
+  types:                 # OPTIONAL. Subset of: diagrams, infographics, video.
+    - diagrams
+    - infographics
+    - video
 ```
 
 ---
@@ -329,6 +337,82 @@ Model configuration values must follow one of these formats:
 
 ---
 
+### 3.5 Optional Fields — `visual_artifacts` (Visual Artifacts)
+
+The `visual_artifacts` block is **optional** and **opt-in**. When the block is **absent**, the
+visual-artifacts capability is **disabled** — exactly as if `enabled: false` were set. This mirrors
+the `cfo_review_gate` / `models` opt-in philosophy: a project must explicitly turn the capability on.
+
+When present, the block declares whether visual artifacts are enabled, where the generative endpoint
+(ComfyUI) lives, and which artifact types are in scope.
+
+| Field | Type | Default | Allowed Values | Constraint | Behavioral Effect |
+|-------|------|---------|----------------|------------|-------------------|
+| `enabled` | Boolean | `false` | `true`, `false` | Must be a YAML boolean when present | Master opt-in switch. `false` (or block absent) ⇒ capability off; `true` ⇒ capability on. |
+| `comfyui_url` | String | `http://localhost:8188` | Any well-formed `http`/`https` URL | Must be a well-formed URL (scheme + host) when present | Declares the ComfyUI generative endpoint. Endpoint availability is the CFO's responsibility; this field only declares where it is configured. |
+| `types` | List of String | `[diagrams, infographics, video]` | Each entry one of: `diagrams`, `infographics`, `video` | Every entry must be an allowed value when present | Selects which artifact types are in scope. `diagrams`: Mermaid/PlantUML structural; `infographics`: ComfyUI-generated imagery; `video`: ComfyUI video (optional). |
+
+#### Field Details
+
+##### `visual_artifacts.enabled`
+
+| Property | Value |
+|----------|-------|
+| Type | Boolean |
+| Required | No |
+| Default | `false` |
+| Allowed Values | `true`, `false` |
+| Constraint | Must be a YAML boolean when present. A non-boolean is a validation error. |
+| Validation Error | `"Invalid visual_artifacts.enabled: '<value>'. Must be a boolean (true or false)."` |
+
+##### `visual_artifacts.comfyui_url`
+
+| Property | Value |
+|----------|-------|
+| Type | String |
+| Required | No |
+| Default | `http://localhost:8188` |
+| Allowed Values | Any well-formed `http`/`https` URL |
+| Constraint | When present, must be a well-formed URL (a parseable `http`/`https` scheme with a host). |
+| Validation Error | `"Invalid visual_artifacts.comfyui_url: '<value>'. Must be a well-formed http(s) URL."` |
+
+##### `visual_artifacts.types`
+
+| Property | Value |
+|----------|-------|
+| Type | List of String |
+| Required | No |
+| Default | `[diagrams, infographics, video]` |
+| Allowed Values | Each entry one of: `diagrams`, `infographics`, `video` |
+| Constraint | When present, every entry must be an allowed value. An entry outside the set is a validation error. |
+| Validation Error | `"Invalid visual_artifacts.types entry: '<value>'. Must be one of: diagrams, infographics, video."` |
+
+#### Unknown `visual_artifacts` Keys
+
+When the `visual_artifacts` block is present, only the three recognized keys (`enabled`,
+`comfyui_url`, `types`) are valid. Unknown keys:
+
+- **MUST produce a validation warning** (not an error) during tooling validation
+- **MUST be ignored** during capability resolution
+- **MUST NOT** affect governance behavior
+
+This forward-compatibility rule (mirroring the `overrides` and `models` blocks) allows future
+versions of the spec to add new `visual_artifacts` fields without breaking existing configurations.
+
+#### Worked Example
+
+```yaml
+visual_artifacts:
+  enabled: false              # opt-in; default false
+  comfyui_url: http://localhost:8188
+  types:
+    - diagrams                # Mermaid/PlantUML structural
+    - infographics            # ComfyUI-generated imagery
+    - video                   # ComfyUI video (optional)
+```
+
+---
+
 ## 4. Validation Rules
 
 A `.ai-project.yml` file is **valid** when all of the following are true:
@@ -360,7 +444,17 @@ When the `models` block is present, the following additional validation rules ap
 16. Unknown keys in the `models` block MUST produce a validation warning
 17. Invalid values or formats in the `models` block MUST produce a validation error
 
-A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, or the file is not valid YAML.
+When the `visual_artifacts` block is present, the following additional validation rules apply:
+
+18. The `visual_artifacts` block must be valid YAML (covered by rule 2)
+19. `visual_artifacts.enabled`, when present, must be a boolean (`true`/`false`)
+20. Each entry in `visual_artifacts.types`, when present, must be one of: `diagrams`, `infographics`, `video`
+21. `visual_artifacts.comfyui_url`, when present, must be a well-formed URL (a parseable `http`/`https` scheme with a host)
+22. Unknown keys in the `visual_artifacts` block MUST produce a validation warning (not an error)
+23. Invalid values in the `visual_artifacts` block MUST produce a validation error
+24. The entire `visual_artifacts` block is optional; an **absent** block is valid and means the capability is **disabled** (no error, no warning)
+
+A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, any `visual_artifacts` value violates rules 19–21, or the file is not valid YAML.
 
 ---
 
@@ -457,9 +551,36 @@ overrides:
 
 ---
 
+## 11. Full Example with Visual Artifacts
+
+```yaml
+# .ai-project.yml
+governance:
+  source: https://github.com/panchew/ai-project-system
+  version: "2.1.0"
+  ref: v2.1.0
+
+project:
+  name: acme-payments
+  description: "Payment processing service for ACME Corp"
+
+visual_artifacts:
+  enabled: true
+  comfyui_url: http://localhost:8188
+  types:
+    - diagrams
+    - infographics
+```
+
+An equivalent project with the `visual_artifacts` block **omitted** (or with `enabled: false`) has
+the capability **disabled** and remains valid.
+
+---
+
 ## Changelog
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.1.0 | 2026-06-28 | Added the optional, opt-in `visual_artifacts` block: Section 3.1 schema reference, new Section 3.5 (field definitions for `enabled`, `comfyui_url`, `types`, unknown-key forward-compatibility, worked example), validation rules 18–24 in Section 4, and a full example in Section 11. Absent block ⇒ capability disabled. (Epic E22.1, P5-M22) |
 | 2.0.0 | 2026-05-21 | Complete override specification: Section 3.3 expanded from stub to full field definitions with types, defaults, allowed values, constraints, behavioral effects, and precedence hierarchy. Added override validation rules to Section 4. (Epic E9.1, P2-M9) |
 | 1.0.0 | 2026-04-20 | Initial specification (Epic E6.3, P2-M6) |
