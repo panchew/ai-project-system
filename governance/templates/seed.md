@@ -60,6 +60,8 @@ The inception stage of this chat has one goal: produce two artifacts together wi
    - Goals (what success looks like, concretely)
    - Non-goals (what this explicitly is not)
    - Success criteria (how the human will know it worked)
+   - Visual success (what the finished thing looks like — its look, feel, or shape: a reference
+     image, a diagram, or a described mood)
    - Constraints (time, technology, team, budget)
    - Open questions (what is still genuinely unknown)
 
@@ -69,6 +71,13 @@ The inception stage of this chat has one goal: produce two artifacts together wi
    - Objectives (from the Project Brief)
    - Constraints (from the Project Brief)
    - Immediate next actions for HQ
+
+Before the Project Brief converges, ask the human **"What does success look like visually?"** — the
+look, feel, or shape of the finished thing (a reference image, a diagram, a mood). Record their
+answer as the Brief's *Visual success* element, or `[PROPOSED — confirm]` a direction per Rule 2;
+if the human has no visual in mind, note that and move on. Visual intent originates here in the
+Creation Chat and propagates down the artifact cascade (see `AI-OPERATING-GUIDELINES.md` §16 —
+Visual Artifact Production).
 
 The human reviews and accepts both. Only then does governance begin.
 
