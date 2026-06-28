@@ -10,6 +10,15 @@ last_updated: 2026-06-13
 
 # Starting a New Project Under the AI Project System
 
+> **Self-referential vs. submodule: how to read this guide**
+>
+> - `governance/` is the **framework SOURCE repo** (this repository) — used when dogfooding the
+>   framework on itself.
+> - `.governance/` is the **submodule path inside a consumer project** — where your governance lives
+>   after `ai-project init`.
+> - In a consumer project, read bare `governance/...` paths below as `.governance/governance/...`.
+>   If your project *is* the framework source, use `governance/...` as written.
+
 ## Purpose
 
 This document defines the **canonical process** for starting a new project governed by the AI Project System.
@@ -34,6 +43,17 @@ only project identity, Phase 1 boundaries, and team composition. It does not pla
 or epics and does not execute work — that begins with the Phase Chat. The full Creation Chat
 role (inputs, authority, outputs, stopping condition) is defined in
 [`chat-hierarchy.md`](chat-hierarchy.md#level-0-creation-chat-project-bootstrap).
+
+---
+
+## Step 0 — Open the Creation Chat
+
+Before anything else, open the **Creation Chat** — the session that produces your first
+`genesis.md`. Paste [`governance/templates/seed.md`](../templates/seed.md) into a Claude session to
+open it (load the Governance Agent first — see the
+[integration guides](../guides/integrations/README.md) for your tool: Claude Code, Cursor, Windsurf,
+or GitHub Copilot). The Creation Chat you open here is the same one you use in **Step 3** to produce
+and commit `genesis.md`.
 
 ---
 

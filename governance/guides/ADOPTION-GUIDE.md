@@ -7,6 +7,15 @@
 > [Legacy Migration Guide](legacy-project-migration.md) instead — it provides
 > workflows for adding governance to existing repositories without disruption.
 
+> **Self-referential vs. submodule: how to read this guide**
+>
+> - `governance/` is the **framework SOURCE repo** (this repository) — used when dogfooding the
+>   framework on itself.
+> - `.governance/` is the **submodule path inside a consumer project** — where your governance lives
+>   after `ai-project init`.
+> - In a consumer project, read bare `governance/...` paths below as `.governance/governance/...`.
+>   If your project *is* the framework source, use `governance/...` as written.
+
 ---
 
 ## Overview
@@ -120,10 +129,10 @@ git clone https://github.com/panchew/ai-project-system /tmp/ai-project-system
 /tmp/ai-project-system/bin/ai-project-init init my-project
 ```
 
-Or reference it after adding the governance submodule:
+Or reference it after adding the governance submodule (the submodule lives at `.governance/`):
 
 ```bash
-./governance/bin/ai-project-init init my-project
+.governance/bin/ai-project-init init my-project
 ```
 
 ### Node.js Version Management
@@ -211,11 +220,11 @@ Expected output (a leading space indicates initialized, `-` indicates uninitiali
 
 The commit SHA should match the governance tag `v4.0.0`.
 
-> **Note on submodule path:** The canonical submodule path is **`.governance/`** — a
-> hidden directory at the project root, following the same convention as `.git/` and
-> `.github/`. The governance source repository itself uses `governance/` (no dot) because
-> it references its own content directly, not via submodule. These are different by design.
-> External projects always use `.governance/`.
+> **Note on submodule path:** As stated in the _Self-referential vs. submodule_ note at the top of
+> this guide, the canonical submodule path is **`.governance/`** — a hidden directory at the project
+> root, following the same convention as `.git/` and `.github/`. The governance source repository
+> itself uses `governance/` (no dot) because it references its own content directly, not via
+> submodule. In a consumer project, always use `.governance/`.
 
 ### Verify Governance Files Are Accessible
 
@@ -256,7 +265,7 @@ Expected output:
 > `.governance/` to see available tags, then check out the latest one and update
 > `.ai-project.yml` to match.
 
-> **Troubleshooting:** If `governance/` is empty, run `git submodule update --init --recursive`. If the version is wrong, see the [FAQ](ADOPTION-FAQ.md#governance-submodule-issues).
+> **Troubleshooting:** If `.governance/` is empty, run `git submodule update --init --recursive`. If the version is wrong, see the [FAQ](ADOPTION-FAQ.md#governance-submodule-issues).
 
 ---
 
@@ -456,10 +465,10 @@ Your HQ Chat is now live and your project is running under the AI Project System
 
 | Resource | Location |
 |----------|----------|
-| Governance Guidelines | `governance/PROJECT-SYSTEM-GUIDELINES.md` |
-| Operating Guidelines | `governance/AI-OPERATING-GUIDELINES.md` |
-| `.ai-project.yml` Spec | `governance/ai-project-yml-spec.md` |
-| Submodule Setup Guide | `governance/submodule-setup.md` |
+| Governance Guidelines | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md` |
+| Operating Guidelines | `.governance/governance/AI-OPERATING-GUIDELINES.md` |
+| `.ai-project.yml` Spec | `.governance/governance/ai-project-yml-spec.md` |
+| Submodule Setup Guide | `.governance/governance/submodule-setup.md` |
 | Troubleshooting FAQ | [ADOPTION-FAQ.md](ADOPTION-FAQ.md) |
 | Legacy Migration Guide | [legacy-project-migration.md](legacy-project-migration.md) |
 | Quick Start (older) | [QUICK-START.md](QUICK-START.md) |
