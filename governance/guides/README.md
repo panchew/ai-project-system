@@ -14,6 +14,7 @@ This directory contains step-by-step guides for using and adopting the AI Projec
 | [FAQ.md](FAQ.md) | General system FAQ — philosophy, architecture, technical questions | All users |
 | [legacy-project-migration.md](legacy-project-migration.md) | Migrating existing projects to adopt the governance framework | Existing project maintainers |
 | [GOVERNANCE-SYNC-GUIDE.md](GOVERNANCE-SYNC-GUIDE.md) | Keeping the governance submodule in sync with upstream releases | All adopters |
+| [visual-artifacts.md](visual-artifacts.md) | Enabling and producing visual artifacts (structural diagrams and generative imagery/video via ComfyUI) | Adopters enabling visuals; tool-capable agents |
 | [integrations/](integrations/README.md) | Per-tool guides for delivering and opening the Governance Agent (Claude Code, Cursor, Windsurf, GitHub Copilot) | Adopters on any AI tool |
 
 ---
