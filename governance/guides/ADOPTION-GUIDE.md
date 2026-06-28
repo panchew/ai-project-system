@@ -7,6 +7,15 @@
 > [Legacy Migration Guide](legacy-project-migration.md) instead — it provides
 > workflows for adding governance to existing repositories without disruption.
 
+> **Self-referential vs. submodule: how to read this guide**
+>
+> - `governance/` is the **framework SOURCE repo** (this repository) — used when dogfooding the
+>   framework on itself.
+> - `.governance/` is the **submodule path inside a consumer project** — where your governance lives
+>   after `ai-project init`.
+> - In a consumer project, read bare `governance/...` paths below as `.governance/governance/...`.
+>   If your project *is* the framework source, use `governance/...` as written.
+
 ---
 
 ## Overview
@@ -120,10 +129,10 @@ git clone https://github.com/panchew/ai-project-system /tmp/ai-project-system
 /tmp/ai-project-system/bin/ai-project-init init my-project
 ```
 
-Or reference it after adding the governance submodule:
+Or reference it after adding the governance submodule (the submodule lives at `.governance/`):
 
 ```bash
-./governance/bin/ai-project-init init my-project
+.governance/bin/ai-project-init init my-project
 ```
 
 ### Node.js Version Management
@@ -170,6 +179,11 @@ Provide the values and confirm. The CLI output will show:
 ✅ Project initialized successfully
 ```
 
+> **Note:** the CLI writes the agent to `.github/agents/` (GitHub Copilot's auto-detection path).
+> The **canonical, tool-neutral** location is `.ai-project/agents/governance.agent.md` — Step 3
+> installs it there and links a guide for your AI tool. `.github/agents/` is one tool's convention,
+> not the framework default.
+
 ### Verification Check
 
 ```bash
@@ -206,11 +220,11 @@ Expected output (a leading space indicates initialized, `-` indicates uninitiali
 
 The commit SHA should match the governance tag `v4.0.0`.
 
-> **Note on submodule path:** The canonical submodule path is **`.governance/`** — a
-> hidden directory at the project root, following the same convention as `.git/` and
-> `.github/`. The governance source repository itself uses `governance/` (no dot) because
-> it references its own content directly, not via submodule. These are different by design.
-> External projects always use `.governance/`.
+> **Note on submodule path:** As stated in the _Self-referential vs. submodule_ note at the top of
+> this guide, the canonical submodule path is **`.governance/`** — a hidden directory at the project
+> root, following the same convention as `.git/` and `.github/`. The governance source repository
+> itself uses `governance/` (no dot) because it references its own content directly, not via
+> submodule. In a consumer project, always use `.governance/`.
 
 ### Verify Governance Files Are Accessible
 
@@ -251,7 +265,7 @@ Expected output:
 > `.governance/` to see available tags, then check out the latest one and update
 > `.ai-project.yml` to match.
 
-> **Troubleshooting:** If `governance/` is empty, run `git submodule update --init --recursive`. If the version is wrong, see the [FAQ](ADOPTION-FAQ.md#governance-submodule-issues).
+> **Troubleshooting:** If `.governance/` is empty, run `git submodule update --init --recursive`. If the version is wrong, see the [FAQ](ADOPTION-FAQ.md#governance-submodule-issues).
 
 ---
 
@@ -259,41 +273,64 @@ Expected output:
 
 **Time:** ~3 minutes
 
-### 3.1 Install the Governance Agent
+### 3.1 Install the Governance Agent (neutral path)
 
-The `ai-project init` command may create an older `hq.agent.md`. Replace it with the unified Governance Agent:
+Install the unified Governance Agent to the canonical, **tool-neutral** path
+`.ai-project/agents/governance.agent.md` (alongside the rest of the `.ai-project/` namespace).
+This is the single source of truth for the agent in your project, independent of which AI tool you
+use:
 
 ```bash
-mkdir -p .github/agents
-cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
-# Remove old separate agent file if present
-rm -f .github/agents/hq.agent.md
+mkdir -p .ai-project/agents
+cp .governance/governance/agents/governance.agent.md .ai-project/agents/governance.agent.md
 ```
 
 Verify the file exists:
 
 ```bash
-cat .github/agents/governance.agent.md
+cat .ai-project/agents/governance.agent.md
 ```
 
 Expected: YAML front-matter and agent definition describing all four modes.
 
 > **Note for governance source repositories:** If your project IS the governance source
 > (e.g., `ai-project-system` itself), governance is at `./governance` locally rather than
-> as a submodule. Use `cp ./governance/agents/governance.agent.md .github/agents/governance.agent.md`
+> as a submodule. Use `cp ./governance/agents/governance.agent.md .ai-project/agents/governance.agent.md`
 > instead of the submodule path.
 
-### 3.2 Register the Agent in Your AI Tool
+> **GitHub Copilot users:** Copilot auto-detects `.github/agents/` and the `ai-project init` CLI
+> already writes a copy there. That tool-specific copy is fine to keep — see the
+> [GitHub Copilot integration guide](integrations/github-copilot.md). It is one tool's convention,
+> not a path other tools require.
 
-- **VS Code + GitHub Copilot:** Detects `.github/agents/*.agent.md` automatically. Select **"hq"** from the agent selector (`Ctrl+Shift+P` → "GitHub Copilot: Select Agent"). The single agent handles all four modes.
-- **Other IDEs / chat tools:** Consult your tool's documentation for registering custom agent instructions. The key requirement is that the tool makes the full contents of the agent file and the governance directory available as context.
-- **Manual / copy-paste:** If your tool does not support agent files, open `governance.agent.md` and copy the entire file contents into a new chat session.
+### 3.2 Open the Agent in Your AI Tool — Pick Your Tool
+
+The Governance Agent is a plain instructions file; any AI tool can load it as context. Follow the
+guide for your tool — each gives the concrete steps to register the agent and open a governance
+chat:
+
+| Tool | Integration guide |
+|------|-------------------|
+| **Claude Code** | [integrations/claude-code.md](integrations/claude-code.md) |
+| **Cursor** | [integrations/cursor.md](integrations/cursor.md) |
+| **Windsurf** | [integrations/windsurf.md](integrations/windsurf.md) |
+| **GitHub Copilot** | [integrations/github-copilot.md](integrations/github-copilot.md) |
+
+See the [integrations index](integrations/README.md) for the full list. All four tools are
+first-class peers — pick the one you use; no GitHub-specific path is required.
+
+> **Manual / copy-paste fallback:** If your tool supports none of the above, open
+> `.ai-project/agents/governance.agent.md` and paste its entire contents into a new chat session.
 
 ### Verification Check
 
 Your AI chat tool is configured with the Governance Agent.
 
-> **Troubleshooting:** If the agent instructions are not available, ensure `.github/agents/governance.agent.md` exists with correct YAML front-matter and that your tool is referencing it. See [FAQ: Governance Agent Not Appearing](ADOPTION-FAQ.md#3-governance-agent-not-appearing).
+> **Troubleshooting:** If the agent instructions are not available, ensure
+> `.ai-project/agents/governance.agent.md` exists with correct YAML front-matter and that your tool
+> is referencing it (per your [tool's integration guide](integrations/README.md)). Copilot-specific
+> agent-detection troubleshooting lives in the
+> [GitHub Copilot guide](integrations/github-copilot.md#troubleshooting).
 
 ---
 
@@ -428,10 +465,10 @@ Your HQ Chat is now live and your project is running under the AI Project System
 
 | Resource | Location |
 |----------|----------|
-| Governance Guidelines | `governance/PROJECT-SYSTEM-GUIDELINES.md` |
-| Operating Guidelines | `governance/AI-OPERATING-GUIDELINES.md` |
-| `.ai-project.yml` Spec | `governance/ai-project-yml-spec.md` |
-| Submodule Setup Guide | `governance/submodule-setup.md` |
+| Governance Guidelines | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md` |
+| Operating Guidelines | `.governance/governance/AI-OPERATING-GUIDELINES.md` |
+| `.ai-project.yml` Spec | `.governance/governance/ai-project-yml-spec.md` |
+| Submodule Setup Guide | `.governance/governance/submodule-setup.md` |
 | Troubleshooting FAQ | [ADOPTION-FAQ.md](ADOPTION-FAQ.md) |
 | Legacy Migration Guide | [legacy-project-migration.md](legacy-project-migration.md) |
 | Quick Start (older) | [QUICK-START.md](QUICK-START.md) |
@@ -454,9 +491,9 @@ git submodule update --init --recursive
 # Verify governance files
 ls .governance/governance/PROJECT-SYSTEM-GUIDELINES.md
 
-# Install Governance Agent manually (if not done by CLI)
-mkdir -p .github/agents
-cp .governance/governance/agents/governance.agent.md .github/agents/governance.agent.md
+# Install Governance Agent manually (neutral path)
+mkdir -p .ai-project/agents
+cp .governance/governance/agents/governance.agent.md .ai-project/agents/governance.agent.md
 ```
 
 ### File Locations
@@ -465,7 +502,8 @@ cp .governance/governance/agents/governance.agent.md .github/agents/governance.a
 |----------|------|
 | Project config | `.ai-project.yml` |
 | Governance submodule | `.governance/` |
-| Governance Agent definition | `.github/agents/governance.agent.md` |
+| Governance Agent definition (canonical, tool-neutral) | `.ai-project/agents/governance.agent.md` |
+| Governance Agent definition (GitHub Copilot auto-detection copy) | `.github/agents/governance.agent.md` |
 | Governance guidelines | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md` |
 | Operating guidelines | `.governance/governance/AI-OPERATING-GUIDELINES.md` |
 | CLI script (local) | `.governance/bin/ai-project-init` |
