@@ -172,20 +172,43 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ---
 
-## Upcoming
+## In Progress
 
-### P6 – ComfyUI Integration & Process Refinements *(Pre-scoping)*
+### P6 – Visual Comprehension Layer & Process Refinements *(Active)*
 
-**Goal**: Wire up the visual artifacts capability end-to-end so agents can actually produce visuals, and close the governance process gaps surfaced during P5 execution.
+**Goal**: Build the consumer architecture that turns the governance flow into a continuous
+visual narrative — explaining the *proposed solution* and the *actual implementation* at
+every level so the CFO can follow along with low cognitive load. Reverse the v5.0.0
+binary-storage model to by-link, define the link + metadata binding convention, make
+proposed-vs-implemented coverage routine, and define clips as single-parent documentation
+that doubles as publishable media. Plus close the three P5 process carry-forwards.
 
-**Status**: Candidates identified — scoping via Creation Chat before phase spec is opened.
+**Status**: Active — opened 2026-06-29. Scoped via Creation Chat (SN-15 + SN-16); producer
+(ComfyUI) and helper (`bin/ai-project-visual`) are done and verified, so P6 is the
+governance/comprehension layer above them, not plumbing. See
+[`docs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6__phase-spec.md`](../phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6__phase-spec.md).
 
-**Registered Candidates**:
+**Milestones**:
 
-| ID | Title | Priority |
-|----|-------|----------|
-| P6-GH-12 | Phase closure canonical sequence — README update, version bump, and tag must be mandatory steps in the phase closure process (same pattern as Epic happy path); currently requires a Steering Note instead of being automatic | High |
-| P6-GH-13 | ComfyUI working integration — define a ComfyUI workflow for visual artifact generation, wire the API call into the agent execution layer, and validate end-to-end visual output in this project and adopting projects | High |
+| Milestone | Name | Scope |
+|-----------|------|-------|
+| **M23** | By-Link Storage Model & Binding Convention | P6-VC-1 (by-link reversal), P6-VC-2 (binding + metadata) |
+| **M24** | Comprehension Behavior & Clips | P6-VC-3 (proposed-vs-implemented), P6-VC-4 (clips) |
+| **M25** | Process Refinements | P6-GH-12, P6-GH-10, P6-GH-11 |
+
+**Candidate Pool** *(single consolidated registry — folds GH-10/11 from the P5 Closure
+Declaration and GH-12/13 from earlier roadmap drafts)*:
+
+| ID | Title | Priority | Disposition |
+|----|-------|----------|-------------|
+| P6-VC-1 | By-link storage reconciliation — reverse the v5.0.0 commit-the-binary model; reconcile guide §4/§1, AOG §16.5, helper output guidance, and the integration test to by-link (explicit, named deliverable) | Highest | M23 |
+| P6-VC-2 | Link + metadata binding convention — link carries what / level / proposed-vs-implemented / short description; load-bearing under by-link | High | M23 |
+| P6-VC-3 | Proposed-vs-implemented comprehension behavior — routine two-track coverage at every level ("nothing is too much"), Structural-first | High | M24 |
+| P6-VC-4 | Clips as documentation + publishable media — single-parent binding, verified LTX-Video path, publish path as same asset reused | High | M24 |
+| P6-GH-12 | Phase-closure canonical sequence — README update, version bump, and tag as mandatory automatic steps (today needs a Steering Note) | High | M25 |
+| P6-GH-13 | ComfyUI working integration | High | **Subsumed** — producer + helper delivered and verified (SN-16); the real work is the consumer/comprehension layer (P6-VC-1…4) |
+| P6-GH-10 | Formally codify SN-13 default-accept model into AOG, PSG, and Starter templates | Medium | M25 |
+| P6-GH-11 | Align `bin/ai-project-init` to write `.ai-project/agents/` (not `.github/agents/`) | Low | M25 |
 
 ---
 
@@ -201,10 +224,11 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Current Focus
 
-All phases (P1–P5) are **completed and consolidated to master** at **v5.0.0**.
+Phases P1–P5 are **completed and consolidated to master** at **v5.0.0**.
 
-**P6** is in pre-scoping — candidates are registered above. The phase spec will open
-after a Creation Chat session establishes the theme and priorities.
+**P6 — Visual Comprehension Layer & Process Refinements is active** (opened 2026-06-29).
+The phase spec is open and `phase/P6` is branched; the Phase Chat is planning Milestones
+M23–M25.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
@@ -212,3 +236,4 @@ See individual phase directories for detailed specs:
 - [`docs/phases/P3__Agentic_Execution_Model_Maturity/`](../phases/P3__Agentic_Execution_Model_Maturity/)
 - [`docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/`](../phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/)
 - [`docs/phases/P5__Process_Hardening_and_Visual_Artifacts/`](../phases/P5__Process_Hardening_and_Visual_Artifacts/)
+- [`docs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/`](../phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/)
