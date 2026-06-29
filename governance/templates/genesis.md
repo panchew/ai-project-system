@@ -66,6 +66,9 @@ status: draft
 - **Governance path:** `.governance/` (sourced as a submodule; see start-a-project.md)
 - **Phase 1 scope summary:** <One or two sentences naming what Phase 1 will and will not cover.>
 - **Key constraints:** <Hard limits: deadlines, tech mandates, compliance, budget, exclusions.>
+- **Architecture visual:** <optional — hosted link to the HQ system-architecture visual>
+  <!-- Record as a visual binding (link + What/Level/State/Description) per
+       governance/guides/visual-artifacts.md §7. Bind a link, never a committed path. Omit if none. -->
 
 ## Phase 1 Scope
 
