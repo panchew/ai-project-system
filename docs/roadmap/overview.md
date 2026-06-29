@@ -184,8 +184,8 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 | ID | Title | Priority |
 |----|-------|----------|
-| P6-GH-1 | Phase closure canonical sequence — README update, version bump, and tag must be mandatory steps in the phase closure process (same pattern as Epic happy path); currently requires a Steering Note instead of being automatic | High |
-| P6-GH-2 | ComfyUI working integration — define a ComfyUI workflow for visual artifact generation, wire the API call into the agent execution layer, and validate end-to-end visual output in this project and adopting projects | High |
+| P6-GH-12 | Phase closure canonical sequence — README update, version bump, and tag must be mandatory steps in the phase closure process (same pattern as Epic happy path); currently requires a Steering Note instead of being automatic | High |
+| P6-GH-13 | ComfyUI working integration — define a ComfyUI workflow for visual artifact generation, wire the API call into the agent execution layer, and validate end-to-end visual output in this project and adopting projects | High |
 
 ---
 
