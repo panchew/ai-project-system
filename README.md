@@ -6,9 +6,9 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — v4.0.0
+## 🎉 All Phases Complete — v5.0.0
 
-**The AI Project System was built using its own governance.** All four phases (P1–P4) are complete and consolidated to `master` at **v4.0.0** with 226/226 tests passing.
+**The AI Project System was built using its own governance.** All five phases (P1–P5) are complete and consolidated to `master` at **v5.0.0** with 226/226 tests passing.
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -44,6 +44,17 @@ above HQ — the founder's office.
 | **M19** — Creation Chat Completion & Bugfix Workflow | Ongoing governance artifacts + expedited bugfix path | Steering Note, Progress Digest, Bouncer Work Log, re-instantiation ritual, CFO PR review gate |
 
 **P4 highlights:** artifact-driven communication · Creation Chat institution (Level 0) · CFO PR review gate · explicit team roles · expedited Bugfix Workflow with 4-hour SLA · 226/226 tests.
+
+### Phase P5 — Process Hardening & Visual Artifacts (Complete)
+Hardened the governance process, tightened the communication model, and laid the foundation for visual artifact delivery.
+
+| Milestone | Focus | Key Deliverables |
+|-----------|-------|------------------|
+| **M20** — Governance Process Hardening | Close P4 execution gaps | Git-tracking verification, working-tree isolation, scope routing protocol, artifact scope adjacency (GH-8), hierarchical communication / spec-as-channel (GH-9) |
+| **M21** — Adoption Clarity & Platform Agnosticism | Remove adoption blockers | `governance/` vs `.governance/` clarity, platform-agnostic agent delivery (Claude Code, Cursor, Windsurf alongside Copilot) |
+| **M22** — Visual Artifacts | Framework layer for visuals | `visual_artifacts` spec in `.ai-project.yml`, visual intent cascade through artifact hierarchy, Mermaid/PlantUML + ComfyUI integration guidelines |
+
+**P5 highlights:** default-accept delivery model (SN-13) · Phase/Milestone Execution Chat role definitions (AOG v2.1.0) · artifact scope adjacency rule · hierarchical communication protocol · visual artifacts framework spec.
 
 👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
 👉 **[Get started with P4 (team mode)](docs/team-collaboration/P4-governance-system-guide.md)** · **[Run the example](examples/team-project-example/README.md)**
@@ -541,13 +552,13 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2 + P3 + P4)
-✅ **59 Epics** delivered across **19 milestones** over **4 phases**
+### Totals (P1 + P2 + P3 + P4 + P5)
+✅ **68 Epics** delivered across **22 milestones** over **5 phases**
 
 ### Governance
-- PROJECT-SYSTEM-GUIDELINES.md v2.0.0 (effective 2026-05-22)
-- AI-OPERATING-GUIDELINES.md v2.0.0 (effective 2026-04-20)
-- Framework version: v4.0.0
+- PROJECT-SYSTEM-GUIDELINES.md v2.1.0 (effective 2026-06-23)
+- AI-OPERATING-GUIDELINES.md v2.1.0 (effective 2026-06-23)
+- Framework version: v5.0.0
 
 ---
 
@@ -596,10 +607,11 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P2 Complete** — Adoption Architecture & Multi-Project Support (5 milestones, 23 Epics)
 - ✅ **Phase P3 Complete** — Agentic Execution Model Maturity (3 milestones, 12 Epics)
 - ✅ **Phase P4 Complete** — Team Collaboration & Artifact-Driven Communication (6 milestones, 12 Epics)
-- ✅ **59 total Epics** delivered across 19 milestones, 4 phases
+- ✅ **Phase P5 Complete** — Process Hardening & Visual Artifacts (3 milestones, 9 Epics)
+- ✅ **68 total Epics** delivered across 22 milestones, 5 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
-- ✅ **Governance stable** — v4.0.0 (effective 2026-05-22)
+- ✅ **Governance stable** — v5.0.0 (effective 2026-06-28)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
@@ -612,7 +624,8 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 
 **What's Next (Future Phases):**
 - **P4 — Team Collaboration & Artifact-Driven Communication** — Complete. See the [P4 Governance System Guide](docs/team-collaboration/P4-governance-system-guide.md).
-- **P5** — Planned candidate. Direction TBD.
+- **P5 — Process Hardening & Visual Artifacts** — Complete. Governance hardened, visual artifacts framework in place.
+- **P6** — Candidates in pre-scoping. Expected focus: ComfyUI workflow implementation, phase closure canonical sequence, and delivery model refinements surfaced during P5 execution.
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively
