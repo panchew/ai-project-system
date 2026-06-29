@@ -142,11 +142,41 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ---
 
+### P5 – Process Hardening & Visual Artifacts *(Completed)*
+
+**Goal**: Harden the governance process model, close communication gaps surfaced during P4 execution, and lay the framework foundation for visual artifact delivery.
+
+**Status**: Completed (Consolidated to master 2026-06-28 — **v5.0.0**, 259/259 tests passing)
+
+**Milestone Status**:
+
+| Milestone | Name | Status | Completed |
+|-----------|------|--------|-----------|
+| **M20** | Governance Process Hardening | ✅ Complete | 2026-06-28 |
+| **M21** | Adoption Clarity & Platform Agnosticism | ✅ Complete | 2026-06-28 |
+| **M22** | Visual Artifacts | ✅ Complete | 2026-06-28 |
+
+**Key Deliverables**:
+- ✅ Git-tracking verification in starters (`git ls-files --error-unmatch`) — closes false-green "committed" gap (GH-1)
+- ✅ Working-tree isolation convention for concurrent chats (GH-2)
+- ✅ Scope routing rule — CFO direction flows through artifact cascade (GH-3)
+- ✅ Platform agnosticism — governance delivery decoupled from `.github/agents/` (GH-5)
+- ✅ Documentation clarity — `governance/` vs `.governance/` distinction explicit in adoption guides (GH-6)
+- ✅ Phase/Milestone/Creation Chat roles defined in AOG §3.5–§3.7 and PSG §13A–§13B (GH-7, fixed early in v4.0.1)
+- ✅ Artifact scope adjacency rule — chats produce artifacts for direct parent or direct children only (GH-8, SN-12a)
+- ✅ Hierarchical communication protocol — escalations up one level; directives down via spec amendment (GH-9, SN-12b)
+- ✅ Default-accept delivery model — parent auto-accepts clean deliveries; Review Decision is exception path only (SN-13)
+- ✅ `visual_artifacts` spec in `.ai-project.yml` — opt-in toggle, ComfyUI URL, artifact type list (VA-1)
+- ✅ Visual intent cascade — visual expectations propagate through Phase → Milestone → Epic artifact hierarchy
+- ✅ Mermaid/PlantUML and ComfyUI integration guidelines in AOG and templates
+
+---
+
 ## Upcoming
 
-### P5 – Governance Hardening & Platform Agnosticism *(Planned)*
+### P6 – ComfyUI Integration & Process Refinements *(Pre-scoping)*
 
-**Goal**: Address process gaps surfaced during P4 execution and decouple the governance framework from GitHub/Copilot-specific conventions.
+**Goal**: Wire up the visual artifacts capability end-to-end so agents can actually produce visuals, and close the governance process gaps surfaced during P5 execution.
 
 **Status**: Candidates identified — scoping via Creation Chat before phase spec is opened.
 
@@ -154,17 +184,8 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 | ID | Title | Priority |
 |----|-------|----------|
-| P5-GH-1 | Prerequisite git-tracking verification in starters (false-green "✅ committed") | Medium |
-| P5-GH-2 | Working-tree isolation convention for concurrent chats | High |
-| P5-GH-3 | Scope routing rule — CFO direction must flow through artifact cascade | Medium |
-| P5-GH-4 | Add Creation Chat session opener step to `start-a-project.md` | Low |
-| P5-GH-5 | Platform agnosticism — decouple `.github/agents/` path from governance delivery | Medium |
-| P5-GH-6 | Documentation clarity — `governance/` vs `.governance/` distinction not surfaced upfront in sync and adoption guides | Medium-High |
-| ~~P5-GH-7~~ | ~~Core guideline docs don't define Phase/Milestone/Creation Chat roles~~ | **Fixed in v4.0.1** |
-| P5-GH-8 | Artifact scope adjacency — chats must not produce artifacts for non-adjacent levels; Phase Chat producing Epic starters bypasses Milestone Chat and collapses a review gate | Medium |
-| P5-GH-9 | Hierarchical communication — escalations travel up one level at a time; directives travel down via spec file amendment; spec file is both planning artifact and live contract | Medium |
-| — | README/roadmap staleness (P4 now shown as complete — this update) | Done |
-| — | CFO Dashboard | Deferred by design |
+| P6-GH-1 | Phase closure canonical sequence — README update, version bump, and tag must be mandatory steps in the phase closure process (same pattern as Epic happy path); currently requires a Steering Note instead of being automatic | High |
+| P6-GH-2 | ComfyUI working integration — define a ComfyUI workflow for visual artifact generation, wire the API call into the agent execution layer, and validate end-to-end visual output in this project and adopting projects | High |
 
 ---
 
@@ -180,9 +201,9 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ## Current Focus
 
-All phases (P1–P4) are **completed and consolidated to master** at **v4.0.0**.
+All phases (P1–P5) are **completed and consolidated to master** at **v5.0.0**.
 
-**P5** is in pre-scoping — candidates are registered above. The phase spec will open
+**P6** is in pre-scoping — candidates are registered above. The phase spec will open
 after a Creation Chat session establishes the theme and priorities.
 
 See individual phase directories for detailed specs:
@@ -190,3 +211,4 @@ See individual phase directories for detailed specs:
 - [`docs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/`](../phases/P2__Adoption_Architecture_and_Multi_Project_Support/)
 - [`docs/phases/P3__Agentic_Execution_Model_Maturity/`](../phases/P3__Agentic_Execution_Model_Maturity/)
 - [`docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/`](../phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/)
+- [`docs/phases/P5__Process_Hardening_and_Visual_Artifacts/`](../phases/P5__Process_Hardening_and_Visual_Artifacts/)
