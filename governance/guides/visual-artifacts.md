@@ -40,8 +40,9 @@ The full schema, defaults, and validation rules live in
 — `bin/ai-project-orchestrator`'s `load_yml_config()` / `resolve_visual_artifacts()` — so the helper,
 the orchestrator, and the tests never disagree about the effective config.
 
-> The governance **source** repository keeps `enabled: false`. It ships the guidance, the helper, and
-> the test — not generated output — and its test suite stays green without a live endpoint.
+> **No** project commits generated binaries — the governance **source** repository's `enabled: false`
+> is one instance of that universal rule. It ships the guidance, the helper, and the test — not
+> generated output — and its test suite stays green without a live endpoint.
 
 ---
 
@@ -95,7 +96,7 @@ ai-project-visual --prompt "<text>" --type <type> --output <path> [--workflow gr
 |------|---------|
 | `--prompt` (required) | Natural-language prompt for the visual. |
 | `--type` (required) | One of the configured `visual_artifacts.types`. |
-| `--output` (required) | Where to write the generated artifact (parent dirs are created). |
+| `--output` (required) | Local working file to write the artifact to, then host and link — not a committed path (parent dirs are created). |
 | `--workflow` | A ComfyUI **API-format** workflow JSON. Required for non-image types (e.g. `video`). The literal token `%prompt%` in the file is replaced with `--prompt`. |
 | `--checkpoint` | Checkpoint name for the built-in text-to-image workflow (must exist on the server). |
 | `--width` / `--height` / `--seed` | Built-in-workflow image dimensions and sampler seed. |
@@ -104,10 +105,11 @@ ai-project-visual --prompt "<text>" --type <type> --output <path> [--workflow gr
 Run it from the project root (it reads that project's `.ai-project.yml`):
 
 ```bash
+# --output is a local working file — host it on your storage backend and link it; do not commit it.
 ai-project-visual \
   --prompt "isometric system architecture diagram, clean, labelled services" \
   --type diagrams \
-  --output .ai-project/visuals/hq/architecture.png
+  --output ./architecture.png
 ```
 
 When no `--workflow` is given, the helper submits a standard text-to-image graph (CheckpointLoader →
@@ -136,15 +138,11 @@ Each failure prints a one-line, actionable message to stderr.
 | Generative — image | `.png` (default ComfyUI `SaveImage`) | `/view?type=output` |
 | Generative — video | `.webp` / `.mp4` / `.gif` per your workflow | `/view` (gifs/videos output) |
 
-Commit generated artifacts under the consuming project's `.ai-project/` namespace and reference them
-from the governing artifact by relative path:
-
-```
-.ai-project/visuals/<level>/<artifact-id>.<ext>
-```
-
-Commit the generated file **together with** the artifact that references it, so the visual travels
-with its decision record.
+Generated artifacts are **referenced by link, never committed to git.** The helper writes a local
+working file; host it on your storage backend — the **adopter owns the storage backend** — and
+reference it by link from the governing artifact, so the **link**, not the binary, travels with the
+decision record. Where generated binaries live is the adopting team's decision; the framework is
+infrastructure-agnostic about storage just as it is about endpoints.
 
 ---
 
@@ -154,6 +152,9 @@ Each chat level produces the visual appropriate to its altitude (the SN-11 abstr
 produces the visual for **its own** level — it does not reach up or down the cascade. Visual intent
 originates at the Creation Chat (elicited via `seed.md` Rule 4) and propagates downward.
 
+In the generative examples below, `--output` names a **local working file**: host it on your storage
+backend and reference it by link from the governing artifact — it is not committed to git.
+
 ### Creation Chat — concept / vision imagery
 
 > *Generative.* Capture the look and feel of the finished product.
@@ -162,7 +163,7 @@ originates at the Creation Chat (elicited via `seed.md` Rule 4) and propagates d
 ai-project-visual \
   --prompt "warm, approachable mobile budgeting app hero image, soft gradients, friendly" \
   --type infographics \
-  --output .ai-project/visuals/creation/vision.png
+  --output ./vision.png
 ```
 
 ### HQ Chat — system architecture
@@ -212,7 +213,7 @@ sequenceDiagram
 ai-project-visual \
   --prompt "clean settings screen mockup, toggle list, light theme, mobile" \
   --type diagrams \
-  --output .ai-project/visuals/epic/E12.3-settings-mockup.png
+  --output ./E12.3-settings-mockup.png
 ```
 
 ---
@@ -232,6 +233,14 @@ the endpoint test run.
 | Document | Purpose |
 |----------|---------|
 | [`../ai-project-yml-spec.md`](../ai-project-yml-spec.md) §3.5 | The `visual_artifacts` config block (schema + validation) |
-| [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §16 | Operating policy: per-level abstraction, modes, gating, commit guidance |
+| [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §16 | Operating policy: per-level abstraction, modes, gating, by-link storage guidance |
 | [`../templates/seed.md`](../templates/seed.md) | Rule 4 — visual-intent elicitation at inception |
 | [`../../bin/ai-project-visual`](../../bin/ai-project-visual) | The ComfyUI helper |
+
+---
+
+## Changelog
+
+| Date | Change |
+|------|--------|
+| 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Reversed the commit-the-binary storage model to **by-link**: generated artifacts are referenced by link and **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend (the adopter owns the storage backend) and links from the governing artifact. Updated §1 (source-repo note generalized — no project commits generated binaries), §3 and §5 (`--output` examples now name local working files), §4 prose, and the §16 related-documents row. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |

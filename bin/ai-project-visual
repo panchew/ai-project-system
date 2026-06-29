@@ -11,8 +11,9 @@ the rest of the system — ``bin/ai-project-orchestrator``'s ``load_yml_config``
 Scope (Milestone Non-Goal): one prompt -> one artifact. No queue, no batch, no UI.
 
 Usage:
+    # --output is a LOCAL WORKING FILE to host and link, not a committed path:
     ai-project-visual --prompt "system architecture, isometric" --type diagrams \\
-        --output .ai-project/visuals/hq/architecture.png
+        --output ./architecture.png
 
     # custom graph (required for video / any non-default workflow); the prompt text is
     # substituted wherever the placeholder %prompt% appears in the workflow JSON:
@@ -179,7 +180,9 @@ def parse_args(argv):
     parser.add_argument("--prompt", required=True, help="Natural-language prompt for the visual.")
     parser.add_argument("--type", required=True, dest="vtype",
                         help="Visual type; must be one of the configured visual_artifacts.types.")
-    parser.add_argument("--output", required=True, help="Path to write the generated artifact.")
+    parser.add_argument("--output", required=True,
+                        help="Local working file to write the artifact to, then host and link "
+                             "(not a committed path).")
     parser.add_argument("--workflow", help="Optional ComfyUI API-format workflow JSON "
                                            "(required for non-image types such as video). "
                                            "The literal token '%%prompt%%' in the file is replaced with --prompt.")
