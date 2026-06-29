@@ -75,9 +75,12 @@ The inception stage of this chat has one goal: produce two artifacts together wi
 Before the Project Brief converges, ask the human **"What does success look like visually?"** — the
 look, feel, or shape of the finished thing (a reference image, a diagram, a mood). Record their
 answer as the Brief's *Visual success* element, or `[PROPOSED — confirm]` a direction per Rule 2;
-if the human has no visual in mind, note that and move on. Visual intent originates here in the
-Creation Chat and propagates down the artifact cascade (see `AI-OPERATING-GUIDELINES.md` §16 —
-Visual Artifact Production).
+if the human has no visual in mind, note that and move on. When a concrete visual exists or is
+generated (a reference image or hosted mockup), record it on the *Visual success* element as a
+**visual binding** — its link plus metadata (`What` / `Level` / `State` / `Description`) — following
+the schema in `governance/guides/visual-artifacts.md` §7. Bind a hosted **link**, never a committed
+file. Visual intent originates here in the Creation Chat and propagates down the artifact cascade
+(see `AI-OPERATING-GUIDELINES.md` §16 — Visual Artifact Production).
 
 The human reviews and accepts both. Only then does governance begin.
 
