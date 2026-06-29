@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.2.0  
-**Effective Date:** 2026-06-28  
+**Version:** 2.3.0  
+**Effective Date:** 2026-06-29  
 **Status:** Current  
 
 ---
@@ -902,12 +902,14 @@ fabricating a result.
 
 - **Structural** diagrams live inline in the governing artifact (spec, brief, guide) or as a sibling
   `.mmd` / `.puml` file next to it.
-- **Generated** artifacts are written under the consuming project's `.ai-project/` namespace —
-  `.ai-project/visuals/<level>/<artifact-id>.<ext>` — and referenced from the governing artifact by
-  relative path. Commit the generated file together with the artifact that references it, so the
-  visual travels with its decision record.
-- The governance **source** repo keeps `visual_artifacts.enabled: false`; it ships the guidance, the
-  helper, and the test — not generated output.
+- **Generated** artifacts are **referenced by link, never committed to git.** The helper writes a
+  local working file; the agent hosts it on the **adopter's storage backend** and references it by
+  link from the governing artifact, so the **link** — not the binary — travels with the decision
+  record. Where generated binaries live is the adopting team's decision: the framework is
+  infrastructure-agnostic about storage just as it is about endpoints and agents.
+- **No** project commits generated binaries — the governance **source** repo's
+  `visual_artifacts.enabled: false` is one instance of that universal rule. The source repo ships the
+  guidance, the helper, and the test — not generated output.
 
 See `governance/guides/visual-artifacts.md` for endpoint configuration, structural-diagram tooling,
 output formats, and a worked example per chat level.
@@ -927,6 +929,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.3.0 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Rewrote §16.5 to the **by-link** storage model: generated visual artifacts are **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend and references by link from the governing artifact (the link, not the binary, travels with the decision record). Generalized the source-repo bullet so that *no* project commits generated binaries — `enabled: false` is one instance of that universal rule. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
 | 2.2.0 | 2026-06-28 | Added §16 "Visual Artifact Production": per-level abstraction table (SN-11), structural vs. generative modes, tool-capability gating, and commit guidance — opt-in on `visual_artifacts.enabled` (ai-project-yml-spec.md §3.5). Part of E22.2 (P5-M22), which completes VA-1 with `seed.md` Rule 4 visual-intent elicitation, the `bin/ai-project-visual` helper, `governance/guides/visual-artifacts.md`, and a skip-on-disabled integration test. |
 | 2.1.0 | 2026-06-23 | Added §3.5–3.7 definitions for Creation Chat, Phase Chat, and Milestone Chat. Added chat hierarchy table to §3 intro. Updated Purpose to name all five chat types. Fixes P5-GH-7: Phase/Milestone chat roles introduced in P4 were absent from this document, causing HQ Chat to use Epic-level rules when producing Phase/Milestone starters. |
 | 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated template path references. |
