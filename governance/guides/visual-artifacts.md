@@ -152,12 +152,25 @@ Each chat level produces the visual appropriate to its altitude (the SN-11 abstr
 produces the visual for **its own** level — it does not reach up or down the cascade. Visual intent
 originates at the Creation Chat (elicited via `seed.md` Rule 4) and propagates downward.
 
+Per **AOG §16.6**, when the capability is enabled each level produces **both** a *proposed* visual
+(the intent, before build) and an *implemented* visual (what was built, after). Every example below
+shows that pair, and each is recorded as a **§7 binding** distinguished by its `State` field —
+`proposed` or `implemented`. The binding schema is documented once in §7; these examples *use* it,
+they do not restate it. A pair is the **same block in two states** — it differs by `State` (and,
+where the medium changes from mockup to screenshot, by `What`). Most pairs are two cheap Structural
+diagrams (Mermaid / PlantUML); only Creation and Epic reach for Generative, where a render
+communicates better — that Structural-first economy is what keeps "nothing is too much" affordable.
+
 In the generative examples below, `--output` names a **local working file**: host it on your storage
-backend and reference it by link from the governing artifact — it is not committed to git.
+backend and bind it by **link** — it is not committed to git. Structural diagrams live inline (free);
+their binding `Link` is a hosted permalink to the committed diagram, never a local path.
 
 ### Creation Chat — concept / vision imagery
 
-> *Generative.* Capture the look and feel of the finished product.
+> *Generative.* Capture the look and feel of the finished product — proposed before build, implemented
+> from the shipped UI.
+
+**Proposed** — the intended look and feel, before anything is built:
 
 ```bash
 ai-project-visual \
@@ -166,9 +179,27 @@ ai-project-visual \
   --output ./vision.png
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/creation/vision-proposed.png
+- **What:** image
+- **Level:** Creation
+- **State:** proposed
+- **Description:** Concept render of the budgeting app's intended warm, approachable feel.
+
+**Implemented** — a render captured from the shipped product:
+
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/creation/vision-implemented.png
+- **What:** image
+- **Level:** Creation
+- **State:** implemented
+- **Description:** Hero screenshot of the shipped app — soft gradients delivered as proposed.
+
 ### HQ Chat — system architecture
 
-> *Structural* for the canonical diagram; *generative* when a polished render is wanted.
+> *Structural.* Two text diagrams — the target architecture, then the one actually built.
+
+**Proposed** — the intended architecture:
 
 ```mermaid
 flowchart TB
@@ -178,9 +209,36 @@ flowchart TB
     Core --> DB[(Database)]
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/hq-architecture.md#proposed
+- **What:** diagram
+- **Level:** HQ
+- **State:** proposed
+- **Description:** Target architecture — a gateway fronting auth + core over one database.
+
+**Implemented** — the architecture as built (a cache was added under load):
+
+```mermaid
+flowchart TB
+    Client --> API[API Gateway]
+    API --> Auth[Auth Service]
+    API --> Core[Core Service]
+    Core --> Cache[(Cache)]
+    Core --> DB[(Database)]
+```
+
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/hq-architecture.md#implemented
+- **What:** diagram
+- **Level:** HQ
+- **State:** implemented
+- **Description:** Shipped architecture — a cache was added between core and the database.
+
 ### Phase Chat — phase scope diagram
 
-> *Structural.* Show what is in and out of the phase.
+> *Structural.* What was planned in/out of the phase, then what actually landed.
+
+**Proposed** — intended scope:
 
 ```mermaid
 flowchart LR
@@ -192,9 +250,37 @@ flowchart LR
     end
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/phase2-spec.md#scope-proposed
+- **What:** diagram
+- **Level:** Phase
+- **State:** proposed
+- **Description:** Phase 2 planned scope — ingestion + normalization in, reporting out.
+
+**Implemented** — scope as delivered (reporting pulled in, validation deferred):
+
+```mermaid
+flowchart LR
+    subgraph Delivered
+        A[Ingestion] --> B[Normalization] --> C[Reporting]
+    end
+    subgraph Deferred
+        D[Validation]
+    end
+```
+
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/phase2-spec.md#scope-implemented
+- **What:** diagram
+- **Level:** Phase
+- **State:** implemented
+- **Description:** Phase 2 as delivered — reporting landed; validation deferred to phase 3.
+
 ### Milestone Chat — component + flow diagrams
 
-> *Structural.* Components and the flow between them.
+> *Structural.* The intended flow, then the flow as built.
+
+**Proposed** — intended request flow:
 
 ```mermaid
 sequenceDiagram
@@ -205,9 +291,37 @@ sequenceDiagram
     API-->>UI: 201 Created
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/m4-spec.md#flow-proposed
+- **What:** diagram
+- **Level:** Milestone
+- **State:** proposed
+- **Description:** Planned record-creation flow — UI to API to DB, 201 on success.
+
+**Implemented** — flow as built (a validation step was added before insert):
+
+```mermaid
+sequenceDiagram
+    User->>UI: submit form
+    UI->>API: POST /record
+    API->>API: validate
+    API->>DB: insert
+    DB-->>API: ok
+    API-->>UI: 201 Created
+```
+
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/m4-spec.md#flow-implemented
+- **What:** diagram
+- **Level:** Milestone
+- **State:** implemented
+- **Description:** Built flow — a server-side validation step was added before insert.
+
 ### Epic Chat — UI mockups, before/after, implementation diagrams
 
-> *Generative* for a mockup; *structural* for an implementation diagram.
+> *Generative.* A mockup of the intended screen, then the screen as shipped.
+
+**Proposed** — a mockup of the intended screen, before build:
 
 ```bash
 ai-project-visual \
@@ -215,6 +329,22 @@ ai-project-visual \
   --type diagrams \
   --output ./E12.3-settings-mockup.png
 ```
+
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/epic/E12.3-settings-proposed.png
+- **What:** mockup
+- **Level:** Epic
+- **State:** proposed
+- **Description:** Proposed settings screen — toggle list, light theme, mobile.
+
+**Implemented** — a screenshot of the built screen:
+
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/epic/E12.3-settings-implemented.png
+- **What:** image
+- **Level:** Epic
+- **State:** implemented
+- **Description:** Shipped settings screen — toggle list as proposed; a search field was added.
 
 ---
 
@@ -300,5 +430,6 @@ references it rather than restating it.
 
 | Date | Change |
 |------|--------|
+| 2026-06-29 | **Proposed/implemented per-level examples (two-track behavior).** Extended §5 so every level (Creation / HQ / Phase / Milestone / Epic) shows a **proposed** and an **implemented** worked example, each recorded as a **§7 binding** distinguished by its `State` field — the same block in two states, not a second schema. Most pairs are two cheap Structural diagrams; Creation and Epic show a Generative pair where a render communicates better (Structural-first economy). The §7 binding schema and by-link (§4) are referenced, **not** restated or changed. Implements the AOG §16.6 two-track default. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Reversed the commit-the-binary storage model to **by-link**: generated artifacts are referenced by link and **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend (the adopter owns the storage backend) and links from the governing artifact. Updated §1 (source-repo note generalized — no project commits generated binaries), §3 and §5 (`--output` examples now name local working files), §4 prose, and the §16 related-documents row. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
 | 2026-06-29 | **Binding convention added (by-link survivability).** Added §7 "Binding a visual to an artifact": a five-element **binding schema** (link + What / Level / State / Description) that records a hosted **link, never a committed path**, and a **per-level placement convention** (Creation → `seed.md` Rule 4 *Visual success*; HQ → `genesis.md` HQ Context Packet; Phase / Milestone / Epic → a "Visual Bindings" section in each spec template). `State` is a single field carrying the proposed/implemented two-track, so a level can hold one of each. Per-level templates updated with a defined binding placement. By-link reversal (§4) and structural-diagram guidance unchanged. Per SN-16 (ratified 2026-06-29), binding decision 2; E23.2 (P6-M23). |
