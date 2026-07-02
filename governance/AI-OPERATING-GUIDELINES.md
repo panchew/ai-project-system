@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.3.0  
-**Effective Date:** 2026-06-29  
+**Version:** 2.5.0  
+**Effective Date:** 2026-07-02  
 **Status:** Current  
 
 ---
@@ -878,7 +878,8 @@ Each chat level produces visuals at its own level of abstraction. An agent produ
 
 Visual intent originates at the **Creation Chat** — elicited at inception via `seed.md` Rule 4 ("What
 does success look like visually?") — and propagates down the artifact cascade: each level translates
-the level above's vision into the visual appropriate to its own scope.
+the level above's vision into the visual appropriate to its own scope. Each level produces that
+abstraction in **both** tracks — a proposed and an implemented visual (§16.6) — at its own altitude.
 
 ### 16.3 Two modes
 
@@ -888,6 +889,9 @@ the level above's vision into the visual appropriate to its own scope.
 - **Generative** — imagery or video produced from a natural-language prompt via the configured
   ComfyUI endpoint, using the `bin/ai-project-visual` helper. Use generative mode for concept/vision
   imagery, infographics, and UI mockups where a rendered image communicates better than a diagram.
+
+Prefer Structural for most coverage: it is what makes the proposed→implemented two-track default
+(§16.6) affordable, since most pairs are two text diagrams at no cost.
 
 ### 16.4 Tool-capability gating
 
@@ -911,8 +915,55 @@ fabricating a result.
   `visual_artifacts.enabled: false` is one instance of that universal rule. The source repo ships the
   guidance, the helper, and the test — not generated output.
 
+### 16.6 Proposed vs. implemented
+
+When the capability is enabled, every level produces **both** a *proposed* visual (the intent, before
+the work is built) and an *implemented* visual (what was actually built, after) — not one or the
+other. The proposed visual records what the level set out to make; the implemented visual records what
+it delivered, so the gap between intent and result stays visible at every altitude. **Producing both
+is the routine default, not an exception.**
+
+**Nothing is too much.** Be generous: err toward producing the pair rather than skipping it. The bar
+is *coverage* — a proposed→implemented pair at each enabled level — not restraint.
+
+**Structural-first is what makes that affordable.** Most coverage is free: a proposed and an
+implemented Mermaid/PlantUML diagram are two text blocks with no endpoint and no cost (§16.3). Lean on
+Structural for most pairs and reserve Generative (ComfyUI) for the levels where a rendered image
+genuinely communicates better — a Creation concept, an Epic mockup. Because the cheap path carries
+most of the load, "nothing is too much" stays cheap.
+
+The two tracks are recorded through the **`State` field of the §7 binding** (`proposed` /
+`implemented`) defined in `governance/guides/visual-artifacts.md` §7 — a level may carry one binding
+of each `State`. This subsection sets the *expectation*; §7 defines *how* a track is recorded. Do not
+restate that schema here.
+
+The gates still bind: the two-track default applies **only when enabled** (§16.1), and a tool-less
+surface produces **Structural** visuals only (§16.4) — where a proposed visual would need generation,
+the agent records the intent and defers it per §16.4 rather than fabricating a render.
+
 See `governance/guides/visual-artifacts.md` for endpoint configuration, structural-diagram tooling,
 output formats, and a worked example per chat level.
+
+### 16.7 Clips
+
+A **clip** is a short video that renders **one** governance node's proposed→implemented story (§16.6)
+as motion — the most CFO-facing visual, and the one that doubles as publishable media. Its policy is
+single-parent binding:
+
+- **Single-parent.** A clip binds to exactly **one** node — one epic, one milestone, or one phase —
+  via the §7 binding with `What: clip` and `Level` set to that node. It narrates **that node's** two
+  tracks (§16.6); it does not reach up or down the cascade (the altitude rule, §16.2).
+- **Hosted and linked, never committed.** A clip is a generated `.webm`, so by-link (§16.5 / §7) binds
+  it exactly as it binds an image: the helper writes a local working file, the agent hosts it, and the
+  **link** — not the binary — travels with the decision record. Do not commit the `.webm`.
+- **No cross-cutting reel.** A clip is single-parent by rule. A project-spanning editorial montage that
+  stitches many nodes into one reel is **deferred in P6** (SN-16, binding decision 3) — do not build
+  one; bind one node's arc.
+
+For how a clip is **produced** from the arc (on the verified LTX-Video path) and **published** (the
+same hosted asset reused, not a second production), see `governance/guides/visual-artifacts.md` §8.
+**Reference §7 for the binding schema — `clip` is an existing `What` value; do not restate the schema
+here.**
 
 ---
 
@@ -929,6 +980,8 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.5.0 | 2026-07-02 | Added §16.7 "Clips": a clip is a short video rendering **one** governance node's proposed→implemented story (§16.6) as motion. Establishes the clip convention at policy altitude — **single-parent** (binds to exactly one epic / milestone / phase via the §7 binding with `What: clip`, narrating that node's two tracks, not spanning the cascade), **hosted and linked, never committed** (by-link, §16.5 / §7, holds for `.webm` as for images), and the **no-cross-cutting-reel boundary** (a project-spanning montage is deferred in P6). Points to `governance/guides/visual-artifacts.md` §8 for production (on the verified LTX-Video path) and publish (same hosted asset reused). The §7 schema is **referenced, not restated**; `clip` is an existing `What` value (not re-added). Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
+| 2.4.0 | 2026-06-29 | Added §16.6 "Proposed vs. implemented": establishes the **two-track expectation as the routine default** — when `visual_artifacts.enabled: true`, every level produces **both** a *proposed* (intent, before build) and an *implemented* (after) visual, with the **"nothing is too much"** coverage bar and a **Structural-first** preference (most pairs are two free text diagrams; reserve Generative for where a render communicates better). The two tracks are recorded via the §7 binding's `State` field (referenced, **not** restated); the §16.1 opt-in and §16.4 tool-capability gates still bind (a tool-less surface produces Structural only and defers generative intent). Added a one-line tie-in to §16.2 and §16.3. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
 | 2.3.0 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Rewrote §16.5 to the **by-link** storage model: generated visual artifacts are **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend and references by link from the governing artifact (the link, not the binary, travels with the decision record). Generalized the source-repo bullet so that *no* project commits generated binaries — `enabled: false` is one instance of that universal rule. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
 | 2.2.0 | 2026-06-28 | Added §16 "Visual Artifact Production": per-level abstraction table (SN-11), structural vs. generative modes, tool-capability gating, and commit guidance — opt-in on `visual_artifacts.enabled` (ai-project-yml-spec.md §3.5). Part of E22.2 (P5-M22), which completes VA-1 with `seed.md` Rule 4 visual-intent elicitation, the `bin/ai-project-visual` helper, `governance/guides/visual-artifacts.md`, and a skip-on-disabled integration test. |
 | 2.1.0 | 2026-06-23 | Added §3.5–3.7 definitions for Creation Chat, Phase Chat, and Milestone Chat. Added chat hierarchy table to §3 intro. Updated Purpose to name all five chat types. Fixes P5-GH-7: Phase/Milestone chat roles introduced in P4 were absent from this document, causing HQ Chat to use Epic-level rules when producing Phase/Milestone starters. |

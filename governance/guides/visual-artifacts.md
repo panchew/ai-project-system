@@ -152,12 +152,25 @@ Each chat level produces the visual appropriate to its altitude (the SN-11 abstr
 produces the visual for **its own** level — it does not reach up or down the cascade. Visual intent
 originates at the Creation Chat (elicited via `seed.md` Rule 4) and propagates downward.
 
+Per **AOG §16.6**, when the capability is enabled each level produces **both** a *proposed* visual
+(the intent, before build) and an *implemented* visual (what was built, after). Every example below
+shows that pair, and each is recorded as a **§7 binding** distinguished by its `State` field —
+`proposed` or `implemented`. The binding schema is documented once in §7; these examples *use* it,
+they do not restate it. A pair is the **same block in two states** — it differs by `State` (and,
+where the medium changes from mockup to screenshot, by `What`). Most pairs are two cheap Structural
+diagrams (Mermaid / PlantUML); only Creation and Epic reach for Generative, where a render
+communicates better — that Structural-first economy is what keeps "nothing is too much" affordable.
+
 In the generative examples below, `--output` names a **local working file**: host it on your storage
-backend and reference it by link from the governing artifact — it is not committed to git.
+backend and bind it by **link** — it is not committed to git. Structural diagrams live inline (free);
+their binding `Link` is a hosted permalink to the committed diagram, never a local path.
 
 ### Creation Chat — concept / vision imagery
 
-> *Generative.* Capture the look and feel of the finished product.
+> *Generative.* Capture the look and feel of the finished product — proposed before build, implemented
+> from the shipped UI.
+
+**Proposed** — the intended look and feel, before anything is built:
 
 ```bash
 ai-project-visual \
@@ -166,9 +179,27 @@ ai-project-visual \
   --output ./vision.png
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/creation/vision-proposed.png
+- **What:** image
+- **Level:** Creation
+- **State:** proposed
+- **Description:** Concept render of the budgeting app's intended warm, approachable feel.
+
+**Implemented** — a render captured from the shipped product:
+
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/creation/vision-implemented.png
+- **What:** image
+- **Level:** Creation
+- **State:** implemented
+- **Description:** Hero screenshot of the shipped app — soft gradients delivered as proposed.
+
 ### HQ Chat — system architecture
 
-> *Structural* for the canonical diagram; *generative* when a polished render is wanted.
+> *Structural.* Two text diagrams — the target architecture, then the one actually built.
+
+**Proposed** — the intended architecture:
 
 ```mermaid
 flowchart TB
@@ -178,9 +209,36 @@ flowchart TB
     Core --> DB[(Database)]
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/hq-architecture.md#proposed
+- **What:** diagram
+- **Level:** HQ
+- **State:** proposed
+- **Description:** Target architecture — a gateway fronting auth + core over one database.
+
+**Implemented** — the architecture as built (a cache was added under load):
+
+```mermaid
+flowchart TB
+    Client --> API[API Gateway]
+    API --> Auth[Auth Service]
+    API --> Core[Core Service]
+    Core --> Cache[(Cache)]
+    Core --> DB[(Database)]
+```
+
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/hq-architecture.md#implemented
+- **What:** diagram
+- **Level:** HQ
+- **State:** implemented
+- **Description:** Shipped architecture — a cache was added between core and the database.
+
 ### Phase Chat — phase scope diagram
 
-> *Structural.* Show what is in and out of the phase.
+> *Structural.* What was planned in/out of the phase, then what actually landed.
+
+**Proposed** — intended scope:
 
 ```mermaid
 flowchart LR
@@ -192,9 +250,37 @@ flowchart LR
     end
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/phase2-spec.md#scope-proposed
+- **What:** diagram
+- **Level:** Phase
+- **State:** proposed
+- **Description:** Phase 2 planned scope — ingestion + normalization in, reporting out.
+
+**Implemented** — scope as delivered (reporting pulled in, validation deferred):
+
+```mermaid
+flowchart LR
+    subgraph Delivered
+        A[Ingestion] --> B[Normalization] --> C[Reporting]
+    end
+    subgraph Deferred
+        D[Validation]
+    end
+```
+
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/phase2-spec.md#scope-implemented
+- **What:** diagram
+- **Level:** Phase
+- **State:** implemented
+- **Description:** Phase 2 as delivered — reporting landed; validation deferred to phase 3.
+
 ### Milestone Chat — component + flow diagrams
 
-> *Structural.* Components and the flow between them.
+> *Structural.* The intended flow, then the flow as built.
+
+**Proposed** — intended request flow:
 
 ```mermaid
 sequenceDiagram
@@ -205,9 +291,37 @@ sequenceDiagram
     API-->>UI: 201 Created
 ```
 
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/m4-spec.md#flow-proposed
+- **What:** diagram
+- **Level:** Milestone
+- **State:** proposed
+- **Description:** Planned record-creation flow — UI to API to DB, 201 on success.
+
+**Implemented** — flow as built (a validation step was added before insert):
+
+```mermaid
+sequenceDiagram
+    User->>UI: submit form
+    UI->>API: POST /record
+    API->>API: validate
+    API->>DB: insert
+    DB-->>API: ok
+    API-->>UI: 201 Created
+```
+
+**Visual binding** (schema in §7)
+- **Link:** https://github.com/acme/app/blob/v1/docs/m4-spec.md#flow-implemented
+- **What:** diagram
+- **Level:** Milestone
+- **State:** implemented
+- **Description:** Built flow — a server-side validation step was added before insert.
+
 ### Epic Chat — UI mockups, before/after, implementation diagrams
 
-> *Generative* for a mockup; *structural* for an implementation diagram.
+> *Generative.* A mockup of the intended screen, then the screen as shipped.
+
+**Proposed** — a mockup of the intended screen, before build:
 
 ```bash
 ai-project-visual \
@@ -215,6 +329,22 @@ ai-project-visual \
   --type diagrams \
   --output ./E12.3-settings-mockup.png
 ```
+
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/epic/E12.3-settings-proposed.png
+- **What:** mockup
+- **Level:** Epic
+- **State:** proposed
+- **Description:** Proposed settings screen — toggle list, light theme, mobile.
+
+**Implemented** — a screenshot of the built screen:
+
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/epic/E12.3-settings-implemented.png
+- **What:** image
+- **Level:** Epic
+- **State:** implemented
+- **Description:** Shipped settings screen — toggle list as proposed; a search field was added.
 
 ---
 
@@ -285,6 +415,66 @@ references it rather than restating it.
 
 ---
 
+## 8. Clips
+
+A **clip** is a short video that renders **one** governance node's proposed→implemented arc (§5, AOG
+§16.6) as motion. It is the most CFO-facing visual — a few seconds that let the CFO follow a node's
+story — and it doubles as publishable media. A clip is **single-parent** (AOG §16.7): it binds to
+exactly one node via a §7 binding with `What: clip`; it does **not** stitch many nodes into a
+cross-cutting reel (that montage is deferred in P6).
+
+### Producing a clip from the arc
+
+A clip is produced on the **verified LTX-Video path — no new plumbing.** The `--type video --workflow`
+capability already exists in [`../../bin/ai-project-visual`](../../bin/ai-project-visual), and the
+LTX-Video workflow is verified end-to-end (`ltxv-video.json` → valid `.webm`):
+
+```bash
+ai-project-visual \
+  --prompt "<the node's proposed→implemented story, e.g. the settings screen's before→after>" \
+  --type video --workflow <ltxv-video graph> \
+  --output ./E12.3-arc.webm
+```
+
+The **exact command, the workflow graph, and the verified parameters** (LTX-Video defaults: 768×512,
+97 frames @ 25 fps) live in the preserved reference bundle — see
+[`../../.ai-project/artifacts/reference/comfyui-endpoint/VISUAL-ARTIFACTS.md`](../../.ai-project/artifacts/reference/comfyui-endpoint/VISUAL-ARTIFACTS.md)
+and its `ltxv-video.json`. **Cite the bundle; do not re-transcribe or ship the workflow** — the
+framework references the CFO-side contract, it does not vendor it (see *Open Design Question A* below).
+
+### Binding a clip
+
+A clip is bound like any other visual — a **§7 binding** — with `What: clip` and `Level` set to the
+one node it narrates. Its **Link** is the hosted URL of the `.webm`, **never a committed path**
+(by-link, §4). A clip narrates the whole arc, so it reads most naturally as an `implemented` binding
+(it exists once the arc is real); this is a wording choice, not a new `State` value.
+
+**Visual binding** (schema in §7)
+- **Link:** https://files.example.com/acme/epic/E12.3-arc.webm
+- **What:** clip
+- **Level:** Epic
+- **State:** implemented
+- **Description:** 4-second clip of E12.3's settings-screen arc — the proposed mockup dissolving into the shipped screen.
+
+### Publishing a clip
+
+Publishing to YouTube / TikTok / Instagram / Facebook is **the same hosted asset reused** — not a
+second render and not a separate production. The clip is already hosted (that is what by-link
+requires), and the hosted link is what gets published. The framework **documents this path; it does
+not build a publisher, a pipeline, or host the asset** — where a clip is hosted and how it reaches a
+social channel is the adopter's decision (infrastructure-agnostic, consistent with §4 / AOG §16.5).
+
+### Open Design Question A — resolved: reference, not vendor
+
+The workflow JSONs and the models behind them are the CFO's generative-request contract and **stay
+CFO-side.** The framework's documented reference is the **preserved bundle** at
+`.ai-project/artifacts/reference/comfyui-endpoint/` (`ltxv-video.json`, `VISUAL-ARTIFACTS.md`, and the
+sibling image workflows); this guide **references** that bundle rather than shipping a runnable
+`workflows/` directory in-repo. Production points at the verified contract — it does not re-home or
+re-implement it.
+
+---
+
 ## Related documents
 
 | Document | Purpose |
@@ -300,5 +490,7 @@ references it rather than restating it.
 
 | Date | Change |
 |------|--------|
+| 2026-07-02 | **Clips (§8) added.** New §8 "Clips": a clip is a short video rendering **one** node's proposed→implemented arc (§5 / AOG §16.6) as motion — single-parent (AOG §16.7), the most CFO-facing visual, doubling as publishable media. Documents **production on the verified LTX-Video path** (`ltxv-video.json` → `.webm` via `--type video --workflow`), **citing** the preserved reference bundle (`.ai-project/artifacts/reference/comfyui-endpoint/`) for the exact command and verified parameters (768×512, 97 frames @ 25 fps) rather than re-transcribing or shipping the workflow (**no new plumbing**); a **worked §7 clip binding** (`What: clip`, hosted `.webm` link, `implemented`); the **publish path as reuse** of the same hosted asset (YouTube / TikTok / IG / FB — no publisher or pipeline built); and records **Open Design Question A — reference, not vendor** (the workflow JSONs stay CFO-side; no runnable `workflows/` directory shipped). The §7 schema and by-link (§4) are referenced, **not** restated or changed; `clip` is an existing `What` value. Implements AOG §16.7. Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
+| 2026-06-29 | **Proposed/implemented per-level examples (two-track behavior).** Extended §5 so every level (Creation / HQ / Phase / Milestone / Epic) shows a **proposed** and an **implemented** worked example, each recorded as a **§7 binding** distinguished by its `State` field — the same block in two states, not a second schema. Most pairs are two cheap Structural diagrams; Creation and Epic show a Generative pair where a render communicates better (Structural-first economy). The §7 binding schema and by-link (§4) are referenced, **not** restated or changed. Implements the AOG §16.6 two-track default. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Reversed the commit-the-binary storage model to **by-link**: generated artifacts are referenced by link and **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend (the adopter owns the storage backend) and links from the governing artifact. Updated §1 (source-repo note generalized — no project commits generated binaries), §3 and §5 (`--output` examples now name local working files), §4 prose, and the §16 related-documents row. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
 | 2026-06-29 | **Binding convention added (by-link survivability).** Added §7 "Binding a visual to an artifact": a five-element **binding schema** (link + What / Level / State / Description) that records a hosted **link, never a committed path**, and a **per-level placement convention** (Creation → `seed.md` Rule 4 *Visual success*; HQ → `genesis.md` HQ Context Packet; Phase / Milestone / Epic → a "Visual Bindings" section in each spec template). `State` is a single field carrying the proposed/implemented two-track, so a level can hold one of each. Per-level templates updated with a defined binding placement. By-link reversal (§4) and structural-diagram guidance unchanged. Per SN-16 (ratified 2026-06-29), binding decision 2; E23.2 (P6-M23). |
