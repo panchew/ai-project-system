@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.4.0  
-**Effective Date:** 2026-06-29  
+**Version:** 2.5.0  
+**Effective Date:** 2026-07-02  
 **Status:** Current  
 
 ---
@@ -944,6 +944,27 @@ the agent records the intent and defers it per §16.4 rather than fabricating a 
 See `governance/guides/visual-artifacts.md` for endpoint configuration, structural-diagram tooling,
 output formats, and a worked example per chat level.
 
+### 16.7 Clips
+
+A **clip** is a short video that renders **one** governance node's proposed→implemented story (§16.6)
+as motion — the most CFO-facing visual, and the one that doubles as publishable media. Its policy is
+single-parent binding:
+
+- **Single-parent.** A clip binds to exactly **one** node — one epic, one milestone, or one phase —
+  via the §7 binding with `What: clip` and `Level` set to that node. It narrates **that node's** two
+  tracks (§16.6); it does not reach up or down the cascade (the altitude rule, §16.2).
+- **Hosted and linked, never committed.** A clip is a generated `.webm`, so by-link (§16.5 / §7) binds
+  it exactly as it binds an image: the helper writes a local working file, the agent hosts it, and the
+  **link** — not the binary — travels with the decision record. Do not commit the `.webm`.
+- **No cross-cutting reel.** A clip is single-parent by rule. A project-spanning editorial montage that
+  stitches many nodes into one reel is **deferred in P6** (SN-16, binding decision 3) — do not build
+  one; bind one node's arc.
+
+For how a clip is **produced** from the arc (on the verified LTX-Video path) and **published** (the
+same hosted asset reused, not a second production), see `governance/guides/visual-artifacts.md` §8.
+**Reference §7 for the binding schema — `clip` is an existing `What` value; do not restate the schema
+here.**
+
 ---
 
 ## 15. Closing Statement
@@ -959,6 +980,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.5.0 | 2026-07-02 | Added §16.7 "Clips": a clip is a short video rendering **one** governance node's proposed→implemented story (§16.6) as motion. Establishes the clip convention at policy altitude — **single-parent** (binds to exactly one epic / milestone / phase via the §7 binding with `What: clip`, narrating that node's two tracks, not spanning the cascade), **hosted and linked, never committed** (by-link, §16.5 / §7, holds for `.webm` as for images), and the **no-cross-cutting-reel boundary** (a project-spanning montage is deferred in P6). Points to `governance/guides/visual-artifacts.md` §8 for production (on the verified LTX-Video path) and publish (same hosted asset reused). The §7 schema is **referenced, not restated**; `clip` is an existing `What` value (not re-added). Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
 | 2.4.0 | 2026-06-29 | Added §16.6 "Proposed vs. implemented": establishes the **two-track expectation as the routine default** — when `visual_artifacts.enabled: true`, every level produces **both** a *proposed* (intent, before build) and an *implemented* (after) visual, with the **"nothing is too much"** coverage bar and a **Structural-first** preference (most pairs are two free text diagrams; reserve Generative for where a render communicates better). The two tracks are recorded via the §7 binding's `State` field (referenced, **not** restated); the §16.1 opt-in and §16.4 tool-capability gates still bind (a tool-less surface produces Structural only and defers generative intent). Added a one-line tie-in to §16.2 and §16.3. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
 | 2.3.0 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Rewrote §16.5 to the **by-link** storage model: generated visual artifacts are **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend and references by link from the governing artifact (the link, not the binary, travels with the decision record). Generalized the source-repo bullet so that *no* project commits generated binaries — `enabled: false` is one instance of that universal rule. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
 | 2.2.0 | 2026-06-28 | Added §16 "Visual Artifact Production": per-level abstraction table (SN-11), structural vs. generative modes, tool-capability gating, and commit guidance — opt-in on `visual_artifacts.enabled` (ai-project-yml-spec.md §3.5). Part of E22.2 (P5-M22), which completes VA-1 with `seed.md` Rule 4 visual-intent elicitation, the `bin/ai-project-visual` helper, `governance/guides/visual-artifacts.md`, and a skip-on-disabled integration test. |
