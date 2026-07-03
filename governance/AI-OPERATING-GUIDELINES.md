@@ -1,7 +1,7 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.5.1  
+**Version:** 2.6.0  
 **Effective Date:** 2026-07-02  
 **Status:** Current  
 
@@ -483,7 +483,7 @@ Phase Execution Chat is a **finite autonomous execution and delivery agent scope
 
 **Stage 1 — Execution:** Reviews the Phase spec, produces Milestone specs and Milestone Execution Chat Starters, creates a phase branch, commits all planning artifacts, and opens a PR to HQ Chat for review.
 
-**Stage 2 — Delivery:** After HQ Chat accepts the PR, oversees Milestone execution — receives Milestone Completion Notices, issues Milestone Review Decisions, and when all Milestones are accepted, delivers the Phase by executing the canonical phase-closure sequence (PROJECT-SYSTEM-GUIDELINES.md §5C) — the consolidation merge plus the mandatory README-update, version-bump, and git-tag steps.
+**Stage 2 — Delivery:** After HQ Chat accepts the PR, oversees Milestone execution — receives Milestone Completion Notices, accepts clean Milestone deliveries by silence (a Milestone Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6), and when all Milestones are accepted, delivers the Phase by executing the canonical phase-closure sequence (PROJECT-SYSTEM-GUIDELINES.md §5C) — the consolidation merge plus the mandatory README-update, version-bump, and git-tag steps.
 
 Phase Execution Chat does NOT:
 - Implement project code or modify infrastructure
@@ -502,7 +502,7 @@ Milestone Execution Chat is a **finite autonomous execution and delivery agent s
 
 **Stage 1 — Execution:** Reviews the Milestone spec, produces Epic specs and Epic Execution Chat Starters, creates a milestone branch, commits all planning artifacts, and opens a PR to the parent chat for review.
 
-**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), issues Epic Review Decisions, and when all Epics are accepted, delivers the Milestone by merging the milestone branch.
+**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), accepts clean Epic deliveries by silence (an Epic Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6), and when all Epics are accepted, delivers the Milestone by merging the milestone branch.
 
 Milestone Execution Chat does NOT:
 - Implement project code or modify infrastructure
@@ -725,7 +725,7 @@ Human review (plain language) → AI-generated Epic Review Seal → HQ decision
 **HQ Chat review behavior:**
 - Ask humans for plain-language findings only; do not require markdown editing.
 - Generate or request AI-generated Epic Review Seals from human input, then confirm accuracy with the human before deciding.
-- Keep acceptance decisions explicit and record them in the Review Decision; do not introduce execution or acceptance loops.
+- Accept clean deliveries by silence per default-accept (§12 "Acceptance Outcomes"; PROJECT-SYSTEM-GUIDELINES.md §11.6); record exception-path decisions (reject / accept-with-follow-ups) in the Review Decision; do not introduce execution or acceptance loops.
 
 **Coding Agent support during review:**
 - When asked, generate Epic Review Seal drafts from human-provided natural language without altering intent.
@@ -814,7 +814,17 @@ HQ Chat makes explicit acceptance decisions using one of three outcomes:
 2. **Accept with follow-up Epic(s):** Epic is accepted, but new Epics must be created to address findings.
 3. **Reject:** Epic does not meet requirements; new Epic(s) must be created.
 
-Acceptance is documented in the Review Decision and becomes immutable.
+Under default-accept (below), outcome 1 on a clean delivery is recorded **by silence** — the merge plus the in-chat acknowledgment — and issues no Review Decision; outcomes 2 and 3 are the **exception path** and are documented in a **Review Decision**, which becomes immutable once issued.
+
+### Default-Accept (SN-13) — Normative
+
+The acceptance model at every **parent-chat → child gate** (Phase Chat accepts a clean Milestone; Milestone Chat accepts a clean Epic; HQ Chat accepts a clean Phase):
+
+- **Happy path (default-accept):** a **clean** delivery — one meeting its Definition of Done, acceptance criteria, and spec — is accepted **by silence**. No Review Decision artifact is produced; the **merge plus the in-chat acknowledgment is the acceptance record**.
+- **Exception path:** a **Review Decision** (and, at Epic level, the **Epic Review Seal**) is issued **only when a delivery is not clean** — to reject it or to accept it with follow-up Epic(s).
+- **Preserved:** **Layer-8 human review** remains available and authoritative wherever the framework mandates it; human-confirmation requirements (e.g., a human-authorized merge on an Epic PR) stand. Default-accept scopes the *acceptance artifact*, not the *human's review* — two gates, not one.
+
+Full normative definition: PROJECT-SYSTEM-GUIDELINES.md **§11.6 "Default-Accept (SN-13)"**. The Review Decision and Epic Review Seal artifacts themselves are unchanged — default-accept changes *when* they are issued, not *what* they are.
 
 ---
 
@@ -980,6 +990,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.6.0 | 2026-07-02 | Codified **SN-13 default-accept** as the normative acceptance model — new "Default-Accept (SN-13) — Normative" block in §12 "Acceptance Outcomes": **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) accepted **by silence**, no Review Decision artifact, merge + in-chat acknowledgment as the acceptance record; **exception path** = Review Decision (Epic Review Seal at Epic level) issued only when a delivery is not clean; **Layer-8 human review preserved** (two gates, not one). Reconciled §3.6/§3.7 Stage-2 "issues … Review Decisions" clauses (E25.1's §5C phase-delivery language kept intact), the §10 HQ-review-behavior bullet, and the §12 immutability sentence to the exception path. Full normative definition lives at PSG §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
 | 2.5.1 | 2026-07-02 | Reconciled the §3.6 Stage 2 phase-delivery clause to the canonical phase-closure sequence (PSG §5C, new in PSG v2.2.0): the Phase Chat delivers the Phase by executing §5C — the consolidation merge **plus** the mandatory README-update, version-bump, and git-tag steps — not by merging the phase branch alone. No acceptance / Review-Decision language changed (that surface is E25.2). E25.1 (P6-M25). |
 | 2.5.0 | 2026-07-02 | Added §16.7 "Clips": a clip is a short video rendering **one** governance node's proposed→implemented story (§16.6) as motion. Establishes the clip convention at policy altitude — **single-parent** (binds to exactly one epic / milestone / phase via the §7 binding with `What: clip`, narrating that node's two tracks, not spanning the cascade), **hosted and linked, never committed** (by-link, §16.5 / §7, holds for `.webm` as for images), and the **no-cross-cutting-reel boundary** (a project-spanning montage is deferred in P6). Points to `governance/guides/visual-artifacts.md` §8 for production (on the verified LTX-Video path) and publish (same hosted asset reused). The §7 schema is **referenced, not restated**; `clip` is an existing `What` value (not re-added). Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
 | 2.4.0 | 2026-06-29 | Added §16.6 "Proposed vs. implemented": establishes the **two-track expectation as the routine default** — when `visual_artifacts.enabled: true`, every level produces **both** a *proposed* (intent, before build) and an *implemented* (after) visual, with the **"nothing is too much"** coverage bar and a **Structural-first** preference (most pairs are two free text diagrams; reserve Generative for where a render communicates better). The two tracks are recorded via the §7 binding's `State` field (referenced, **not** restated); the §16.1 opt-in and §16.4 tool-capability gates still bind (a tool-less surface produces Structural only and defers generative intent). Added a one-line tie-in to §16.2 and §16.3. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |

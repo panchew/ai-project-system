@@ -1,7 +1,7 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 2.2.0  
+**Version:** 2.3.0  
 **Effective Date:** 2026-07-02  
 **Status:** Current  
 
@@ -38,6 +38,8 @@ All Epics MUST follow the single canonical happy path for closure:
 8. **Stop**: Execution stops immediately after merge. No further actions are taken.
 
 **No step may be skipped, inferred, or collapsed.**
+
+**Gate scoping (§11.6 Default-Accept):** Steps 3–6 are the **Layer-8 human-review gate** and are preserved — default-accept does not remove them. The **acceptance-artifact** question within them is governed by §11.6: for a **clean** Epic (meets Definition of Done, acceptance criteria, and spec), the review acknowledgment, HQ decision, and delivery authorization are **in-chat acts** — no Review Decision artifact is produced, and the **Epic Review Seal is issued only on the exception path** (reject / accept-with-follow-ups). Explicit authorization before merge (Step 6) still applies; it is an in-chat act, not an artifact.
 
 ---
 
@@ -326,7 +328,7 @@ Phase closure follows a structured process parallel to Epic closure (§1A) and M
 
 **Step 6: Delivery Reviewed**
 - Closure is recorded under the operating acceptance model, **SN-13 default-accept**: a clean delivery (all completion criteria met) is accepted by silence; a **Review Decision** artifact is the exception path only
-- *(Stated by reference only — the acceptance model's normative text lives at its own surfaces, not in this section)*
+- *(Stated by reference only — the acceptance model's normative text is §11.6 "Default-Accept (SN-13)", not this section)*
 
 **Step 7: Merge Completes**
 - PR merged; the merge commit becomes the **phase closure commit** on `master`
@@ -551,28 +553,56 @@ Coding Agent Reports: "Execution Complete"
   ↓
 Human Reviews (Layer 8) in natural language
   ↓
-AI Structures review into Epic Review Seal (human approval, no markdown authoring required)
+AI Structures review into Epic Review Seal — exception path only (human approval, no markdown authoring required)
   ↓
 HQ Chat Makes Decision: Accept | Accept-with-Followups | Reject
   ↓
-Acceptance Recorded in Review Decision
+Acceptance Recorded per §11.6 Default-Accept:
+  clean → accepted by silence (merge + in-chat acknowledgment; no artifact)
+  not clean → Review Decision records the exception
 ```
 
 ### Key Rules
 
 1. **Coding Agents MUST stop after reporting execution completion.** They do NOT infer acceptance.
 2. **Coding Agents MUST produce a Delivery Notice before review.** No Epic may proceed to review or closure without a Delivery Notice.
-2. **Humans OWN review.** Human judgment is a first-class input, not a rubber stamp.
-3. **HQ Chat OWNS acceptance decisions.** Acceptance is recorded explicitly and becomes immutable.
-4. **HQ Chat MUST issue explicit delivery authorization before PR/merge.** Coding Agents must await this authorization and refuse to proceed without it.
-4. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
-5. **Acceptance decisions are recorded in the Review Decision** (and Epic Review Seal). It captures human findings, the decision, and any follow-up actions.
-6. **Structured review artifacts are AI-generated.** Humans provide plain-language findings; Coding Agents or HQ Chat produce the Epic Review Seal from that input. Humans may approve or correct AI-structured text but are not required to author or edit markdown.
-
-7. **No Epic may close with uncommitted changes.** The working tree must be clean before merge and closure.
-8. **Execution stops immediately after merge.** No further actions are taken by the Coding Agent.
+3. **Humans OWN review.** Human judgment is a first-class input, not a rubber stamp.
+4. **HQ Chat OWNS acceptance decisions.** A clean delivery is accepted by silence per §11.6 — the merge plus the in-chat acknowledgment is the acceptance record; a Review Decision, when issued on the exception path, is immutable.
+5. **HQ Chat MUST issue explicit delivery authorization before PR/merge.** Coding Agents must await this authorization and refuse to proceed without it. The authorization is an in-chat act; it produces no artifact on the happy path.
+6. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
+7. **Exception-path decisions are recorded in the Review Decision** (and Epic Review Seal): human findings, the reject / accept-with-follow-ups decision, and any follow-up actions. A clean delivery produces no Review Decision — see §11.6.
+8. **Structured review artifacts are AI-generated.** Humans provide plain-language findings; Coding Agents or HQ Chat produce the Epic Review Seal from that input. Humans may approve or correct AI-structured text but are not required to author or edit markdown.
+9. **No Epic may close with uncommitted changes.** The working tree must be clean before merge and closure.
+10. **Execution stops immediately after merge.** No further actions are taken by the Coding Agent.
 
 ---
+
+## 11.6. Default-Accept (SN-13)
+
+The **normative acceptance model** at every **parent-chat → child gate**: Phase Chat accepts a clean Milestone; Milestone Chat accepts a clean Epic; HQ Chat accepts a clean Phase.
+
+### The Model
+
+- **Happy path (default-accept):** a parent chat accepts a **clean** child delivery — one meeting its Definition of Done, acceptance criteria, and spec — **by silence**. No Review Decision artifact is produced; the **merge plus the in-chat acknowledgment is the acceptance record**.
+- **Exception path:** a **Review Decision** (and, at Epic level, the **Epic Review Seal**) is issued **only when a delivery is not clean** — to reject it or to accept it with follow-up Epic(s). A Review Decision, once issued, is immutable.
+
+### What Default-Accept Governs
+
+Exactly two questions:
+
+1. Whether the parent chat must produce an **explicit acceptance** of a clean child delivery — no; silence accepts.
+2. Whether an **acceptance artifact** is mandatory on the happy path — no; the Review Decision is the exception path only.
+
+### What Is Preserved — Two Gates, Not One
+
+Default-accept does **not** remove the human from the loop. Two distinct gates exist and MUST NOT be collapsed:
+
+- **(A) Layer-8 human review — preserved.** The human's independent review (§11.5 "Human Review"; "Humans OWN review") remains available and authoritative wherever the framework mandates it, and human-confirmation requirements (e.g., a human-authorized merge on an Epic PR) stand. Human judgment is a first-class input, not a rubber stamp.
+- **(B) Parent-chat → child acceptance artifact — default-accept.** Silence accepts a clean delivery; a Review Decision is issued only on the exception path.
+
+Default-accept removes the *mandatory Review Decision artifact on the happy path*, not the *human's review*.
+
+> **History:** SN-13 (P5) established this model; it has governed every delivery since P5. The Review Decision and Epic Review Seal artifacts themselves are unchanged — default-accept changes *when* they are issued, not *what* they are. Codified by E25.2 (P6-M25); closes GH-10.
 
 ---
 
@@ -590,7 +620,7 @@ The Delivery Notice:
 
 Delivery Notices are append-only and MUST NOT modify the original Epic spec.
 
-The acceptance decision and human review findings are recorded separately in the **Review Decision** (and **Epic Review Seal**), not in the Delivery Notice — see §11.5.
+On the **exception path**, the acceptance decision and human review findings are recorded separately in the **Review Decision** (and **Epic Review Seal**), not in the Delivery Notice; a clean delivery is accepted by silence and produces no Review Decision — see §11.5 and §11.6.
 
 See `governance/templates/delivery-notice.md` for the canonical template.
 
@@ -607,7 +637,7 @@ The Phase Execution Chat Starter is a binding execution contract that defines:
 - Phase Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Phase Execution Chat (autonomous execution and delivery agent scoped to a single Phase) is launched by HQ Chat using this artifact. In Stage 1 it produces Milestone specs and Milestone Execution Chat Starters, commits them to a phase branch, and opens a PR. In Stage 2 it oversees Milestone delivery, issues Review Decisions, and merges the phase branch when all Milestones are accepted.
+A Phase Execution Chat (autonomous execution and delivery agent scoped to a single Phase) is launched by HQ Chat using this artifact. In Stage 1 it produces Milestone specs and Milestone Execution Chat Starters, commits them to a phase branch, and opens a PR. In Stage 2 it oversees Milestone delivery — accepting clean Milestone deliveries by silence and issuing a Review Decision only on the exception path (§11.6) — and merges the phase branch when all Milestones are accepted.
 
 **Phase Execution Chat role:** Execution and delivery agent for this Phase. It commits and PRs its deliverables and oversees delivery through to merge — it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.6 for full role definition.
 
@@ -630,7 +660,7 @@ The Milestone Execution Chat Starter is a binding execution contract that define
 - Milestone Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Milestone Execution Chat (autonomous execution and delivery agent scoped to a single Milestone) is launched by Phase Execution Chat (or HQ Chat during bootstrap) using this artifact. In Stage 1 it produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR. In Stage 2 it oversees Epic delivery, issues Review Decisions, and merges the milestone branch when all Epics are accepted.
+A Milestone Execution Chat (autonomous execution and delivery agent scoped to a single Milestone) is launched by Phase Execution Chat (or HQ Chat during bootstrap) using this artifact. In Stage 1 it produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR. In Stage 2 it oversees Epic delivery — accepting clean Epic deliveries by silence and issuing a Review Decision only on the exception path (§11.6) — and merges the milestone branch when all Epics are accepted.
 
 **Milestone Execution Chat role:** Execution and delivery agent for this Milestone. It commits and PRs its deliverables and oversees delivery through to merge — it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
 
@@ -920,6 +950,7 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.3.0 | 2026-07-02 | Added §11.6 "Default-Accept (SN-13)": the normative acceptance model at every parent-chat → child gate — **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) is accepted **by silence**, no Review Decision artifact, the merge + in-chat acknowledgment is the acceptance record; **exception path** = a Review Decision (and Epic-level Epic Review Seal) is issued only when a delivery is not clean. Two-gate framing made explicit: **Layer-8 human review preserved** (§11.5 "Human Review" and "Humans OWN review" stand); only the acceptance-artifact question changes. Reconciled the always-review surfaces: §11.5 flow last step + Key Rules (duplicate rule numbering also fixed — rules now 1–10), §12 exception-path sentence, §13A/§13B "issues … Review Decisions" clauses, §1A gate-scoping note (human-review steps preserved verbatim); wired §5C Step 6's by-reference pointer to §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
 | 2.2.0 | 2026-07-02 | Added §5C "Phase Closure": canonical, mandatory phase-closure sequence mirroring §1A/§5B — an ordered 9-step process with **README update, version bump, and git tag as mandatory automatic steps** (no out-of-band Steering Note required to close a phase); "phase complete vs. fully closed (delivered)" distinction; consolidation target `phase/P<id>` → `master`; phase-closure declaration as the recorded output, formalized as `governance/templates/phase-closure-declaration.md`. Reconciled the §5B consolidation-rules line that called phase closure "future work" to point at §5C. Closure acceptance stated by reference to SN-13 default-accept only (normative codification is E25.2). Applies P6 forward. Fixes P6-GH-12; E25.1 (P6-M25). |
 | 2.1.0 | 2026-06-23 | Renamed §13A "Phase Planning Chat Starter" and §13B "Milestone Planning Chat Starter" (removed "Execution" misnomer). Added Phase/Milestone Chat role summaries to §13A/13B with references to AI-OPERATING-GUIDELINES.md §3.6–3.7. Removed duplicate §13A section. Fixes P5-GH-7: "Execution" terminology was being copied into Phase/Milestone starters, causing generated starters to carry Epic-level rules. |
 | 3.0.0 | 2026-05-22 | Phase P3: Agentic Execution Model Maturity. Added Section 18 defining rules for 24/7 unattended development clusters, Docker sandboxing, and file-driven Dev-QA recursion queues. |
