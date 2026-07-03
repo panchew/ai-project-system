@@ -131,7 +131,9 @@ A Completion Notice is a structured artifact that signals an Epic has finished a
 
 1. **Receive** Completion Notices from Epic Agents as they finish work
 2. **Review** each Completion Notice for spec compliance, QA status, and PR readiness
-3. **Decide** whether to Accept or Reject by issuing a **Review Decision** artifact
+3. **Decide** — accept a clean delivery by silence (the merge plus the in-chat
+   acknowledgment is the acceptance record; no artifact); issue a **Review Decision**
+   artifact only on the exception path (PSG §11.6 / AOG §12)
 4. **Aggregate** all Epic Completion Notices into a **Milestone Completion Notice** when all Epics are done
 
 ### Workflow
@@ -145,31 +147,36 @@ Milestone Chat receives it
   ↓
 You review Completion Notice
   ↓
-Issue Review Decision (Accept or Reject)
-  ↓
-If Accept: Epic proceeds to merge, produces Delivery Notice
-If Reject: Epic reworks, resubmits new Completion Notice
+Clean? (DoD, acceptance criteria, spec all met)
+  ├─ Yes: accept by silence (no artifact — PSG §11.6);
+  │       Epic proceeds to merge, produces Delivery Notice
+  └─ No:  issue Review Decision (exception path)
+          ├─ Accept with follow-up Epic(s): Epic proceeds to merge
+          └─ Reject: Epic reworks, resubmits new Completion Notice
 ```
 
-### Review Criteria (Accept or Reject)
+### Review Criteria (clean vs. not clean)
 
-**Accept if:**
+**Clean (accept by silence) if:**
 - ✓ Spec compliance confirmed (implementation matches Epic spec)
 - ✓ Tests passing (all tests pass, coverage meets DoD requirements)
 - ✓ Code review ready (linting, style, documentation complete)
 - ✓ PR is against the correct target branch (milestone/M#)
 - ✓ All Definition of Done items are satisfied
 
-**Reject if:**
+**Not clean (exception path — issue a Review Decision) if:**
 - ✗ Spec mismatch (implementation deviates from Epic spec)
 - ✗ Tests failing or insufficient coverage
 - ✗ Code review issues (linting, documentation, style problems)
 - ✗ PR against wrong branch or not created yet
 - ✗ Missing Definition of Done items
 
-### Issuing a Review Decision
+### Issuing a Review Decision (exception path only)
 
-When you review a Completion Notice, issue a **Review Decision** artifact using this template:
+A Review Decision is issued **only when a delivery is not clean** — to reject it or to
+accept it with follow-up Epic(s) (PSG §11.6 / AOG §12). A clean delivery is accepted by
+silence: the merge plus the in-chat acknowledgment is the acceptance record, and no
+artifact is produced. When you do issue one, use this template:
 
 **Template:** `governance/templates/review-decision.md`
 
@@ -199,7 +206,7 @@ If Reject: Explain required changes.
 
 ### Aggregating into Milestone Completion Notice
 
-When **all Epics** in the Milestone are complete (have received Accept decisions), you produce a **Milestone Completion Notice** to report the entire Milestone's completion to the parent Phase Chat.
+When **all Epics** in the Milestone are complete (accepted — by silence for clean deliveries, or via an exception-path Review Decision; PSG §11.6), you produce a **Milestone Completion Notice** to report the entire Milestone's completion to the parent Phase Chat.
 
 **Same artifact type, but scoped to Milestone level:**
 ```markdown
@@ -239,48 +246,32 @@ Milestone M# is complete. All 3 Epics delivered and merged.
 ...
 ```
 
-Then the parent Phase Chat reviews and issues a Review Decision at the Milestone level.
+Then the parent Phase Chat reviews it — accepting a clean Milestone delivery by silence, and issuing a Milestone-level Review Decision only on the exception path (PSG §11.6).
 
 ---
 
-## Issuing Review Decisions — Worked Examples (P4.1)
+## Acceptance Outcomes — Worked Examples (P4.1)
 
-A Review Decision is the binding accept/reject artifact you issue after reading a
-Completion Notice. It is committed to the repository — a decision made only in chat is
-not authoritative. Use the template `governance/templates/review-decision.md`.
+A clean delivery is accepted **by silence** — no Review Decision is produced; the merge
+plus the in-chat acknowledgment is the acceptance record (PSG §11.6 / AOG §12). A Review
+Decision is the binding **exception-path** artifact, issued only when a delivery is not
+clean. It is committed to the repository — a decision made only in chat is not
+authoritative. Use the template `governance/templates/review-decision.md`.
 
-### Example — Review Decision (ACCEPT)
+### Example — Clean delivery (accepted by silence; no artifact)
 
-```markdown
----
-artifact_type: review_decision
-artifact_version: 1.0
-timestamp: 2026-06-17T15:00:00Z
-issuer_chat: Milestone Agent (P4-M17)
-issuer_role: Milestone Agent
-decision: accept
-epic_id: P4-M17-E17.1
-milestone_id: P4-M17
-phase_id: P4
-completion_notice_timestamp: 2026-06-17T00:00:00Z
-authorization:
-  action: merge
-  merge_instruction: Merge PR #73 to milestone/M17; delete epic/P4-M17-E17.1 after merge.
----
+Epic P4-M17-E17.1 submits a Completion Notice. Review confirms spec compliance,
+independently verified: 17 new tests, full suite green, no regression, root cause
+analysis correct. The delivery is clean, so no Review Decision is issued. The Milestone
+Chat acknowledges in chat and authorizes the merge:
 
-# Review Decision: P4-M17-E17.1 — Fix Daemon Orchestrator Path Resolution
+> Reviewed Completion Notice for P4-M17-E17.1 — clean (DoD, acceptance criteria, and
+> spec all met). Accepted per PSG §11.6 default-accept. Merge PR #73 to milestone/M17
+> using squash-and-merge, then delete the epic branch.
 
-## Decision: ACCEPT ✓
+The merge plus this in-chat acknowledgment is the entire acceptance record.
 
-## Feedback
-Spec compliance confirmed and independently verified: 17 new tests, full suite green,
-no regression. Root cause analysis correct. Authorized to merge.
-
-## Authorization
-Merge PR #73 to milestone/M17 using squash-and-merge, then delete the epic branch.
-```
-
-### Example — Review Decision (REJECT)
+### Example — Review Decision (REJECT — exception path)
 
 ```markdown
 ---
@@ -323,7 +314,8 @@ When you issue a **Reject**, the Epic enters the rework cycle:
 1. The Epic Agent reads your feedback and addresses every item.
 2. It produces a **new Completion Notice** (increment the version: v1.1, v1.2, …) and
    resubmits.
-3. You review again and issue a fresh Review Decision.
+3. You review again — a now-clean resubmission is accepted by silence (PSG §11.6); if it
+   still falls short, issue a fresh Review Decision.
 
 **Maximum 3 attempts.** If a third Completion Notice is still not acceptable, do **not**
 issue a fourth rejection-and-retry. Instead the Epic Agent produces an **Escalation
@@ -373,7 +365,8 @@ A Milestone Chat session follows this sequence:
 4. **Return** — deliver all artifacts to parent chat for review
 5. **Authorize** — for each accepted Epic, issue an Epic Delivery Authorization
 6. **Execute** — receive Completion Notices from Epic Agents as they finish work
-7. **Review** — issue Review Decisions (Accept or Reject) for each Completion Notice
+7. **Review** — review each Completion Notice; accept clean deliveries by silence,
+   issuing a Review Decision only on the exception path (PSG §11.6)
 8. **Aggregate** — when all Epics complete, produce Milestone Completion Notice
 9. **Close** — declare the session closed after parent Phase Chat accepts Milestone Completion Notice
 
