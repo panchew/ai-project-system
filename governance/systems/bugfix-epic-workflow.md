@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-05-29
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Bugfix Epic Workflow (P4.2)
@@ -219,6 +219,13 @@ status: open
 **Bugfix Epic:** 2-4 hours for review (SLA)
 
 HQ Chat MUST review Completion Notice within 4 hours of receipt. If unable to decide within 4 hours, escalate decision to product/engineering leadership.
+
+> **Deliberate exception to default-accept (PSG §11.6):** The Bugfix Workflow does
+> **not** use silence-accept. Because of the 4-hour SLA and production urgency, HQ Chat
+> **always** issues an explicit Review Decision (Accept or Reject) for a Bugfix Epic —
+> a bugfix delivery is never accepted by silence. This is a documented carve-out from
+> the default-accept model (PSG §11.6 / AOG §12), not a contradiction of it: the
+> explicit decision is what makes the SLA measurable and the production path auditable.
 
 See [SLA Tracking and Escalation](#sla-tracking-and-escalation) below for the precise
 measurement and escalation rules.
@@ -450,3 +457,4 @@ authored_by: <role>
 |---------|------|--------|
 | 1.0.0 | 2026-05-29 | Initial release. Defines lightweight Bugfix Epic workflow for unplanned, time-sensitive issues. Includes minimal spec template, expedited review SLA, and production deployment gate requiring CFO authorization. |
 | 1.1.0 | 2026-06-20 | Added the SLA Tracking and Escalation section (4-hour window measured from the Completion Notice timestamp; miss → urgent flag to CFO, review never skipped). Referenced the canonical Deployment Authorization and Post-Mortem templates, and the `docs/bugfixes/` location. (P4-M19-E19.1) |
+| 1.2.0 | 2026-07-03 | Documented the Bugfix Workflow as a deliberate exception to default-accept (PSG §11.6 / AOG §12): HQ Chat always issues an explicit Review Decision — never silence-accept. Explicit review and the 4-hour SLA are unchanged. (P6-M25-E25.4) |
