@@ -131,5 +131,6 @@ see docs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5__phase-closure-dec
   closure declaration, which is issued in HQ chat
 - The frontmatter formalizes the shape the hand-made P2–P5 declarations already shared
 - `acceptance_model` records **how** closure acceptance was recorded; the acceptance
-  model's normative text lives at its own governance surfaces, not in this template
+  model's normative text is PROJECT-SYSTEM-GUIDELINES.md §11.6 "Default-Accept (SN-13)",
+  not this template
 - Template follows governance style (prescriptive, structured, explicit)
