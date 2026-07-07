@@ -12,7 +12,7 @@
   before HQ Chat makes an explicit acceptance decision.
 -->
 
-**Purpose:** The Epic Review Seal is a structured, copy-pasteable block used to express human (Layer 8) review findings after a Coding Agent has reported execution completion.
+**Purpose:** The Epic Review Seal is a structured, copy-pasteable block used to express human (Layer 8) review findings after a Coding Agent has reported execution completion. Under default-accept (PROJECT-SYSTEM-GUIDELINES.md §11.6 / AI-OPERATING-GUIDELINES.md §12), the Seal is produced on the **exception path** — a clean delivery is accepted by silence and produces no Seal.
 
 **Usage:** This template is optimized for HQ Chat. It captures human judgment without requiring formalized documentation before review is complete. It is NOT an acceptance artifact—it is a decision input.
 

@@ -1,18 +1,21 @@
 ---
 type: template
 status: active
-last_updated: 2026-06-17
+last_updated: 2026-07-07
 ---
 
 # Merge Authorization Template
 
 A **Merge Authorization** is the artifact a Phase Chat (or HQ Chat) issues to a Coding
 Agent to authorize merging an accepted Epic branch into its parent branch. It is the
-explicit "you may now merge" signal that follows an accepting Review Decision — no merge
-may happen without it.
+explicit "you may now merge" signal that follows **parent acceptance** of the delivery —
+by silence for a clean delivery, or by an accepting Review Decision on the exception path
+(PROJECT-SYSTEM-GUIDELINES.md §11.6 / AI-OPERATING-GUIDELINES.md §12) — no merge may
+happen without it.
 
 Used by: **Phase Chat / HQ Chat** (issuer) → **Coding Agent** (recipient).
-Related artifacts: [Review Decision](review-decision.md) (must precede this),
+Related artifacts: [Review Decision](review-decision.md) (precedes this only on the
+exception path — a clean delivery is accepted by silence),
 [Epic Closure Notice](epic-closure-notice.md) (the Coding Agent's reply after merge),
 [Delivery Notice](delivery-notice.md).
 
@@ -50,8 +53,9 @@ status: authorized
 # Merge Authorization: <P#-M#-E#.#> — <Epic Name>
 
 ## Basis
-<Reference the accepting Review Decision (timestamp / path) that this authorization
-follows. State that the Definition of Done is met and the PR is accepted.>
+<State that the Definition of Done is met and the delivery is accepted — by silence for
+a clean delivery (PSG §11.6 / AOG §12), or, on the exception path, reference the
+accepting Review Decision (timestamp / path) that this authorization follows.>
 
 ## Authorized Merge
 - Source branch: epic/<E#.#>
@@ -86,8 +90,9 @@ status: authorized
 # Merge Authorization: P4-M17-E17.1 — Fix Daemon Orchestrator Path Resolution
 
 ## Basis
-Follows the accepting Review Decision dated 2026-06-17 (Milestone Agent, P4-M17). All
-Definition of Done items verified; 182 tests pass with no regression. PR #73 accepted.
+Follows the accepting Review Decision dated 2026-06-17 (Milestone Agent, P4-M17) —
+exception path, accepted with a follow-up Epic. All Definition of Done items verified;
+182 tests pass with no regression. PR #73 accepted.
 
 ## Authorized Merge
 - Source branch: epic/P4-M17-E17.1
@@ -107,8 +112,9 @@ Epic Closure Notice confirming the merge commit, then stop.
 
 ## Notes
 
-- A Merge Authorization is only valid after an accepting **Review Decision**. It does not
-  replace the review — it acts on its outcome.
+- A Merge Authorization is only valid after **parent acceptance** of the delivery — by
+  silence for a clean delivery, or an accepting **Review Decision** on the exception path
+  (PSG §11.6 / AOG §12). It does not replace the review — it acts on its outcome.
 - Only HQ Chat, Phase Chat, or Milestone Chat may issue a Merge Authorization. A Coding
   Agent MUST NOT self-authorize a merge.
 - The authorization is committed to the repository for the audit trail.
