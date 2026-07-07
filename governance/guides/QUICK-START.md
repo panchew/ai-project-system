@@ -88,9 +88,9 @@ This creates:
 - **Canonical `docs/` hierarchy** (phases, roadmap, context, decisions, admin)
 - **Governance submodule** pinned to the current version
 - **`.ai-project.yml`** with correct governance reference
-- **Governance Agent file.** The canonical, tool-neutral location is
-  `.ai-project/agents/governance.agent.md`. (The CLI also writes a copy to `.github/agents/`, which
-  GitHub Copilot auto-detects — see [Tool Integration Guides](integrations/README.md).)
+- **Governance Agent file.** The CLI writes the canonical, tool-neutral file at
+  `.ai-project/agents/governance.agent.md`. For a GitHub Copilot auto-detection copy, see
+  [Tool Integration Guides](integrations/README.md).
 
 ### 1.2 Install the CLI (if needed)
 
@@ -143,9 +143,6 @@ your-project/
 ├── .ai-project/
 │   └── agents/
 │       └── governance.agent.md # Governance Agent (canonical, tool-neutral; all modes)
-├── .github/
-│   └── agents/
-│       └── governance.agent.md # GitHub Copilot auto-detection copy (one tool's convention)
 └── [your existing project files]
 ```
 
@@ -732,8 +729,8 @@ cd .governance && git fetch && git checkout v4.0.0 && cd ..
 | Project configuration | `.ai-project.yml` (repository root) |
 | Governance rules | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md`, `.governance/governance/AI-OPERATING-GUIDELINES.md` |
 | Templates | `.governance/governance/templates/` |
-| Governance Agent (canonical, tool-neutral) | `.ai-project/agents/governance.agent.md` |
-| Governance Agent (GitHub Copilot auto-detection copy) | `.github/agents/governance.agent.md` |
+| Governance Agent (canonical, tool-neutral; written by `ai-project init`) | `.ai-project/agents/governance.agent.md` |
+| Governance Agent (GitHub Copilot auto-detection copy; manual — see [Tool Integration Guides](integrations/README.md)) | `.github/agents/governance.agent.md` |
 | Phase Specs | `docs/phases/P<N>__phase__*.md` |
 | Milestone Specs | `docs/phases/P<N>__*/P<N>-M<N>__milestone.md` |
 | Epic Specs | `docs/phases/P<N>__*/P<N>-M<N>-E<N>.<N>__spec__*.md` |
