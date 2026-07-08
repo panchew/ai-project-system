@@ -2,12 +2,15 @@
 milestone: M25
 name: Process Refinements
 phase: P6
-status: planned
+status: complete
 start_date: 2026-07-02
 epics:
   - E25.1
   - E25.2
   - E25.3
+  - E25.4
+  - E25.5
+  - E25.6
 is_final: true
 ---
 
@@ -125,13 +128,24 @@ This milestone explicitly does **not**:
 - **E25.1 — Phase-closure canonical sequence** (P6-GH-12, High)
 - **E25.2 — Codify SN-13 default-accept** (P6-GH-10, Medium)
 - **E25.3 — Align `ai-project-init` agent path** (P6-GH-11, Low)
+- **E25.4 — Reconcile default-accept across reference/protocol/role/diagram docs** (P6-GH-10) — *added during execution*
+- **E25.5 — Reconcile default-accept in the artifact templates tier** (P6-GH-10) — *added during execution*
+- **E25.6 — Reconcile the remaining CLI-path adoption docs** (P6-GH-11) — *added during execution*
+
+> **Amendment (Phase Chat, 2026-07-03 — milestone-level bookkeeping, GH-8):** M25 was planned with
+> three epics; two carry-forwards (P6-GH-10 default-accept; P6-GH-11 init-path) reached across far
+> more of the framework than the named-surface lists captured. E25.4/E25.5/E25.6 were added **by
+> explicit Phase Chat decision at each step during execution** (never assumed) to reconcile
+> default-accept across the reference/protocol/role/diagram and templates tiers (E25.4/E25.5) and
+> the remaining CLI-path adoption docs (E25.6). The Milestone Chat, bound by adjacency, could not
+> edit this (its parent's) spec; the Phase Chat records the final six-epic list here. Two new
+> carry-forwards surfaced and are recorded at phase level: **P6-GH-14** (P4.1-vs-PSG §12
+> Delivery-Notice ordering) and **P6-GH-15** (`ai-project-init` installs the superseded
+> `hq.agent.md`). Lesson recorded: *a spec's named-surface list is a floor, not a ceiling.*
 
 > **Artifact scope (GH-8 adjacency):** the Phase Chat produces only this Milestone spec and the
 > Milestone Execution Chat Starter. The **Milestone Chat** owns final epic planning and authors
-> all three Epic specs and all three Epic Execution Chat Starters. No Phase-level Epic drafts
-> exist; the epic detail below is the indicative decomposition and the verified grounding the
-> Milestone Chat plans against — it may adjust epic boundaries **within M25's scope** but may not
-> add or drop the named deliverables.
+> every Epic spec and Epic Execution Chat Starter. No Phase-level Epic drafts exist.
 
 ### Deferred Epics
 
