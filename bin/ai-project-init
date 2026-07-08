@@ -130,7 +130,7 @@ create_folder_structure() {
   success "Creating folder structure"
   mkdir -p "$project_dir/docs/phases" "$project_dir/docs/context" "$project_dir/docs/roadmap" \
            "$project_dir/docs/decisions" "$project_dir/docs/_legacy" "$project_dir/docs/admin"
-  mkdir -p "$project_dir/.github/agents"
+  mkdir -p "$project_dir/.ai-project/agents"
 
   create_stub_file "$project_dir/docs/README.md" "# Project Documentation
 
@@ -324,7 +324,7 @@ install_hq_agent() {
   # Install the HQ Chat agent file into the generated project.
   # If the governance agent file is unavailable, create a stub placeholder.
   local project_dir="$1"
-  local agents_dir="$project_dir/.github/agents"
+  local agents_dir="$project_dir/.ai-project/agents"
   local src_file="$project_dir/governance/agents/hq.agent.md"
   local dest_file="$agents_dir/hq.agent.md"
 
@@ -405,7 +405,7 @@ main() {
   # If a git repo exists, include the agent file in the initial commit (amend) to keep history tidy
   if [[ "$skip_git" == false ]]; then
     cd "$target_dir" || error "Failed to enter directory: $target_dir"
-    git add .github/agents/hq.agent.md > /dev/null 2>&1 || error "Failed to stage HQ agent file"
+    git add .ai-project/agents/hq.agent.md > /dev/null 2>&1 || error "Failed to stage HQ agent file"
     # Prefer amending the initial commit; if that fails (edge cases), fall back to a new commit
     if ! git commit --amend --no-edit > /dev/null 2>&1; then
       git commit -m "Add HQ agent file" > /dev/null 2>&1 || error "Failed to commit HQ agent file"

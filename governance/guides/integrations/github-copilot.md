@@ -39,8 +39,9 @@ rm -f .github/agents/hq.agent.md
 
 (If your project IS the governance source, copy from `./governance/agents/governance.agent.md`.)
 
-> The `ai-project init` CLI already creates `.github/agents/governance.agent.md` for you; the copy
-> step above is the manual equivalent and ensures it matches the current Governance Agent.
+> The `ai-project init` CLI writes the neutral `.ai-project/agents/governance.agent.md` copy for
+> you; the Copilot auto-detection copy above is a manual step you (or your tooling) maintain
+> separately.
 
 ## 2. How GitHub Copilot consumes it
 

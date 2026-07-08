@@ -21,9 +21,11 @@ Stage 1 — Planning
 
 Stage 2 — Oversight
   Does:        Receives Completion Notices from direct children
-               Issues Review Decisions (accept / reject)
+               Accepts clean deliveries by silence; issues a Review Decision
+                 only on the exception path (PSG §11.6 / AOG §12)
                Opens own PR to parent branch
-               Merges own PR after parent Review Decision Accept
+               Merges own PR on parent acceptance (silence, or an
+                 exception-path Review Decision Accept)
                Sends Delivery Notice
   Closes when: Own PR is merged and Delivery Notice is sent
 ```
@@ -56,7 +58,7 @@ Stage 2 — Oversight
 |  Stage 1 only · Strategic control · No PR (master is final) |
 +------+--------------------------------------+---------------+
        |  ✅ Phase Execution Chat Starter     |
-       v                                      |  ✅ Review Decision
+       v                                      |  ✅ Review Decision (exception path)
 +---------------------------------------------v---------------+
 |  Phase Chat                                                 |
 |  Stage 1: Produces Milestone Starters                       |
@@ -65,7 +67,7 @@ Stage 2 — Oversight
 |           Merges on HQ Accept                               |
 +------+--------------------------------------+---------------+
        |  ✅ Milestone Execution Chat Starter |
-       v                                      |  ✅ Review Decision
+       v                                      |  ✅ Review Decision (exception path)
 +---------------------------------------------v---------------+
 |  Milestone Chat                                             |
 |  Stage 1: Produces Epic Starters                            |
@@ -74,7 +76,7 @@ Stage 2 — Oversight
 |           Merges on Phase Accept                            |
 +------+--------------------------------------+---------------+
        |  ✅ Epic Execution Chat Starter      |
-       v                                      |  ✅ Review Decision
+       v                                      |  ✅ Review Decision (exception path)
 +---------------------------------------------v---------------+
 |  Epic Chat                                                  |
 |  Stage 2 only · Execution · Code                            |
@@ -88,8 +90,9 @@ Stage 2 — Oversight
 ## Upward Flow (child → parent)
 
 Every chat signals completion by sending a Completion Notice to its parent.
-The parent reviews and responds with a Review Decision.
-After a positive decision and PR merge, the child sends a Delivery Notice.
+The parent reviews; a clean delivery is accepted by silence, and a Review Decision
+comes back only on the exception path (PSG §11.6 / AOG §12).
+After acceptance and PR merge, the child sends a Delivery Notice.
 
 ```
 Epic Chat        ---> ✅ Completion Notice ---> Milestone Chat
@@ -106,13 +109,15 @@ Phase Chat       ---> ✅ Delivery Notice   ---> HQ Chat
 ## Downward Flow (parent → child)
 
 A parent opens a child chat by sending it an Execution Chat Starter.
-After reviewing a Completion Notice, the parent sends a Review Decision back.
+After reviewing a Completion Notice, the parent accepts a clean delivery by silence;
+a Review Decision is sent back only on the exception path (PSG §11.6).
 
 ```
 HQ Chat         ---> ✅ Phase Execution Chat Starter      ---> Phase Chat (opens it)
 Phase Chat      ---> ✅ Milestone Execution Chat Starter  ---> Milestone Chat (opens it)
 Milestone Chat  ---> ✅ Epic Execution Chat Starter       ---> Epic Chat (opens it)
 
+Exception path only — issued when a delivery is not clean (PSG §11.6):
 HQ Chat         ---> ✅ Review Decision ---> Phase Chat
 Phase Chat      ---> ✅ Review Decision ---> Milestone Chat
 Milestone Chat  ---> ✅ Review Decision ---> Epic Chat
@@ -145,7 +150,7 @@ HQ Chat        ---> ⬜ Progress Digest  ---> Creation  (periodic: aggregated mi
 | Milestone Execution Chat Starter | Phase → Milestone | Phase Chat | Milestone Chat | ✅ exists |
 | Epic Execution Chat Starter | Milestone → Epic | Milestone Chat | Epic Chat | ✅ exists |
 | Completion Notice | Child → Parent | Any child chat | Parent chat | ✅ exists |
-| Review Decision | Parent → Child | Any parent chat | Child chat | ✅ exists |
+| Review Decision (exception path — PSG §11.6) | Parent → Child | Any parent chat | Child chat | ✅ exists |
 | Delivery Notice | Child → Parent | Any child chat | Parent chat | ✅ exists |
 
 **4 artifacts missing. 6 artifacts exist.**
@@ -157,8 +162,8 @@ HQ Chat        ---> ⬜ Progress Digest  ---> Creation  (periodic: aggregated mi
 **The two-stage lifecycle is not documented.** Phase and Milestone Execution Chat Starters
 currently define these chats as planning-only and explicitly state they do not open PRs
 or merge. This is wrong — they manage their own branch lifecycle in Stage 2.
-The starters need a Stage 2 section added: Completion Notice intake, Review Decision
-issuance, PR creation, and merge instructions.
+The starters need a Stage 2 section added: Completion Notice intake, exception-path
+Review Decision issuance (PSG §11.6), PR creation, and merge instructions.
 
 **The missing artifacts are all at the top of the hierarchy** — no bootstrap (Genesis),
 no inception-to-governance handoff (Project Brief), no ongoing steering channel

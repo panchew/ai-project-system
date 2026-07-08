@@ -174,15 +174,16 @@ Provide the values and confirm. The CLI output will show:
 ```
 ✅ Created .ai-project.yml
 ✅ Created docs/phases/
-✅ Created .github/agents/governance.agent.md
+✅ Created .ai-project/agents/governance.agent.md
 ✅ Created governance submodule at .governance/
 ✅ Project initialized successfully
 ```
 
-> **Note:** the CLI writes the agent to `.github/agents/` (GitHub Copilot's auto-detection path).
-> The **canonical, tool-neutral** location is `.ai-project/agents/governance.agent.md` — Step 3
-> installs it there and links a guide for your AI tool. `.github/agents/` is one tool's convention,
-> not the framework default.
+> **Note:** the CLI writes the agent to the **canonical, tool-neutral** location
+> `.ai-project/agents/governance.agent.md` — Step 3 confirms it there and links a guide for your AI
+> tool. For a GitHub Copilot auto-detection copy at `.github/agents/governance.agent.md`, see the
+> [GitHub Copilot integration guide](integrations/github-copilot.md); that copy is a manual step,
+> not something the CLI writes.
 
 ### Verification Check
 
@@ -298,8 +299,8 @@ Expected: YAML front-matter and agent definition describing all four modes.
 > as a submodule. Use `cp ./governance/agents/governance.agent.md .ai-project/agents/governance.agent.md`
 > instead of the submodule path.
 
-> **GitHub Copilot users:** Copilot auto-detects `.github/agents/` and the `ai-project init` CLI
-> already writes a copy there. That tool-specific copy is fine to keep — see the
+> **GitHub Copilot users:** Copilot auto-detects `.github/agents/`. The `ai-project init` CLI does
+> **not** write a copy there — you create it manually (a one-line `cp`) — see the
 > [GitHub Copilot integration guide](integrations/github-copilot.md). It is one tool's convention,
 > not a path other tools require.
 
@@ -502,8 +503,8 @@ cp .governance/governance/agents/governance.agent.md .ai-project/agents/governan
 |----------|------|
 | Project config | `.ai-project.yml` |
 | Governance submodule | `.governance/` |
-| Governance Agent definition (canonical, tool-neutral) | `.ai-project/agents/governance.agent.md` |
-| Governance Agent definition (GitHub Copilot auto-detection copy) | `.github/agents/governance.agent.md` |
+| Governance Agent definition (canonical, tool-neutral; written by `ai-project init`) | `.ai-project/agents/governance.agent.md` |
+| Governance Agent definition (GitHub Copilot auto-detection copy; manual — see [GitHub Copilot integration guide](integrations/github-copilot.md)) | `.github/agents/governance.agent.md` |
 | Governance guidelines | `.governance/governance/PROJECT-SYSTEM-GUIDELINES.md` |
 | Operating guidelines | `.governance/governance/AI-OPERATING-GUIDELINES.md` |
 | CLI script (local) | `.governance/bin/ai-project-init` |

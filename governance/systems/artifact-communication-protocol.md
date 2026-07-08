@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-05-29
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Artifact Communication Protocol (P4.1)
@@ -29,9 +29,9 @@ This document defines the canonical artifact formats and communication rules for
 1. **Artifact-First Communication** — Every chat-to-chat handoff uses one of the three canonical artifacts
 2. **Frontmatter + Body** — YAML frontmatter for machine parsing, markdown body for human context
 3. **Reference Integrity** — Every artifact includes parent_id, child_id, epic_id, milestone_id, phase_id as appropriate
-4. **One Way Per Direction** — Completion flows up, Review Decision flows down, Delivery closes the cycle
+4. **One Way Per Direction** — Completion flows up, Delivery closes the cycle; a Review Decision flows down only on the exception path (a clean delivery is accepted by silence — PSG §11.6 / AOG §12)
 5. **Immutability** — Once an artifact is created, it is archived; modifications create a new versioned artifact
-6. **Terminal States** — A chat declares completion via artifact, parent accepts/rejects via artifact, delivery finalizes via artifact
+6. **Terminal States** — A chat declares completion via artifact, the parent accepts a clean delivery by silence (merge + in-chat acknowledgment) and rejects or accepts-with-follow-ups via artifact on the exception path (PSG §11.6), delivery finalizes via artifact
 
 ---
 
@@ -43,7 +43,7 @@ This document defines the canonical artifact formats and communication rules for
 
 **Direction:** Upward (child → parent)
 
-**Purpose:** Signal readiness for parent acceptance. Parent must explicitly accept or reject.
+**Purpose:** Signal readiness for parent acceptance. The parent accepts a clean delivery by silence; it issues a Review Decision (Reject, or Accept with follow-up Epics) only on the exception path (PSG §11.6 / AOG §12).
 
 #### Structure
 
@@ -94,9 +94,9 @@ pr_details:
 ## Ready for Parent Review
 This Epic is complete and submitted for <Milestone|Phase|HQ> Chat review and acceptance.
 
-**Next Action:** Parent Chat reviews this artifact, then issues either:
-- **Review Decision (Accept)** → allows merge
-- **Review Decision (Reject)** → requires rework
+**Next Action:** Parent Chat reviews this artifact. Then (PSG §11.6):
+- **Clean delivery** → accepted by silence (merge + in-chat acknowledgment; no artifact)
+- **Not clean** → exception-path **Review Decision** (Reject → rework, or Accept with follow-up Epics)
 ```
 
 #### Examples
@@ -166,13 +166,13 @@ This Epic is complete and submitted for Milestone Chat review and acceptance.
 
 ---
 
-### 2. Review Decision (Milestone → Epic, Phase → Milestone, HQ → Phase)
+### 2. Review Decision (Milestone → Epic, Phase → Milestone, HQ → Phase) — exception path
 
-**Trigger:** Parent reviews Completion Notice, decides to accept or reject.
+**Trigger:** Parent reviews a Completion Notice and finds the delivery **not clean**. This is the exception path (PSG §11.6 / AOG §12): a clean delivery is accepted by silence — the merge plus the in-chat acknowledgment is the acceptance record — and produces no Review Decision.
 
 **Direction:** Downward (parent → child)
 
-**Purpose:** Grant authority to proceed with merge (Accept) or require rework (Reject).
+**Purpose:** Require rework (Reject), or grant authority to proceed with merge while binding follow-up Epic(s) (Accept with follow-ups).
 
 #### Structure
 
@@ -223,7 +223,11 @@ This submission has been rejected. Please address the following before resubmitt
 
 #### Examples
 
-**Epic Review Decision (Accept):**
+Both examples below are **exception-path** artifacts. A clean delivery produces no
+Review Decision at all — it is accepted by silence, with the merge plus the in-chat
+acknowledgment as the acceptance record (PSG §11.6).
+
+**Epic Review Decision (Accept with follow-up Epic — exception path):**
 ```markdown
 ---
 artifact_type: review_decision
@@ -237,7 +241,7 @@ milestone_id: P1-M1
 phase_id: P1
 project_name: my-project
 completion_notice_timestamp: 2026-05-29T14:32:00Z
-feedback: "Excellent work. Spec compliance confirmed, tests comprehensive, PR ready for merge."
+feedback: "Spec compliance confirmed and tests comprehensive, but the API documentation gap must be closed. Accepted with follow-up Epic E1.3."
 authorization:
   action: merge
   merge_instruction: "Merge PR #428 to milestone/M1. After merge, declare Epic complete in Milestone Chat."
@@ -245,7 +249,7 @@ authorization:
 
 # Review Decision: P1-M1-E1.1 — Feature Name
 
-## Decision: ACCEPT ✓
+## Decision: ACCEPT ✓ (with follow-up Epic)
 
 ## Reviewer Context
 - Reviewed by: Milestone Agent (P1-M1)
@@ -253,7 +257,9 @@ authorization:
 - Completion Notice Date: 2026-05-29 14:32 UTC
 
 ## Feedback
-Excellent work. The implementation is spec-compliant, tests are comprehensive (14/14 passing), and the PR is ready for merge. No issues found.
+The implementation is spec-compliant and tests are comprehensive (14/14 passing), but
+the API documentation named in the spec was not delivered. The delivery is not clean, so
+this exception-path decision records acceptance with follow-up Epic E1.3 (API docs).
 
 ## Authorization
 You are authorized to merge this work. Follow these steps:
@@ -261,10 +267,10 @@ You are authorized to merge this work. Follow these steps:
 2. Merge PR #428 to milestone/M1 using squash-and-merge strategy
 3. Delete the epic/E1.1 branch after merge
 4. Declare Epic E1.1 complete in the Milestone Chat
-5. Move to the next Epic
+5. Follow-up Epic E1.3 (API documentation) is created for the next planning cycle
 ```
 
-**Epic Review Decision (Reject):**
+**Epic Review Decision (Reject — exception path):**
 ```markdown
 ---
 artifact_type: review_decision
@@ -522,14 +528,14 @@ Epic Execution Chat
     ↓
 Milestone Chat
     ↓
-    [Review]
-    ↓ ARTIFACT: Review Decision (Accept)
-    ↓ ARTIFACT: Review Decision (Reject ← rework required)
+    [Review]  (PSG §11.6)
+    ↓ clean     → accepted by silence (no artifact; in-chat acknowledgment + merge)
+    ↓ not clean → ARTIFACT: Review Decision (Reject ← rework required,
+    ↓             or Accept with follow-up Epics)
     ↓
 Epic Execution Chat (if Reject: rework and resubmit)
     ↓
-    [Rework] → Completion Notice
-    ↓ ARTIFACT: Review Decision (Accept)
+    [Rework] → Completion Notice → re-review (clean → accepted by silence)
     ↓
 Epic Execution Chat
     ↓
@@ -553,7 +559,7 @@ Phase Chat
 ### Creation Rules
 
 1. **Completion Notice** is created by the child chat when work is finished (all Definition of Done items met, PR open/merged).
-2. **Review Decision** is created by the parent chat after reviewing the Completion Notice (accept within 24 hours or escalate).
+2. **Review Decision** is created by the parent chat only on the exception path — when its review of the Completion Notice finds the delivery not clean (PSG §11.6). A clean delivery is accepted by silence; review happens within 24 hours or escalates, but produces no artifact.
 3. **Delivery Notice** is created by the child chat after the PR is merged to the parent branch.
 
 ### Formatting Rules
@@ -567,7 +573,7 @@ Phase Chat
 ### Workflow Rules
 
 1. A Completion Notice MUST precede a Review Decision.
-2. A Review Decision (Accept) MUST precede a Delivery Notice.
+2. Parent acceptance MUST precede the merge and its Delivery Notice. On the happy path a clean delivery is accepted by silence — no Review Decision exists (PSG §11.6 / AOG §12); on the exception path the Review Decision (Accept with follow-ups) MUST precede them.
 3. A Delivery Notice MUST be created within 24 hours of PR merge (or escalate if delayed).
 4. If a Review Decision rejects, the child chat creates a new Completion Notice (v1.1) after rework.
 5. Artifacts are immutable once created; modifications create new versions (v1.1, v1.2, etc.).
@@ -584,7 +590,7 @@ Phase Chat
 
 ## Integration with Manual Mode
 
-In manual mode (no daemon), chats produce these artifacts and paste them into parent chats via copy-paste. The parent chat reviews and copies the Review Decision back.
+In manual mode (no daemon), chats produce these artifacts and paste them into parent chats via copy-paste. The parent chat reviews; a clean delivery is accepted by silence with an in-chat acknowledgment (PSG §11.6), and on the exception path the Review Decision is copied back.
 
 **CFO Benefit:** Layer-8 can visit any HQ Chat and see the latest Completion Notices, Review Decisions, and Delivery Notices in a structured format, making progress tracking across multiple projects trivial.
 
@@ -596,9 +602,9 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 1. Epic Chat completes → writes Completion Notice to `.ai-project/artifacts/completion-notices/`
 2. Daemon detects Completion Notice → routes to parent (Milestone Chat or HQ Chat)
-3. Parent Chat reads and processes → writes Review Decision to `.ai-project/artifacts/review-decisions/`
-4. Daemon detects Review Decision → routes back to child (Epic Chat or Milestone Chat)
-5. Child Chat reads Accept decision → proceeds to merge → writes Delivery Notice
+3. Parent Chat reads and reviews → clean: accepts by silence and acknowledges to the child (no artifact — PSG §11.6); not clean: writes exception-path Review Decision to `.ai-project/artifacts/review-decisions/`
+4. Daemon detects an exception-path Review Decision → routes back to child (Epic Chat or Milestone Chat)
+5. Child Chat proceeds on acceptance (silence, or Accept-with-follow-ups) → merges → writes Delivery Notice; on Reject it reworks and resubmits
 
 ---
 
@@ -618,3 +624,4 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-05-29 | Initial release. Defines Completion Notice, Review Decision, Delivery Notice schemas and integration with manual & agentic modes. |
+| 1.1.0 | 2026-07-03 | Reconciled to default-accept (SN-13, PSG §11.6 / AOG §12): Review Decision reframed as the exception-path artifact; a clean delivery is accepted by silence. Ordering rule "Review Decision (Accept) MUST precede a Delivery Notice" scoped to the exception path. ACCEPT worked example reframed as accept-with-follow-ups; REJECT example and all schemas unchanged. (P6-M25-E25.4) |
