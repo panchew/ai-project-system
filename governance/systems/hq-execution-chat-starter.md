@@ -47,14 +47,16 @@ An **HQ Chat** is a long-lived planning, governance, and coordination surface. I
 1. **Define project vision and scope** — establish intent and constraints
 2. **Produce Phase specs and Phase Execution Chat Starters** — launch each Phase with a
    binding planning contract
-3. **Review and accept deliverables returned by Phase Chats** — issue accept / reject /
-   request-changes decisions
+3. **Review and accept deliverables returned by Phase Chats** — accept clean deliveries
+   by silence (merge + in-chat acknowledgment); issue an explicit reject or
+   accept-with-follow-ups decision only on the exception path (PSG §11.6)
 4. **Create and dispatch Bugfix Epics** — handle unplanned production issues on the
    expedited path (see [Handling Production Issues](#handling-production-issues-bugfix-epics))
 5. **Authorize production deployment** — the CFO production gate; no deployment proceeds
    without it (see [Production Deployment Gate](#production-deployment-gate))
-6. **Oversee the artifact system** — ensure Completion Notices, Review Decisions, and
-   Delivery Notices flow correctly between layers (see [Artifact System](#artifact-system-p4))
+6. **Oversee the artifact system** — ensure Completion Notices, Review Decisions
+   (exception path only — PSG §11.6), and Delivery Notices flow correctly between layers
+   (see [Artifact System](#artifact-system-p4))
 
 An HQ Chat enforces the canonical happy path for Epic closure and never skips, infers,
 or collapses a step.
@@ -95,7 +97,7 @@ Three artifacts carry the core review cycle:
 | Artifact | Produced by | Direction | Meaning |
 |----------|-------------|-----------|---------|
 | **Completion Notice** | Epic Agent | Epic → Milestone | "Work is finished and ready for your review" |
-| **Review Decision** | Reviewing chat (Milestone/Phase/HQ) | parent → child | "Accept" (merge) or "Reject" (rework) |
+| **Review Decision** | Reviewing chat (Milestone/Phase/HQ) | parent → child | Exception path only (PSG §11.6): "Reject" (rework) or "Accept with follow-ups"; a clean delivery is accepted by silence |
 | **Delivery Notice** | Epic Agent | Epic → Milestone | "PR merged; here is the merge record. Chat closed." |
 
 Several supporting artifacts have canonical templates in `governance/templates/`:
@@ -107,9 +109,9 @@ Notice** (Coding Agent confirms the branch merge completed), and **Escalation No
 
 ```
    HQ Chat
-     │  Phase Execution Chat Starter ▼        ▲ Milestone Completion Notice → Review Decision
+     │  Phase Execution Chat Starter ▼        ▲ Milestone Completion Notice (→ Review Decision only if not clean)
    Phase Chat
-     │  Milestone Execution Chat Starter ▼    ▲ Epic Completion Notice → Review Decision
+     │  Milestone Execution Chat Starter ▼    ▲ Epic Completion Notice (→ Review Decision only if not clean)
    Milestone Chat
      │  Epic Execution Chat Starter +         ▲ Completion Notice
      │  Epic Delivery Authorization ▼         │ Delivery Notice (after merge)
@@ -119,8 +121,9 @@ Notice** (Coding Agent confirms the branch merge completed), and **Escalation No
 ```
 
 Downward: each layer launches the layer below with a Chat Starter and a Delivery
-Authorization. Upward: each layer reports completion with a Completion Notice and
-receives a Review Decision; after merge it produces a Delivery Notice.
+Authorization. Upward: each layer reports completion with a Completion Notice; a clean
+delivery is accepted by silence, and a Review Decision comes back only on the exception
+path (PSG §11.6 / AOG §12); after merge it produces a Delivery Notice.
 
 **Reference:** [`artifact-communication-protocol.md`](artifact-communication-protocol.md)
 defines every artifact schema. Storage convention:
@@ -150,7 +153,12 @@ qa_status: passed
 All Definition of Done items satisfied. Tests pass; no regression.
 ```
 
-### Example — Review Decision (Milestone → Epic)
+### Example — Review Decision (Milestone → Epic, exception path)
+
+A Review Decision is issued **only when a delivery is not clean** — to reject it or to
+accept it with follow-up Epic(s) (PSG §11.6). A clean delivery is accepted by silence:
+the merge plus the in-chat acknowledgment is the acceptance record, and no artifact is
+produced.
 
 ```yaml
 ---
@@ -169,8 +177,9 @@ authorization:
   merge_instruction: Merge PR #74 to milestone/M17; delete the epic branch after merge.
 ---
 # Review Decision: P4-M17-E17.2 — Update Starters and Documentation
-## Decision: ACCEPT ✓
-Spec compliance confirmed, examples present, links resolve, lint check passes.
+## Decision: ACCEPT ✓ (with follow-up Epic)
+Spec compliance confirmed, links resolve, lint check passes — but one worked example is
+missing. Accepted with a follow-up Epic to add it; authorized to merge.
 ```
 
 ### Example — Delivery Notice (after merge)
@@ -339,8 +348,9 @@ Walk through it with the
 1. **Open** — establish project context (name, repo, governance versions, current Phase)
 2. **Plan** — produce Phase specs and Phase Execution Chat Starters
 3. **Authorize** — issue Phase Delivery Authorizations for accepted Phase plans
-4. **Oversee** — receive Completion Notices, issue Review Decisions, supervise the
-   artifact flow; create Bugfix Epics as needed
+4. **Oversee** — receive Completion Notices, accept clean deliveries by silence (a
+   Review Decision is the exception path only — PSG §11.6), supervise the artifact flow;
+   create Bugfix Epics as needed
 5. **Gate** — authorize production deployments (CFO)
 6. **Persist** — HQ Chat remains open across Phases for continuity
 

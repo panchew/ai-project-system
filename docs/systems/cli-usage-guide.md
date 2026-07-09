@@ -33,7 +33,7 @@ ai-project init <project-name> [options]
 
 - Standard docs structure and `.ai-project.yml` with governance metadata
 - Governance as a Git submodule at `governance/`
-- HQ Chat agent installed at `.github/agents/hq.agent.md` (stubbed if governance agent not present)
+- HQ Chat agent installed at `.ai-project/agents/hq.agent.md` (stubbed if governance agent not present)
 - Clean initial git commit
 
 ## Quick Start
@@ -72,7 +72,7 @@ git submodule status
 ls governance/
 
 # Verify agent file
-cat .github/agents/hq.agent.md | sed -n '1,40p'
+cat .ai-project/agents/hq.agent.md | sed -n '1,40p'
 
 # Validate YAML
 cat .ai-project.yml
@@ -90,9 +90,9 @@ git log --oneline -n 1
 - Governance Agent file missing or empty:
   - Install the agent manually:
     ```bash
-    mkdir -p .github/agents
+    mkdir -p .ai-project/agents
     if [[ -f governance/agents/governance.agent.md ]]; then
-      cp governance/agents/governance.agent.md .github/agents/governance.agent.md
+      cp governance/agents/governance.agent.md .ai-project/agents/governance.agent.md
     fi
     ```
 - Governance Agent cannot find `.ai-project.yml` or `governance/`:

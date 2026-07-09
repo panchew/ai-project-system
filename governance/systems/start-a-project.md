@@ -147,7 +147,7 @@ Windsurf, or GitHub Copilot).
 The HQ Chat becomes the **strategic control plane** for the project:
 - Defines Phases, Milestones, and Epics
 - Produces Epic specs and Epic Execution Chat Starters
-- Issues Review Decisions and Delivery Authorizations
+- Accepts clean deliveries by silence (a Review Decision is the exception path only — PSG §11.6) and issues Delivery Authorizations
 - Never executes code
 
 ---

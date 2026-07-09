@@ -34,7 +34,7 @@
 | Template | File | When to Use |
 |----------|------|-------------|
 | **Completion Notice (Epic)** | [completion-notice-epic.md](completion-notice-epic.md) | Epic Agent signals work is finished and ready for Milestone review |
-| **Review Decision** | [review-decision.md](review-decision.md) | Reviewing chat issues Accept or Reject on a Completion Notice |
+| **Review Decision** | [review-decision.md](review-decision.md) | Exception path only — reviewing chat issues Accept-with-follow-ups or Reject on a Completion Notice that isn't clean; a clean delivery is accepted by silence (PROJECT-SYSTEM-GUIDELINES.md §11.6) |
 | **Delivery Notice** | [delivery-notice.md](delivery-notice.md) | Epic Agent records the merge after acceptance |
 | **Merge Authorization** | [merge-authorization.md](merge-authorization.md) | Phase/HQ Chat authorizes a Coding Agent to merge an accepted Epic |
 | **Epic Closure Notice** | [epic-closure-notice.md](epic-closure-notice.md) | Coding Agent confirms a merge completed, to the Milestone Chat |

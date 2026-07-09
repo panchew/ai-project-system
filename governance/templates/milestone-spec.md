@@ -308,6 +308,24 @@ Milestone <M#> is complete when all Epics under <M#> are completed and closed.
 
 ---
 
+## Visual Bindings
+
+<!-- 
+  Optional. Record links to any generated visuals for this milestone, using the binding schema in
+  governance/guides/visual-artifacts.md §7 (link + What / Level / State / Description).
+  Bind a hosted LINK, never a committed path. A level may carry both a `proposed` binding
+  (before build) and an `implemented` binding (after). Omit this section if there are no visuals.
+-->
+
+**Visual binding**
+- **Link:** <hosted URL of the generated visual>
+- **What:** image | infographic | mockup | diagram | clip
+- **Level:** Milestone
+- **State:** proposed | implemented
+- **Description:** <short text that survives link rot>
+
+---
+
 ## Notes
 
 <!-- 

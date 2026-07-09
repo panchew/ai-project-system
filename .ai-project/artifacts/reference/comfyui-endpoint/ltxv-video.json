@@ -1,0 +1,16 @@
+{
+  "4": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": "ltx-video-2b-v0.9.5.safetensors"}},
+  "11": {"class_type": "CLIPLoader", "inputs": {"clip_name": "t5xxl_fp8_e4m3fn.safetensors", "type": "ltxv"}},
+  "6": {"class_type": "CLIPTextEncode", "inputs": {"text": "%prompt%", "clip": ["11", 0]}},
+  "7": {"class_type": "CLIPTextEncode", "inputs": {"text": "low quality, worst quality, deformed, distorted, watermark, blurry, jpeg artifacts", "clip": ["11", 0]}},
+  "12": {"class_type": "LTXVConditioning", "inputs": {"positive": ["6", 0], "negative": ["7", 0], "frame_rate": 25.0}},
+  "13": {"class_type": "EmptyLTXVLatentVideo", "inputs": {"width": 768, "height": 512, "length": 97, "batch_size": 1}},
+  "14": {"class_type": "ModelSamplingLTXV", "inputs": {"model": ["4", 0], "max_shift": 2.05, "base_shift": 0.95, "latent": ["13", 0]}},
+  "15": {"class_type": "KSamplerSelect", "inputs": {"sampler_name": "euler"}},
+  "16": {"class_type": "RandomNoise", "inputs": {"noise_seed": 0}},
+  "17": {"class_type": "LTXVScheduler", "inputs": {"steps": 30, "max_shift": 2.05, "base_shift": 0.95, "stretch": true, "terminal": 0.1, "latent": ["13", 0]}},
+  "19": {"class_type": "CFGGuider", "inputs": {"model": ["14", 0], "positive": ["12", 0], "negative": ["12", 1], "cfg": 3.0}},
+  "20": {"class_type": "SamplerCustomAdvanced", "inputs": {"noise": ["16", 0], "guider": ["19", 0], "sampler": ["15", 0], "sigmas": ["17", 0], "latent_image": ["13", 0]}},
+  "8": {"class_type": "VAEDecode", "inputs": {"samples": ["20", 0], "vae": ["4", 2]}},
+  "21": {"class_type": "SaveWEBM", "inputs": {"images": ["8", 0], "filename_prefix": "ltxv", "codec": "vp9", "fps": 24.0, "crf": 32.0}}
+}
