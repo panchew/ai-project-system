@@ -172,43 +172,52 @@ This system eliminates the chaos of ephemeral chats and lost context.
 
 ---
 
-## In Progress
-
-### P6 – Visual Comprehension Layer & Process Refinements *(Active)*
+### P6 – Visual Comprehension Layer & Process Refinements *(Completed)*
 
 **Goal**: Build the consumer architecture that turns the governance flow into a continuous
 visual narrative — explaining the *proposed solution* and the *actual implementation* at
-every level so the CFO can follow along with low cognitive load. Reverse the v5.0.0
-binary-storage model to by-link, define the link + metadata binding convention, make
-proposed-vs-implemented coverage routine, and define clips as single-parent documentation
-that doubles as publishable media. Plus close the three P5 process carry-forwards.
+every level so the CFO can follow along with low cognitive load — plus close the three P5
+process carry-forwards.
 
-**Status**: Active — opened 2026-06-29. Scoped via Creation Chat (SN-15 + SN-16); producer
-(ComfyUI) and helper (`bin/ai-project-visual`) are done and verified, so P6 is the
-governance/comprehension layer above them, not plumbing. See
-[`docs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6__phase-spec.md`](../phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6__phase-spec.md).
+**Status**: Completed (Consolidated to master 2026-07-08 — **v5.1.0**, 260 passed / 1 skipped
+by design). First phase closed through the canonical **PSG §5C** sequence — the very sequence
+P6 itself codified. See the
+[Phase Closure Declaration](../phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6__phase-closure-declaration.md).
 
-**Milestones**:
+**Milestone Status**:
 
-| Milestone | Name | Scope |
-|-----------|------|-------|
-| **M23** | By-Link Storage Model & Binding Convention | P6-VC-1 (by-link reversal), P6-VC-2 (binding + metadata) |
-| **M24** | Comprehension Behavior & Clips | P6-VC-3 (proposed-vs-implemented), P6-VC-4 (clips) |
-| **M25** | Process Refinements | P6-GH-12, P6-GH-10, P6-GH-11 |
+| Milestone | Name | Epics | Status | PR |
+|-----------|------|-------|--------|-----|
+| **M23** | By-Link Storage Model & Binding Convention | E23.1–E23.2 (2) | ✅ Complete | #96 |
+| **M24** | Comprehension Behavior & Clips | E24.1–E24.2 (2) | ✅ Complete | #99 |
+| **M25** | Process Refinements | E25.1–E25.6 (6) | ✅ Complete | #102 |
 
-**Candidate Pool** *(single consolidated registry — folds GH-10/11 from the P5 Closure
-Declaration and GH-12/13 from earlier roadmap drafts)*:
+**Key Deliverables**:
+- ✅ By-link storage model — generated visual material referenced by link, never committed to git (v5.0.0 commit-the-binary guidance reversed and reconciled everywhere) (P6-VC-1)
+- ✅ Binding convention (guide §7) — link + What / Level / State / Description metadata with per-level placement (P6-VC-2)
+- ✅ Proposed-vs-implemented visuals as the routine default at every level, Structural-first (AOG §16.6) (P6-VC-3)
+- ✅ Single-parent clips as documentation that doubles as publishable media, on the verified LTX-Video path (AOG §16.7, guide §8) (P6-VC-4)
+- ✅ Canonical phase closure (PSG §5C) — README update, version bump, tag as mandatory automatic steps (P6-GH-12)
+- ✅ SN-13 default-accept codified (PSG §11.6, AOG §12) and reconciled framework-wide, Layer-8 human review preserved (P6-GH-10)
+- ✅ `ai-project-init` writes tool-neutral `.ai-project/agents/`, with the framework's first test of that behavior (P6-GH-11)
+- ✅ Governance at delivery: **PSG v2.3.0**, **AOG v2.6.0**
 
-| ID | Title | Priority | Disposition |
-|----|-------|----------|-------------|
-| P6-VC-1 | By-link storage reconciliation — reverse the v5.0.0 commit-the-binary model; reconcile guide §4/§1, AOG §16.5, helper output guidance, and the integration test to by-link (explicit, named deliverable) | Highest | M23 |
-| P6-VC-2 | Link + metadata binding convention — link carries what / level / proposed-vs-implemented / short description; load-bearing under by-link | High | M23 |
-| P6-VC-3 | Proposed-vs-implemented comprehension behavior — routine two-track coverage at every level ("nothing is too much"), Structural-first | High | M24 |
-| P6-VC-4 | Clips as documentation + publishable media — single-parent binding, verified LTX-Video path, publish path as same asset reused | High | M24 |
-| P6-GH-12 | Phase-closure canonical sequence — README update, version bump, and tag as mandatory automatic steps (today needs a Steering Note) | High | M25 |
-| P6-GH-13 | ComfyUI working integration | High | **Subsumed** — producer + helper delivered and verified (SN-16); the real work is the consumer/comprehension layer (P6-VC-1…4) |
-| P6-GH-10 | Formally codify SN-13 default-accept model into AOG, PSG, and Starter templates | Medium | M25 |
-| P6-GH-11 | Align `bin/ai-project-init` to write `.ai-project/agents/` (not `.github/agents/`) | Low | M25 |
+---
+
+## Upcoming
+
+### P7 – *(Pre-scoping)*
+
+**Status**: Candidates registered — scoping via Creation Chat before a phase spec is opened.
+
+**Registered Candidates** *(single registry; IDs as named by their source)*:
+
+| ID | Title | Priority | Source |
+|----|-------|----------|--------|
+| P7-AE-1 | **`bin/run-dev-agent` adapter — first real agentic run.** Wire `local-agent-runner` (standalone engine, v1.0.0 proven) as the P3 orchestrator's `dev_command`: task = epic DoD, context = scoped spec/starter (never full governance), tools = coding set scoped to the repo, model from `AI_PROJECT_ACTIVE_MODEL`. Must not depend on the runner's `final_answer` (audit-verified unreliable); switch `epic_dev` off `llama3:8b` → `qwen2.5-coder:14b`; exit criterion = a live Epic completes non-mocked. **Gated on `local-agent-runner` P2** (write_file/list_dir/git tools + repair nudge). | High | [GH #111](https://github.com/panchew/ai-project-system/issues/111) |
+| P7-GH-16 | **Level-0 handoff defined two contradictory ways.** `seed.md` Rule 4 converges on Project Brief + HQ Chat Opener → HQ Chat; `genesis.md` / `start-a-project.md` / `chat-hierarchy.md` converge on committed `genesis.md` → Phase Chat directly (HQ never opened, despite the packet being named "HQ Context Packet"). Decide the canonical output (or codify both flows as scale-dependent) and reconcile all four docs. Sub-item: promote the existing `systems/hq-chat-opener.md` into `templates/` as the missing HQ starter (SN-2). | Medium | [GH #110](https://github.com/panchew/ai-project-system/issues/110) |
+| P6-GH-14 | P4.1-vs-PSG §12 Delivery-Notice ordering inconsistency (Completion → review → merge → DN, vs. §12's execution → DN → review); surfaced during E25.4 | Medium | P6 Closure Declaration |
+| P6-GH-15 | `bin/ai-project-init` installs the superseded `hq.agent.md` instead of the canonical unified `governance.agent.md`; surfaced during E25.6 | Low | P6 Closure Declaration |
 
 ---
 
@@ -224,11 +233,13 @@ Declaration and GH-12/13 from earlier roadmap drafts)*:
 
 ## Current Focus
 
-Phases P1–P5 are **completed and consolidated to master** at **v5.0.0**.
+All phases (P1–P6) are **completed and consolidated to master** at **v5.1.0**.
 
-**P6 — Visual Comprehension Layer & Process Refinements is active** (opened 2026-06-29).
-The phase spec is open and `phase/P6` is branched; the Phase Chat is planning Milestones
-M23–M25.
+**P7** is in pre-scoping — candidates are registered above. The headline candidate is
+**P7-AE-1**: the first real (non-mocked) agentic run, wiring the `local-agent-runner`
+engine into the P3 orchestrator. It is gated on that project's Phase P2; the governance
+items (P7-GH-16, P6-GH-14, P6-GH-15) are independent and executable any time. The phase
+spec will open after a Creation Chat session establishes the theme and priorities.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
