@@ -218,6 +218,11 @@ P6 itself codified. See the
 | P7-GH-16 | **Level-0 handoff defined two contradictory ways.** `seed.md` Rule 4 converges on Project Brief + HQ Chat Opener → HQ Chat; `genesis.md` / `start-a-project.md` / `chat-hierarchy.md` converge on committed `genesis.md` → Phase Chat directly (HQ never opened, despite the packet being named "HQ Context Packet"). Decide the canonical output (or codify both flows as scale-dependent) and reconcile all four docs. Sub-item: promote the existing `systems/hq-chat-opener.md` into `templates/` as the missing HQ starter (SN-2). | Medium | [GH #110](https://github.com/panchew/ai-project-system/issues/110) |
 | P6-GH-14 | P4.1-vs-PSG §12 Delivery-Notice ordering inconsistency (Completion → review → merge → DN, vs. §12's execution → DN → review); surfaced during E25.4 | Medium | P6 Closure Declaration |
 | P6-GH-15 | `bin/ai-project-init` installs the superseded `hq.agent.md` instead of the canonical unified `governance.agent.md`; surfaced during E25.6 | Low | P6 Closure Declaration |
+| P7-VC-1 | **Visual production default-on (opt-out), tied to artifact creation.** Flip `visual_artifacts` from opt-in to **default-on with an explicit opt-out** (`enabled: false`) — reconcile AOG §16.1, `ai-project-yml-spec.md` §3.5, `guides/visual-artifacts.md`, spec templates, and agent definitions. **Structural-first default** (no `comfyui_url` ⇒ Mermaid/PlantUML only; generative activates when an endpoint is present — safe with zero infrastructure). **Trigger set:** automatic production limited to **specs + delivery/closure declarations**; all other artifact types on demand. **Enforcement is a setting**, not a hard gate (e.g. `visual_required_for_specs: true`, default true). The four decisions are settled — scoping turns them into epics, not re-debate. | High | [SN-17](../../.ai-project/artifacts/steering-notes/2026-07-11__creation-chat__steering-note__visuals-default-on.md) |
+
+**Scoping adjacencies (from SN-17, for P7 scoping — not yet epics):**
+- **P7-VC-1 ↔ P7-GH-16** both touch the artifact cascade + templates; scoping them in the same milestone may reduce reconciliation churn.
+- **P7-AE-1 ↔ Local Agent Runner + ComfyUI coexistence** (SN-17 carry-over): the two local-inference systems (Ollama runner, ComfyUI generation) must share one machine (GPU/VRAM, scheduling, possible orchestration) — resolve together, since both concern the local-inference platform.
 
 ---
 
@@ -237,8 +242,9 @@ All phases (P1–P6) are **completed and consolidated to master** at **v5.1.0**.
 
 **P7** is in pre-scoping — candidates are registered above. The headline candidate is
 **P7-AE-1**: the first real (non-mocked) agentic run, wiring the `local-agent-runner`
-engine into the P3 orchestrator. It is gated on that project's Phase P2; the governance
-items (P7-GH-16, P6-GH-14, P6-GH-15) are independent and executable any time. The phase
+engine into the P3 orchestrator. It is gated on that project's Phase P2; the framework
+items (P7-VC-1 visuals default-on, P7-GH-16, P6-GH-14, P6-GH-15) are independent and
+executable any time — P7-VC-1's structural-first default needs no infrastructure. The phase
 spec will open after a Creation Chat session establishes the theme and priorities.
 
 See individual phase directories for detailed specs:
