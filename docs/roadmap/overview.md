@@ -226,7 +226,7 @@ adapter is the one remaining variable. See
 |-----------|------|------------|
 | **M26** | First Real Agentic Run *(scheduled first — binding)* | P7-AE-1 |
 | **M27** | Visuals Default-On | P7-VC-1 (SN-17) + Ollama/ComfyUI coexistence design task |
-| **M28** | Governance Reconciliations | P7-GH-16, P6-GH-14, P6-GH-15 |
+| **M28** | Governance Reconciliations | P7-GH-16, P6-GH-14, P6-GH-15, P7-GH-17 |
 
 **Candidate → milestone mapping** *(single registry; IDs as named by their source)*:
 
@@ -237,6 +237,7 @@ adapter is the one remaining variable. See
 | P7-GH-16 | **Level-0 handoff defined two contradictory ways.** `seed.md` Rule 4 → Brief + HQ Opener → HQ Chat; `genesis.md` / `start-a-project.md` / `chat-hierarchy.md` → committed `genesis.md` → Phase Chat directly (HQ never opened). Decide the canonical output (or codify both as scale-dependent) and reconcile all four docs. Sub-item (SN-2): promote `systems/hq-chat-opener.md` into `templates/`. | Medium | **M28** | [GH #110](https://github.com/panchew/ai-project-system/issues/110) |
 | P6-GH-14 | P4.1-vs-PSG §12 Delivery-Notice ordering inconsistency; surfaced during E25.4 | Medium | **M28** | P6 Closure Declaration |
 | P6-GH-15 | `bin/ai-project-init` installs the superseded `hq.agent.md` instead of the canonical `governance.agent.md`; surfaced during E25.6 | Low | **M28** | P6 Closure Declaration |
+| P7-GH-17 | **Retire the Delivery Authorization ceremonial block.** The Epic/Milestone Delivery Authorization blocks survived E25.2's SN-13 default-accept reconciliation in the starter tier. PSG §1A gate-scoping already made it an in-chat act (no artifact) on the happy path, but the blocks persist in both starter templates, the `governance/systems/` mirrors, and AOG §1A step 6 + §10 bullets. Docs-only (E25.6-shaped): retire the block, keep the in-chat merge authorization. → **E28.4** (added by phase-spec amendment v1.1.0, GH-9). | Medium | **M28** | [SN-19](../../.ai-project/artifacts/steering-notes/2026-07-12__creation-chat__steering-note__delivery-authorization-retirement.md) |
 
 **Coexistence (SN-18 decision 4):** the Ollama runner + ComfyUI single-GPU contention
 (`~/soft-dev/ai-stack`) is resolved as a **design task inside M27** — designed where it bites
