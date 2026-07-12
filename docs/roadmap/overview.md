@@ -204,25 +204,43 @@ P6 itself codified. See the
 
 ---
 
-## Upcoming
+## In Progress
 
-### P7 – *(Pre-scoping)*
+### P7 – Agentic Execution & Default-On Visuals *(Active)*
 
-**Status**: Candidates registered — scoping via Creation Chat before a phase spec is opened.
+**Goal**: The governance machine starts doing the work itself. Build `bin/run-dev-agent` and
+complete the first real, non-mocked agentic run — the system executing its own epics through
+the P3 orchestrator on local models (P7-AE-1) — flip visuals from opt-in to the default lens
+the CFO follows that flow through (SN-17), and reconcile the adoption/execution contradictions
+real consumer projects hit (P7-GH-16, P6-GH-14, P6-GH-15).
 
-**Registered Candidates** *(single registry; IDs as named by their source)*:
+**Status**: Active — opened 2026-07-12. Scoped via Creation Chat (SN-18 spine) on the HQ
+ruling (2026-07-11) and SN-17. Both halves of the first run are ready: orchestration proven
+(verify-loop 5/5, mocked) and `local-agent-runner` P2 runner-side support delivered — the
+adapter is the one remaining variable. See
+[`docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7__phase-spec.md`](../phases/P7__Agentic_Execution_and_Default_On_Visuals/P7__phase-spec.md).
 
-| ID | Title | Priority | Source |
-|----|-------|----------|--------|
-| P7-AE-1 | **`bin/run-dev-agent` adapter — first real agentic run.** Wire `local-agent-runner` (standalone engine, v1.0.0 proven) as the P3 orchestrator's `dev_command`: task = epic DoD, context = scoped spec/starter (never full governance), tools = coding set scoped to the repo, model from `AI_PROJECT_ACTIVE_MODEL`. Must not depend on the runner's `final_answer` (audit-verified unreliable); switch `epic_dev` off `llama3:8b` → `qwen2.5-coder:14b`; exit criterion = a live Epic completes non-mocked. **Gated on `local-agent-runner` P2** (write_file/list_dir/git tools + repair nudge). | High | [GH #111](https://github.com/panchew/ai-project-system/issues/111) |
-| P7-GH-16 | **Level-0 handoff defined two contradictory ways.** `seed.md` Rule 4 converges on Project Brief + HQ Chat Opener → HQ Chat; `genesis.md` / `start-a-project.md` / `chat-hierarchy.md` converge on committed `genesis.md` → Phase Chat directly (HQ never opened, despite the packet being named "HQ Context Packet"). Decide the canonical output (or codify both flows as scale-dependent) and reconcile all four docs. Sub-item: promote the existing `systems/hq-chat-opener.md` into `templates/` as the missing HQ starter (SN-2). | Medium | [GH #110](https://github.com/panchew/ai-project-system/issues/110) |
-| P6-GH-14 | P4.1-vs-PSG §12 Delivery-Notice ordering inconsistency (Completion → review → merge → DN, vs. §12's execution → DN → review); surfaced during E25.4 | Medium | P6 Closure Declaration |
-| P6-GH-15 | `bin/ai-project-init` installs the superseded `hq.agent.md` instead of the canonical unified `governance.agent.md`; surfaced during E25.6 | Low | P6 Closure Declaration |
-| P7-VC-1 | **Visual production default-on (opt-out), tied to artifact creation.** Flip `visual_artifacts` from opt-in to **default-on with an explicit opt-out** (`enabled: false`) — reconcile AOG §16.1, `ai-project-yml-spec.md` §3.5, `guides/visual-artifacts.md`, spec templates, and agent definitions. **Structural-first default** (no `comfyui_url` ⇒ Mermaid/PlantUML only; generative activates when an endpoint is present — safe with zero infrastructure). **Trigger set:** automatic production limited to **specs + delivery/closure declarations**; all other artifact types on demand. **Enforcement is a setting**, not a hard gate (e.g. `visual_required_for_specs: true`, default true). The four decisions are settled — scoping turns them into epics, not re-debate. | High | [SN-17](../../.ai-project/artifacts/steering-notes/2026-07-11__creation-chat__steering-note__visuals-default-on.md) |
+**Milestones**:
 
-**Scoping adjacencies (from SN-17, for P7 scoping — not yet epics):**
-- **P7-VC-1 ↔ P7-GH-16** both touch the artifact cascade + templates; scoping them in the same milestone may reduce reconciliation churn.
-- **P7-AE-1 ↔ Local Agent Runner + ComfyUI coexistence** (SN-17 carry-over): the two local-inference systems (Ollama runner, ComfyUI generation) must share one machine (GPU/VRAM, scheduling, possible orchestration) — resolve together, since both concern the local-inference platform.
+| Milestone | Name | Candidates |
+|-----------|------|------------|
+| **M26** | First Real Agentic Run *(scheduled first — binding)* | P7-AE-1 |
+| **M27** | Visuals Default-On | P7-VC-1 (SN-17) + Ollama/ComfyUI coexistence design task |
+| **M28** | Governance Reconciliations | P7-GH-16, P6-GH-14, P6-GH-15 |
+
+**Candidate → milestone mapping** *(single registry; IDs as named by their source)*:
+
+| ID | Title | Priority | Milestone | Source |
+|----|-------|----------|-----------|--------|
+| P7-AE-1 | **`bin/run-dev-agent` adapter — first real agentic run.** Wire `local-agent-runner` (v1.0.0 proven) as the P3 orchestrator's `dev_command`: task = epic DoD, context = scoped spec/starter (never full governance), tools = coding set scoped to the repo, model from `AI_PROJECT_ACTIVE_MODEL`. Must not depend on the runner's `final_answer` (unreliable); switch `epic_dev` `llama3:8b` → `qwen2.5-coder:14b`; drop the `04_epic.json` mock trigger; exit = a live Epic completes non-mocked **and** its transcript is accepted in the runner's P2-M3 Milestone Chat. Runner-side gate **cleared** (HQ ruling 2026-07-11). | High | **M26** | [GH #111](https://github.com/panchew/ai-project-system/issues/111) |
+| P7-VC-1 | **Visual production default-on (opt-out).** Flip `visual_artifacts` opt-in → **default-on with explicit opt-out** (`enabled: false`); reconcile AOG §16.1, spec §3.5, guide, templates, agent defs. **Structural-first** (generative only when `comfyui_url` present — safe at zero infra). **Trigger set:** automatic for **specs + delivery/closure declarations**; all else on demand. **Enforcement is a setting** (`visual_required_for_specs`-style, default true), not a hard gate. Four decisions settled — turn into epics, not re-debate. | High | **M27** | [SN-17](../../.ai-project/artifacts/steering-notes/2026-07-11__creation-chat__steering-note__visuals-default-on.md) |
+| P7-GH-16 | **Level-0 handoff defined two contradictory ways.** `seed.md` Rule 4 → Brief + HQ Opener → HQ Chat; `genesis.md` / `start-a-project.md` / `chat-hierarchy.md` → committed `genesis.md` → Phase Chat directly (HQ never opened). Decide the canonical output (or codify both as scale-dependent) and reconcile all four docs. Sub-item (SN-2): promote `systems/hq-chat-opener.md` into `templates/`. | Medium | **M28** | [GH #110](https://github.com/panchew/ai-project-system/issues/110) |
+| P6-GH-14 | P4.1-vs-PSG §12 Delivery-Notice ordering inconsistency; surfaced during E25.4 | Medium | **M28** | P6 Closure Declaration |
+| P6-GH-15 | `bin/ai-project-init` installs the superseded `hq.agent.md` instead of the canonical `governance.agent.md`; surfaced during E25.6 | Low | **M28** | P6 Closure Declaration |
+
+**Coexistence (SN-18 decision 4):** the Ollama runner + ComfyUI single-GPU contention
+(`~/soft-dev/ai-stack`) is resolved as a **design task inside M27** — designed where it bites
+(when generative visuals run), not its own epic, not deferred.
 
 ---
 
@@ -238,14 +256,12 @@ P6 itself codified. See the
 
 ## Current Focus
 
-All phases (P1–P6) are **completed and consolidated to master** at **v5.1.0**.
+Phases P1–P6 are **completed and consolidated to master** at **v5.1.0**.
 
-**P7** is in pre-scoping — candidates are registered above. The headline candidate is
-**P7-AE-1**: the first real (non-mocked) agentic run, wiring the `local-agent-runner`
-engine into the P3 orchestrator. It is gated on that project's Phase P2; the framework
-items (P7-VC-1 visuals default-on, P7-GH-16, P6-GH-14, P6-GH-15) are independent and
-executable any time — P7-VC-1's structural-first default needs no infrastructure. The phase
-spec will open after a Creation Chat session establishes the theme and priorities.
+**P7 — Agentic Execution & Default-On Visuals is active** (opened 2026-07-12). The phase spec
+is open and the Phase Chat plans **M26 — First Real Agentic Run** first (binding), the
+milestone that makes the system execute its own epics for real and unblocks the stalled
+`local-agent-runner` P2. M27 (visuals default-on) and M28 (governance reconciliations) follow.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
@@ -254,3 +270,4 @@ See individual phase directories for detailed specs:
 - [`docs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/`](../phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/)
 - [`docs/phases/P5__Process_Hardening_and_Visual_Artifacts/`](../phases/P5__Process_Hardening_and_Visual_Artifacts/)
 - [`docs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/`](../phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/)
+- [`docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/`](../phases/P7__Agentic_Execution_and_Default_On_Visuals/)
