@@ -1,0 +1,9 @@
+{
+  "_comment": "Coding tool set for bin/run-dev-agent (Epic P7-M26-E26.1) — local-agent-runner CONTRACT §4. Paths cover the Docker sandbox mount (/workspace, the primary execution context) and the orchestrator's documented local fallback (working directory = project root, relative paths). Commands are limited to the repo's test surface; git is scoped to read/stage/commit subcommands.",
+  "enabled": ["read_file", "write_file", "edit_file", "list_dir", "run_command", "git"],
+  "allow_paths": ["/workspace/**", "./**"],
+  "allow_commands": ["pytest*", "python -m pytest*", "python3 -m pytest*"],
+  "deny_commands": [],
+  "allow_subcommands": ["status", "diff", "log", "show", "add", "commit", "branch", "checkout"],
+  "timeout": 300
+}
