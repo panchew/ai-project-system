@@ -6,6 +6,11 @@
 **Repository:** https://github.com/panchew/ai-project-system
 **Milestone Spec:** `docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26__milestone-spec.md`
 
+> **Amended 2026-07-12 (SN-19):** the ceremonial Epic Delivery Authorization block is retired
+> on the happy path per Creation Chat SN-19 — Epic acceptance and the merge instruction are
+> **in-chat acts, no artifact** (PSG §1A gate scoping / §11.6). Human merge authorization
+> before any PR merge is preserved unchanged.
+
 ---
 
 ## Governance References
@@ -184,21 +189,17 @@ wait for a Review Decision artifact on the happy path.
 
 ---
 
-## Epic Delivery Authorization
+## Epic Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-When the Phase Chat accepts an Epic's deliverables, issue:
+Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Epic Delivery Authorization
+artifact or ceremonial block**. When the Phase Chat accepts an Epic's deliverables (by
+silence on the happy path), acknowledge the acceptance **in-chat** and proceed. The standing
+merge instruction is: **merge `epic/P7-M26-<E#.#>` to `milestone/M26` upon Epic completion,
+Phase Chat acceptance, and explicit human merge authorization** — the authorization is an
+in-chat act (the CFO says "merge it"; the harness enforces human merge authorization
+regardless).
 
-```
-EPIC DELIVERY AUTHORIZATION
-
-Issuer: Milestone Chat (P7-M26 — First Real Agentic Run)
-Date: <YYYY-MM-DD>
-Epic Reference: P7-M26-<E#.#> — <Epic Name>
-Authorized Action: Proceed with Epic execution
-Merge Instruction: Merge epic/P7-M26-<E#.#> to milestone/M26 upon Epic completion and Phase Chat acceptance
-```
-
-Do NOT issue without explicit Phase Chat acceptance.
+Do NOT proceed to execution or merge without Phase Chat acceptance.
 
 ---
 
@@ -232,7 +233,6 @@ This Milestone Chat session is complete when:
 
 - [ ] An Epic spec has been produced and accepted for E26.1, E26.2, and E26.3
 - [ ] An Epic Execution Chat Starter has been produced and accepted for each
-- [ ] An Epic Delivery Authorization has been issued for every accepted Epic
 - [ ] The Phase Chat has declared the Milestone planning session complete
 
 Upon completion, declare: "Milestone P7-M26 planning complete. All Epic specs and Chat Starters
