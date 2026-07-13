@@ -260,12 +260,16 @@ class TestCfoReviewGate:
 
 
 # ---------------------------------------------------------------------------
-# Visual artifacts config layer (Epic P5-M22-E22.1, VA-1)
+# Visual artifacts config layer (Epic P5-M22-E22.1, VA-1; default-on flip P7-M27-E27.1)
 # ---------------------------------------------------------------------------
 
 class TestVisualArtifactsRepoConfig:
     def test_ai_project_yml_carries_visual_artifacts_disabled(self):
-        # This repo opts the capability OFF (keep the suite green without a live endpoint).
+        # This repo opts the capability OFF via the explicit enabled: false opt-out
+        # (default-on flip, E27.1). Kept disabled because bin/ai-project-visual's
+        # --type diagrams is a ComfyUI-generative call, not an endpoint-free
+        # structural diagram, so enabling here would require a live endpoint the
+        # suite doesn't have (verified: un-skips test_helper_generates_against_endpoint).
         config = yaml.safe_load(AI_PROJECT_YML.read_text(encoding="utf-8"))
         va = config.get("visual_artifacts")
         assert isinstance(va, dict), (

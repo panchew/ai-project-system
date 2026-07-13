@@ -1,9 +1,10 @@
 # Visual Artifacts — Integration Guide
 
 Visual artifacts let each chat level produce an image, diagram, or video appropriate to its level of
-abstraction. The capability is **opt-in** and **off by default**: nothing is generated unless a
-project enables it. This guide covers enabling the capability, the two production modes, the
-`bin/ai-project-visual` helper, output formats, and a worked example for every chat level.
+abstraction. The capability is **default-on**: it is active unless a project explicitly opts out
+with `visual_artifacts.enabled: false`. This guide covers the capability's config, opting out, the
+two production modes, the `bin/ai-project-visual` helper, output formats, and a worked example for
+every chat level.
 
 | | |
 |---|---|
@@ -14,26 +15,30 @@ project enables it. This guide covers enabling the capability, the two productio
 
 ---
 
-## 1. Enabling the capability
+## 1. Configuring the capability
 
-Add a `visual_artifacts` block to your project's `.ai-project.yml`:
+The capability is active with no `.ai-project.yml` block at all. To customize it, or to opt out, add
+a `visual_artifacts` block to your project's `.ai-project.yml`:
 
 ```yaml
 visual_artifacts:
-  enabled: true                       # opt-in; absent or false ⇒ disabled
+  enabled: true                       # default-on; absent or true ⇒ enabled, false ⇒ opt-out
   comfyui_url: http://localhost:8188  # your ComfyUI endpoint (http/https)
   types:                              # subset of the allowed types
     - diagrams
     - infographics
     - video
+  visual_required_for_specs: true     # enforcement setting; defaulted true
 ```
 
-- **`enabled`** (bool) — the master switch. Absent block or `false` means the capability is off and
-  the helper exits with a clear "disabled" message.
+- **`enabled`** (bool) — the master switch. Absent block or `true` means the capability is on;
+  explicit `false` opts out and the helper exits with a clear "disabled" message.
 - **`comfyui_url`** (URL) — a well-formed `http(s)` endpoint for a reachable ComfyUI instance.
   Standing up that endpoint is the **CFO's** responsibility, not the framework's.
 - **`types`** (list) — any subset of `diagrams`, `infographics`, `video`. The helper refuses a
   `--type` that is not listed.
+- **`visual_required_for_specs`** (bool) — enforcement setting, defaulted `true`; governs whether
+  specs are required to carry a visual. It does not decide which artifact types are automatic.
 
 The full schema, defaults, and validation rules live in
 [`ai-project-yml-spec.md`](../ai-project-yml-spec.md) §3.5. The block is read through a single source
@@ -122,7 +127,7 @@ downloads the result via `/view`. For `video` or any bespoke pipeline, supply yo
 | Code | Meaning |
 |------|---------|
 | `0` | Success — artifact written to `--output`. |
-| `2` | Capability disabled (`enabled: false` or block absent). |
+| `2` | Capability disabled (explicit `enabled: false`). |
 | `3` | Configuration error — invalid endpoint, `--type` not in `types`, or missing `--workflow`. |
 | `4` | Runtime error — endpoint unreachable, generation failed, or no output produced. |
 
