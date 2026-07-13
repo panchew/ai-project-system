@@ -112,11 +112,28 @@ There are **no manual governance file-copy steps** — governance is sourced fro
 stage. For a completed reference, see
 [`examples/genesis-walkthrough/genesis.md`](../../examples/genesis-walkthrough/genesis.md).
 
-**Next step:** with `genesis.md` committed, open a Phase Chat using
-[`governance/templates/phase-execution-chat-starter.md`](../templates/phase-execution-chat-starter.md),
-passing `genesis.md` (its HQ Context Packet and Phase 1 Scope) as the mandatory context
-packet. The remaining steps below describe the ongoing HQ-level control plane that governs
-the project after Phase 1 planning begins.
+**Next step:** with `genesis.md` committed, choose your path below — **once** — before
+proceeding further.
+
+---
+
+## Choose Your Path
+
+This is the single fork point for the Level-0 handoff. Pick one:
+
+- **Small, single-phase bootstrap:** stop here and open a Phase Chat directly, using
+  [`governance/templates/phase-execution-chat-starter.md`](../templates/phase-execution-chat-starter.md)
+  and passing the committed `genesis.md` (its HQ Context Packet and Phase 1 Scope) as the
+  mandatory context packet. Steps 4-7 below do not apply — a Phase Chat is your ongoing
+  control plane. This is the **lightweight path** described in `governance/templates/
+  genesis.md`.
+- **Ongoing, multi-phase project that needs a persistent control plane:** continue to Step 4
+  onward. This **full path** additionally converges the Creation Chat on a Project Brief and
+  HQ Chat Opener (`governance/templates/seed.md` Rule 4) and spawns an HQ Chat that governs
+  every Phase, not just the first.
+
+Steps 4-7 are the full-flow continuation of the ongoing-project path only — they are not a
+second, mandatory pass over the same ground the lightweight path already covered in Step 3.
 
 ---
 
@@ -138,8 +155,13 @@ the same governance version.
 
 ## Step 5 — Spawn the HQ Chat
 
+*(Full path only — see "Choose Your Path" above.)*
+
 Create an **HQ Chat** (Headquarters / Control Room) in your preferred LLM interface, opened
-from the HQ Context Packet recorded in the committed `genesis.md`. To load the Governance Agent in
+from the HQ Chat Opener produced by the Creation Chat's full-path convergence
+([`governance/templates/hq-chat-opener.md`](../templates/hq-chat-opener.md), filled out per
+`seed.md` Rule 4), together with the HQ Context Packet and Phase 1 Scope recorded in the
+committed `genesis.md`. To load the Governance Agent in
 your tool, follow the matching guide in
 [`governance/guides/integrations/`](../guides/integrations/README.md) (Claude Code, Cursor,
 Windsurf, or GitHub Copilot).

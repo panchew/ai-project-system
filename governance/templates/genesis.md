@@ -99,3 +99,8 @@ Open a Phase Chat using
 passing this committed `genesis.md` as the mandatory context packet. The Phase Chat
 consumes the HQ Context Packet and Phase 1 Scope above to plan milestones. Do not begin
 any execution until the Phase Chat has produced and authorized Milestone work.
+
+This is the **lightweight path**, for a small, single-phase bootstrap. An ongoing,
+multi-phase project that needs a persistent control plane should instead use
+[`seed.md`](seed.md)'s Project Brief + HQ Chat Opener flow to spawn an HQ Chat — see
+`governance/systems/start-a-project.md`'s "Choose Your Path" fork for the full comparison.
