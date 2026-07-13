@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+
+import yaml
+
+with open('.ai-project.yml', 'r') as f:
+    config = yaml.safe_load(f)
+    version = config['governance']['version']
+
+print(version.strip())
