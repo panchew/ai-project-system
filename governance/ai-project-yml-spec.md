@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.1.0  
+**Version:** 2.2.0  
 **Status:** Active  
-**Effective Date:** 2026-06-28  
-**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22)
+**Effective Date:** 2026-07-12  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26)
 
 ---
 
@@ -55,7 +55,7 @@ models:                  # OPTIONAL. Hybrid model routing maps for autonomous cl
   hq: <string>           # default: remote:gpt-4o
   phase: <string>        # default: remote:claude-3-5-sonnet
   milestone: <string>    # default: remote:claude-3-5-sonnet
-  epic_dev: <string>     # default: local:llama3:8b
+  epic_dev: <string>     # default: local:qwen2.5-coder:14b
   epic_qa: <string>      # default: local:qwen2.5-coder:7b
 
 visual_artifacts:        # OPTIONAL. Opt-in visual-artifact generation. Absent ⇒ disabled. Full spec: M22.
@@ -327,13 +327,13 @@ The `models` block is **optional**. When present, it configures the local/remote
 | `hq` | String | `remote:gpt-4o` | `remote:gpt-4o`, `remote:claude-3-5-sonnet` | Product Owner (High-level vision & Requirements) |
 | `phase` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Phase Milestone planning) |
 | `milestone` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Milestone Epic planning) |
-| `epic_dev` | String | `local:llama3:8b` | `local:llama3:8b`, `local:qwen2.5-coder` | Developer Agent (Code implementation) |
+| `epic_dev` | String | `local:qwen2.5-coder:14b` | `local:qwen2.5-coder:14b`, `local:qwen2.5-coder` | Developer Agent (Code implementation; must be a tool-calling-capable model) |
 | `epic_qa` | String | `local:qwen2.5-coder:7b` | `local:qwen2.5-coder:7b`, `local:llama3` | QA Tester Agent (Verification & Test runner) |
 
 #### Format Constraints
 Model configuration values must follow one of these formats:
 - **Remote Models:** Prefix with `remote:` followed by the provider and model name (e.g., `remote:gpt-4o`, `remote:claude-3-5-sonnet`, `remote:gemini-1.5-pro`).
-- **Local Models:** Prefix with `local:` followed by the model identifier (e.g., `local:llama3:8b`, `local:qwen2.5-coder:7b`).
+- **Local Models:** Prefix with `local:` followed by the model identifier (e.g., `local:qwen2.5-coder:14b`, `local:qwen2.5-coder:7b`). These are format examples only, not defaults; role defaults are defined in the table above.
 
 ---
 
@@ -581,6 +581,7 @@ the capability **disabled** and remains valid.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.2.0 | 2026-07-12 | `epic_dev` default moved from `local:llama3:8b` (verified unusable for tool-calling — empty tool-call responses, local-agent-runner CONTRACT §1.4) to `local:qwen2.5-coder:14b`, consistently in the schema comment (§3.4), the field table default/examples, and the format-constraint examples. `epic_qa` unchanged. (Epic E26.2, P7-M26) |
 | 2.1.0 | 2026-06-28 | Added the optional, opt-in `visual_artifacts` block: Section 3.1 schema reference, new Section 3.5 (field definitions for `enabled`, `comfyui_url`, `types`, unknown-key forward-compatibility, worked example), validation rules 18–24 in Section 4, and a full example in Section 11. Absent block ⇒ capability disabled. (Epic E22.1, P5-M22) |
 | 2.0.0 | 2026-05-21 | Complete override specification: Section 3.3 expanded from stub to full field definitions with types, defaults, allowed values, constraints, behavioral effects, and precedence hierarchy. Added override validation rules to Section 4. (Epic E9.1, P2-M9) |
 | 1.0.0 | 2026-04-20 | Initial specification (Epic E6.3, P2-M6) |

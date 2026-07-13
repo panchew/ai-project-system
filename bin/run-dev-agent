@@ -1,0 +1,234 @@
+#!/usr/bin/env python3
+"""run-dev-agent — the governance adapter between the P3 orchestrator and local-agent-runner.
+
+Part of Epic P7-M26-E26.1. This is the CONTRACT §7 shim: the *only* governance-aware
+piece of the agentic execution path. The orchestrator (``bin/ai-project-orchestrator``,
+``handle_epic_execution``) invokes it as the default ``dev_command`` with
+``AI_PROJECT_ACTIVE_MODEL`` in the environment and the repo as the working directory
+(``/workspace`` in the Docker sandbox; the project root in the local fallback).
+
+What it does (CONTRACT §7, point for point):
+
+1. Reads ``AI_PROJECT_ACTIVE_MODEL`` and maps ``local:<tag>`` to the bare ollama
+   ``<tag>`` for ``--model``; a bare tag passes through; missing/empty is a config
+   error (exit 3, one-line stderr) — no invented default.
+2. Locates the epic's Definition of Done and scoped spec via the trigger JSON in
+   ``.ai-project/queue/`` (the orchestrator does not pass trigger fields through the
+   environment; the mounted repo does include the queue).
+3. Builds the runner Task: ``--task-text`` = the spec's Definition of Done section,
+   ``--context`` = the scoped epic spec (plus the epic's chat starter, if present) —
+   never the governance corpus (CONTRACT §6 token discipline, binding),
+   ``--tools`` = the coding set, ``--transcript`` = the epic's artifact path.
+4. Invokes the runner and returns its exit code unaltered (0/2/3/4 pass through).
+5. Writes the transcript into the epic's artifacts (git-visible, stable path).
+
+Epic design decisions (E26.1 — decided here, per the spec's "decide, document, move"):
+
+* **DoD sourcing:** the trigger JSON is read from ``.ai-project/queue/04_epic.json``
+  relative to the working directory; ``epic_spec_path`` names the scoped spec. The
+  "Definition of Done" markdown section (## or ### heading, up to the next heading of
+  the same or higher level) becomes the task text. A missing trigger, spec, or DoD
+  section is a config error (exit 3) — never a silent fallback.
+* **Runner discovery + endpoint reachability:** the runner binary is taken from the
+  ``LOCAL_AGENT_RUNNER`` environment variable when set (a path to the executable),
+  else ``local-agent-runner`` on PATH; not found is a config error (exit 3). The
+  ollama endpoint defaults to the runner's own default (http://localhost:11434);
+  ``AI_PROJECT_OLLAMA_ENDPOINT`` in the environment is forwarded as ``--endpoint``
+  for execution contexts where localhost does not reach the ollama host (e.g. the
+  Docker sandbox without host networking — E26.3 exercises this live and picks the
+  concrete wiring; this adapter already supports both routes).
+* **Transcript path convention:** ``.ai-project/artifacts/agentic-runs/<epic_id>/``
+  holds ``transcript.json`` (written by the runner, passed through as produced —
+  this adapter never reads it), ``context.md`` (the exact context handed to the
+  runner, so token discipline is auditable), and ``run-metadata.json`` (model,
+  runner, exit code, timing — the adapter's own one-line-class run record).
+* **tools.json location:** ``.ai-project/agents/tools.json`` (the ``.ai-project/agents/``
+  home established by E25.3), git-tracked, CONTRACT §4 shape.
+
+Exit codes: adapter-detected configuration problems exit 3 (the runner's config-error
+class) with a one-line reason on stderr; once the runner is invoked, its exit code is
+returned as-is. Epic success is decided downstream by the QA ``validation_command``
+exit code and the transcript — never by prose.
+"""
+
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+EXIT_CONFIG = 3
+
+TRIGGER_FILE = Path(".ai-project") / "queue" / "04_epic.json"
+TOOLS_JSON = Path(".ai-project") / "agents" / "tools.json"
+ARTIFACT_ROOT = Path(".ai-project") / "artifacts" / "agentic-runs"
+
+DOD_HEADING = re.compile(r"^(#{2,3})\s+Definition of Done\b.*$", re.MULTILINE)
+
+
+def fail(message):
+    """One-line reason on stderr, config-error exit (runner exit-code class 3)."""
+    print(f"[run-dev-agent] {message}", file=sys.stderr)
+    sys.exit(EXIT_CONFIG)
+
+
+def resolve_model():
+    """Map AI_PROJECT_ACTIVE_MODEL to the bare ollama tag the runner expects."""
+    raw = os.environ.get("AI_PROJECT_ACTIVE_MODEL", "").strip()
+    if not raw:
+        fail("AI_PROJECT_ACTIVE_MODEL is missing or empty — no default is assumed")
+    if raw.startswith("local:"):
+        tag = raw[len("local:"):].strip()
+        if not tag:
+            fail(f"AI_PROJECT_ACTIVE_MODEL {raw!r} has an empty tag after 'local:'")
+        return tag
+    return raw
+
+
+def load_trigger():
+    """Read the epic trigger JSON from the queue in the working directory."""
+    if not TRIGGER_FILE.exists():
+        fail(f"trigger not found: {TRIGGER_FILE} (working directory: {Path.cwd()})")
+    try:
+        with open(TRIGGER_FILE, "r") as f:
+            return json.load(f)
+    except (OSError, ValueError) as e:
+        fail(f"cannot read trigger {TRIGGER_FILE}: {e}")
+
+
+def extract_dod(spec_text, spec_path):
+    """The spec's 'Definition of Done' section: heading up to the next same-or-higher heading."""
+    match = DOD_HEADING.search(spec_text)
+    if not match:
+        fail(f"no 'Definition of Done' section found in {spec_path}")
+    level = len(match.group(1))
+    rest = spec_text[match.end():]
+    next_heading = re.compile(r"^#{1,%d}\s+\S" % level, re.MULTILINE).search(rest)
+    body = rest[: next_heading.start()] if next_heading else rest
+    section = f"{match.group(0)}\n{body}".strip()
+    if not body.strip():
+        fail(f"'Definition of Done' section in {spec_path} is empty")
+    return section
+
+
+def find_starter(spec_path, epic_id):
+    """The epic's chat starter, if present next to the spec (scoped context, optional)."""
+    candidates = sorted(
+        p for p in spec_path.parent.glob(f"*{epic_id}*starter*.md") if p != spec_path
+    )
+    return candidates[0] if candidates else None
+
+
+def build_context(spec_path, spec_text, epic_id, artifact_dir):
+    """Write the exact scoped context handed to the runner (spec + optional starter).
+
+    Scoped epic material only — the governance corpus is never included (binding).
+    Persisted in the run's artifact dir so token discipline is auditable.
+    """
+    parts = [f"<!-- scoped context: {spec_path} -->\n{spec_text}"]
+    sources = [str(spec_path)]
+    starter = find_starter(spec_path, epic_id)
+    if starter is not None:
+        try:
+            parts.append(f"<!-- scoped context: {starter} -->\n{starter.read_text()}")
+            sources.append(str(starter))
+        except OSError as e:
+            fail(f"cannot read starter {starter}: {e}")
+    context_path = artifact_dir / "context.md"
+    context_path.write_text("\n\n".join(parts))
+    return context_path, sources
+
+
+def discover_runner():
+    """LOCAL_AGENT_RUNNER env override, else local-agent-runner on PATH."""
+    override = os.environ.get("LOCAL_AGENT_RUNNER", "").strip()
+    if override:
+        path = Path(override)
+        if not path.exists():
+            fail(f"LOCAL_AGENT_RUNNER points to a missing file: {override}")
+        return str(path)
+    found = shutil.which("local-agent-runner")
+    if not found:
+        fail("local-agent-runner not found (set LOCAL_AGENT_RUNNER or add it to PATH)")
+    return found
+
+
+def main():
+    model = resolve_model()
+
+    trigger = load_trigger()
+    epic_id = str(trigger.get("epic_id", "")).strip()
+    if not epic_id:
+        fail(f"trigger {TRIGGER_FILE} has no epic_id")
+    spec_rel = str(trigger.get("epic_spec_path", "")).strip()
+    if not spec_rel:
+        fail(f"trigger {TRIGGER_FILE} has no epic_spec_path")
+    spec_path = Path(spec_rel)
+    if not spec_path.exists():
+        fail(f"epic spec not found: {spec_path}")
+    try:
+        spec_text = spec_path.read_text()
+    except OSError as e:
+        fail(f"cannot read epic spec {spec_path}: {e}")
+
+    if not TOOLS_JSON.exists():
+        fail(f"coding tool set not found: {TOOLS_JSON}")
+
+    task_text = extract_dod(spec_text, spec_path)
+
+    safe_epic_id = re.sub(r"[^A-Za-z0-9._-]", "_", epic_id)
+    artifact_dir = ARTIFACT_ROOT / safe_epic_id
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+    transcript_path = artifact_dir / "transcript.json"
+
+    context_path, context_sources = build_context(
+        spec_path, spec_text, epic_id, artifact_dir
+    )
+
+    runner = discover_runner()
+    cmd = [
+        runner,
+        "--model", model,
+        "--task-text", task_text,
+        "--context", str(context_path),
+        "--tools", str(TOOLS_JSON),
+        "--transcript", str(transcript_path),
+    ]
+    endpoint = os.environ.get("AI_PROJECT_OLLAMA_ENDPOINT", "").strip()
+    if endpoint:
+        cmd += ["--endpoint", endpoint]
+
+    started = datetime.now(timezone.utc)
+    t0 = time.monotonic()
+    result = subprocess.run(cmd)
+    duration_ms = int((time.monotonic() - t0) * 1000)
+
+    # The adapter's own run record. The transcript itself is the runner's output,
+    # written through as produced — this adapter does not open it.
+    metadata = {
+        "epic_id": epic_id,
+        "model": model,
+        "runner": runner,
+        "endpoint": endpoint or "runner-default",
+        "exit_code": result.returncode,
+        "started_utc": started.isoformat(),
+        "duration_ms": duration_ms,
+        "transcript": str(transcript_path),
+        "context": str(context_path),
+        "context_sources": context_sources,
+        "tools": str(TOOLS_JSON),
+    }
+    (artifact_dir / "run-metadata.json").write_text(
+        json.dumps(metadata, indent=2) + "\n"
+    )
+
+    # The runner's exit code is the interface — returned unaltered (0/2/3/4).
+    sys.exit(result.returncode)
+
+
+if __name__ == "__main__":
+    main()
