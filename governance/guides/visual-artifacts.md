@@ -130,6 +130,7 @@ downloads the result via `/view`. For `video` or any bespoke pipeline, supply yo
 | `2` | Capability disabled (explicit `enabled: false`). |
 | `3` | Configuration error — invalid endpoint, `--type` not in `types`, or missing `--workflow`. |
 | `4` | Runtime error — endpoint unreachable, generation failed, or no output produced. |
+| `5` | Execution locked — a live agentic epic execution holds `bin/ai-project-orchestrator`'s execution lock; the call is refused to avoid GPU contention with live Ollama inference. See [`gpu-coexistence.md`](gpu-coexistence.md). |
 
 Each failure prints a one-line, actionable message to stderr.
 
@@ -524,6 +525,7 @@ This is the adopter-facing restatement of AOG §16.8; the normative rule lives t
 | [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §16 | Operating policy: per-level abstraction, modes, gating, by-link storage guidance |
 | [`../templates/seed.md`](../templates/seed.md) | Rule 4 — visual-intent elicitation at inception |
 | [`../../bin/ai-project-visual`](../../bin/ai-project-visual) | The ComfyUI helper |
+| [`gpu-coexistence.md`](gpu-coexistence.md) | Ollama + ComfyUI GPU/VRAM coexistence design; the execution-lock guardrail (exit code `5`) |
 
 ---
 
@@ -531,6 +533,7 @@ This is the adopter-facing restatement of AOG §16.8; the normative rule lives t
 
 | Date | Change |
 |------|--------|
+| 2026-07-13 | **Execution-lock guardrail exit code (`5`) added.** `bin/ai-project-visual` now refuses a generative call while a live agentic epic execution holds `bin/ai-project-orchestrator`'s execution lock (GPU contention with live Ollama inference) — new exit code `5` added to the §3 exit-code table, and a new "Related documents" row for [`gpu-coexistence.md`](gpu-coexistence.md), the new guide documenting the confirmed Ollama+ComfyUI contention and the guardrail design. No other section changed. Per SN-18; E27.3 (P7-M27). |
 | 2026-07-13 | **Trigger-set behavior (§9) added.** New §9 "Automatic vs. on-demand production (the trigger set)": adopter-facing restatement of AOG §16.8 — structural-first at zero infrastructure (cross-referencing §2/AOG §16.4, no new machinery), and the automatic trigger set (Phase/Milestone/Epic specs + the four delivery/closure declarations automatic; everything else on-demand). Extended the §7 placement table with four new rows (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`), closing the gap where the delivery/closure half of the trigger set had no defined binding home; the existing five spec rows are unchanged. Appended as §9, following the §8 precedent — §1-§8 not renumbered. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
 | 2026-07-02 | **Clips (§8) added.** New §8 "Clips": a clip is a short video rendering **one** node's proposed→implemented arc (§5 / AOG §16.6) as motion — single-parent (AOG §16.7), the most CFO-facing visual, doubling as publishable media. Documents **production on the verified LTX-Video path** (`ltxv-video.json` → `.webm` via `--type video --workflow`), **citing** the preserved reference bundle (`.ai-project/artifacts/reference/comfyui-endpoint/`) for the exact command and verified parameters (768×512, 97 frames @ 25 fps) rather than re-transcribing or shipping the workflow (**no new plumbing**); a **worked §7 clip binding** (`What: clip`, hosted `.webm` link, `implemented`); the **publish path as reuse** of the same hosted asset (YouTube / TikTok / IG / FB — no publisher or pipeline built); and records **Open Design Question A — reference, not vendor** (the workflow JSONs stay CFO-side; no runnable `workflows/` directory shipped). The §7 schema and by-link (§4) are referenced, **not** restated or changed; `clip` is an existing `What` value. Implements AOG §16.7. Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
 | 2026-06-29 | **Proposed/implemented per-level examples (two-track behavior).** Extended §5 so every level (Creation / HQ / Phase / Milestone / Epic) shows a **proposed** and an **implemented** worked example, each recorded as a **§7 binding** distinguished by its `State` field — the same block in two states, not a second schema. Most pairs are two cheap Structural diagrams; Creation and Epic show a Generative pair where a render communicates better (Structural-first economy). The §7 binding schema and by-link (§4) are referenced, **not** restated or changed. Implements the AOG §16.6 two-track default. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
