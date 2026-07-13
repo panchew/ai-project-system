@@ -1,0 +1,54 @@
+<!-- scoped context: docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.3-PROVE__spec__version-script-proving-vehicle.md -->
+---
+type: epic-spec
+epic: P7-M26-E26.3-PROVE
+phase: P7
+milestone: M26
+status: active
+last_updated: 2026-07-12
+---
+
+# Epic P7-M26-E26.3-PROVE — Version Script Proving Vehicle
+
+> **Purpose-built minimal proving vehicle** (Open Design Question A, resolved by the
+> Milestone Chat) — authored by E26.3's own Coding Agent, not tracked as a fourth M26 Epic.
+> It exists solely so the real orchestrator loop, on `qwen2.5-coder:14b`, has something small
+> and real to execute end-to-end. Not a governed product Epic; do not apply normal Epic-spec
+> depth expectations.
+
+## Context
+
+E26.1 delivered the adapter (`bin/run-dev-agent`); E26.2 wired `epic_dev` to
+`local:qwen2.5-coder:14b` and retired the mocked live path. This proving vehicle is E26.3's
+one real, non-mocked exercise of that wiring.
+
+## Task
+
+Create `bin/ai-project-version`: a Python 3 script (stdlib + PyYAML, matching the repo's other
+`bin/` tooling) that reads the `governance.version` value from `.ai-project.yml` at the repo
+root and prints it to stdout followed by a single trailing newline, exiting `0`. No other
+behavior.
+
+**Invocation:** the script is run as `python3 bin/ai-project-version` — **not**
+`./bin/ai-project-version`. Do **not** make the file executable; the coding tool set available
+for this run (`write_file`, scoped `run_command`, scoped `git`) has no mechanism to set a
+file's permission bits, so an executable-bit requirement cannot be satisfied and must not be
+attempted.
+
+**Do not modify any other file.**
+
+## Definition of Done
+- `bin/ai-project-version` exists at the repo root's `bin/` directory.
+- Running `python3 bin/ai-project-version` exits `0`.
+- Its stdout, stripped of trailing whitespace, equals the `governance.version` value read
+  from `.ai-project.yml` (read the YAML mapping's `governance.version` key; do not
+  string-match or hardcode the value).
+- The script prints nothing else — no extra output, no stderr noise on success.
+- Do not modify, create, or delete any file other than `bin/ai-project-version`.
+- Do not attempt to set an executable permission bit — it is not required and no available
+  tool can do it.
+
+## Non-Goals
+- No argument parsing, no error handling beyond letting a missing/malformed config surface
+  naturally (this is a minimal proving vehicle, not a hardened CLI tool).
+- No changes to `.ai-project.yml`, `governance/`, or any file outside `bin/ai-project-version`.
