@@ -1,5 +1,11 @@
 #!/bin/bash
 # bin/verify-loop.sh - Verification Script & Loop Mock Harness for P3-M12-E12.3
+#
+# VERIFICATION-ONLY REGRESSION HARNESS (boundary set in P7-M26-E26.2).
+# This script and tests/mocks/mock_{dev,qa}.sh exercise the orchestrator's Dev-QA
+# loop logic with mock agents. They are NEVER part of the live epic-execution flow:
+# live 04_epic.json triggers use ./bin/run-dev-agent and a real validation_command
+# (see .ai-project/queue/README.md).
 
 # Exit on error
 set -e
