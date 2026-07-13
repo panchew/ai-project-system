@@ -18,7 +18,7 @@ DEFAULT_MODELS = {
     "hq": "remote:gpt-4o",
     "phase": "remote:claude-3-5-sonnet",
     "milestone": "remote:claude-3-5-sonnet",
-    "epic_dev": "local:llama3:8b",
+    "epic_dev": "local:qwen2.5-coder:14b",
     "epic_qa": "local:qwen2.5-coder:7b"
 }
 
