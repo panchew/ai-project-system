@@ -1,8 +1,0 @@
-{
-  "epic_id": "P7-M26-E26.3-PROVE",
-  "epic_spec_path": "docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.3-PROVE__spec__version-script-proving-vehicle.md",
-  "sandbox_env": "alpine:latest",
-  "dev_command": "./bin/run-dev-agent",
-  "validation_command": "python3 -m pytest tests/test_ai_project_version_script.py -q",
-  "run_dev_initially": true
-}
