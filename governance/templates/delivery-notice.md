@@ -55,6 +55,21 @@ Example:
 - src/features/feature-name.ts
 - tests/features/feature-name.test.ts
 
+## Visual Bindings
+
+<!--
+  Optional. Record links to any generated visuals for this delivery, using the binding schema in
+  governance/guides/visual-artifacts.md §7 (link + What / Level / State / Description).
+  Bind a hosted LINK, never a committed path. Omit this section if there are no visuals.
+-->
+
+**Visual binding**
+- **Link:** <hosted URL of the generated visual>
+- **What:** image | infographic | mockup | diagram | clip
+- **Level:** Epic
+- **State:** proposed | implemented
+- **Description:** <short text that survives link rot>
+
 ## Chat Closure
 
 This <Epic|Milestone> Chat (<P#-M#-E#.#>) is now closed. All work is delivered and merged to <target_branch>.

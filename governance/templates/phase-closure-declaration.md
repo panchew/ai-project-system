@@ -79,6 +79,21 @@ each with a pointer to its committed artifact.>
 
 ---
 
+## Visual Bindings
+
+<Optional. Record links to any generated visuals for this phase, using the binding schema in
+governance/guides/visual-artifacts.md §7 (link + What / Level / State / Description). Bind a
+hosted LINK, never a committed path. Omit this section if there are no visuals.>
+
+**Visual binding**
+- **Link:** <hosted URL of the generated visual>
+- **What:** image | infographic | mockup | diagram | clip
+- **Level:** Phase
+- **State:** proposed | implemented
+- **Description:** <short text that survives link rot>
+
+---
+
 ## Carry-Forward to P<next-id>
 
 | ID | Title | Priority |

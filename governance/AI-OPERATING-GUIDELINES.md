@@ -1,7 +1,7 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.7.0  
+**Version:** 2.8.0  
 **Effective Date:** 2026-07-13  
 **Status:** Current  
 
@@ -896,6 +896,9 @@ does success look like visually?") — and propagates down the artifact cascade:
 the level above's vision into the visual appropriate to its own scope. Each level produces that
 abstraction in **both** tracks — a proposed and an implemented visual (§16.6) — at its own altitude.
 
+This table names *what kind* of visual a level produces; it does not say *when* production is
+automatic versus on request — see §16.8 for the trigger-set policy.
+
 ### 16.3 Two modes
 
 - **Structural** — diagrams expressed as text (Mermaid / PlantUML), committed alongside the artifact
@@ -983,6 +986,28 @@ same hosted asset reused, not a second production), see `governance/guides/visua
 **Reference §7 for the binding schema — `clip` is an existing `What` value; do not restate the schema
 here.**
 
+### 16.8 Default-on trigger policy
+
+With the capability on (default per §16.1), **structural-first governs the zero-infrastructure
+default path**: no `comfyui_url` configured ⇒ Structural only (§16.3); Generative activates only
+once an endpoint is present and the tool-capability gate (§16.4) is satisfied. This subsection does
+not alter the §16.3/§16.4 mode split or gate — it states which path fires by default.
+
+**The automatic trigger set.** Two artifact families get a visual automatically, with no request
+required:
+- **Specs** — the Phase spec, Milestone spec, and Epic spec (the three `*-spec.md` templates).
+- **Delivery/closure declarations** — the Delivery Notice, Epic Closure Notice, Milestone Closure
+  Declaration, and Phase Closure Declaration (`delivery-notice.md`, `epic-closure-notice.md`,
+  `milestone-closure-declaration.md`, `phase-closure-declaration.md`).
+
+Every other artifact type — steering note, progress digest, merge authorization, escalation notice,
+run record, and any artifact not named above — is **on-demand only**: produced when explicitly asked
+for in the proper chat, pointing at the artifact file, never automatically. A chat level MUST NOT
+infer automatic production for an artifact type outside this list.
+
+Where each of these artifact types records its binding is defined by the placement table in
+`governance/guides/visual-artifacts.md` §7.
+
 ---
 
 ## 15. Closing Statement
@@ -998,6 +1023,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.8.0 | 2026-07-13 | **Default-on trigger policy (SN-17).** Added §16.8 "Default-on trigger policy": states structural-first as the zero-infrastructure default path (no `comfyui_url` ⇒ Structural only; Generative activates only with an endpoint present and the §16.4 gate satisfied — cross-references §16.3/§16.4, does not restate them) and codifies **the automatic trigger set** — Phase/Milestone/Epic specs plus the four delivery/closure declarations (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`) get a visual automatically; every other artifact type is on-demand only. Added a one-line pointer from §16.2 to §16.8 (§16.2 states *what kind*, §16.8 states *when automatic*). **Appended as §16.8, following the §16.6/§16.7 precedent — §16.2-§16.7 not renumbered.** Closes the delivery/closure Visual-Bindings gap found during grounding: added a "Visual Bindings" section (mirroring the existing spec-template pattern) to all four delivery/closure templates, and extended the `visual-artifacts.md` §7 placement table with the four new rows. Completes, with E27.1, the milestone-level joint criterion: a fresh project with no `visual_artifacts` block now produces structural visuals for a new spec by default. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
 | 2.7.0 | 2026-07-13 | **Default-on flip (SN-17).** Rewrote §16 intro and §16.1 "Opt-in gating" → "Default-on gating": `visual_artifacts.enabled: false` is now the explicit **opt-out**; an absent block or `enabled: true` means the capability is **on**. Added the new `visual_required_for_specs` enforcement-setting key (defaulted `true`) to the §16.1 key list — governs whether specs are required to carry a visual, distinct from *which* artifact types are automatic (E27.2's surface). Reconciled §16.5's source-repo sentence: this repo keeps `enabled: false` (the explicit opt-out) — investigated dogfooding default-on but `bin/ai-project-visual --type diagrams` is a ComfyUI-generative call in the current implementation, not an endpoint-free structural diagram, so enabling would require a live endpoint the suite doesn't have (verified). Schema in `ai-project-yml-spec.md` §3.5 (v2.3.0). Per SN-17 (ratified SN-18); E27.1 (P7-M27). |
 | 2.6.0 | 2026-07-02 | Codified **SN-13 default-accept** as the normative acceptance model — new "Default-Accept (SN-13) — Normative" block in §12 "Acceptance Outcomes": **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) accepted **by silence**, no Review Decision artifact, merge + in-chat acknowledgment as the acceptance record; **exception path** = Review Decision (Epic Review Seal at Epic level) issued only when a delivery is not clean; **Layer-8 human review preserved** (two gates, not one). Reconciled §3.6/§3.7 Stage-2 "issues … Review Decisions" clauses (E25.1's §5C phase-delivery language kept intact), the §10 HQ-review-behavior bullet, and the §12 immutability sentence to the exception path. Full normative definition lives at PSG §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
 | 2.5.1 | 2026-07-02 | Reconciled the §3.6 Stage 2 phase-delivery clause to the canonical phase-closure sequence (PSG §5C, new in PSG v2.2.0): the Phase Chat delivers the Phase by executing §5C — the consolidation merge **plus** the mandatory README-update, version-bump, and git-tag steps — not by merging the phase branch alone. No acceptance / Review-Decision language changed (that surface is E25.2). E25.1 (P6-M25). |
