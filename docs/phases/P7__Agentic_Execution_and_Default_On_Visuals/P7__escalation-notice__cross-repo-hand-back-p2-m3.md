@@ -4,7 +4,7 @@ milestone: M26
 issued_by: Phase Chat (P7 — Agentic Execution and Default-On Visuals)
 issued_to: HQ Chat
 date: 2026-07-13
-status: open
+status: resolved
 ---
 
 # Escalation Notice: Cross-repo hand-back — `local-agent-runner` P2-M3/E3.2 acceptance ready
@@ -76,4 +76,9 @@ issued); this escalation is the on-record request to close that out.
 
 ## Resolution
 
-(empty — awaiting HQ Chat / CFO relay to `local-agent-runner`'s P2-M3 Milestone Chat)
+**Resolved 2026-07-13 by the CFO.** The evidence package was carried to `local-agent-runner`'s
+P2-M3 Milestone Chat; the cross-repo hand-back is delivered and that repo's own P2 work is
+proceeding in parallel. This closes the AE-1 exit criterion from the HQ ruling of 2026-07-11.
+**M26 is now fully and completely closed — both the milestone-level consolidation (PR #113,
+`db4a34f`) and the cross-repo hand-back it depended on are done.** P7 proceeds to M27 (Visuals
+Default-On) planning.

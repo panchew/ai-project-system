@@ -4,7 +4,7 @@ milestone: M26
 issued_by: Milestone Chat (P7-M26 — First Real Agentic Run)
 issued_to: Phase Chat (P7 — Agentic Execution and Default-On Visuals)
 date: 2026-07-13
-status: open
+status: resolved
 ---
 
 # Escalation Notice: Cross-repo hand-back — `local-agent-runner` P2-M3/E3.2 evidence ready
@@ -81,4 +81,7 @@ evidence is ready.
 
 ## Resolution
 
-(empty — awaiting Phase Chat action)
+**Resolved 2026-07-13 by the Phase Chat.** Relayed one hop further as
+`P7__escalation-notice__cross-repo-hand-back-p2-m3.md` (Phase Chat → HQ Chat); HQ/CFO then
+carried the evidence to `local-agent-runner`'s P2-M3 Milestone Chat and that repo's own work
+is proceeding in parallel. The hand-back this Milestone Chat requested is complete.
