@@ -527,15 +527,22 @@ def main():
                 self.assertEqual(config["models"]["epic_dev"], "custom_dev_model")
                 self.assertEqual(config["models"]["epic_qa"], DEFAULT_MODELS["epic_qa"])
 
-            def test_visual_artifacts_absent_is_disabled(self):
-                # No .ai-project.yml at all ⇒ disabled, no error.
+            def test_visual_artifacts_absent_resolves_enabled(self):
+                # Default-on (SN-17): no .ai-project.yml at all ⇒ enabled, no error.
                 config = load_yml_config()
-                self.assertFalse(config["visual_artifacts"]["enabled"])
+                self.assertTrue(config["visual_artifacts"]["enabled"])
 
-            def test_visual_artifacts_absent_block_is_disabled(self):
-                # File present but visual_artifacts omitted ⇒ disabled, no error.
+            def test_visual_artifacts_absent_block_resolves_enabled(self):
+                # File present but visual_artifacts omitted ⇒ still enabled (the default).
                 with open(YML_CONFIG, 'w') as f:
                     yaml.dump({"models": {"epic_dev": "x"}}, f)
+                config = load_yml_config()
+                self.assertTrue(config["visual_artifacts"]["enabled"])
+
+            def test_visual_artifacts_enabled_false_is_disabled(self):
+                # Explicit enabled: false is the opt-out and must still disable.
+                with open(YML_CONFIG, 'w') as f:
+                    yaml.dump({"visual_artifacts": {"enabled": False}}, f)
                 config = load_yml_config()
                 self.assertFalse(config["visual_artifacts"]["enabled"])
 
