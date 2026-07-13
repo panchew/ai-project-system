@@ -22,15 +22,16 @@ DEFAULT_MODELS = {
     "epic_qa": "local:qwen2.5-coder:7b"
 }
 
-# Visual artifacts (VA-1) config layer. The block is optional and opt-in: an absent
-# block (or enabled: false) means the capability is disabled. See
-# governance/ai-project-yml-spec.md §3.5 and §4 rules 18–24.
+# Visual artifacts (VA-1) config layer. The block is optional and default-on: an
+# absent block means the capability is enabled; `enabled: false` is the explicit
+# opt-out. See governance/ai-project-yml-spec.md §3.5 and §4 rules 18–25.
 VALID_VISUAL_ARTIFACT_TYPES = ("diagrams", "infographics", "video")
 
 DEFAULT_VISUAL_ARTIFACTS = {
-    "enabled": False,
+    "enabled": True,
     "comfyui_url": "http://localhost:8188",
     "types": list(VALID_VISUAL_ARTIFACT_TYPES),
+    "visual_required_for_specs": True,
 }
 
 ACTIVE_CONTAINERS = []
@@ -86,25 +87,32 @@ def _is_well_formed_url(value):
 
 def validate_visual_artifacts(va):
     """Validate the optional visual_artifacts block per ai-project-yml-spec.md §4
-    (rules 18–24).
+    (rules 18–25).
 
-    - An absent block (``va is None``) is valid and means the capability is disabled
-      (no error, no warning).
+    - An absent block (``va is None``) is valid and means the capability is enabled
+      at its documented defaults (no error, no warning).
     - ``enabled`` (when present) must be a boolean.
     - Each ``types`` entry (when present) must be one of VALID_VISUAL_ARTIFACT_TYPES.
     - ``comfyui_url`` (when present) must be a well-formed http(s) URL.
+    - ``visual_required_for_specs`` (when present) must be a boolean.
     - Unknown keys produce a warning (not an error), mirroring models/overrides.
 
     Raises ValueError on any invalid value (a validation error).
     """
     if va is None:
-        return  # absent ⇒ disabled
+        return  # absent ⇒ enabled at defaults
     if not isinstance(va, dict):
         raise ValueError(f"Invalid visual_artifacts block: '{va}'. Must be a mapping.")
 
     if "enabled" in va and not isinstance(va["enabled"], bool):
         raise ValueError(
             f"Invalid visual_artifacts.enabled: '{va['enabled']}'. Must be a boolean (true or false)."
+        )
+
+    if "visual_required_for_specs" in va and not isinstance(va["visual_required_for_specs"], bool):
+        raise ValueError(
+            f"Invalid visual_artifacts.visual_required_for_specs: "
+            f"'{va['visual_required_for_specs']}'. Must be a boolean (true or false)."
         )
 
     if "types" in va and va["types"] is not None:
@@ -138,10 +146,10 @@ def validate_visual_artifacts(va):
 
 def resolve_visual_artifacts(va):
     """Resolve the effective visual_artifacts config, merging documented defaults.
-    An absent block (None) ⇒ disabled. Assumes va has already passed
+    An absent block (None) ⇒ enabled at defaults. An explicit `enabled: false` in a
+    provided block still disables. Assumes va has already passed
     validate_visual_artifacts."""
     resolved = DEFAULT_VISUAL_ARTIFACTS.copy()
-    resolved["enabled"] = False  # opt-in: absent or unset ⇒ disabled
     if isinstance(va, dict):
         for key in DEFAULT_VISUAL_ARTIFACTS:
             if key in va and va[key] is not None:
@@ -152,7 +160,7 @@ def resolve_visual_artifacts(va):
 def load_yml_config():
     """Loads the model mapping and visual_artifacts config from .ai-project.yml if present.
 
-    Validation errors in the visual_artifacts block (ai-project-yml-spec.md §4 rules 19–21)
+    Validation errors in the visual_artifacts block (ai-project-yml-spec.md §4 rules 19–21, 25)
     propagate as ValueError; YAML parse failures fall back to defaults with a warning.
     """
     result = {"models": DEFAULT_MODELS.copy(), "visual_artifacts": resolve_visual_artifacts(None)}
@@ -519,15 +527,22 @@ def main():
                 self.assertEqual(config["models"]["epic_dev"], "custom_dev_model")
                 self.assertEqual(config["models"]["epic_qa"], DEFAULT_MODELS["epic_qa"])
 
-            def test_visual_artifacts_absent_is_disabled(self):
-                # No .ai-project.yml at all ⇒ disabled, no error.
+            def test_visual_artifacts_absent_resolves_enabled(self):
+                # Default-on (SN-17): no .ai-project.yml at all ⇒ enabled, no error.
                 config = load_yml_config()
-                self.assertFalse(config["visual_artifacts"]["enabled"])
+                self.assertTrue(config["visual_artifacts"]["enabled"])
 
-            def test_visual_artifacts_absent_block_is_disabled(self):
-                # File present but visual_artifacts omitted ⇒ disabled, no error.
+            def test_visual_artifacts_absent_block_resolves_enabled(self):
+                # File present but visual_artifacts omitted ⇒ still enabled (the default).
                 with open(YML_CONFIG, 'w') as f:
                     yaml.dump({"models": {"epic_dev": "x"}}, f)
+                config = load_yml_config()
+                self.assertTrue(config["visual_artifacts"]["enabled"])
+
+            def test_visual_artifacts_enabled_false_is_disabled(self):
+                # Explicit enabled: false is the opt-out and must still disable.
+                with open(YML_CONFIG, 'w') as f:
+                    yaml.dump({"visual_artifacts": {"enabled": False}}, f)
                 config = load_yml_config()
                 self.assertFalse(config["visual_artifacts"]["enabled"])
 

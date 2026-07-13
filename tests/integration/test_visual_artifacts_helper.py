@@ -11,6 +11,7 @@ loaded via ``SourceFileLoader``, mirroring tests/test_visual_artifacts_config.py
 """
 
 import importlib.util
+import os
 import subprocess
 import sys
 from importlib.machinery import SourceFileLoader
@@ -102,3 +103,75 @@ def test_helper_rejects_unconfigured_type(tmp_path):
     )
     assert result.returncode == 3
     assert "video" in result.stderr
+
+
+# --- Execution-lock guardrail (E27.3, GPU coexistence) -----------------------------
+#
+# `--comfyui-url` deliberately points at a closed port (127.0.0.1:1, TCPMUX — never
+# bound by ComfyUI or anything else) rather than 8188: this host's own ai-stack may
+# have a real ComfyUI listening on 8188 (the exact contention this Epic documents), and
+# these tests must stay deterministic without depending on whether that stack happens
+# to be running. A closed port gives a fast, reliable "connection refused" (exit 4)
+# once the guardrail lets a call through, distinguishing "not locked" from "locked".
+
+_UNREACHABLE_YML = (
+    "visual_artifacts:\n"
+    "  enabled: true\n"
+    "  comfyui_url: http://127.0.0.1:1\n"
+    "  types:\n"
+    "    - diagrams\n"
+)
+
+
+def _write_lock(directory, pid):
+    lock_dir = directory / ".ai-project" / "locks"
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    (lock_dir / "execution.lock").write_text(str(pid), encoding="utf-8")
+
+
+def _dead_pid():
+    """Spawn and reap a short-lived subprocess; its PID is dead by the time it's used."""
+    proc = subprocess.Popen([sys.executable, "-c", "pass"])
+    proc.wait()
+    return proc.pid
+
+
+def test_helper_refused_when_execution_lock_live(tmp_path):
+    """A live PID in .ai-project/locks/execution.lock ⇒ refused before any generative
+    call: exit 5, clear message. Uses this test process's own (necessarily live) PID."""
+    _write_yml(tmp_path, _UNREACHABLE_YML)
+    _write_lock(tmp_path, os.getpid())
+    result = _run_helper(
+        ["--prompt", "x", "--type", "diagrams", "--output", str(tmp_path / "o.png"),
+         "--timeout", "2"],
+        cwd=tmp_path,
+    )
+    assert result.returncode == 5
+    assert "locked" in result.stderr.lower() or "execution" in result.stderr.lower()
+
+
+def test_helper_proceeds_when_execution_lock_stale(tmp_path):
+    """A dead PID in the lock file ⇒ stale-lock handling matches the orchestrator's own:
+    not falsely blocked, proceeds to attempt generation (exit 4, unreachable endpoint)."""
+    _write_yml(tmp_path, _UNREACHABLE_YML)
+    _write_lock(tmp_path, _dead_pid())
+    result = _run_helper(
+        ["--prompt", "x", "--type", "diagrams", "--output", str(tmp_path / "o.png"),
+         "--timeout", "2"],
+        cwd=tmp_path,
+    )
+    assert result.returncode != 5
+    assert result.returncode == 4
+
+
+def test_helper_proceeds_when_execution_lock_absent(tmp_path):
+    """No lock file at all ⇒ not blocked; proceeds to attempt generation (exit 4,
+    unreachable endpoint)."""
+    _write_yml(tmp_path, _UNREACHABLE_YML)
+    result = _run_helper(
+        ["--prompt", "x", "--type", "diagrams", "--output", str(tmp_path / "o.png"),
+         "--timeout", "2"],
+        cwd=tmp_path,
+    )
+    assert result.returncode != 5
+    assert result.returncode == 4

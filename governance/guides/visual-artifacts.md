@@ -1,9 +1,10 @@
 # Visual Artifacts — Integration Guide
 
 Visual artifacts let each chat level produce an image, diagram, or video appropriate to its level of
-abstraction. The capability is **opt-in** and **off by default**: nothing is generated unless a
-project enables it. This guide covers enabling the capability, the two production modes, the
-`bin/ai-project-visual` helper, output formats, and a worked example for every chat level.
+abstraction. The capability is **default-on**: it is active unless a project explicitly opts out
+with `visual_artifacts.enabled: false`. This guide covers the capability's config, opting out, the
+two production modes, the `bin/ai-project-visual` helper, output formats, and a worked example for
+every chat level.
 
 | | |
 |---|---|
@@ -14,26 +15,30 @@ project enables it. This guide covers enabling the capability, the two productio
 
 ---
 
-## 1. Enabling the capability
+## 1. Configuring the capability
 
-Add a `visual_artifacts` block to your project's `.ai-project.yml`:
+The capability is active with no `.ai-project.yml` block at all. To customize it, or to opt out, add
+a `visual_artifacts` block to your project's `.ai-project.yml`:
 
 ```yaml
 visual_artifacts:
-  enabled: true                       # opt-in; absent or false ⇒ disabled
+  enabled: true                       # default-on; absent or true ⇒ enabled, false ⇒ opt-out
   comfyui_url: http://localhost:8188  # your ComfyUI endpoint (http/https)
   types:                              # subset of the allowed types
     - diagrams
     - infographics
     - video
+  visual_required_for_specs: true     # enforcement setting; defaulted true
 ```
 
-- **`enabled`** (bool) — the master switch. Absent block or `false` means the capability is off and
-  the helper exits with a clear "disabled" message.
+- **`enabled`** (bool) — the master switch. Absent block or `true` means the capability is on;
+  explicit `false` opts out and the helper exits with a clear "disabled" message.
 - **`comfyui_url`** (URL) — a well-formed `http(s)` endpoint for a reachable ComfyUI instance.
   Standing up that endpoint is the **CFO's** responsibility, not the framework's.
 - **`types`** (list) — any subset of `diagrams`, `infographics`, `video`. The helper refuses a
   `--type` that is not listed.
+- **`visual_required_for_specs`** (bool) — enforcement setting, defaulted `true`; governs whether
+  specs are required to carry a visual. It does not decide which artifact types are automatic.
 
 The full schema, defaults, and validation rules live in
 [`ai-project-yml-spec.md`](../ai-project-yml-spec.md) §3.5. The block is read through a single source
@@ -122,9 +127,10 @@ downloads the result via `/view`. For `video` or any bespoke pipeline, supply yo
 | Code | Meaning |
 |------|---------|
 | `0` | Success — artifact written to `--output`. |
-| `2` | Capability disabled (`enabled: false` or block absent). |
+| `2` | Capability disabled (explicit `enabled: false`). |
 | `3` | Configuration error — invalid endpoint, `--type` not in `types`, or missing `--workflow`. |
 | `4` | Runtime error — endpoint unreachable, generation failed, or no output produced. |
+| `5` | Execution locked — a live agentic epic execution holds `bin/ai-project-orchestrator`'s execution lock; the call is refused to avoid GPU contention with live Ollama inference. See [`gpu-coexistence.md`](gpu-coexistence.md). |
 
 Each failure prints a one-line, actionable message to stderr.
 
@@ -406,6 +412,14 @@ it illustrates. Each level has a defined home:
 | Phase | [`../templates/phase-spec.md`](../templates/phase-spec.md) | The **Visual Bindings** section. |
 | Milestone | [`../templates/milestone-spec.md`](../templates/milestone-spec.md) | The **Visual Bindings** section. |
 | Epic | [`../templates/epic-spec.md`](../templates/epic-spec.md) | The **Visual Bindings** section. |
+| Epic (delivery) | [`../templates/delivery-notice.md`](../templates/delivery-notice.md) | The **Visual Bindings** section. |
+| Epic (closure) | [`../templates/epic-closure-notice.md`](../templates/epic-closure-notice.md) | The **Visual Bindings** section. |
+| Milestone (closure) | [`../templates/milestone-closure-declaration.md`](../templates/milestone-closure-declaration.md) | The **Visual Bindings** section. |
+| Phase (closure) | [`../templates/phase-closure-declaration.md`](../templates/phase-closure-declaration.md) | The **Visual Bindings** section. |
+
+The last four rows are the **delivery/closure** half of the automatic trigger set (§9) —
+`delivery-notice.md` and `epic-closure-notice.md` are both Epic-level artifacts and get adjacent
+rows rather than sharing one, consistent with one row per artifact file elsewhere in this table.
 
 An agent records the binding for **its own** level only — it does not reach up or down the cascade
 (the altitude rule from §5). Visual intent still originates at the Creation Chat (`seed.md` Rule 4)
@@ -475,6 +489,34 @@ re-implement it.
 
 ---
 
+## 9. Automatic vs. on-demand production (the trigger set)
+
+The capability is on by default (§1, AOG §16.1) — this section states what "on" actually produces,
+and when.
+
+**Structural-first at zero infrastructure.** With no `comfyui_url` configured, only Structural
+visuals (§2) are produced; Generative activates only once an endpoint is present and the agent has
+tool capability (AOG §16.4). This is the same mode split and gate documented in §2 above — this
+section adds no new machinery, only states which path fires by default.
+
+**The automatic trigger set.** Two artifact families get a visual automatically, with no request
+required:
+- **Specs** — Phase spec, Milestone spec, Epic spec.
+- **Delivery/closure declarations** — Delivery Notice, Epic Closure Notice, Milestone Closure
+  Declaration, Phase Closure Declaration.
+
+Every other artifact type — steering note, progress digest, merge authorization, escalation notice,
+run record, and anything else not named above — is **on-demand only**: an adopter or agent asks for
+it explicitly, in the proper chat, pointing at the artifact file. Do not infer automatic production
+for an artifact type outside this list.
+
+All eight automatic-trigger artifact types have a defined binding home in the §7 placement table —
+the four delivery/closure rows close a gap the original five spec-only rows left open.
+
+This is the adopter-facing restatement of AOG §16.8; the normative rule lives there.
+
+---
+
 ## Related documents
 
 | Document | Purpose |
@@ -483,6 +525,7 @@ re-implement it.
 | [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §16 | Operating policy: per-level abstraction, modes, gating, by-link storage guidance |
 | [`../templates/seed.md`](../templates/seed.md) | Rule 4 — visual-intent elicitation at inception |
 | [`../../bin/ai-project-visual`](../../bin/ai-project-visual) | The ComfyUI helper |
+| [`gpu-coexistence.md`](gpu-coexistence.md) | Ollama + ComfyUI GPU/VRAM coexistence design; the execution-lock guardrail (exit code `5`) |
 
 ---
 
@@ -490,6 +533,8 @@ re-implement it.
 
 | Date | Change |
 |------|--------|
+| 2026-07-13 | **Execution-lock guardrail exit code (`5`) added.** `bin/ai-project-visual` now refuses a generative call while a live agentic epic execution holds `bin/ai-project-orchestrator`'s execution lock (GPU contention with live Ollama inference) — new exit code `5` added to the §3 exit-code table, and a new "Related documents" row for [`gpu-coexistence.md`](gpu-coexistence.md), the new guide documenting the confirmed Ollama+ComfyUI contention and the guardrail design. No other section changed. Per SN-18; E27.3 (P7-M27). |
+| 2026-07-13 | **Trigger-set behavior (§9) added.** New §9 "Automatic vs. on-demand production (the trigger set)": adopter-facing restatement of AOG §16.8 — structural-first at zero infrastructure (cross-referencing §2/AOG §16.4, no new machinery), and the automatic trigger set (Phase/Milestone/Epic specs + the four delivery/closure declarations automatic; everything else on-demand). Extended the §7 placement table with four new rows (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`), closing the gap where the delivery/closure half of the trigger set had no defined binding home; the existing five spec rows are unchanged. Appended as §9, following the §8 precedent — §1-§8 not renumbered. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
 | 2026-07-02 | **Clips (§8) added.** New §8 "Clips": a clip is a short video rendering **one** node's proposed→implemented arc (§5 / AOG §16.6) as motion — single-parent (AOG §16.7), the most CFO-facing visual, doubling as publishable media. Documents **production on the verified LTX-Video path** (`ltxv-video.json` → `.webm` via `--type video --workflow`), **citing** the preserved reference bundle (`.ai-project/artifacts/reference/comfyui-endpoint/`) for the exact command and verified parameters (768×512, 97 frames @ 25 fps) rather than re-transcribing or shipping the workflow (**no new plumbing**); a **worked §7 clip binding** (`What: clip`, hosted `.webm` link, `implemented`); the **publish path as reuse** of the same hosted asset (YouTube / TikTok / IG / FB — no publisher or pipeline built); and records **Open Design Question A — reference, not vendor** (the workflow JSONs stay CFO-side; no runnable `workflows/` directory shipped). The §7 schema and by-link (§4) are referenced, **not** restated or changed; `clip` is an existing `What` value. Implements AOG §16.7. Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
 | 2026-06-29 | **Proposed/implemented per-level examples (two-track behavior).** Extended §5 so every level (Creation / HQ / Phase / Milestone / Epic) shows a **proposed** and an **implemented** worked example, each recorded as a **§7 binding** distinguished by its `State` field — the same block in two states, not a second schema. Most pairs are two cheap Structural diagrams; Creation and Epic show a Generative pair where a render communicates better (Structural-first economy). The §7 binding schema and by-link (§4) are referenced, **not** restated or changed. Implements the AOG §16.6 two-track default. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Reversed the commit-the-binary storage model to **by-link**: generated artifacts are referenced by link and **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend (the adopter owns the storage backend) and links from the governing artifact. Updated §1 (source-repo note generalized — no project commits generated binaries), §3 and §5 (`--output` examples now name local working files), §4 prose, and the §16 related-documents row. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |

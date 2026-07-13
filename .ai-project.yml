@@ -1,6 +1,6 @@
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
-# Spec: governance/ai-project-yml-spec.md v2.2.0
+# Spec: governance/ai-project-yml-spec.md v2.3.0
 
 governance:
   source: ./governance
@@ -26,10 +26,19 @@ models:
   epic_dev: local:qwen2.5-coder:14b
   epic_qa: local:qwen2.5-coder:7b
 
-# Visual artifacts (M22, VA-1) — opt-in, default off. Absent block ⇒ disabled.
-# enabled: false keeps the capability off in the governance source repo (the suite
-# stays green without a live ComfyUI endpoint). comfyui_url/types document the
-# contract but are inert while enabled is false.
+# Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
+# This repo opts OUT (enabled: false). Investigated dogfooding default-on restricted
+# to types: [diagrams] on the theory that structural diagrams need no ComfyUI
+# endpoint (AOG §16.3/§16.5) — but bin/ai-project-visual's --type diagrams is a
+# ComfyUI-generative call in the current implementation (a txt2img workflow), NOT
+# the endpoint-free Mermaid/PlantUML "structural" mode AOG §16.3 describes; that is
+# a pre-existing naming collision between this schema's `types: diagrams` value and
+# AOG's "structural" diagrams, not something this Epic's scope covers fixing
+# (tests/integration/test_visual_artifacts_helper.py is outside E27.1's Technical
+# Constraints). Confirmed empirically: enabled: true here un-skips
+# test_helper_generates_against_endpoint, which then fails with connection-refused
+# against localhost:8188. enabled: false is kept to preserve the suite-green
+# requirement; comfyui_url/types document the contract but are inert while disabled.
 # See governance/ai-project-yml-spec.md §3.5.
 visual_artifacts:
   enabled: false
@@ -38,3 +47,4 @@ visual_artifacts:
     - diagrams
     - infographics
     - video
+  visual_required_for_specs: true

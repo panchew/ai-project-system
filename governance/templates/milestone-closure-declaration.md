@@ -60,6 +60,19 @@ Examples:
 - "This milestone delivered 3 Epics focused on system refinement based on M4 real usage."
 - "Key deliverables include governance updates, template improvements, and milestone closure process formalization."
 
+## Visual Bindings
+
+[Optional. Record links to any generated visuals for this milestone, using the binding schema in
+governance/guides/visual-artifacts.md §7 (link + What / Level / State / Description). Bind a
+hosted LINK, never a committed path. Omit this section if there are no visuals.]
+
+**Visual binding**
+- **Link:** <hosted URL of the generated visual>
+- **What:** image | infographic | mockup | diagram | clip
+- **Level:** Milestone
+- **State:** proposed | implemented
+- **Description:** <short text that survives link rot>
+
 ## Required Action: Consolidation
 
 **To fully close this milestone, consolidation is required:**
