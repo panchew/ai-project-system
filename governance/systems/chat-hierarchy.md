@@ -63,7 +63,9 @@ All levels are served by a single **Governance Agent** (`governance/agents/gover
 
 ## Level 0: Creation Chat (Project Bootstrap)
 
-The Creation Chat is the **entry point** for a new project — the step before the four-level hierarchy begins. It runs once per project, immediately after `ai-project init`, and exists to turn a project brief into the single artifact that lets a Phase Chat open: a committed `genesis.md`. It is not one of the Governance Agent's four execution modes; it is a one-time bootstrap session (a human or an AI agent acting as Creation Chat).
+The Creation Chat is the **entry point** for a new project — the step before the four-level hierarchy begins. It runs once per project, immediately after `ai-project init`. It is not one of the Governance Agent's four execution modes; it is a one-time bootstrap session (a human or an AI agent acting as Creation Chat).
+
+The Level-0 handoff is **scale-dependent** — this section describes its **lightweight path**: a project brief converges on the single artifact that lets a Phase Chat open directly: a committed `genesis.md`. An ongoing, multi-phase project that needs a persistent control plane instead takes the **full path** — `seed.md` Rule 4's Project Brief + HQ Chat Opener convergence, handing off to an HQ Chat rather than a Phase Chat directly. See `governance/systems/start-a-project.md`'s "Choose Your Path" fork for the full comparison; both paths are legitimate Level-0 outcomes, not competing models.
 
 ### Role
 
@@ -91,7 +93,8 @@ Creation Chat is complete when `genesis.md` is committed (`status: complete`) an
 
 ### Documentation
 
-- **Template:** `governance/templates/genesis.md`
+- **Template (lightweight path):** `governance/templates/genesis.md`
+- **Template (full path):** `governance/templates/seed.md`
 - **Walkthrough example:** `examples/genesis-walkthrough/genesis.md`
 - **Process guide:** `governance/systems/start-a-project.md`
 

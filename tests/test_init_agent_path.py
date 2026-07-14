@@ -8,6 +8,7 @@ disagreeing with the framework's own docs. This test guards the fix: the
 initializer must write the HQ agent to the canonical path.
 """
 
+import re
 import subprocess
 from pathlib import Path
 
@@ -16,7 +17,8 @@ INIT_SCRIPT = REPO_ROOT / "bin" / "ai-project-init"
 
 
 def test_init_writes_canonical_agent_path(tmp_path):
-    """`ai-project-init` installs the HQ agent at `.ai-project/agents/hq.agent.md`."""
+    """`ai-project-init` installs the governance agent at
+    `.ai-project/agents/governance.agent.md`."""
     result = subprocess.run(
         ["bash", str(INIT_SCRIPT), "test-proj",
          "--dir", str(tmp_path), "--skip-git", "--skip-submodule"],
@@ -25,9 +27,13 @@ def test_init_writes_canonical_agent_path(tmp_path):
     assert result.returncode == 0, result.stderr
 
     project_dir = tmp_path / "test-proj"
-    canonical_agent = project_dir / ".ai-project" / "agents" / "hq.agent.md"
+    canonical_agent = project_dir / ".ai-project" / "agents" / "governance.agent.md"
     assert canonical_agent.is_file()
     assert canonical_agent.stat().st_size > 0
+    first_line = canonical_agent.read_text().splitlines()[0]
+    assert re.match(r"^(#|---)", first_line), (
+        f"expected a Markdown header or frontmatter, got: {first_line!r}"
+    )
 
     # The old GitHub-specific path must not be written (Option A: canonical-only).
     assert not (project_dir / ".github" / "agents").exists()
