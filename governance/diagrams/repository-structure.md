@@ -35,7 +35,6 @@ ai-project-system/
 │   ├── systems/                        # System operation guides
 │   │   ├── epic-execution-chat-starter.md
 │   │   ├── governance-propagation.md
-│   │   ├── hq-chat-opener.md
 │   │   ├── hq-chat.md
 │   │   ├── PROJECT-TRACKER-INTEGRATION-SYSTEM.md
 │   │   └── start-a-project.md
@@ -46,6 +45,7 @@ ai-project-system/
 │       ├── milestone-spec.md
 │       ├── epic-spec.md
 │       ├── epic-execution-chat-starter.md
+│       ├── hq-chat-opener.md
 │       ├── delivery-notice.md
 │       ├── completion-notice-epic.md
 │       ├── review-decision.md
