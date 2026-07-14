@@ -39,7 +39,7 @@ The following is the exhaustive list of Phase Chat responsibilities:
 2. **Produce Milestone specs** — create a Milestone spec file for every Milestone stub within the Phase; these are deliverables committed by the Coding Agent
 3. **Produce Milestone Execution Chat Starters** — create a filled-in Milestone Execution Chat Starter for each Milestone within the Phase
 4. **Return deliverables to HQ Chat** — all produced artifacts are returned to HQ Chat for review and acceptance
-5. **Issue Milestone Delivery Authorization** — when HQ Chat accepts a Milestone's deliverables, the Phase Chat issues a Milestone Delivery Authorization artifact authorizing the Coding Agent to proceed with that Milestone
+5. **Acknowledge Milestone acceptance in-chat** — when HQ Chat accepts a Milestone's deliverables (by silence on the happy path, per SN-19), the Phase Chat acknowledges the acceptance in-chat and applies the standing merge instruction authorizing the Milestone Chat to proceed with that Milestone
 
 A Phase Chat MUST complete all responsibilities before declaring the session closed.
 
@@ -52,7 +52,7 @@ Phase Chat communication is strictly bounded:
 | Direction | Permitted | Notes |
 |-----------|-----------|-------|
 | Upward | HQ Chat only | Reports progress, returns deliverables, requests decisions |
-| Downward | Milestone Chats only | Issues Milestone Execution Chat Starters and Delivery Authorizations |
+| Downward | Milestone Chats only | Issues Milestone Execution Chat Starters; acknowledges Milestone acceptance in-chat (SN-19 — no artifact) |
 | Lateral | PROHIBITED | A Phase Chat MUST NOT reach across to sibling phases or lateral epics |
 
 **Rule:** A Phase Chat MUST NOT communicate with or reference work belonging to another Phase. If cross-phase dependencies are discovered, the Phase Chat escalates to HQ Chat.
@@ -85,31 +85,23 @@ Documentation is authoritative. Chat is ephemeral. Any conflict between a chat s
 
 ---
 
-## Milestone Delivery Authorization
+## Milestone Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-When HQ Chat accepts a Milestone's deliverables, the Phase Chat (or HQ Chat, during bootstrap) issues a **Milestone Delivery Authorization** artifact.
+Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Milestone Delivery Authorization
+artifact or ceremonial block**. When HQ Chat accepts a Milestone's deliverables (by silence on
+the happy path), the Phase Chat (or HQ Chat, during bootstrap) acknowledges the acceptance
+**in-chat**. This acknowledgment is the signal to the Coding Agent that the Milestone's
+planning artifacts are accepted and the Milestone Chat may begin execution.
 
-The Milestone Delivery Authorization is the signal to the Coding Agent that the Milestone's planning artifacts are accepted and the Milestone Chat may begin execution.
-
-### Required Format
-
-The Milestone Delivery Authorization is a structured block with the following fields:
-
-```
-MILESTONE DELIVERY AUTHORIZATION
-
-Issuer: <Phase Chat | HQ Chat>
-Date: <YYYY-MM-DD>
-Milestone Reference: <P#-M#> — <Milestone Name>
-Authorized Action: Proceed with Milestone execution
-Merge Instruction: Merge epic branches to milestone/<M#> upon Epic acceptance
-```
+The standing merge instruction is: **merge epic branches to `milestone/<M#>` upon Epic
+acceptance** — the merge itself still requires explicit human authorization, which the harness
+enforces.
 
 ### Authority Rules
 
-- **Only HQ Chat or Phase Chat may issue Milestone Delivery Authorizations.**
+- **Only HQ Chat or Phase Chat may acknowledge Milestone acceptance.**
 - A Coding Agent MUST NOT self-authorize Milestone execution.
-- The Milestone Delivery Authorization MUST be issued before a Milestone Chat begins.
+- HQ Chat acceptance MUST be acknowledged before a Milestone Chat begins.
 
 ---
 
@@ -121,7 +113,7 @@ A Phase Chat session follows this sequence:
 2. **Review** — confirm the Phase spec exists and is complete
 3. **Plan** — produce Milestone specs and Milestone Execution Chat Starters for all Milestones
 4. **Return** — deliver all artifacts to HQ Chat for review
-5. **Authorize** — for each accepted Milestone, issue a Milestone Delivery Authorization
+5. **Authorize** — for each accepted Milestone, acknowledge acceptance in-chat and apply the standing merge instruction (SN-19 — no artifact)
 6. **Close** — declare the session closed after all Milestones are authorized
 
 **If the Phase spec is missing or incomplete:** STOP. Report the issue to HQ Chat. Do not proceed with planning.

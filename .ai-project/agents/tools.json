@@ -1,0 +1,9 @@
+{
+  "_comment": "Coding tool set for bin/run-dev-agent (Epic P7-M26-E26.1) — local-agent-runner CONTRACT §4. Paths cover the Docker sandbox mount (/workspace, the primary execution context) and the orchestrator's documented local fallback (working directory = project root). Fixed 2026-07-13 (P7-M26-E26.3 escalation, tools-json-allow-paths-glob-bug): local_agent_runner/tools.py's path_permitted() checks fnmatchcase() against Path.resolve()'s always-absolute output, so a literal './**' can never match anything under any execution route — only an absolute-path glob works. '*/ai-project-system/**' matches this repo's resolved path under the local fallback on any host (matches by directory name, not a hardcoded home path) without over-broadening to sibling or similarly-named directories. Commands are limited to the repo's test surface; git is scoped to read/stage/commit subcommands.",
+  "enabled": ["read_file", "write_file", "edit_file", "list_dir", "run_command", "git"],
+  "allow_paths": ["/workspace/**", "*/ai-project-system/**"],
+  "allow_commands": ["pytest*", "python -m pytest*", "python3 -m pytest*"],
+  "deny_commands": [],
+  "allow_subcommands": ["status", "diff", "log", "show", "add", "commit", "branch", "checkout"],
+  "timeout": 300
+}

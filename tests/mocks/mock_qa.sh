@@ -1,6 +1,10 @@
 #!/bin/bash
 # mock_qa.sh - Mock QA Validation Script
 # Simulates tests passing or failing.
+#
+# VERIFICATION-ONLY (boundary set in P7-M26-E26.2): used solely by
+# bin/verify-loop.sh to regression-test the orchestrator loop logic.
+# Never part of the live flow — live triggers use a real validation_command.
 
 SCENARIO="${1:-$MOCK_QA_SCENARIO}"
 

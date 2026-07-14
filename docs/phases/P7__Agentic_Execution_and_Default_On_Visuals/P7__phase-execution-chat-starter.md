@@ -5,6 +5,9 @@
 **Repository:** https://github.com/panchew/ai-project-system
 **Phase Spec:** `docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7__phase-spec.md`
 **Issued:** 2026-07-12
+**Amended:** 2026-07-12 (GH-9) — SN-19 accepted: M28 gains **E28.4** (retire the Delivery
+Authorization ceremonial block); this starter's own Delivery Authorization section retired,
+merge instruction folded into Output Requirements. Phase spec → v1.1.0.
 
 ---
 
@@ -173,6 +176,14 @@ design task.
   ordering.
 - **E28.3 — init canonical agent file** (P6-GH-15): `bin/ai-project-init` installs
   `governance.agent.md` (resolve the `hq`-vs-`governance` filename mismatch), with a test.
+- **E28.4 — Retire the Delivery Authorization ceremonial block** (P7-GH-17 / SN-19): docs-only,
+  E25.6-shaped. Remove the Delivery Authorization sections + their Completion-Requirements lines
+  from both starter **templates** and the `governance/systems/` **mirrors**
+  (milestone/phase/hq); fold the merge instruction into each starter's execution instructions;
+  reword AOG §1A step 6 + the two §10 bullets to in-chat authorization language. **Preserve the
+  in-chat merge authorization unchanged** (retire the artifact, not the authorization). The live
+  P7 phase starter is already amended (this document); the live **M26 milestone starter** carries
+  the same block — sweep it as a mid-flight amendment (GH-9) when planning M28.
 
 ---
 
@@ -199,27 +210,15 @@ Wrap the Milestone Execution Chat Starter in a four-backtick fence (per AOG §3.
 Deliver the Milestone spec first, then the Milestone Execution Chat Starter. After both,
 request HQ review. Under SN-13, HQ accepts a clean delivery by silence.
 
+**On HQ acceptance of M26** (by silence per SN-13, or explicit), proceed with M26 execution:
+**epic branches merge to `milestone/M26` upon Epic acceptance.** Authorization is an **in-chat
+act** — no Delivery Authorization artifact is produced (PSG §1A gate-scoping under §11.6;
+retired per SN-19). The merge itself still requires explicit human authorization, which the
+harness enforces.
+
 > **Do NOT produce Epic specs or Epic Execution Chat Starters.** Epic planning belongs to the
 > Milestone Chat (adjacency, GH-8). Your deliverables are the Milestone spec and the Milestone
 > Execution Chat Starter only.
-
----
-
-## Milestone Delivery Authorization Format
-
-When HQ accepts M26's deliverables:
-
-```
-MILESTONE DELIVERY AUTHORIZATION
-
-Issuer: Phase Chat (P7 — Agentic Execution and Default-On Visuals)
-Date: <YYYY-MM-DD>
-Milestone Reference: P7-M26 — First Real Agentic Run
-Authorized Action: Proceed with Milestone execution
-Merge Instruction: Merge epic branches to milestone/M26 upon Epic acceptance
-```
-
-Do NOT issue without explicit HQ Chat acceptance.
 
 ---
 

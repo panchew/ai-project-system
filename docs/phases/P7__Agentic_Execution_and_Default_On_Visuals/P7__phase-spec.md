@@ -4,7 +4,7 @@ name: Agentic Execution and Default-On Visuals
 status: active
 start_date: 2026-07-12
 planned_end_date: 2026-09-05
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Phase P7: Agentic Execution and Default-On Visuals
@@ -34,7 +34,8 @@ Three milestones:
    binding decisions, and resolve Ollama+ComfyUI single-GPU coexistence as a design task
    inside this milestone.
 3. **M28 — Governance Reconciliations** — P7-GH-16 (Level-0 handoff + HQ opener template),
-   P6-GH-14 (Delivery-Notice ordering), P6-GH-15 (init installs superseded agent file).
+   P6-GH-14 (Delivery-Notice ordering), P6-GH-15 (init installs superseded agent file), and
+   P7-GH-17 (retire the Delivery Authorization ceremonial block — SN-19).
 
 ---
 
@@ -136,6 +137,18 @@ and visual work.
   superseded `governance/agents/hq.agent.md` instead of the canonical unified
   `governance/agents/governance.agent.md` (also resolves the `hq`-vs-`governance` filename
   mismatch). A script + test + doc behavior change.
+- **P7-GH-17 — retire the Delivery Authorization ceremonial block (SN-19).** The Epic /
+  Milestone **Delivery Authorization** blocks in the starter tier survived E25.2's SN-13
+  default-accept reconciliation. PSG §1A gate-scoping (under §11.6) already demoted delivery
+  authorization to an **in-chat act — no artifact** on the happy path, but the artifact-shaped
+  blocks persist in both starter templates, the `governance/systems/` mirrors
+  (milestone/phase/hq execution-chat-starter), and AOG §1A step 6 + the two §10 enforcement
+  bullets. A docs-only reconciliation (E25.6-shaped): **retire the ceremonial block; preserve
+  the in-chat merge authorization unchanged** (the CFO still says "merge it"; the harness
+  enforces human merge authorization regardless). Fold the load-bearing **merge instruction**
+  into each starter's execution instructions. *The live P7 phase-execution starter has already
+  been amended by HQ under the GH-9 path at SN-19 acceptance; the live M26 milestone starter's
+  block is the Phase Chat's to sweep (adjacency).*
 
 ---
 
@@ -211,7 +224,7 @@ Ollama+ComfyUI coexistence as a design task within.
 
 ### M28: Governance Reconciliations
 
-**Goal:** Fix the three doc/CLI contradictions surfaced by real adoption. Independent; may run
+**Goal:** Fix the four doc/CLI contradictions surfaced by real adoption. Independent; may run
 in parallel with M27 at the Phase Chat's discretion.
 
 **Indicative Epics:**
@@ -221,6 +234,14 @@ in parallel with M27 at the Phase Chat's discretion.
 - **E28.2 — Delivery-Notice ordering reconciliation** (P6-GH-14).
 - **E28.3 — init canonical agent file** (P6-GH-15) — install `governance.agent.md`, resolve the
   filename mismatch, with a test.
+- **E28.4 — Retire the Delivery Authorization ceremonial block** (P7-GH-17 / SN-19) — docs-only,
+  E25.6-shaped. Remove the Delivery Authorization sections and their Completion-Requirements
+  checklist lines from both starter **templates** (`governance/templates/{milestone,phase}-execution-chat-starter.md`)
+  and the `governance/systems/` **mirrors** (milestone/phase/hq execution-chat-starter); fold
+  the load-bearing merge instruction into each starter's execution instructions. Reword AOG §1A
+  step 6 and the two §10 enforcement bullets to the in-chat authorization language PSG §1A
+  gate-scoping already uses (authorization preserved; artifact retired). The live P7 phase
+  starter is already amended (HQ, GH-9); the M26 milestone starter is the Phase Chat's to sweep.
 
 ---
 
@@ -243,6 +264,9 @@ in parallel with M27 at the Phase Chat's discretion.
    scale-dependent) and all four docs agree; an HQ starter template exists in `templates/`
 7. ✅ **Delivery-Notice ordering reconciled** (P6-GH-14) and **`ai-project-init` installs the
    canonical agent file** (P6-GH-15)
+8. ✅ **Delivery Authorization ceremonial block retired** (P7-GH-17) — gone from the starter
+   templates, the `governance/systems/` mirrors, and AOG §1A/§10; the in-chat merge
+   authorization preserved unchanged
 
 ---
 
@@ -262,6 +286,9 @@ The CFO (Layer 8) will accept P7 complete when:
 - [ ] `seed.md`, `genesis.md`, `start-a-project.md`, and `chat-hierarchy.md` no longer
   contradict each other on the Level-0 handoff; an HQ starter template is in `templates/`
 - [ ] `bin/ai-project-init` installs `governance.agent.md`
+- [ ] No Delivery Authorization ceremonial block remains in the starter templates,
+  `governance/systems/` mirrors, or AOG §1A/§10; each starter still carries the merge
+  instruction as an in-chat act
 
 ---
 
@@ -289,7 +316,7 @@ The CFO (Layer 8) will accept P7 complete when:
 - M26 (First Real Agentic Run): 5–8 days (3 epics) — **first**, time-sensitive (a partner
   project's P2 closure is stalled on it)
 - M27 (Visuals Default-On): 5–7 days (3 epics) — includes the coexistence design task
-- M28 (Governance Reconciliations): 3–5 days (3 small epics) — independent
+- M28 (Governance Reconciliations): 4–6 days (4 small epics) — independent
 - **Total: ~2.5–3 weeks**
 
 ---
@@ -331,3 +358,4 @@ The CFO (Layer 8) will accept P7 complete when:
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-07-12 | Initial P7 phase spec. Three milestones (M26–M28), ~8–9 Epics. Agentic execution (first real run, P7-AE-1) + default-on visuals (SN-17) + governance reconciliations (P7-GH-16, P6-GH-14, P6-GH-15). Scoped by SN-18 on the HQ ruling (2026-07-11) and SN-17; AE-1 fixed as milestone one with a cross-repo E3.2 acceptance exit criterion. |
+| 1.1.0 | 2026-07-12 | Mid-flight amendment (GH-9) accepting **SN-19**: added **E28.4 (P7-GH-17)** to M28 — retire the Delivery Authorization ceremonial block (SN-13 missed reconciliation) across starter templates, `governance/systems/` mirrors, and AOG §1A/§10, preserving the in-chat merge authorization. Live P7 phase-execution starter amended at the same time (HQ, GH-9). M28 now 4 epics. |

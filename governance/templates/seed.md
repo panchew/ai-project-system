@@ -53,6 +53,11 @@ via an artifact. The human is the only one who can promote a thought into a deci
 
 ### Rule 4 — Convergence Target
 
+This is the **full path** for an ongoing, multi-phase project that needs a persistent control
+plane. A small, single-phase bootstrap should skip this convergence and fill
+`governance/templates/genesis.md` directly instead, handing off straight to a Phase Chat — see
+`governance/systems/start-a-project.md`'s "Choose Your Path" fork for the full comparison.
+
 The inception stage of this chat has one goal: produce two artifacts together with the human.
 
 1. **Project Brief** — captures what the project is:

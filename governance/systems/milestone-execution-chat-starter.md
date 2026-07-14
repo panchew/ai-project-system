@@ -39,7 +39,7 @@ The following is the exhaustive list of Milestone Chat responsibilities:
 2. **Produce Epic specs** — create an Epic spec file for every Epic stub within the Milestone; these are deliverables committed by the Coding Agent
 3. **Produce Epic Execution Chat Starters** — create a filled-in Epic Execution Chat Starter for each Epic within the Milestone
 4. **Return deliverables to the parent chat** — all produced artifacts are returned to the Phase Chat (or HQ Chat) for review and acceptance
-5. **Issue Epic Delivery Authorization** — when the parent chat accepts an Epic's deliverables, the Milestone Chat issues an Epic Delivery Authorization artifact authorizing the Coding Agent to proceed with that Epic
+5. **Acknowledge Epic acceptance in-chat** — when the parent chat accepts an Epic's deliverables (by silence on the happy path, per SN-19), the Milestone Chat acknowledges the acceptance in-chat and applies the standing merge instruction authorizing the Coding Agent to proceed with that Epic
 
 A Milestone Chat MUST complete all responsibilities before declaring the session closed.
 
@@ -52,7 +52,7 @@ Milestone Chat communication is strictly bounded:
 | Direction | Permitted | Notes |
 |-----------|-----------|-------|
 | Upward | Phase Chat (or HQ Chat during bootstrap) only | Reports progress, returns deliverables, requests decisions |
-| Downward | Coding Agents only | Issues Epic Execution Chat Starters and Epic Delivery Authorizations |
+| Downward | Coding Agents only | Issues Epic Execution Chat Starters; acknowledges Epic acceptance in-chat (SN-19 — no artifact) |
 | Lateral | PROHIBITED | A Milestone Chat MUST NOT reach across to sibling milestones or phases |
 
 **Rule:** A Milestone Chat MUST NOT communicate with or reference work belonging to another Milestone. If cross-milestone dependencies are discovered, the Milestone Chat escalates to the parent chat (Phase Chat or HQ Chat).
@@ -85,31 +85,23 @@ Documentation is authoritative. Chat is ephemeral. Any conflict between a chat s
 
 ---
 
-## Epic Delivery Authorization
+## Epic Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-When the parent chat (Phase Chat or HQ Chat) accepts an Epic's deliverables, the Milestone Chat issues an **Epic Delivery Authorization** artifact.
+Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Epic Delivery Authorization artifact
+or ceremonial block**. When the parent chat (Phase Chat or HQ Chat) accepts an Epic's
+deliverables (by silence on the happy path), the Milestone Chat acknowledges the acceptance
+**in-chat**. This acknowledgment is the signal to the Coding Agent that the Epic's planning
+artifacts are accepted and Epic execution may begin.
 
-The Epic Delivery Authorization is the signal to the Coding Agent that the Epic's planning artifacts are accepted and Epic execution may begin.
-
-### Required Format
-
-The Epic Delivery Authorization is a structured block with the following fields:
-
-```
-EPIC DELIVERY AUTHORIZATION
-
-Issuer: Milestone Chat (<P#>-<M#> — <Milestone Name>)
-Date: <YYYY-MM-DD>
-Epic Reference: <P#>-<M#>-<E#.#> — <Epic Name>
-Authorized Action: Proceed with Epic execution
-Merge Instruction: Merge epic/<E#.#> to milestone/<M#> upon Epic completion and parent acceptance
-```
+The standing merge instruction is: **merge `epic/<E#.#>` to `milestone/<M#>` upon Epic
+completion and parent acceptance** — the merge itself still requires explicit human
+authorization, which the harness enforces.
 
 ### Authority Rules
 
-- **Only HQ Chat, Phase Chat, or Milestone Chat may issue Epic Delivery Authorizations.**
+- **Only HQ Chat, Phase Chat, or Milestone Chat may acknowledge Epic acceptance.**
 - A Coding Agent MUST NOT self-authorize Epic execution.
-- The Epic Delivery Authorization MUST be issued before a Coding Agent begins.
+- Parent chat acceptance MUST be acknowledged before a Coding Agent begins.
 
 ---
 
@@ -363,7 +355,7 @@ A Milestone Chat session follows this sequence:
 2. **Review** — confirm the Milestone spec exists and is complete
 3. **Plan** — produce Epic specs and Epic Execution Chat Starters for all Epics
 4. **Return** — deliver all artifacts to parent chat for review
-5. **Authorize** — for each accepted Epic, issue an Epic Delivery Authorization
+5. **Authorize** — for each accepted Epic, acknowledge acceptance in-chat and apply the standing merge instruction (SN-19 — no artifact)
 6. **Execute** — receive Completion Notices from Epic Agents as they finish work
 7. **Review** — review each Completion Notice; accept clean deliveries by silence,
    issuing a Review Decision only on the exception path (PSG §11.6)

@@ -325,8 +325,8 @@ install_hq_agent() {
   # If the governance agent file is unavailable, create a stub placeholder.
   local project_dir="$1"
   local agents_dir="$project_dir/.ai-project/agents"
-  local src_file="$project_dir/governance/agents/hq.agent.md"
-  local dest_file="$agents_dir/hq.agent.md"
+  local src_file="$project_dir/governance/agents/governance.agent.md"
+  local dest_file="$agents_dir/governance.agent.md"
 
   mkdir -p "$agents_dir" || error "Failed to create agents directory at $agents_dir"
 
@@ -405,7 +405,7 @@ main() {
   # If a git repo exists, include the agent file in the initial commit (amend) to keep history tidy
   if [[ "$skip_git" == false ]]; then
     cd "$target_dir" || error "Failed to enter directory: $target_dir"
-    git add .ai-project/agents/hq.agent.md > /dev/null 2>&1 || error "Failed to stage HQ agent file"
+    git add .ai-project/agents/governance.agent.md > /dev/null 2>&1 || error "Failed to stage HQ agent file"
     # Prefer amending the initial commit; if that fails (edge cases), fall back to a new commit
     if ! git commit --amend --no-edit > /dev/null 2>&1; then
       git commit -m "Add HQ agent file" > /dev/null 2>&1 || error "Failed to commit HQ agent file"

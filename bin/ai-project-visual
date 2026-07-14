@@ -31,6 +31,10 @@ Exit codes:
     2  capability disabled (visual_artifacts.enabled is false / block absent)
     3  configuration error (invalid endpoint, --type not in configured types, missing workflow)
     4  runtime error (endpoint unreachable, generation failed, or no output produced)
+    5  execution locked — a live agentic epic execution holds
+       bin/ai-project-orchestrator's execution lock; the generative call is refused to
+       avoid GPU contention with live Ollama inference. See
+       governance/guides/gpu-coexistence.md.
 """
 
 import argparse
@@ -48,8 +52,10 @@ EXIT_OK = 0
 EXIT_DISABLED = 2
 EXIT_CONFIG = 3
 EXIT_RUNTIME = 4
+EXIT_LOCKED = 5
 
 ORCH_PATH = Path(__file__).resolve().parent / "ai-project-orchestrator"
+DAEMON_PATH = Path(__file__).resolve().parent / "ai-project-daemon"
 PROMPT_PLACEHOLDER = "%prompt%"
 
 
@@ -66,6 +72,21 @@ def load_orchestrator():
     if not ORCH_PATH.exists():
         fail(EXIT_CONFIG, f"orchestrator not found at {ORCH_PATH}; cannot read visual_artifacts config.")
     loader = SourceFileLoader("ai_project_orchestrator_for_visual", str(ORCH_PATH))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def load_daemon():
+    """Load the extensionless sibling ``bin/ai-project-daemon`` as a module so the
+    execution-lock guardrail (E27.3, GPU coexistence) reuses its existing
+    ``check_execution_locked()`` / ``check_pid_alive()`` — the same PID-liveness
+    semantics as the orchestrator's own lock handling — rather than a second,
+    divergent implementation. Mirrors ``load_orchestrator()``."""
+    if not DAEMON_PATH.exists():
+        fail(EXIT_CONFIG, f"daemon helper not found at {DAEMON_PATH}; cannot check the execution lock.")
+    loader = SourceFileLoader("ai_project_daemon_for_visual", str(DAEMON_PATH))
     spec = importlib.util.spec_from_loader(loader.name, loader)
     module = importlib.util.module_from_spec(spec)
     loader.exec_module(module)
@@ -230,7 +251,23 @@ def main(argv=None):
     else:
         workflow = default_workflow(args.prompt, args.checkpoint, args.width, args.height, args.seed)
 
-    # 5. Generate.
+    # 5. Execution-lock guardrail (E27.3, GPU coexistence) — refuse a generative call
+    #    while a live agentic epic execution holds the orchestrator's execution lock,
+    #    since both compete for the same GPU (see governance/guides/gpu-coexistence.md).
+    #    Point the daemon's lock check at the orchestrator's own resolved LOCK_FILE
+    #    (cwd-based, the project actually being executed against) rather than trusting
+    #    the daemon module's own file-location-based default, so this never checks a
+    #    different lock than the one the orchestrator actually writes.
+    daemon = load_daemon()
+    daemon.EXECUTION_LOCK = orch.LOCK_FILE
+    if daemon.check_execution_locked():
+        fail(EXIT_LOCKED,
+             "a live agentic epic execution is in progress and holds the execution lock "
+             "(.ai-project/locks/execution.lock); GPU is shared with live Ollama inference, "
+             "so the generative call is deferred. Retry once the execution completes. "
+             "See governance/guides/gpu-coexistence.md.")
+
+    # 6. Generate.
     try:
         prompt_id = submit(url, workflow, args.timeout)
         outputs = wait_for_outputs(url, prompt_id, args.timeout)

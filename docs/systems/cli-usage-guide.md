@@ -33,7 +33,7 @@ ai-project init <project-name> [options]
 
 - Standard docs structure and `.ai-project.yml` with governance metadata
 - Governance as a Git submodule at `governance/`
-- HQ Chat agent installed at `.ai-project/agents/hq.agent.md` (stubbed if governance agent not present)
+- HQ Chat agent installed at `.ai-project/agents/governance.agent.md` (stubbed if governance agent not present)
 - Clean initial git commit
 
 ## Quick Start
@@ -72,7 +72,7 @@ git submodule status
 ls governance/
 
 # Verify agent file
-cat .ai-project/agents/hq.agent.md | sed -n '1,40p'
+cat .ai-project/agents/governance.agent.md | sed -n '1,40p'
 
 # Validate YAML
 cat .ai-project.yml

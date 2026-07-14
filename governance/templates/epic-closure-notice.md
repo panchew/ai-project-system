@@ -62,6 +62,11 @@ status: complete
 <Confirm the Definition of Done is satisfied, the Delivery Notice is produced, and the
 working tree is clean. List any accepted follow-ups carried forward.>
 
+## Visual Bindings
+<Optional. Record links to any generated visuals for this closure, using the binding schema
+in governance/guides/visual-artifacts.md §7 (link + What / Level / State / Description).
+Bind a hosted LINK, never a committed path. Omit this section if there are no visuals.>
+
 ## Chat Closure
 This Epic Chat (<P#-M#-E#.#>) is now closed. No further work will be performed here.
 ```

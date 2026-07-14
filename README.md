@@ -6,9 +6,9 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — v5.1.0
+## 🎉 All Phases Complete — v6.0.0
 
-**The AI Project System was built using its own governance.** All six phases (P1–P6) are complete and consolidated to `master` at **v5.1.0** with 260 tests passing (1 skipped by design — the visual-artifact endpoint test at `enabled: false`).
+**The AI Project System was built using its own governance.** All seven phases (P1–P7) are complete and consolidated to `master` at **v6.0.0** with 306 tests passing (1 skipped by design — the visual-artifact endpoint test at `enabled: false`).
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -67,6 +67,19 @@ framework match the framework as operated.
 | **M25** — Process Refinements | Close three P5 carry-forwards | PSG §5C canonical phase-closure sequence; SN-13 default-accept codified (PSG §11.6 / AOG §12) + reconciled framework-wide with Layer-8 review preserved; `ai-project-init` → tool-neutral `.ai-project/agents/` |
 
 **P6 highlights:** by-link storage reversal · load-bearing binding convention · proposed-vs-implemented as the routine default · single-parent clips as publishable media · mandatory canonical phase closure (README/version/tag) · default-accept codified framework-wide.
+
+### Phase P7 — Agentic Execution & Default-On Visuals (Complete)
+The governance machine started doing the work itself: the first genuine, non-mocked agentic
+Epic run, visual artifacts flipped to default-on framework-wide, and the adoption/execution
+contradictions real consumer projects hit, reconciled.
+
+| Milestone | Focus | Key Deliverables |
+|-----------|-------|------------------|
+| **M26** — First Real Agentic Run | Wire a real local-model runner into the orchestrator | `bin/run-dev-agent`, `04_epic.json` mock trigger retired, first live Epic completed non-mocked, transcript accepted cross-repo |
+| **M27** — Visuals Default-On | Flip the CFO's default lens on an increasingly autonomous system | AOG §16.1 default-on/opt-out, §16.8 automatic trigger set (specs + delivery/closure), `visual_required_for_specs` enforcement key, Ollama+ComfyUI coexistence guide |
+| **M28** — Governance Reconciliations | Close three carry-forwards + retire a ceremonial artifact | Level-0 handoff scale-dependent fork + HQ Chat Opener template; Delivery-Notice terminology reconciled to practiced model; `ai-project-init` installs canonical `governance.agent.md`; Delivery Authorization ceremonial block retired framework-wide |
+
+**P7 highlights:** first real (non-mocked) agentic execution · default-on visual artifacts · single-GPU Ollama+ComfyUI coexistence design · coherent Level-0 handoff · one Delivery-Notice terminology · canonical `ai-project-init` agent file · in-chat merge authorization, ceremony-free.
 
 👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
 👉 **[Get started with P4 (team mode)](docs/team-collaboration/P4-governance-system-guide.md)** · **[Run the example](examples/team-project-example/README.md)**
@@ -564,13 +577,13 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2 + P3 + P4 + P5 + P6)
-✅ **78 Epics** delivered across **25 milestones** over **6 phases**
+### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7)
+✅ **88 Epics** delivered across **28 milestones** over **7 phases**
 
 ### Governance
 - PROJECT-SYSTEM-GUIDELINES.md v2.3.0 (effective 2026-07-02)
-- AI-OPERATING-GUIDELINES.md v2.6.0 (effective 2026-07-02)
-- Framework version: v5.1.0
+- AI-OPERATING-GUIDELINES.md v2.9.0 (effective 2026-07-13)
+- Framework version: v6.0.0
 
 ---
 
@@ -621,10 +634,12 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P4 Complete** — Team Collaboration & Artifact-Driven Communication (6 milestones, 12 Epics)
 - ✅ **Phase P5 Complete** — Process Hardening & Visual Artifacts (3 milestones, 9 Epics)
 - ✅ **Phase P6 Complete** — Visual Comprehension Layer & Process Refinements (3 milestones, 10 Epics)
-- ✅ **78 total Epics** delivered across 25 milestones, 6 phases
+- ✅ **Phase P7 Complete** — Agentic Execution & Default-On Visuals (3 milestones, 10 Epics)
+- ✅ **88 total Epics** delivered across 28 milestones, 7 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
-- ✅ **Governance stable** — v5.1.0 (effective 2026-07-02)
+- ✅ **First real, non-mocked agentic execution** — the system executes its own epics through the orchestrator on local models
+- ✅ **Governance stable** — v6.0.0 (effective 2026-07-13)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
@@ -638,7 +653,9 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 **What's Next (Future Phases):**
 - **P4 — Team Collaboration & Artifact-Driven Communication** — Complete. See the [P4 Governance System Guide](docs/team-collaboration/P4-governance-system-guide.md).
 - **P5 — Process Hardening & Visual Artifacts** — Complete. Governance hardened, visual artifacts framework in place.
-- **P6** — Candidates in pre-scoping. Expected focus: ComfyUI workflow implementation, phase closure canonical sequence, and delivery model refinements surfaced during P5 execution.
+- **P6 — Visual Comprehension Layer & Process Refinements** — Complete. By-link storage, binding convention, proposed-vs-implemented as routine, canonical phase closure (PSG §5C).
+- **P7 — Agentic Execution & Default-On Visuals** — Complete. First real non-mocked agentic run, default-on visuals framework-wide, governance reconciliations.
+- **P8** — Not yet scoped. See [`docs/roadmap/overview.md`](docs/roadmap/overview.md) for the current focus.
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively

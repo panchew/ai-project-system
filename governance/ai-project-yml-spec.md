@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.1.0  
+**Version:** 2.3.0  
 **Status:** Active  
-**Effective Date:** 2026-06-28  
-**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22)
+**Effective Date:** 2026-07-13  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27)
 
 ---
 
@@ -55,16 +55,17 @@ models:                  # OPTIONAL. Hybrid model routing maps for autonomous cl
   hq: <string>           # default: remote:gpt-4o
   phase: <string>        # default: remote:claude-3-5-sonnet
   milestone: <string>    # default: remote:claude-3-5-sonnet
-  epic_dev: <string>     # default: local:llama3:8b
+  epic_dev: <string>     # default: local:qwen2.5-coder:14b
   epic_qa: <string>      # default: local:qwen2.5-coder:7b
 
-visual_artifacts:        # OPTIONAL. Opt-in visual-artifact generation. Absent ⇒ disabled. Full spec: M22.
-  enabled: <bool>        # default: false. Opt-in switch for the capability.
+visual_artifacts:        # OPTIONAL. Default-on visual-artifact generation. Absent ⇒ enabled. Full spec: M22/M27.
+  enabled: <bool>        # default: true. false is the explicit opt-out.
   comfyui_url: <string>  # default: http://localhost:8188. Generative endpoint (well-formed URL when present).
   types:                 # OPTIONAL. Subset of: diagrams, infographics, video.
     - diagrams
     - infographics
     - video
+  visual_required_for_specs: <bool>  # default: true. Enforcement setting for specs.
 ```
 
 ---
@@ -327,30 +328,33 @@ The `models` block is **optional**. When present, it configures the local/remote
 | `hq` | String | `remote:gpt-4o` | `remote:gpt-4o`, `remote:claude-3-5-sonnet` | Product Owner (High-level vision & Requirements) |
 | `phase` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Phase Milestone planning) |
 | `milestone` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Milestone Epic planning) |
-| `epic_dev` | String | `local:llama3:8b` | `local:llama3:8b`, `local:qwen2.5-coder` | Developer Agent (Code implementation) |
+| `epic_dev` | String | `local:qwen2.5-coder:14b` | `local:qwen2.5-coder:14b`, `local:qwen2.5-coder` | Developer Agent (Code implementation; must be a tool-calling-capable model) |
 | `epic_qa` | String | `local:qwen2.5-coder:7b` | `local:qwen2.5-coder:7b`, `local:llama3` | QA Tester Agent (Verification & Test runner) |
 
 #### Format Constraints
 Model configuration values must follow one of these formats:
 - **Remote Models:** Prefix with `remote:` followed by the provider and model name (e.g., `remote:gpt-4o`, `remote:claude-3-5-sonnet`, `remote:gemini-1.5-pro`).
-- **Local Models:** Prefix with `local:` followed by the model identifier (e.g., `local:llama3:8b`, `local:qwen2.5-coder:7b`).
+- **Local Models:** Prefix with `local:` followed by the model identifier (e.g., `local:qwen2.5-coder:14b`, `local:qwen2.5-coder:7b`). These are format examples only, not defaults; role defaults are defined in the table above.
 
 ---
 
 ### 3.5 Optional Fields — `visual_artifacts` (Visual Artifacts)
 
-The `visual_artifacts` block is **optional** and **opt-in**. When the block is **absent**, the
-visual-artifacts capability is **disabled** — exactly as if `enabled: false` were set. This mirrors
-the `cfo_review_gate` / `models` opt-in philosophy: a project must explicitly turn the capability on.
+The `visual_artifacts` block is **optional** and **default-on**. When the block is **absent**, the
+visual-artifacts capability is **enabled** at its documented defaults — `enabled: false` is the
+explicit opt-out. This reflects visuals as the CFO's default lens on an increasingly autonomous
+system (SN-17); it no longer mirrors the `cfo_review_gate` / `models` opt-in philosophy for the
+`enabled` field specifically.
 
 When present, the block declares whether visual artifacts are enabled, where the generative endpoint
-(ComfyUI) lives, and which artifact types are in scope.
+(ComfyUI) lives, which artifact types are in scope, and whether visuals are required for specs.
 
 | Field | Type | Default | Allowed Values | Constraint | Behavioral Effect |
 |-------|------|---------|----------------|------------|-------------------|
-| `enabled` | Boolean | `false` | `true`, `false` | Must be a YAML boolean when present | Master opt-in switch. `false` (or block absent) ⇒ capability off; `true` ⇒ capability on. |
+| `enabled` | Boolean | `true` | `true`, `false` | Must be a YAML boolean when present | Master on/off switch. `true` (or block absent) ⇒ capability on; `false` ⇒ capability off (explicit opt-out). |
 | `comfyui_url` | String | `http://localhost:8188` | Any well-formed `http`/`https` URL | Must be a well-formed URL (scheme + host) when present | Declares the ComfyUI generative endpoint. Endpoint availability is the CFO's responsibility; this field only declares where it is configured. |
 | `types` | List of String | `[diagrams, infographics, video]` | Each entry one of: `diagrams`, `infographics`, `video` | Every entry must be an allowed value when present | Selects which artifact types are in scope. `diagrams`: Mermaid/PlantUML structural; `infographics`: ComfyUI-generated imagery; `video`: ComfyUI video (optional). |
+| `visual_required_for_specs` | Boolean | `true` | `true`, `false` | Must be a YAML boolean when present | Enforcement setting: whether specs are required to carry a visual. Governs enforcement only, not which artifact types are automatic (see AOG §16.1/§16.2). |
 
 #### Field Details
 
@@ -360,7 +364,7 @@ When present, the block declares whether visual artifacts are enabled, where the
 |----------|-------|
 | Type | Boolean |
 | Required | No |
-| Default | `false` |
+| Default | `true` |
 | Allowed Values | `true`, `false` |
 | Constraint | Must be a YAML boolean when present. A non-boolean is a validation error. |
 | Validation Error | `"Invalid visual_artifacts.enabled: '<value>'. Must be a boolean (true or false)."` |
@@ -387,10 +391,21 @@ When present, the block declares whether visual artifacts are enabled, where the
 | Constraint | When present, every entry must be an allowed value. An entry outside the set is a validation error. |
 | Validation Error | `"Invalid visual_artifacts.types entry: '<value>'. Must be one of: diagrams, infographics, video."` |
 
+##### `visual_artifacts.visual_required_for_specs`
+
+| Property | Value |
+|----------|-------|
+| Type | Boolean |
+| Required | No |
+| Default | `true` |
+| Allowed Values | `true`, `false` |
+| Constraint | Must be a YAML boolean when present. A non-boolean is a validation error. |
+| Validation Error | `"Invalid visual_artifacts.visual_required_for_specs: '<value>'. Must be a boolean (true or false)."` |
+
 #### Unknown `visual_artifacts` Keys
 
-When the `visual_artifacts` block is present, only the three recognized keys (`enabled`,
-`comfyui_url`, `types`) are valid. Unknown keys:
+When the `visual_artifacts` block is present, only the four recognized keys (`enabled`,
+`comfyui_url`, `types`, `visual_required_for_specs`) are valid. Unknown keys:
 
 - **MUST produce a validation warning** (not an error) during tooling validation
 - **MUST be ignored** during capability resolution
@@ -403,12 +418,13 @@ versions of the spec to add new `visual_artifacts` fields without breaking exist
 
 ```yaml
 visual_artifacts:
-  enabled: false              # opt-in; default false
+  enabled: true                          # default-on; false is the explicit opt-out
   comfyui_url: http://localhost:8188
   types:
-    - diagrams                # Mermaid/PlantUML structural
-    - infographics            # ComfyUI-generated imagery
-    - video                   # ComfyUI video (optional)
+    - diagrams                           # Mermaid/PlantUML structural
+    - infographics                       # ComfyUI-generated imagery
+    - video                              # ComfyUI video (optional)
+  visual_required_for_specs: true        # enforcement setting; defaulted true
 ```
 
 ---
@@ -452,9 +468,10 @@ When the `visual_artifacts` block is present, the following additional validatio
 21. `visual_artifacts.comfyui_url`, when present, must be a well-formed URL (a parseable `http`/`https` scheme with a host)
 22. Unknown keys in the `visual_artifacts` block MUST produce a validation warning (not an error)
 23. Invalid values in the `visual_artifacts` block MUST produce a validation error
-24. The entire `visual_artifacts` block is optional; an **absent** block is valid and means the capability is **disabled** (no error, no warning)
+24. The entire `visual_artifacts` block is optional; an **absent** block is valid and means the capability is **enabled** at its documented defaults (no error, no warning)
+25. `visual_artifacts.visual_required_for_specs`, when present, must be a boolean (`true`/`false`)
 
-A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, any `visual_artifacts` value violates rules 19–21, or the file is not valid YAML.
+A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, any `visual_artifacts` value violates rules 19–21 or 25, or the file is not valid YAML.
 
 ---
 
@@ -570,10 +587,11 @@ visual_artifacts:
   types:
     - diagrams
     - infographics
+  visual_required_for_specs: true
 ```
 
-An equivalent project with the `visual_artifacts` block **omitted** (or with `enabled: false`) has
-the capability **disabled** and remains valid.
+An equivalent project with the `visual_artifacts` block **omitted** has the capability **enabled**
+at its documented defaults and remains valid. Setting `enabled: false` is the explicit opt-out.
 
 ---
 
@@ -581,6 +599,8 @@ the capability **disabled** and remains valid.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.3.0 | 2026-07-13 | `visual_artifacts` flipped from opt-in/off-by-default to default-on/opt-out: §3.5 `enabled` default `false` → `true`; added new `visual_required_for_specs` enforcement field (default `true`) with Field Details block and §4 validation rule 25; Worked Example and §11 Full Example updated. (Epic E27.1, P7-M27) |
+| 2.2.0 | 2026-07-12 | `epic_dev` default moved from `local:llama3:8b` (verified unusable for tool-calling — empty tool-call responses, local-agent-runner CONTRACT §1.4) to `local:qwen2.5-coder:14b`, consistently in the schema comment (§3.4), the field table default/examples, and the format-constraint examples. `epic_qa` unchanged. (Epic E26.2, P7-M26) |
 | 2.1.0 | 2026-06-28 | Added the optional, opt-in `visual_artifacts` block: Section 3.1 schema reference, new Section 3.5 (field definitions for `enabled`, `comfyui_url`, `types`, unknown-key forward-compatibility, worked example), validation rules 18–24 in Section 4, and a full example in Section 11. Absent block ⇒ capability disabled. (Epic E22.1, P5-M22) |
 | 2.0.0 | 2026-05-21 | Complete override specification: Section 3.3 expanded from stub to full field definitions with types, defaults, allowed values, constraints, behavioral effects, and precedence hierarchy. Added override validation rules to Section 4. (Epic E9.1, P2-M9) |
 | 1.0.0 | 2026-04-20 | Initial specification (Epic E6.3, P2-M6) |
