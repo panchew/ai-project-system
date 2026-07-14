@@ -114,16 +114,17 @@ Notice** (Coding Agent confirms the branch merge completed), and **Escalation No
      │  Milestone Execution Chat Starter ▼    ▲ Epic Completion Notice (→ Review Decision only if not clean)
    Milestone Chat
      │  Epic Execution Chat Starter +         ▲ Completion Notice
-     │  Epic Delivery Authorization ▼         │ Delivery Notice (after merge)
+     │  In-chat Acceptance (SN-19) ▼          │ Delivery Notice (after merge)
    Epic Agent (Coding Agent)
      │  Branch · PR · code ▼
    Repository
 ```
 
-Downward: each layer launches the layer below with a Chat Starter and a Delivery
-Authorization. Upward: each layer reports completion with a Completion Notice; a clean
-delivery is accepted by silence, and a Review Decision comes back only on the exception
-path (PSG §11.6 / AOG §12); after merge it produces a Delivery Notice.
+Downward: each layer launches the layer below with a Chat Starter, and acknowledges
+acceptance in-chat (SN-19 — no Delivery Authorization artifact; the standing merge
+instruction carries the same authority). Upward: each layer reports completion with a
+Completion Notice; a clean delivery is accepted by silence, and a Review Decision comes back
+only on the exception path (PSG §11.6 / AOG §12); after merge it produces a Delivery Notice.
 
 **Reference:** [`artifact-communication-protocol.md`](artifact-communication-protocol.md)
 defines every artifact schema. Storage convention:
@@ -238,9 +239,9 @@ When a production issue lands in HQ Chat, the HQ Agent runs these six steps in o
 3. **Commit the spec** to `docs/bugfixes/B#.#__spec__<slug>.md`. The committed file — not
    the chat message — is the record of the Bugfix Epic.
 
-4. **Issue an Epic Delivery Authorization** directly to the executing Coding Agent (the
-   bugfix path skips the Phase/Milestone layers). The agent fixes on a `bugfix/B#.#`
-   branch.
+4. **Acknowledge acceptance in-chat** directly to the executing Coding Agent (SN-19 — no
+   artifact; the bugfix path skips the Phase/Milestone layers). The agent fixes on a
+   `bugfix/B#.#` branch.
 
 5. **Track the SLA** — start a **4-hour clock from the timestamp of the Completion
    Notice** and review within that window. The clock measures HQ's review latency, not the
@@ -347,7 +348,7 @@ Walk through it with the
 
 1. **Open** — establish project context (name, repo, governance versions, current Phase)
 2. **Plan** — produce Phase specs and Phase Execution Chat Starters
-3. **Authorize** — issue Phase Delivery Authorizations for accepted Phase plans
+3. **Authorize** — acknowledge acceptance in-chat and apply the standing merge instruction for accepted Phase plans (SN-19 — no artifact)
 4. **Oversee** — receive Completion Notices, accept clean deliveries by silence (a
    Review Decision is the exception path only — PSG §11.6), supervise the artifact flow;
    create Bugfix Epics as needed
