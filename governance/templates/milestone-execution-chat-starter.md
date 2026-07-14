@@ -154,21 +154,16 @@ After each set of deliverables, explicitly request parent chat review before pro
 
 ---
 
-## Epic Delivery Authorization
+## Epic Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-When the parent chat (Phase Chat or HQ Chat) accepts an Epic's deliverables, issue an **Epic Delivery Authorization** using the following format:
+Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Epic Delivery Authorization artifact
+or ceremonial block**. When the parent chat (Phase Chat or HQ Chat) accepts an Epic's
+deliverables (by silence on the happy path), acknowledge the acceptance **in-chat** and
+proceed. The standing merge instruction is: **merge `epic/<E#.#>` to `milestone/<M#>` upon
+Epic completion, parent chat acceptance, and explicit human merge authorization** — the
+authorization is an in-chat act (the harness enforces human merge authorization regardless).
 
-```
-EPIC DELIVERY AUTHORIZATION
-
-Issuer: Milestone Chat (<P#>-<M#> — <Milestone Name>)
-Date: <YYYY-MM-DD>
-Epic Reference: <P#>-<M#>-<E#.#> — <Epic Name>
-Authorized Action: Proceed with Epic execution
-Merge Instruction: Merge epic/<E#.#> to milestone/<M#> upon Epic completion and parent acceptance
-```
-
-Do NOT issue authorization without explicit parent chat acceptance.
+Do NOT proceed to execution or merge without parent chat acceptance.
 
 ---
 
@@ -188,7 +183,7 @@ This Milestone Chat session is complete when:
 
 - [ ] An Epic spec has been produced and accepted for every Epic in this Milestone
 - [ ] An Epic Execution Chat Starter has been produced and accepted for every Epic
-- [ ] An Epic Delivery Authorization has been issued for every accepted Epic
+- [ ] In-chat acceptance has been acknowledged for every accepted Epic (SN-19 — no artifact)
 - [ ] The parent chat (Phase Chat or HQ Chat) has declared the Milestone planning session complete
 
 Upon completion, declare: "Milestone <P#>-<M#> planning complete. All Epic specs and Chat Starters accepted. Session closed."

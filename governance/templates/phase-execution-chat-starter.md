@@ -153,21 +153,17 @@ After each set of deliverables, explicitly request HQ Chat review before proceed
 
 ---
 
-## Milestone Delivery Authorization
+## Milestone Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-When HQ Chat accepts a Milestone's deliverables, issue a **Milestone Delivery Authorization** using the following format:
+Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Milestone Delivery Authorization
+artifact or ceremonial block**. When HQ Chat accepts a Milestone's deliverables (by silence on
+the happy path), acknowledge the acceptance **in-chat** and proceed. The standing merge
+instruction is: **merge epic branches to `milestone/<M#>` upon Epic acceptance, and merge
+`milestone/<M#>` to `phase/<P#>` upon Milestone completion, HQ Chat acceptance, and explicit
+human merge authorization** — the authorization is an in-chat act (the harness enforces human
+merge authorization regardless).
 
-```
-MILESTONE DELIVERY AUTHORIZATION
-
-Issuer: Phase Chat (<P#> — <Phase Name>)
-Date: <YYYY-MM-DD>
-Milestone Reference: <P#-M#> — <Milestone Name>
-Authorized Action: Proceed with Milestone execution
-Merge Instruction: Merge epic branches to milestone/<M#> upon Epic acceptance
-```
-
-Do NOT issue authorization without explicit HQ Chat acceptance.
+Do NOT proceed to execution or merge without HQ Chat acceptance.
 
 ---
 
@@ -187,7 +183,7 @@ This Phase Chat session is complete when:
 
 - [ ] A Milestone spec has been produced and accepted for every Milestone in this Phase
 - [ ] A Milestone Execution Chat Starter has been produced and accepted for every Milestone
-- [ ] A Milestone Delivery Authorization has been issued for every accepted Milestone
+- [ ] In-chat acceptance has been acknowledged for every accepted Milestone (SN-19 — no artifact)
 - [ ] HQ Chat has declared the Phase planning session complete
 
 Upon completion, declare: "Phase <P#> planning complete. All Milestone specs and Chat Starters accepted. Session closed."
