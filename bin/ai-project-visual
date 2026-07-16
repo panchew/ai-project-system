@@ -8,10 +8,17 @@ the rest of the system — ``bin/ai-project-orchestrator``'s ``load_yml_config``
 ``resolve_visual_artifacts`` (the contract E22.1 delivered) — rather than re-parsing
 ``.ai-project.yml`` with a divergent validator.
 
+Every ``--type`` this helper accepts, including ``diagrams``, is a Generative
+(ComfyUI) call (AOG §16.3) — there is no Structural (Mermaid/PlantUML, endpoint-free)
+mode here. ``--type diagrams`` produces ComfyUI-generated diagram-*style* imagery
+(a txt2img workflow), not Mermaid/PlantUML output. Structural diagrams are written
+directly by the agent as text and never call this helper.
+
 Scope (Milestone Non-Goal): one prompt -> one artifact. No queue, no batch, no UI.
 
 Usage:
     # --output is a LOCAL WORKING FILE to host and link, not a committed path:
+    # (--type diagrams is a ComfyUI-generative call — diagram-style imagery, not Mermaid/PlantUML)
     ai-project-visual --prompt "system architecture, isometric" --type diagrams \\
         --output ./architecture.png
 
@@ -19,7 +26,8 @@ Usage:
     # substituted wherever the placeholder %prompt% appears in the workflow JSON:
     ai-project-visual --prompt "..." --type video --output out.mp4 --workflow graph.json
 
-Configuration lives in ``.ai-project.yml`` (read from the current working directory):
+Configuration lives in ``.ai-project.yml`` (read from the current working directory).
+All ``types`` entries below are Generative (ComfyUI) categories:
 
     visual_artifacts:
       enabled: true
