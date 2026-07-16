@@ -1,9 +1,13 @@
 """Integration test for ``bin/ai-project-visual`` (Epic P5-M22-E22.2, VA-1).
 
-Exercises the ComfyUI helper. The endpoint-generation test **skips** when
-``visual_artifacts.enabled`` is ``false`` (the repo default) so the suite stays green with
-no live ComfyUI instance. Gate/configuration behaviour that needs no endpoint is asserted
-deterministically.
+Exercises the ComfyUI helper. As of Epic P8-M29-E29.2, this repo's own
+``visual_artifacts.enabled`` is ``true`` and ``test_helper_generates_against_endpoint`` runs
+for real against the live local ComfyUI endpoint by default — it is not skipped unless a
+contributor explicitly opts out. A contributor/agent running on a machine without ComfyUI
+reachable at ``http://localhost:8188`` should set ``AI_PROJECT_SKIP_LIVE_ENDPOINT_TESTS=1``
+to skip that one test; the default (unset) still runs and requires the endpoint, preserving
+this repo's suite-green-with-a-real-call bar. Gate/configuration behaviour that needs no
+endpoint is asserted deterministically and is unaffected by either flag.
 
 The effective config is read through E22.1's single source —
 ``bin/ai-project-orchestrator``'s ``load_yml_config`` / ``resolve_visual_artifacts`` —
@@ -57,14 +61,26 @@ def _write_yml(directory, body):
 # Read once at collection time; drives the skip decision for the endpoint test.
 REPO_VA = _effective_repo_config()
 
+# Opt-OUT only (P8-M29-E29.2): a contributor without a reachable ComfyUI endpoint sets this
+# to skip test_helper_generates_against_endpoint explicitly. Unset (the default) still runs
+# and requires the live endpoint — an opt-in-to-run default would just be the old
+# skip-by-default behaviour renamed, which the Hard Constraint forbids.
+_SKIP_LIVE_ENDPOINT = os.environ.get("AI_PROJECT_SKIP_LIVE_ENDPOINT_TESTS", "") not in ("", "0")
+
 
 @pytest.mark.skipif(
     not REPO_VA.get("enabled"),
     reason="visual_artifacts.enabled is false (repo default); no live ComfyUI endpoint to exercise.",
 )
+@pytest.mark.skipif(
+    _SKIP_LIVE_ENDPOINT,
+    reason="AI_PROJECT_SKIP_LIVE_ENDPOINT_TESTS is set; contributor opted out of the live "
+           "ComfyUI endpoint call (see module docstring).",
+)
 def test_helper_generates_against_endpoint(tmp_path):
     """With the capability enabled, the helper writes a non-empty artifact from the
-    configured endpoint. SKIPPED at the repo default (enabled: false)."""
+    configured endpoint. Runs for real by default; skip explicitly via
+    AI_PROJECT_SKIP_LIVE_ENDPOINT_TESTS=1 on a machine without a reachable endpoint."""
     vtype = (REPO_VA.get("types") or ["diagrams"])[0]
     out = tmp_path / "out.png"
     result = _run_helper(

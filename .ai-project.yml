@@ -27,19 +27,17 @@ models:
   epic_qa: local:qwen2.5-coder:7b
 
 # Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
-# This repo opts OUT (enabled: false). Investigated dogfooding default-on restricted
-# to types: [diagrams], but every `types` entry — including diagrams — is a
-# Generative (ComfyUI) category (AOG §16.3; naming collision with Structural mode
-# resolved in Epic E29.1, P8-M29): bin/ai-project-visual's --type diagrams is a
-# ComfyUI-generative call (a txt2img workflow), not endpoint-free Mermaid/PlantUML
-# output. Structural diagrams need no visual_artifacts config at all — they are
-# written directly by the agent as text and never call this helper. Confirmed
-# empirically: enabled: true here un-skips test_helper_generates_against_endpoint,
-# which then fails with connection-refused against localhost:8188. enabled: false
-# is kept to preserve the suite-green requirement; comfyui_url/types document the
-# contract but are inert while disabled. See governance/ai-project-yml-spec.md §3.5.
+# This repo is ENABLED (enabled: true) as of Epic E29.2 (P8-M29): the live local
+# ComfyUI endpoint is proven reachable and test_helper_generates_against_endpoint
+# passes for real against it. `--type diagrams`/`infographics`/`video` are all
+# Generative (ComfyUI) categories (AOG §16.3; naming collision with Structural mode
+# resolved in Epic E29.1, P8-M29) — Structural diagrams (Mermaid/PlantUML) need no
+# visual_artifacts config at all and remain fully independent of this flag (AOG
+# §16.3/§16.8). Contributors without a reachable ComfyUI endpoint: see
+# AI_PROJECT_SKIP_LIVE_ENDPOINT_TESTS in tests/integration/test_visual_artifacts_helper.py.
+# See governance/ai-project-yml-spec.md §3.5 for the field contract.
 visual_artifacts:
-  enabled: false
+  enabled: true
   comfyui_url: http://localhost:8188
   types:
     - diagrams

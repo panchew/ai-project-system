@@ -264,17 +264,17 @@ class TestCfoReviewGate:
 # ---------------------------------------------------------------------------
 
 class TestVisualArtifactsRepoConfig:
-    def test_ai_project_yml_carries_visual_artifacts_disabled(self):
-        # This repo opts the capability OFF via the explicit enabled: false opt-out
-        # (default-on flip, E27.1). Kept disabled because bin/ai-project-visual's
-        # --type diagrams is a ComfyUI-generative call, not an endpoint-free
-        # structural diagram, so enabling here would require a live endpoint the
-        # suite doesn't have (verified: un-skips test_helper_generates_against_endpoint).
+    def test_ai_project_yml_carries_visual_artifacts_enabled(self):
+        # This repo dogfoods the capability ON (enabled: true) as of Epic P8-M29-E29.2:
+        # the live local ComfyUI endpoint is proven reachable and
+        # test_helper_generates_against_endpoint passes for real against it. Every prior
+        # milestone (P5-M22, P7-M27) preserved suite-green by leaving enabled: false;
+        # E29.2 is the epic that stops deferring that trade.
         config = yaml.safe_load(AI_PROJECT_YML.read_text(encoding="utf-8"))
         va = config.get("visual_artifacts")
         assert isinstance(va, dict), (
             f".ai-project.yml must carry a visual_artifacts block, got: {va!r}"
         )
-        assert va.get("enabled") is False, (
-            f".ai-project.yml visual_artifacts.enabled must be false, got: {va.get('enabled')!r}"
+        assert va.get("enabled") is True, (
+            f".ai-project.yml visual_artifacts.enabled must be true, got: {va.get('enabled')!r}"
         )
