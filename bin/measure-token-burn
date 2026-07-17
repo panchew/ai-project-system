@@ -1,0 +1,773 @@
+#!/usr/bin/env python3
+"""measure-token-burn — E30.1 token-burn measurement mechanism (P9-M30).
+
+Hybrid mechanism (see .ai-project/artifacts/reference/token-measurement/README.md):
+
+  (A) Paid spend   — parses Claude Code harness session JSONL files (machine-local,
+                     never committed) and aggregates provider-reported ``usage``
+                     blocks per session, attributed to chat level and task type by
+                     the documented rules below.
+  (B) Corpus size  — tokenizes the governance corpus, per-level starter packs, and
+                     agentic-run context files with a local tokenizer (tiktoken
+                     o200k_base) as a documented proxy for billed counts.
+  (C) Local spend  — extracts ollama token counts from the committed agentic-run
+                     transcripts (no changes to bin/run-dev-agent).
+
+Privacy contract: the emitted dataset carries aggregated token numbers and
+attribution labels only. Raw transcripts and conversation content never leave the
+machine-local session directory. The only session-derived strings that are read are
+the first user message head (for classification, discarded after matching) and
+Write/Edit tool-call file paths (for task-type signals, only counted).
+
+Usage:
+  bin/measure-token-burn [--sessions-dir DIR] [--out DIR] [--no-corpus]
+
+Outputs (aggregates only):
+  <out>/token-burn-dataset.json   machine-readable dataset (E30.2's input)
+  <out>/token-burn-dataset.md     human-readable matrix + gap records
+"""
+
+import argparse
+import datetime
+import glob
+import json
+import os
+import re
+import sys
+
+SCRIPT_VERSION = "1.0.0"
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DEFAULT_SESSIONS_DIR = os.path.expanduser(
+    "~/.claude/projects/-home-panchew-soft-dev-ai-project-system"
+)
+DEFAULT_OUT = os.path.join(
+    REPO_ROOT, ".ai-project", "artifacts", "reference", "token-measurement"
+)
+
+LEVELS = ["creation", "hq", "phase", "milestone", "epic"]
+TASK_TYPES = ["planning", "execution", "review", "closure"]
+
+# ---------------------------------------------------------------------------
+# Attribution rules (Direction A) — documented in the mechanism README.
+# Level: matched against the first non-sidechain user message (wrappers stripped),
+# falling back to the session's git branch prefix. Task type: role- and
+# signal-based; sessions that span several task types are bucketed as "mixed"
+# rather than guessed into a single cell (Hard Constraint).
+# ---------------------------------------------------------------------------
+
+WRAPPER_RE = re.compile(
+    r"<system-reminder>.*?</system-reminder>"
+    r"|<ide_opened_file>.*?</ide_opened_file>"
+    r"|<ide_selection>.*?</ide_selection>"
+    r"|<local-command-caveat>.*?</local-command-caveat>",
+    re.S,
+)
+
+LEVEL_RULES = [
+    ("epic", re.compile(r"epic execution chat starter", re.I)),
+    ("epic", re.compile(r"^phase\s+p\d+\s+milestone\s+m?\d+\s+(?:epic\s+)?e\d+", re.I)),
+    ("epic", re.compile(r"^epic\s+e\d+", re.I)),
+    ("milestone", re.compile(r"milestone execution chat starter", re.I)),
+    ("milestone", re.compile(r"^phase\s+p\d+\s+milestone\s+m?\d+\b", re.I)),
+    ("phase", re.compile(r"phase execution chat starter", re.I)),
+    ("phase", re.compile(r"^phase\s+p\d+\b", re.I)),
+    ("hq", re.compile(r"artifact_type:\s*hq_opener|hq chat opener", re.I)),
+    ("creation", re.compile(r"artifact_type:\s*seed", re.I)),
+]
+
+BRANCH_LEVELS = [("epic/", "epic"), ("milestone/", "milestone"), ("phase/", "phase")]
+
+SIGNAL_PATTERNS = {
+    "spec_writes": re.compile(r"__spec__|milestone-spec|phase-spec"),
+    "starter_writes": re.compile(r"chat-starter|starter\.md", re.I),
+    "delivery_notice_writes": re.compile(r"delivery-notice"),
+    "closure_writes": re.compile(r"closure-declaration"),
+    "review_decision_writes": re.compile(r"review-decision"),
+}
+
+
+def classify_level(first_user_text, branch):
+    for level, pat in LEVEL_RULES:
+        if pat.search(first_user_text):
+            return level, "first-message"
+    for prefix, level in BRANCH_LEVELS:
+        if (branch or "").startswith(prefix):
+            return level, "branch-fallback"
+    return "unattributed", "none"
+
+
+def classify_task(level, level_rule, first_user_text, signals):
+    if re.match(r"^review\b", first_user_text, re.I):
+        # A "Review …" opener is the parent chat reviewing a delivery; level
+        # comes from the branch fallback (the reviewer's branch), task is review.
+        return "review", "first-message"
+    if level == "epic" and level_rule == "first-message":
+        # Epic chats execute end-to-end (incl. Delivery Notice authoring);
+        # planning/review of epics happens in parent chats. Branch-inferred
+        # epic sessions are NOT assumed to be executions — signals decide.
+        return "execution", "role"
+    active = {
+        "planning": signals["spec_writes"] + signals["starter_writes"],
+        "review": signals["review_decision_writes"],
+        "closure": signals["closure_writes"],
+        "delivery_handling": signals["delivery_notice_writes"],
+    }
+    present = [k for k, v in active.items() if v > 0]
+    if present == ["planning"]:
+        return "planning", "signals"
+    if not present:
+        return "unattributed", "no-signals"
+    return "mixed", "signals:" + "+".join(present)
+
+
+# ---------------------------------------------------------------------------
+# Direction A — harness session parsing
+# ---------------------------------------------------------------------------
+
+def parse_session(path):
+    seen_ids = set()
+    totals = {"input": 0, "cache_creation": 0, "cache_read": 0, "output": 0}
+    by_model = {}
+    api_calls = 0
+    sidechain_calls = 0
+    first_turn_context = None
+    branch = None
+    entrypoint = None
+    t_first = None
+    t_last = None
+    first_user_text = None
+    signals = {k: 0 for k in SIGNAL_PATTERNS}
+
+    with open(path) as fh:
+        for line in fh:
+            try:
+                rec = json.loads(line)
+            except (ValueError, UnicodeDecodeError):
+                continue
+            rtype = rec.get("type")
+            if rtype == "user" and first_user_text is None and not rec.get("isSidechain"):
+                content = rec.get("message", {}).get("content")
+                if isinstance(content, str):
+                    text = content
+                else:
+                    text = " ".join(
+                        b.get("text", "")
+                        for b in (content or [])
+                        if isinstance(b, dict) and b.get("type") == "text"
+                    )
+                text = " ".join(WRAPPER_RE.sub("", text).split())
+                if text:
+                    first_user_text = text[:200]
+            if rtype != "assistant":
+                continue
+            msg = rec.get("message", {})
+            if msg.get("model") == "<synthetic>":
+                continue
+            usage = msg.get("usage")
+            if not usage:
+                continue
+            # Claude Code writes one JSONL line per content block, so tool-use
+            # signals must be scanned on every line — but each line repeats the
+            # same message id and usage, so usage is counted once per message.
+            for block in msg.get("content") or []:
+                if (
+                    isinstance(block, dict)
+                    and block.get("type") == "tool_use"
+                    and block.get("name") in ("Write", "Edit", "MultiEdit")
+                ):
+                    fpath = str(block.get("input", {}).get("file_path", ""))
+                    for key, pat in SIGNAL_PATTERNS.items():
+                        if pat.search(fpath):
+                            signals[key] += 1
+            mid = msg.get("id")
+            if mid in seen_ids:
+                continue
+            seen_ids.add(mid)
+            api_calls += 1
+            if rec.get("isSidechain"):
+                sidechain_calls += 1
+            call = {
+                "input": usage.get("input_tokens") or 0,
+                "cache_creation": usage.get("cache_creation_input_tokens") or 0,
+                "cache_read": usage.get("cache_read_input_tokens") or 0,
+                "output": usage.get("output_tokens") or 0,
+            }
+            for k, v in call.items():
+                totals[k] += v
+            model = msg.get("model") or "unknown"
+            bucket = by_model.setdefault(model, dict.fromkeys(totals, 0))
+            for k, v in call.items():
+                bucket[k] += v
+            if first_turn_context is None:
+                first_turn_context = (
+                    call["input"] + call["cache_creation"] + call["cache_read"]
+                )
+            branch = branch or rec.get("gitBranch")
+            entrypoint = entrypoint or rec.get("entrypoint")
+            ts = rec.get("timestamp")
+            if ts:
+                t_first = t_first or ts
+                t_last = ts
+
+    if api_calls == 0:
+        return None
+    first_user_text = first_user_text or ""
+    level, level_rule = classify_level(first_user_text, branch)
+    task, task_rule = classify_task(level, level_rule, first_user_text, signals)
+    context_per_call = (
+        totals["input"] + totals["cache_creation"] + totals["cache_read"]
+    ) // api_calls
+    return {
+        "session": os.path.basename(path)[:8],
+        "date": (t_first or "")[:10],
+        "branch": branch,
+        "entrypoint": entrypoint,
+        "level": level,
+        "level_rule": level_rule,
+        "task_type": task,
+        "task_rule": task_rule,
+        "api_calls": api_calls,
+        "sidechain_calls": sidechain_calls,
+        "tokens": totals,
+        "by_model": by_model,
+        "first_turn_context_tokens": first_turn_context,
+        "mean_context_tokens_per_call": context_per_call,
+        "artifact_write_signals": signals,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Direction B — corpus tokenization (local proxy tokenizer)
+# ---------------------------------------------------------------------------
+
+def load_tokenizer():
+    try:
+        import tiktoken  # type: ignore
+
+        enc = tiktoken.get_encoding("o200k_base")
+        return (
+            lambda text: len(enc.encode(text, disallowed_special=())),
+            "tiktoken/o200k_base (proxy for the Claude tokenizer; see README error bars)",
+        )
+    except ImportError:
+        return None, None
+
+
+def count_file(counter, path):
+    try:
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            return counter(fh.read())
+    except OSError:
+        return None
+
+
+def tokenize_corpus(counter):
+    gov = os.path.join(REPO_ROOT, "governance")
+    p9 = os.path.join(
+        REPO_ROOT, "docs", "phases", "P9__Context_Handling_and_Token_Efficiency"
+    )
+    files = {
+        "PSG (PROJECT-SYSTEM-GUIDELINES.md)": os.path.join(gov, "PROJECT-SYSTEM-GUIDELINES.md"),
+        "AOG (AI-OPERATING-GUIDELINES.md)": os.path.join(gov, "AI-OPERATING-GUIDELINES.md"),
+        "yml spec (ai-project-yml-spec.md)": os.path.join(gov, "ai-project-yml-spec.md"),
+        "generic epic starter (governance/EPIC-EXECUTION-CHAT-STARTER.md)": os.path.join(
+            gov, "EPIC-EXECUTION-CHAT-STARTER.md"
+        ),
+        "P9 phase starter": os.path.join(p9, "P9__phase-execution-chat-starter.md"),
+        "P9 phase spec": os.path.join(p9, "P9__phase-spec.md"),
+        "M30 milestone starter": os.path.join(p9, "P9-M30__milestone-execution-chat-starter.md"),
+        "M30 milestone spec": os.path.join(p9, "P9-M30__milestone-spec.md"),
+        "E30.1 epic starter": os.path.join(p9, "P9-M30-E30.1__epic-execution-chat-starter.md"),
+        "E30.1 epic spec": os.path.join(p9, "P9-M30-E30.1__spec__token-burn-instrumentation.md"),
+    }
+    out = {"files": {}, "directories": {}, "level_packs": {}}
+    for label, path in files.items():
+        n = count_file(counter, path)
+        if n is not None:
+            out["files"][label] = n
+    for label, sub in [
+        ("governance/ total (*.md recursive)", gov),
+        ("governance/templates", os.path.join(gov, "templates")),
+        ("governance/systems", os.path.join(gov, "systems")),
+    ]:
+        total = 0
+        nfiles = 0
+        for path in glob.glob(os.path.join(sub, "**", "*.md"), recursive=True):
+            n = count_file(counter, path)
+            if n is not None:
+                total += n
+                nfiles += 1
+        out["directories"][label] = {"tokens": total, "files": nfiles}
+
+    f = out["files"]
+
+    def pack(*labels):
+        vals = [f[l] for l in labels if l in f]
+        return {"tokens": sum(vals), "components": {l: f[l] for l in labels if l in f}}
+
+    core = ["PSG (PROJECT-SYSTEM-GUIDELINES.md)", "AOG (AI-OPERATING-GUIDELINES.md)"]
+    out["level_packs"] = {
+        "phase": pack("P9 phase starter", "P9 phase spec", *core),
+        "milestone": pack(
+            "M30 milestone starter", "M30 milestone spec", "P9 phase spec", *core
+        ),
+        "epic": pack("E30.1 epic starter", "E30.1 epic spec", *core),
+    }
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Direction C (lite) — local agentic-run extraction
+# ---------------------------------------------------------------------------
+
+def collect_local_runs(counter):
+    runs = []
+    base = os.path.join(REPO_ROOT, ".ai-project", "artifacts", "agentic-runs")
+    for run_dir in sorted(glob.glob(os.path.join(base, "*"))):
+        meta_path = os.path.join(run_dir, "transcript.json")
+        rmeta_path = os.path.join(run_dir, "run-metadata.json")
+        if not os.path.isfile(rmeta_path):
+            continue
+        with open(rmeta_path) as fh:
+            rmeta = json.load(fh)
+        entry = {
+            "run": os.path.basename(run_dir),
+            "model": rmeta.get("model"),
+            "spend_kind": "local",
+            "output_tokens": None,
+            "prompt_tokens": None,  # not recorded by the runner — gap
+            "context_md_tokens_proxy": None,
+            "duration_ms": rmeta.get("duration_ms"),
+        }
+        if os.path.isfile(meta_path):
+            try:
+                with open(meta_path) as fh:
+                    transcript = json.load(fh)
+                # Prefer the runner's own reported total (includes the final
+                # answer turn); fall back to summing per-turn eval_count.
+                if isinstance(transcript.get("tokens"), int):
+                    entry["output_tokens"] = transcript["tokens"]
+                else:
+                    turns = transcript.get("transcript") or []
+                    evals = [
+                        t.get("eval_count")
+                        for t in turns
+                        if isinstance(t, dict) and isinstance(t.get("eval_count"), int)
+                    ]
+                    if evals:
+                        entry["output_tokens"] = sum(evals)
+            except (ValueError, OSError):
+                pass
+        ctx = os.path.join(run_dir, "context.md")
+        if counter and os.path.isfile(ctx):
+            entry["context_md_tokens_proxy"] = count_file(counter, ctx)
+        runs.append(entry)
+    return runs
+
+
+# ---------------------------------------------------------------------------
+# Gap records (Hard Constraint: every uncapturable cell recorded, never guessed)
+# ---------------------------------------------------------------------------
+
+GAP_RECORDS = [
+    {
+        "id": "G1",
+        "cells": [["epic", "planning"], ["epic", "review"]],
+        "status": "structural",
+        "record": "Epic planning and epic review are performed inside the parent "
+        "chats (Milestone/Phase), never in a standalone epic-level session — no "
+        "such session type exists to measure. Their spend is contained in the "
+        "milestone/phase planning, review, and mixed cells.",
+    },
+    {
+        "id": "G2",
+        "cells": [["epic", "closure"]],
+        "status": "gap",
+        "record": "Epic closure (Delivery Notice authoring) happens inside the "
+        "epic execution session. The mechanism attributes whole sessions and does "
+        "not segment spend within a session, so the closure share is bundled into "
+        "epic x execution and not separately measurable.",
+    },
+    {
+        "id": "G3",
+        "cells": [
+            ["milestone", "execution"],
+            ["phase", "execution"],
+            ["hq", "execution"],
+            ["creation", "execution"],
+        ],
+        "status": "structural",
+        "record": "Only Epic chats execute; Milestone/Phase/HQ/Creation delegate "
+        "execution downward. These cells are structurally empty, not measurement "
+        "holes.",
+    },
+    {
+        "id": "G4",
+        "cells": [
+            ["milestone", "closure"],
+            ["phase", "review"],
+            ["phase", "closure"],
+        ],
+        "status": "gap",
+        "record": "Milestone/phase review and closure activity is embedded in "
+        "long mixed-purpose sessions (see the mixed bucket) and cannot be "
+        "separated per-message by this mechanism. Whole-session totals for those "
+        "sessions are reported in the mixed bucket; the per-task split is a gap.",
+    },
+    {
+        "id": "G5",
+        "cells": [["hq", "review"], ["hq", "closure"]],
+        "status": "gap",
+        "record": "HQ work (scoping, digests, coordination, acceptance) does not "
+        "map one-to-one onto the four task types; sessions with pure planning "
+        "signals are measured, the remainder are mixed or signal-free. HQ level "
+        "totals are measured; these per-task cells are gaps.",
+    },
+    {
+        "id": "G6",
+        "cells": [
+            ["creation", "planning"],
+            ["creation", "review"],
+            ["creation", "closure"],
+        ],
+        "status": "gap",
+        "record": "Creation Chat sessions (seed-booted) produce artifacts "
+        "in-conversation and write no governance files to the repo, so the "
+        "task-type signals cannot see their work. Creation level totals are "
+        "measured (see per-session rows); the per-task split is a gap.",
+    },
+    {
+        "id": "G7",
+        "cells": [],
+        "status": "gap",
+        "record": "Mixed-purpose sessions (level attributed, several task types "
+        "in one session) are reported as their own bucket with full totals; "
+        "their internal per-task split is a recorded gap, not estimated.",
+    },
+    {
+        "id": "G8",
+        "cells": [],
+        "status": "gap",
+        "record": "Coverage is limited to this machine's harness directory. "
+        "Sessions on other surfaces or machines (e.g. any claude.ai web chats "
+        "for Creation/HQ) and any deleted local sessions are invisible to the "
+        "mechanism and unmeasured.",
+    },
+    {
+        "id": "G9",
+        "cells": [],
+        "status": "gap",
+        "record": "Local (ollama) prompt/input tokens: the runner transcript "
+        "records per-turn output eval_count only; prompt_eval_count is not "
+        "persisted and run-metadata.json carries no token counts (unchanged by "
+        "this epic). Local output tokens are measured; local input tokens are a "
+        "gap (context.md size is proxy-tokenized as the context figure).",
+    },
+    {
+        "id": "G10",
+        "cells": [],
+        "status": "limitation",
+        "record": "Direction B corpus numbers use tiktoken o200k_base as a proxy "
+        "for the Claude tokenizer (billed counts). Treat them with an error bar "
+        "of roughly +/-10-15% typical for English markdown; they are suitable "
+        "for proportions and ordering, not exact billing. Paid-side first-turn "
+        "and per-call context medians ARE provider-billed numbers, but include "
+        "the harness system prompt and memory, not governance corpus alone.",
+    },
+]
+
+CELL_STATUS = {}
+for _g in GAP_RECORDS:
+    for _lvl, _task in _g["cells"]:
+        CELL_STATUS[(_lvl, _task)] = (_g["status"], _g["id"])
+
+
+# ---------------------------------------------------------------------------
+# Aggregation + report
+# ---------------------------------------------------------------------------
+
+def build_matrix(sessions):
+    matrix = {}
+    for s in sessions:
+        cell = matrix.setdefault(s["level"], {}).setdefault(
+            s["task_type"],
+            {
+                "sessions": 0,
+                "api_calls": 0,
+                "input": 0,
+                "cache_creation": 0,
+                "cache_read": 0,
+                "output": 0,
+            },
+        )
+        cell["sessions"] += 1
+        cell["api_calls"] += s["api_calls"]
+        for k in ("input", "cache_creation", "cache_read", "output"):
+            cell[k] += s["tokens"][k]
+    return matrix
+
+
+def aggregate_models(sessions):
+    models = {}
+    for s in sessions:
+        for model, tok in s["by_model"].items():
+            bucket = models.setdefault(
+                model, {"input": 0, "cache_creation": 0, "cache_read": 0, "output": 0}
+            )
+            for k, v in tok.items():
+                bucket[k] += v
+    return models
+
+
+def median(values):
+    vals = sorted(values)
+    if not vals:
+        return None
+    mid = len(vals) // 2
+    return vals[mid] if len(vals) % 2 else (vals[mid - 1] + vals[mid]) // 2
+
+
+def render_markdown(dataset):
+    p = dataset["paid_sessions"]
+    matrix = p["matrix_level_x_task"]
+    lines = []
+    add = lines.append
+    add("# Token-Burn Dataset — E30.1 (P9-M30)")
+    add("")
+    add(f"Generated {dataset['generated_utc']} by `{dataset['script']}` "
+        f"v{dataset['script_version']}. **Aggregated numbers only** — no "
+        "conversation content. Machine-readable twin: `token-burn-dataset.json`.")
+    add("")
+    add(f"- Paid source: {p['session_files_scanned']} harness session files, "
+        f"{p['sessions_with_usage']} with usage data, window "
+        f"{p['coverage_window']['first']} → {p['coverage_window']['last']}.")
+    add(f"- Corpus tokenizer: {dataset['tokenizer']}.")
+    add("- Spend kinds: `paid` (Anthropic API via Claude Code) vs `local` "
+        "(ollama agentic runs) — kept in separate sections, never merged.")
+    add("")
+    add("## 1. Paid spend — level × task-type matrix")
+    add("")
+    add("Cell values: `sessions / API calls / output tokens / cache-creation / "
+        "cache-read` (input tokens are negligible next to cache figures; full "
+        "components per cell in the JSON). Empty cells carry their gap or "
+        "structural record — see §6.")
+    add("")
+    add("| level \\ task | " + " | ".join(TASK_TYPES) + " |")
+    add("|---|" + "---|" * len(TASK_TYPES))
+    for level in LEVELS:
+        row = [f"**{level}**"]
+        for task in TASK_TYPES:
+            cell = matrix.get(level, {}).get(task)
+            if cell:
+                row.append(
+                    f"n={cell['sessions']}, calls={cell['api_calls']}, "
+                    f"out={cell['output']:,}, cc={cell['cache_creation']:,}, "
+                    f"cr={cell['cache_read']:,}"
+                )
+            else:
+                status, gid = CELL_STATUS.get(
+                    (level, task), ("gap", "G7")
+                )
+                label = "N/A structural" if status == "structural" else "GAP"
+                row.append(f"{label} → {gid}")
+        add("| " + " | ".join(row) + " |")
+    add("")
+    add("### Mixed / unattributed buckets (whole-session totals, split is G7)")
+    add("")
+    add("| level | bucket | sessions | API calls | output | cache-creation | cache-read |")
+    add("|---|---|---|---|---|---|---|")
+    for level in LEVELS + ["unattributed"]:
+        for task in ("mixed", "unattributed"):
+            cell = matrix.get(level, {}).get(task)
+            if cell:
+                add(
+                    f"| {level} | {task} | {cell['sessions']} | "
+                    f"{cell['api_calls']} | {cell['output']:,} | "
+                    f"{cell['cache_creation']:,} | {cell['cache_read']:,} |"
+                )
+    add("")
+    add("## 2. Paid spend — by model (frontier mix)")
+    add("")
+    add("| model | input | cache-creation | cache-read | output |")
+    add("|---|---|---|---|---|")
+    for model, t in sorted(p["by_model"].items()):
+        add(
+            f"| {model} | {t['input']:,} | {t['cache_creation']:,} | "
+            f"{t['cache_read']:,} | {t['output']:,} |"
+        )
+    add("")
+    add("## 3. Measured context load (provider-billed)")
+    add("")
+    add("| level | first-turn context, median | per-call context, median |")
+    add("|---|---|---|")
+    for level in LEVELS:
+        ft = p["first_turn_context_median_by_level"].get(level)
+        pc = p["mean_context_per_call_median_by_level"].get(level)
+        add(
+            f"| {level} | {ft:,} | {pc:,} |"
+            if ft is not None
+            else f"| {level} | — | — |"
+        )
+    add("")
+    add("First-turn = input + cache-creation + cache-read of the session's first "
+        "API call (system prompt + memory + first message). Per-call = session "
+        "context total / API calls (what each call re-reads, mostly cached).")
+    add("")
+    corpus = dataset.get("corpus_overhead_proxy")
+    add("## 4. Governance-corpus overhead (Direction B, proxy tokenizer — G10)")
+    add("")
+    if corpus:
+        add("| file | tokens (o200k proxy) |")
+        add("|---|---|")
+        for label, n in corpus["files"].items():
+            add(f"| {label} | {n:,} |")
+        add("")
+        add("| directory | tokens | files |")
+        add("|---|---|---|")
+        for label, v in corpus["directories"].items():
+            add(f"| {label} | {v['tokens']:,} | {v['files']} |")
+        add("")
+        add("Per-level load packs (starter + required specs + PSG + AOG):")
+        add("")
+        add("| level | pack tokens (o200k proxy) |")
+        add("|---|---|")
+        for level, v in corpus["level_packs"].items():
+            add(f"| {level} | {v['tokens']:,} |")
+    else:
+        add("Not captured in this run (tokenizer unavailable — rerun with "
+            "tiktoken installed).")
+    add("")
+    add("## 5. Local (ollama) spend — Direction C-lite")
+    add("")
+    add("| run | model | output tokens | prompt tokens | context.md (proxy) | duration ms |")
+    add("|---|---|---|---|---|---|")
+    for r in dataset["local_runs"]:
+        add(
+            f"| {r['run']} | {r['model']} | {r['output_tokens']} | "
+            f"GAP → G9 | {r['context_md_tokens_proxy']} | {r['duration_ms']} |"
+        )
+    add("")
+    add("## 6. Gap records (Hard Constraint)")
+    add("")
+    for g in dataset["gap_records"]:
+        cells = (
+            "; ".join(f"{l} × {t}" for l, t in g["cells"]) if g["cells"] else "cross-cutting"
+        )
+        add(f"- **{g['id']}** ({g['status']}; {cells}): {g['record']}")
+    add("")
+    add("## 7. Per-session aggregates (paid)")
+    add("")
+    add("Attribution rules are documented in README.md. `level_rule`/`task_rule` "
+        "state which rule fired; `branch-fallback` and signal-based rules are "
+        "lower-confidence than `first-message`.")
+    add("")
+    add("| session | date | level (rule) | task (rule) | calls | input | cache-cr | cache-rd | output | first-turn ctx |")
+    add("|---|---|---|---|---|---|---|---|---|---|")
+    for s in sorted(p["sessions"], key=lambda x: x["date"]):
+        t = s["tokens"]
+        add(
+            f"| {s['session']} | {s['date']} | {s['level']} ({s['level_rule']}) | "
+            f"{s['task_type']} ({s['task_rule']}) | {s['api_calls']} | "
+            f"{t['input']:,} | {t['cache_creation']:,} | {t['cache_read']:,} | "
+            f"{t['output']:,} | {s['first_turn_context_tokens']:,} |"
+        )
+    add("")
+    return "\n".join(lines) + "\n"
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--sessions-dir", default=DEFAULT_SESSIONS_DIR)
+    ap.add_argument("--out", default=DEFAULT_OUT)
+    ap.add_argument(
+        "--no-corpus",
+        action="store_true",
+        help="skip Direction B (no tokenizer available)",
+    )
+    args = ap.parse_args(argv)
+
+    counter = None
+    tokenizer_desc = "unavailable (Direction B skipped)"
+    if not args.no_corpus:
+        counter, tokenizer_desc = load_tokenizer()
+        if counter is None:
+            print(
+                "warning: tiktoken not importable — run under a venv with tiktoken "
+                "installed, or pass --no-corpus to skip corpus tokenization",
+                file=sys.stderr,
+            )
+            tokenizer_desc = "unavailable (Direction B skipped)"
+
+    sessions = []
+    session_files = sorted(glob.glob(os.path.join(args.sessions_dir, "*.jsonl")))
+    for path in session_files:
+        parsed = parse_session(path)
+        if parsed:
+            sessions.append(parsed)
+
+    dataset = {
+        "generated_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(
+            timespec="seconds"
+        ),
+        "script": "bin/measure-token-burn",
+        "script_version": SCRIPT_VERSION,
+        "epic": "P9-M30-E30.1",
+        "tokenizer": tokenizer_desc,
+        "paid_sessions": {
+            "source": "Claude Code harness session JSONL usage blocks "
+            "(machine-local; aggregated here, never committed raw)",
+            "spend_kind": "paid",
+            "session_files_scanned": len(session_files),
+            "sessions_with_usage": len(sessions),
+            "coverage_window": {
+                "first": min((s["date"] for s in sessions), default=None),
+                "last": max((s["date"] for s in sessions), default=None),
+            },
+            "sessions": sessions,
+            "matrix_level_x_task": build_matrix(sessions),
+            "by_model": aggregate_models(sessions),
+            "first_turn_context_median_by_level": {
+                level: median(
+                    [
+                        s["first_turn_context_tokens"]
+                        for s in sessions
+                        if s["level"] == level
+                    ]
+                )
+                for level in LEVELS
+            },
+            "mean_context_per_call_median_by_level": {
+                level: median(
+                    [
+                        s["mean_context_tokens_per_call"]
+                        for s in sessions
+                        if s["level"] == level
+                    ]
+                )
+                for level in LEVELS
+            },
+        },
+        "corpus_overhead_proxy": tokenize_corpus(counter) if counter else None,
+        "local_runs": collect_local_runs(counter),
+        "gap_records": GAP_RECORDS,
+    }
+
+    os.makedirs(args.out, exist_ok=True)
+    json_path = os.path.join(args.out, "token-burn-dataset.json")
+    with open(json_path, "w") as fh:
+        json.dump(dataset, fh, indent=2)
+        fh.write("\n")
+    md_path = os.path.join(args.out, "token-burn-dataset.md")
+    with open(md_path, "w") as fh:
+        fh.write(render_markdown(dataset))
+    print(f"wrote {os.path.relpath(json_path, REPO_ROOT)}")
+    print(f"wrote {os.path.relpath(md_path, REPO_ROOT)}")
+    print(
+        f"  sessions: {len(sessions)} attributed "
+        f"({sum(1 for s in sessions if s['level'] == 'unattributed')} unattributed)"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
