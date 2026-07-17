@@ -6,9 +6,9 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — v6.0.0
+## 🎉 All Phases Complete — v6.0.1
 
-**The AI Project System was built using its own governance.** All seven phases (P1–P7) are complete and consolidated to `master` at **v6.0.0** with 306 tests passing (1 skipped by design — the visual-artifact endpoint test at `enabled: false`).
+**The AI Project System was built using its own governance.** All eight phases (P1–P8) are complete and consolidated to `master` at **v6.0.1** with 307 tests passing (0 skipped — the former visual-artifact endpoint skip is now a real pass against a live ComfyUI endpoint, `enabled: true`).
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -80,6 +80,17 @@ contradictions real consumer projects hit, reconciled.
 | **M28** — Governance Reconciliations | Close three carry-forwards + retire a ceremonial artifact | Level-0 handoff scale-dependent fork + HQ Chat Opener template; Delivery-Notice terminology reconciled to practiced model; `ai-project-init` installs canonical `governance.agent.md`; Delivery Authorization ceremonial block retired framework-wide |
 
 **P7 highlights:** first real (non-mocked) agentic execution · default-on visual artifacts · single-GPU Ollama+ComfyUI coexistence design · coherent Level-0 handoff · one Delivery-Notice terminology · canonical `ai-project-init` agent file · in-chat merge authorization, ceremony-free.
+
+### Phase P8 — Visual Artifacts Activation (Complete)
+This source repo finally ran its own visual-artifacts capability for real, against a live local
+ComfyUI endpoint — and found out, honestly, that "renders successfully" and "precise enough for
+technical explanation" are different bars.
+
+| Milestone | Focus | Key Deliverables |
+|-----------|-------|-------------------|
+| **M29** — Visual Artifacts Activation | Resolve the naming collision, enable for real, validate precision | `visual_artifacts.types` reframed as Generative-only (P7-GH-21 closed); `enabled: true` with a real passing endpoint test (two genuine helper bugs fixed); first hosted-by-link generated artifacts, both judged FAIL against the technical-explanation bar |
+
+**P8 highlights:** first real generative call from this repo's own suite · `test_helper_generates_against_endpoint` a real pass, not a skip · Structural/Generative naming collision closed · first honest precision-validation evidence (two FAIL findings) handed to the CFO for SN-20 Carry-Over item 3 · first machine-level `system_request`/`system_response` round-trip.
 
 👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
 👉 **[Get started with P4 (team mode)](docs/team-collaboration/P4-governance-system-guide.md)** · **[Run the example](examples/team-project-example/README.md)**
@@ -577,13 +588,13 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7)
-✅ **88 Epics** delivered across **28 milestones** over **7 phases**
+### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8)
+✅ **89 Epics** delivered across **29 milestones** over **8 phases**
 
 ### Governance
 - PROJECT-SYSTEM-GUIDELINES.md v2.3.0 (effective 2026-07-02)
 - AI-OPERATING-GUIDELINES.md v2.9.0 (effective 2026-07-13)
-- Framework version: v6.0.0
+- Framework version: v6.0.1
 
 ---
 
@@ -635,11 +646,13 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P5 Complete** — Process Hardening & Visual Artifacts (3 milestones, 9 Epics)
 - ✅ **Phase P6 Complete** — Visual Comprehension Layer & Process Refinements (3 milestones, 10 Epics)
 - ✅ **Phase P7 Complete** — Agentic Execution & Default-On Visuals (3 milestones, 10 Epics)
-- ✅ **88 total Epics** delivered across 28 milestones, 7 phases
+- ✅ **Phase P8 Complete** — Visual Artifacts Activation (1 milestone, 3 Epics)
+- ✅ **89 total Epics** delivered across 29 milestones, 8 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
 - ✅ **First real, non-mocked agentic execution** — the system executes its own epics through the orchestrator on local models
-- ✅ **Governance stable** — v6.0.0 (effective 2026-07-13)
+- ✅ **First real generative visual-artifact call from this repo's own suite** — `visual_artifacts.enabled: true`, endpoint test passing for real, not skipped
+- ✅ **Governance stable** — v6.0.1 (effective 2026-07-17)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes

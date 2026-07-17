@@ -8,10 +8,17 @@ the rest of the system — ``bin/ai-project-orchestrator``'s ``load_yml_config``
 ``resolve_visual_artifacts`` (the contract E22.1 delivered) — rather than re-parsing
 ``.ai-project.yml`` with a divergent validator.
 
+Every ``--type`` this helper accepts, including ``diagrams``, is a Generative
+(ComfyUI) call (AOG §16.3) — there is no Structural (Mermaid/PlantUML, endpoint-free)
+mode here. ``--type diagrams`` produces ComfyUI-generated diagram-*style* imagery
+(a txt2img workflow), not Mermaid/PlantUML output. Structural diagrams are written
+directly by the agent as text and never call this helper.
+
 Scope (Milestone Non-Goal): one prompt -> one artifact. No queue, no batch, no UI.
 
 Usage:
     # --output is a LOCAL WORKING FILE to host and link, not a committed path:
+    # (--type diagrams is a ComfyUI-generative call — diagram-style imagery, not Mermaid/PlantUML)
     ai-project-visual --prompt "system architecture, isometric" --type diagrams \\
         --output ./architecture.png
 
@@ -19,7 +26,8 @@ Usage:
     # substituted wherever the placeholder %prompt% appears in the workflow JSON:
     ai-project-visual --prompt "..." --type video --output out.mp4 --workflow graph.json
 
-Configuration lives in ``.ai-project.yml`` (read from the current working directory):
+Configuration lives in ``.ai-project.yml`` (read from the current working directory).
+All ``types`` entries below are Generative (ComfyUI) categories:
 
     visual_artifacts:
       enabled: true
@@ -40,6 +48,7 @@ Exit codes:
 import argparse
 import importlib.util
 import json
+import random
 import sys
 import time
 from importlib.machinery import SourceFileLoader
@@ -207,11 +216,15 @@ def parse_args(argv):
     parser.add_argument("--workflow", help="Optional ComfyUI API-format workflow JSON "
                                            "(required for non-image types such as video). "
                                            "The literal token '%%prompt%%' in the file is replaced with --prompt.")
-    parser.add_argument("--checkpoint", default="v1-5-pruned-emaonly.safetensors",
+    parser.add_argument("--checkpoint", default="DreamShaper_8_pruned.safetensors",
                         help="Checkpoint name for the default workflow (must exist on the server).")
     parser.add_argument("--width", type=int, default=512, help="Default-workflow image width.")
     parser.add_argument("--height", type=int, default=512, help="Default-workflow image height.")
-    parser.add_argument("--seed", type=int, default=0, help="Default-workflow sampler seed.")
+    parser.add_argument("--seed", type=int, default=None,
+                        help="Default-workflow sampler seed. Unset: a fresh random seed is "
+                             "used per invocation, so a repeated identical call doesn't hit "
+                             "ComfyUI's full-graph cache and silently return no output. Pass "
+                             "an explicit value for reproducible generations.")
     parser.add_argument("--timeout", type=int, default=120, help="Generation timeout in seconds.")
     return parser.parse_args(argv)
 
@@ -249,7 +262,8 @@ def main(argv=None):
         fail(EXIT_CONFIG, "type 'video' has no built-in workflow; supply a ComfyUI graph via "
                           "--workflow (use the %prompt% placeholder for the prompt text).")
     else:
-        workflow = default_workflow(args.prompt, args.checkpoint, args.width, args.height, args.seed)
+        seed = args.seed if args.seed is not None else random.randint(0, 2**31 - 1)
+        workflow = default_workflow(args.prompt, args.checkpoint, args.width, args.height, seed)
 
     # 5. Execution-lock guardrail (E27.3, GPU coexistence) — refuse a generative call
     #    while a live agentic epic execution holds the orchestrator's execution lock,

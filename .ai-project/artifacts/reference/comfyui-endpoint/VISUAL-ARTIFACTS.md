@@ -64,7 +64,7 @@ API-format graphs in `workflows/`. The helper replaces the literal token `%promp
 visual_artifacts:
   enabled: true
   comfyui_url: http://localhost:8188
-  types: [diagrams, infographics, video]
+  types: [diagrams, infographics, video]  # all Generative (ComfyUI); Structural needs no config
 ```
 
 The helper reads this from the **current working directory** (`PROJECT_ROOT = cwd`), and refuses a

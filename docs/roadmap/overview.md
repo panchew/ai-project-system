@@ -214,6 +214,42 @@ by design). Second phase closed through the canonical **PSG §5C** sequence. See
 
 ---
 
+### P8 – Visual Artifacts Activation *(Completed)*
+
+**Goal**: Make `visual_artifacts` real in this source repo. Resolve the `types: diagrams` /
+Structural naming collision (P7-GH-21), flip `visual_artifacts.enabled: true` for real against
+the local ComfyUI endpoint, and validate whether the P6-verified workflows produce artifacts
+precise enough for technical explanation — not merely "renders successfully" (SN-20).
+
+**Status**: Completed (Consolidated to master 2026-07-17 — **v6.0.1**, 307 passed / 0 skipped).
+Third phase closed through the canonical **PSG §5C** sequence. See the
+[Phase Closure Declaration](../phases/P8__Visual_Artifacts_Activation/P8__phase-closure-declaration.md).
+
+**Milestone Status**:
+
+| Milestone | Name | Epics | Status | PR |
+|-----------|------|-------|--------|-----|
+| **M29** | Visual Artifacts Activation | E29.1–E29.3 (3) | ✅ Complete | #133 |
+
+**Key Deliverables**:
+- ✅ `visual_artifacts.types` reframed as Generative-only categories across all four named
+  surfaces (yml-spec §3.5, `.ai-project.yml`, `bin/ai-project-visual` docstring,
+  `VISUAL-ARTIFACTS.md`) — Structural mode documented as needing no `visual_artifacts` config
+  at all. **P7-GH-21 closed** (E29.1)
+- ✅ `visual_artifacts.enabled: true` in this repo for the first time — the trade every prior
+  milestone (P5-M22, P7-M27) deferred. `test_helper_generates_against_endpoint` now a real pass
+  against the live endpoint, not a skip; two genuine helper bugs found and fixed in the process
+  (stale default checkpoint, fixed-seed empty-output caching) (E29.2)
+- ✅ First real generated-and-hosted artifacts from this repo, judged against the
+  technical-explanation bar: a diagram-style case (FLUX-schnell) and a clip-style case
+  (LTX-Video) — **both judged FAIL**, honest evidence handed to the CFO for SN-20 Carry-Over
+  item 3 (E29.3)
+- ✅ First machine-level `system_request`/`system_response` round-trip, provisioning a local
+  storage backend to complete E29.3's by-link hosting
+- ✅ Governance at delivery: **PSG v2.3.0**, **AOG v2.9.0**, yml-spec **v2.3.1**
+
+---
+
 ### P6 – Visual Comprehension Layer & Process Refinements *(Completed)*
 
 **Goal**: Build the consumer architecture that turns the governance flow into a continuous
@@ -248,7 +284,7 @@ P6 itself codified. See the
 
 ## In Progress
 
-No active phase. P8 is not yet scoped.
+No active phase. P9 is not yet scoped.
 
 ---
 
@@ -264,12 +300,13 @@ No active phase. P8 is not yet scoped.
 
 ## Current Focus
 
-Phases P1–P7 are **completed and consolidated to master** at **v6.0.0**.
+Phases P1–P8 are **completed and consolidated to master** at **v6.0.1**.
 
-**P8 is not yet scoped.** P7 closed 2026-07-14 having delivered the framework's first genuine
-non-mocked agentic run (M26), default-on visual artifacts framework-wide (M27), and four
-governance reconciliations closing three carry-forwards plus SN-19's mid-flight addition (M28).
-Next-phase scoping is HQ/Creation Chat's call.
+**P9 is not yet scoped.** P8 closed 2026-07-17 having made `visual_artifacts` real in this
+source repo: the `types`/Structural naming collision resolved (P7-GH-21), the capability
+enabled for the first time against a live endpoint, and honest precision-validation evidence
+(two FAIL findings) delivered to the CFO for SN-20 Carry-Over item 3. Next-phase scoping is
+HQ/Creation Chat's call.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
@@ -279,4 +316,4 @@ See individual phase directories for detailed specs:
 - [`docs/phases/P5__Process_Hardening_and_Visual_Artifacts/`](../phases/P5__Process_Hardening_and_Visual_Artifacts/)
 - [`docs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/`](../phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/)
 - [`docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/`](../phases/P7__Agentic_Execution_and_Default_On_Visuals/)
-- [`docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/`](../phases/P7__Agentic_Execution_and_Default_On_Visuals/)
+- [`docs/phases/P8__Visual_Artifacts_Activation/`](../phases/P8__Visual_Artifacts_Activation/)
