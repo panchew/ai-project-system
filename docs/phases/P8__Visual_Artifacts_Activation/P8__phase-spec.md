@@ -1,7 +1,7 @@
 ---
 phase: P8
 name: Visual Artifacts Activation
-status: active
+status: completed
 start_date: 2026-07-14
 planned_end_date: 2026-07-28
 version: 1.0.0
