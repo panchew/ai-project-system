@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.3.0  
+**Version:** 2.3.1  
 **Status:** Active  
-**Effective Date:** 2026-07-13  
-**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27)
+**Effective Date:** 2026-07-15  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29)
 
 ---
 
@@ -353,7 +353,7 @@ When present, the block declares whether visual artifacts are enabled, where the
 |-------|------|---------|----------------|------------|-------------------|
 | `enabled` | Boolean | `true` | `true`, `false` | Must be a YAML boolean when present | Master on/off switch. `true` (or block absent) ⇒ capability on; `false` ⇒ capability off (explicit opt-out). |
 | `comfyui_url` | String | `http://localhost:8188` | Any well-formed `http`/`https` URL | Must be a well-formed URL (scheme + host) when present | Declares the ComfyUI generative endpoint. Endpoint availability is the CFO's responsibility; this field only declares where it is configured. |
-| `types` | List of String | `[diagrams, infographics, video]` | Each entry one of: `diagrams`, `infographics`, `video` | Every entry must be an allowed value when present | Selects which artifact types are in scope. `diagrams`: Mermaid/PlantUML structural; `infographics`: ComfyUI-generated imagery; `video`: ComfyUI video (optional). |
+| `types` | List of String | `[diagrams, infographics, video]` | Each entry one of: `diagrams`, `infographics`, `video` | Every entry must be an allowed value when present | Selects which **generative** (ComfyUI) artifact types are in scope — see note below. `diagrams`: ComfyUI-generated diagram-style imagery (txt2img); `infographics`: ComfyUI-generated imagery; `video`: ComfyUI video (optional). |
 | `visual_required_for_specs` | Boolean | `true` | `true`, `false` | Must be a YAML boolean when present | Enforcement setting: whether specs are required to carry a visual. Governs enforcement only, not which artifact types are automatic (see AOG §16.1/§16.2). |
 
 #### Field Details
@@ -391,6 +391,15 @@ When present, the block declares whether visual artifacts are enabled, where the
 | Constraint | When present, every entry must be an allowed value. An entry outside the set is a validation error. |
 | Validation Error | `"Invalid visual_artifacts.types entry: '<value>'. Must be one of: diagrams, infographics, video."` |
 
+> **All `types` entries — including `diagrams` — are Generative (ComfyUI) categories.** This
+> field has no Structural entry and needs no Structural entry: AOG §16.3's Structural mode
+> (Mermaid/PlantUML diagrams written as text by the agent) calls no endpoint, uses no
+> `bin/ai-project-visual` invocation, and is available regardless of this block's presence,
+> contents, or the `enabled` flag. `types: diagrams` selects ComfyUI-generated diagram-*style*
+> imagery (a txt2img call), not Mermaid/PlantUML output. See
+> `.ai-project/artifacts/reference/comfyui-endpoint/VISUAL-ARTIFACTS.md` for the full
+> Structural/Generative split.
+
 ##### `visual_artifacts.visual_required_for_specs`
 
 | Property | Value |
@@ -421,10 +430,12 @@ visual_artifacts:
   enabled: true                          # default-on; false is the explicit opt-out
   comfyui_url: http://localhost:8188
   types:
-    - diagrams                           # Mermaid/PlantUML structural
+    - diagrams                           # ComfyUI-generated diagram-style imagery (txt2img)
     - infographics                       # ComfyUI-generated imagery
     - video                              # ComfyUI video (optional)
   visual_required_for_specs: true        # enforcement setting; defaulted true
+  # Structural diagrams (Mermaid/PlantUML, agent-authored text) call no ComfyUI endpoint
+  # and need no `types` entry — see AOG §16.3.
 ```
 
 ---
@@ -599,6 +610,7 @@ at its documented defaults and remains valid. Setting `enabled: false` is the ex
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.3.1 | 2026-07-15 | Resolved the `visual_artifacts.types` naming collision with AOG §16.3 (P7-GH-21): §3.5 field table, Field Details (`types`, new clarifying note), and Worked Example no longer describe `diagrams` as "Mermaid/PlantUML structural" — all `types` entries, including `diagrams`, are now documented as Generative (ComfyUI) categories; Structural mode (AOG §16.3) is clarified as needing no `visual_artifacts` config at all. No field, default, or validation rule changed — documentation/reframing only. (Epic E29.1, P8-M29) |
 | 2.3.0 | 2026-07-13 | `visual_artifacts` flipped from opt-in/off-by-default to default-on/opt-out: §3.5 `enabled` default `false` → `true`; added new `visual_required_for_specs` enforcement field (default `true`) with Field Details block and §4 validation rule 25; Worked Example and §11 Full Example updated. (Epic E27.1, P7-M27) |
 | 2.2.0 | 2026-07-12 | `epic_dev` default moved from `local:llama3:8b` (verified unusable for tool-calling — empty tool-call responses, local-agent-runner CONTRACT §1.4) to `local:qwen2.5-coder:14b`, consistently in the schema comment (§3.4), the field table default/examples, and the format-constraint examples. `epic_qa` unchanged. (Epic E26.2, P7-M26) |
 | 2.1.0 | 2026-06-28 | Added the optional, opt-in `visual_artifacts` block: Section 3.1 schema reference, new Section 3.5 (field definitions for `enabled`, `comfyui_url`, `types`, unknown-key forward-compatibility, worked example), validation rules 18–24 in Section 4, and a full example in Section 11. Absent block ⇒ capability disabled. (Epic E22.1, P5-M22) |
