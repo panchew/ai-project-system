@@ -1,0 +1,2928 @@
+{
+  "generated_utc": "2026-07-17T22:16:01+00:00",
+  "script": "bin/measure-token-burn",
+  "script_version": "1.0.0",
+  "epic": "P9-M30-E30.1",
+  "tokenizer": "tiktoken/o200k_base (proxy for the Claude tokenizer; see README error bars)",
+  "paid_sessions": {
+    "source": "Claude Code harness session JSONL usage blocks (machine-local; aggregated here, never committed raw)",
+    "spend_kind": "paid",
+    "session_files_scanned": 72,
+    "sessions_with_usage": 72,
+    "coverage_window": {
+      "first": "2026-06-12",
+      "last": "2026-07-17"
+    },
+    "sessions": [
+      {
+        "session": "185e0694",
+        "date": "2026-07-12",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "phase",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+closure+delivery_handling",
+        "api_calls": 170,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 336,
+          "cache_creation": 1038487,
+          "cache_read": 33842968,
+          "output": 159157
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 66,
+            "cache_creation": 110804,
+            "cache_read": 2778029,
+            "output": 42548
+          },
+          "claude-sonnet-5": {
+            "input": 270,
+            "cache_creation": 927683,
+            "cache_read": 31064939,
+            "output": 116609
+          }
+        },
+        "first_turn_context_tokens": 22639,
+        "mean_context_tokens_per_call": 205187,
+        "artifact_write_signals": {
+          "spec_writes": 5,
+          "starter_writes": 6,
+          "delivery_notice_writes": 1,
+          "closure_writes": 1,
+          "review_decision_writes": 1
+        }
+      },
+      {
+        "session": "1ca83dbb",
+        "date": "2026-07-14",
+        "branch": "milestone/M28",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 41,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 82,
+          "cache_creation": 92217,
+          "cache_read": 2836491,
+          "output": 22024
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 82,
+            "cache_creation": 92217,
+            "cache_read": 2836491,
+            "output": 22024
+          }
+        },
+        "first_turn_context_tokens": 34247,
+        "mean_context_tokens_per_call": 71433,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "1d84328e",
+        "date": "2026-07-16",
+        "branch": "milestone/M29",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 54,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 108,
+          "cache_creation": 97879,
+          "cache_read": 4429819,
+          "output": 34729
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 108,
+            "cache_creation": 97879,
+            "cache_read": 4429819,
+            "output": 34729
+          }
+        },
+        "first_turn_context_tokens": 34360,
+        "mean_context_tokens_per_call": 83848,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "25bdc917",
+        "date": "2026-06-27",
+        "branch": "milestone/M20",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 33,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 4124,
+          "cache_creation": 116643,
+          "cache_read": 2880700,
+          "output": 31185
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 4124,
+            "cache_creation": 116643,
+            "cache_read": 2880700,
+            "output": 31185
+          }
+        },
+        "first_turn_context_tokens": 14863,
+        "mean_context_tokens_per_call": 90953,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 2,
+          "delivery_notice_writes": 3,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "2aa61a92",
+        "date": "2026-06-26",
+        "branch": "milestone/M20",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 23,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 4599,
+          "cache_creation": 74964,
+          "cache_read": 1115191,
+          "output": 25974
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 4599,
+            "cache_creation": 74964,
+            "cache_read": 1115191,
+            "output": 25974
+          }
+        },
+        "first_turn_context_tokens": 15846,
+        "mean_context_tokens_per_call": 51945,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "2c93c36a",
+        "date": "2026-06-25",
+        "branch": "milestone/M20",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 24,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 4571,
+          "cache_creation": 86489,
+          "cache_read": 1084416,
+          "output": 21189
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 4571,
+            "cache_creation": 86489,
+            "cache_read": 1084416,
+            "output": 21189
+          }
+        },
+        "first_turn_context_tokens": 19908,
+        "mean_context_tokens_per_call": 48978,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 2,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "2cc0bad4",
+        "date": "2026-07-13",
+        "branch": "milestone/M27",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 50,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 100,
+          "cache_creation": 145880,
+          "cache_read": 5917633,
+          "output": 43178
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 100,
+            "cache_creation": 145880,
+            "cache_read": 5917633,
+            "output": 43178
+          }
+        },
+        "first_turn_context_tokens": 34667,
+        "mean_context_tokens_per_call": 121272,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "324cc892",
+        "date": "2026-07-08",
+        "branch": "milestone/M25",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 48,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 96,
+          "cache_creation": 103575,
+          "cache_read": 3556718,
+          "output": 28432
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 96,
+            "cache_creation": 103575,
+            "cache_read": 3556718,
+            "output": 28432
+          }
+        },
+        "first_turn_context_tokens": 32004,
+        "mean_context_tokens_per_call": 76258,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "3331978d",
+        "date": "2026-07-17",
+        "branch": "phase/P9",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "planning",
+        "task_rule": "signals",
+        "api_calls": 17,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 33,
+          "cache_creation": 74322,
+          "cache_read": 1011615,
+          "output": 25541
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 33,
+            "cache_creation": 74322,
+            "cache_read": 1011615,
+            "output": 25541
+          }
+        },
+        "first_turn_context_tokens": 24602,
+        "mean_context_tokens_per_call": 63880,
+        "artifact_write_signals": {
+          "spec_writes": 1,
+          "starter_writes": 1,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "3caa6b86",
+        "date": "2026-06-13",
+        "branch": "milestone/M16",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 69,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 75,
+          "cache_creation": 182723,
+          "cache_read": 5270861,
+          "output": 40883
+        },
+        "by_model": {
+          "claude-sonnet-4-6": {
+            "input": 75,
+            "cache_creation": 182723,
+            "cache_read": 5270861,
+            "output": 40883
+          }
+        },
+        "first_turn_context_tokens": 22784,
+        "mean_context_tokens_per_call": 79038,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "3e555593",
+        "date": "2026-06-20",
+        "branch": "milestone/M19",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 56,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 9176,
+          "cache_creation": 93065,
+          "cache_read": 3710430,
+          "output": 37594
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 9176,
+            "cache_creation": 93065,
+            "cache_read": 3710430,
+            "output": 37594
+          }
+        },
+        "first_turn_context_tokens": 18991,
+        "mean_context_tokens_per_call": 68083,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "4140d3f0",
+        "date": "2026-06-29",
+        "branch": "milestone/M23",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 30,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 6096,
+          "cache_creation": 84178,
+          "cache_read": 1639685,
+          "output": 26732
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 6096,
+            "cache_creation": 84178,
+            "cache_read": 1639685,
+            "output": 26732
+          }
+        },
+        "first_turn_context_tokens": 16141,
+        "mean_context_tokens_per_call": 57665,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "417cf960",
+        "date": "2026-06-30",
+        "branch": "milestone/M24",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 33,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 5228,
+          "cache_creation": 160635,
+          "cache_read": 2026164,
+          "output": 41653
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 5228,
+            "cache_creation": 160635,
+            "cache_read": 2026164,
+            "output": 41653
+          }
+        },
+        "first_turn_context_tokens": 20966,
+        "mean_context_tokens_per_call": 66425,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "46ee7e03",
+        "date": "2026-07-15",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "hq",
+        "level_rule": "first-message",
+        "task_type": "planning",
+        "task_rule": "signals",
+        "api_calls": 39,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 78,
+          "cache_creation": 228159,
+          "cache_read": 3917889,
+          "output": 38664
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 78,
+            "cache_creation": 228159,
+            "cache_read": 3917889,
+            "output": 38664
+          }
+        },
+        "first_turn_context_tokens": 38221,
+        "mean_context_tokens_per_call": 106310,
+        "artifact_write_signals": {
+          "spec_writes": 1,
+          "starter_writes": 1,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "4735e1dc",
+        "date": "2026-06-12",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "unattributed",
+        "level_rule": "none",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 326,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 2797,
+          "cache_creation": 2823652,
+          "cache_read": 31883177,
+          "output": 246395
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 2346,
+            "cache_creation": 79675,
+            "cache_read": 1547622,
+            "output": 30336
+          },
+          "claude-sonnet-4-6": {
+            "input": 451,
+            "cache_creation": 2743977,
+            "cache_read": 30335555,
+            "output": 216059
+          }
+        },
+        "first_turn_context_tokens": 14758,
+        "mean_context_tokens_per_call": 106471,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 26,
+          "delivery_notice_writes": 0,
+          "closure_writes": 7,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "512af82f",
+        "date": "2026-06-13",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "hq",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+closure",
+        "api_calls": 107,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 139,
+          "cache_creation": 1174201,
+          "cache_read": 9099456,
+          "output": 100446
+        },
+        "by_model": {
+          "claude-sonnet-4-6": {
+            "input": 139,
+            "cache_creation": 1174201,
+            "cache_read": 9099456,
+            "output": 100446
+          }
+        },
+        "first_turn_context_tokens": 20088,
+        "mean_context_tokens_per_call": 96016,
+        "artifact_write_signals": {
+          "spec_writes": 15,
+          "starter_writes": 9,
+          "delivery_notice_writes": 0,
+          "closure_writes": 2,
+          "review_decision_writes": 2
+        }
+      },
+      {
+        "session": "560100ae",
+        "date": "2026-06-28",
+        "branch": "milestone/M22",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 46,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 6524,
+          "cache_creation": 185109,
+          "cache_read": 4127490,
+          "output": 46575
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 6524,
+            "cache_creation": 185109,
+            "cache_read": 4127490,
+            "output": 46575
+          }
+        },
+        "first_turn_context_tokens": 15985,
+        "mean_context_tokens_per_call": 93893,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "56e005e7",
+        "date": "2026-07-02",
+        "branch": "milestone/M24",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 30,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 4771,
+          "cache_creation": 118138,
+          "cache_read": 1733116,
+          "output": 26061
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 4771,
+            "cache_creation": 118138,
+            "cache_read": 1733116,
+            "output": 26061
+          }
+        },
+        "first_turn_context_tokens": 19008,
+        "mean_context_tokens_per_call": 61867,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "578cb649",
+        "date": "2026-07-03",
+        "branch": "milestone/M25",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "branch-fallback",
+        "task_type": "review",
+        "task_rule": "first-message",
+        "api_calls": 35,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 5513,
+          "cache_creation": 134344,
+          "cache_read": 2914804,
+          "output": 57137
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 5513,
+            "cache_creation": 134344,
+            "cache_read": 2914804,
+            "output": 57137
+          }
+        },
+        "first_turn_context_tokens": 20522,
+        "mean_context_tokens_per_call": 87276,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 2,
+          "delivery_notice_writes": 1,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "588dab4d",
+        "date": "2026-06-27",
+        "branch": "milestone/M20",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 24,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 4648,
+          "cache_creation": 42445,
+          "cache_read": 933518,
+          "output": 12984
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 4648,
+            "cache_creation": 42445,
+            "cache_read": 933518,
+            "output": 12984
+          }
+        },
+        "first_turn_context_tokens": 15567,
+        "mean_context_tokens_per_call": 40858,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "5ace29f0",
+        "date": "2026-07-14",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "creation",
+        "level_rule": "first-message",
+        "task_type": "unattributed",
+        "task_rule": "no-signals",
+        "api_calls": 61,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 122,
+          "cache_creation": 530354,
+          "cache_read": 5722970,
+          "output": 78897
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 122,
+            "cache_creation": 530354,
+            "cache_read": 5722970,
+            "output": 78897
+          }
+        },
+        "first_turn_context_tokens": 35387,
+        "mean_context_tokens_per_call": 102515,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "5b365f77",
+        "date": "2026-06-27",
+        "branch": "milestone/M20",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 34,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 4663,
+          "cache_creation": 104518,
+          "cache_read": 1786314,
+          "output": 19572
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 4663,
+            "cache_creation": 104518,
+            "cache_read": 1786314,
+            "output": 19572
+          }
+        },
+        "first_turn_context_tokens": 15689,
+        "mean_context_tokens_per_call": 55749,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 2,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "5eee1fb0",
+        "date": "2026-07-12",
+        "branch": "phase/P7",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 169,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 337,
+          "cache_creation": 765621,
+          "cache_read": 34058954,
+          "output": 156418
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 75,
+            "cache_creation": 225354,
+            "cache_read": 3047616,
+            "output": 44083
+          },
+          "claude-sonnet-5": {
+            "input": 262,
+            "cache_creation": 540267,
+            "cache_read": 31011338,
+            "output": 112335
+          }
+        },
+        "first_turn_context_tokens": 22869,
+        "mean_context_tokens_per_call": 206064,
+        "artifact_write_signals": {
+          "spec_writes": 12,
+          "starter_writes": 5,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "63949cc0",
+        "date": "2026-06-24",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "phase",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+delivery_handling",
+        "api_calls": 119,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 30152,
+          "cache_creation": 1735027,
+          "cache_read": 28650644,
+          "output": 282358
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 30152,
+            "cache_creation": 1735027,
+            "cache_read": 28650644,
+            "output": 282358
+          }
+        },
+        "first_turn_context_tokens": 19822,
+        "mean_context_tokens_per_call": 255595,
+        "artifact_write_signals": {
+          "spec_writes": 5,
+          "starter_writes": 14,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 1
+        }
+      },
+      {
+        "session": "67c9a58b",
+        "date": "2026-06-30",
+        "branch": "phase/P6",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 76,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 14646,
+          "cache_creation": 543550,
+          "cache_read": 10124398,
+          "output": 114652
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 14646,
+            "cache_creation": 543550,
+            "cache_read": 10124398,
+            "output": 114652
+          }
+        },
+        "first_turn_context_tokens": 20058,
+        "mean_context_tokens_per_call": 140560,
+        "artifact_write_signals": {
+          "spec_writes": 2,
+          "starter_writes": 2,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "6b9a1b4e",
+        "date": "2026-07-17",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "creation",
+        "level_rule": "first-message",
+        "task_type": "unattributed",
+        "task_rule": "no-signals",
+        "api_calls": 24,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 45,
+          "cache_creation": 43874,
+          "cache_read": 1059289,
+          "output": 19902
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 45,
+            "cache_creation": 43874,
+            "cache_read": 1059289,
+            "output": 19902
+          }
+        },
+        "first_turn_context_tokens": 29749,
+        "mean_context_tokens_per_call": 45967,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "6ce000fc",
+        "date": "2026-07-13",
+        "branch": "milestone/M28",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 36,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 72,
+          "cache_creation": 104163,
+          "cache_read": 3317665,
+          "output": 39747
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 72,
+            "cache_creation": 104163,
+            "cache_read": 3317665,
+            "output": 39747
+          }
+        },
+        "first_turn_context_tokens": 34232,
+        "mean_context_tokens_per_call": 95052,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "75bf59aa",
+        "date": "2026-06-18",
+        "branch": "milestone/M17",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 102,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 19667,
+          "cache_creation": 510626,
+          "cache_read": 15376234,
+          "output": 114333
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 19667,
+            "cache_creation": 510626,
+            "cache_read": 15376234,
+            "output": 114333
+          }
+        },
+        "first_turn_context_tokens": 19936,
+        "mean_context_tokens_per_call": 155946,
+        "artifact_write_signals": {
+          "spec_writes": 3,
+          "starter_writes": 4,
+          "delivery_notice_writes": 3,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "78839715",
+        "date": "2026-07-16",
+        "branch": "milestone/M29",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 97,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 194,
+          "cache_creation": 292492,
+          "cache_read": 11916430,
+          "output": 73655
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 194,
+            "cache_creation": 292492,
+            "cache_read": 11916430,
+            "output": 73655
+          }
+        },
+        "first_turn_context_tokens": 34394,
+        "mean_context_tokens_per_call": 125867,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 8,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "79de3147",
+        "date": "2026-07-13",
+        "branch": "milestone/M27",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 54,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 108,
+          "cache_creation": 101129,
+          "cache_read": 4281156,
+          "output": 27851
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 108,
+            "cache_creation": 101129,
+            "cache_read": 4281156,
+            "output": 27851
+          }
+        },
+        "first_turn_context_tokens": 34404,
+        "mean_context_tokens_per_call": 81155,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 2,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "7dd5c0b3",
+        "date": "2026-07-13",
+        "branch": "phase/P7",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure+delivery_handling",
+        "api_calls": 214,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 428,
+          "cache_creation": 860633,
+          "cache_read": 54019683,
+          "output": 173616
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 428,
+            "cache_creation": 860633,
+            "cache_read": 54019683,
+            "output": 173616
+          }
+        },
+        "first_turn_context_tokens": 34181,
+        "mean_context_tokens_per_call": 256452,
+        "artifact_write_signals": {
+          "spec_writes": 4,
+          "starter_writes": 4,
+          "delivery_notice_writes": 1,
+          "closure_writes": 2,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "7e0e95fe",
+        "date": "2026-07-13",
+        "branch": "milestone/M26",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 151,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 302,
+          "cache_creation": 509959,
+          "cache_read": 28533207,
+          "output": 143575
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 302,
+            "cache_creation": 509959,
+            "cache_read": 28533207,
+            "output": 143575
+          }
+        },
+        "first_turn_context_tokens": 34003,
+        "mean_context_tokens_per_call": 192340,
+        "artifact_write_signals": {
+          "spec_writes": 1,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "7f0a6440",
+        "date": "2026-06-28",
+        "branch": "phase/P5",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 61,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 9493,
+          "cache_creation": 661173,
+          "cache_read": 7206604,
+          "output": 97641
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 9493,
+            "cache_creation": 661173,
+            "cache_read": 7206604,
+            "output": 97641
+          }
+        },
+        "first_turn_context_tokens": 15799,
+        "mean_context_tokens_per_call": 129135,
+        "artifact_write_signals": {
+          "spec_writes": 2,
+          "starter_writes": 2,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "808814a3",
+        "date": "2026-06-27",
+        "branch": "phase/P5",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+closure",
+        "api_calls": 58,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 7288,
+          "cache_creation": 382712,
+          "cache_read": 5926070,
+          "output": 99736
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 7288,
+            "cache_creation": 382712,
+            "cache_read": 5926070,
+            "output": 99736
+          }
+        },
+        "first_turn_context_tokens": 15682,
+        "mean_context_tokens_per_call": 108897,
+        "artifact_write_signals": {
+          "spec_writes": 2,
+          "starter_writes": 3,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 2
+        }
+      },
+      {
+        "session": "88bb556b",
+        "date": "2026-07-12",
+        "branch": "milestone/M26",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 26,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 51,
+          "cache_creation": 75203,
+          "cache_read": 1572161,
+          "output": 30544
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 51,
+            "cache_creation": 75203,
+            "cache_read": 1572161,
+            "output": 30544
+          }
+        },
+        "first_turn_context_tokens": 22882,
+        "mean_context_tokens_per_call": 63362,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "8c9d55d2",
+        "date": "2026-07-13",
+        "branch": "milestone/M28",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 40,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 80,
+          "cache_creation": 100593,
+          "cache_read": 3842536,
+          "output": 29820
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 80,
+            "cache_creation": 100593,
+            "cache_read": 3842536,
+            "output": 29820
+          }
+        },
+        "first_turn_context_tokens": 34214,
+        "mean_context_tokens_per_call": 98580,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "95d1571e",
+        "date": "2026-06-28",
+        "branch": "milestone/M22",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 47,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 6631,
+          "cache_creation": 126168,
+          "cache_read": 3770540,
+          "output": 56341
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 6631,
+            "cache_creation": 126168,
+            "cache_read": 3770540,
+            "output": 56341
+          }
+        },
+        "first_turn_context_tokens": 16022,
+        "mean_context_tokens_per_call": 83049,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "985fefe2",
+        "date": "2026-06-20",
+        "branch": "milestone/M19",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+closure",
+        "api_calls": 74,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 9141,
+          "cache_creation": 236809,
+          "cache_read": 7552471,
+          "output": 101426
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 9141,
+            "cache_creation": 236809,
+            "cache_read": 7552471,
+            "output": 101426
+          }
+        },
+        "first_turn_context_tokens": 18826,
+        "mean_context_tokens_per_call": 105384,
+        "artifact_write_signals": {
+          "spec_writes": 4,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 3
+        }
+      },
+      {
+        "session": "9bafa61f",
+        "date": "2026-07-11",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "creation",
+        "level_rule": "first-message",
+        "task_type": "unattributed",
+        "task_rule": "no-signals",
+        "api_calls": 66,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 5489,
+          "cache_creation": 567993,
+          "cache_read": 6505181,
+          "output": 57800
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 5386,
+            "cache_creation": 112319,
+            "cache_read": 514699,
+            "output": 11768
+          },
+          "claude-fable-5": {
+            "input": 103,
+            "cache_creation": 455674,
+            "cache_read": 5990482,
+            "output": 46032
+          }
+        },
+        "first_turn_context_tokens": 34824,
+        "mean_context_tokens_per_call": 107252,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "a252bba7",
+        "date": "2026-06-18",
+        "branch": "milestone/M18",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:review+closure",
+        "api_calls": 31,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 8454,
+          "cache_creation": 76897,
+          "cache_read": 1330350,
+          "output": 23685
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 8454,
+            "cache_creation": 76897,
+            "cache_read": 1330350,
+            "output": 23685
+          }
+        },
+        "first_turn_context_tokens": 19176,
+        "mean_context_tokens_per_call": 45667,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 1
+        }
+      },
+      {
+        "session": "a26452cd",
+        "date": "2026-07-03",
+        "branch": "milestone/M25",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 57,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 9145,
+          "cache_creation": 204664,
+          "cache_read": 6355776,
+          "output": 61514
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 9145,
+            "cache_creation": 204664,
+            "cache_read": 6355776,
+            "output": 61514
+          }
+        },
+        "first_turn_context_tokens": 20847,
+        "mean_context_tokens_per_call": 115255,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 18,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "a7bbcbc5",
+        "date": "2026-07-14",
+        "branch": "milestone/M28",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 57,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 114,
+          "cache_creation": 100789,
+          "cache_read": 4509243,
+          "output": 28458
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 114,
+            "cache_creation": 100789,
+            "cache_read": 4509243,
+            "output": 28458
+          }
+        },
+        "first_turn_context_tokens": 34470,
+        "mean_context_tokens_per_call": 80879,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 15,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "a8637d59",
+        "date": "2026-06-13",
+        "branch": "milestone/M15",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+closure",
+        "api_calls": 57,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 80,
+          "cache_creation": 532693,
+          "cache_read": 4962872,
+          "output": 60577
+        },
+        "by_model": {
+          "claude-sonnet-4-6": {
+            "input": 80,
+            "cache_creation": 532693,
+            "cache_read": 4962872,
+            "output": 60577
+          }
+        },
+        "first_turn_context_tokens": 21030,
+        "mean_context_tokens_per_call": 96414,
+        "artifact_write_signals": {
+          "spec_writes": 2,
+          "starter_writes": 4,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 2
+        }
+      },
+      {
+        "session": "aaa16d82",
+        "date": "2026-07-13",
+        "branch": "epic/P7-M27-E27.2",
+        "entrypoint": "claude-desktop",
+        "level": "epic",
+        "level_rule": "branch-fallback",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure+delivery_handling",
+        "api_calls": 226,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 11364,
+          "cache_creation": 705398,
+          "cache_read": 45790814,
+          "output": 168210
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 11364,
+            "cache_creation": 705398,
+            "cache_read": 45790814,
+            "output": 168210
+          }
+        },
+        "first_turn_context_tokens": 40366,
+        "mean_context_tokens_per_call": 205785,
+        "artifact_write_signals": {
+          "spec_writes": 4,
+          "starter_writes": 6,
+          "delivery_notice_writes": 4,
+          "closure_writes": 2,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "ad7d43f6",
+        "date": "2026-06-25",
+        "branch": "phase/P5",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+closure",
+        "api_calls": 108,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 9061,
+          "cache_creation": 1088259,
+          "cache_read": 19598867,
+          "output": 198374
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 9061,
+            "cache_creation": 1088259,
+            "cache_read": 19598867,
+            "output": 198374
+          }
+        },
+        "first_turn_context_tokens": 19356,
+        "mean_context_tokens_per_call": 191631,
+        "artifact_write_signals": {
+          "spec_writes": 5,
+          "starter_writes": 5,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 5
+        }
+      },
+      {
+        "session": "afa3c75b",
+        "date": "2026-06-29",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "phase",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 108,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 23024,
+          "cache_creation": 1401248,
+          "cache_read": 17697384,
+          "output": 170312
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 23024,
+            "cache_creation": 1401248,
+            "cache_read": 17697384,
+            "output": 170312
+          }
+        },
+        "first_turn_context_tokens": 15241,
+        "mean_context_tokens_per_call": 177052,
+        "artifact_write_signals": {
+          "spec_writes": 5,
+          "starter_writes": 4,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "b0294145",
+        "date": "2026-06-29",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "hq",
+        "level_rule": "first-message",
+        "task_type": "planning",
+        "task_rule": "signals",
+        "api_calls": 113,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 5414,
+          "cache_creation": 1619586,
+          "cache_read": 18980876,
+          "output": 155474
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 5414,
+            "cache_creation": 1619586,
+            "cache_read": 18980876,
+            "output": 155474
+          }
+        },
+        "first_turn_context_tokens": 20778,
+        "mean_context_tokens_per_call": 182352,
+        "artifact_write_signals": {
+          "spec_writes": 12,
+          "starter_writes": 6,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "b1444f31",
+        "date": "2026-06-15",
+        "branch": "milestone/M16",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "branch-fallback",
+        "task_type": "unattributed",
+        "task_rule": "no-signals",
+        "api_calls": 27,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 4826,
+          "cache_creation": 336824,
+          "cache_read": 1131497,
+          "output": 53249
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 4826,
+            "cache_creation": 336824,
+            "cache_read": 1131497,
+            "output": 53249
+          }
+        },
+        "first_turn_context_tokens": 13805,
+        "mean_context_tokens_per_call": 54561,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "b1d38ce2",
+        "date": "2026-06-17",
+        "branch": "milestone/M16",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+review+closure",
+        "api_calls": 133,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 10733,
+          "cache_creation": 385812,
+          "cache_read": 16233994,
+          "output": 118829
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 10733,
+            "cache_creation": 385812,
+            "cache_read": 16233994,
+            "output": 118829
+          }
+        },
+        "first_turn_context_tokens": 16823,
+        "mean_context_tokens_per_call": 125041,
+        "artifact_write_signals": {
+          "spec_writes": 4,
+          "starter_writes": 12,
+          "delivery_notice_writes": 0,
+          "closure_writes": 3,
+          "review_decision_writes": 2
+        }
+      },
+      {
+        "session": "b5881f04",
+        "date": "2026-06-17",
+        "branch": "milestone/M17",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 72,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 6211,
+          "cache_creation": 151195,
+          "cache_read": 5324314,
+          "output": 56125
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 6211,
+            "cache_creation": 151195,
+            "cache_read": 5324314,
+            "output": 56125
+          }
+        },
+        "first_turn_context_tokens": 18156,
+        "mean_context_tokens_per_call": 76135,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 1
+        }
+      },
+      {
+        "session": "b63cfdd7",
+        "date": "2026-07-16",
+        "branch": "milestone/M29",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 36,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 72,
+          "cache_creation": 63618,
+          "cache_read": 2344633,
+          "output": 19557
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 72,
+            "cache_creation": 63618,
+            "cache_read": 2344633,
+            "output": 19557
+          }
+        },
+        "first_turn_context_tokens": 34351,
+        "mean_context_tokens_per_call": 66897,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "b68eb249",
+        "date": "2026-07-16",
+        "branch": "phase/P8",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 140,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 280,
+          "cache_creation": 622576,
+          "cache_read": 21770659,
+          "output": 129444
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 168,
+            "cache_creation": 192350,
+            "cache_read": 10567972,
+            "output": 84203
+          },
+          "claude-fable-5": {
+            "input": 112,
+            "cache_creation": 430226,
+            "cache_read": 11202687,
+            "output": 45241
+          }
+        },
+        "first_turn_context_tokens": 34386,
+        "mean_context_tokens_per_call": 159953,
+        "artifact_write_signals": {
+          "spec_writes": 6,
+          "starter_writes": 3,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "b91de094",
+        "date": "2026-06-13",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "phase",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure+delivery_handling",
+        "api_calls": 204,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 248,
+          "cache_creation": 1526278,
+          "cache_read": 18958978,
+          "output": 193765
+        },
+        "by_model": {
+          "claude-sonnet-4-6": {
+            "input": 248,
+            "cache_creation": 1526278,
+            "cache_read": 18958978,
+            "output": 193765
+          }
+        },
+        "first_turn_context_tokens": 21817,
+        "mean_context_tokens_per_call": 100419,
+        "artifact_write_signals": {
+          "spec_writes": 17,
+          "starter_writes": 18,
+          "delivery_notice_writes": 1,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "c10b3cb0",
+        "date": "2026-07-17",
+        "branch": "phase/P9",
+        "entrypoint": "claude-vscode",
+        "level": "phase",
+        "level_rule": "first-message",
+        "task_type": "planning",
+        "task_rule": "signals",
+        "api_calls": 15,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 28,
+          "cache_creation": 79902,
+          "cache_read": 959048,
+          "output": 25509
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 28,
+            "cache_creation": 79902,
+            "cache_read": 959048,
+            "output": 25509
+          }
+        },
+        "first_turn_context_tokens": 24554,
+        "mean_context_tokens_per_call": 69265,
+        "artifact_write_signals": {
+          "spec_writes": 1,
+          "starter_writes": 1,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "c23d583e",
+        "date": "2026-06-29",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "creation",
+        "level_rule": "first-message",
+        "task_type": "unattributed",
+        "task_rule": "no-signals",
+        "api_calls": 115,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 11294,
+          "cache_creation": 2761241,
+          "cache_read": 18799989,
+          "output": 280959
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 8679,
+            "cache_creation": 2325505,
+            "cache_read": 12581704,
+            "output": 254367
+          },
+          "claude-fable-5": {
+            "input": 2615,
+            "cache_creation": 435736,
+            "cache_read": 6218285,
+            "output": 26592
+          }
+        },
+        "first_turn_context_tokens": 17571,
+        "mean_context_tokens_per_call": 187587,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "c2cb4082",
+        "date": "2026-07-13",
+        "branch": "milestone/M27",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 97,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 194,
+          "cache_creation": 149382,
+          "cache_read": 9618270,
+          "output": 54944
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 194,
+            "cache_creation": 149382,
+            "cache_read": 9618270,
+            "output": 54944
+          }
+        },
+        "first_turn_context_tokens": 34233,
+        "mean_context_tokens_per_call": 100699,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "c5c8deda",
+        "date": "2026-06-28",
+        "branch": "milestone/M21",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 38,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 5445,
+          "cache_creation": 94656,
+          "cache_read": 2305371,
+          "output": 34086
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 5445,
+            "cache_creation": 94656,
+            "cache_read": 2305371,
+            "output": 34086
+          }
+        },
+        "first_turn_context_tokens": 15791,
+        "mean_context_tokens_per_call": 63301,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "c6e9a2bc",
+        "date": "2026-06-20",
+        "branch": "milestone/M19",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 70,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 17509,
+          "cache_creation": 361929,
+          "cache_read": 5776480,
+          "output": 49796
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 17509,
+            "cache_creation": 361929,
+            "cache_read": 5776480,
+            "output": 49796
+          }
+        },
+        "first_turn_context_tokens": 18116,
+        "mean_context_tokens_per_call": 87941,
+        "artifact_write_signals": {
+          "spec_writes": 5,
+          "starter_writes": 3,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "cd0b37fa",
+        "date": "2026-07-07",
+        "branch": "milestone/M25",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 49,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 98,
+          "cache_creation": 134298,
+          "cache_read": 3404005,
+          "output": 26672
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 98,
+            "cache_creation": 134298,
+            "cache_read": 3404005,
+            "output": 26672
+          }
+        },
+        "first_turn_context_tokens": 32585,
+        "mean_context_tokens_per_call": 72212,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "ce8fab50",
+        "date": "2026-07-17",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "creation",
+        "level_rule": "first-message",
+        "task_type": "unattributed",
+        "task_rule": "no-signals",
+        "api_calls": 1,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 2,
+          "cache_creation": 17143,
+          "cache_read": 12585,
+          "output": 848
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 2,
+            "cache_creation": 17143,
+            "cache_read": 12585,
+            "output": 848
+          }
+        },
+        "first_turn_context_tokens": 29730,
+        "mean_context_tokens_per_call": 29730,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "ceaba5dd",
+        "date": "2026-06-29",
+        "branch": "phase/P6",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 74,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 15092,
+          "cache_creation": 563007,
+          "cache_read": 10046473,
+          "output": 123692
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 15092,
+            "cache_creation": 563007,
+            "cache_read": 10046473,
+            "output": 123692
+          }
+        },
+        "first_turn_context_tokens": 16123,
+        "mean_context_tokens_per_call": 143575,
+        "artifact_write_signals": {
+          "spec_writes": 2,
+          "starter_writes": 2,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "d32f9742",
+        "date": "2026-07-15",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "phase",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 100,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 910,
+          "cache_creation": 557349,
+          "cache_read": 15537169,
+          "output": 72951
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 910,
+            "cache_creation": 557349,
+            "cache_read": 15537169,
+            "output": 72951
+          }
+        },
+        "first_turn_context_tokens": 33913,
+        "mean_context_tokens_per_call": 160954,
+        "artifact_write_signals": {
+          "spec_writes": 2,
+          "starter_writes": 1,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "d986496c",
+        "date": "2026-06-27",
+        "branch": "milestone/M21",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 46,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 6309,
+          "cache_creation": 97127,
+          "cache_read": 3163387,
+          "output": 34025
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 6309,
+            "cache_creation": 97127,
+            "cache_read": 3163387,
+            "output": 34025
+          }
+        },
+        "first_turn_context_tokens": 15691,
+        "mean_context_tokens_per_call": 71017,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "da4b2438",
+        "date": "2026-07-07",
+        "branch": "milestone/M25",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 56,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 112,
+          "cache_creation": 132012,
+          "cache_read": 3928281,
+          "output": 24686
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 112,
+            "cache_creation": 132012,
+            "cache_read": 3928281,
+            "output": 24686
+          }
+        },
+        "first_turn_context_tokens": 31805,
+        "mean_context_tokens_per_call": 72507,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "da848017",
+        "date": "2026-07-17",
+        "branch": "master",
+        "entrypoint": "claude-vscode",
+        "level": "hq",
+        "level_rule": "first-message",
+        "task_type": "planning",
+        "task_rule": "signals",
+        "api_calls": 25,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 47,
+          "cache_creation": 88505,
+          "cache_read": 1589417,
+          "output": 41043
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 47,
+            "cache_creation": 88505,
+            "cache_read": 1589417,
+            "output": 41043
+          }
+        },
+        "first_turn_context_tokens": 25324,
+        "mean_context_tokens_per_call": 67118,
+        "artifact_write_signals": {
+          "spec_writes": 1,
+          "starter_writes": 1,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "dd3bfe59",
+        "date": "2026-06-18",
+        "branch": "milestone/M18",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 34,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 13628,
+          "cache_creation": 157316,
+          "cache_read": 2081957,
+          "output": 28952
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 13628,
+            "cache_creation": 157316,
+            "cache_read": 2081957,
+            "output": 28952
+          }
+        },
+        "first_turn_context_tokens": 16325,
+        "mean_context_tokens_per_call": 66261,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "ddff3f41",
+        "date": "2026-07-13",
+        "branch": "phase/P7",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "planning",
+        "task_rule": "signals",
+        "api_calls": 128,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 256,
+          "cache_creation": 396143,
+          "cache_read": 24031219,
+          "output": 105392
+        },
+        "by_model": {
+          "claude-sonnet-5": {
+            "input": 256,
+            "cache_creation": 396143,
+            "cache_read": 24031219,
+            "output": 105392
+          }
+        },
+        "first_turn_context_tokens": 34382,
+        "mean_context_tokens_per_call": 190840,
+        "artifact_write_signals": {
+          "spec_writes": 6,
+          "starter_writes": 3,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "e17e800e",
+        "date": "2026-06-29",
+        "branch": "milestone/M23",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 39,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 5134,
+          "cache_creation": 146097,
+          "cache_read": 2843769,
+          "output": 33487
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 5134,
+            "cache_creation": 146097,
+            "cache_read": 2843769,
+            "output": 33487
+          }
+        },
+        "first_turn_context_tokens": 20915,
+        "mean_context_tokens_per_call": 76794,
+        "artifact_write_signals": {
+          "spec_writes": 2,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "e92a5427",
+        "date": "2026-07-17",
+        "branch": "milestone/M30",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 26,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 51,
+          "cache_creation": 101815,
+          "cache_read": 1835202,
+          "output": 51685
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 51,
+            "cache_creation": 101815,
+            "cache_read": 1835202,
+            "output": 51685
+          }
+        },
+        "first_turn_context_tokens": 24632,
+        "mean_context_tokens_per_call": 74502,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 0,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "f3cd130d",
+        "date": "2026-07-03",
+        "branch": "milestone/M25",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 31,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 5139,
+          "cache_creation": 92499,
+          "cache_read": 1959892,
+          "output": 34654
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 5139,
+            "cache_creation": 92499,
+            "cache_read": 1959892,
+            "output": 34654
+          }
+        },
+        "first_turn_context_tokens": 20410,
+        "mean_context_tokens_per_call": 66371,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 1,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "f5fedd22",
+        "date": "2026-07-03",
+        "branch": "phase/P6",
+        "entrypoint": "claude-vscode",
+        "level": "milestone",
+        "level_rule": "first-message",
+        "task_type": "mixed",
+        "task_rule": "signals:planning+closure",
+        "api_calls": 184,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 27619,
+          "cache_creation": 2231141,
+          "cache_read": 51878179,
+          "output": 321879
+        },
+        "by_model": {
+          "claude-opus-4-8": {
+            "input": 27619,
+            "cache_creation": 2231141,
+            "cache_read": 51878179,
+            "output": 321879
+          }
+        },
+        "first_turn_context_tokens": 19000,
+        "mean_context_tokens_per_call": 294222,
+        "artifact_write_signals": {
+          "spec_writes": 6,
+          "starter_writes": 12,
+          "delivery_notice_writes": 0,
+          "closure_writes": 1,
+          "review_decision_writes": 0
+        }
+      },
+      {
+        "session": "f71d128a",
+        "date": "2026-07-13",
+        "branch": "milestone/M26",
+        "entrypoint": "claude-vscode",
+        "level": "epic",
+        "level_rule": "first-message",
+        "task_type": "execution",
+        "task_rule": "role",
+        "api_calls": 40,
+        "sidechain_calls": 0,
+        "tokens": {
+          "input": 74,
+          "cache_creation": 128469,
+          "cache_read": 2077456,
+          "output": 21969
+        },
+        "by_model": {
+          "claude-fable-5": {
+            "input": 68,
+            "cache_creation": 63657,
+            "cache_read": 1891028,
+            "output": 20961
+          },
+          "claude-sonnet-5": {
+            "input": 6,
+            "cache_creation": 64812,
+            "cache_read": 186428,
+            "output": 1008
+          }
+        },
+        "first_turn_context_tokens": 22912,
+        "mean_context_tokens_per_call": 55149,
+        "artifact_write_signals": {
+          "spec_writes": 0,
+          "starter_writes": 0,
+          "delivery_notice_writes": 2,
+          "closure_writes": 0,
+          "review_decision_writes": 0
+        }
+      }
+    ],
+    "matrix_level_x_task": {
+      "phase": {
+        "mixed": {
+          "sessions": 5,
+          "api_calls": 701,
+          "input": 54670,
+          "cache_creation": 6258389,
+          "cache_read": 114687143,
+          "output": 878543
+        },
+        "planning": {
+          "sessions": 1,
+          "api_calls": 15,
+          "input": 28,
+          "cache_creation": 79902,
+          "cache_read": 959048,
+          "output": 25509
+        }
+      },
+      "epic": {
+        "execution": {
+          "sessions": 38,
+          "api_calls": 1896,
+          "input": 151201,
+          "cache_creation": 5624657,
+          "cache_read": 173186511,
+          "output": 1535241
+        },
+        "mixed": {
+          "sessions": 1,
+          "api_calls": 226,
+          "input": 11364,
+          "cache_creation": 705398,
+          "cache_read": 45790814,
+          "output": 168210
+        }
+      },
+      "milestone": {
+        "planning": {
+          "sessions": 2,
+          "api_calls": 145,
+          "input": 289,
+          "cache_creation": 470465,
+          "cache_read": 25042834,
+          "output": 130933
+        },
+        "review": {
+          "sessions": 1,
+          "api_calls": 35,
+          "input": 5513,
+          "cache_creation": 134344,
+          "cache_read": 2914804,
+          "output": 57137
+        },
+        "mixed": {
+          "sessions": 13,
+          "api_calls": 1379,
+          "input": 112652,
+          "cache_creation": 8950883,
+          "cache_read": 244709574,
+          "output": 1719969
+        },
+        "unattributed": {
+          "sessions": 1,
+          "api_calls": 27,
+          "input": 4826,
+          "cache_creation": 336824,
+          "cache_read": 1131497,
+          "output": 53249
+        }
+      },
+      "hq": {
+        "planning": {
+          "sessions": 3,
+          "api_calls": 177,
+          "input": 5539,
+          "cache_creation": 1936250,
+          "cache_read": 24488182,
+          "output": 235181
+        },
+        "mixed": {
+          "sessions": 1,
+          "api_calls": 107,
+          "input": 139,
+          "cache_creation": 1174201,
+          "cache_read": 9099456,
+          "output": 100446
+        }
+      },
+      "unattributed": {
+        "mixed": {
+          "sessions": 1,
+          "api_calls": 326,
+          "input": 2797,
+          "cache_creation": 2823652,
+          "cache_read": 31883177,
+          "output": 246395
+        }
+      },
+      "creation": {
+        "unattributed": {
+          "sessions": 5,
+          "api_calls": 267,
+          "input": 16952,
+          "cache_creation": 3920605,
+          "cache_read": 32100014,
+          "output": 438406
+        }
+      }
+    },
+    "by_model": {
+      "claude-fable-5": {
+        "input": 25439,
+        "cache_creation": 2713397,
+        "cache_read": 51945538,
+        "output": 604170
+      },
+      "claude-sonnet-5": {
+        "input": 20982,
+        "cache_creation": 7243453,
+        "cache_read": 314801207,
+        "output": 1560981
+      },
+      "claude-opus-4-8": {
+        "input": 318556,
+        "cache_creation": 16298848,
+        "cache_read": 270618587,
+        "output": 2812338
+      },
+      "claude-sonnet-4-6": {
+        "input": 993,
+        "cache_creation": 6159872,
+        "cache_read": 68627722,
+        "output": 611730
+      }
+    },
+    "first_turn_context_median_by_level": {
+      "creation": 29749,
+      "hq": 23051,
+      "phase": 22228,
+      "milestone": 19356,
+      "epic": 20966
+    },
+    "mean_context_per_call_median_by_level": {
+      "creation": 102515,
+      "hq": 101163,
+      "phase": 169003,
+      "milestone": 129135,
+      "epic": 76135
+    }
+  },
+  "corpus_overhead_proxy": {
+    "files": {
+      "PSG (PROJECT-SYSTEM-GUIDELINES.md)": 10443,
+      "AOG (AI-OPERATING-GUIDELINES.md)": 12080,
+      "yml spec (ai-project-yml-spec.md)": 7140,
+      "generic epic starter (governance/EPIC-EXECUTION-CHAT-STARTER.md)": 859,
+      "P9 phase starter": 2687,
+      "P9 phase spec": 5268,
+      "M30 milestone starter": 3593,
+      "M30 milestone spec": 5230,
+      "E30.1 epic starter": 2997,
+      "E30.1 epic spec": 3816
+    },
+    "directories": {
+      "governance/ total (*.md recursive)": {
+        "tokens": 157287,
+        "files": 69
+      },
+      "governance/templates": {
+        "tokens": 34030,
+        "files": 25
+      },
+      "governance/systems": {
+        "tokens": 33470,
+        "files": 13
+      }
+    },
+    "level_packs": {
+      "phase": {
+        "tokens": 30478,
+        "components": {
+          "P9 phase starter": 2687,
+          "P9 phase spec": 5268,
+          "PSG (PROJECT-SYSTEM-GUIDELINES.md)": 10443,
+          "AOG (AI-OPERATING-GUIDELINES.md)": 12080
+        }
+      },
+      "milestone": {
+        "tokens": 36614,
+        "components": {
+          "M30 milestone starter": 3593,
+          "M30 milestone spec": 5230,
+          "P9 phase spec": 5268,
+          "PSG (PROJECT-SYSTEM-GUIDELINES.md)": 10443,
+          "AOG (AI-OPERATING-GUIDELINES.md)": 12080
+        }
+      },
+      "epic": {
+        "tokens": 29336,
+        "components": {
+          "E30.1 epic starter": 2997,
+          "E30.1 epic spec": 3816,
+          "PSG (PROJECT-SYSTEM-GUIDELINES.md)": 10443,
+          "AOG (AI-OPERATING-GUIDELINES.md)": 12080
+        }
+      }
+    }
+  },
+  "local_runs": [
+    {
+      "run": "P7-M26-E26.3-PROVE",
+      "model": "qwen2.5-coder:14b",
+      "spend_kind": "local",
+      "output_tokens": 404,
+      "prompt_tokens": null,
+      "context_md_tokens_proxy": 671,
+      "duration_ms": 20595
+    }
+  ],
+  "gap_records": [
+    {
+      "id": "G1",
+      "cells": [
+        [
+          "epic",
+          "planning"
+        ],
+        [
+          "epic",
+          "review"
+        ]
+      ],
+      "status": "structural",
+      "record": "Epic planning and epic review are performed inside the parent chats (Milestone/Phase), never in a standalone epic-level session \u2014 no such session type exists to measure. Their spend is contained in the milestone/phase planning, review, and mixed cells."
+    },
+    {
+      "id": "G2",
+      "cells": [
+        [
+          "epic",
+          "closure"
+        ]
+      ],
+      "status": "gap",
+      "record": "Epic closure (Delivery Notice authoring) happens inside the epic execution session. The mechanism attributes whole sessions and does not segment spend within a session, so the closure share is bundled into epic x execution and not separately measurable."
+    },
+    {
+      "id": "G3",
+      "cells": [
+        [
+          "milestone",
+          "execution"
+        ],
+        [
+          "phase",
+          "execution"
+        ],
+        [
+          "hq",
+          "execution"
+        ],
+        [
+          "creation",
+          "execution"
+        ]
+      ],
+      "status": "structural",
+      "record": "Only Epic chats execute; Milestone/Phase/HQ/Creation delegate execution downward. These cells are structurally empty, not measurement holes."
+    },
+    {
+      "id": "G4",
+      "cells": [
+        [
+          "milestone",
+          "closure"
+        ],
+        [
+          "phase",
+          "review"
+        ],
+        [
+          "phase",
+          "closure"
+        ]
+      ],
+      "status": "gap",
+      "record": "Milestone/phase review and closure activity is embedded in long mixed-purpose sessions (see the mixed bucket) and cannot be separated per-message by this mechanism. Whole-session totals for those sessions are reported in the mixed bucket; the per-task split is a gap."
+    },
+    {
+      "id": "G5",
+      "cells": [
+        [
+          "hq",
+          "review"
+        ],
+        [
+          "hq",
+          "closure"
+        ]
+      ],
+      "status": "gap",
+      "record": "HQ work (scoping, digests, coordination, acceptance) does not map one-to-one onto the four task types; sessions with pure planning signals are measured, the remainder are mixed or signal-free. HQ level totals are measured; these per-task cells are gaps."
+    },
+    {
+      "id": "G6",
+      "cells": [
+        [
+          "creation",
+          "planning"
+        ],
+        [
+          "creation",
+          "review"
+        ],
+        [
+          "creation",
+          "closure"
+        ]
+      ],
+      "status": "gap",
+      "record": "Creation Chat sessions (seed-booted) produce artifacts in-conversation and write no governance files to the repo, so the task-type signals cannot see their work. Creation level totals are measured (see per-session rows); the per-task split is a gap."
+    },
+    {
+      "id": "G7",
+      "cells": [],
+      "status": "gap",
+      "record": "Mixed-purpose sessions (level attributed, several task types in one session) are reported as their own bucket with full totals; their internal per-task split is a recorded gap, not estimated."
+    },
+    {
+      "id": "G8",
+      "cells": [],
+      "status": "gap",
+      "record": "Coverage is limited to this machine's harness directory. Sessions on other surfaces or machines (e.g. any claude.ai web chats for Creation/HQ) and any deleted local sessions are invisible to the mechanism and unmeasured."
+    },
+    {
+      "id": "G9",
+      "cells": [],
+      "status": "gap",
+      "record": "Local (ollama) prompt/input tokens: the runner transcript records per-turn output eval_count only; prompt_eval_count is not persisted and run-metadata.json carries no token counts (unchanged by this epic). Local output tokens are measured; local input tokens are a gap (context.md size is proxy-tokenized as the context figure)."
+    },
+    {
+      "id": "G10",
+      "cells": [],
+      "status": "limitation",
+      "record": "Direction B corpus numbers use tiktoken o200k_base as a proxy for the Claude tokenizer (billed counts). Treat them with an error bar of roughly +/-10-15% typical for English markdown; they are suitable for proportions and ordering, not exact billing. Paid-side first-turn and per-call context medians ARE provider-billed numbers, but include the harness system prompt and memory, not governance corpus alone."
+    }
+  ]
+}
