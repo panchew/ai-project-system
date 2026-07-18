@@ -4,7 +4,7 @@ name: Context Handling and Token Efficiency
 status: active
 start_date: 2026-07-17
 planned_end_date: 2026-08-07
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Phase P9: Context Handling and Token Efficiency
@@ -198,6 +198,18 @@ evidence-grounded frontier-vs-local policy plus a refreshed `models:` mapping.
   frontier-vs-local policy, and the `.ai-project.yml` `models:` refresh.
 - **E30.3 — Evidence-driven context-load reduction.** Conditional in extent — sized by what
   E30.2's evidence shows about governance-corpus overhead (scoping/retrieval/caching).
+- **E30.4 — Reference-don't-display reconciliation (SN-23, added v1.1.0).** Reconcile the
+  governance-mandated artifact-echo surfaces to reference-first handoff: (a) AOG §3.1.1 —
+  parent emits starter path + one-line summary instead of the full fenced code block when the
+  starter is a committed file (starter templates' copy-paste boilerplate updated to match);
+  (b) `artifact-communication-protocol.md` §Integration with Manual Mode — paste replaced by
+  reference handoff (IDE-attach, or path + frontmatter summary), **paste retained as the
+  documented fallback** for genuinely repo-less setups (platform agnosticism preserved, both
+  SN-23 decisions binding); (c) a rule that producing chats do not echo bodies of artifacts
+  they have written to file, and consumers read selectively. Any reduction claim carries
+  before/after evidence via E30.1's mechanism. **Complementary to E30.3, not a resize of it**
+  — E30.3's pack-slice boundary stands; E30.4 owns the AOG/protocol edits E30.3's Non-Goals
+  forbid it. Sequenced after E30.3.
 
 **Sequencing:** M30 first — M31's paid-vs-local decision logic consumes its policy output
 (evidence before policy is CFO-ratified, not a preference).
@@ -271,6 +283,10 @@ The CFO (Layer 8) will accept P9 complete when:
   hierarchy placement is recorded, and the System Chat re-instantiation seed is usable daily
 - [ ] Grep-level checks show no remaining stale opt-out prose (P8-GH-1) and no remaining
   "Phase Delivery Notice" phrasing in templates/living docs (P8-GH-3)
+- [ ] The three SN-23 echo surfaces (AOG §3.1.1 + starter templates, protocol §Manual Mode,
+  EPIC-EXECUTION-CHAT-STARTER paste line) mandate reference-first handoff with paste documented
+  as repo-less fallback; no governance surface still mandates full-body echo of a committed
+  artifact (E30.4)
 - [ ] The full suite is green at delivery (307 baseline, no regressions, no skips introduced to
   route around changes)
 - [ ] The phase closure declaration restates P8-GH-2 (deferred, with trigger) and the ComfyUI
@@ -316,6 +332,10 @@ The CFO (Layer 8) will accept P9 complete when:
 - **SN-21:** `.ai-project/artifacts/steering-notes/2026-07-16__creation-chat__steering-note__system-hq-adoption.md`
   — system-level participant field adoption, schemas, authority boundary, canonize-vs-observe
   triage (triage resolved by this spec: canonize, in M32)
+- **SN-23:** `.ai-project/artifacts/steering-notes/2026-07-18__creation-chat__steering-note__reference-dont-display.md`
+  — governance-mandated artifact echo obsolete vs committed files + IDE-attach; reference-first
+  handoff ratified, paste-as-fallback preserved (triage resolved by this spec v1.1.0: M30
+  follow-up epic E30.4)
 
 ### Key Reference Documents
 - `.ai-project/artifacts/progress-digests/2026-07-17__hq__progress-digest__v1.1.md` — the
@@ -355,6 +375,7 @@ The CFO (Layer 8) will accept P9 complete when:
 | P8-GH-3 (vestigial "Phase Delivery Notice", Low) | Into P9; P9 planning docs written without the phrase | M32 (E32.3) |
 | P8-GH-2 (machine-local hosting, Low) | **Deferred, not scoped** — revisit only on its recorded trigger | Out of Scope |
 | ComfyUI investigation (SN-20 CO-3 resolution) | Non-blocking CFO-side track | Out of Scope |
+| SN-23 reference-don't-display (High, triaged 2026-07-18) | **Into M30 as follow-up epic E30.4** (not M31) — same spine, evidence bound to E30.1's mechanism which lives in M30; M31 stays mode/guardrail design; landing now stops the echo cost before M31/M32 sessions start. G7 mixed-session recommendations remain M31 input, unchanged | M30 (E30.4) |
 
 ---
 
@@ -362,4 +383,5 @@ The CFO (Layer 8) will accept P9 complete when:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-07-18 | Mid-flight amendment (HQ, per SN-23 triage): E30.4 "reference-don't-display reconciliation" added to M30 as a follow-up epic after E30.3 — reference-first artifact handoff across AOG §3.1.1/starter templates, protocol §Manual Mode, and EPIC-EXECUTION-CHAT-STARTER; paste preserved as repo-less fallback; before/after evidence via E30.1's mechanism; E30.3 boundary explicitly unchanged. SN-23 added to governing steering notes, triage table, and acceptance criteria. |
 | 1.0.0 | 2026-07-17 | Initial P9 phase spec. Three milestones (M30 measurement/audit, M31 dual-mode + guardrail, M32 SN-21 canonization + hygiene), ~9 epics. Scoped by SN-22 (spine: context handling / token efficiency); SN-21 triaged canonize-in-P9; P8-GH-1/3 absorbed, P8-GH-2 deferred; ComfyUI track non-blocking. |
