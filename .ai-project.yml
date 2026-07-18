@@ -18,13 +18,20 @@ project:
 # See governance/systems/creation-chat-guide.md (CFO PR Review Gate).
 cfo_review_gate: enabled
 
-# Hybrid model mapping for unattended 24/7 autonomous cluster execution
+# Hybrid model mapping for unattended 24/7 autonomous cluster execution.
+# Evidence-grounded mapping (Epic E30.2, P9-M30) — derived from the measured
+# token-burn dataset, not assumption. Policy + per-key rationale:
+#   .ai-project/artifacts/reference/token-measurement/model-routing-policy.md
+# Audit report + gap records (G1-G12):
+#   .ai-project/artifacts/reference/token-measurement/audit-report.md
+# M31's manual-mode guardrail verifies chats against this block; keep it in
+# sync with the policy (divergence is an error).
 models:
-  hq: remote:gpt-4o
-  phase: remote:claude-3-5-sonnet
-  milestone: remote:claude-3-5-sonnet
+  hq: remote:claude-opus-4-8
+  phase: remote:claude-opus-4-8
+  milestone: remote:claude-opus-4-8
   epic_dev: local:qwen2.5-coder:14b
-  epic_qa: local:qwen2.5-coder:7b
+  epic_qa: local:qwen2.5-coder:14b
 
 # Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
 # This repo is ENABLED (enabled: true) as of Epic E29.2 (P8-M29): the live local
