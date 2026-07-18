@@ -18,6 +18,9 @@ requirement; E30.2's audit input). It contains:
 | `README.md` | this mechanism doc — design decision, attribution rules, blind spots |
 | `token-burn-dataset.json` | the dataset, machine-readable (E30.2 cites cells from here) |
 | `token-burn-dataset.md` | the same dataset, human-readable, incl. the gap records |
+| `audit-report.md` | E30.2's audit — price-weighted findings over the dataset |
+| `model-routing-policy.md` | E30.2's derived frontier-vs-local policy (`models:` grounding) |
+| `context-scoping.md` | E30.3's per-level context-scoping standard + before/after pack evidence + bounded-scope finding |
 
 The dataset is **generated, not hand-written**: both files are emitted by
 [`bin/measure-token-burn`](../../../../bin/measure-token-burn). The committed copies are a

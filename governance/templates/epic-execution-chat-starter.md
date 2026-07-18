@@ -68,6 +68,12 @@ You are operating under the AI Project System governance framework.
 - You must stop after PR creation and await HQ authorization for merge
 - Accept/reject decisions are made by HQ Chat (human), not by you
 
+**Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
+- Load at session start: this starter; the Epic spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §11, §11.5, §11.6, §12; AOG preamble+§1, §1A, §2, §3.2, §3.8, §3.10, §4, §5, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
+- Load on trigger (before acting on that situation): PSG §3, §8A, §10, §13D, §14A, §14C, §18; AOG §3.9, §8, §11, §16
+- Do not load: PSG/AOG changelogs, other levels' role or starter-format sections
+- Use targeted section reads; never re-read a whole document to reach one section. PSG and AOG remain fully authoritative — a triggered situation requires its section loaded before acting.
+
 ---
 
 ## Epic Specification
@@ -125,87 +131,24 @@ New projects must reverse-engineer spec structure from existing files, creating 
 
 ---
 
-## Deliverables
+## Spec References (load-one-reference-the-other)
 
-You must produce:
+The Epic spec is the single authoritative copy of this Epic's **Deliverables,
+Definition of Done, Acceptance Criteria, and Technical Constraints**. Load them
+from the spec sections named below — this starter does not restate them
+(per-level context-scoping standard, P9-M30-E30.3).
 
-1. [✅/❌] **[Deliverable 1]** (`<file-path>`)
-2. [✅/❌] **[Deliverable 2]** (`<file-path>`)
-3. [✅/❌] **[Deliverable 3]** (`<file-path>`)
-4. [✅/❌] **[Deliverable 4]** (`<file-path>`)
-5. [✅/❌] **Delivery Notice** (`<file-path>`)
+- **Deliverables:** Epic spec §Deliverables (includes the Delivery Notice at `<delivery-notice-path>`)
+- **Definition of Done:** Epic spec §Definition of Done — plus, always: Delivery Notice produced and committed; all changes committed to `epic/<E#.#>`; PR opened to `milestone/<M#>`
+- **Acceptance Criteria:** Epic spec §Acceptance Criteria (verified during review, not by you)
+- **Technical Constraints:** Epic spec §Technical Constraints (in-scope surfaces and do-not-touch list)
 
-<!-- 
-  List all deliverables from Epic spec.
-  
-  Use checkboxes to track progress during execution.
-  
-  Example:
-  1. ✅ **Phase spec template** (`governance/templates/phase-spec.md`)
-  2. ✅ **Milestone spec template** (`governance/templates/milestone-spec.md`)
-  3. ✅ **Epic spec template** (`governance/templates/epic-spec.md`)
-  4. ✅ **Delivery Notice** (`docs/phases/P1__System_Foundation_and_Adoption/P1-M4-E4.1__completion__templates-and-scaffolding.md`)
--->
-
----
-
-## Definition of Done
-
-- [ ] [DoD item 1 from Epic spec]
-- [ ] [DoD item 2 from Epic spec]
-- [ ] [DoD item 3 from Epic spec]
-- [ ] [DoD item 4 from Epic spec]
-- [ ] [DoD item 5 from Epic spec]
-- [ ] Delivery Notice produced and committed
-- [ ] All changes committed to `epic/<E#.#>` branch
-- [ ] Pull request opened to `milestone/<M#>` branch
-
-<!-- 
-  Copy Definition of Done items EXACTLY from Epic spec.
-  
-  Use this checklist to track execution progress.
--->
-
----
-
-## Acceptance Criteria
-
-- [ ] [Acceptance criterion 1 from Epic spec]
-- [ ] [Acceptance criterion 2 from Epic spec]
-- [ ] [Acceptance criterion 3 from Epic spec]
-- [ ] [Acceptance criterion 4 from Epic spec]
-
-<!-- 
-  Copy Acceptance Criteria items EXACTLY from Epic spec.
-  
-  These will be verified during human review (not by Coding Agent).
--->
-
----
-
-## Technical Constraints
-
-<!-- 
-  Summarize key technical constraints from Epic spec.
-  
-  Examples:
-  - **Format:** Markdown with YAML front-matter
-  - **Technology:** No external dependencies
-  - **Performance:** Must complete in under 5 seconds
-  - **Compatibility:** Must work with existing specs
--->
-
-- **Format:** [Required format]
-- **Technology:** [Tech stack or tools]
-- **Performance:** [Performance requirements]
-- **Compatibility:** [Compatibility requirements]
-
-<!-- Example:
-- **Format:** Markdown with YAML front-matter
-- **Comments:** Use HTML comment syntax `<!-- comment -->` for inline guidance
-- **Examples:** Must be placeholder/generic, not real project data
-- **Governance:** Must not contradict or modify governance documents
-- **Location:** All templates in `governance/templates/`
+<!--
+  Do NOT copy the spec's Deliverables/DoD/Acceptance-Criteria/Technical-Constraints
+  bodies into this starter — reference the spec's section names (adding the
+  epic-specific paths above). Only starter-specific additions (binding constraints
+  the spec does not carry, e.g. sequencing decided after the spec was written)
+  may be stated here, marked as additions.
 -->
 
 ---
@@ -278,53 +221,9 @@ For structural reference, examine:
 
 ### Front-Matter Fields Reference
 
-<!-- 
-  Provide front-matter schema for relevant spec types.
-  
-  Include examples showing required fields and format.
--->
-
-**Phase spec:**
-```yaml
----
-project: <project-name>
-phase: <P#>
-milestone: null
-epic: null
-type: phase
-status: <planned|active|completed>
-last_updated: <YYYY-MM-DD>
----
-```
-
-**Milestone spec:**
-```yaml
----
-project: <project-name>
-phase: <P#>
-milestone: <M#>
-type: milestone
-status: <planned|active|completed>
-last_updated: <YYYY-MM-DD>
----
-```
-
-**Epic spec:**
-```yaml
----
-project: <project-name>
-phase: <P#>
-milestone: <M#>
-epic: <E#.#>
-type: spec
-status: <planned|active|completed>
-last_updated: <YYYY-MM-DD>
----
-```
-
-<!-- 
-  Include any additional reference materials needed for execution.
--->
+Front-matter schemas live in the committed templates — reference, don't restate:
+`governance/templates/epic-spec.md` (and `milestone-spec.md` / `phase-spec.md` if
+the Epic touches those document types). See PSG §5 for the front-matter rules.
 
 ---
 
@@ -343,65 +242,16 @@ last_updated: <YYYY-MM-DD>
 
 ---
 
-## Epic Delivery Notice Template
+## Epic Delivery Notice
 
-When you complete execution, produce this artifact:
+When you complete execution, produce the Delivery Notice at:
 
 **File:** `docs/phases/<P#>__<Phase_Folder>/<P#>-<M#>-<E#.#>__delivery-notice.md`
 
-```markdown
----
-type: delivery-notice
-epic: <E#.#>
-status: delivered
-delivery_date: <YYYY-MM-DD>
----
-
-# Epic Delivery Notice — <E#.#>
-
-**Epic:** <E#.#> — <Epic Name>  
-**Status:** Execution Complete, Delivered to HQ for Review  
-**Delivery Date:** <YYYY-MM-DD>
-
-## Execution Summary
-
-[Brief summary of what was completed]
-
-## Deliverables Completed
-
-- [ ] [Deliverable 1]
-- [ ] [Deliverable 2]
-- [ ] [Deliverable 3]
-- [ ] [Delivery Notice]
-
-## Definition of Done Status
-
-[List each DoD item and confirm completion]
-
-## Branch and PR Information
-
-- **Branch:** `epic/<E#.#>`
-- **PR:** [Link to PR]
-- **Target:** `milestone/<M#>`
-- **Commits:** [Number] commits
-- **Files Changed:** [Number] files
-
-## Notes
-
-[Any deviations, challenges, or follow-up items]
-
-## Awaiting HQ Review
-
-This Epic is delivered and awaiting:
-1. Human Review
-2. Epic Review Seal
-3. HQ acceptance decision
-4. HQ merge authorization
-
----
-
-**Coding Agent stopped per AI-OPERATING-GUIDELINES.md canonical happy path.**
-```
+Use the committed template `governance/templates/delivery-notice.md` (reference,
+don't restate — its structure is authoritative; PSG §12 defines the content
+requirements). Confirm every spec DoD item in it, including the
+extent-vs-spec and claims-vs-evidence checks where the spec records them.
 
 ---
 
