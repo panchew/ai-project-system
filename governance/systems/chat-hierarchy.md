@@ -142,6 +142,87 @@ chat instance per discrete task rather than continuing one instance across unrel
 tasks. This recommendation applies uniformly to manual and agentic instances alike; it is
 not gated by, and does not affect, any instance's Execution Mode declaration.
 
+### Manual Chat Model Verification (P9-M31-E31.3)
+
+*(Added P9-M31-E31.3, 2026-07-19 — the manual-mode counterpart to the Execution Mode
+declaration above and to E31.2's agentic decision logic: neither gives a manual chat any
+way to know, or refuse on, a model mismatch. This section closes that gap.)*
+
+This section defines, for every manually-startable chat level, which model it is expected
+to run on, how it checks its own identity against that expectation, and what it must do on
+a mismatch. It governs **manual** instances only — agentic dispatch's model selection is
+E31.2's surface, untouched here.
+
+#### The mapping
+
+| `.ai-project.yml` key | Value | Level | Basis |
+|---|---|---|---|
+| `creation` | `remote:claude-opus-4-8` | Creation | New key (this Epic). Policy row P1 (`model-routing-policy.md`): paid frontier, manual. |
+| `hq` | `remote:claude-opus-4-8` | HQ | Existing key (P9-M30-E30.2). Policy row P2. |
+| `phase` | `remote:claude-opus-4-8` | Phase | Existing key. Policy row P3. |
+| `milestone` | `remote:claude-opus-4-8` | Milestone | Existing key. Policy row P4. |
+| `epic_manual` | `remote:claude-opus-4-8` | Epic (manual) | New key (this Epic), distinct from the `epic_dev`/`epic_qa` agentic-dispatch lanes those keys serve. Policy row P5's general "epic × execution: paid frontier" default — P6/P7's local-offload values apply only when the agentic Dev/QA dispatch lanes are actually in use, which a manual Epic chat, by definition, is not. |
+
+(This table records all five manual-verification keys for completeness; `tests/test_model_config.py`'s divergence guard applies it only to the two keys with no pre-existing coverage — `creation` and `epic_manual` — since `hq`/`phase`/`milestone` are already fully guarded via `model-routing-policy.md`'s own mapping table, unchanged by this Epic.)
+
+`creation` and `epic_manual` are new keys, added by this Epic because the pre-existing
+five-key `models:` set (`hq`, `phase`, `milestone`, `epic_dev`, `epic_qa`) was built for
+agentic dispatch and does not reach Creation (which never dispatches) or a manually-run
+Epic chat (which is neither the `epic_dev` nor the `epic_qa` agentic lane). See
+`governance/ai-project-yml-spec.md` §3.4 for the field definitions and
+`.ai-project.yml`'s `models:` block for this repository's live values. Both new keys are
+**consumed from, not re-derived against,** `model-routing-policy.md`'s policy rows — this
+section cites those rows' reasoning; it does not add new rows to that file, which is out
+of scope for this Epic.
+
+#### Self-model verification method
+
+The only observed mechanism by which a chat can know what model it is currently running
+on is the **harness's own self-report**: this repository's harness (Claude Code) injects
+an `# Environment` block into every session's system context naming the running model
+(e.g. *"You are powered by the model named Sonnet 5. The exact model ID is
+claude-sonnet-5."*). A manual chat verifies itself by reading that self-report and
+comparing it to the level's expected value above.
+
+**Known limit, stated plainly:** this is a harness-provided self-report, not an
+independently, cryptographically verifiable fact. The chat has no mechanism to confirm the
+string the harness gave it is accurate — it can only act honestly on what it was told. No
+stronger claim is made here.
+
+#### Absent block, or absent key
+
+A freshly initialized project's `.ai-project.yml` has no `models:` block at all
+(`bin/ai-project-init` writes only `project:` and `governance:`); an existing project's
+`models:` block may predate this Epic and lack the `creation` or `epic_manual` keys. Both
+cases are the same condition: **there is no configured expectation for this level to
+verify against.** The documented behavior is an explicit **permissive default**: the chat
+proceeds, but must state plainly, in its first substantive response, that no
+model-mapping expectation is configured for its level and no verification was performed.
+This is deliberately different from refusing outright on an absent block — a fresh project
+with no `models:` block must still be able to open its first chat — and deliberately
+different from silence — an unstated skip would be as dishonest as a false refusal claim.
+"Cannot verify, therefore refuse" was the other legitimate option considered; this
+document's answer is the permissive default, stated explicitly, not silently assumed.
+
+#### Mismatch: refuse, unconditionally
+
+If the harness-reported model and the configured expected value for this level are both
+present and disagree, the chat **MUST stop** before doing any further planning, review, or
+execution work in that session, and state the mismatch plainly (self-reported model vs.
+configured value). This is a refusal, not an advisory — no continuation, no "proceeding
+with caution," no deferring the check to later in the session. A mismatch never resolves
+to switching to agentic mode (no agentic default — this section does not touch Execution
+Mode). Policy↔block divergence (the recorded policy disagreeing with `.ai-project.yml`
+itself, independent of any chat's own model) is likewise treated as an error, consistent
+with E31.2's `tests/test_model_config.py` guard.
+
+**What "refuse" technically means here:** there is no code process wrapping a manual chat
+session the way `bin/ai-project-orchestrator` wraps agentic dispatch. This refusal is a
+**documented instruction the agent must follow**, enforced the same way every other
+AOG/PSG "MUST" in this framework is enforced — by the agent's compliance with governing
+documentation — not a technical impossibility-to-proceed. Stating this honestly is itself
+part of what this section requires of anything built on top of it.
+
 ---
 
 ## Level 0: Creation Chat (Project Bootstrap)

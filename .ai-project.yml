@@ -26,12 +26,17 @@ cfo_review_gate: enabled
 #   .ai-project/artifacts/reference/token-measurement/audit-report.md
 # M31's manual-mode guardrail verifies chats against this block; keep it in
 # sync with the policy (divergence is an error).
+# `creation` and `epic_manual` (added E31.3, P9-M31) are manual-chat-only keys with no
+# agentic dispatch surface — see governance/systems/chat-hierarchy.md "Manual Chat Model
+# Verification" for the mapping and governance/ai-project-yml-spec.md §3.4 for the schema.
 models:
   hq: remote:claude-opus-4-8
   phase: remote:claude-opus-4-8
   milestone: remote:claude-opus-4-8
   epic_dev: local:qwen2.5-coder:14b
   epic_qa: local:qwen2.5-coder:14b
+  creation: remote:claude-opus-4-8
+  epic_manual: remote:claude-opus-4-8
 
 # Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
 # This repo is ENABLED (enabled: true) as of Epic E29.2 (P8-M29): the live local

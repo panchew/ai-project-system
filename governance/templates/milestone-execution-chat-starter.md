@@ -124,6 +124,16 @@ The Milestone spec MUST be **git-tracked on the expected branch** at the path sp
 
 **If the Milestone spec is incomplete or ambiguous:** Report the issue to the parent chat. Do NOT assume intent or fill gaps without parent chat confirmation.
 
+**Model verification (P9-M31-E31.3 — required when this instance is manual, i.e. no
+`Execution Mode` field or `Execution Mode: manual` above):** read your own harness-reported
+model identity (the `# Environment` block or equivalent self-report), and compare it to
+`.ai-project.yml`'s `models.milestone` value — see `governance/systems/chat-hierarchy.md`
+"Manual Chat Model Verification" for the mapping, the self-report method's known limits,
+and the absent-block/absent-key permissive-default behavior. **If both are present and
+disagree, STOP — do not proceed with any planning or review work.** State the mismatch
+plainly and wait for the parent chat/human. This is a documented instruction the agent
+must follow, not a technical impossibility-to-proceed.
+
 ---
 
 ## Output Requirements
