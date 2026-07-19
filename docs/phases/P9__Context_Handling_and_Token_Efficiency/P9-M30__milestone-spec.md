@@ -8,6 +8,7 @@ epics:
   - E30.1
   - E30.2
   - E30.3
+  - E30.4
 is_final: false
 ---
 
@@ -155,6 +156,7 @@ reduction work may be scoped from the prior 24K/157K estimates alone.
 - **E30.1 — Token-burn instrumentation**
 - **E30.2 — Audit report + policy derivation**
 - **E30.3 — Evidence-driven context-load reduction**
+- **E30.4 — Reference-don't-display reconciliation (SN-23; added mid-flight, amendment A1)**
 
 > **Artifact scope (adjacency).** The Phase Chat produces only this Milestone spec and the
 > Milestone Execution Chat Starter. The **Milestone Chat** owns final epic planning and
@@ -293,6 +295,32 @@ E30.2 where no file contention exists, but the sizing decision cannot precede th
 
 ---
 
+### E30.4 — Reference-don't-display reconciliation (SN-23; added mid-flight, amendment A1)
+
+**Source:** SN-23
+(`.ai-project/artifacts/steering-notes/2026-07-18__creation-chat__steering-note__reference-dont-display.md`,
+master `a7a153c`); HQ triage via P9 phase spec **v1.1.0** (`e490394`) — added to M30 as a
+follow-up epic under the mid-flight amendment protocol. The phase spec v1.1.0 §Indicative
+Epics E30.4 entry is the authoritative scope statement; this section records it in the
+milestone's own governing spec.
+
+**Scope (per phase spec v1.1.0, both SN-23 decisions CFO-ratified and binding):**
+reconcile the governance-mandated artifact-echo surfaces to reference-first handoff —
+(a) AOG §3.1.1: parent emits starter path + one-line summary instead of the full fenced
+block when the starter is a committed file, starter templates updated to match;
+(b) `artifact-communication-protocol.md` §Integration with Manual Mode: paste replaced by
+reference handoff, **paste retained as the documented repo-less fallback** (platform
+agnosticism preserved); (c) a producer no-echo / consumer selective-read rule. Any
+reduction claim carries before/after evidence via E30.1's mechanism.
+
+**Boundary:** complementary to E30.3, **not a resize of it** — E30.3's pack-slice boundary
+stands; E30.4 owns the AOG/protocol edits E30.3's Non-Goals forbid it.
+
+**Dependency:** sequenced after E30.3 (its template edits must not be clobbered; rebase
+constraint).
+
+---
+
 ## Branch Strategy
 
 ```
@@ -335,8 +363,11 @@ via the PSG §5C canonical closure sequence ending in the Phase Closure Declarat
 
 - **E30.1 → E30.2 is a hard dependency:** the report and policy derive from the captured
   dataset (Hard Constraint). No policy drafting before the data exists.
-- **E30.3 depends on E30.1's data** for its sizing decision and is recommended last; its
-  sizing analysis may overlap E30.2 where the Milestone Chat finds no contention.
+- **E30.3 depends on E30.1's data** for its sizing decision and is recommended last among
+  the originally planned three; its sizing analysis may overlap E30.2 where the Milestone
+  Chat finds no contention.
+- **E30.4 runs after E30.3** (amendment A1): it edits governance/protocol surfaces adjacent
+  to E30.3's template changes and must preserve them.
 - **M30 → M31 is binding at phase level:** M31 is not planned until M30's policy output
   exists. This spec's E30.2 is the link — its policy and `models:` refresh are M31's inputs.
 - No dependency on M32 in either direction.
@@ -345,8 +376,9 @@ via the PSG §5C canonical closure sequence ending in the Phase Closure Declarat
 
 ## Definition of Done (Milestone)
 
-- [ ] E30.1, E30.2, and E30.3 each meet their Definition of Done above
-- [ ] All three epic branches merged to `milestone/M30`
+- [ ] E30.1, E30.2, and E30.3 each meet their Definition of Done above; E30.4 meets its
+      DoD per its Epic spec under phase spec v1.1.0 (amendment A1)
+- [ ] All four epic branches merged to `milestone/M30`
 - [ ] Real captured token data is committed, covering the level × task-type matrix with
       governance-corpus overhead separable and all gaps explicit
 - [ ] The audit report, the recorded policy (in its decided home), and the refreshed
@@ -423,3 +455,11 @@ flowchart LR
   Milestone deliveries are accepted by silence; a Review Decision is the exception path only.
   Per SN-19, acceptance and the merge instruction are in-chat acts — no ceremonial artifact.
   The harness enforces explicit human authorization on every merge regardless.
+
+---
+
+## Amendment History
+
+| # | Date | Authority | Change |
+|---|------|-----------|--------|
+| A1 | 2026-07-19 | P9 phase spec v1.1.0 (`e490394`, HQ SN-23 triage, mid-flight amendment protocol) | E30.4 "Reference-don't-display reconciliation" added to the epic list, Epic Detail, sequencing, and Milestone DoD. The milestone executed E30.4 under the phase spec's authority; this amendment reconciles the milestone spec's record (owed per the GH-8 precedent, flagged in the M30 Milestone Closure Declaration, closed at consolidation). |
