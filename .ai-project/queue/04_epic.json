@@ -1,0 +1,8 @@
+{
+  "epic_id": "P9-M31-E31.2-PROVE",
+  "epic_spec_path": "docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2-PROVE__spec__row-p5-run-evidence.md",
+  "sandbox_env": "alpine:latest",
+  "dev_command": "./bin/run-dev-agent",
+  "validation_command": "test \"$(cat docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2-PROVE__output.md)\" = \"row-p5-run-evidence-E31.2: local lane dispatch verified\"",
+  "run_dev_initially": true
+}

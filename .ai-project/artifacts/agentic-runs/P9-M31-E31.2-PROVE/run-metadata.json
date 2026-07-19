@@ -1,0 +1,16 @@
+{
+  "epic_id": "P9-M31-E31.2-PROVE",
+  "model": "qwen2.5-coder:14b",
+  "runner": "/tmp/claude-1000/-home-panchew-soft-dev-ai-project-system/dfee1a5a-35cc-4c8f-841f-b2f1ece36d2f/scratchpad/local-agent-runner-wrapper.sh",
+  "endpoint": "runner-default",
+  "exit_code": 2,
+  "started_utc": "2026-07-19T18:03:36.393635+00:00",
+  "duration_ms": 21978,
+  "transcript": ".ai-project/artifacts/agentic-runs/P9-M31-E31.2-PROVE/transcript.json",
+  "context": ".ai-project/artifacts/agentic-runs/P9-M31-E31.2-PROVE/context.md",
+  "context_sources": [
+    "docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2-PROVE__spec__row-p5-run-evidence.md",
+    "docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2-PROVE__epic-execution-chat-starter.md"
+  ],
+  "tools": ".ai-project/agents/tools.json"
+}
