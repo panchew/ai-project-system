@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.9.0  
-**Effective Date:** 2026-07-13  
+**Version:** 2.10.0  
+**Effective Date:** 2026-07-18  
 **Status:** Current  
 
 ---
@@ -87,46 +87,62 @@ HQ chats:
 
 HQ chats are **authoritative for intent**, not for code.
 
-#### 3.1.1 Epic Execution Chat Starter Format
+#### 3.1.1 Artifact Handoff: Reference-First (Normative)
 
-When HQ Chat produces an Epic Execution Chat Starter, it MUST:
+This section is the single home of the artifact-handoff rule (SN-23; P9-M30-E30.4).
+Every other governance surface that describes handing an artifact between chats cites
+this section — it does not restate the rule.
 
-1. **Present in markdown code block:**
-   - Use four backticks (````) to fence the code block
-   - Ensures code blocks inside chat starter (triple backticks) are properly escaped
-   
-2. **Include filename in header:**
-   - Format: `name=<epic-id>-epic-execution-chat-starter.md`
-   - Example: `name=E5.1-epic-execution-chat-starter.md`
-   - Helps users identify and save the file if needed
+**The rule:** an artifact that exists as a committed, git-tracked file is passed
+**by reference, never by paste or full-body display.** In IDE contexts, the
+canonical manual-mode handoff is **attach + one line of intent**: open the artifact
+file so the harness attaches it, and state intent in one line. Where attach is
+unavailable, emit the canonical reference line instead.
 
-3. **Use markdown language identifier:**
-   - Specify `markdown` as language for proper syntax highlighting
-   - Full header format: ````markdown name=<epic-id>-epic-execution-chat-starter.md`
+**Canonical reference format** (defined once, here; every surface cites it):
 
-4. **Provide brief instruction:**
-   - After code block, include: "Copy the entire chat starter above and paste into your Coding Agent chat to begin execution."
-   - Clear call-to-action for user
-
-**Rationale:** Code blocks provide clear visual boundaries, enable one-click copying, and prevent incomplete content selection. This significantly improves user experience when starting Epic execution.
-
-**Example:**
-
-`````markdown name=E5.1-epic-execution-chat-starter.md
-## EPIC EXECUTION CHAT STARTER
-
-### MANDATORY CONTEXT PACKET
-
-**Project:** ai-project-system
-[... full chat starter content ...]
 ```
-`````
+<Artifact type + id> — `<repo-relative path>` — <status, one clause>
+```
 
-Copy the entire chat starter above and paste into your Coding Agent chat to begin execution.
+Example: Epic E30.4 Delivery Notice —
+`docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.4__delivery-notice.md`
+— delivered, suite green.
+
+**Producer half (no-echo):** a chat that has written an artifact to file MUST NOT
+display that artifact's body in chat output — neither when producing it nor when
+handing it off. The committed file is the record; the chat emits the reference line
+(or attaches the file). This applies to Chat Starters, Delivery Notices, specs, and
+every other committed artifact, at every chat level.
+
+**Consumer half (selective read):** the receiving chat reads the referenced file
+from disk **once, selectively** — for a clean delivery under default-accept
+(PSG §11.6), frontmatter + Summary + DoD/QA confirmation suffices. Reference-first
+does not make ingestion free; it eliminates the duplication (producer echo,
+full-body parent display, second ingestion on paste), not ingestion itself.
+
+**Fallback — repo-less delivery (SN-23 Decision 2, ratified):** when the receiving
+session genuinely cannot read the repository (disconnected or repo-less setups —
+platform agnosticism preserved), the full-body fenced form remains the documented
+transport. In that case the producing chat MUST:
+
+1. **Present in markdown code block:** four backticks (````) to fence, so triple-backtick
+   blocks inside the content stay escaped
+2. **Include filename in header:** `name=<artifact-filename>.md`
+   (e.g. `name=E5.1-epic-execution-chat-starter.md`)
+3. **Use markdown language identifier:** full header form
+   ````markdown name=<artifact-filename>.md`
+4. **Provide brief instruction:** after the code block, "Copy the entire chat starter
+   above and paste into your Coding Agent chat to begin execution."
+
+Paste is the fallback, not the default: use it only when reference handoff is
+impossible, and say so when using it.
 
 **Scope:**
-- **Applies to:** Epic Execution Chat Starters produced by HQ Chat
-- **Does NOT apply to:** Normal HQ responses, Epic specs, Coding Agent outputs, or other governance documents
+- **Applies to:** every handoff of a committed artifact between governance chats
+  (starters, Delivery Notices, specs, closure declarations), produced by any level
+- **Does NOT apply to:** normal chat responses, uncommitted working notes, or
+  content that has no file on disk (which has nothing to reference)
 
 ---
 
@@ -1023,6 +1039,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.10.0 | 2026-07-18 | **Reference-first artifact handoff (SN-23).** Rewrote §3.1.1 from "Epic Execution Chat Starter Format" into the generalized normative artifact-handoff rule: a committed, git-tracked artifact is passed **by reference, never by paste or full-body display** (IDE attach + one-line intent, or the canonical reference line defined in-section); producer no-echo half (never display a body you wrote to file) + consumer selective-read half (read once, selectively; frontmatter + Summary + DoD/QA suffices under PSG §11.6). The four-backtick fenced full-body form is **retained, demoted to the documented repo-less fallback** (SN-23 Decision 2 — platform agnosticism preserved; paste is not deleted). All other mandating surfaces (three `governance/templates/` starters, `governance/systems/epic-execution-chat-starter.md`, `governance/systems/artifact-communication-protocol.md` §Manual Mode, `governance/EPIC-EXECUTION-CHAT-STARTER.md`, `governance/agents/governance.agent.md`) now cite §3.1.1 instead of restating the paste mandate. Evidence: `.ai-project/artifacts/reference/token-measurement/echo-cost-note.md` (E30.1 mechanism, honest bound stated). Per SN-23 (CFO-ratified 2026-07-18); E30.4 (P9-M30). |
 | 2.9.0 | 2026-07-13 | **Retired the Delivery Authorization ceremonial block (SN-19).** Reworded §1A step 6, the line-716 "Delivery Notice... prerequisite" bullet, and the line-756 HQ-enforcement bullet from "issue explicit Epic Delivery Authorization" to in-chat acceptance acknowledgment — the ceremonial artifact is removed, the underlying human merge-authorization gate is preserved unchanged (harness-enforced). Companion edits retired the same ceremony from `governance/templates/{milestone,phase}-execution-chat-starter.md` and all touch points in the three `governance/systems/` mirrors (Milestone, Phase, HQ); the CFO Deployment Authorization (a separate, untouched ceremony) is unaffected. Per SN-19/P7-GH-17; E28.4 (P7-M28). |
 | 2.8.0 | 2026-07-13 | **Default-on trigger policy (SN-17).** Added §16.8 "Default-on trigger policy": states structural-first as the zero-infrastructure default path (no `comfyui_url` ⇒ Structural only; Generative activates only with an endpoint present and the §16.4 gate satisfied — cross-references §16.3/§16.4, does not restate them) and codifies **the automatic trigger set** — Phase/Milestone/Epic specs plus the four delivery/closure declarations (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`) get a visual automatically; every other artifact type is on-demand only. Added a one-line pointer from §16.2 to §16.8 (§16.2 states *what kind*, §16.8 states *when automatic*). **Appended as §16.8, following the §16.6/§16.7 precedent — §16.2-§16.7 not renumbered.** Closes the delivery/closure Visual-Bindings gap found during grounding: added a "Visual Bindings" section (mirroring the existing spec-template pattern) to all four delivery/closure templates, and extended the `visual-artifacts.md` §7 placement table with the four new rows. Completes, with E27.1, the milestone-level joint criterion: a fresh project with no `visual_artifacts` block now produces structural visuals for a new spec by default. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
 | 2.7.0 | 2026-07-13 | **Default-on flip (SN-17).** Rewrote §16 intro and §16.1 "Opt-in gating" → "Default-on gating": `visual_artifacts.enabled: false` is now the explicit **opt-out**; an absent block or `enabled: true` means the capability is **on**. Added the new `visual_required_for_specs` enforcement-setting key (defaulted `true`) to the §16.1 key list — governs whether specs are required to carry a visual, distinct from *which* artifact types are automatic (E27.2's surface). Reconciled §16.5's source-repo sentence: this repo keeps `enabled: false` (the explicit opt-out) — investigated dogfooding default-on but `bin/ai-project-visual --type diagrams` is a ComfyUI-generative call in the current implementation, not an endpoint-free structural diagram, so enabling would require a live endpoint the suite doesn't have (verified). Schema in `ai-project-yml-spec.md` §3.5 (v2.3.0). Per SN-17 (ratified SN-18); E27.1 (P7-M27). |

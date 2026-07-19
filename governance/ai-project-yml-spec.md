@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.3.1  
+**Version:** 2.4.0  
 **Status:** Active  
-**Effective Date:** 2026-07-15  
-**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29)
+**Effective Date:** 2026-07-17  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29); `models` defaults refreshed to the measurement-grounded mapping in Epic E30.2 (P9-M30)
 
 ---
 
@@ -52,11 +52,11 @@ overrides:               # OPTIONAL. Project-specific governance overrides. Full
   epic_prefix: <string>       # default: epic/
 
 models:                  # OPTIONAL. Hybrid model routing maps for autonomous clusters.
-  hq: <string>           # default: remote:gpt-4o
-  phase: <string>        # default: remote:claude-3-5-sonnet
-  milestone: <string>    # default: remote:claude-3-5-sonnet
+  hq: <string>           # default: remote:claude-opus-4-8
+  phase: <string>        # default: remote:claude-opus-4-8
+  milestone: <string>    # default: remote:claude-opus-4-8
   epic_dev: <string>     # default: local:qwen2.5-coder:14b
-  epic_qa: <string>      # default: local:qwen2.5-coder:7b
+  epic_qa: <string>      # default: local:qwen2.5-coder:14b
 
 visual_artifacts:        # OPTIONAL. Default-on visual-artifact generation. Absent ⇒ enabled. Full spec: M22/M27.
   enabled: <bool>        # default: true. false is the explicit opt-out.
@@ -325,15 +325,24 @@ The `models` block is **optional**. When present, it configures the local/remote
 
 | Field | Type | Default | Allowed Formats / Examples | Role |
 |-------|------|---------|---------------------------|------|
-| `hq` | String | `remote:gpt-4o` | `remote:gpt-4o`, `remote:claude-3-5-sonnet` | Product Owner (High-level vision & Requirements) |
-| `phase` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Phase Milestone planning) |
-| `milestone` | String | `remote:claude-3-5-sonnet` | `remote:claude-3-5-sonnet` | Software Architect (Milestone Epic planning) |
+| `hq` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8`, `remote:claude-sonnet-5` | Product Owner (High-level vision & Requirements) |
+| `phase` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8` | Software Architect (Phase Milestone planning) |
+| `milestone` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8` | Software Architect (Milestone Epic planning) |
 | `epic_dev` | String | `local:qwen2.5-coder:14b` | `local:qwen2.5-coder:14b`, `local:qwen2.5-coder` | Developer Agent (Code implementation; must be a tool-calling-capable model) |
-| `epic_qa` | String | `local:qwen2.5-coder:7b` | `local:qwen2.5-coder:7b`, `local:llama3` | QA Tester Agent (Verification & Test runner) |
+| `epic_qa` | String | `local:qwen2.5-coder:14b` | `local:qwen2.5-coder:14b`, `local:llama3` | QA Tester Agent (Verification & Test runner) |
+
+> **Defaults provenance (v2.4.0, Epic E30.2 / P9-M30):** these defaults are the
+> measurement-grounded mapping derived in the governance source repository from
+> its captured token-burn dataset — the prior defaults (`remote:gpt-4o`,
+> `remote:claude-3-5-sonnet`, `local:qwen2.5-coder:7b` for `epic_qa`) never
+> appeared in a single measured session and were replaced as unevidenced. See
+> the source repo's `.ai-project/artifacts/reference/token-measurement/`
+> (model-routing-policy.md + audit-report.md) for the derivation. Adopting
+> repositories may override any value per their own evidence.
 
 #### Format Constraints
 Model configuration values must follow one of these formats:
-- **Remote Models:** Prefix with `remote:` followed by the provider and model name (e.g., `remote:gpt-4o`, `remote:claude-3-5-sonnet`, `remote:gemini-1.5-pro`).
+- **Remote Models:** Prefix with `remote:` followed by the provider and model name (e.g., `remote:claude-opus-4-8`, `remote:claude-sonnet-5`, `remote:gemini-1.5-pro`).
 - **Local Models:** Prefix with `local:` followed by the model identifier (e.g., `local:qwen2.5-coder:14b`, `local:qwen2.5-coder:7b`). These are format examples only, not defaults; role defaults are defined in the table above.
 
 ---
@@ -610,6 +619,7 @@ at its documented defaults and remains valid. Setting `enabled: false` is the ex
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.4.0 | 2026-07-17 | `models` defaults refreshed to the measurement-grounded mapping (Hard Constraint, P9-M30): `hq`/`phase`/`milestone` moved from `remote:gpt-4o` / `remote:claude-3-5-sonnet` (never observed in the 72-session token-burn dataset — falsified defaults) to `remote:claude-opus-4-8` (the measured workhorse at those levels); `epic_qa` moved from the never-measured `local:qwen2.5-coder:7b` to `local:qwen2.5-coder:14b` (the only local model with captured run evidence; gap G11). Updated consistently in the §3.1 schema comments, §3.4 field table defaults/examples + new provenance note, and format-constraint examples. `epic_dev` unchanged. No field, key, or validation rule changed — value/documentation refresh only. Derivation: governance source repo `.ai-project/artifacts/reference/token-measurement/` (Epic E30.2, P9-M30) |
 | 2.3.1 | 2026-07-15 | Resolved the `visual_artifacts.types` naming collision with AOG §16.3 (P7-GH-21): §3.5 field table, Field Details (`types`, new clarifying note), and Worked Example no longer describe `diagrams` as "Mermaid/PlantUML structural" — all `types` entries, including `diagrams`, are now documented as Generative (ComfyUI) categories; Structural mode (AOG §16.3) is clarified as needing no `visual_artifacts` config at all. No field, default, or validation rule changed — documentation/reframing only. (Epic E29.1, P8-M29) |
 | 2.3.0 | 2026-07-13 | `visual_artifacts` flipped from opt-in/off-by-default to default-on/opt-out: §3.5 `enabled` default `false` → `true`; added new `visual_required_for_specs` enforcement field (default `true`) with Field Details block and §4 validation rule 25; Worked Example and §11 Full Example updated. (Epic E27.1, P7-M27) |
 | 2.2.0 | 2026-07-12 | `epic_dev` default moved from `local:llama3:8b` (verified unusable for tool-calling — empty tool-call responses, local-agent-runner CONTRACT §1.4) to `local:qwen2.5-coder:14b`, consistently in the schema comment (§3.4), the field table default/examples, and the format-constraint examples. `epic_qa` unchanged. (Epic E26.2, P7-M26) |
