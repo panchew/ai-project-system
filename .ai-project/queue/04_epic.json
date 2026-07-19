@@ -1,0 +1,8 @@
+{
+  "epic_id": "P9-M31-E31.1-PROVE",
+  "epic_spec_path": "docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.1-PROVE__spec__agentic-dispatch-demo.md",
+  "sandbox_env": "alpine:latest",
+  "validation_command": "test -f docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.1-PROVE__output.md && grep -q agentic-dispatch-demo-E31.1 docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.1-PROVE__output.md",
+  "dev_command": "./bin/run-dev-agent",
+  "run_dev_initially": true
+}
