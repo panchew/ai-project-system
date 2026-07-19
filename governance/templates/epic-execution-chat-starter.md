@@ -9,18 +9,14 @@
   1. Copy this template
   2. Replace all <placeholders> with actual content
   3. Delete HTML comments (or keep for reference)
-  4. The entire filled-in content MUST be wrapped in a fenced markdown code block
-     when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
-
-         ````markdown name=<E#.#>-epic-execution-chat-starter.md
-         [filled-in content here]
-         ````
-
-     This preserves markdown formatting when the starter is copy-pasted into a
-     new Governance Agent session (Epic mode). The four-backtick fence escapes
-     any triple-backtick code blocks inside the content.
-  5. After the code block, add the canonical copy instruction:
-     "Copy the entire chat starter above and paste into the Governance Agent (Epic mode) to begin execution."
+  4. Commit the filled-in starter as a git-tracked file, then hand it off
+     **by reference** (AI-OPERATING-GUIDELINES.md §3.1.1 — the canonical
+     artifact-handoff rule): IDE-attach + one line of intent, or the canonical
+     reference line (artifact type + id — repo-relative path — status). Do NOT
+     echo the starter's body into chat output.
+  5. Fallback — no repo access? For genuinely repo-less delivery only, wrap the
+     full body in a four-backtick fence per the fallback format in
+     AI-OPERATING-GUIDELINES.md §3.1.1, and say the fallback is in use.
   
   This template aligns with AI-OPERATING-GUIDELINES.md and PROJECT-SYSTEM-GUIDELINES.md.
 -->

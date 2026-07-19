@@ -1,6 +1,6 @@
 ---
 name: hq
-version: 2.0.0
+version: 2.1.0
 description: Unified Governance Agent — operates as HQ, Phase, Milestone, or Epic mode based on the Chat Starter delivered
 type: custom-agent
 scope: governance-execution
@@ -175,12 +175,14 @@ Initialize HQ Chat for this project, help me assess what's needed for adoption, 
 
 ### Phase / Milestone / Epic mode
 
-Copy the filled-in Chat Starter (Phase, Milestone, or Epic Execution Chat Starter) into a new session with this agent. The agent will detect the mode from the starter and configure its boundaries automatically.
+Hand the filled-in Chat Starter (Phase, Milestone, or Epic Execution Chat Starter) to a new session with this agent **by reference** — attach the committed starter file (IDE-attach) or give its repo-relative path with one line of intent (AI-OPERATING-GUIDELINES.md §3.1.1, the canonical artifact-handoff rule). The agent will detect the mode from the starter and configure its boundaries automatically.
 
-**Example delivery instruction** (appended to every Chat Starter):
+**Example delivery instruction:**
 ```
-Copy the entire chat starter above and paste into a new session with the Governance Agent to begin.
+Epic Execution Chat Starter — docs/phases/<...>/P#-M#-E#.#__epic-execution-chat-starter.md — begin execution.
 ```
+
+*Fallback — no repo access?* For genuinely repo-less setups only, paste the starter's full body into the new session per the fallback format in AI-OPERATING-GUIDELINES.md §3.1.1.
 
 ## Mode Detection Logic
 
