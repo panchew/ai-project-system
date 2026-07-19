@@ -1,6 +1,6 @@
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
-# Spec: governance/ai-project-yml-spec.md v2.3.1
+# Spec: governance/ai-project-yml-spec.md v2.4.0
 
 governance:
   source: ./governance

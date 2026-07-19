@@ -77,6 +77,12 @@ You are operating under the AI Project System governance framework as a **Phase 
 - **Issuing a mid-flight amendment:** To change scope or direction after Milestone sessions are already running, do NOT reach into those running sessions. Instead, amend the governing spec, note the change (e.g., an amendment-history entry), and notify your parent chat (HQ Chat) — escalating up for a pause/cancel decision if the change is blocking. The spec file is the downward channel (one write, many readers). See the "Communication Protocol" section of `governance/systems/chat-hierarchy.md`.
 - Milestone-level decisions are within your authority; phase-level acceptance belongs to HQ Chat
 
+**Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
+- Load at session start: this starter; the Phase spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6, §12, §13B, §13D; AOG preamble+§1, §1A, §2, §3.6, §3.9, §3.10, §4, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
+- Load on trigger (before acting on that situation): PSG §5B + AOG §3.4/§3.7 during a milestone's closure; PSG §5C at phase-closure time; PSG §3, §8A, §14A, §14C, §18; AOG §8, §11, §16
+- Do not load: PSG/AOG changelogs, other levels' role or starter-format sections; milestone/epic specs except by targeted section during review
+- Use targeted section reads; never re-read a whole document to reach one section. PSG and AOG remain fully authoritative — a triggered situation requires its section loaded before acting.
+
 ---
 
 ## Phase Context
