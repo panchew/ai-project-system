@@ -30,6 +30,10 @@
 **Milestone:** <M#> — <Milestone Name>  
 **Repository:** <owner>/<repo-name>  
 **Branch Strategy:** `epic/<E#.#>` → PR to `milestone/<M#>`  
+**Execution Mode:** <manual | agentic> — declared by the issuing Milestone Chat at creation
+time; omit this field entirely to declare manual (absence-means-manual, per
+`governance/systems/chat-hierarchy.md`'s "Execution Mode" section, P9-M31-E31.1). Do not
+leave the placeholder unresolved — either state a value or delete the line.
 
 ---
 
