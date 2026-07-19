@@ -16,6 +16,17 @@ policy<->block divergence check: the recorded policy
 "Mapping to `.ai-project.yml`" table is parsed with a narrow, documented method (five
 known key rows, not a general markdown parser) and compared against both the config
 file and the in-script default. A mismatch fails the suite — never a silent divergence.
+
+P9-M31-E31.3 (Deliverable 4) adds two more `models:` keys, ``creation`` and
+``epic_manual`` — manual-chat-only verification targets with no agentic dispatch
+surface (Creation never dispatches; a manual Epic chat is neither the `epic_dev` nor
+`epic_qa` lane). Because neither key has a dispatch role, they deliberately sit outside
+`bin/ai-project-orchestrator`'s ``DEFAULT_MODELS`` (out of scope to touch, per this
+Epic's Technical Constraints) and outside `model-routing-policy.md`'s "Mapping to
+`.ai-project.yml`" table (out of scope to edit). Their recorded source of truth is
+instead `governance/systems/chat-hierarchy.md`'s "Manual Chat Model Verification"
+section, "The mapping" table — parsed below with the same narrow, documented-row method
+as the policy table, and checked against `.ai-project.yml` for divergence.
 """
 
 import importlib.util
@@ -39,12 +50,19 @@ POLICY_PATH = (
     / "token-measurement"
     / "model-routing-policy.md"
 )
+CHAT_HIERARCHY_PATH = REPO_ROOT / "governance" / "systems" / "chat-hierarchy.md"
 
 EXPECTED_EPIC_DEV = "local:qwen2.5-coder:14b"
 
 # The five `models:` keys, per the policy's "Mapping to .ai-project.yml" table
 # (model-routing-policy.md) — the guard target this file enforces.
 MODEL_KEYS = ("hq", "phase", "milestone", "epic_dev", "epic_qa")
+
+# The two manual-chat-only keys added P9-M31-E31.3 — no agentic dispatch surface, so
+# deliberately outside MODEL_KEYS, DEFAULT_MODELS, and model-routing-policy.md's own
+# mapping table (see this file's module docstring).
+MANUAL_ONLY_KEYS = ("creation", "epic_manual")
+EXPECTED_MANUAL_ONLY_VALUE = "remote:claude-opus-4-8"
 
 FALSIFIED_NAMES = ("gpt-4o", "claude-3-5-sonnet", "qwen2.5-coder:7b", "llama3:8b")
 
@@ -80,6 +98,25 @@ def _policy_mapping_table():
     start = text.index(marker)
     rest = text[start + len(marker):]
     next_heading = re.search(r"^##\s", rest, re.MULTILINE)
+    section = rest[: next_heading.start()] if next_heading else rest
+    mapping = {}
+    for line in section.splitlines():
+        match = _MAPPING_ROW.match(line.strip())
+        if match:
+            mapping[match.group(1)] = match.group(2)
+    return mapping
+
+
+def _chat_hierarchy_manual_mapping():
+    """`chat-hierarchy.md`'s "Manual Chat Model Verification" → "The mapping" table as a
+    ``{key: value}`` dict — the recorded source of truth for the two manual-only keys
+    (P9-M31-E31.3), parsed with the same narrow, documented method as
+    ``_policy_mapping_table`` (five known key rows, not a general markdown parser)."""
+    text = CHAT_HIERARCHY_PATH.read_text(encoding="utf-8")
+    marker = "#### The mapping"
+    start = text.index(marker)
+    rest = text[start + len(marker):]
+    next_heading = re.search(r"^####\s", rest, re.MULTILINE)
     section = rest[: next_heading.start()] if next_heading else rest
     mapping = {}
     for line in section.splitlines():
@@ -184,4 +221,58 @@ def test_policy_mapping_agrees_with_default_models(key):
     assert policy_value == default_value, (
         f"policy<->DEFAULT_MODELS divergence on {key!r}: policy says "
         f"{policy_value!r}, DEFAULT_MODELS[{key!r}] says {default_value!r}."
+    )
+
+
+# --- manual-chat-only keys: creation / epic_manual (P9-M31-E31.3) ----------------
+
+
+def test_config_has_both_manual_only_keys():
+    """The two keys this Epic adds must actually exist in `.ai-project.yml` — a
+    guardrail whose documented mapping names a key the config never defines would be
+    an empty promise."""
+    config = _config_models()
+    for key in MANUAL_ONLY_KEYS:
+        assert key in config, f"models.{key} missing from .ai-project.yml"
+
+
+@pytest.mark.parametrize("key", MANUAL_ONLY_KEYS)
+def test_config_manual_only_key_matches_expected_value(key):
+    assert _config_models()[key] == EXPECTED_MANUAL_ONLY_VALUE
+
+
+@pytest.mark.parametrize("key", MANUAL_ONLY_KEYS)
+@pytest.mark.parametrize("falsified", FALSIFIED_NAMES)
+def test_no_falsified_name_in_config_for_manual_only_key(key, falsified):
+    assert falsified not in _config_models()[key]
+
+
+def test_chat_hierarchy_manual_mapping_documents_all_five_keys():
+    """Sanity check on the parser: if chat-hierarchy.md's table shape drifts, fail
+    loudly here rather than the divergence test below silently passing on an empty or
+    partial mapping."""
+    mapping = _chat_hierarchy_manual_mapping()
+    expected_keys = set(MODEL_KEYS[:3]) | set(MANUAL_ONLY_KEYS)  # hq, phase, milestone + 2
+    assert expected_keys <= set(mapping.keys()), (
+        f"parsed chat-hierarchy.md mapping keys {sorted(mapping.keys())} do not cover "
+        f"expected {sorted(expected_keys)} — 'The mapping' table's shape may have "
+        "changed; update _MAPPING_ROW/_chat_hierarchy_manual_mapping()"
+    )
+
+
+@pytest.mark.parametrize("key", MANUAL_ONLY_KEYS)
+def test_chat_hierarchy_manual_mapping_agrees_with_yml_block(key):
+    """Deliverable 4's divergence check for the two manual-only keys: chat-hierarchy.md
+    "The mapping" table is these keys' recorded source of truth (they have no
+    agentic-dispatch surface, so model-routing-policy.md's own table and
+    DEFAULT_MODELS deliberately do not cover them — see module docstring). A mismatch
+    here is a real defect; this test never edits either file, it only refuses to pass
+    on a silent divergence, consistent with E31.2's enforcement of the same principle
+    for the other five keys."""
+    documented_value = _chat_hierarchy_manual_mapping()[key]
+    config_value = _config_models()[key]
+    assert documented_value == config_value, (
+        f"chat-hierarchy.md<->.ai-project.yml divergence on {key!r}: 'The mapping' "
+        f"table says {documented_value!r}, .ai-project.yml's models.{key} says "
+        f"{config_value!r}. Update both together."
     )

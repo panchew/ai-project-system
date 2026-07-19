@@ -96,6 +96,18 @@ You are operating under the AI Project System governance framework.
 
 Before relying on the spec, confirm it is **git-tracked on the expected branch** — and likewise every prerequisite artifact this Epic declares — using `git ls-files --error-unmatch <path>` run on the expected branch, not a disk-existence check. Disk presence is not proof of commit: an untracked file passes a file-exists check but is absent from a fresh worktree clone, producing a false-green prerequisite. If any path is untracked, STOP and report to HQ before proceeding.
 
+**Model verification (P9-M31-E31.3 — required when this instance is manual, i.e. no
+`Execution Mode` field or `Execution Mode: manual` above):** read your own harness-reported
+model identity (the `# Environment` block or equivalent self-report), and compare it to
+`.ai-project.yml`'s `models.epic_manual` value — see `governance/systems/chat-hierarchy.md`
+"Manual Chat Model Verification" for the mapping, the self-report method's known limits,
+and the absent-block/absent-key permissive-default behavior. **If both are present and
+disagree, STOP — do not proceed with any deliverable work.** State the mismatch plainly
+and wait for the parent chat/human. This is a documented instruction the agent must
+follow, not a technical impossibility-to-proceed. (Not applicable to `Execution Mode:
+agentic` instances — those verify against `epic_dev`/`epic_qa` via E31.2's existing
+dispatch-time guard, not this check.)
+
 ### Summary
 
 [Provide a 1-2 sentence summary of the Epic.]
