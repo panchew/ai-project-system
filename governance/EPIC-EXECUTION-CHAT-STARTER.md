@@ -80,7 +80,7 @@ Implemented feature XYZ with full test coverage and documentation. All Definitio
 
 ### What Happens Next
 
-1. **You (Epic Agent):** Produce Completion Notice in `governance/templates/completion-notice-epic.md`, fill it in, and paste it into the Milestone Chat.
+1. **You (Epic Agent):** Produce the Completion Notice from `governance/templates/completion-notice-epic.md`, commit it, and hand it to the Milestone Chat **by reference** (AI-OPERATING-GUIDELINES.md §3.1.1: reference line or IDE-attach — do not echo its body into chat; paste only as the documented repo-less fallback).
 2. **Milestone Agent:** Reviews your Completion Notice — a clean delivery is accepted by silence (the merge plus the in-chat acknowledgment is the acceptance record; no artifact); a **Review Decision** artifact is issued only on the exception path (PSG §11.6 / AOG §12).
 3. **If accepted:** You merge the PR (on the Milestone Agent's merge instruction) and produce a **Delivery Notice** artifact.
 4. **If rejected (exception-path Review Decision):** You address feedback, create a new Completion Notice (v1.1), and resubmit.

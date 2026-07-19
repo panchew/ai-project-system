@@ -10,18 +10,14 @@
   1. Copy this template
   2. Replace all <placeholders> with actual content
   3. Delete HTML comments (or keep for reference)
-  4. The entire filled-in content MUST be wrapped in a fenced markdown code block
-     when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
-
-         ````markdown name=<P#>-phase-execution-chat-starter.md
-         [filled-in content here]
-         ````
-
-     This preserves markdown formatting when the starter is copy-pasted into a
-     Phase Chat session. The four-backtick fence escapes any triple-backtick code
-     blocks inside the content.
-  5. After the code block, add the canonical copy instruction:
-     "Copy the entire chat starter above and paste into your Phase Chat to begin planning."
+  4. Commit the filled-in starter as a git-tracked file, then hand it off
+     **by reference** (AI-OPERATING-GUIDELINES.md §3.1.1 — the canonical
+     artifact-handoff rule): IDE-attach + one line of intent, or the canonical
+     reference line (artifact type + id — repo-relative path — status). Do NOT
+     echo the starter's body into chat output.
+  5. Fallback — no repo access? For genuinely repo-less delivery only, wrap the
+     full body in a four-backtick fence per the fallback format in
+     AI-OPERATING-GUIDELINES.md §3.1.1, and say the fallback is in use.
 
   This template aligns with AI-OPERATING-GUIDELINES.md and PROJECT-SYSTEM-GUIDELINES.md.
 -->
@@ -142,18 +138,23 @@ You must produce the following deliverables, in order:
 
 <!--
   This Phase Execution Chat commits Milestone spec files and Milestone Execution Chat Starters directly to the phase branch,
-  the same way a Coding Agent commits code. Deliver them as structured blocks in this chat AND push them to the branch.
+  the same way a Coding Agent commits code. Commit and push them to the branch, then hand them off by reference —
+  do NOT echo their bodies into this chat (AI-OPERATING-GUIDELINES.md §3.1.1).
   Do NOT produce both simultaneously — produce one Milestone's deliverables at a time
   and await HQ Chat acceptance before proceeding to the next.
 -->
 
 ### Delivery format
 
-Each Milestone's deliverables are delivered together as a set. Wrap each Milestone Execution Chat Starter in a four-backtick fence per AI-OPERATING-GUIDELINES.md §3.1.1:
+Each Milestone's deliverables are delivered together as a set — committed to the
+branch, then handed off **by reference** per AI-OPERATING-GUIDELINES.md §3.1.1
+(the canonical artifact-handoff rule): one reference line per artifact
+(artifact type + id — repo-relative path — status), or IDE-attach + one-line
+intent. Do not display the artifact bodies in chat output.
 
-    ````markdown name=<P#>-<M#>-milestone-execution-chat-starter.md
-    [starter content here]
-    ````
+*Fallback — no repo access?* For genuinely repo-less delivery only, use the
+four-backtick fenced full-body form per the fallback format in
+AI-OPERATING-GUIDELINES.md §3.1.1.
 
 After each set of deliverables, explicitly request HQ Chat review before proceeding.
 
