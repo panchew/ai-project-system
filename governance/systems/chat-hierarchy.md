@@ -1,7 +1,7 @@
 ---
 type: system
 status: active
-effective_date: 2026-04-23
+effective_date: 2026-07-19
 ---
 
 # Chat Hierarchy — System Reference
@@ -60,6 +60,89 @@ HQ mode
 ---
 
 All levels are served by a single **Governance Agent** (`governance/agents/governance.agent.md`). The Chat Starter header determines which mode activates — see [Mode Detection Logic](governance.agent.md#mode-detection-logic) in the agent definition.
+
+---
+
+## Execution Mode: Manual vs. Agentic (Per-Instance Declaration)
+
+*(Added P9-M31-E31.1, 2026-07-19.)*
+
+The table above uses **"Mode"** for a different axis entirely: which of the four levels
+(HQ/Phase/Milestone/Epic) a chat instance is. This section introduces a second,
+orthogonal axis — whether a *given instance* of a Phase, Milestone, or Epic chat runs
+under direct human control or is dispatched to run unattended. To keep the two axes from
+reading as one ("Milestone mode in agentic mode" is exactly the ambiguity being avoided),
+this document keeps calling the level axis **"Mode"** (as in the table above) and always
+spells out **"Execution Mode"** for this new axis — never bare "mode" where either
+meaning is possible.
+
+Execution Mode applies to **Phase, Milestone, and Epic instances only** (Levels 2–4).
+Creation Chat and HQ Chat never take an Execution Mode — see "Creation Chat and HQ Chat:
+Manual-Only, Permanently" below.
+
+### The two Execution Modes
+
+- **Manual** — the instance runs as a human-driven chat session, one decision at a time,
+  exactly as every chat has run to date. **This is the default** (see Declaration below).
+- **Agentic** — the instance is dispatched to run unattended against the model
+  `.ai-project.yml`'s `models:` block assigns to its level, via the orchestrator/runner
+  path (`bin/ai-project-orchestrator` → `bin/run-dev-agent`). The paid-vs-local choice
+  *within* "agentic" is governed by the recorded model-routing policy
+  (`.ai-project/artifacts/reference/token-measurement/model-routing-policy.md`) — this
+  section only records that agentic instances exist and consume that policy; it does not
+  restate or implement the policy's rows (that logic is a separate, later concern).
+
+  **What exists mechanically today:** the dispatch path is implemented for the **Epic**
+  level only (`bin/ai-project-orchestrator`'s epic-trigger handling, which calls
+  `bin/run-dev-agent`). Declaring a Phase or Milestone instance agentic is a valid
+  declaration under this mode model — the semantics above are level-agnostic — but no
+  dispatch mechanism yet consumes a Phase/Milestone agentic declaration; wiring the
+  orchestrator to those levels is future implementation work, not a defect in this
+  declaration mechanism. No agentic instance, at any level, may assume a local model is
+  always loadable — GPU-contention handling belongs to the routing policy, not to this
+  section.
+
+### Declaration mechanism
+
+Execution Mode is declared **per instance**, not project-wide. A single project-wide
+switch cannot express "this Milestone Chat session is agentic, the next one is manual"
+without becoming a constantly-edited, drift-prone value — so the declaration lives in the
+concrete instance's own committed **Execution Chat Starter**
+(`governance/templates/{phase,milestone,epic}-execution-chat-starter.md`), in an
+**Execution Mode** field near the header, filled in by the parent chat at the moment it
+produces the starter — the same natural author, at the same natural moment, as every
+other starter field.
+
+- `Execution Mode: manual` — the instance is declared manual.
+- `Execution Mode: agentic` — the instance is declared agentic.
+- **No field present means manual.** A starter that omits the Execution Mode field —
+  including every starter produced before this section existed — is a manual instance.
+  No instance is agentic without an explicit, git-tracked declaration in its own starter.
+
+A reader determines any instance's Execution Mode by reading its committed starter file —
+no new artifact type, lifecycle, or `.ai-project.yml` field is introduced; the mechanism
+piggybacks on the artifact every instance already receives.
+
+### Creation Chat and HQ Chat: Manual-Only, Permanently
+
+Creation Chat (Level 0) and HQ Chat (Level 1) **never take an Execution Mode declaration
+and never run agentically.** This is normative, permanent policy (SN-22), not a deferral
+pending future work. Neither level's opener gains an Execution Mode field; both levels
+are manual at all times, unconditionally, with no per-instance override possible.
+
+### Session-discipline guidance: one task, one session (G7)
+
+*(Adopted 2026-07-19, per the M30 Milestone Closure Declaration's G7 recommendation.)*
+M30's token-burn audit found that milestone- and phase-level sessions mixing several
+unrelated tasks in one session (planning, Stage-2 review, and closure authority together)
+accounted for 53% of measured spend, versus 23% for single-task epic execution sessions
+(`.ai-project/artifacts/reference/token-measurement/audit-report.md` §2.2). Based on that
+measured evidence, this document records, as **guidance, not a requirement**: start a new
+chat instance per discrete task rather than continuing one instance across unrelated
+tasks. This recommendation applies uniformly to manual and agentic instances alike; it is
+not gated by, and does not affect, any instance's Execution Mode declaration.
+
+---
 
 ## Level 0: Creation Chat (Project Bootstrap)
 
