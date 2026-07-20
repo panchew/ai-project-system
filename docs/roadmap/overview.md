@@ -282,9 +282,55 @@ P6 itself codified. See the
 
 ---
 
+### P9 – Context Handling and Token Efficiency *(Completed)*
+
+**Goal**: Make token use as smart and effective as possible. The original model-tier
+assumption (local models only at the Epic level, frontier everywhere else) failed in
+practice — premium quota exhausted, no frontier reasoning left when it mattered. P9 replaced
+assumption with evidence-grounded policy, gave the working levels a real dual-mode switch
+with a guardrail on both sides, and canonized the system-level participant already running
+in the field.
+
+**Status**: Completed (Consolidated to master 2026-07-20 — **v7.0.0**, 363 passed / 0
+skipped). Fourth phase closed through the canonical **PSG §5C** sequence. See the
+[Phase Closure Declaration](../phases/P9__Context_Handling_and_Token_Efficiency/P9__phase-closure-declaration.md).
+
+**Milestone Status**:
+
+| Milestone | Name | Epics | Status | PR |
+|-----------|------|-------|--------|-----|
+| **M30** | Token Measurement & Model-Tier Audit | E30.1–E30.4 (4) | ✅ Complete | #135 |
+| **M31** | Dual-Mode Working Levels & Model Guardrail | E31.1–E31.3 (3) | ✅ Complete | #144 |
+| **M32** | System Participant Canonization & Governance Hygiene | E32.1–E32.3 (3) | ✅ Complete | #145 |
+
+**Key Deliverables**:
+- ✅ Real captured token-burn data per chat level and task type, including governance-corpus
+  overhead, with every uncapturable cell recorded as an explicit gap rather than a guess
+  (`bin/measure-token-burn`) (M30)
+- ✅ Evidence-grounded frontier-vs-local policy (`model-routing-policy.md`, rows P1–P7)
+  replacing the falsified `.ai-project.yml` `models:` mapping (M30)
+- ✅ Evidence-sized context-load reduction (pack reduction across the three starter
+  templates) and the reference-first artifact-handoff rule (AOG §3.1.1, SN-23) replacing
+  mandated body-echo (M30)
+- ✅ Per-instance manual/agentic Execution Mode for Phase/Milestone/Epic Chats
+  (`chat-hierarchy.md`); Creation and HQ Chat recorded manual-only, permanently (M31)
+- ✅ Agentic paid-vs-local decision logic applying the M30 policy; `DEFAULT_MODELS`
+  falsified-name fix; local-unavailable handling for GPU contention with ComfyUI (M31)
+- ✅ Manual-mode startup guardrail — a chat on a mismatched model refuses, at every manual
+  level including HQ and Creation (M31)
+- ✅ System HQ canonized: `system_request`/`system_response` schemas, an explicit
+  out-of-hierarchy annex in `chat-hierarchy.md`, a normative execute-never-decide authority
+  boundary, and a daily System Chat re-instantiation seed (M32)
+- ✅ P8-GH-1 (stale opt-out prose) and P8-GH-3 (vestigial "Phase Delivery Notice" phrasing)
+  reconciled, grep-clean; P8-GH-2 restated as deferred, not dropped (M32)
+- ✅ Governance at delivery: **PSG v2.3.0**, **AOG v2.10.0**, yml-spec **v2.5.0**, protocol
+  **v1.4.0**
+
+---
+
 ## In Progress
 
-No active phase. P9 is not yet scoped.
+No active phase. P10 is not yet scoped.
 
 ---
 
@@ -300,13 +346,12 @@ No active phase. P9 is not yet scoped.
 
 ## Current Focus
 
-Phases P1–P8 are **completed and consolidated to master** at **v6.0.1**.
+Phases P1–P9 are **completed and consolidated to master** at **v7.0.0**.
 
-**P9 is not yet scoped.** P8 closed 2026-07-17 having made `visual_artifacts` real in this
-source repo: the `types`/Structural naming collision resolved (P7-GH-21), the capability
-enabled for the first time against a live endpoint, and honest precision-validation evidence
-(two FAIL findings) delivered to the CFO for SN-20 Carry-Over item 3. Next-phase scoping is
-HQ/Creation Chat's call.
+**P10 is not yet scoped.** P9 closed 2026-07-20 having replaced the failed model-tier
+assumption with evidence-grounded policy, given the working levels a real dual-mode switch
+with a guardrail on both sides, and canonized the system-level participant field-adopted
+since 2026-07-16. Next-phase scoping is HQ/Creation Chat's call.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
@@ -317,3 +362,4 @@ See individual phase directories for detailed specs:
 - [`docs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/`](../phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/)
 - [`docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/`](../phases/P7__Agentic_Execution_and_Default_On_Visuals/)
 - [`docs/phases/P8__Visual_Artifacts_Activation/`](../phases/P8__Visual_Artifacts_Activation/)
+- [`docs/phases/P9__Context_Handling_and_Token_Efficiency/`](../phases/P9__Context_Handling_and_Token_Efficiency/)

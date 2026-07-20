@@ -6,9 +6,9 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — v6.0.1
+## 🎉 All Phases Complete — v7.0.0
 
-**The AI Project System was built using its own governance.** All eight phases (P1–P8) are complete and consolidated to `master` at **v6.0.1** with 307 tests passing (0 skipped — the former visual-artifact endpoint skip is now a real pass against a live ComfyUI endpoint, `enabled: true`).
+**The AI Project System was built using its own governance.** All nine phases (P1–P9) are complete and consolidated to `master` at **v7.0.0** with 363 tests passing (0 skipped).
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -91,6 +91,26 @@ technical explanation" are different bars.
 | **M29** — Visual Artifacts Activation | Resolve the naming collision, enable for real, validate precision | `visual_artifacts.types` reframed as Generative-only (P7-GH-21 closed); `enabled: true` with a real passing endpoint test (two genuine helper bugs fixed); first hosted-by-link generated artifacts, both judged FAIL against the technical-explanation bar |
 
 **P8 highlights:** first real generative call from this repo's own suite · `test_helper_generates_against_endpoint` a real pass, not a skip · Structural/Generative naming collision closed · first honest precision-validation evidence (two FAIL findings) handed to the CFO for SN-20 Carry-Over item 3 · first machine-level `system_request`/`system_response` round-trip.
+
+### Phase P9 — Context Handling and Token Efficiency (Complete)
+The original model-tier assumption (local models only at the Epic level, frontier everywhere
+else) failed in practice — premium quota exhausted, no frontier reasoning left when it
+mattered. P9 replaced assumption with evidence: real captured token-burn data drove the
+frontier-vs-local policy; the working levels gained a real per-instance manual/agentic switch
+with a guardrail on both sides; and the system-level participant already running in the field
+since 2026-07-16 was written into governance.
+
+| Milestone | Focus | Key Deliverables |
+|-----------|-------|-------------------|
+| **M30** — Token Measurement & Model-Tier Audit | Evidence before policy | `bin/measure-token-burn`, real per-level/per-task-type token dataset (gap-recorded where uncapturable), `model-routing-policy.md` (rows P1–P7), `.ai-project.yml` `models:` refreshed to the measured mix, evidence-sized context-scoping standard, AOG §3.1.1 reference-first handoff rule (SN-23) |
+| **M31** — Dual-Mode Working Levels & Model Guardrail | Apply the policy, guard the model | Per-instance Execution Mode (`chat-hierarchy.md`), Creation/HQ recorded manual-only permanently, agentic paid-vs-local decision logic consuming the M30 policy, `DEFAULT_MODELS` falsified-name fix, manual-mode startup guardrail refusing on mismatch at every level including HQ/Creation |
+| **M32** — System Participant Canonization & Governance Hygiene | Canonize the field, pay down debt | `system_request`/`system_response` schemas + out-of-hierarchy annex (`governance/systems/system-hq.md`, `chat-hierarchy.md`), daily System Chat re-instantiation seed, P8-GH-1/P8-GH-3 reconciled (grep-clean) |
+
+**P9 highlights:** measurement-before-policy replacing a failed assumption with real data ·
+per-instance manual/agentic mode switch for Phase/Milestone/Epic · a working refuse-on-
+mismatch model guardrail · System HQ (the cross-project, execute-never-decide participant)
+canonized · reference-first artifact handoff replacing mandated body-echo (SN-23) · honest
+"no reduction observed yet" recapture finding reported plainly rather than shaped positive.
 
 👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
 👉 **[Get started with P4 (team mode)](docs/team-collaboration/P4-governance-system-guide.md)** · **[Run the example](examples/team-project-example/README.md)**
@@ -588,13 +608,13 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8)
-✅ **89 Epics** delivered across **29 milestones** over **8 phases**
+### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9)
+✅ **99 Epics** delivered across **32 milestones** over **9 phases**
 
 ### Governance
 - PROJECT-SYSTEM-GUIDELINES.md v2.3.0 (effective 2026-07-02)
-- AI-OPERATING-GUIDELINES.md v2.9.0 (effective 2026-07-13)
-- Framework version: v6.0.1
+- AI-OPERATING-GUIDELINES.md v2.10.0 (effective 2026-07-18)
+- Framework version: v7.0.0
 
 ---
 
@@ -647,12 +667,15 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P6 Complete** — Visual Comprehension Layer & Process Refinements (3 milestones, 10 Epics)
 - ✅ **Phase P7 Complete** — Agentic Execution & Default-On Visuals (3 milestones, 10 Epics)
 - ✅ **Phase P8 Complete** — Visual Artifacts Activation (1 milestone, 3 Epics)
-- ✅ **89 total Epics** delivered across 29 milestones, 8 phases
+- ✅ **Phase P9 Complete** — Context Handling and Token Efficiency (3 milestones, 10 Epics)
+- ✅ **99 total Epics** delivered across 32 milestones, 9 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
 - ✅ **First real, non-mocked agentic execution** — the system executes its own epics through the orchestrator on local models
 - ✅ **First real generative visual-artifact call from this repo's own suite** — `visual_artifacts.enabled: true`, endpoint test passing for real, not skipped
-- ✅ **Governance stable** — v6.0.1 (effective 2026-07-17)
+- ✅ **Evidence-grounded model-tier policy** — real captured token-burn data replaces the failed local-only-at-Epic assumption; a working per-instance manual/agentic mode switch with a refuse-on-mismatch guardrail
+- ✅ **System HQ canonized** — the cross-project, execute-never-decide participant field-adopted since 2026-07-16 is now normative governance
+- ✅ **Governance stable** — v7.0.0 (effective 2026-07-20)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
