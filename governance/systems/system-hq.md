@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-20
-version: 1.0.0
+version: 1.0.1
 ---
 
 # System HQ — Cross-Project System Participant (System Reference)
@@ -204,6 +204,7 @@ mistaken for it:
 - **Chat Hierarchy (out-of-hierarchy annex):** `governance/systems/chat-hierarchy.md`
   ("System HQ — Out-of-Hierarchy, Cross-Project Participant")
 - **Artifact Communication Protocol:** `governance/systems/artifact-communication-protocol.md`
+- **Daily re-instantiation seed:** `governance/systems/system-hq-seed.md`
 - **Field adoption record (informative, outside this repo):** `~/.ai-project/SYSTEM-GOVERNANCE.md`
 - **Source steering note:** SN-21
   (`.ai-project/artifacts/steering-notes/2026-07-16__creation-chat__steering-note__system-hq-adoption.md`)
@@ -217,3 +218,4 @@ mistaken for it:
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-07-20 | Initial release. Canonizes System HQ (field-adopted 2026-07-16, SN-21): the `system_request`/`system_response` schemas, storage/naming conventions, and status vocabulary (matching field usage, not reinvented); the normative Authority Boundary (execute-never-decide; `status: escalated` mandatory for review/merge/scope); and System HQ's out-of-hierarchy, cross-project, one-desk-per-machine nature. (P9-M32-E32.1) |
+| 1.0.1 | 2026-07-20 | Reference section gains a back-pointer to the daily re-instantiation seed (`system-hq-seed.md`, P9-M32-E32.2), closing the one-way-only cross-reference E32.2 correctly declined to edit unilaterally. Phase-closure hygiene, not a schema or authority change. |
