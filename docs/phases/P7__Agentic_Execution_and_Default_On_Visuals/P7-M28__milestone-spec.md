@@ -366,7 +366,7 @@ master
 Epic PRs target `milestone/M28`. Consolidation PR: `milestone/M28 → phase/P7`.
 **M28 is the final P7 milestone** (`is_final: true`). On its consolidation, the Phase Chat
 proceeds to **phase delivery** (`phase/P7 → master`, PR #112) via the PSG §5C canonical
-closure sequence + the P7 Phase Delivery Notice.
+closure sequence, closing with the P7 Phase Closure Declaration.
 
 ---
 
@@ -448,9 +448,9 @@ serialized)
 ## Notes
 
 - **M28 is the final P7 milestone** (`is_final: true`). On consolidation, the Phase Chat
-  proceeds to **phase delivery** (`phase/P7 → master`, the already-open long-lived PR #112) +
-  Phase Delivery Notice, following the PSG §5C canonical closure sequence (README update +
-  version bump + tag + phase-closure declaration) that P6 itself introduced and exercised.
+  proceeds to **phase delivery** (`phase/P7 → master`, the already-open long-lived PR #112),
+  following the PSG §5C canonical closure sequence (README update + version bump + tag +
+  phase-closure declaration) that P6 itself introduced and exercised.
 - **E28.1's grounding surfaced two findings beyond the phase spec's own description**: the
   internal self-contradiction inside `governance/systems/start-a-project.md` itself (not just
   a cross-document mismatch), and a duplicate `start-a-project.md` filename

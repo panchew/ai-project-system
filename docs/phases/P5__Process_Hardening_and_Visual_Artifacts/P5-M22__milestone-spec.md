@@ -294,7 +294,8 @@ Epic PRs target `milestone/M22`. Consolidation PR: `milestone/M22 → phase/P5`.
 
 - M22 is the **final P5 milestone** (`is_final: true`). On its consolidation into `phase/P5`,
   the Phase Chat proceeds to **Phase delivery** — `phase/P5 → master` (PR #82) — and the
-  P5 Phase Delivery Notice.
+  P5 phase-delivery record (`P5__phase-delivery-notice.md`, the separate file P5-era practice
+  produced; PSG §5C later canonized the Phase Closure Declaration as the closing artifact).
 - The framework/CFO split is binding (SN-11): M22 delivers a working integration; the CFO
   delivers a reachable endpoint. Keep the suite green without one (skip-on-disabled).
 - The exact helper name/location (`bin/ai-project-visual` vs. equivalent) and the structural

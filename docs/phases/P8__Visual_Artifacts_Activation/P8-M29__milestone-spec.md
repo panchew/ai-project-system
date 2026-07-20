@@ -325,7 +325,7 @@ master
 Epic PRs target `milestone/M29`. Consolidation PR: `milestone/M29 → phase/P8`. **M29 is the
 final and only P8 milestone** (`is_final: true`). On its consolidation, the Phase Chat proceeds
 to **phase delivery** (`phase/P8 → master`) via the PSG §5C canonical closure sequence (README
-update + version bump + tag + phase-closure declaration) + the P8 Phase Delivery Notice.
+update + version bump + tag), closing with the P8 Phase Closure Declaration.
 
 ---
 
@@ -431,8 +431,9 @@ flowchart LR
 ## Notes
 
 - **M29 is the sole and final P8 milestone** (`is_final: true`). On consolidation, the Phase
-  Chat proceeds to phase delivery (`phase/P8 → master`) + Phase Delivery Notice, via the PSG §5C
-  canonical closure sequence P6 introduced and P7 already exercised twice.
+  Chat proceeds to phase delivery (`phase/P8 → master`), via the PSG §5C canonical closure
+  sequence P6 introduced and P7 already exercised twice, closing with the Phase Closure
+  Declaration.
 - **E29.1's resolution direction is intentionally left open.** The phase spec and this spec both
   name candidate directions but do not pick one — that is a design call for the Milestone/Epic
   Chat, per the Question Policy in the Phase Execution Chat Starter.
