@@ -1,7 +1,7 @@
 ---
 type: template
 status: active
-last_updated: 2026-01-17
+last_updated: 2026-07-18
 ---
 
 
@@ -63,15 +63,15 @@ QUESTION POLICY
 
 DELIVERY FORMAT (MANDATORY)
 
-When HQ Chat produces an Epic Execution Chat Starter, the entire content MUST be
-wrapped in a fenced markdown code block using four backticks:
+When a parent chat produces an Epic Execution Chat Starter, it commits the
+filled-in starter as a git-tracked file and hands it off **by reference**:
+IDE-attach + one line of intent, or the canonical reference line
+(artifact type + id — repo-relative path — status). The starter's body is NOT
+echoed into chat output.
 
-    ````markdown name=<E#.#>-epic-execution-chat-starter.md
-    [starter content here]
-    ````
+Fallback — no repo access? For genuinely repo-less delivery only, use the
+four-backtick fenced full-body form defined in the canonical rule's fallback
+format.
 
-This preserves markdown formatting when copy-pasted into a Coding Agent chat.
-After the code block, include:
-"Copy the entire chat starter above and paste into the Governance Agent (Epic mode) to begin execution."
-
-Canonical rule: AI-OPERATING-GUIDELINES.md §3.1.1
+Canonical rule: AI-OPERATING-GUIDELINES.md §3.1.1 (reference-first artifact
+handoff; cited, not restated)

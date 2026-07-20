@@ -14,13 +14,27 @@ LOCK_FILE = PROJECT_ROOT / ".ai-project" / "locks" / "execution.lock"
 YML_CONFIG = PROJECT_ROOT / ".ai-project.yml"
 MAX_RETRIES = 3
 
+# Aligned with .ai-project.yml's `models:` block and the recorded policy
+# (.ai-project/artifacts/reference/token-measurement/model-routing-policy.md rows
+# P2-P4, P6, P7 — the "Mapping to .ai-project.yml" table, verbatim). This is the
+# fallback used when the yml is absent or fails to parse (load_yml_config()), so it
+# must never drift from the policy silently (P9-M31-E31.2, Hard Constraint 3);
+# tests/test_model_config.py guards all five keys against exactly that drift.
 DEFAULT_MODELS = {
-    "hq": "remote:gpt-4o",
-    "phase": "remote:claude-3-5-sonnet",
-    "milestone": "remote:claude-3-5-sonnet",
+    "hq": "remote:claude-opus-4-8",
+    "phase": "remote:claude-opus-4-8",
+    "milestone": "remote:claude-opus-4-8",
     "epic_dev": "local:qwen2.5-coder:14b",
-    "epic_qa": "local:qwen2.5-coder:7b"
+    "epic_qa": "local:qwen2.5-coder:14b"
 }
+
+# Shared exit-code convention across this project's tooling: 5 means "a local
+# resource this run depends on is genuinely unavailable, refuse loudly rather than
+# retry or silently fall back" (Hard Constraint 1). bin/run-dev-agent's own
+# EXIT_LOCAL_UNAVAILABLE uses the same value for the identical reason; so does
+# bin/ai-project-visual's execution-lock guardrail (governance/guides/
+# gpu-coexistence.md) for the adjacent GPU-contention case. P9-M31-E31.2.
+LOCAL_UNAVAILABLE_EXIT = 5
 
 # Visual artifacts (VA-1) config layer. The block is optional and default-on: an
 # absent block means the capability is enabled; `enabled: false` is the explicit
@@ -325,10 +339,25 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
     dev_cmd = trigger.get("dev_command", "./bin/run-dev-agent")
     run_dev_initially = trigger.get("run_dev_initially", False) or trigger.get("dev_initially", False)
     
-    # Resolve Hybrid Model Selection
+    # Resolve Hybrid Model Selection. Policy-traceable (P9-M31-E31.2 Design Decision 1,
+    # option A: traceability-only): these two config-lookups are the only per-task
+    # decision this Epic makes, and they apply policy rows P6 (epic_dev) and P7
+    # (epic_qa) exactly as recorded in model-routing-policy.md -- not re-derived here.
+    # A runtime divergence assertion was considered and rejected (Design Decision 1):
+    # tests/test_model_config.py's policy<->block divergence guard already catches
+    # drift at CI time, before any dispatch happens, so a second check in this hot
+    # path would only add a runtime dependency on parsing the policy file for no
+    # additional safety. Honesty note: qa_model is resolved and logged here, but no
+    # code path in this dispatch surface actually invokes it as an LLM today --
+    # validation_command is an arbitrary shell command (e.g. test/lint), not routed
+    # through bin/run-dev-agent, so P7 has no real local-unavailable code path to
+    # guard (Hard Constraint 4 covers dev_model's run-dev-agent invocation below,
+    # the only such path that exists; see also grounding's dispatch-exists-for-
+    # dev-lane-only note). Building a QA-role dispatch mechanism is out of scope
+    # (Non-Goals).
     dev_model = models_config.get("epic_dev", DEFAULT_MODELS["epic_dev"])
     qa_model = models_config.get("epic_qa", DEFAULT_MODELS["epic_qa"])
-    
+
     print(f"[*] Starting unattended validation loop for Epic {epic_id}...")
     print(f"[*] Hybrid Model Mapping:")
     print(f"    - Developer Role: {dev_model}")
@@ -350,7 +379,10 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
             print(f"[*] Developer command finished with exit code: {dev_code}")
             if dev_code != 0:
                 print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
-        
+            _escalate_if_local_unavailable(
+                dev_code, epic_id, dev_out, dev_err, dev_model, qa_model, trigger_file_name
+            )
+
         # Run validation_command inside sandbox under epic_qa model configuration
         print(f"[*] Running validation command inside sandbox (active model: {qa_model}): {validation_cmd}")
         val_code, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd, active_model=qa_model)
@@ -409,7 +441,10 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
         print(f"[*] Developer command on failure finished with exit code: {dev_code}")
         if dev_code != 0:
             print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
-            
+        _escalate_if_local_unavailable(
+            dev_code, epic_id, dev_out, dev_err, dev_model, qa_model, trigger_file_name
+        )
+
     # If all MAX_RETRIES attempts fail
     print(f"[X] Maximum attempts ({MAX_RETRIES}) exhausted. Generating escalation report...")
     generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model)
@@ -427,14 +462,72 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
     # Exit with status code 1
     sys.exit(1)
 
-def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model):
+
+def _escalate_if_local_unavailable(dev_code, epic_id, dev_out, dev_err, dev_model, qa_model, trigger_file_name):
+    """Hard Constraint 1 (P9-M31-E31.2): local-unavailable must fail loudly, never
+    scroll past as a soft warning that gets retried like an ordinary task failure.
+
+    dev_code == LOCAL_UNAVAILABLE_EXIT is bin/run-dev-agent's own distinguished
+    signal for "the local model lane (Ollama endpoint or model tag) could not be
+    reached" -- raised before the runner is ever invoked, so it is never a genuine
+    task failure. Retrying against a dead endpoint would just burn the retry budget
+    for no reason, so this short-circuits the Dev-QA loop immediately instead of
+    letting it run to MAX_RETRIES and file a generic "blocked" escalation report
+    that would misreport a connectivity gap as a code defect.
+    """
+    if dev_code != LOCAL_UNAVAILABLE_EXIT:
+        return
+    print(
+        f"[X] Developer command reported local-unavailable (exit {LOCAL_UNAVAILABLE_EXIT}) "
+        f"for Epic {epic_id} -- refusing to retry against an unreachable local lane.",
+        file=sys.stderr,
+    )
+    generate_escalation_report(
+        epic_id, dev_out, dev_err, dev_model, qa_model, status="local-unavailable"
+    )
+    trigger_file = QUEUE_DIR / trigger_file_name
+    if trigger_file.exists():
+        archived_file = QUEUE_DIR / f"{trigger_file_name}.failed"
+        try:
+            trigger_file.rename(archived_file)
+            print(f"[✓] Archived trigger file to {archived_file} to prevent duplicate runs.")
+        except Exception as e:
+            print(f"[!] Failed to archive trigger file: {e}", file=sys.stderr)
+    sys.exit(LOCAL_UNAVAILABLE_EXIT)
+
+
+def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model, status="blocked"):
     admin_dir = PROJECT_ROOT / "docs" / "admin"
     admin_dir.mkdir(parents=True, exist_ok=True)
-    
+
     report_path = admin_dir / f"escalation-report-{epic_id}.md"
+
+    if status == "local-unavailable":
+        heading = f"# Escalation Report: Epic {epic_id} — Local Model Lane Unavailable"
+        intro = (
+            "The developer role's local model lane reported unavailable "
+            f"(`bin/run-dev-agent` exit `{LOCAL_UNAVAILABLE_EXIT}`) before the Dev-QA loop "
+            "could run. This is **not** a task failure and the retry ceiling was not "
+            "exhausted -- the loop refused immediately per Hard Constraint 1 "
+            "(P9-M31-E31.2: refusal means refusal, never a soft warning)."
+        )
+        intervention = (
+            "Confirm the Ollama endpoint is reachable and the resolved model tag is "
+            "pulled, then re-queue the Epic trigger. This is a local-infrastructure gap, "
+            "not a structural code defect or an Epic Spec issue."
+        )
+    else:
+        heading = f"# Escalation Report: Epic {epic_id} Blocked"
+        intro = f"The autonomous Dev-QA validation loop has exhausted the retry ceiling of {MAX_RETRIES} attempts."
+        intervention = (
+            "Execution on the active branch has been suspended. Please review the failed "
+            "validation outputs above, resolve any structural code defects, or update the "
+            "Epic Spec."
+        )
+
     report_content = f"""---
 epic: {epic_id}
-status: blocked
+status: {status}
 retry_attempts: {MAX_RETRIES}
 resolved_under:
   dev: "{dev_model}"
@@ -442,9 +535,9 @@ resolved_under:
 timestamp: UTC
 ---
 
-# Escalation Report: Epic {epic_id} Blocked
+{heading}
 
-The autonomous Dev-QA validation loop has exhausted the retry ceiling of {MAX_RETRIES} attempts.
+{intro}
 
 ## Hybrid Roles Context
 - **Developer Model:** `{dev_model}`
@@ -461,7 +554,7 @@ The autonomous Dev-QA validation loop has exhausted the retry ceiling of {MAX_RE
 ```
 
 ## Director Intervention Required
-Execution on the active branch has been suspended. Please review the failed validation outputs above, resolve any structural code defects, or update the Epic Spec.
+{intervention}
 """
     try:
         with open(report_path, 'w') as f:
@@ -711,6 +804,50 @@ def main():
                     self.assertEqual(feedback["exit_code"], 1)
                     
                 mock_exit.assert_called_once_with(1)
+
+            @patch('subprocess.run')
+            @patch('sys.exit')
+            def test_handle_epic_execution_local_unavailable_short_circuits(self, mock_exit, mock_run):
+                """P9-M31-E31.2 Hard Constraint 1: dev exit LOCAL_UNAVAILABLE_EXIT (5)
+                must refuse immediately, never retry as if it were an ordinary task
+                failure, and must never reach QA validation."""
+                mock_exit.side_effect = SystemExit
+                trigger = {
+                    "epic_id": "EPIC-104",
+                    "sandbox_env": "mock-sandbox",
+                    "validation_command": "run-validation",
+                    "dev_command": "run-dev",
+                    "run_dev_initially": True
+                }
+                trigger_file = QUEUE_DIR / "04_epic.json"
+                with open(trigger_file, 'w') as f:
+                    json.dump(trigger, f)
+
+                mock_run.return_value = MagicMock(
+                    returncode=LOCAL_UNAVAILABLE_EXIT, stdout="", stderr="ollama endpoint unreachable"
+                )
+
+                with self.assertRaises(SystemExit):
+                    handle_epic_execution(trigger, DEFAULT_MODELS)
+
+                # Only the dev command's sandbox invocation happened -- QA validation
+                # (and the feedback.json write that follows a QA failure) never ran.
+                self.assertEqual(mock_run.call_count, 1)
+                feedback_file = PROJECT_ROOT / ".ai-project" / "feedback.json"
+                self.assertFalse(feedback_file.exists())
+
+                trigger_file_after = QUEUE_DIR / "04_epic.json"
+                self.assertFalse(trigger_file_after.exists())
+                archived_file = QUEUE_DIR / "04_epic.json.failed"
+                self.assertTrue(archived_file.exists())
+
+                report_file = PROJECT_ROOT / "docs" / "admin" / "escalation-report-EPIC-104.md"
+                self.assertTrue(report_file.exists())
+                report_text = report_file.read_text()
+                self.assertIn("status: local-unavailable", report_text)
+                self.assertIn("Local Model Lane Unavailable", report_text)
+
+                mock_exit.assert_called_once_with(LOCAL_UNAVAILABLE_EXIT)
 
         suite = unittest.TestLoader().loadTestsFromTestCase(TestOrchestrator)
         runner = unittest.TextTestRunner(verbosity=2)

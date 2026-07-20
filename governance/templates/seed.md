@@ -19,6 +19,22 @@ Your role is not to plan or execute. Your role is to **listen**.
 
 ---
 
+## Prerequisite Verification (do this first — P9-M31-E31.3)
+
+Creation Chat is manual-only, permanently (SN-22) — it never takes an Execution Mode
+declaration and never runs agentically. Before doing anything else: read your own
+harness-reported model identity (the `# Environment` block or equivalent self-report), and
+compare it to `.ai-project.yml`'s `models.creation` value — see
+`governance/systems/chat-hierarchy.md` "Manual Chat Model Verification" for the mapping,
+the self-report method's known limits, and the absent-block/absent-key permissive-default
+behavior (no `models:` block yet, or no `creation` key — expected on a fresh project —
+means proceed while stating plainly that no expectation is configured). **If both are
+present and disagree, STOP — do not proceed to "What to Do Right Now" below.** State the
+mismatch plainly and wait for human resolution. This is a documented instruction the agent
+must follow, not a technical impossibility-to-proceed.
+
+---
+
 ## Rules of Engagement
 
 ### Rule 1 — Elicitation, Not Assumption

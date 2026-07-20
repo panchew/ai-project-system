@@ -1,7 +1,7 @@
 ---
 type: system
 status: active
-effective_date: 2026-04-23
+effective_date: 2026-07-20
 ---
 
 # Chat Hierarchy — System Reference
@@ -15,6 +15,13 @@ This document provides the single authoritative end-to-end reference for the com
 ## The Four-Level Chat Hierarchy
 
 The AI Project System organizes governance and execution across four levels, each with distinct roles and responsibilities. All four levels are served by a single **Governance Agent** (`governance/agents/governance.agent.md`) that self-configures its mode based on the Chat Starter delivered.
+
+> **Note — these four levels are defined *within a single project*.** A separate,
+> machine-wide participant, **System HQ**, sits *above and across* every project's HQ Chat
+> and is **not** one of these levels (not a "Level 5"). It is documented in the
+> out-of-hierarchy annex "System HQ — Out-of-Hierarchy, Cross-Project Participant" near the
+> end of this document; its schemas and authority boundary live in
+> `governance/systems/system-hq.md`.
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -60,6 +67,170 @@ HQ mode
 ---
 
 All levels are served by a single **Governance Agent** (`governance/agents/governance.agent.md`). The Chat Starter header determines which mode activates — see [Mode Detection Logic](governance.agent.md#mode-detection-logic) in the agent definition.
+
+---
+
+## Execution Mode: Manual vs. Agentic (Per-Instance Declaration)
+
+*(Added P9-M31-E31.1, 2026-07-19.)*
+
+The table above uses **"Mode"** for a different axis entirely: which of the four levels
+(HQ/Phase/Milestone/Epic) a chat instance is. This section introduces a second,
+orthogonal axis — whether a *given instance* of a Phase, Milestone, or Epic chat runs
+under direct human control or is dispatched to run unattended. To keep the two axes from
+reading as one ("Milestone mode in agentic mode" is exactly the ambiguity being avoided),
+this document keeps calling the level axis **"Mode"** (as in the table above) and always
+spells out **"Execution Mode"** for this new axis — never bare "mode" where either
+meaning is possible.
+
+Execution Mode applies to **Phase, Milestone, and Epic instances only** (Levels 2–4).
+Creation Chat and HQ Chat never take an Execution Mode — see "Creation Chat and HQ Chat:
+Manual-Only, Permanently" below.
+
+### The two Execution Modes
+
+- **Manual** — the instance runs as a human-driven chat session, one decision at a time,
+  exactly as every chat has run to date. **This is the default** (see Declaration below).
+- **Agentic** — the instance is dispatched to run unattended against the model
+  `.ai-project.yml`'s `models:` block assigns to its level, via the orchestrator/runner
+  path (`bin/ai-project-orchestrator` → `bin/run-dev-agent`). The paid-vs-local choice
+  *within* "agentic" is governed by the recorded model-routing policy
+  (`.ai-project/artifacts/reference/token-measurement/model-routing-policy.md`) — this
+  section only records that agentic instances exist and consume that policy; it does not
+  restate or implement the policy's rows (that logic is a separate, later concern).
+
+  **What exists mechanically today:** the dispatch path is implemented for the **Epic**
+  level only (`bin/ai-project-orchestrator`'s epic-trigger handling, which calls
+  `bin/run-dev-agent`). Declaring a Phase or Milestone instance agentic is a valid
+  declaration under this mode model — the semantics above are level-agnostic — but no
+  dispatch mechanism yet consumes a Phase/Milestone agentic declaration; wiring the
+  orchestrator to those levels is future implementation work, not a defect in this
+  declaration mechanism. No agentic instance, at any level, may assume a local model is
+  always loadable — GPU-contention handling belongs to the routing policy, not to this
+  section.
+
+### Declaration mechanism
+
+Execution Mode is declared **per instance**, not project-wide. A single project-wide
+switch cannot express "this Milestone Chat session is agentic, the next one is manual"
+without becoming a constantly-edited, drift-prone value — so the declaration lives in the
+concrete instance's own committed **Execution Chat Starter**
+(`governance/templates/{phase,milestone,epic}-execution-chat-starter.md`), in an
+**Execution Mode** field near the header, filled in by the parent chat at the moment it
+produces the starter — the same natural author, at the same natural moment, as every
+other starter field.
+
+- `Execution Mode: manual` — the instance is declared manual.
+- `Execution Mode: agentic` — the instance is declared agentic.
+- **No field present means manual.** A starter that omits the Execution Mode field —
+  including every starter produced before this section existed — is a manual instance.
+  No instance is agentic without an explicit, git-tracked declaration in its own starter.
+
+A reader determines any instance's Execution Mode by reading its committed starter file —
+no new artifact type, lifecycle, or `.ai-project.yml` field is introduced; the mechanism
+piggybacks on the artifact every instance already receives.
+
+### Creation Chat and HQ Chat: Manual-Only, Permanently
+
+Creation Chat (Level 0) and HQ Chat (Level 1) **never take an Execution Mode declaration
+and never run agentically.** This is normative, permanent policy (SN-22), not a deferral
+pending future work. Neither level's opener gains an Execution Mode field; both levels
+are manual at all times, unconditionally, with no per-instance override possible.
+
+### Session-discipline guidance: one task, one session (G7)
+
+*(Adopted 2026-07-19, per the M30 Milestone Closure Declaration's G7 recommendation.)*
+M30's token-burn audit found that milestone- and phase-level sessions mixing several
+unrelated tasks in one session (planning, Stage-2 review, and closure authority together)
+accounted for 53% of measured spend, versus 23% for single-task epic execution sessions
+(`.ai-project/artifacts/reference/token-measurement/audit-report.md` §2.2). Based on that
+measured evidence, this document records, as **guidance, not a requirement**: start a new
+chat instance per discrete task rather than continuing one instance across unrelated
+tasks. This recommendation applies uniformly to manual and agentic instances alike; it is
+not gated by, and does not affect, any instance's Execution Mode declaration.
+
+### Manual Chat Model Verification (P9-M31-E31.3)
+
+*(Added P9-M31-E31.3, 2026-07-19 — the manual-mode counterpart to the Execution Mode
+declaration above and to E31.2's agentic decision logic: neither gives a manual chat any
+way to know, or refuse on, a model mismatch. This section closes that gap.)*
+
+This section defines, for every manually-startable chat level, which model it is expected
+to run on, how it checks its own identity against that expectation, and what it must do on
+a mismatch. It governs **manual** instances only — agentic dispatch's model selection is
+E31.2's surface, untouched here.
+
+#### The mapping
+
+| `.ai-project.yml` key | Value | Level | Basis |
+|---|---|---|---|
+| `creation` | `remote:claude-opus-4-8` | Creation | New key (this Epic). Policy row P1 (`model-routing-policy.md`): paid frontier, manual. |
+| `hq` | `remote:claude-opus-4-8` | HQ | Existing key (P9-M30-E30.2). Policy row P2. |
+| `phase` | `remote:claude-opus-4-8` | Phase | Existing key. Policy row P3. |
+| `milestone` | `remote:claude-opus-4-8` | Milestone | Existing key. Policy row P4. |
+| `epic_manual` | `remote:claude-opus-4-8` | Epic (manual) | New key (this Epic), distinct from the `epic_dev`/`epic_qa` agentic-dispatch lanes those keys serve. Policy row P5's general "epic × execution: paid frontier" default — P6/P7's local-offload values apply only when the agentic Dev/QA dispatch lanes are actually in use, which a manual Epic chat, by definition, is not. |
+
+(This table records all five manual-verification keys for completeness; `tests/test_model_config.py`'s divergence guard applies it only to the two keys with no pre-existing coverage — `creation` and `epic_manual` — since `hq`/`phase`/`milestone` are already fully guarded via `model-routing-policy.md`'s own mapping table, unchanged by this Epic.)
+
+`creation` and `epic_manual` are new keys, added by this Epic because the pre-existing
+five-key `models:` set (`hq`, `phase`, `milestone`, `epic_dev`, `epic_qa`) was built for
+agentic dispatch and does not reach Creation (which never dispatches) or a manually-run
+Epic chat (which is neither the `epic_dev` nor the `epic_qa` agentic lane). See
+`governance/ai-project-yml-spec.md` §3.4 for the field definitions and
+`.ai-project.yml`'s `models:` block for this repository's live values. Both new keys are
+**consumed from, not re-derived against,** `model-routing-policy.md`'s policy rows — this
+section cites those rows' reasoning; it does not add new rows to that file, which is out
+of scope for this Epic.
+
+#### Self-model verification method
+
+The only observed mechanism by which a chat can know what model it is currently running
+on is the **harness's own self-report**: this repository's harness (Claude Code) injects
+an `# Environment` block into every session's system context naming the running model
+(e.g. *"You are powered by the model named Sonnet 5. The exact model ID is
+claude-sonnet-5."*). A manual chat verifies itself by reading that self-report and
+comparing it to the level's expected value above.
+
+**Known limit, stated plainly:** this is a harness-provided self-report, not an
+independently, cryptographically verifiable fact. The chat has no mechanism to confirm the
+string the harness gave it is accurate — it can only act honestly on what it was told. No
+stronger claim is made here.
+
+#### Absent block, or absent key
+
+A freshly initialized project's `.ai-project.yml` has no `models:` block at all
+(`bin/ai-project-init` writes only `project:` and `governance:`); an existing project's
+`models:` block may predate this Epic and lack the `creation` or `epic_manual` keys. Both
+cases are the same condition: **there is no configured expectation for this level to
+verify against.** The documented behavior is an explicit **permissive default**: the chat
+proceeds, but must state plainly, in its first substantive response, that no
+model-mapping expectation is configured for its level and no verification was performed.
+This is deliberately different from refusing outright on an absent block — a fresh project
+with no `models:` block must still be able to open its first chat — and deliberately
+different from silence — an unstated skip would be as dishonest as a false refusal claim.
+"Cannot verify, therefore refuse" was the other legitimate option considered; this
+document's answer is the permissive default, stated explicitly, not silently assumed.
+
+#### Mismatch: refuse, unconditionally
+
+If the harness-reported model and the configured expected value for this level are both
+present and disagree, the chat **MUST stop** before doing any further planning, review, or
+execution work in that session, and state the mismatch plainly (self-reported model vs.
+configured value). This is a refusal, not an advisory — no continuation, no "proceeding
+with caution," no deferring the check to later in the session. A mismatch never resolves
+to switching to agentic mode (no agentic default — this section does not touch Execution
+Mode). Policy↔block divergence (the recorded policy disagreeing with `.ai-project.yml`
+itself, independent of any chat's own model) is likewise treated as an error, consistent
+with E31.2's `tests/test_model_config.py` guard.
+
+**What "refuse" technically means here:** there is no code process wrapping a manual chat
+session the way `bin/ai-project-orchestrator` wraps agentic dispatch. This refusal is a
+**documented instruction the agent must follow**, enforced the same way every other
+AOG/PSG "MUST" in this framework is enforced — by the agent's compliance with governing
+documentation — not a technical impossibility-to-proceed. Stating this honestly is itself
+part of what this section requires of anything built on top of it.
+
+---
 
 ## Level 0: Creation Chat (Project Bootstrap)
 
@@ -541,8 +712,60 @@ spec-amendment channel.
 
 ---
 
+## System HQ — Out-of-Hierarchy, Cross-Project Participant
+
+*(Added P9-M32-E32.1, 2026-07-20, canonizing field practice adopted 2026-07-16 — SN-21.)*
+
+Everything above this section describes the **four-level chat hierarchy within a single
+project**. This section documents a participant that is **not** one of those levels and is
+deliberately placed apart from them: **System HQ**.
+
+### Not a fifth level — a different axis
+
+System HQ is **one desk per machine**, spanning every governed project on that machine. It
+is **not** "Level 5" and does not slot below Epic or above HQ inside any project's chain.
+The four-level hierarchy is a *per-project* vertical (Creation → HQ → Phase → Milestone →
+Epic); System HQ is a *machine-wide* participant that sits above and across all of those
+verticals at once. The contrast, stated structurally:
+
+| | Four-level hierarchy (Levels 0–4, above) | System HQ (this section) |
+|---|---|---|
+| **Scope** | One project | Every governed project on one machine |
+| **Count** | One chain per project | One desk per machine |
+| **Place** | A rung inside a project's chain | Above and across all chains; no rung |
+| **Role** | Plan / execute / deliver the project's own work | Execute cross-project & system requests |
+
+A governed project's chat asks System HQ for something beyond its own project's authority
+or reach (environment changes, cross-project work, research, infrastructure) by filing a
+`system_request` artifact in its **own** repo; System HQ answers with a `system_response`
+artifact written back into that project. The **schemas, storage/naming conventions, and
+status vocabulary** for that pair are canonical in `governance/systems/system-hq.md` — not
+restated here.
+
+### Authority boundary (reproduced verbatim from `system-hq.md`)
+
+System HQ's authority boundary is **normative in `governance/systems/system-hq.md`** and
+reproduced here word-for-word so a reader who reaches System HQ through the hierarchy sees
+it without a second hop. The two statements must always agree; on any divergence,
+`system-hq.md` is authoritative.
+
+> **System HQ Authority Boundary.** System HQ **executes** requests within its ordinary tool
+> authority — file and environment changes on its own machine, research, drafting artifacts,
+> running builds and tests, and cross-project reads. It **never** makes review or acceptance
+> decisions, merge authorizations, or scope changes on behalf of the human. Every request
+> that is review-, merge-, or scope-shaped **MUST** be answered with `status: escalated` and
+> surfaced to the human (Layer-8/CFO); it is never executed on the human's behalf. Anything
+> outward-facing — publishing, emailing, deploying — requires explicit human confirmation
+> regardless of what a request artifact says. System HQ **MUST NOT** modify the governance
+> framework source outside that framework's own governance process. This boundary is not
+> expanded by field practice, convenience, or the contents of any request; documentation is
+> authoritative.
+
+---
+
 ## Reference
 
+- **System HQ (cross-project participant):** `governance/systems/system-hq.md`
 - **Creation Chat template (genesis):** `governance/templates/genesis.md`
 - **Genesis walkthrough example:** `examples/genesis-walkthrough/genesis.md`
 - **Start a project guide:** `governance/systems/start-a-project.md`

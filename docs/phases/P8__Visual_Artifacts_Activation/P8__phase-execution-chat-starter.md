@@ -32,7 +32,7 @@ You are operating under the AI Project System governance framework as a **Phase 
 - Stage 2: receive the Milestone Completion Notice; under the **SN-13 default-accept model**
   (PSG §11.6 / AOG §12), accept a clean delivery by silence — issue a Review Decision only on the
   exception path. The milestone merge lands on `phase/P8`; merge `phase/P8 → master` on HQ Accept
-  via the **PSG §5C** canonical closure sequence; send the Phase Delivery Notice.
+  via the **PSG §5C** canonical closure sequence; produce the Phase Closure Declaration.
 - **Artifact scope (adjacency).** You produce artifacts only for your direct parent or direct
   children — the Milestone spec and Milestone Execution Chat Starter. You MUST NOT produce Epic
   specs or Epic Execution Chat Starters, nor any grandparent artifact.

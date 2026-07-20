@@ -46,9 +46,13 @@ Epic design decisions (E26.1 — decided here, per the spec's "decide, document,
   home established by E25.3), git-tracked, CONTRACT §4 shape.
 
 Exit codes: adapter-detected configuration problems exit 3 (the runner's config-error
-class) with a one-line reason on stderr; once the runner is invoked, its exit code is
-returned as-is. Epic success is decided downstream by the QA ``validation_command``
-exit code and the transcript — never by prose.
+class) with a one-line reason on stderr; adapter-detected local-unavailable (the Ollama
+endpoint is unreachable, or the resolved model tag is not pulled there) exits 5, checked
+only when the resolved model is ``local:``-prefixed and always before the runner is
+invoked (P9-M31-E31.2, Hard Constraint 4 — "local loadability is never assumed"); once
+the runner is invoked, its exit code is returned as-is. Epic success is decided
+downstream by the QA ``validation_command`` exit code and the transcript — never by
+prose.
 """
 
 import json
@@ -58,10 +62,23 @@ import shutil
 import subprocess
 import sys
 import time
+import urllib.error
+import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
 
 EXIT_CONFIG = 3
+# Shared exit-code convention across this project's tooling (P9-M31-E31.2): 5 means "a
+# local resource this run depends on is genuinely unavailable, refuse loudly rather than
+# retry or silently fall back to a different model" — Hard Constraint 1. The orchestrator
+# (bin/ai-project-orchestrator's LOCAL_UNAVAILABLE_EXIT) short-circuits its retry loop on
+# exactly this value from this adapter; bin/ai-project-visual's execution-lock guardrail
+# (governance/guides/gpu-coexistence.md) uses the same value for the adjacent GPU-
+# contention case.
+EXIT_LOCAL_UNAVAILABLE = 5
+
+DEFAULT_OLLAMA_ENDPOINT = "http://localhost:11434"
+AVAILABILITY_CHECK_TIMEOUT_S = 5.0
 
 TRIGGER_FILE = Path(".ai-project") / "queue" / "04_epic.json"
 TOOLS_JSON = Path(".ai-project") / "agents" / "tools.json"
@@ -76,8 +93,21 @@ def fail(message):
     sys.exit(EXIT_CONFIG)
 
 
+def fail_local_unavailable(message):
+    """One-line reason on stderr, local-unavailable exit (class 5) — distinct from
+    both the config-error class (3, a caller mistake) and the runner's own exit-4
+    runtime-error class (raised only once the runner has actually been invoked).
+    This exit means the runner was never invoked at all."""
+    print(f"[run-dev-agent] {message}", file=sys.stderr)
+    sys.exit(EXIT_LOCAL_UNAVAILABLE)
+
+
 def resolve_model():
-    """Map AI_PROJECT_ACTIVE_MODEL to the bare ollama tag the runner expects."""
+    """Map AI_PROJECT_ACTIVE_MODEL to the bare ollama tag the runner expects.
+
+    Returns ``(tag, is_local)``; ``is_local`` gates the local-availability preflight
+    check below — a bare/``remote:``-prefixed model has no local endpoint to check.
+    """
     raw = os.environ.get("AI_PROJECT_ACTIVE_MODEL", "").strip()
     if not raw:
         fail("AI_PROJECT_ACTIVE_MODEL is missing or empty — no default is assumed")
@@ -85,8 +115,35 @@ def resolve_model():
         tag = raw[len("local:"):].strip()
         if not tag:
             fail(f"AI_PROJECT_ACTIVE_MODEL {raw!r} has an empty tag after 'local:'")
-        return tag
-    return raw
+        return tag, True
+    return raw, False
+
+
+def check_local_availability(tag, endpoint):
+    """Hard Constraint 4: local loadability is never assumed. Probes the Ollama
+    endpoint's ``/api/tags`` before the runner is invoked, so an unreachable endpoint
+    or an unpulled model tag is caught here — distinguished (exit 5) from both a
+    config error (3) and whatever the runner itself would have returned (0/2/3/4) had
+    it been given the chance to try and fail. Never falls back to a different model:
+    that would itself be an undeclared routing change (Non-Goals)."""
+    url = endpoint.rstrip("/") + "/api/tags"
+    try:
+        with urllib.request.urlopen(url, timeout=AVAILABILITY_CHECK_TIMEOUT_S) as resp:
+            body = json.loads(resp.read())
+    except (urllib.error.URLError, OSError, TimeoutError) as e:
+        fail_local_unavailable(f"Ollama endpoint {endpoint!r} unreachable: {e}")
+    except ValueError as e:
+        fail_local_unavailable(f"Ollama endpoint {endpoint!r} returned unparseable JSON: {e}")
+
+    available = {
+        m.get("name") or m.get("model")
+        for m in (body.get("models") or [])
+        if isinstance(m, dict)
+    }
+    if tag not in available:
+        fail_local_unavailable(
+            f"model {tag!r} not found on Ollama endpoint {endpoint!r} (not pulled)"
+        )
 
 
 def load_trigger():
@@ -158,7 +215,10 @@ def discover_runner():
 
 
 def main():
-    model = resolve_model()
+    model, is_local = resolve_model()
+    endpoint = os.environ.get("AI_PROJECT_OLLAMA_ENDPOINT", "").strip()
+    if is_local:
+        check_local_availability(model, endpoint or DEFAULT_OLLAMA_ENDPOINT)
 
     trigger = load_trigger()
     epic_id = str(trigger.get("epic_id", "")).strip()
@@ -198,7 +258,6 @@ def main():
         "--tools", str(TOOLS_JSON),
         "--transcript", str(transcript_path),
     ]
-    endpoint = os.environ.get("AI_PROJECT_OLLAMA_ENDPOINT", "").strip()
     if endpoint:
         cmd += ["--endpoint", endpoint]
 

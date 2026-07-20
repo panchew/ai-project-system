@@ -6,6 +6,20 @@ last_updated: 2026-01-17
 
 # HQ Chat Opener — Project Control Room
 
+## Prerequisite Verification (do this first — P9-M31-E31.3)
+
+HQ Chat is manual-only, permanently (SN-22) — it never takes an Execution Mode
+declaration and never runs agentically. Before proceeding: read your own harness-reported
+model identity (the `# Environment` block or equivalent self-report), and compare it to
+`.ai-project.yml`'s `models.hq` value — see `governance/systems/chat-hierarchy.md` "Manual
+Chat Model Verification" for the mapping, the self-report method's known limits, and the
+absent-block/absent-key permissive-default behavior (no `models:` block, or no `hq` key,
+means proceed while stating plainly that no expectation is configured). **If both are
+present and disagree, STOP — do not proceed with any HQ work** (scoping, Phase
+authorization, digest review, etc.). State the mismatch plainly and wait for human
+resolution. This is a documented instruction the agent must follow, not a technical
+impossibility-to-proceed.
+
 ## Project Context
 Project:
 Repository:

@@ -45,9 +45,10 @@ The full schema, defaults, and validation rules live in
 — `bin/ai-project-orchestrator`'s `load_yml_config()` / `resolve_visual_artifacts()` — so the helper,
 the orchestrator, and the tests never disagree about the effective config.
 
-> **No** project commits generated binaries — the governance **source** repository's `enabled: false`
-> is one instance of that universal rule. It ships the guidance, the helper, and the test — not
-> generated output — and its test suite stays green without a live endpoint.
+> **No** project commits generated binaries — the rule is universal and holds whether or not the
+> capability is enabled. The governance **source** repository runs with `enabled: true` (since Epic
+> E29.2) and still commits no generated output: it ships the guidance, the helper, and the test, and
+> references generated artifacts by link like every other adopter.
 
 ---
 
@@ -357,10 +358,19 @@ ai-project-visual \
 ## 6. Testing without a live endpoint
 
 The integration test under [`../../tests/integration/`](../../tests/integration/) exercises the
-helper against the configured endpoint but **skips when `visual_artifacts.enabled` is `false`**. It
-reads the effective config through the same resolver as the helper, so the suite stays green with no
-ComfyUI instance running. Set `enabled: true` and point `comfyui_url` at a reachable server to make
-the endpoint test run.
+helper against the configured endpoint. It reads the effective config through the same resolver as
+the helper, so a project's suite never disagrees with its config about whether the endpoint test
+should run. Two paths keep the suite green without a reachable ComfyUI instance:
+
+- **Projects with the capability off** — the endpoint test **skips when `visual_artifacts.enabled` is
+  `false`**. Set `enabled: true` and point `comfyui_url` at a reachable server to make it run.
+- **Contributors and CI on a project that has it on** — set
+  `AI_PROJECT_SKIP_LIVE_ENDPOINT_TESTS=1` to skip that one test on a machine without a reachable
+  endpoint. Unset (the default) still runs it and requires the endpoint.
+
+In *this* repository the capability is enabled (`enabled: true`, since Epic E29.2) and the endpoint
+test therefore **runs for real by default** against the live local endpoint — it is not skipped here
+unless a contributor opts out via that environment variable.
 
 ---
 

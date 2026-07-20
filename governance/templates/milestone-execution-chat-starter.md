@@ -10,18 +10,14 @@
   1. Copy this template
   2. Replace all <placeholders> with actual content
   3. Delete HTML comments (or keep for reference)
-  4. The entire filled-in content MUST be wrapped in a fenced markdown code block
-     when delivered (see AI-OPERATING-GUIDELINES.md §3.1.1):
-
-         ````markdown name=<P#>-<M#>-milestone-execution-chat-starter.md
-         [filled-in content here]
-         ````
-
-     This preserves markdown formatting when the starter is copy-pasted into a
-     Milestone Chat session. The four-backtick fence escapes any triple-backtick code
-     blocks inside the content.
-  5. After the code block, add the canonical copy instruction:
-     "Copy the entire chat starter above and paste into your Milestone Chat to begin planning."
+  4. Commit the filled-in starter as a git-tracked file, then hand it off
+     **by reference** (AI-OPERATING-GUIDELINES.md §3.1.1 — the canonical
+     artifact-handoff rule): IDE-attach + one line of intent, or the canonical
+     reference line (artifact type + id — repo-relative path — status). Do NOT
+     echo the starter's body into chat output.
+  5. Fallback — no repo access? For genuinely repo-less delivery only, wrap the
+     full body in a four-backtick fence per the fallback format in
+     AI-OPERATING-GUIDELINES.md §3.1.1, and say the fallback is in use.
 
   This template aligns with AI-OPERATING-GUIDELINES.md and PROJECT-SYSTEM-GUIDELINES.md.
 -->
@@ -35,6 +31,10 @@
 **Project:** <project-name>
 **Repository:** <path/to/repository>
 **Milestone Spec:** `<path/to/P#>-<M#>__milestone.md>`
+**Execution Mode:** <manual | agentic> — declared by the issuing chat at creation time; omit
+this field entirely to declare manual (absence-means-manual, per
+`governance/systems/chat-hierarchy.md`'s "Execution Mode" section, P9-M31-E31.1). Do not
+leave the placeholder unresolved — either state a value or delete the line.
 
 ---
 
@@ -78,6 +78,12 @@ You are operating under the AI Project System governance framework as a **Milest
 - **Issuing a mid-flight amendment:** To change scope or direction after Epic/Coding-Agent sessions are already running, do NOT reach into those running sessions. Instead, amend the governing Epic spec, note the change (e.g., an amendment-history entry), and notify your parent chat (Phase Chat, or HQ Chat during bootstrap) — escalating up for a pause/cancel decision if the change is blocking. The spec file is the downward channel (one write, many readers). See the "Communication Protocol" section of `governance/systems/chat-hierarchy.md`.
 - Epic-level decisions are within your authority; milestone-level acceptance belongs to the parent chat
 
+**Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
+- Load at session start: this starter; the Milestone spec (full); the Phase spec **by targeted section only** — your milestone's entry in §Milestones plus the phase §Acceptance Criteria, not the whole document; PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6, §12, §13C, §15; AOG preamble+§1, §1A, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
+- Load on trigger (before acting on that situation): PSG §5B + AOG §3.4 at milestone-closure time; PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §11, §16 (visual bindings due)
+- Do not load: PSG/AOG changelogs, other levels' role or starter-format sections, sibling specs
+- Use targeted section reads; never re-read a whole document to reach one section. PSG and AOG remain fully authoritative — a triggered situation requires its section loaded before acting.
+
 ---
 
 ## Milestone Context
@@ -118,6 +124,16 @@ The Milestone spec MUST be **git-tracked on the expected branch** at the path sp
 
 **If the Milestone spec is incomplete or ambiguous:** Report the issue to the parent chat. Do NOT assume intent or fill gaps without parent chat confirmation.
 
+**Model verification (P9-M31-E31.3 — required when this instance is manual, i.e. no
+`Execution Mode` field or `Execution Mode: manual` above):** read your own harness-reported
+model identity (the `# Environment` block or equivalent self-report), and compare it to
+`.ai-project.yml`'s `models.milestone` value — see `governance/systems/chat-hierarchy.md`
+"Manual Chat Model Verification" for the mapping, the self-report method's known limits,
+and the absent-block/absent-key permissive-default behavior. **If both are present and
+disagree, STOP — do not proceed with any planning or review work.** State the mismatch
+plainly and wait for the parent chat/human. This is a documented instruction the agent
+must follow, not a technical impossibility-to-proceed.
+
 ---
 
 ## Output Requirements
@@ -137,18 +153,23 @@ You must produce the following deliverables, in order:
 
 <!--
   This Milestone Execution Chat commits Epic spec files and Epic Execution Chat Starters directly to the milestone branch,
-  the same way a Coding Agent commits code. Deliver them as structured blocks in this chat AND push them to the branch.
+  the same way a Coding Agent commits code. Commit and push them to the branch, then hand them off by reference —
+  do NOT echo their bodies into this chat (AI-OPERATING-GUIDELINES.md §3.1.1).
   Do NOT produce both simultaneously — produce one Epic's deliverables at a time
   and await parent chat acceptance before proceeding to the next.
 -->
 
 ### Delivery format
 
-Each Epic's deliverables are delivered together as a set. Wrap each Epic Execution Chat Starter in a four-backtick fence per AI-OPERATING-GUIDELINES.md §3.1.1:
+Each Epic's deliverables are delivered together as a set — committed to the
+branch, then handed off **by reference** per AI-OPERATING-GUIDELINES.md §3.1.1
+(the canonical artifact-handoff rule): one reference line per artifact
+(artifact type + id — repo-relative path — status), or IDE-attach + one-line
+intent. Do not display the artifact bodies in chat output.
 
-    ````markdown name=<P#>-<M#>-<E#.#>-epic-execution-chat-starter.md
-    [starter content here]
-    ````
+*Fallback — no repo access?* For genuinely repo-less delivery only, use the
+four-backtick fenced full-body form per the fallback format in
+AI-OPERATING-GUIDELINES.md §3.1.1.
 
 After each set of deliverables, explicitly request parent chat review before proceeding.
 

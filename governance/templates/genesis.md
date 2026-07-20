@@ -37,6 +37,23 @@ status: draft
 
 # Genesis — <Project Name>
 
+## Prerequisite Verification (do this first — P9-M31-E31.3)
+
+<!--
+  Creation Chat is manual-only, permanently (SN-22) — it never takes an Execution Mode
+  declaration and never runs agentically. Before filling in this genesis, read your own
+  harness-reported model identity (the `# Environment` block or equivalent self-report),
+  and compare it to `.ai-project.yml`'s `models.creation` value — see
+  `governance/systems/chat-hierarchy.md` "Manual Chat Model Verification" for the mapping,
+  the self-report method's known limits, and the absent-block/absent-key
+  permissive-default behavior (no `models:` block yet, or no `creation` key — expected on
+  a fresh project — means proceed while stating plainly that no expectation is
+  configured). If both are present and disagree, STOP — do not fill in this genesis or
+  produce any project-bootstrap artifact. State the mismatch plainly and wait for human
+  resolution. This is a documented instruction the agent must follow, not a technical
+  impossibility-to-proceed.
+-->
+
 ## Project Brief
 
 <!-- The one-paragraph "why" of the project. Enough for a stranger to understand intent. -->

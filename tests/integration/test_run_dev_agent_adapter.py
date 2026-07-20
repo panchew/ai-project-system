@@ -12,13 +12,23 @@ Covered here, per the Epic spec:
 - Transcript written under the documented artifact convention
 - Absence guard: the adapter source never references the runner's terminating-text
   field (SN-3 binding constraint)
+
+P9-M31-E31.2 adds the local-availability preflight (Hard Constraint 4): every
+``local:``-prefixed model is checked against a real ``/api/tags`` endpoint before the
+runner is invoked. ``ollama_stub`` below is a real, minimal Ollama stand-in (a loopback
+HTTP server) so those tests are deterministic and hermetic — no dependency on a real
+Ollama install. ``run_adapter`` points ``AI_PROJECT_OLLAMA_ENDPOINT`` at it by default;
+tests exercising the local-unavailable path override that explicitly.
 """
 
+import http.server
 import json
 import os
+import socket
 import stat
 import subprocess
 import sys
+import threading
 from pathlib import Path
 
 import pytest
@@ -26,6 +36,9 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[2]
 ADAPTER_PATH = REPO_ROOT / "bin" / "run-dev-agent"
 REPO_TOOLS_JSON = REPO_ROOT / ".ai-project" / "agents" / "tools.json"
+
+EXIT_LOCAL_UNAVAILABLE = 5  # bin/run-dev-agent's EXIT_LOCAL_UNAVAILABLE (CONTRACT-adjacent)
+STUB_MODEL_TAG = "qwen2.5-coder:14b"  # the suite's default local model tag
 
 EPIC_ID = "P9-M99-E99.9"
 SPEC_DIR = "docs/phases/P9__Fixture_Phase"
@@ -69,8 +82,57 @@ sys.exit(int(os.environ.get("STUB_EXIT_CODE", "0")))
 """
 
 
+class _TagsHandler(http.server.BaseHTTPRequestHandler):
+    """Serves ``/api/tags`` with whatever tags ``self.server.tags`` carries (set by
+    the ``ollama_stub`` fixture) — enough of the real Ollama API surface for the
+    adapter's preflight check."""
+
+    def do_GET(self):
+        if self.path == "/api/tags":
+            body = json.dumps(
+                {"models": [{"name": t} for t in self.server.tags]}
+            ).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, *_args):
+        pass
+
+
 @pytest.fixture
-def project(tmp_path):
+def ollama_stub():
+    """A real loopback HTTP server standing in for Ollama's ``/api/tags``, reachable
+    by the adapter's subprocess. Reports ``STUB_MODEL_TAG`` as pulled by default."""
+    server = http.server.HTTPServer(("127.0.0.1", 0), _TagsHandler)
+    server.tags = [STUB_MODEL_TAG]
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield server
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)
+
+
+def _unused_port():
+    """A port nothing is listening on (bind-then-close), for the unreachable-endpoint
+    tests — standard idiom, negligible flakiness risk in a short test window."""
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind(("127.0.0.1", 0))
+    port = s.getsockname()[1]
+    s.close()
+    return port
+
+
+@pytest.fixture
+def project(tmp_path, ollama_stub):
     """A minimal project the adapter can run against, plus a stubbed runner."""
     root = tmp_path / "project"
     spec_dir = root / SPEC_DIR
@@ -103,10 +165,22 @@ def project(tmp_path):
         "stub": stub,
         "args_file": tmp_path / "stub-args.json",
         "spec_dir": spec_dir,
+        "ollama_stub": ollama_stub,
+        "ollama_url": f"http://127.0.0.1:{ollama_stub.server_port}",
     }
 
 
-def run_adapter(project, model="local:qwen2.5-coder:14b", exit_code=0, env_extra=None):
+_DEFAULT_ENDPOINT = object()  # sentinel: "use project's working ollama_stub"
+
+
+def run_adapter(
+    project, model="local:qwen2.5-coder:14b", exit_code=0, env_extra=None,
+    ollama_endpoint=_DEFAULT_ENDPOINT,
+):
+    """``ollama_endpoint`` defaults to the project's real, reachable stub (so every
+    existing local-model test passes the P9-M31-E31.2 preflight check silently);
+    pass an explicit URL/``None`` to exercise endpoint-forwarding or the
+    local-unavailable path instead."""
     env = os.environ.copy()
     env.pop("AI_PROJECT_ACTIVE_MODEL", None)
     env.pop("AI_PROJECT_OLLAMA_ENDPOINT", None)
@@ -115,6 +189,11 @@ def run_adapter(project, model="local:qwen2.5-coder:14b", exit_code=0, env_extra
     env["LOCAL_AGENT_RUNNER"] = str(project["stub"])
     env["STUB_ARGS_FILE"] = str(project["args_file"])
     env["STUB_EXIT_CODE"] = str(exit_code)
+    resolved_endpoint = (
+        project["ollama_url"] if ollama_endpoint is _DEFAULT_ENDPOINT else ollama_endpoint
+    )
+    if resolved_endpoint is not None:
+        env["AI_PROJECT_OLLAMA_ENDPOINT"] = resolved_endpoint
     env.update(env_extra or {})
     return subprocess.run(
         [sys.executable, str(ADAPTER_PATH)],
@@ -208,15 +287,19 @@ def test_tools_flag_is_the_coding_set(project):
 
 
 def test_endpoint_env_is_forwarded(project):
-    result = run_adapter(
-        project, env_extra={"AI_PROJECT_OLLAMA_ENDPOINT": "http://ollama-host:11434"}
-    )
+    # A real, reachable endpoint (not a fake hostname): P9-M31-E31.2's preflight
+    # check would otherwise reject an unreachable AI_PROJECT_OLLAMA_ENDPOINT before
+    # the flag-forwarding behavior under test ever gets exercised.
+    result = run_adapter(project, ollama_endpoint=project["ollama_url"])
     assert result.returncode == 0, result.stderr
-    assert flag_value(runner_args(project), "--endpoint") == "http://ollama-host:11434"
+    assert flag_value(runner_args(project), "--endpoint") == project["ollama_url"]
 
 
 def test_endpoint_defaults_to_runner_default(project):
-    result = run_adapter(project)
+    # A non-local model: the preflight check (and its dependency on a reachable
+    # default endpoint) only applies to local: models, so this isolates the
+    # flag-omission behavior under test from that check entirely.
+    result = run_adapter(project, model="qwen2.5-coder:14b", ollama_endpoint=None)
     assert result.returncode == 0, result.stderr
     assert "--endpoint" not in runner_args(project)
 
@@ -228,6 +311,48 @@ def test_endpoint_defaults_to_runner_default(project):
 def test_runner_exit_code_passes_through_unaltered(project, code):
     result = run_adapter(project, exit_code=code)
     assert result.returncode == code
+
+
+# --- local-availability preflight (P9-M31-E31.2, Hard Constraint 4) --------------
+
+
+def test_local_unavailable_when_endpoint_unreachable(project):
+    unreachable = f"http://127.0.0.1:{_unused_port()}"
+    result = run_adapter(project, ollama_endpoint=unreachable)
+    assert result.returncode == EXIT_LOCAL_UNAVAILABLE
+    assert "unreachable" in result.stderr
+    assert not project["args_file"].exists(), "runner must not be invoked"
+
+
+def test_local_unavailable_when_model_not_pulled(project):
+    result = run_adapter(project, model="local:some-unpulled-tag:latest")
+    assert result.returncode == EXIT_LOCAL_UNAVAILABLE
+    assert "not found" in result.stderr or "not pulled" in result.stderr
+    assert not project["args_file"].exists(), "runner must not be invoked"
+
+
+def test_local_unavailable_distinct_from_config_error_and_runner_codes():
+    """The distinguished exit must not collide with the config-error class (3) or
+    any value in the runner's own 0/2/3/4 contract."""
+    assert EXIT_LOCAL_UNAVAILABLE not in {0, 2, 3, 4}
+
+
+def test_non_local_model_skips_local_availability_check(project):
+    """A bare/remote-tagged model has no local endpoint to check -- the preflight
+    is scoped to local: models only (Non-Goals: never treat a remote dispatch as
+    a local-availability question)."""
+    unreachable = f"http://127.0.0.1:{_unused_port()}"
+    result = run_adapter(project, model="qwen2.5-coder:14b", ollama_endpoint=unreachable)
+    assert result.returncode == 0, result.stderr
+    assert project["args_file"].exists(), "runner should have been invoked normally"
+
+
+def test_local_available_and_model_present_proceeds_normally(project):
+    """Sanity check: a reachable endpoint reporting the requested tag as pulled
+    must not be mistaken for unavailable -- the check must not false-positive."""
+    result = run_adapter(project, model=f"local:{STUB_MODEL_TAG}")
+    assert result.returncode == 0, result.stderr
+    assert flag_value(runner_args(project), "--model") == STUB_MODEL_TAG
 
 
 # --- transcript + artifacts ------------------------------------------------------

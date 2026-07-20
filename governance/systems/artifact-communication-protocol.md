@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-05-29
-version: 1.2.0
+version: 1.4.0
 ---
 
 # Artifact Communication Protocol (P4.1)
@@ -11,7 +11,7 @@ version: 1.2.0
 
 This document defines the canonical artifact formats and communication rules for structured, predictable handoffs between governance chats in the AI Project System.
 
-**Problem Solved:** Manual mode previously required human copy-paste between chats, creating transcription errors and breaking audit trails. Agentic mode had no standard for parent-child artifact exchange.
+**Problem Solved:** Manual mode previously required human copy-paste between chats, creating transcription errors and breaking audit trails. Agentic mode had no standard for parent-child artifact exchange. (Transport itself is now solved better still by committed files passed by reference — AI-OPERATING-GUIDELINES.md §3.1.1; see §Integration with Manual Mode.)
 
 **Solution:** Two canonical artifacts for the standard Epic/Milestone/Phase flow — **Delivery Notice** (produced by the child at execution completion) and **Review Decision** (produced by the parent, exception path only) — with standardized frontmatter (YAML) + markdown body. Every chat produces these when appropriate, and parent chats consume them for decisions. The Bugfix Workflow retains its own, separate two-artifact model (see §3) as a deliberate exception.
 
@@ -405,7 +405,18 @@ Phase Chat
 
 ## Integration with Manual Mode
 
-In manual mode (no daemon), chats produce these artifacts and paste them into parent chats via copy-paste. The parent chat reviews; a clean delivery is accepted by silence with an in-chat acknowledgment (PSG §11.6), and on the exception path the Review Decision is copied back.
+In manual mode (no daemon), chats produce these artifacts as committed, git-tracked
+files and hand them to parent chats **by reference** per AI-OPERATING-GUIDELINES.md
+§3.1.1 (the canonical artifact-handoff rule): IDE-attach + one line of intent, or
+the canonical reference line (artifact type + id — repo-relative path — status).
+The parent chat reads the referenced file selectively (frontmatter + Summary +
+DoD/QA suffices under PSG §11.6); a clean delivery is accepted by silence with an
+in-chat acknowledgment, and on the exception path the Review Decision is handed
+back the same way — by reference.
+
+*Fallback — no repo access?* For genuinely repo-less setups only, copy-paste
+transport remains documented in AI-OPERATING-GUIDELINES.md §3.1.1's fallback
+format (SN-23 Decision 2 — platform agnosticism preserved).
 
 **CFO Benefit:** Layer-8 can visit any HQ Chat and see the latest Delivery Notices and Review Decisions in a structured format, making progress tracking across multiple projects trivial.
 
@@ -425,6 +436,7 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 ## Reference
 
+- **System HQ (cross-project participant — `system_request`/`system_response` schemas):** `governance/systems/system-hq.md` — the machine-wide System HQ desk and its two artifact types live there, not in this document, because they are the framework's first **cross-project** pair (this document's types are all intra-project). See that document for their schemas, storage/naming conventions, status vocabulary, and System HQ's normative authority boundary.
 - **Chat Hierarchy:** `governance/systems/chat-hierarchy.md`
 - **Epic Execution Chat Starter:** `governance/EPIC-EXECUTION-CHAT-STARTER.md`
 - **Milestone Execution Chat Starter:** `governance/systems/milestone-execution-chat-starter.md`
@@ -438,6 +450,8 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.4.0 | 2026-07-20 | Added a `## Reference` pointer to the new companion document `governance/systems/system-hq.md`, which canonizes the framework's first **cross-project** artifact pair (`system_request`/`system_response`) and the System HQ participant. Design Decision 1B (SN-21): the cross-project pair lives in a companion document rather than this document's intra-project `## Artifact Types` section, whose Core Principles and Communication Flow Diagram assume a single-project chain. No existing schema, example, flow diagram, or storage rule changed. (P9-M32-E32.1) |
 | 1.0.0 | 2026-05-29 | Initial release. Defines Completion Notice, Review Decision, Delivery Notice schemas and integration with manual & agentic modes. |
 | 1.1.0 | 2026-07-03 | Reconciled to default-accept (SN-13, PSG §11.6 / AOG §12): Review Decision reframed as the exception-path artifact; a clean delivery is accepted by silence. Ordering rule "Review Decision (Accept) MUST precede a Delivery Notice" scoped to the exception path. ACCEPT worked example reframed as accept-with-follow-ups; REJECT example and all schemas unchanged. (P6-M25-E25.4) |
+| 1.3.0 | 2026-07-18 | **Reference-first manual-mode handoff (SN-23).** §Integration with Manual Mode rewritten: artifacts are committed, git-tracked files handed to parent chats **by reference** (IDE-attach + one-line intent, or the canonical reference line) per the generalized AI-OPERATING-GUIDELINES.md §3.1.1 — cited, not restated; copy-paste transport retained as the documented **repo-less fallback** (SN-23 Decision 2). §Purpose "Problem Solved" annotated: transport is now solved by committed files + reference, not paste. Schemas, storage rules, agentic-mode flow, and the §11.6 acceptance model unchanged. Per SN-23 (CFO-ratified 2026-07-18); E30.4 (P9-M30). |
 | 1.2.0 | 2026-07-13 | Delivery-Notice terminology collision reconciled against PSG §12 / AOG §1A step 2 / AOG §10 (all three already agreed): the pre-review, execution-completion artifact (formerly "Completion Notice," §1) is renamed **Delivery Notice**. The separate post-merge "Delivery Notice" (formerly §3) is retired from the standard Epic/Milestone/Phase flow — direct verification found it unproduced across all seven recent P7 Epics (E26.1-3, E27.1-3, E28.1) and the canonical `epic-execution-chat-starter.md` template, which has fully converged on the single-artifact model. The Bugfix Workflow's continued, intentional two-artifact model (`bugfix-epic-workflow.md`) is explicitly carved out as an exception, not restated here. No PSG or AOG edit was needed — both already matched this direction. (P7-M28-E28.2; reverses the M28 Milestone spec's stated recommended default, with reasoning grounded in direct evidence — see the Epic spec) |
