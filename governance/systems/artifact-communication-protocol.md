@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-05-29
-version: 1.3.0
+version: 1.4.0
 ---
 
 # Artifact Communication Protocol (P4.1)
@@ -436,6 +436,7 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 ## Reference
 
+- **System HQ (cross-project participant — `system_request`/`system_response` schemas):** `governance/systems/system-hq.md` — the machine-wide System HQ desk and its two artifact types live there, not in this document, because they are the framework's first **cross-project** pair (this document's types are all intra-project). See that document for their schemas, storage/naming conventions, status vocabulary, and System HQ's normative authority boundary.
 - **Chat Hierarchy:** `governance/systems/chat-hierarchy.md`
 - **Epic Execution Chat Starter:** `governance/EPIC-EXECUTION-CHAT-STARTER.md`
 - **Milestone Execution Chat Starter:** `governance/systems/milestone-execution-chat-starter.md`
@@ -449,6 +450,7 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.4.0 | 2026-07-20 | Added a `## Reference` pointer to the new companion document `governance/systems/system-hq.md`, which canonizes the framework's first **cross-project** artifact pair (`system_request`/`system_response`) and the System HQ participant. Design Decision 1B (SN-21): the cross-project pair lives in a companion document rather than this document's intra-project `## Artifact Types` section, whose Core Principles and Communication Flow Diagram assume a single-project chain. No existing schema, example, flow diagram, or storage rule changed. (P9-M32-E32.1) |
 | 1.0.0 | 2026-05-29 | Initial release. Defines Completion Notice, Review Decision, Delivery Notice schemas and integration with manual & agentic modes. |
 | 1.1.0 | 2026-07-03 | Reconciled to default-accept (SN-13, PSG §11.6 / AOG §12): Review Decision reframed as the exception-path artifact; a clean delivery is accepted by silence. Ordering rule "Review Decision (Accept) MUST precede a Delivery Notice" scoped to the exception path. ACCEPT worked example reframed as accept-with-follow-ups; REJECT example and all schemas unchanged. (P6-M25-E25.4) |
 | 1.3.0 | 2026-07-18 | **Reference-first manual-mode handoff (SN-23).** §Integration with Manual Mode rewritten: artifacts are committed, git-tracked files handed to parent chats **by reference** (IDE-attach + one-line intent, or the canonical reference line) per the generalized AI-OPERATING-GUIDELINES.md §3.1.1 — cited, not restated; copy-paste transport retained as the documented **repo-less fallback** (SN-23 Decision 2). §Purpose "Problem Solved" annotated: transport is now solved by committed files + reference, not paste. Schemas, storage rules, agentic-mode flow, and the §11.6 acceptance model unchanged. Per SN-23 (CFO-ratified 2026-07-18); E30.4 (P9-M30). |
