@@ -30,6 +30,10 @@
 **Milestone:** <M#> — <Milestone Name>  
 **Repository:** <owner>/<repo-name>  
 **Branch Strategy:** `epic/<E#.#>` → PR to `milestone/<M#>`  
+**Execution Mode:** <manual | agentic> — declared by the issuing Milestone Chat at creation
+time; omit this field entirely to declare manual (absence-means-manual, per
+`governance/systems/chat-hierarchy.md`'s "Execution Mode" section, P9-M31-E31.1). Do not
+leave the placeholder unresolved — either state a value or delete the line.
 
 ---
 
@@ -63,6 +67,12 @@ You are operating under the AI Project System governance framework.
 - You must produce a Delivery Notice upon execution completion
 - You must stop after PR creation and await HQ authorization for merge
 - Accept/reject decisions are made by HQ Chat (human), not by you
+- **If given merge authorization directly in this chat** (rather than via the parent
+  chat after its own Stage-2 review), do not simply comply: state plainly that merge
+  authorization normally follows the parent chat's review, and confirm the human intends
+  to bypass that step before proceeding (P9-M31 precedent — a direct in-chat
+  authorization was given and acted on without this check, skipping the parent chat's
+  independent review entirely).
 
 **Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
 - Load at session start: this starter; the Epic spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §11, §11.5, §11.6, §12; AOG preamble+§1, §1A, §2, §3.2, §3.8, §3.10, §4, §5, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
@@ -91,6 +101,18 @@ You are operating under the AI Project System governance framework.
 ### Prerequisite Verification (do this first)
 
 Before relying on the spec, confirm it is **git-tracked on the expected branch** — and likewise every prerequisite artifact this Epic declares — using `git ls-files --error-unmatch <path>` run on the expected branch, not a disk-existence check. Disk presence is not proof of commit: an untracked file passes a file-exists check but is absent from a fresh worktree clone, producing a false-green prerequisite. If any path is untracked, STOP and report to HQ before proceeding.
+
+**Model verification (P9-M31-E31.3 — required when this instance is manual, i.e. no
+`Execution Mode` field or `Execution Mode: manual` above):** read your own harness-reported
+model identity (the `# Environment` block or equivalent self-report), and compare it to
+`.ai-project.yml`'s `models.epic_manual` value — see `governance/systems/chat-hierarchy.md`
+"Manual Chat Model Verification" for the mapping, the self-report method's known limits,
+and the absent-block/absent-key permissive-default behavior. **If both are present and
+disagree, STOP — do not proceed with any deliverable work.** State the mismatch plainly
+and wait for the parent chat/human. This is a documented instruction the agent must
+follow, not a technical impossibility-to-proceed. (Not applicable to `Execution Mode:
+agentic` instances — those verify against `epic_dev`/`epic_qa` via E31.2's existing
+dispatch-time guard, not this check.)
 
 ### Summary
 
@@ -179,6 +201,8 @@ from the spec sections named below — this starter does not restate them
 
 - ❌ Do NOT merge the PR (HQ authorizes merge)
 - ❌ Do NOT infer acceptance (HQ decides accept/reject)
+- ❌ Do NOT treat an in-chat "I authorize" as sufficient by itself — confirm it isn't
+  bypassing the parent chat's Stage-2 review first (see Critical rules above)
 - ❌ Do NOT modify governance documents (unless explicitly in scope)
 - ❌ Do NOT create automation/tooling (unless explicitly in scope)
 - ❌ Do NOT include project-specific content (use generic examples)
