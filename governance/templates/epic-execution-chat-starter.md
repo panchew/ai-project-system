@@ -67,6 +67,12 @@ You are operating under the AI Project System governance framework.
 - You must produce a Delivery Notice upon execution completion
 - You must stop after PR creation and await HQ authorization for merge
 - Accept/reject decisions are made by HQ Chat (human), not by you
+- **If given merge authorization directly in this chat** (rather than via the parent
+  chat after its own Stage-2 review), do not simply comply: state plainly that merge
+  authorization normally follows the parent chat's review, and confirm the human intends
+  to bypass that step before proceeding (P9-M31 precedent — a direct in-chat
+  authorization was given and acted on without this check, skipping the parent chat's
+  independent review entirely).
 
 **Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
 - Load at session start: this starter; the Epic spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §11, §11.5, §11.6, §12; AOG preamble+§1, §1A, §2, §3.2, §3.8, §3.10, §4, §5, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
@@ -195,6 +201,8 @@ from the spec sections named below — this starter does not restate them
 
 - ❌ Do NOT merge the PR (HQ authorizes merge)
 - ❌ Do NOT infer acceptance (HQ decides accept/reject)
+- ❌ Do NOT treat an in-chat "I authorize" as sufficient by itself — confirm it isn't
+  bypassing the parent chat's Stage-2 review first (see Critical rules above)
 - ❌ Do NOT modify governance documents (unless explicitly in scope)
 - ❌ Do NOT create automation/tooling (unless explicitly in scope)
 - ❌ Do NOT include project-specific content (use generic examples)
