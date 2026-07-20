@@ -945,12 +945,12 @@ fabricating a result.
   link from the governing artifact, so the **link** — not the binary — travels with the decision
   record. Where generated binaries live is the adopting team's decision: the framework is
   infrastructure-agnostic about storage just as it is about endpoints and agents.
-- **No** project commits generated binaries — the governance **source** repo's own
-  `visual_artifacts.enabled: false` (the explicit opt-out, since the default-on flip) is one instance
-  of that universal rule. It stays opted out because `bin/ai-project-visual`'s `--type diagrams` is a
-  ComfyUI-generative call in the current implementation, not the endpoint-free structural mode this
-  section describes, so enabling the capability here would require a live endpoint the suite doesn't
-  have. The source repo ships the guidance, the helper, and the test — not generated output.
+- **No** project commits generated binaries — that rule is universal, and it holds independently of
+  whether a project has the capability enabled. The governance **source** repo runs with
+  `visual_artifacts.enabled: true` (set by Epic E29.2, P8-M29, against a live local ComfyUI endpoint
+  that `test_helper_generates_against_endpoint` exercises for real), and it still commits no
+  generated output: it ships the guidance, the helper, and the test, and references any generated
+  artifact by link like every other adopter.
 
 ### 16.6 Proposed vs. implemented
 
