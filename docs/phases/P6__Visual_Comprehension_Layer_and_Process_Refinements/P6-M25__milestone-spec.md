@@ -308,7 +308,7 @@ master
 Epic PRs target `milestone/M25`. Consolidation PR: `milestone/M25 → phase/P6`.
 **M25 is the final P6 milestone** (`is_final: true`). On its consolidation, the Phase Chat
 proceeds to **phase delivery** — `phase/P6 → master` (PR #95) — following E25.1's new canonical
-phase-closure sequence, plus the P6 Phase Delivery Notice.
+phase-closure sequence, whose closing artifact is the P6 Phase Closure Declaration.
 
 ---
 
@@ -374,8 +374,8 @@ phase-closure sequence, plus the P6 Phase Delivery Notice.
 ## Notes
 
 - **M25 is the final P6 milestone** (`is_final: true`). On consolidation, the Phase Chat proceeds
-  to **phase delivery** (`phase/P6 → master`, PR #95) + Phase Delivery Notice — following the
-  canonical phase-closure sequence E25.1 introduces (README update / version bump / tag). This
+  to **phase delivery** (`phase/P6 → master`, PR #95) — following the canonical phase-closure
+  sequence E25.1 introduces (README update / version bump / tag / Phase Closure Declaration). This
   is the intended dogfood: P6 closes by the process it just codified, not by a Steering Note.
 - **E25.2 is the subtle one.** It is a reconciliation, not an append: the codified always-review
   language (PSG §11.5/§12/§1A/§13; AOG Stage-2 text; the starter templates) contradicts the
