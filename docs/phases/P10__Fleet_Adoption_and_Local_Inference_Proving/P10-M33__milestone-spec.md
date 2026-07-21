@@ -8,6 +8,7 @@ epics:
   - E33.1
   - E33.2
   - E33.3
+  - E33.4
 is_final: false
 ---
 
@@ -191,6 +192,8 @@ E33.1's bump must complete before the run can begin.
 - **E33.1 — Enrolled-project v7.0.0 bump procedure + apply to the pair**
 - **E33.2 — First real Agentic/Local epic on the pair + runtime decision**
 - **E33.3 — Trustworthy measurement out of the run (P9-GH-2)**
+- **E33.4 — `home_finance` real Agentic/Local epic, proving-pair completion (decomposition
+  addition; added mid-flight, amendment A1)**
 
 > **Artifact scope (adjacency).** The Phase Chat produces only this Milestone spec and the
 > Milestone Execution Chat Starter. The **Milestone Chat** owns final epic planning and
@@ -348,6 +351,52 @@ E33.2, once real numbers exist. The sizing decision cannot precede the run's dat
 
 ---
 
+### E33.4 — `home_finance` real Agentic/Local epic, proving-pair completion (decomposition addition; amendment A1)
+
+**Source:** this Milestone spec's Milestone DoD / Milestone AC 1 and P10 phase spec Success
+Criterion 1 + Acceptance Criteria — all of which require **each** proving-pair project to have a
+committed run record. Added under the decomposition authority §Planned Epics grants the
+Milestone Chat, on Phase Chat disposition of an escalated completion gap.
+
+**Grounding — the gap this closes (recorded plainly).** M33 was planned with three epics. At
+closure review the Milestone Chat verified the Milestone DoD line-by-line and found an
+**internal inconsistency in this spec**: the Milestone DoD and AC 1 require *both*
+`home_finance` **and** `local-agent-runner` to carry a committed run record, but E33.2's Epic
+Detail was written in the **singular** ("a genuine epic of **a** target project's own work").
+E33.2 therefore correctly ran on `local-agent-runner` only, and the three-epic decomposition
+**never gave the `home_finance` run a home** — the milestone was not complete as specified. The
+Milestone Chat escalated rather than declaring closure on an unmet DoD item; the Phase Chat
+disposed: **add E33.4.** The defect was in this spec's epic decomposition, not in E33.2's
+execution.
+
+**Scope boundary (deliberately narrow).** E33.4 delivers **only** the missing second run. It
+produces **no runtime decision** and **no measurement work** — both legs were closed by E33.2
+and E33.3 respectively, and the settled runtime is **applied, not re-opened**. The run-first
+Hard Constraint and the cross-repo record/evidence split apply to it in full.
+
+**Deliverables:**
+1. A **genuine** Agentic/Local epic of `home_finance`'s own work, run under the fixed posture
+   against the E33.1-bumped target, with its **run record committed to the governance record**.
+2. Evidence that the work is real and not a demo, traceable to **pre-existing** target-repo
+   documents rather than to the run itself.
+
+**Definition of Done:**
+- [ ] A real Agentic/Local epic ran on `home_finance` under the fixed posture; run record
+      committed to the governance record
+- [ ] The run advanced the target repo, evidenced by the cited commit descending from E33.1's
+      bump
+- [ ] The "genuine, not a demo" claim is traceable to pre-existing target-repo documents
+- [ ] For any change touching **this** repo: full suite green, no new skips
+
+**Acceptance Criteria:**
+- [ ] With E33.4 merged, **each** proving-pair project has a committed run record — the
+      Milestone DoD / AC 1 bar is met
+
+**Dependency:** requires E33.1's bump of `home_finance`. Independent of E33.3 (produces no
+measurement). Runs after E33.1; sequenced last in practice.
+
+---
+
 ## Branch Strategy
 
 ```
@@ -356,7 +405,8 @@ master
     └── milestone/M33              ← this milestone (Milestone Chat branches from phase/P10)
         ├── epic/P10-M33-E33.1     ← v7.0.0 bump procedure + apply to the pair
         ├── epic/P10-M33-E33.2     ← first real Agentic/Local epic + runtime decision
-        └── epic/P10-M33-E33.3     ← trustworthy measurement out of the run
+        ├── epic/P10-M33-E33.3     ← trustworthy measurement out of the run
+        └── epic/P10-M33-E33.4     ← home_finance run (proving-pair completion; amendment A1)
 ```
 
 Epic PRs target `milestone/M33`. Consolidation PR: `milestone/M33 → phase/P10`. **M33 is not
@@ -411,6 +461,9 @@ verifiable from this repo.
   captured data. No trust judgment before real numbers exist. E33.3's sizing may overlap the
   tail of E33.2 where no file contention exists, but the sizing decision cannot precede the
   data.
+- **E33.4 requires E33.1's bump of `home_finance`** and is independent of E33.2/E33.3 (it
+  produces no runtime decision and no measurement — those legs are closed). Sequenced last in
+  practice (amendment A1).
 - **M33 → M34 is binding at phase level:** M34 is not planned until M33's bump procedure
   (E33.1) and settled runtime choice (E33.2) exist. This spec's E33.1 and E33.2 are the links.
 - **No dependency on M35** in either direction (M35 is independent; the Phase Chat schedules
@@ -420,8 +473,8 @@ verifiable from this repo.
 
 ## Definition of Done (Milestone)
 
-- [ ] E33.1, E33.2, and E33.3 each meet their Definition of Done above
-- [ ] All three epic branches merged to `milestone/M33`
+- [ ] E33.1, E33.2, E33.3, and E33.4 each meet their Definition of Done above
+- [ ] All four epic branches merged to `milestone/M33`
 - [ ] Both `home_finance` and `local-agent-runner` are stamped `framework_version: v7.0.0`
       (confirmable), each with a committed run record for at least one real Agentic/Local epic
       executed under the fixed posture
@@ -519,3 +572,11 @@ flowchart LR
   deliveries are accepted by silence; a Review Decision is the exception path only. Per SN-19,
   acceptance and the merge instruction are in-chat acts — no ceremonial artifact. The harness
   enforces explicit human authorization on every merge regardless.
+
+---
+
+## Amendment History
+
+| # | Date | Authority | Change |
+|---|------|-----------|--------|
+| A1 | 2026-07-21 | Phase Chat (P10) disposition of a Milestone-Chat escalation, at M33 closure review; recorded per the GH-8 / P9-M30-A1 precedent | **E33.4 added** to the front-matter `epics:` list, §Planned Epics, §Epic Detail, §Branch Strategy, §Dependencies and Sequencing, and the Milestone DoD. Closes a **completion gap in this spec's own decomposition**: the Milestone DoD and AC 1 require *each* proving-pair project to hold a committed run record, while E33.2's Epic Detail was written in the singular — so the `home_finance` run had no home in the three-epic split. The Milestone Chat escalated rather than declaring closure on an unmet DoD item; the Phase Chat disposed "add E33.4". The milestone executed E33.4 under §Planned Epics decomposition authority; this amendment reconciles the spec's record, closed at consolidation. |
