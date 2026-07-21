@@ -1,0 +1,15 @@
+{
+  "epic_id": "P2-M1-E1.1",
+  "model": "qwen3-coder:30b",
+  "runner": "/tmp/claude-1000/-home-panchew-soft-dev-ai-project-system/103706a1-c0bf-4004-8d64-fcccce70e65b/scratchpad/lar-wrapper.sh",
+  "endpoint": "runner-default",
+  "exit_code": 2,
+  "started_utc": "2026-07-21T00:58:28.795969+00:00",
+  "duration_ms": 139905,
+  "transcript": ".ai-project/artifacts/agentic-runs/P2-M1-E1.1/transcript.json",
+  "context": ".ai-project/artifacts/agentic-runs/P2-M1-E1.1/context.md",
+  "context_sources": [
+    "docs/phases/P2__Monthly_Loop_and_North_Star/P2-M1-E1.1__spec__mxn-currency-default.md"
+  ],
+  "tools": ".ai-project/agents/tools.json"
+}
