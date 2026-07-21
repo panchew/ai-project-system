@@ -11,7 +11,14 @@ Hybrid mechanism (see .ai-project/artifacts/reference/token-measurement/README.m
                      agentic-run context files with a local tokenizer (tiktoken
                      o200k_base) as a documented proxy for billed counts.
   (C) Local spend  — extracts ollama token counts from the committed agentic-run
-                     transcripts (no changes to bin/run-dev-agent).
+                     transcripts (no changes to bin/run-dev-agent). Handles both
+                     the single-transcript PROVE layout and the newer per-model
+                     layout (``transcript-<tag>.json`` + optional
+                     ``transcript-<tag>__run-metadata.json``, one per model), and
+                     records the run-status each token count is attached to
+                     (exit code / status / tool rounds) so a per-run number is
+                     never trusted apart from whether its run actually did the
+                     work — the E33.2 "exit-code-untrust" finding (P10-M33-E33.3).
 
 Privacy contract: the emitted dataset carries aggregated token numbers and
 attribution labels only. Raw transcripts and conversation content never leave the
@@ -35,7 +42,7 @@ import os
 import re
 import sys
 
-SCRIPT_VERSION = "1.0.0"
+SCRIPT_VERSION = "1.1.0"
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_SESSIONS_DIR = os.path.expanduser(
     "~/.claude/projects/-home-panchew-soft-dev-ai-project-system"
@@ -320,48 +327,115 @@ def tokenize_corpus(counter):
 # Direction C (lite) — local agentic-run extraction
 # ---------------------------------------------------------------------------
 
+def _load_json(path):
+    try:
+        with open(path) as fh:
+            return json.load(fh)
+    except (ValueError, OSError):
+        return None
+
+
+def _build_run_entry(run_name, variant, transcript_path, rmeta, ctx_tokens):
+    """Assemble one local-run record from its transcript and (optional) metadata.
+
+    ``rmeta`` may be None when a transcript carries no sibling run-metadata file
+    (E33.2's Run B) — the exit code is then a recorded gap, not fabricated. The
+    token count is captured together with the run-status it is attached to
+    (exit / status / tool rounds), because a per-run number is only as
+    trustworthy as whether the run actually did the work (exit-code-untrust; see
+    gap G11). ``zero_work_completion`` is the one case this can decide
+    mechanically — a ``completed``/0-round run is a false-positive success; the
+    mirror false-negative (non-zero exit with good work) needs human review and
+    is left to G11, not guessed.
+    """
+    rmeta = rmeta or {}
+    entry = {
+        "run": run_name,
+        "variant": variant,  # None for the single-transcript PROVE layout
+        "model": rmeta.get("model"),
+        "spend_kind": "local",
+        "output_tokens": None,
+        "prompt_tokens": None,  # not recorded by the runner — gap (G9)
+        "context_md_tokens_proxy": ctx_tokens,
+        "duration_ms": rmeta.get("duration_ms"),
+        # Run-status the token count is attached to (exit-code-untrust — G11).
+        "exit_code": rmeta.get("exit_code"),  # None => no metadata file (gap)
+        "run_metadata_present": bool(rmeta),
+        "status": None,
+        "iterations": None,
+        "zero_work_completion": None,
+    }
+    transcript = _load_json(transcript_path) if transcript_path else None
+    if transcript:
+        # Prefer the runner's own reported total (includes the final answer
+        # turn); fall back to summing per-turn eval_count.
+        if isinstance(transcript.get("tokens"), int):
+            entry["output_tokens"] = transcript["tokens"]
+        else:
+            turns = transcript.get("transcript") or []
+            evals = [
+                t.get("eval_count")
+                for t in turns
+                if isinstance(t, dict) and isinstance(t.get("eval_count"), int)
+            ]
+            if evals:
+                entry["output_tokens"] = sum(evals)
+        entry["status"] = transcript.get("status")
+        it = transcript.get("iterations")
+        entry["iterations"] = it if isinstance(it, int) else None
+        # Fall back to transcript-reported model/duration when metadata is absent.
+        if entry["model"] is None:
+            entry["model"] = transcript.get("model")
+        if entry["duration_ms"] is None:
+            entry["duration_ms"] = transcript.get("duration_ms")
+        if entry["status"] is not None and entry["iterations"] is not None:
+            entry["zero_work_completion"] = (
+                entry["status"] == "completed" and entry["iterations"] == 0
+            )
+    return entry
+
+
 def collect_local_runs(counter):
     runs = []
     base = os.path.join(REPO_ROOT, ".ai-project", "artifacts", "agentic-runs")
     for run_dir in sorted(glob.glob(os.path.join(base, "*"))):
-        meta_path = os.path.join(run_dir, "transcript.json")
-        rmeta_path = os.path.join(run_dir, "run-metadata.json")
-        if not os.path.isfile(rmeta_path):
+        if not os.path.isdir(run_dir):
             continue
-        with open(rmeta_path) as fh:
-            rmeta = json.load(fh)
-        entry = {
-            "run": os.path.basename(run_dir),
-            "model": rmeta.get("model"),
-            "spend_kind": "local",
-            "output_tokens": None,
-            "prompt_tokens": None,  # not recorded by the runner — gap
-            "context_md_tokens_proxy": None,
-            "duration_ms": rmeta.get("duration_ms"),
-        }
-        if os.path.isfile(meta_path):
-            try:
-                with open(meta_path) as fh:
-                    transcript = json.load(fh)
-                # Prefer the runner's own reported total (includes the final
-                # answer turn); fall back to summing per-turn eval_count.
-                if isinstance(transcript.get("tokens"), int):
-                    entry["output_tokens"] = transcript["tokens"]
-                else:
-                    turns = transcript.get("transcript") or []
-                    evals = [
-                        t.get("eval_count")
-                        for t in turns
-                        if isinstance(t, dict) and isinstance(t.get("eval_count"), int)
-                    ]
-                    if evals:
-                        entry["output_tokens"] = sum(evals)
-            except (ValueError, OSError):
-                pass
+        run_name = os.path.basename(run_dir)
         ctx = os.path.join(run_dir, "context.md")
-        if counter and os.path.isfile(ctx):
-            entry["context_md_tokens_proxy"] = count_file(counter, ctx)
-        runs.append(entry)
+        ctx_tokens = (
+            count_file(counter, ctx) if counter and os.path.isfile(ctx) else None
+        )
+        legacy_tr = os.path.join(run_dir, "transcript.json")
+        legacy_rm = os.path.join(run_dir, "run-metadata.json")
+        if os.path.isfile(legacy_tr) or os.path.isfile(legacy_rm):
+            # Single-transcript PROVE layout (P7-M26/P9-M31): one run per dir.
+            rmeta = _load_json(legacy_rm) if os.path.isfile(legacy_rm) else None
+            runs.append(
+                _build_run_entry(run_name, None, legacy_tr, rmeta, ctx_tokens)
+            )
+            continue
+        # Newer per-model layout (E33.2+): one transcript file per model, named
+        # transcript-<tag>.json, each with an OPTIONAL sibling
+        # transcript-<tag>__run-metadata.json (Run B carries none — that becomes
+        # a recorded exit-code gap, not a skipped run).
+        transcripts = sorted(
+            p
+            for p in glob.glob(os.path.join(run_dir, "transcript-*.json"))
+            if not p.endswith("__run-metadata.json")
+        )
+        for tr_path in transcripts:
+            stem = os.path.basename(tr_path)[: -len(".json")]
+            variant = (
+                stem[len("transcript-") :]
+                if stem.startswith("transcript-")
+                else stem
+            )
+            rm_path = os.path.join(run_dir, stem + "__run-metadata.json")
+            rmeta = _load_json(rm_path) if os.path.isfile(rm_path) else None
+            runs.append(
+                _build_run_entry(run_name, variant, tr_path, rmeta, ctx_tokens)
+            )
     return runs
 
 
@@ -473,6 +547,20 @@ GAP_RECORDS = [
         "for proportions and ordering, not exact billing. Paid-side first-turn "
         "and per-call context medians ARE provider-billed numbers, but include "
         "the harness system prompt and memory, not governance corpus alone.",
+    },
+    {
+        "id": "G11",
+        "cells": [],
+        "status": "limitation",
+        "record": "Exit-code-untrust (E33.2, P10-M33-E33.3): a local run's token/"
+        "round count is only as trustworthy as the run-status it is attached to. "
+        "A `completed`/exit-0 run with 0 tool rounds is a false-positive success "
+        "(real tokens, no epic work) and IS flagged here as zero_work_completion. "
+        "The mirror case — a non-zero exit whose work was actually correct "
+        "(E33.2 Run B) — is a false negative that only human review can "
+        "establish; the mechanism records exit/status/rounds but does not and "
+        "cannot decide work-correctness from the transcript, so that half stays "
+        "a recorded caveat, not an automated verdict.",
     },
 ]
 
@@ -639,12 +727,28 @@ def render_markdown(dataset):
     add("")
     add("## 5. Local (ollama) spend — Direction C-lite")
     add("")
-    add("| run | model | output tokens | prompt tokens | context.md (proxy) | duration ms |")
-    add("|---|---|---|---|---|---|")
+    add("Each output-token count is shown with the run-status it is attached to "
+        "(exit / status / tool rounds). A per-run number is only as trustworthy "
+        "as that status: a `completed`/exit-0 run with 0 rounds is a "
+        "**false-positive success** (flagged `zero-work? ⚠`); a non-zero exit "
+        "whose work was actually good is a false negative only human review can "
+        "confirm (E33.2 exit-code-untrust — gap G11). `exit=GAP` means no "
+        "run-metadata file accompanied that transcript.")
+    add("")
+    add("| run | variant | model | output tokens | prompt tokens | exit | status "
+        "| rounds | zero-work? | context.md (proxy) | duration ms |")
+    add("|---|---|---|---|---|---|---|---|---|---|---|")
     for r in dataset["local_runs"]:
+        zwc = r.get("zero_work_completion")
+        zw = "⚠ yes" if zwc else ("no" if zwc is False else "—")
+        exit_code = r.get("exit_code")
+        exit_cell = "GAP → G11" if exit_code is None else exit_code
         add(
-            f"| {r['run']} | {r['model']} | {r['output_tokens']} | "
-            f"GAP → G9 | {r['context_md_tokens_proxy']} | {r['duration_ms']} |"
+            f"| {r['run']} | {r.get('variant') or '—'} | {r['model']} | "
+            f"{r['output_tokens']} | GAP → G9 | {exit_cell} | "
+            f"{r.get('status') or '—'} | "
+            f"{r.get('iterations') if r.get('iterations') is not None else '—'} | "
+            f"{zw} | {r['context_md_tokens_proxy']} | {r['duration_ms']} |"
         )
     add("")
     add("## 6. Gap records (Hard Constraint)")
