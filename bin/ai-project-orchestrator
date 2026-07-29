@@ -24,8 +24,8 @@ DEFAULT_MODELS = {
     "hq": "remote:claude-opus-5",
     "phase": "remote:claude-opus-5",
     "milestone": "remote:claude-opus-5",
-    "epic_dev": "local:qwen2.5-coder:14b",
-    "epic_qa": "local:qwen2.5-coder:14b"
+    "epic_dev": "local:qwen3-coder:30b",
+    "epic_qa": "local:qwen3-coder:30b"
 }
 
 # Shared exit-code convention across this project's tooling: 5 means "a local
