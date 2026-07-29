@@ -47,19 +47,40 @@ dataset cannot separate them (G4–G7), which is Hard-Constraint-compliant.
 
 | key | value | policy row |
 |---|---|---|
-| `hq` | `remote:claude-opus-4-8` | P2 (paid frontier; value = measured workhorse at hq — report §2.3) |
-| `phase` | `remote:claude-opus-4-8` | P3 (value = measured workhorse at phase — report §2.3) |
-| `milestone` | `remote:claude-opus-4-8` | P4 (value = measured workhorse at milestone — report §2.3) |
+| `hq` | `remote:claude-opus-5` | P2 (paid frontier; value = measured workhorse at hq — report §2.3) |
+| `phase` | `remote:claude-opus-5` | P3 (value = measured workhorse at phase — report §2.3) |
+| `milestone` | `remote:claude-opus-5` | P4 (value = measured workhorse at milestone — report §2.3) |
 | `epic_dev` | `local:qwen2.5-coder:14b` | P6 |
 | `epic_qa` | `local:qwen2.5-coder:14b` | P7 |
 
-**Why claude-opus-4-8 for the remote keys:** it carried 49.6% of all measured
-spend and the plurality of spend at each of hq, phase, and milestone (report
-§2.3, findings 4–5) — it is the model that demonstrably did this governance
-work in the window. Choosing among the four measured models involves judgment
-(no quality measure was captured — G12); choosing a model *outside* the
-measured mix would repeat the original fiction. Neither `gpt-4o` nor
-`claude-3-5-sonnet` ran once in 72 sessions (dataset §2).
+**Why the Opus line for the remote keys:** `claude-opus-4-8` carried 49.6% of
+all measured spend and the plurality of spend at each of hq, phase, and
+milestone (report §2.3, findings 4–5) — it is the model that demonstrably did
+this governance work in the window. Choosing among the four measured models
+involves judgment (no quality measure was captured — G12); choosing a model
+*outside* the measured mix would repeat the original fiction. Neither `gpt-4o`
+nor `claude-3-5-sonnet` ran once in 72 sessions (dataset §2).
+
+**Version refresh, 2026-07-28 (`claude-opus-4-8` → `claude-opus-5`):** the
+measured version stopped being offered in the harness surface in use, halting
+every manual chat under the M31 guardrail (P10-M34 Escalation Notice). HQ
+refreshed this table to the same line's successor version. This is a **mapping
+change, not a row change**: rows P1–P4 decide a *tier* ("Paid frontier"), and
+`claude-opus-5` is paid frontier, so the Change-discipline rule below — which
+binds *rows* to new cited evidence — is not engaged and no re-run of the M30
+evidence process is required. The evidence above still says what it said: it
+justifies the Opus line over the measured alternatives, and a same-tier
+successor inherits that justification. See
+`.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md`.
+
+**Mapping revisit trigger — model unavailability.** This table (not rows
+P1–P7) is revisited whenever a mapped model becomes unavailable, is
+deprecated, or is superseded within its tier. Recorded here rather than in the
+rows' *revisit trigger* column deliberately: a **tier is never deprecated —
+only a version is**, so unavailability can only ever falsify a mapping, never
+a policy row. Same-tier refreshes are applied under this trigger without new
+evidence; anything that would change the *tier* remains a row change and takes
+the Change-discipline path.
 
 ## Standing findings the policy rests on
 

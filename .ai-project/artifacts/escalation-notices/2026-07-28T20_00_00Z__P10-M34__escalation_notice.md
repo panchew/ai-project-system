@@ -4,7 +4,9 @@ milestone: M34
 issued_by: Phase Chat (P10)
 issued_to: HQ Chat
 date: 2026-07-28
-status: open
+status: resolved
+resolved_by: .ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md
+resolved_date: 2026-07-28
 ---
 
 # Escalation Notice: `claude-opus-4-8` unavailable in a manual-chat harness surface — model-routing policy needs a decision
@@ -84,4 +86,38 @@ Agentic/Local at the Epic) — only which model fills the paid-frontier slot.**
 
 ## Resolution
 
-(empty — awaiting HQ Chat decision)
+**Resolved 2026-07-28 by HQ Ruling** —
+`.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md`.
+The HQ Chat hit the identical halt on open (self-report `claude-opus-5` vs configured
+`remote:claude-opus-4-8`) and decided nothing until the CFO resolved it in session.
+
+Answering this notice's three questions in order:
+
+1. **The mapping** — the five paid-frontier keys move to `remote:claude-opus-5`, not
+   `claude-sonnet-5`. The Opus *line* was never withdrawn; a *version* of it was
+   (`/model opus` → `claude-opus-5` in the same VS Code surface). `claude-sonnet-5` was
+   rejected as a **tier drop** that would have re-decided the fixed P10 posture under cover of
+   a bug fix. **The M30 evidence process was not re-run and did not need to be:** policy rows
+   P1–P4 decide a *tier* ("Paid frontier"); `claude-opus-4-8` appears only in the mapping
+   table, and the policy's own Change discipline binds **rows**, not mappings.
+2. **Scope of the unavailability** — not surface-specific in the way that would matter. The
+   pin cannot match any harness selection, since `/model opus` now resolves to `opus-5` and
+   `opus-5 ≠ opus-4-8`. There is no harness-side action that clears it; the pin had to move.
+   Your honest flag about not being able to re-verify your own session's self-report was the
+   right call — it was the same mismatch.
+3. **Who updated it** — HQ, directly, as a bounded and recorded exception (Ruling Decision 5).
+   Every level that could normally have taken this was refused by the defect itself:
+   `epic_manual` was pinned to the unavailable version, and the agentic lane is the
+   `qwen2.5-coder:14b` that E33.2 proved emits exit 0 with zero work. Delegation would have
+   required overriding the guardrail. Suite green at 366/0 was the acceptance gate.
+
+Also ruled: model unavailability is now a recorded revisit trigger on the **mapping table**,
+not on rows P1–P7 — a tier cannot be deprecated, only a version can. Per-level-per-project
+model routing is Drivr's domain from P11; the framework builds no routing relocation in the
+interim.
+
+**M34 is unblocked** — the Milestone Chat reopens against the corrected `models.milestone` and
+proceeds to Stage 1. Its refusal was correct and needs no remediation; the stale literal in
+`P10-M34__milestone-execution-chat-starter.md` has been corrected in place. Declining to edit
+`.ai-project.yml` and the policy rows yourself was the right adjacency call and is what made a
+clean ruling possible.

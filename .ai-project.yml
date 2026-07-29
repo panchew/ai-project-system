@@ -1,6 +1,6 @@
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
-# Spec: governance/ai-project-yml-spec.md v2.5.0
+# Spec: governance/ai-project-yml-spec.md v2.6.0
 
 governance:
   source: ./governance
@@ -29,14 +29,19 @@ cfo_review_gate: enabled
 # `creation` and `epic_manual` (added E31.3, P9-M31) are manual-chat-only keys with no
 # agentic dispatch surface — see governance/systems/chat-hierarchy.md "Manual Chat Model
 # Verification" for the mapping and governance/ai-project-yml-spec.md §3.4 for the schema.
+# The five paid-frontier keys moved claude-opus-4-8 -> claude-opus-5 on 2026-07-28 (HQ
+# Ruling, P10-M34 escalation): a same-tier version refresh after claude-opus-4-8 stopped
+# being offered in the harness. The policy's TIER rows (P1-P4) are untouched — only its
+# mapping table. See .ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__
+# ruling__paid-frontier-model-mapping-refresh.md.
 models:
-  hq: remote:claude-opus-4-8
-  phase: remote:claude-opus-4-8
-  milestone: remote:claude-opus-4-8
+  hq: remote:claude-opus-5
+  phase: remote:claude-opus-5
+  milestone: remote:claude-opus-5
   epic_dev: local:qwen2.5-coder:14b
   epic_qa: local:qwen2.5-coder:14b
-  creation: remote:claude-opus-4-8
-  epic_manual: remote:claude-opus-4-8
+  creation: remote:claude-opus-5
+  epic_manual: remote:claude-opus-5
 
 # Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
 # This repo is ENABLED (enabled: true) as of Epic E29.2 (P8-M29): the live local

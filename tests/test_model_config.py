@@ -62,7 +62,7 @@ MODEL_KEYS = ("hq", "phase", "milestone", "epic_dev", "epic_qa")
 # deliberately outside MODEL_KEYS, DEFAULT_MODELS, and model-routing-policy.md's own
 # mapping table (see this file's module docstring).
 MANUAL_ONLY_KEYS = ("creation", "epic_manual")
-EXPECTED_MANUAL_ONLY_VALUE = "remote:claude-opus-4-8"
+EXPECTED_MANUAL_ONLY_VALUE = "remote:claude-opus-5"
 
 FALSIFIED_NAMES = ("gpt-4o", "claude-3-5-sonnet", "qwen2.5-coder:7b", "llama3:8b")
 

@@ -164,11 +164,24 @@ E31.2's surface, untouched here.
 
 | `.ai-project.yml` key | Value | Level | Basis |
 |---|---|---|---|
-| `creation` | `remote:claude-opus-4-8` | Creation | New key (this Epic). Policy row P1 (`model-routing-policy.md`): paid frontier, manual. |
-| `hq` | `remote:claude-opus-4-8` | HQ | Existing key (P9-M30-E30.2). Policy row P2. |
-| `phase` | `remote:claude-opus-4-8` | Phase | Existing key. Policy row P3. |
-| `milestone` | `remote:claude-opus-4-8` | Milestone | Existing key. Policy row P4. |
-| `epic_manual` | `remote:claude-opus-4-8` | Epic (manual) | New key (this Epic), distinct from the `epic_dev`/`epic_qa` agentic-dispatch lanes those keys serve. Policy row P5's general "epic × execution: paid frontier" default — P6/P7's local-offload values apply only when the agentic Dev/QA dispatch lanes are actually in use, which a manual Epic chat, by definition, is not. |
+| `creation` | `remote:claude-opus-5` | Creation | New key (this Epic). Policy row P1 (`model-routing-policy.md`): paid frontier, manual. |
+| `hq` | `remote:claude-opus-5` | HQ | Existing key (P9-M30-E30.2). Policy row P2. |
+| `phase` | `remote:claude-opus-5` | Phase | Existing key. Policy row P3. |
+| `milestone` | `remote:claude-opus-5` | Milestone | Existing key. Policy row P4. |
+| `epic_manual` | `remote:claude-opus-5` | Epic (manual) | New key (this Epic), distinct from the `epic_dev`/`epic_qa` agentic-dispatch lanes those keys serve. Policy row P5's general "epic × execution: paid frontier" default — P6/P7's local-offload values apply only when the agentic Dev/QA dispatch lanes are actually in use, which a manual Epic chat, by definition, is not. |
+
+**Values are versions; the decision behind them is a tier.** These five cells named
+`remote:claude-opus-4-8` until 2026-07-28, when that version stopped being offered in the
+harness surface in use and this guardrail — correctly — halted every manual chat at once
+(P10-M34 Escalation Notice). HQ refreshed all five to `remote:claude-opus-5`, the same
+line's successor. What the policy actually decides is *paid frontier* (rows P1–P4); only
+this table and `model-routing-policy.md`'s mapping table name a version, and a version can
+be deprecated where a tier cannot. Expect this refresh to recur at every future
+deprecation, and treat it as a mapping change rather than a policy change — see
+`model-routing-policy.md`'s **Mapping revisit trigger — model unavailability**. Deciding
+which model fills the tier *per level per project* is routing, and routing is Drivr's
+domain from P11 onward; the framework does not build a relocation of these values in the
+interim. See `.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md`.
 
 (This table records all five manual-verification keys for completeness; `tests/test_model_config.py`'s divergence guard applies it only to the two keys with no pre-existing coverage — `creation` and `epic_manual` — since `hq`/`phase`/`milestone` are already fully guarded via `model-routing-policy.md`'s own mapping table, unchanged by this Epic.)
 

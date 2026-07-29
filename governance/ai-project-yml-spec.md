@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.5.0  
+**Version:** 2.6.0  
 **Status:** Active  
-**Effective Date:** 2026-07-19  
-**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29); `models` defaults refreshed to the measurement-grounded mapping in Epic E30.2 (P9-M30); `models.creation` and `models.epic_manual` keys added (manual-chat-only, no agentic dispatch surface) in Epic E31.3 (P9-M31)
+**Effective Date:** 2026-07-28  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29); `models` defaults refreshed to the measurement-grounded mapping in Epic E30.2 (P9-M30); `models.creation` and `models.epic_manual` keys added (manual-chat-only, no agentic dispatch surface) in Epic E31.3 (P9-M31); the five paid-frontier `models` defaults refreshed `claude-opus-4-8` → `claude-opus-5` by HQ Ruling (P10-M34 escalation, 2026-07-28)
 
 ---
 
@@ -54,13 +54,13 @@ overrides:               # OPTIONAL. Project-specific governance overrides. Full
 models:                  # OPTIONAL. Hybrid model routing maps for autonomous clusters
                          # (hq/phase/milestone/epic_dev/epic_qa) plus manual-chat-only
                          # verification targets (creation/epic_manual, no dispatch surface).
-  hq: <string>           # default: remote:claude-opus-4-8
-  phase: <string>        # default: remote:claude-opus-4-8
-  milestone: <string>    # default: remote:claude-opus-4-8
+  hq: <string>           # default: remote:claude-opus-5
+  phase: <string>        # default: remote:claude-opus-5
+  milestone: <string>    # default: remote:claude-opus-5
   epic_dev: <string>     # default: local:qwen2.5-coder:14b
   epic_qa: <string>      # default: local:qwen2.5-coder:14b
-  creation: <string>     # default: remote:claude-opus-4-8. Manual-chat-only (E31.3).
-  epic_manual: <string>  # default: remote:claude-opus-4-8. Manual-chat-only (E31.3).
+  creation: <string>     # default: remote:claude-opus-5. Manual-chat-only (E31.3).
+  epic_manual: <string>  # default: remote:claude-opus-5. Manual-chat-only (E31.3).
 
 visual_artifacts:        # OPTIONAL. Default-on visual-artifact generation. Absent ⇒ enabled. Full spec: M22/M27.
   enabled: <bool>        # default: true. false is the explicit opt-out.
@@ -336,13 +336,13 @@ manually or (for Phase/Milestone) agentically).
 
 | Field | Type | Default | Allowed Formats / Examples | Role |
 |-------|------|---------|---------------------------|------|
-| `hq` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8`, `remote:claude-sonnet-5` | Product Owner (High-level vision & Requirements); manual-chat verification target for HQ |
-| `phase` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8` | Software Architect (Phase Milestone planning); manual-chat verification target for Phase |
-| `milestone` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8` | Software Architect (Milestone Epic planning); manual-chat verification target for Milestone |
+| `hq` | String | `remote:claude-opus-5` | `remote:claude-opus-5`, `remote:claude-sonnet-5` | Product Owner (High-level vision & Requirements); manual-chat verification target for HQ |
+| `phase` | String | `remote:claude-opus-5` | `remote:claude-opus-5` | Software Architect (Phase Milestone planning); manual-chat verification target for Phase |
+| `milestone` | String | `remote:claude-opus-5` | `remote:claude-opus-5` | Software Architect (Milestone Epic planning); manual-chat verification target for Milestone |
 | `epic_dev` | String | `local:qwen2.5-coder:14b` | `local:qwen2.5-coder:14b`, `local:qwen2.5-coder` | Developer Agent (Code implementation; must be a tool-calling-capable model). Agentic dispatch lane only — not a manual-chat verification target. |
 | `epic_qa` | String | `local:qwen2.5-coder:14b` | `local:qwen2.5-coder:14b`, `local:llama3` | QA Tester Agent (Verification & Test runner). Agentic dispatch lane only — not a manual-chat verification target. |
-| `creation` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8` | Manual-chat verification target for Creation Chat only — Creation never dispatches agentically (SN-22), so this key has no dispatch role. |
-| `epic_manual` | String | `remote:claude-opus-4-8` | `remote:claude-opus-4-8` | Manual-chat verification target for a human-driven Epic chat — distinct from `epic_dev`/`epic_qa`, which serve the agentic Dev/QA dispatch lanes only. |
+| `creation` | String | `remote:claude-opus-5` | `remote:claude-opus-5` | Manual-chat verification target for Creation Chat only — Creation never dispatches agentically (SN-22), so this key has no dispatch role. |
+| `epic_manual` | String | `remote:claude-opus-5` | `remote:claude-opus-5` | Manual-chat verification target for a human-driven Epic chat — distinct from `epic_dev`/`epic_qa`, which serve the agentic Dev/QA dispatch lanes only. |
 
 > **Defaults provenance (v2.4.0, Epic E30.2 / P9-M30):** these defaults are the
 > measurement-grounded mapping derived in the governance source repository from
@@ -363,7 +363,7 @@ manually or (for Phase/Milestone) agentically).
 
 #### Format Constraints
 Model configuration values must follow one of these formats:
-- **Remote Models:** Prefix with `remote:` followed by the provider and model name (e.g., `remote:claude-opus-4-8`, `remote:claude-sonnet-5`, `remote:gemini-1.5-pro`).
+- **Remote Models:** Prefix with `remote:` followed by the provider and model name (e.g., `remote:claude-opus-5`, `remote:claude-sonnet-5`, `remote:gemini-1.5-pro`).
 - **Local Models:** Prefix with `local:` followed by the model identifier (e.g., `local:qwen2.5-coder:14b`, `local:qwen2.5-coder:7b`). These are format examples only, not defaults; role defaults are defined in the table above.
 
 ---
@@ -640,6 +640,7 @@ at its documented defaults and remains valid. Setting `enabled: false` is the ex
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.6.0 | 2026-07-28 | The five paid-frontier `models` defaults — `hq`, `phase`, `milestone`, `creation`, `epic_manual` — refreshed `remote:claude-opus-4-8` → `remote:claude-opus-5` after `claude-opus-4-8` stopped being offered in the harness surface in use, halting every manual governance chat under the P9-M31-E31.3 verification guardrail (P10-M34 Escalation Notice). A **same-tier version refresh**, not a policy change: `model-routing-policy.md`'s rows P1–P4 decide *"Paid frontier"* and `claude-opus-5` is paid frontier, so the M30 evidence process was not re-run — see that file's new **Mapping revisit trigger — model unavailability**. Updated §3.1 schema comments, §3.4 field table defaults/examples, and format-constraint examples. `epic_dev`/`epic_qa` unchanged (agentic lanes, different surface). No field, key, or validation rule changed — value/documentation refresh only. Derivation: `.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md` (HQ Chat, ai-project-system). |
 | 2.5.0 | 2026-07-19 | Added two new **manual-chat-only** `models` keys, `creation` and `epic_manual` (default `remote:claude-opus-4-8` for both) — neither has an agentic dispatch surface; both exist solely as verification targets for the manual-mode startup guardrail (Hard Constraint, P9-M31-E31.3). Updated §3.1 schema comments, §3.4 field table + new provenance note, and §4 validation rule 15's recognized-field list. No existing key's default, format, or validation behavior changed. Derivation: governance source repo `governance/systems/chat-hierarchy.md` "Manual Chat Model Verification" (Epic E31.3, P9-M31), consuming `.ai-project/artifacts/reference/token-measurement/model-routing-policy.md` policy rows P1 and P5 without editing them. |
 | 2.4.0 | 2026-07-17 | `models` defaults refreshed to the measurement-grounded mapping (Hard Constraint, P9-M30): `hq`/`phase`/`milestone` moved from `remote:gpt-4o` / `remote:claude-3-5-sonnet` (never observed in the 72-session token-burn dataset — falsified defaults) to `remote:claude-opus-4-8` (the measured workhorse at those levels); `epic_qa` moved from the never-measured `local:qwen2.5-coder:7b` to `local:qwen2.5-coder:14b` (the only local model with captured run evidence; gap G11). Updated consistently in the §3.1 schema comments, §3.4 field table defaults/examples + new provenance note, and format-constraint examples. `epic_dev` unchanged. No field, key, or validation rule changed — value/documentation refresh only. Derivation: governance source repo `.ai-project/artifacts/reference/token-measurement/` (Epic E30.2, P9-M30) |
 | 2.3.1 | 2026-07-15 | Resolved the `visual_artifacts.types` naming collision with AOG §16.3 (P7-GH-21): §3.5 field table, Field Details (`types`, new clarifying note), and Worked Example no longer describe `diagrams` as "Mermaid/PlantUML structural" — all `types` entries, including `diagrams`, are now documented as Generative (ComfyUI) categories; Structural mode (AOG §16.3) is clarified as needing no `visual_artifacts` config at all. No field, default, or validation rule changed — documentation/reframing only. (Epic E29.1, P8-M29) |

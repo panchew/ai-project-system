@@ -121,10 +121,19 @@ intent or fill gaps without Phase Chat confirmation.
 
 **Model verification (P9-M31-E31.3 — required for this manual instance):** read your own
 harness-reported model identity (the `# Environment` block or equivalent self-report) and compare
-it to `.ai-project.yml`'s `models.milestone` value (`remote:claude-opus-4-8`) — see
+it to `.ai-project.yml`'s `models.milestone` value (`remote:claude-opus-5`) — see
 `governance/systems/chat-hierarchy.md` "Manual Chat Model Verification" for the mapping, the
 self-report method's known limits, and the absent-block/absent-key permissive default. **If both
 are present and disagree, STOP** — state the mismatch plainly and wait for the Phase Chat/human.
+
+> **Corrected 2026-07-28 by HQ Ruling.** This line read `remote:claude-opus-4-8` when the
+> starter was issued (`96ae2fb`), and that value is why your first open attempt refused: the
+> version had stopped being offered in the harness. The refusal was correct and was escalated,
+> not overridden. `.ai-project.yml` and the policy mapping now read `remote:claude-opus-5`, a
+> same-tier refresh — verify against that. The value is quoted here as **documentation of the
+> live config, never as the source of truth**; `.ai-project.yml` remains the only authority the
+> guardrail reads. See
+> `.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md`.
 
 ---
 
