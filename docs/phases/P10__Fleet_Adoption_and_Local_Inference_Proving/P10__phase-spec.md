@@ -4,7 +4,7 @@ name: Fleet Adoption and Local-Inference Proving
 status: scoping
 start_date: 2026-07-20
 planned_end_date: 2026-08-10
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Phase P10: Fleet Adoption and Local-Inference Proving
@@ -58,9 +58,12 @@ Three milestones:
 2. **M34 — Fleet Roll-forward** — the dormant enrolled projects (courtis, fieldledger-assesment,
    Getawayinsured2023, ai-project-system-mcp) roll under v7.0.0 by end of phase, including the
    ai-project-system-mcp superseded-agent fix (P6-GH-15 live in the wild).
-3. **M35 — System-Operator Canonization** — System Chat as the fleet operator: it runs the
-   serialized local-inference lane and keeps registered projects current on governance version,
-   with **no authority to act fleet-wide on a spoken word**, plus its daily re-instantiation seed.
+3. **M35 — System-Operator Canonization** — the **fleet operator role** (implementation
+   form-neutral; expected but not required to be the Drivr daemon, P11): runs the serialized
+   local-inference lane and keeps registered projects current on governance version, with
+   **no authority to act fleet-wide on a spoken word**, plus its standing brief (what the
+   operator needs each cycle — amended from a daily chat-spawn ritual, SN-24 / HQ Ruling
+   2026-07-28).
 
 ---
 
@@ -81,10 +84,12 @@ By the end of P10:
 - ✅ **The fleet is rolling under v7.0.0.** The dormant enrolled projects are on the P10 roadmap
   with a recorded path to v7.0.0 and are moving along it; ai-project-system-mcp no longer carries
   the superseded `hq.agent.md` (P6-GH-15 resolved in the wild).
-- ✅ **System Chat is the canonized fleet operator.** Its operator role (run the lane, keep
-  projects current) is recorded, the **no-authority-on-speech seam** is normative ("update every
-  project to v7.0.0" is a fleet-wide write that must not execute on speech alone), and the daily
-  re-instantiation seed exists so the CFO can spawn it each day.
+- ✅ **The fleet operator role is canonized** (form-neutral — chat, daemon, cron job, or a
+  person with a terminal; expected but not required to be Drivr, P11). Its role (run the lane,
+  keep projects current) is recorded, the **no-authority-on-speech seam** is normative ("update
+  every project to v7.0.0" is a fleet-wide write that must not execute on speech alone), and its
+  standing brief exists — what the operator needs each cycle, usable regardless of what
+  implements the role.
 - ✅ **Progress happened in more than one repo.** The phase's evidence shows governed work
   advancing in the CFO's real projects, which is the entire point.
 
@@ -149,34 +154,48 @@ to v7.0.0 and demonstrable movement along it.
 
 ### P10.3: System-Operator Canonization (M35)
 
+*(Amended by SN-24 / HQ Ruling, 2026-07-28 — form-only. Original text named the operator "System
+Chat"; a chat is one of several things that could implement the role, and naming it in normative
+governance pinned the record to a value outside this repo's control. See the Amendment History
+entry and the ruling at
+`.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__sn-24-m35-operator-form.md`.
+Content is unchanged — the role, the seam, and the standing brief all survive; only the assumed
+implementation is retired.)*
+
 Advances the standing SN-21 System-participant work into the operator role SN-23 describes.
 Independent of M33/M34 in dependency; schedulable by the Phase Chat where it fits.
 
-**System Chat operates the fleet.** Record normatively that System Chat runs the serialized
-local-inference lane, decides what runs next, and keeps registered projects current on governance
-version ("make sure all registered projects have the latest governance version"). Creation Chat
-remains the source of governance knowledge; System Chat remains the hands.
+**The fleet operator runs the fleet.** Record normatively that the fleet operator runs the
+serialized local-inference lane, decides what runs next, and keeps registered projects current on
+governance version ("make sure all registered projects have the latest governance version").
+Creation Chat remains the source of governance knowledge; the operator remains the hands. **The
+operator's implementation is form-neutral and lives outside this repo's governance corpus** — a
+chat window, a daemon, a cron job, or a person with a terminal are all admissible; the role and
+its boundary hold regardless of which one fills it. It is expected, but not required, to be
+implemented by the Drivr daemon (P11) — this record does not depend on that.
 
-**The no-authority-on-speech seam (load-bearing).** System Chat holds **no authority to act
-fleet-wide on a spoken word.** A request to System Chat is a proposal until it carries authority
-behind it — the same rule that governs the Creation Chat. "Update every project to v7.0.0" is a
+**The no-authority-on-speech seam (load-bearing).** The fleet operator holds **no authority to
+act fleet-wide on a spoken word.** A request to it is a proposal until it carries authority behind
+it — the same rule that governs the Creation Chat. "Update every project to v7.0.0" is a
 fleet-wide write and must not execute on speech alone. This is the seam that must not recreate,
-one level down, the very thing the framework exists to prevent. It is recorded normatively.
+one level down, the very thing the framework exists to prevent. It is recorded normatively, and
+generalizes cleanly across implementations — a daemon has no speech at all, only gates, which
+makes the seam stronger, not weaker, under that form.
 
-**Daily re-instantiation seed.** System Chat needs a daily re-instantiation seed — an artifact
-analogous to the Creation Chat's Genesis seed, spawnable once a day (restates the SN-22 open item
-that M32's E32.2 began). This milestone completes it as an operator-role seed: what the System
-Chat needs to know each morning to run the lane and keep the fleet current, within the authority
-boundary above.
+**Operator's standing brief.** The operator needs a standing brief — what it needs to know each
+cycle to run the lane and keep the fleet current, within the authority boundary above — analogous
+in content to the Creation Chat's Genesis seed (restates the SN-22 open item that M32/E32.2
+began), but **form-neutral**: a document a chat re-reads each day, a daemon loads on boot, or a
+human consults, not a daily-spawn ritual tied to any one of those.
 
 **The serialized lane, hand-run first.** Enrollment (all projects eligible to run) and concurrency
 (one reasoning job at any instant) are different axes and do not conflict. Epics run back-to-back
 through a **single serialized local-inference lane** — near-24/7 means the lane stays busy, never
 idle, never two reasoning jobs at once. With at most two or three projects able to run an epic
-this week, a contention problem is not yet possible: **the CFO (optionally with System Chat) IS
-the lane for now.** M35 canonizes the operator role and the hand-run lane; a built scheduler is
-constructed only when real contention bites — that friction defines P10's later scope rather than
-a guess up front.
+this week, a contention problem is not yet possible: **the CFO (optionally with the fleet
+operator) IS the lane for now.** M35 canonizes the operator role and the hand-run lane; a built
+scheduler is constructed only when real contention bites — that friction defines P10's later
+scope rather than a guess up front.
 
 ---
 
@@ -250,17 +269,20 @@ superseded-agent fix (P6-GH-15).
 
 ### M35: System-Operator Canonization
 
-**Goal:** Canonize System Chat as the fleet operator — runs the serialized lane, keeps projects
-current — with the no-authority-on-speech seam normative and a daily operator-role re-instantiation
-seed.
+*(Amended by SN-24 / HQ Ruling, 2026-07-28 — form-only; see §P10.3 note above.)*
+
+**Goal:** Canonize the fleet operator role — runs the serialized lane, keeps projects current —
+with the no-authority-on-speech seam normative and a form-neutral operator standing brief.
 
 **Indicative Epics:**
-- **E35.1 — System-operator role + no-authority-on-speech seam.** Record normatively that System
-  Chat operates the lane and keeps registered projects current, and that it holds no authority to
-  act fleet-wide on speech alone (fleet-wide writes are proposals until authorized).
-- **E35.2 — Daily operator re-instantiation seed.** Complete the daily-spawn seed as an
-  operator-role artifact (extends M32/E32.2's re-instantiation seed): what System Chat needs each
-  morning to run the lane and keep the fleet current, within the authority boundary.
+- **E35.1 — Fleet-operator role + no-authority-on-speech seam.** Record normatively that the
+  fleet operator (implementation form-neutral) operates the lane and keeps registered projects
+  current, and that it holds no authority to act fleet-wide on speech alone (fleet-wide writes are
+  proposals until authorized).
+- **E35.2 — Operator's standing brief.** Complete the operator's standing brief as a form-neutral
+  artifact (extends M32/E32.2's re-instantiation seed): what the operator needs each cycle to run
+  the lane and keep the fleet current, within the authority boundary — consumable by a chat, a
+  daemon, or a human, not a daily-spawn ritual tied to any one of those.
 
 **Sequencing note:** M35 is independent of M33/M34 in dependency and schedulable by the Phase Chat
 where it fits; the M33 → M34 ordering is binding.
@@ -284,9 +306,9 @@ where it fits; the M33 → M34 ordering is binding.
 5. ✅ **The dormant enrolled projects are rolling under v7.0.0** — each on the roadmap with a
    recorded path and demonstrable movement; ai-project-system-mcp no longer carries the superseded
    `hq.agent.md` (P6-GH-15 resolved in the wild)
-6. ✅ **System Chat's operator role is canonized** — the run-the-lane / keep-projects-current role
-   is recorded, the no-authority-on-speech seam is normative, and a daily operator re-instantiation
-   seed exists
+6. ✅ **The fleet-operator role is canonized** (form-neutral implementation) — the run-the-lane /
+   keep-projects-current role is recorded, the no-authority-on-speech seam is normative, and the
+   operator's standing brief exists
 7. ✅ **The parked items are recorded as explicit defers** — competing-model code review, P9-GH-1,
    P9-GH-3, ComfyUI, and P8-GH-2 named with their triggers, not silently dropped
 
@@ -309,8 +331,8 @@ The CFO (Layer 8) will accept P10 complete when:
 - [ ] ai-project-system-mcp carries the canonical `governance.agent.md` (superseded `hq.agent.md`
   gone) at v7.0.0; courtis, fieldledger-assesment, and Getawayinsured2023 each have a recorded
   roll-forward path with demonstrable movement
-- [ ] Governance records System Chat's operator role and the no-authority-on-speech seam
-  normatively, and a daily operator re-instantiation seed is usable
+- [ ] Governance records the fleet-operator role (form-neutral) and the no-authority-on-speech
+  seam normatively, and the operator's standing brief is usable
 - [ ] The full suite is green at delivery (363 baseline, no regressions, no skips introduced to
   route around changes) — for changes that touch this repo
 - [ ] The phase closure declaration restates the parked/deferred items with their triggers
@@ -325,7 +347,7 @@ The CFO (Layer 8) will accept P10 complete when:
   the fixed posture is applied through these, not rebuilt — on master at v7.0.0
 - P9's `measure-token-burn` instrumentation (M30/E30.1) — the object of M33/E33.3's trust work
 - P9's SN-21 canonization + re-instantiation seed (M32/E32.1–E32.2) — M35 extends the seed into
-  the operator role
+  the operator's standing brief (form-neutral, SN-24)
 - `bin/run-dev-agent` + orchestrator path (P7) — the Agentic/Local Epic execution substrate
 - The canonical `governance.agent.md` and `ai-project-init` install path — the bump procedure's
   raw material
@@ -368,6 +390,12 @@ duration is discovered, not assumed.
   at the Epic); proving pair first; dormant-project roadmap; run-first ordering; System-Chat-as-
   operator with the no-authority-on-speech seam and daily seed; local substrate as the open risk;
   parked items (binding; all decisions CFO-ratified)
+- **SN-24:** `.ai-project/artifacts/steering-notes/2026-07-28__creation-chat__steering-note__M35-operator-form-change.md`
+  — M35's operator form is superseded before it starts (Drivr/P11 daemon direction); HQ Ruling
+  (`.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__sn-24-m35-operator-form.md`)
+  accepted it and amended one step further — M35 names the operator by **role**, not by any
+  implementation (chat or daemon). Form-only; the role, the seam, and the standing brief are
+  unchanged from SN-23
 
 ### Key Reference Documents
 - `.ai-project/artifacts/hq-openers/2026-07-20__hq-chat-opener.md` — the opener instantiating this
@@ -377,7 +405,7 @@ duration is discovered, not assumed.
   resolves; its Decision 2 (token measurement) resolved here by run-first ordering
 - `docs/phases/P9__Context_Handling_and_Token_Efficiency/P9__phase-closure-declaration.md` —
   carry-forwards P9-GH-1/2/3 (verbatim definitions), P8-GH-2 restated deferred, ComfyUI non-blocking
-- Local-model setup reference (share with System Chat): https://quesma.com/blog/qwen-36-is-awesome/
+- Local-model setup reference (share with the fleet operator): https://quesma.com/blog/qwen-36-is-awesome/
   — Qwen3.6 27B dense, Q8_0 + MTP, llama.cpp (recommends against Ollama), 64k context, ~32 tok/s
   at ~42 GB on MacBook M5 Max 128 GB. Author's bar: "a third as much code, but of higher quality"
   — the correct trade for a bounded, reviewed Epic agent
@@ -399,6 +427,13 @@ duration is discovered, not assumed.
 7. **Scheduler only when contention bites.** Hand-run the lane first; the CFO is the lane for now.
 8. **Local-inference substrate is the open risk** — the last thing standing between here and go.
 
+> **Note on Decision 6 (SN-24 / HQ Ruling, 2026-07-28):** the text above is preserved verbatim as
+> SN-23's original record — not reopened. Its **form** is amended: "System Chat" names an
+> implementation this repo's governance does not control; M35 (§P10.3) now records the operator
+> by **role**, form-neutral, with the content (runs the lane, keeps projects current, no
+> authority on speech, a standing brief) unchanged. See
+> `.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__sn-24-m35-operator-form.md`.
+
 ### HQ Triage Decisions (this scoping session, 2026-07-20)
 | Item | Decision | Where |
 |------|----------|-------|
@@ -419,4 +454,5 @@ duration is discovered, not assumed.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-07-28 | Mid-flight amendment (Phase Chat, per SN-24 / HQ Ruling): M35 "System-Operator Canonization" amended form-only — the operator is named by **role**, not by implementation (neither "System Chat" nor "Drivr's daemon"); the daily re-instantiation-seed *ritual* retired in favor of a form-neutral **standing brief** with the same content. Touches Executive Summary item 3, Vision, §P10.3, §Milestones→M35 (E35.1/E35.2 retitled), Success Criteria 6, Acceptance Criteria, Dependencies, Reference (SN-24 added to Governing Steering Notes; Decision 6 footnoted, not rewritten). No change to M33 (closed), M34 (unaffected/independent), the fixed operating posture, or any SN-23 ratified decision's substance. Companion to the same-session paid-frontier model-mapping ruling (escalation-notice `2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`), which this changelog does not otherwise touch (`.ai-project.yml`/policy files, not this spec). |
 | 1.0.0 | 2026-07-20 | Initial P10 phase spec. Three milestones (M33 Proving Pair — v7.0.0 + first real Agentic/Local epic + runtime decision + P9-GH-2 folded in; M34 Fleet Roll-forward incl. P6-GH-15 fix; M35 System-Operator Canonization with no-authority-on-speech seam + daily seed), ~7 epics. Scoped by SN-23 (spine: fleet adoption of v7.0.0; fixed posture; proving pair first; run-first ordering; local substrate the open risk). Parked: competing-model review, P9-GH-1, P9-GH-3, ComfyUI, P8-GH-2. Milestone shape and P9-GH-2 disposition CFO-ratified this session. |
