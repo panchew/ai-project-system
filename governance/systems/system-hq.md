@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-20
-version: 1.0.1
+version: 1.0.2
 ---
 
 # System HQ — Cross-Project System Participant (System Reference)
@@ -203,6 +203,12 @@ mistaken for it:
 
 - **Chat Hierarchy (out-of-hierarchy annex):** `governance/systems/chat-hierarchy.md`
   ("System HQ — Out-of-Hierarchy, Cross-Project Participant")
+- **Fleet operator (a distinct role, not an expansion of this one):**
+  `governance/systems/fleet-operator.md` — the role that operates the serialized
+  local-inference lane, sequences already-authorized work within it, and keeps registered
+  projects current on governance version. Recorded separately because it is **not** part of
+  System HQ's authority: that document expands nothing here, and the same party may hold both
+  roles without merging their boundaries.
 - **Artifact Communication Protocol:** `governance/systems/artifact-communication-protocol.md`
 - **Daily re-instantiation seed:** `governance/systems/system-hq-seed.md`
 - **Field adoption record (informative, outside this repo):** `~/.ai-project/SYSTEM-GOVERNANCE.md`
@@ -219,3 +225,4 @@ mistaken for it:
 |---------|------|--------|
 | 1.0.0 | 2026-07-20 | Initial release. Canonizes System HQ (field-adopted 2026-07-16, SN-21): the `system_request`/`system_response` schemas, storage/naming conventions, and status vocabulary (matching field usage, not reinvented); the normative Authority Boundary (execute-never-decide; `status: escalated` mandatory for review/merge/scope); and System HQ's out-of-hierarchy, cross-project, one-desk-per-machine nature. (P9-M32-E32.1) |
 | 1.0.1 | 2026-07-20 | Reference section gains a back-pointer to the daily re-instantiation seed (`system-hq-seed.md`, P9-M32-E32.2), closing the one-way-only cross-reference E32.2 correctly declined to edit unilaterally. Phase-closure hygiene, not a schema or authority change. |
+| 1.0.2 | 2026-07-30 | Reference section gains a back-pointer to `governance/systems/fleet-operator.md` (P10-M35-E35.1), which records the fleet-operator role as a **distinct** role. Cross-reference hygiene only: the Authority Boundary block is untouched (and therefore still word-for-word identical to its reproductions in `chat-hierarchy.md` and `system-hq-seed.md`), the §Out of Scope pin against expansion toward a "mighty governing System Chat" stands unamended, and no System HQ authority is added, removed, or reinterpreted. |
