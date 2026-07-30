@@ -248,9 +248,10 @@ until its own verification passes.**
     carries governance. **Do not hand-edit around the guard**; disambiguate, then remove the orphan
     stanza entirely (`courtis` commit `a2e95a9`) — deleting only its `branch` line per FM 9 would
     leave a declaration for a path that does not exist and Step 0 would keep tripping. Stage
-    `.gitmodules` with the bump. The replacement resolver was verified against all six enrolled
+    `.gitmodules` with the bump. The replacement resolver was verified against the six **bumped**
     projects (`courtis`, `footboard`, `Getawayinsured2023`, `home_finance`, `local-agent-runner`,
-    `ai-project-system-mcp`), including the FM 8 `governance` path.
+    `ai-project-system-mcp`), including the FM 8 `governance` path. It was **not** exercised against
+    `fieldledger-assesment`, which is enrolled but outside M34's fleet scope.
 11. **The procedure never said what to branch `chore/framework-v7.0.0-bump` FROM, and on a dirty
     target the obvious answer can be impossible.** Preferred base is the project's **default
     branch** (`main`/`master`), so the bump is an isolated, independently-publishable change rather
