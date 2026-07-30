@@ -755,6 +755,16 @@ artifact written back into that project. The **schemas, storage/naming conventio
 status vocabulary** for that pair are canonical in `governance/systems/system-hq.md` — not
 restated here.
 
+*(Added P10-M35-E35.1, 2026-07-30.)* A **second** out-of-hierarchy role exists and is likewise
+not a level of the hierarchy above: the **fleet operator**
+(`governance/systems/fleet-operator.md`), which operates a machine's serialized
+local-inference lane, sequences already-authorized work within it, and keeps registered
+projects current on governance version. It is a **distinct role from System HQ, not an
+expansion of it** — the same party may hold both without merging their boundaries — and, like
+System HQ, it never makes review, acceptance, merge, or scope decisions. Its own authority
+boundary, including the no-authority-on-speech seam, is normative in that document and is not
+restated here.
+
 ### Authority boundary (reproduced verbatim from `system-hq.md`)
 
 System HQ's authority boundary is **normative in `governance/systems/system-hq.md`** and
@@ -779,6 +789,8 @@ it without a second hop. The two statements must always agree; on any divergence
 ## Reference
 
 - **System HQ (cross-project participant):** `governance/systems/system-hq.md`
+- **Fleet operator (out-of-hierarchy role; lane operation, sequencing, governance-version
+  currency, and the no-authority-on-speech seam):** `governance/systems/fleet-operator.md`
 - **Creation Chat template (genesis):** `governance/templates/genesis.md`
 - **Genesis walkthrough example:** `examples/genesis-walkthrough/genesis.md`
 - **Start a project guide:** `governance/systems/start-a-project.md`
