@@ -4,7 +4,7 @@ name: Fleet Adoption and Local-Inference Proving
 status: scoping
 start_date: 2026-07-20
 planned_end_date: 2026-08-10
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Phase P10: Fleet Adoption and Local-Inference Proving
@@ -55,9 +55,9 @@ Three milestones:
    the first real Agentic/Local epic, settle the Ollama-vs-llama.cpp runtime question from that
    run, and produce the trustworthy burn/validation evidence run-first ordering promises (P9-GH-2
    fixed only as far as trusting that run's numbers requires).
-2. **M34 — Fleet Roll-forward** — the dormant enrolled projects (courtis, fieldledger-assesment,
-   Getawayinsured2023, ai-project-system-mcp) roll under v7.0.0 by end of phase, including the
-   ai-project-system-mcp superseded-agent fix (P6-GH-15 live in the wild).
+2. **M34 — Fleet Roll-forward** — the dormant enrolled projects (courtis, Getawayinsured2023,
+   ai-project-system-mcp) roll under v7.0.0 by end of phase, including the ai-project-system-mcp
+   superseded-agent fix (P6-GH-15 live in the wild).
 3. **M35 — System-Operator Canonization** — the **fleet operator role** (implementation
    form-neutral; expected but not required to be the Drivr daemon, P11): runs the serialized
    local-inference lane and keeps registered projects current on governance version, with
@@ -139,9 +139,11 @@ data, not perfected in the abstract. The extent is conditional, sized by what th
 Sequenced behind the proving pair. The dormant enrolled projects roll under v7.0.0 by end of
 phase — not urgent, but moving:
 
-- **courtis, fieldledger-assesment, Getawayinsured2023** — dormant, artifacts dir near-empty.
-  Roadmap each onto v7.0.0: cleanup, version bump, and (where the project is ready) a first
-  governed epic. The repeatable bump procedure from M33 is the lever.
+- **courtis, Getawayinsured2023** — dormant, artifacts dir near-empty. Roadmap each onto v7.0.0:
+  cleanup, version bump, and (where the project is ready) a first governed epic. The repeatable
+  bump procedure from M33 is the lever. (`fieldledger-assesment`, originally listed here, was
+  dropped 2026-07-29 — a screening project, not a real adoption target; direct CFO instruction.
+  See Changelog v1.2.0.)
 - **ai-project-system-mcp** — carries the **superseded `hq.agent.md`** (P6-GH-15 sitting live in
   a real project); artifacts near-empty. Replace it with the canonical `governance.agent.md` and
   bring it to v7.0.0. This closes P6-GH-15 in the wild.
@@ -254,16 +256,16 @@ and M35. The runtime decision (E33.2) unblocks the fleet's local substrate choic
 
 ### M34: Fleet Roll-forward
 
-**Goal:** The dormant enrolled projects (courtis, fieldledger-assesment, Getawayinsured2023,
-ai-project-system-mcp) are rolling under v7.0.0 by end of phase, including the ai-project-system-mcp
-superseded-agent fix (P6-GH-15).
+**Goal:** The dormant enrolled projects (courtis, Getawayinsured2023, ai-project-system-mcp) are
+rolling under v7.0.0 by end of phase, including the ai-project-system-mcp superseded-agent fix
+(P6-GH-15).
 
 **Indicative Epics:**
 - **E34.1 — ai-project-system-mcp superseded-agent fix + v7.0.0.** Replace the superseded
   `hq.agent.md` with canonical `governance.agent.md`; bump to v7.0.0. Closes P6-GH-15 in the wild.
-- **E34.2 — Dormant-project roadmap + roll-forward.** Sequence courtis, fieldledger-assesment,
-  Getawayinsured2023 (and footboard as reached) onto v7.0.0 using E33.1's procedure; each rolling
-  with a recorded path and demonstrable movement by phase close.
+- **E34.2 — Dormant-project roadmap + roll-forward.** Sequence courtis, Getawayinsured2023 (and
+  footboard as reached) onto v7.0.0 using E33.1's procedure; each rolling with a recorded path
+  and demonstrable movement by phase close.
 
 **Sequencing:** Behind M33 — consumes E33.1's bump procedure and E33.2's settled runtime choice.
 
@@ -329,8 +331,8 @@ The CFO (Layer 8) will accept P10 complete when:
 - [ ] A documented, repeatable enrolled-project v7.0.0 bump procedure exists and shows evidence of
   having been applied to the pair
 - [ ] ai-project-system-mcp carries the canonical `governance.agent.md` (superseded `hq.agent.md`
-  gone) at v7.0.0; courtis, fieldledger-assesment, and Getawayinsured2023 each have a recorded
-  roll-forward path with demonstrable movement
+  gone) at v7.0.0; courtis and Getawayinsured2023 each have a recorded roll-forward path with
+  demonstrable movement
 - [ ] Governance records the fleet-operator role (form-neutral) and the no-authority-on-speech
   seam normatively, and the operator's standing brief is usable
 - [ ] The full suite is green at delivery (363 baseline, no regressions, no skips introduced to
@@ -454,5 +456,6 @@ duration is discovered, not assumed.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.2.0 | 2026-07-29 | Mid-flight amendment (Phase Chat, direct CFO instruction, resolving Milestone Chat escalation `.ai-project/artifacts/escalation-notices/2026-07-29T00_00_00Z__P10-M34__escalation_notice.md`): **`fieldledger-assesment` removed** from M34's dormant-project set and from the phase Acceptance Criteria — a screening project, not a real adoption target. Touches Executive Summary item 2, §P10.2, §Milestones→M34 (Goal + E34.2), and Acceptance Criteria. M34's own spec carries the matching amendment (Amendment A1). The escalation's other two items (an incoming `social-stories-creator` project; an inbound "personal platform") are **not** resolved by this entry — left open, not silently absorbed. No change to M33 (closed) or the fixed operating posture. |
 | 1.1.0 | 2026-07-28 | Mid-flight amendment (Phase Chat, per SN-24 / HQ Ruling): M35 "System-Operator Canonization" amended form-only — the operator is named by **role**, not by implementation (neither "System Chat" nor "Drivr's daemon"); the daily re-instantiation-seed *ritual* retired in favor of a form-neutral **standing brief** with the same content. Touches Executive Summary item 3, Vision, §P10.3, §Milestones→M35 (E35.1/E35.2 retitled), Success Criteria 6, Acceptance Criteria, Dependencies, Reference (SN-24 added to Governing Steering Notes; Decision 6 footnoted, not rewritten). No change to M33 (closed), M34 (unaffected/independent), the fixed operating posture, or any SN-23 ratified decision's substance. Companion to the same-session paid-frontier model-mapping ruling (escalation-notice `2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`), which this changelog does not otherwise touch (`.ai-project.yml`/policy files, not this spec). |
 | 1.0.0 | 2026-07-20 | Initial P10 phase spec. Three milestones (M33 Proving Pair — v7.0.0 + first real Agentic/Local epic + runtime decision + P9-GH-2 folded in; M34 Fleet Roll-forward incl. P6-GH-15 fix; M35 System-Operator Canonization with no-authority-on-speech seam + daily seed), ~7 epics. Scoped by SN-23 (spine: fleet adoption of v7.0.0; fixed posture; proving pair first; run-first ordering; local substrate the open risk). Parked: competing-model review, P9-GH-1, P9-GH-3, ComfyUI, P8-GH-2. Milestone shape and P9-GH-2 disposition CFO-ratified this session. |
