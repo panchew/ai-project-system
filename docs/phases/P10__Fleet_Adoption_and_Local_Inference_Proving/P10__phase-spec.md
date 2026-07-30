@@ -4,7 +4,7 @@ name: Fleet Adoption and Local-Inference Proving
 status: scoping
 start_date: 2026-07-20
 planned_end_date: 2026-08-10
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Phase P10: Fleet Adoption and Local-Inference Proving
@@ -63,7 +63,12 @@ Three milestones:
    local-inference lane and keeps registered projects current on governance version, with
    **no authority to act fleet-wide on a spoken word**, plus its standing brief (what the
    operator needs each cycle — amended from a daily chat-spawn ritual, SN-24 / HQ Ruling
-   2026-07-28).
+   2026-07-28). Also records that **a blocked autonomous instance must hand back to its
+   immediate parent** via escalation notice, that escalation travels exactly one level, that
+   Creation Chat's awareness of escalations is visibility-only, and ratifies an **execution
+   matrix** restoring agentic mode at Phase/Milestone (mode is not authority — Stage-2
+   accept/merge still require the human's key) while directing an evidence-gathering evaluation
+   of Milestone × local inference (SN-25 / HQ Ruling 2026-07-30).
 
 ---
 
@@ -90,6 +95,16 @@ By the end of P10:
   every project to v7.0.0" is a fleet-wide write that must not execute on speech alone), and its
   standing brief exists — what the operator needs each cycle, usable regardless of what
   implements the role.
+- ✅ **Autonomy can hand back, and the chain terminates at a human.** A blocked autonomous
+  instance escalates to its immediate parent, one level at a time, guaranteed to reach a manual
+  level (Creation/HQ, permanently manual per SN-22) in a bounded number of hops. Creation Chat's
+  awareness of the chain is recorded as visibility only. The execution matrix is ratified —
+  Phase and Milestone may run agentically — with mode explicitly not conferring authority:
+  Stage-2 acceptance and merge still require the human's key.
+- ✅ **The Milestone × local-inference question has real evidence, not an assertion either way.**
+  A local model's Stage-2 review has been back-tested against the phase's own known defects
+  (M33's decomposition gap, E33.2's false positive, E33.4's false negative, M34's dirty-entry
+  miscount, P10-GH-6), measuring review quality rather than throughput or cost.
 - ✅ **Progress happened in more than one repo.** The phase's evidence shows governed work
   advancing in the CFO's real projects, which is the entire point.
 
@@ -156,16 +171,19 @@ to v7.0.0 and demonstrable movement along it.
 
 ### P10.3: System-Operator Canonization (M35)
 
-*(Amended by SN-24 / HQ Ruling, 2026-07-28 — form-only. Original text named the operator "System
-Chat"; a chat is one of several things that could implement the role, and naming it in normative
-governance pinned the record to a value outside this repo's control. See the Amendment History
-entry and the ruling at
-`.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__sn-24-m35-operator-form.md`.
-Content is unchanged — the role, the seam, and the standing brief all survive; only the assumed
-implementation is retired.)*
+*(Re-scoped in one pass, 2026-07-30, per HQ Ruling on SN-25, Decision 6 — folding in both the
+SN-24 operator-form amendment (2026-07-28, form-only) and SN-25's additions (2026-07-30: handback,
+one-level escalation, Creation Chat awareness, the execution matrix, the Milestone × local
+evidence mandate). M35 had been amended once already (v1.1.0) and had still not opened; rather
+than patch a second time, HQ directed a single clean re-scope from current understanding. See the
+Amendment History entry and both rulings:
+`.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__sn-24-m35-operator-form.md`,
+`.ai-project/artifacts/rulings/2026-07-30__ai-project-system-hq__ruling__sn-25-handback-and-execution-matrix.md`.)*
 
-Advances the standing SN-21 System-participant work into the operator role SN-23 describes.
-Independent of M33/M34 in dependency; schedulable by the Phase Chat where it fits.
+Advances the standing SN-21 System-participant work into the operator role SN-23 describes, and
+adds the obligations SN-25 found the operator record under-specified without. Independent of
+M33/M34 in dependency; schedulable by the Phase Chat where it fits. **M35 stays in P10** —
+recording the rules is governance; only the mechanisms wait for P11 (Decision 8, both rulings).
 
 **The fleet operator runs the fleet.** Record normatively that the fleet operator runs the
 serialized local-inference lane, decides what runs next, and keeps registered projects current on
@@ -199,6 +217,112 @@ operator) IS the lane for now.** M35 canonizes the operator role and the hand-ru
 scheduler is constructed only when real contention bites — that friction defines P10's later
 scope rather than a guess up front.
 
+**Handback is a role obligation (SN-25 Decision 1).** An autonomous execution instance that
+becomes **blocked** — it has encountered something requiring judgment it cannot supply — must be
+able to surface that block, with enough context for the receiving level to act, and the resulting
+intervention is **authority-bearing**. An autonomy that cannot hand back is not autonomy; it is an
+unattended process that fails silently. The handback travels as an **escalation notice** —
+already an existing artifact type, exercised by hand twice in M34; no new artifact type, no new
+authority model. **The destination is the immediate parent, not "a human"** — an instance has no
+way to identify or select a human directly. The human is reached because the chain **terminates
+at a manual level by construction**: Creation and HQ are manual-only, permanently (SN-22), so
+every escalation that keeps escalating arrives at a human in a bounded number of hops.
+Termination is guaranteed by SN-22, not by hope. How that arrival is surfaced to the human (a
+chat window opening, a notification, a dashboard) is **coordination and is P11's** — governance's
+part ends at "the notice is emitted, reaches the parent, and carries enough context to act on."
+
+**Escalation travels exactly one level (SN-25 Decision 2).** An escalation notice targets the
+issuing instance's **immediate parent and nowhere else.** The parent then decides the next step's
+direction: **resolve and return** to the child, or **issue its own notice** one level further up.
+No instance names a target above its parent; no level is skipped. The child's job is to describe
+the blocker fully — nature, what was attempted, what it could not resolve; judgment about the
+*problem* stays nearest the problem, judgment about *where it goes* stays with the level holding
+authority over it. This is a restoration of the framework's existing design, not a new rule —
+instance-judged routing was considered and rejected because it lets a child choose its own judge
+(an Epic routing straight to HQ steps around its Milestone's Stage-2 authority, and the parent may
+never learn its own epic is blocked). M34's own escalation is the worked example: the Milestone
+Chat could not open, its parent Phase Chat diagnosed and issued its own notice to HQ, and HQ
+ruled — two hops, no level skipped. **This does not close P9-GH-1** (the merge-authorization hole
+at Milestone→Phase and Phase→HQ) — the two are adjacent protection, not the same fix, and a
+future reader must not conflate them. **The CFO is not a level in the chain** and may answer at
+any point without that being a bypass; the obligation a direct CFO answer creates is *recording*
+— the decision must land where the level that would otherwise have ruled can see it (the M34
+`fieldledger-assesment` resolution is the worked example of this, too).
+
+**Creation Chat awareness is visibility, never authority (SN-25 Decision 3).** The Creation Chat
+is aware of all escalation notices wherever they arise in the chain — a **retrieval** property
+over committed artifacts (a re-instantiated Creation Chat reads the directory), never a
+subscription, and never a seat. **Seed Rule 3 stands: the Creation Chat holds no governance
+authority.** Awareness must never make it a decision point or a resolution path. Awareness has
+exactly one legitimate outlet: the Creation Chat may **issue a steering note to HQ** —
+direction-setting, not resolution — which is how SN-23, SN-24, and SN-25 themselves arrived.
+Naming the outlet explicitly is what keeps awareness from drifting into "the Creation Chat
+unblocked it."
+
+**The execution matrix is ratified; mode is not authority (SN-25 Decision 4).** SN-23 Ratified
+Decision #2 (Manual/Paid from Creation through Milestone; Agentic/Local at the Epic) is
+**superseded on the Execution Mode axis only** — see the Ratified Decisions footnote below. The
+locality axis stands, with Milestone under evaluation (next paragraph):
+
+| Level | Execution Mode | Inference locality |
+|---|---|---|
+| Creation | Manual only (permanent, SN-22) | Remote |
+| HQ | Manual only (permanent, SN-22) | Remote |
+| Phase | Agentic or manual | Remote |
+| Milestone | Agentic or manual | Remote — **local under evaluation** |
+| Epic | Agentic or manual | Local or remote (in force, E34.3) |
+
+At Phase and Milestone the change is dispatch, not permission — `governance/systems/chat-hierarchy.md`
+(P9-M31-E31.1) already made Execution Mode normative at those levels and recorded that no dispatch
+mechanism yet consumes the declaration; SN-23 narrowed it for P10, and this restores the E31.1
+baseline. **Mode is not authority.** Restoring agentic mode at Milestone says an instance at that
+level *may run unattended* — it does **not** widen what that instance may *authorize*. Milestone
+is where Stage-2 accept authority lives, and errors there propagate into merges. **Until ruled
+otherwise, authority-bearing acts — Stage-2 acceptance and merge authorization — still require the
+human's key, whatever mode the instance is running in.** Mode is what may run; gates are what may
+be decided without a key; conflating them would let a mode restoration silently widen authority.
+Per-level gates remain a requirement and stay revisitable (SN-24). Technical possibility remains
+not sufficient reason — this is a bounded position, not a removal of limits.
+
+**Milestone × local inference — collect evidence, decide on the result (SN-25 Decision 5).** The
+cell is **neither opened nor closed** — it opens or closes on evidence, run-first (SN-23 #4). What
+must be measured is **review quality, not throughput or cost**: `model-routing-policy.md` row
+P4's reason for paid frontier is that Milestone holds Stage-2 accept authority and its errors
+propagate into merges, not price. **The sufficiency bar, stated concretely:** a local model's
+Stage-2 review is a candidate for the cell if it **back-tests successfully against defects with
+already-known ground truth** — at minimum, M33's decomposition gap (E33.4), E33.2 Run A's
+false-positive completion, E33.4's false-negative completion, M34's footboard dirty-entry
+miscount, and P10-GH-6's starter-lint false positive — catching what was caught and flagging what
+was missed, on material it was not told the answer to. A pass is necessary evidence, not by
+itself sufficient to move row P4. `Getawayinsured2023`'s live `.ai-project.yml` (`phase` and
+`milestone` already pointed at a local model) is a **legitimate override, not a policy
+violation** — the yml-spec's defaults-provenance note permits per-project overrides — and may be
+harvested as a natural experiment; its evidence is that project's alone until corroborated, and
+harvesting it must never retroactively convert an override into a fleet standard. **The result may
+amend row P4 independently of the row's own unfired revisit trigger** — a trigger is a prompt to
+revisit, not a precondition for it — and P4 does not wait on P9-GH-3 (still carried forward,
+unowned).
+
+**Block detection is the load-bearing risk — P10-GH-7 (SN-25 Decision 7).** You cannot escalate on
+a block you cannot detect, and detection is measured broken in both directions: E33.2 Run A
+returned exit 0 having done zero work (the validation command would have passed on the unchanged
+repo); E33.4 returned exit 2 having produced complete, green work. Corroborated across two
+projects: **the exit code is not a completion signal on this stack.** Compounding it, **G11
+stands** — zero captured QA-role runs, so the lane that would supply a trustworthy signal has
+never been exercised. Any handback mechanism built over this signal yields either constant false
+escalations (the human becomes the bottleneck again, worse than before) or silent no-ops that read
+as success. Recorded now because recording it costs nothing and building on it costs everything;
+owner unassigned, carried forward to the P10 closure declaration alongside P10-GH-1…GH-6.
+
+**Nothing here is built in P10 (SN-25 Decision 8, reaffirming SN-24's).** M35 records the rules;
+P11 builds the mechanisms. No block detector, no mode switch, no runner→chat channel, no dispatch
+wiring for Phase/Milestone agentic declarations, and no push-notification work (deferred under the
+SN-24 ruling) is scoped here. The domain split: executing larger units and being invocable from a
+manual chat is **execution** (Local Agent Runner); deciding when to run, detecting the block,
+switching mode, and surfacing the intervention is **coordination** (Drivr, P11); the rule that
+autonomy must hand back, that escalation travels one level, and that intervention is
+authority-bearing, is **governance** (this repo).
+
 ---
 
 ## Out of Scope
@@ -226,6 +350,16 @@ scope rather than a guess up front.
 - **The "mighty" governing System Chat / fleet-wide write authority.** Pinned vision item. M35
   canonizes the operator role **with the no-authority-on-speech seam intact** — no expansion of
   authority.
+- **The handback/escalation mechanisms themselves.** M35 records that a blocked instance must
+  hand back and that escalation travels one level; it does not build a block detector, a
+  mode-switch trigger, a runner→chat channel, or dispatch wiring for Phase/Milestone agentic
+  declarations. These are P11 (SN-25 / HQ Ruling 2026-07-30, Decision 8).
+- **P9-GH-1 remains open — the one-level escalation rule does not close it.** Adjacent
+  protection against the same authority class, not the same fix (SN-25 ruling Decision 2). Not
+  to be silently conflated at any future reading.
+- **A decision on Milestone × local inference.** M35 directs and conducts the evidence-gathering
+  evaluation; it does not itself decide whether to move `model-routing-policy.md` row P4. That
+  is a further HQ call on the evaluation's result (SN-25 ruling Decision 5).
 - **Sidekick-for-external-projects (adapting this governance to serve teams that hire the CFO).**
   An **identity question** — Project-Brief territory (pivot vs addition) — deliberately NOT decided
   here. Noted so P10 does not inherit an unstated pivot (SN-23).
@@ -271,10 +405,15 @@ rolling under v7.0.0 by end of phase, including the ai-project-system-mcp supers
 
 ### M35: System-Operator Canonization
 
-*(Amended by SN-24 / HQ Ruling, 2026-07-28 — form-only; see §P10.3 note above.)*
+*(Re-scoped in one pass, 2026-07-30, per HQ Ruling on SN-25 Decision 6 — folds in SN-24
+(2026-07-28, form-only) and SN-25 (2026-07-30: handback, one-level escalation, Creation Chat
+awareness, execution matrix, Milestone × local evidence mandate); see §P10.3 above.)*
 
-**Goal:** Canonize the fleet operator role — runs the serialized lane, keeps projects current —
-with the no-authority-on-speech seam normative and a form-neutral operator standing brief.
+**Goal:** Canonize the fleet operator role — runs the serialized lane, keeps projects current,
+holds no authority to act on speech alone — with a form-neutral standing brief; record that a
+blocked autonomous instance must hand back to its immediate parent and that escalation travels
+exactly one level; ratify the execution matrix (mode is not authority); and produce real evidence
+on the Milestone × local-inference question.
 
 **Indicative Epics:**
 - **E35.1 — Fleet-operator role + no-authority-on-speech seam.** Record normatively that the
@@ -285,9 +424,31 @@ with the no-authority-on-speech seam normative and a form-neutral operator stand
   artifact (extends M32/E32.2's re-instantiation seed): what the operator needs each cycle to run
   the lane and keep the fleet current, within the authority boundary — consumable by a chat, a
   daemon, or a human, not a daily-spawn ritual tied to any one of those.
+- **E35.3 — Handback + one-level escalation + Creation Chat awareness.** Record normatively that
+  a blocked autonomous instance hands back to its immediate parent via escalation notice
+  (authority-bearing intervention, terminates at a manual level by construction, SN-22); that
+  escalation targets the immediate parent only, with the parent choosing resolve-or-escalate;
+  that this does **not** close P9-GH-1; and that Creation Chat's awareness of all escalations is
+  visibility-only, with "issue a steering note to HQ" as its sole legitimate outlet.
+- **E35.4 — Execution matrix ratification + mode-is-not-authority.** Record the execution matrix
+  normatively (likely in `governance/systems/chat-hierarchy.md`'s Execution Mode section),
+  restoring the E31.1 baseline at Phase/Milestone; record explicitly that mode never confers
+  Stage-2 accept or merge authority, which still requires the human's key regardless of running
+  mode; record the SN-23 Ratified Decision #2 supersession (Execution Mode axis only).
+- **E35.5 — Milestone × local-inference evidence-gathering.** Conduct the back-test evaluation
+  against the concrete bar (M33's decomposition gap, E33.2 Run A's false positive, E33.4's false
+  negative, M34's footboard miscount, P10-GH-6), measuring review quality; harvest
+  `Getawayinsured2023`'s live local-Milestone configuration as a natural experiment (a legitimate
+  override, not scoped as a violation); produce a recorded pass/fail judgment as evidence for a
+  further HQ call on `model-routing-policy.md` row P4 — this epic does not itself decide row P4.
+
+> Also carried forward (recorded, not an epic — nothing is built on it in P10): **P10-GH-7**,
+> the two-sided exit-code untrust (E33.2 Run A / E33.4) plus the unexercised QA lane (G11), which
+> makes any future handback mechanism's block-detection signal untrustworthy until addressed.
 
 **Sequencing note:** M35 is independent of M33/M34 in dependency and schedulable by the Phase Chat
-where it fits; the M33 → M34 ordering is binding.
+where it fits; the M33 → M34 ordering is binding. Within M35, E35.1–E35.4 are governance-record
+epics with no hard ordering among them; E35.5 is evidence-gathering work and may run in parallel.
 
 ---
 
@@ -311,8 +472,20 @@ where it fits; the M33 → M34 ordering is binding.
 6. ✅ **The fleet-operator role is canonized** (form-neutral implementation) — the run-the-lane /
    keep-projects-current role is recorded, the no-authority-on-speech seam is normative, and the
    operator's standing brief exists
-7. ✅ **The parked items are recorded as explicit defers** — competing-model code review, P9-GH-1,
-   P9-GH-3, ComfyUI, and P8-GH-2 named with their triggers, not silently dropped
+7. ✅ **A blocked autonomous instance can hand back, normatively** — the escalation-notice
+   handback is recorded as authority-bearing, the one-level-only routing rule is recorded (with
+   P9-GH-1 explicitly not closed by it), and Creation Chat's awareness of escalations is recorded
+   as visibility-only with its steering-note outlet named
+8. ✅ **The execution matrix is ratified and mode is not authority** — Phase/Milestone agentic
+   mode is restored per the E31.1 baseline, and it is recorded explicitly that Stage-2 accept and
+   merge authorization still require the human's key regardless of running mode
+9. ✅ **The Milestone × local-inference question has real evidence** — a back-test evaluation
+   against the phase's own known defects (measuring review quality, not throughput or cost) is
+   conducted and its pass/fail judgment recorded, with `Getawayinsured2023`'s live configuration
+   harvested as a natural experiment where applicable
+10. ✅ **The parked items are recorded as explicit defers** — competing-model code review,
+    P9-GH-1, P9-GH-3, ComfyUI, P8-GH-2, and P10-GH-7 (block-detection untrust) named with their
+    triggers, not silently dropped
 
 ---
 
@@ -335,10 +508,17 @@ The CFO (Layer 8) will accept P10 complete when:
   demonstrable movement
 - [ ] Governance records the fleet-operator role (form-neutral) and the no-authority-on-speech
   seam normatively, and the operator's standing brief is usable
+- [ ] Governance records the handback rule (authority-bearing, terminates at a manual level by
+  construction), the one-level escalation rule (with P9-GH-1 explicitly not closed by it), and
+  Creation Chat awareness as visibility-only with its steering-note outlet named
+- [ ] The execution matrix is ratified and recorded, with mode-is-not-authority stated explicitly
+  (Stage-2 accept/merge require the human's key regardless of running mode)
+- [ ] A Milestone × local-inference back-test evaluation is conducted against the phase's known
+  defects, measuring review quality, with a recorded pass/fail judgment
 - [ ] The full suite is green at delivery (363 baseline, no regressions, no skips introduced to
   route around changes) — for changes that touch this repo
 - [ ] The phase closure declaration restates the parked/deferred items with their triggers
-  (competing-model review, P9-GH-1, P9-GH-3, ComfyUI, P8-GH-2)
+  (competing-model review, P9-GH-1, P9-GH-3, ComfyUI, P8-GH-2, P10-GH-7)
 
 ---
 
@@ -353,6 +533,14 @@ The CFO (Layer 8) will accept P10 complete when:
 - `bin/run-dev-agent` + orchestrator path (P7) — the Agentic/Local Epic execution substrate
 - The canonical `governance.agent.md` and `ai-project-init` install path — the bump procedure's
   raw material
+- `governance/systems/chat-hierarchy.md`'s "Execution Mode" section (P9-M31-E31.1) — the existing
+  normative baseline the execution matrix (E35.4) restores at Phase/Milestone, and the surface
+  E35.4 amends to record the matrix and mode-is-not-authority
+- `.ai-project/artifacts/escalation-notices/` — the existing artifact type E35.3's handback rule
+  reuses; the M34 escalations (`2026-07-28T20_00_00Z…`, `2026-07-29T00_00_00Z…`) are its worked
+  examples
+- `model-routing-policy.md` row P4 — the evidence-derived decision E35.5's evaluation must engage
+  with (may amend independently of the row's own unfired trigger, per the SN-25 ruling)
 
 ### External / CFO-side
 - **The target project repos** — `home_finance`, `local-agent-runner`, and the dormant four live
@@ -370,13 +558,15 @@ The CFO (Layer 8) will accept P10 complete when:
 
 ## Timeline
 
-**Estimate:** 3 Milestones, ~7 Epics
-- M33 (Proving Pair — v7.0.0 + first real Agentic/Local epic): ~1–1.5 weeks (3 epics; the real
-  epic run and runtime decision are the long pole)
-- M34 (Fleet Roll-forward): ~1 week (2 epics; consumes M33's bump procedure)
-- M35 (System-Operator Canonization): ~3–5 days (2 epics; schedulable in parallel by the Phase
-  Chat)
-- **Total: ~2–3 weeks**
+**Estimate:** 3 Milestones, ~13 Epics (revised 2026-07-30 from actuals + the M35 re-scope; original
+estimate was ~7)
+- M33 (Proving Pair — v7.0.0 + first real Agentic/Local epic): **closed**, 4 epics actual (E33.4
+  added at closure to fix a decomposition gap)
+- M34 (Fleet Roll-forward): **closed**, 3 epics actual (E34.3/E34.1/E34.2)
+- M35 (System-Operator Canonization): ~5 epics indicative post-re-scope (E35.1–E35.5); mostly
+  governance-record work, E35.5's evidence-gathering is the long pole
+- **Total: ~2–3 weeks original estimate held through M33/M34; M35 added scope 2026-07-30 (SN-25)
+  after the estimate was set**
 
 The CFO's read (2026-07-20): "this might be the week everything clicks and the machine starts
 going." The estimate is deliberately loose — run-first ordering means the first real epic's
@@ -398,6 +588,16 @@ duration is discovered, not assumed.
   accepted it and amended one step further — M35 names the operator by **role**, not by any
   implementation (chat or daemon). Form-only; the role, the seam, and the standing brief are
   unchanged from SN-23
+- **SN-25:** `.ai-project/artifacts/steering-notes/2026-07-30__creation-chat__steering-note__escalation-handback-and-execution-matrix.md`
+  — autonomy must be able to hand back (an autonomous instance that becomes blocked has no way to
+  summon a human); plus a CFO precision on the Execution Mode axis and a Milestone × local
+  inference evidence-collection mandate. HQ Ruling
+  (`.ai-project/artifacts/rulings/2026-07-30__ai-project-system-hq__ruling__sn-25-handback-and-execution-matrix.md`)
+  accepted it: handback destination corrected to the immediate parent (not "a human"); one-level
+  escalation recorded (does not close P9-GH-1); Creation Chat awareness is visibility-only; the
+  execution matrix ratified with mode-is-not-authority attached; the Milestone × local evaluation
+  directed with a concrete back-test bar; P10-GH-7 registered; M35 directed to re-scope once
+  (this amendment) rather than patch twice
 
 ### Key Reference Documents
 - `.ai-project/artifacts/hq-openers/2026-07-20__hq-chat-opener.md` — the opener instantiating this
@@ -436,6 +636,16 @@ duration is discovered, not assumed.
 > authority on speech, a standing brief) unchanged. See
 > `.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__sn-24-m35-operator-form.md`.
 
+> **Note on Decision 2 (SN-25 / HQ Ruling, 2026-07-30):** the text above is preserved verbatim as
+> SN-23's original record — not reopened. Decision 2's **Execution Mode axis is superseded**:
+> Phase and Milestone may now run agentically or manually (the execution matrix, §P10.3), not
+> Manual/Paid-only — restoring the P9-M31-E31.1 baseline that SN-23 had narrowed for P10's start.
+> Decision 2's **locality axis stands**, with Milestone × local inference now under a directed
+> evidence evaluation (§P10.3, E35.5) rather than settled either way. The supersession is recorded
+> explicitly so it is a decision, not drift; **mode restoration does not confer authority** —
+> Stage-2 accept and merge still require the human's key regardless of running mode. See
+> `.ai-project/artifacts/rulings/2026-07-30__ai-project-system-hq__ruling__sn-25-handback-and-execution-matrix.md`.
+
 ### HQ Triage Decisions (this scoping session, 2026-07-20)
 | Item | Decision | Where |
 |------|----------|-------|
@@ -456,6 +666,7 @@ duration is discovered, not assumed.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.3.0 | 2026-07-30 | M35 re-scoped in one pass (Phase Chat, per HQ Ruling on SN-25, Decision 6), folding in SN-24 (2026-07-28, form-only, already at v1.1.0) and SN-25 (2026-07-30) together rather than patching a second time. **SN-25 additions:** the handback rule (a blocked autonomous instance hands back to its immediate parent via escalation notice, authority-bearing, terminating at a manual level by construction per SN-22); the one-level escalation rule (parent-only targeting; does **not** close P9-GH-1); Creation Chat awareness as visibility-only (outlet: steering note to HQ); the execution matrix ratified, **superseding SN-23 Ratified Decision #2 on the Execution Mode axis only** (Phase/Milestone restored to agentic-or-manual per the E31.1 baseline; locality axis stands, Milestone under evaluation) with **mode-is-not-authority** stated explicitly (Stage-2 accept/merge still require the human's key); the Milestone × local-inference evidence mandate (back-test bar named, review-quality not throughput, `Getawayinsured2023` harvestable as a legitimate natural experiment, may amend row P4 independent of its unfired trigger); **P10-GH-7** registered (two-sided exit-code untrust + unexercised G11 QA lane — the block-detection risk under any future handback mechanism). Touches Executive Summary item 3, Vision, §P10.3 (comprehensive rewrite), Out of Scope, §Milestones→M35 (epics E35.1–E35.5, from E35.1–E35.2), Success Criteria (+3), Acceptance Criteria (+3), Dependencies, Timeline (epic estimate revised from actuals), Reference (SN-25 + ruling added; new Ratified-Decisions footnote on Decision 2, verbatim text not reopened). No change to M33/M34 (both closed) or to any decision this note does not name. |
 | 1.2.0 | 2026-07-29 | Mid-flight amendment (Phase Chat, direct CFO instruction, resolving Milestone Chat escalation `.ai-project/artifacts/escalation-notices/2026-07-29T00_00_00Z__P10-M34__escalation_notice.md`): **`fieldledger-assesment` removed** from M34's dormant-project set and from the phase Acceptance Criteria — a screening project, not a real adoption target. Touches Executive Summary item 2, §P10.2, §Milestones→M34 (Goal + E34.2), and Acceptance Criteria. M34's own spec carries the matching amendment (Amendment A1). The escalation's other two items (an incoming `social-stories-creator` project; an inbound "personal platform") are **not** resolved by this entry — left open, not silently absorbed. No change to M33 (closed) or the fixed operating posture. |
 | 1.1.0 | 2026-07-28 | Mid-flight amendment (Phase Chat, per SN-24 / HQ Ruling): M35 "System-Operator Canonization" amended form-only — the operator is named by **role**, not by implementation (neither "System Chat" nor "Drivr's daemon"); the daily re-instantiation-seed *ritual* retired in favor of a form-neutral **standing brief** with the same content. Touches Executive Summary item 3, Vision, §P10.3, §Milestones→M35 (E35.1/E35.2 retitled), Success Criteria 6, Acceptance Criteria, Dependencies, Reference (SN-24 added to Governing Steering Notes; Decision 6 footnoted, not rewritten). No change to M33 (closed), M34 (unaffected/independent), the fixed operating posture, or any SN-23 ratified decision's substance. Companion to the same-session paid-frontier model-mapping ruling (escalation-notice `2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`), which this changelog does not otherwise touch (`.ai-project.yml`/policy files, not this spec). |
 | 1.0.0 | 2026-07-20 | Initial P10 phase spec. Three milestones (M33 Proving Pair — v7.0.0 + first real Agentic/Local epic + runtime decision + P9-GH-2 folded in; M34 Fleet Roll-forward incl. P6-GH-15 fix; M35 System-Operator Canonization with no-authority-on-speech seam + daily seed), ~7 epics. Scoped by SN-23 (spine: fleet adoption of v7.0.0; fixed posture; proving pair first; run-first ordering; local substrate the open risk). Parked: competing-model review, P9-GH-1, P9-GH-3, ComfyUI, P8-GH-2. Milestone shape and P9-GH-2 disposition CFO-ratified this session. |
