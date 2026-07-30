@@ -42,8 +42,8 @@ schedulable by the Phase Chat where it fits. `is_final: false` — M35 remains.
 Same split M33 established, and it applies with full force here because **most M34 deliverables
 land in OTHER repositories.**
 
-- **The target repos** (`ai-project-system-mcp`, `courtis`, `fieldledger-assesment`,
-  `Getawayinsured2023`, `footboard`) receive the actual `framework_version` stamp, the
+- **The target repos** (`ai-project-system-mcp`, `courtis`, `Getawayinsured2023`, `footboard`)
+  receive the actual `framework_version` stamp, the
   governance refresh / canonical-agent install, and any real epic code. The Milestone/Epic
   Chats own the mechanics inside each target repo; **their branches are the CFO's to publish**
   (committed locally, not pushed by these epics — the M33 precedent).
@@ -65,7 +65,7 @@ so a reader of this repo can verify the target-repo outcome.
 
 ## Binding Context (settled scope — NOT for re-debate)
 
-Per the P10 phase spec (v1.0.0), SN-23, and M33's now-settled outputs, the following apply in
+Per the P10 phase spec (v1.2.0), SN-23, and M33's now-settled outputs, the following apply in
 full and are not open for re-examination:
 
 1. **P10 is adoption, not capability.** M34 rolls a proven procedure and applies a settled
@@ -104,8 +104,10 @@ part):
 | `ai-project-system-mcp` | **No — superseded `hq.agent.md`** | pinned to a **raw SHA** (`2bd76ff4…`), not a tag | none | 2 | **E34.1:** replace agent with canonical `governance.agent.md`, fix the pin to v7.0.0, stamp |
 | `Getawayinsured2023` | **Yes** (`governance.agent.md`) | **7.0.0** already | **none** | 12 | Lightest: stamp `framework_version` + Failure-Mode-3 agent-freshness check; likely no corpus bump |
 | `courtis` | No | v4.0.1 | none | 2 | Full: install canonical agent + bump corpus + stamp |
-| `fieldledger-assesment` | No | 5.1.0 | none | 2 | Full: install canonical agent + bump corpus + stamp |
 | `footboard` | No | 5.1.0 | none | 7 | Canonical-agent install + bump, as the roadmap reaches it (phase spec §P10.2) |
+
+> `fieldledger-assesment` **dropped from M34/P10 scope** — CFO direct instruction, 2026-07-29: it
+> was a screening project, not a real adoption target. See Amendment History.
 
 Three things this makes concrete:
 - **P6-GH-15 is live and confirmed:** `ai-project-system-mcp` runs the superseded `hq.agent.md`,
@@ -113,8 +115,8 @@ Three things this makes concrete:
   both (E34.1).
 - **The dormant set is not uniform.** `Getawayinsured2023` is already at gov 7.0.0 with the
   canonical agent (further along than SN-23 recorded) and needs little more than the stamp;
-  `courtis`/`fieldledger-assesment`/`footboard` need an agent install and a multi-version corpus
-  bump. E34.2 sizes each from its actual state, not the snapshot.
+  `courtis`/`footboard` need an agent install and a multi-version corpus bump. E34.2 sizes each
+  from its actual state, not the snapshot.
 - **The `models:` routing is still wrong for the fleet.** `.ai-project.yml`'s `models.epic_dev`
   / `models.epic_qa` remain `local:qwen2.5-coder:14b` — the model E33.2 proved produces
   false-positive empty completions. Any agentic roll-forward run would default straight into
@@ -129,10 +131,10 @@ By the end of this milestone:
 1. **P6-GH-15 is closed in the wild** — `ai-project-system-mcp` carries the canonical
    `governance.agent.md`, the superseded `hq.agent.md` is gone, its governance pin is a proper
    v7.0.0 tag, and it is stamped `framework_version: v7.0.0` (confirmable) (E34.1).
-2. **The dormant enrolled projects are rolling under v7.0.0** — `courtis`,
-   `fieldledger-assesment`, and `Getawayinsured2023` each have a recorded roll-forward path and
-   **demonstrable movement** along it (at minimum the v7.0.0 stamp where the project is ready);
-   `footboard` is on the roadmap with a canonical-agent path (E34.2).
+2. **The dormant enrolled projects are rolling under v7.0.0** — `courtis` and
+   `Getawayinsured2023` each have a recorded roll-forward path and **demonstrable movement**
+   along it (at minimum the v7.0.0 stamp where the project is ready); `footboard` is on the
+   roadmap with a canonical-agent path (E34.2).
 3. **The settled runtime choice is applied** — `.ai-project.yml`'s `models:` routing reflects
    E33.2's decision (Ollama + a 30B-class coder); the `qwen2.5-coder:14b` epic entries are gone
    (E34.3).
@@ -165,9 +167,8 @@ This milestone explicitly does **not**:
   `governance.agent.md`, correct the raw-SHA governance pin to the v7.0.0 tag, refresh the
   corpus, and stamp `framework_version: v7.0.0` — via E33.1's procedure. Closes P6-GH-15.
 - **E34.2** — the dormant-project roadmap and roll-forward: a recorded, per-project path to
-  v7.0.0 for `courtis`, `fieldledger-assesment`, `Getawayinsured2023` (and `footboard` as
-  reached), each with demonstrable movement, applying E33.1's procedure and sizing each from its
-  observed state.
+  v7.0.0 for `courtis`, `Getawayinsured2023` (and `footboard` as reached), each with
+  demonstrable movement, applying E33.1's procedure and sizing each from its observed state.
 - **E34.3** — apply E33.2's settled runtime choice to this repo's `.ai-project.yml` `models:`
   routing (off `qwen2.5-coder:14b` to the 30B-class model the run proved), with the change
   traced to the run evidence.
@@ -261,25 +262,30 @@ Independent of E34.2 and E34.3.
 
 **Grounding:** the dormant set is **not uniform** (see Problem Statement). `Getawayinsured2023`
 is already at gov 7.0.0 with the canonical agent and needs little beyond the stamp;
-`courtis` (v4.0.1) and `fieldledger-assesment` (5.1.0) have no canonical agent and need a full
-install + multi-version corpus bump; `footboard` (5.1.0, 7 artifacts, no agent) is brought under
-v7.0.0 with a canonical agent as the roadmap reaches it. E33.1's procedure is the lever; each
-project's extent is **sized from its actual observed state**, verified at execution.
+`courtis` (v4.0.1) has no canonical agent and needs a full install + multi-version corpus bump;
+`footboard` (5.1.0, 7 artifacts, no agent) is brought under v7.0.0 with a canonical agent as the
+roadmap reaches it. E33.1's procedure is the lever; each project's extent is **sized from its
+actual observed state**, verified at execution.
+
+**`fieldledger-assesment` is out of scope** — dropped from the fleet set by direct CFO
+instruction (2026-07-29): it was a screening project, not a real adoption target. It is not
+"deferred" or "recorded as a blocker" — it is removed, and no roll-forward path is owed for it.
+See Amendment History.
 
 **Deliverables:**
 1. A **recorded per-project roll-forward roadmap** (governance record on `phase/P10`) for
-   `courtis`, `fieldledger-assesment`, `Getawayinsured2023`, and `footboard`: each project's
-   current state, its path to v7.0.0 via E33.1's procedure, and its target extent for M34.
+   `courtis`, `Getawayinsured2023`, and `footboard`: each project's current state, its path to
+   v7.0.0 via E33.1's procedure, and its target extent for M34.
 2. **Demonstrable movement** along each path — at minimum the `framework_version: v7.0.0` stamp
    for each project that is ready (`Getawayinsured2023` at least), with confirmation evidence;
-   `courtis`/`fieldledger-assesment`/`footboard` moved as far as their readiness allows, with any
-   project that cannot yet move recorded as an explicit blocker.
+   `courtis`/`footboard` moved as far as their readiness allows, with any project that cannot yet
+   move recorded as an explicit blocker.
 3. If any project is ready for a first governed epic and one is run, its run record — under the
    fixed posture and the Hard Constraint (run-first; exit-code untrust). This is **optional per
    project** (the bar is *rolling*, not a completed epic).
 
 **Definition of Done:**
-- [ ] A per-project roadmap for all four projects is committed to the governance record
+- [ ] A per-project roadmap for all three projects is committed to the governance record
 - [ ] `Getawayinsured2023` (at minimum) is stamped `framework_version: v7.0.0` (confirmable);
       each other project shows demonstrable movement or a recorded blocker
 - [ ] Every "rolling"/"bumped" claim is confirmable from committed evidence against the actual
@@ -287,9 +293,9 @@ project's extent is **sized from its actual observed state**, verified at execut
 - [ ] For any change touching **this** repo: full suite green (366 baseline, no new skips)
 
 **Acceptance Criteria:**
-- [ ] `courtis`, `fieldledger-assesment`, and `Getawayinsured2023` each have a recorded
-      roll-forward path with demonstrable movement (phase acceptance criterion); `footboard` is
-      on the roadmap with a canonical-agent path
+- [ ] `courtis` and `Getawayinsured2023` each have a recorded roll-forward path with
+      demonstrable movement (phase acceptance criterion); `footboard` is on the roadmap with a
+      canonical-agent path
 
 **Sequencing:** consumes E33.1's procedure (available). Independent of E34.1. If it performs an
 agentic run, E34.3's `models:` fix should land first (else the run defaults to the broken model).
@@ -348,9 +354,9 @@ final P10 milestone** (`is_final: false`) — M35 remains (independent). Phase c
 sequence ending in the Phase Closure Declaration.
 
 **Cross-repo note:** E34.1/E34.2 land in the **target repos** (`ai-project-system-mcp`,
-`courtis`, `fieldledger-assesment`, `Getawayinsured2023`, `footboard`); those branches are the
-CFO's to publish and are **not** merged onto `phase/P10`. Only the governance record + evidence
-(and E34.3's `models:` edit) land here.
+`courtis`, `Getawayinsured2023`, `footboard`); those branches are the CFO's to publish and are
+**not** merged onto `phase/P10`. Only the governance record + evidence (and E34.3's `models:`
+edit) land here.
 
 ---
 
@@ -370,7 +376,7 @@ CFO's to publish and are **not** merged onto `phase/P10`. Only the governance re
   the P7 orchestrator path.
 - `.ai-project.yml` (this repo) — E34.3's edit target; the stale `models.epic_dev`/`epic_qa`
   entries at lines 36–37.
-- **External dependencies (CFO-side):** the five target repos live outside this repo; the CFO
+- **External dependencies (CFO-side):** the four target repos live outside this repo; the CFO
   controls their state and access, and publishing their bump/run branches is the CFO's outward
   action (the M33 precedent). Premium/frontier quota governs any Manual/Paid scoping.
 - Reference context: SN-23; the M33 Milestone Closure Declaration (carry-forwards); the
@@ -396,8 +402,8 @@ CFO's to publish and are **not** merged onto `phase/P10`. Only the governance re
 - [ ] All three epic branches merged to `milestone/M34`
 - [ ] `ai-project-system-mcp` carries canonical `governance.agent.md` (no `hq.agent.md`), pinned
       to v7.0.0, stamped `framework_version: v7.0.0` — P6-GH-15 closed in the wild
-- [ ] `courtis`, `fieldledger-assesment`, and `Getawayinsured2023` each have a recorded
-      roll-forward path with demonstrable movement; `footboard` roadmapped
+- [ ] `courtis` and `Getawayinsured2023` each have a recorded roll-forward path with
+      demonstrable movement; `footboard` roadmapped
 - [ ] `.ai-project.yml` `models:` routing reflects E33.2's settled choice; no `qwen2.5-coder:14b`
       epic entry remains
 - [ ] Every fleet-state claim is confirmable from committed evidence against the actual target
@@ -412,9 +418,8 @@ CFO's to publish and are **not** merged onto `phase/P10`. Only the governance re
 
 1. `ai-project-system-mcp` carries the canonical `governance.agent.md` (superseded `hq.agent.md`
    gone) at v7.0.0, confirmable from committed evidence — P6-GH-15 closed in the wild (E34.1).
-2. `courtis`, `fieldledger-assesment`, and `Getawayinsured2023` each have a recorded roll-forward
-   path with demonstrable movement; `footboard` is on the roadmap with a canonical-agent path
-   (E34.2).
+2. `courtis` and `Getawayinsured2023` each have a recorded roll-forward path with demonstrable
+   movement; `footboard` is on the roadmap with a canonical-agent path (E34.2).
 3. `.ai-project.yml`'s `models:` routing reflects the settled runtime choice — no
    `qwen2.5-coder:14b` epic entry — with the change traced to E33.2's run evidence (E34.3).
 4. Every "rolling"/"bumped" claim traces to committed confirmation evidence against the real
@@ -446,7 +451,7 @@ E34.2's per-project extent is the variable pole)
 ```mermaid
 flowchart LR
     P["M33 outputs\n(E33.1 bump procedure,\nE33.2 runtime choice)"] -->|lever| A["E34.1\nai-project-system-mcp\nsuperseded-agent fix + v7.0.0\n(closes P6-GH-15)"]
-    P -->|lever| B["E34.2\nDormant-project roadmap\n+ roll-forward\n(courtis, fieldledger,\nGetawayinsured, footboard)"]
+    P -->|lever| B["E34.2\nDormant-project roadmap\n+ roll-forward\n(courtis, Getawayinsured,\nfootboard)"]
     P -->|settled choice| C["E34.3\nmodels: routing edit\n(qwen2.5-coder:14b → 30B-class)"]
     C -->|before any agentic run| B
 ```
@@ -477,6 +482,15 @@ flowchart LR
   exit-2/complete-work) means any M34 agentic run is judged from the transcript and target repo,
   never the exit code.
 
+- **Two other items the E34.2 escalation raised are explicitly NOT resolved by this amendment —
+  do not act on them.** The CFO's instruction was narrow: drop `fieldledger-assesment`, nothing
+  else. In particular: (a) `social-stories-creator` is **not** added to E34.2's project set — it
+  would also invert the epic's premise (an active, already-v7.0.0, already-canonical-agent
+  project, not a dormant/stale one), a scope question this amendment does not decide; (b) the
+  inbound "personal platform" is **not** routed anywhere by this spec — it has no name, repo, or
+  enrollment, and a phase-or-above prioritization claim is not an M34 input. Both remain open;
+  raise them again (Steering Note / Creation Chat, most likely) if they need a decision.
+
 ### Carry-forwards recorded (not scoped into M34)
 - **P10-GH-1 (candidate):** `framework_version` is a convention-only top-level key, not defined
   in `governance/ai-project-yml-spec.md` (E33.1 Failure Mode 4). Schema-blessing it is a
@@ -485,6 +499,14 @@ flowchart LR
   authorized loadable-quant trial).
 - **Residual P9-GH-2:** blind spot G9 (local *input* tokens unmeasured — runner-side) and a
   general self-verification harness for the paid dataset; neither required for M34.
+
+---
+
+## Amendment History
+
+| # | Date | Authority | Change |
+|---|------|-----------|--------|
+| A1 | 2026-07-29 | Phase Chat (P10), direct CFO instruction, resolving Milestone Chat escalation-notice `.ai-project/artifacts/escalation-notices/2026-07-29T00_00_00Z__P10-M34__escalation_notice.md` | **`fieldledger-assesment` removed** from the M34 fleet set — a screening project, not a real adoption target (CFO's stated reason). Touches the Cross-Repo target-repo list, Problem Statement table, Goals, In Scope, Epic Detail (E34.2 grounding/deliverables), Definition of Done, Branch Strategy cross-repo note, Prerequisites (five→four target repos), Milestone DoD, Milestone Acceptance Criteria, and the visual-binding diagram. E34.1 and E34.3 (already merged before this amendment) are unaffected — neither named `fieldledger-assesment`. The escalation's other two items (an incoming `social-stories-creator` project; an inbound "personal platform") are explicitly **not** resolved here — see the Notes entry above. The companion **P10 phase spec** amendment (v1.1.0 → v1.2.0) removes the same project from the phase's own Acceptance Criteria and Milestones section. |
 
 ---
 

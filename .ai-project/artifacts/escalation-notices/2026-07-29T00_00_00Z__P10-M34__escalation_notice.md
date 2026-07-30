@@ -4,8 +4,9 @@ milestone: M34
 issued_by: Milestone Chat (P10-M34)
 issued_to: Phase Chat (P10)
 date: 2026-07-29
-status: open
-blocks: E34.2 planning
+status: resolved
+resolved_by: direct CFO instruction to Phase Chat (in-session, 2026-07-29)
+resolved_date: 2026-07-29
 ---
 
 # Escalation Notice: the M34 fleet set changed — `fieldledger-assesment` out, `social-stories-creator` in, and a higher-priority project inbound
@@ -115,3 +116,41 @@ Specifically:
 E34.1 (merged `bf70841`, P6-GH-15 closed) and E34.3 (merged `aa6cf12`) are complete and unaffected.
 Nothing about this escalation reopens them. M34 can still close on two of three epics if the Phase
 Chat elects to descope E34.2, though that would leave the phase acceptance criterion open.
+
+## Resolution
+
+**Resolved 2026-07-29 by direct CFO instruction to the Phase Chat**, in-session: *"the only thing
+I need is to drop `fieldledger-assesment` as that was a screening project."*
+
+Answering the four numbered questions:
+
+1. **Removed, not deprioritized — and yes, a phase spec amendment.** `fieldledger-assesment` is
+   dropped entirely: no roll-forward path is owed for it, and it is not carried as a recorded,
+   non-blocking deferral. The phase spec is bumped to **v1.2.0**, removing it from Executive
+   Summary item 2, §P10.2, §Milestones→M34 (Goal + E34.2), and the phase Acceptance Criteria. The
+   Milestone spec carries the matching amendment (**Amendment A1**).
+2. **Not confirmed, and not acted on.** The CFO's instruction addressed only the removal — your
+   observation that `social-stories-builder` doesn't exist while `social-stories-creator` does was
+   correct to flag and correct not to resolve unilaterally. It is not added to E34.2's scope by
+   this resolution.
+3. **Not in M34** — unanswered by design, not by oversight. Whether a mid-inception,
+   already-v7.0.0 project belongs in a "dormant enrolled projects" epic at all is exactly the kind
+   of premise question you were right to escalate rather than absorb; it stays open.
+4. **Not routed.** No Steering Note, Creation Chat session, or later-phase placement is decided
+   here. M34 assumes nothing about the "personal platform," per your own recommendation.
+
+**This was resolved as a Phase Chat decision, not escalated further to HQ**, despite touching a
+phase Acceptance Criterion: the CFO — the authority HQ Chat's process ultimately serves — gave the
+instruction directly, in-session, to the Phase Chat, on a narrow, unambiguous, scope-*reducing*
+question (drop one named project; add nothing). This is treated as equivalent in kind to the
+CFO-ratified decisions Creation Chat sessions record directly (SN-23, SN-24) rather than requiring
+a separate HQ round-trip to ratify what the CFO already stated plainly. Flagged here rather than
+silently normalized — this is a real routing choice, not the only correct one, and it is
+consistent with the framework's open carry-forward **P9-GH-1** (the merge-authorization/routing
+hole at Milestone→Phase and Phase→HQ), which this moment is arguably an instance of. Worth HQ's
+attention if this pattern recurs.
+
+**E34.2 is unblocked** — proceed to author its spec and starter against the amended Milestone
+spec's project set (`courtis`, `Getawayinsured2023`, `footboard`). Your escalation was the correct
+call: the project set is not a Milestone-Chat variable, and you were right not to absorb any of
+its four questions unilaterally.

@@ -80,8 +80,8 @@ Milestone P10-M34.
 
 **Epics within this Milestone (indicative — you own final decomposition within scope):**
 - **E34.1** — `ai-project-system-mcp` superseded-agent fix + v7.0.0 (closes P6-GH-15)
-- **E34.2** — Dormant-project roadmap + roll-forward (courtis, fieldledger-assesment,
-  Getawayinsured2023, footboard)
+- **E34.2** — Dormant-project roadmap + roll-forward (courtis, Getawayinsured2023, footboard —
+  `fieldledger-assesment` dropped 2026-07-29, CFO instruction; see milestone spec Amendment A1)
 - **E34.3** — Apply the settled runtime choice (`models:` routing edit)
 
 **Session objective:** Produce a complete Epic spec and an Epic Execution Chat Starter for each
@@ -95,9 +95,13 @@ SN-13 default-accept, the Phase Chat accepts a clean set by silence.
 - **The dormant set is not uniform — verify each project at execution.** The milestone spec's
   Problem-Statement table (2026-07-28) already differs from the SN-23 snapshot: `Getawayinsured2023`
   is already at gov 7.0.0 with the canonical agent (needs little beyond the stamp); `courtis`/
-  `fieldledger-assesment`/`footboard` need an agent install + multi-version bump; `ai-project-system-mcp`
+  `footboard` need an agent install + multi-version bump; `ai-project-system-mcp`
   carries the superseded `hq.agent.md` **and** a raw-SHA pin. Re-check state per project and
   roadmap from what you find, recording any further drift.
+- **`fieldledger-assesment` is out of E34.2's scope entirely** (dropped, not deferred — CFO
+  instruction, 2026-07-29: it was a screening project). Do **not** add `social-stories-creator`
+  or plan around the inbound "personal platform" either — both raised in the same escalation but
+  explicitly left unresolved; see milestone spec Amendment A1 and its Notes entry.
 - **Cross-repo record/evidence split.** E34.1/E34.2 land in the **target repos** (their branches
   are the CFO's to publish, not merged onto `phase/P10`); **this** repo holds the governance
   record + evidence. **E34.3 is the exception** — it edits *this* repo's `.ai-project.yml`.
