@@ -4,7 +4,7 @@ name: Fleet Adoption and Local-Inference Proving
 status: scoping
 start_date: 2026-07-20
 planned_end_date: 2026-08-10
-version: 1.3.0
+version: 1.3.1
 ---
 
 # Phase P10: Fleet Adoption and Local-Inference Proving
@@ -294,12 +294,19 @@ already-known ground truth** — at minimum, M33's decomposition gap (E33.4), E3
 false-positive completion, E33.4's false-negative completion, M34's footboard dirty-entry
 miscount, and P10-GH-6's starter-lint false positive — catching what was caught and flagging what
 was missed, on material it was not told the answer to. A pass is necessary evidence, not by
-itself sufficient to move row P4. `Getawayinsured2023`'s live `.ai-project.yml` (`phase` and
-`milestone` already pointed at a local model) is a **legitimate override, not a policy
-violation** — the yml-spec's defaults-provenance note permits per-project overrides — and may be
-harvested as a natural experiment; its evidence is that project's alone until corroborated, and
-harvesting it must never retroactively convert an override into a fleet standard. **The result may
-amend row P4 independently of the row's own unfired revisit trigger** — a trigger is a prompt to
+itself sufficient to move row P4. ~~`Getawayinsured2023`'s live `.ai-project.yml` (`phase` and
+`milestone` already pointed at a local model) is a legitimate override... and may be harvested as
+a natural experiment~~ — **premise corrected 2026-07-31 (E35.5 Stage-2 finding; escalation notice
+`2026-07-31T00_00_00Z__P10-M35__escalation_notice.md`).** `Getawayinsured2023` routes `phase`/
+`milestone` to `remote:qwen3.6:27b`, not a local endpoint — it is a legitimate override on the
+**model/tier** axis (a non-frontier open-weights model where rows P3/P4 specify paid frontier)
+and is **silent on locality**. **No fleet project was running the Milestone level on local
+inference; there is no natural experiment to harvest.** This does not weaken E35.5's own
+back-test evidence (which ran `qwen3.6:27b` locally against blinded material and stands on its
+own), but it removes the corroboration this spec assumed was available — **the evidence base for
+opening the Milestone-locality cell is thinner than this section originally stated.** See the
+Changelog v1.3.1 entry. The result may still amend row P4 independently of the row's own unfired
+revisit trigger — a trigger is a prompt to
 revisit, not a precondition for it — and P4 does not wait on P9-GH-3 (still carried forward,
 unowned).
 
@@ -437,10 +444,11 @@ on the Milestone × local-inference question.
   mode; record the SN-23 Ratified Decision #2 supersession (Execution Mode axis only).
 - **E35.5 — Milestone × local-inference evidence-gathering.** Conduct the back-test evaluation
   against the concrete bar (M33's decomposition gap, E33.2 Run A's false positive, E33.4's false
-  negative, M34's footboard miscount, P10-GH-6), measuring review quality; harvest
-  `Getawayinsured2023`'s live local-Milestone configuration as a natural experiment (a legitimate
-  override, not scoped as a violation); produce a recorded pass/fail judgment as evidence for a
-  further HQ call on `model-routing-policy.md` row P4 — this epic does not itself decide row P4.
+  negative, M34's footboard miscount, P10-GH-6), measuring review quality; produce a recorded
+  pass/fail judgment as evidence for a further HQ call on `model-routing-policy.md` row P4 — this
+  epic does not itself decide row P4. *(The `Getawayinsured2023` "natural experiment" named in
+  earlier drafts of this entry does not exist — corrected 2026-07-31, see §P10.3 above and the
+  Changelog v1.3.1 entry; `Getawayinsured2023` runs Phase/Milestone remote, not local.)*
 
 > Also carried forward (recorded, not an epic — nothing is built on it in P10): **P10-GH-7**,
 > the two-sided exit-code untrust (E33.2 Run A / E33.4) plus the unexercised QA lane (G11), which
@@ -666,6 +674,7 @@ duration is discovered, not assumed.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.3.1 | 2026-07-31 | Premise correction (Phase Chat, resolving M35 escalation `.ai-project/artifacts/escalation-notices/2026-07-31T00_00_00Z__P10-M35__escalation_notice.md`, filed by the M35 Milestone Chat after E35.5 verified its harvest target before using it). §P10.3 and §Milestones→M35 (E35.5) both claimed `Getawayinsured2023` already ran Phase/Milestone on a local model, offering it as a corroborating "natural experiment" for the Milestone-locality question. **False**: it routes `phase`/`milestone` to `remote:qwen3.6:27b`; its override is on the model/tier axis (non-frontier open-weights vs. paid frontier), silent on locality. Corrected in place (struck text preserved, not deleted) rather than reopening the sections wholesale. Does not affect E35.5's own back-test evidence, which is independent of the harvest claim; does narrow the evidence base for any future row-P4 decision, which the Phase Closure Declaration must carry forward accurately. M35 milestone spec corrected in parallel (Milestone Chat's escalation deferred that edit to the Phase Chat). No other change; M33/M34 unaffected. |
 | 1.3.0 | 2026-07-30 | M35 re-scoped in one pass (Phase Chat, per HQ Ruling on SN-25, Decision 6), folding in SN-24 (2026-07-28, form-only, already at v1.1.0) and SN-25 (2026-07-30) together rather than patching a second time. **SN-25 additions:** the handback rule (a blocked autonomous instance hands back to its immediate parent via escalation notice, authority-bearing, terminating at a manual level by construction per SN-22); the one-level escalation rule (parent-only targeting; does **not** close P9-GH-1); Creation Chat awareness as visibility-only (outlet: steering note to HQ); the execution matrix ratified, **superseding SN-23 Ratified Decision #2 on the Execution Mode axis only** (Phase/Milestone restored to agentic-or-manual per the E31.1 baseline; locality axis stands, Milestone under evaluation) with **mode-is-not-authority** stated explicitly (Stage-2 accept/merge still require the human's key); the Milestone × local-inference evidence mandate (back-test bar named, review-quality not throughput, `Getawayinsured2023` harvestable as a legitimate natural experiment, may amend row P4 independent of its unfired trigger); **P10-GH-7** registered (two-sided exit-code untrust + unexercised G11 QA lane — the block-detection risk under any future handback mechanism). Touches Executive Summary item 3, Vision, §P10.3 (comprehensive rewrite), Out of Scope, §Milestones→M35 (epics E35.1–E35.5, from E35.1–E35.2), Success Criteria (+3), Acceptance Criteria (+3), Dependencies, Timeline (epic estimate revised from actuals), Reference (SN-25 + ruling added; new Ratified-Decisions footnote on Decision 2, verbatim text not reopened). No change to M33/M34 (both closed) or to any decision this note does not name. |
 | 1.2.0 | 2026-07-29 | Mid-flight amendment (Phase Chat, direct CFO instruction, resolving Milestone Chat escalation `.ai-project/artifacts/escalation-notices/2026-07-29T00_00_00Z__P10-M34__escalation_notice.md`): **`fieldledger-assesment` removed** from M34's dormant-project set and from the phase Acceptance Criteria — a screening project, not a real adoption target. Touches Executive Summary item 2, §P10.2, §Milestones→M34 (Goal + E34.2), and Acceptance Criteria. M34's own spec carries the matching amendment (Amendment A1). The escalation's other two items (an incoming `social-stories-creator` project; an inbound "personal platform") are **not** resolved by this entry — left open, not silently absorbed. No change to M33 (closed) or the fixed operating posture. |
 | 1.1.0 | 2026-07-28 | Mid-flight amendment (Phase Chat, per SN-24 / HQ Ruling): M35 "System-Operator Canonization" amended form-only — the operator is named by **role**, not by implementation (neither "System Chat" nor "Drivr's daemon"); the daily re-instantiation-seed *ritual* retired in favor of a form-neutral **standing brief** with the same content. Touches Executive Summary item 3, Vision, §P10.3, §Milestones→M35 (E35.1/E35.2 retitled), Success Criteria 6, Acceptance Criteria, Dependencies, Reference (SN-24 added to Governing Steering Notes; Decision 6 footnoted, not rewritten). No change to M33 (closed), M34 (unaffected/independent), the fixed operating posture, or any SN-23 ratified decision's substance. Companion to the same-session paid-frontier model-mapping ruling (escalation-notice `2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`), which this changelog does not otherwise touch (`.ai-project.yml`/policy files, not this spec). |

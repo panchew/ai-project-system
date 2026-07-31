@@ -13,6 +13,18 @@ epics:
 is_final: true
 ---
 
+> **Correction (Phase Chat, 2026-07-31, resolving escalation notice
+> `.ai-project/artifacts/escalation-notices/2026-07-31T00_00_00Z__P10-M35__escalation_notice.md`,
+> filed by the M35 Milestone Chat after E35.5 verified its harvest target before using it).**
+> Every mention below of `Getawayinsured2023` "already" running Phase/Milestone on a local model,
+> or offering a "natural experiment" to harvest, is **false** and preserved here only as the
+> planning-time record. `Getawayinsured2023` routes `phase`/`milestone` to
+> `remote:qwen3.6:27b` — a legitimate override on the **model/tier** axis, silent on **locality**.
+> There was nothing to harvest on the axis E35.5 was evaluating. This does not affect E35.5's own
+> back-test delivery, which is independent of the harvest claim (M35 closed clean on that
+> delivery); it narrows the evidence base for any future `model-routing-policy.md` row P4 decision.
+> The corresponding phase spec claim is corrected at v1.3.1.
+
 # Milestone M35 — System-Operator Canonization
 
 ## Purpose
