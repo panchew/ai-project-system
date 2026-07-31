@@ -4,8 +4,8 @@ phase: P10
 milestone: M35
 epic: E35.5
 type: reference
-status: in-execution
-last_updated: 2026-07-30
+status: complete
+last_updated: 2026-07-31
 ---
 
 # Milestone × local-inference back-test — evidence directory
@@ -26,9 +26,11 @@ Constraint → "Nothing built").
 |---|---|
 | `rubric.md` | The **pre-registered** scoring rubric. Committed with the packets, before any run. |
 | `packets/` | Five blinded review packets, one per defect. |
-| `runs/` | Raw model outputs, verbatim and unedited — every run made. |
-| `scores.md` | Catch / miss / false-alarm per defect, with the quoted model text that earned each. |
-| `judgment.md` | The recorded pass/fail judgment and its reasons. |
+| `runs/` | Raw model outputs, verbatim and unedited — the ten scored runs. Each records the exact options used and both the `thinking` and `response` fields. |
+| `runs/superseded/` | Two completed packet-4 runs whose capture discarded the `thinking` field, before the runner was fixed. Committed in full; **not scored**. |
+| `runs/truncated/` | One packet-5 run that hit `done_reason=length` at `num_ctx` 8192. Committed in full; **not scored** (rubric Run protocol — mechanical failure). |
+| `scores.md` | Catch / miss / false-alarm per defect, with the quoted model text that earned each, plus the full inventory of every run made. |
+| `judgment.md` | The recorded pass/fail judgment, what it does **not** license, and what HQ should weigh against it. |
 
 ## The method
 
