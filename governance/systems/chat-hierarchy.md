@@ -125,6 +125,17 @@ to Manual/Paid from Creation through Milestone. The table is reproduced here exa
 | Milestone | Agentic or manual | Remote — **local under evaluation** |
 | Epic | Agentic or manual | Local or remote (in force, E34.3) |
 
+> **Status of the Milestone locality cell (HQ Ruling, 2026-07-31).** The table above is left as
+> ratified; this note records where its one open cell now stands. P10-M35-E35.5 back-tested a
+> local model's Stage-2 review against five known-ground-truth defects and passed 4 of 5 with
+> zero false alarms. HQ ruled **`model-routing-policy.md` row P4 unchanged — Milestone remains
+> remote/paid frontier.** The evaluation established a *candidate*, not an adoption; the
+> decisive finding was that the two runs on the missed defect gave identical diagnoses and
+> **opposite prescriptions**, and at Milestone the remedy is the decision. Three gates now name
+> what would move the cell (G-P4-a/b/c). "Local under evaluation" therefore remains accurate —
+> evaluated once, candidate established, not adopted. See
+> `.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__milestone-locality-row-p4.md`.
+
 Three things this table does not say — each of which it would be read as saying if left to stand
 alone:
 
