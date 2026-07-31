@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-30
-version: 1.1.0
+version: 1.2.0
 ---
 
 # Fleet Operator — Role and Authority Boundary (System Reference)
@@ -209,6 +209,9 @@ Named here so they are not mistaken for part of this record:
 
 ## Reference
 
+- **Fleet Operator standing brief (operational companion to this document; what the operator needs
+  to know each cycle, as questions and pointers — informative, not normative, and it neither
+  restates nor varies the Authority Boundary above):** `governance/systems/fleet-operator-brief.md`
 - **System HQ (cross-project participant, distinct role):** `governance/systems/system-hq.md`
 - **System HQ seed (re-instantiation):** `governance/systems/system-hq-seed.md`
 - **Chat Hierarchy (four-level per-project hierarchy; the operator is not a level; also the
@@ -231,5 +234,6 @@ Named here so they are not mistaken for part of this record:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.2.0 | 2026-07-30 | §Reference gains a pointer to the new `governance/systems/fleet-operator-brief.md` — the operator's **standing brief**, the operational companion to this normative record (P10-M35-E35.2). Cross-reference hygiene only: **no normative text in this document changed.** The three duties, the Authority Boundary, the seam, the sequencing reading, and the relationship to System HQ are untouched and are stated here only — the brief **cites** them and reproduces none of them, keeping this document the single home of the limit. The two are separated deliberately because their change cadences differ: the role and its boundary should be close to immutable, while the brief is expected to gain and lose items as field practice evolves, and keeping them in one file would make every operational tweak a boundary-document edit. Same precedent one role over (`system-hq.md` normative + `system-hq-seed.md` operational). No authority is widened or narrowed and no mechanism is created. (P10-M35-E35.2) |
 | 1.1.0 | 2026-07-30 | Binds the seam's *"declining to act is a successful outcome"* outcome to the **surfacing obligation**, closing the Milestone Chat's Stage-2 reconciliation finding on v1.0.0: read alone, that sentence was also a licence to stop silently — the exact failure mode SN-25 exists to eliminate. Adds *"'Does not run' is not 'stops silently'"* to §The seam, and why it is load-bearing — decline **then** surface, one sequence and not two options; an instance that stops without handing back has performed half the obligation. The handback rule itself (destination = immediate parent, authority-bearing resolution, one-level routing) is **cited, not restated** — it is normative in `governance/systems/chat-hierarchy.md` ("Handback: what a blocked agentic instance owes"), which carries the matching statement at its own end of the cross-reference. §Reference updated to name that home. **No authority is widened or narrowed**, no duty is added or removed, and no mechanism is created; the successful outcome is still that the unauthorized act does not execute — what is added is that its non-execution must be visible to the level that can supply what was missing. (P10-M35-E35.3) |
 | 1.0.0 | 2026-07-30 | Initial release. Records the **fleet operator** role — a role already performed by hand through P10-M33/M34 — normatively and form-neutrally: its three duties (operate the serialized local-inference lane; sequence already-authorized work within it; keep registered projects current on governance version), the normative **Fleet Operator Authority Boundary** with the **no-authority-on-speech seam** (a request is a proposal until it carries authority; fleet-wide writes never run on speech alone), the **sequencing-is-not-governance** reading (review, acceptance, merge authorization, and scope change are never the operator's), the form-neutrality statement with its single non-dependent reference to the expected filler, and the operator's relationship to System HQ (distinct role, **not** an expansion of System HQ's authority, same filler admissible for both). No authority is expanded and no mechanism is created. (P10-M35-E35.1) |
