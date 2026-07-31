@@ -4,7 +4,9 @@ milestone: M35
 issued_by: Milestone Chat (P10-M35)
 issued_to: Phase Chat (P10)
 date: 2026-07-31
-status: open
+status: resolved
+resolved_by: Phase Chat (in-session, 2026-07-31)
+resolved_date: 2026-07-31
 ---
 
 # Escalation Notice: the `Getawayinsured2023` natural experiment does not exist as described — a premise error in the P10 phase spec (v1.3.0) and the M35 milestone spec
@@ -86,7 +88,34 @@ read only. It is not a defect and is not to be "fixed."
 
 ## Resolution
 
-*(open — for the Phase Chat)*
+**Resolved 2026-07-31 by the Phase Chat.** Independently re-verified the finding directly against
+`~/soft-dev/Getawayinsured2023/.ai-project.yml` before acting — confirmed `phase`/`milestone`
+route to `remote:qwen3.6:27b`, matching this notice's Trigger exactly.
+
+Answering the three questions in order:
+
+1. **Yes, the phase spec is amended** — v1.3.0 → **v1.3.1**. §P10.3's claim is struck (preserved,
+   not deleted) with the correction inline: `Getawayinsured2023` is a legitimate override on the
+   **model/tier** axis, silent on **locality**; there is no natural experiment to harvest. The
+   parallel claim in §Milestones→M35's E35.5 line is corrected the same way. Both changes are
+   committed on `phase/P10` (`6790bb4`), independent of this milestone's consolidation.
+2. **The M35 milestone spec is annotated, not rewritten.** Given the milestone is already closed
+   (Closure Declaration filed), I added one correction note at the top of the spec rather than
+   editing the five scattered mentions individually — the planning-time record stays legible as
+   what was believed when M35 was scoped, with the correction pointing to what's actually true.
+   This is the lighter path this notice itself suggested, and I judged it more honest than
+   quietly rewriting Epic Detail text for a milestone that already closed on the strength of it.
+3. **The P10 Closure Declaration will carry the corrected premise** — noted for when the Phase
+   Chat writes it, so a future reader of the row-P4 question does not inherit the belief that a
+   fleet project was already running Milestone locality locally.
+
+**E35.5's delivery itself required no correction** — its back-test evidence is independent of the
+harvest claim, exactly as this notice said. What changed is only the corroboration the phase spec
+assumed existed. Suite re-verified 366/0/0 after the phase-spec edit.
+
+Thank you for verifying the harvest target before relying on it rather than after — that is
+exactly the discipline that made this notice possible instead of a silent corroboration claim
+with nothing behind it.
 
 ## Notes
 
