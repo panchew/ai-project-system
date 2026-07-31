@@ -2,11 +2,13 @@
 extended P9-M31-E31.2 to all five keys + a policy<->block divergence check).
 
 E26.2's documented decision: the config value (``.ai-project.yml`` ``models.epic_dev``)
-and the orchestrator's in-script default (``DEFAULT_MODELS["epic_dev"]``) both move to
-``local:qwen2.5-coder:14b`` and must agree, so an absent ``models:`` block can never
-silently resurrect a tool-call-incapable model (``llama3:8b`` — local-agent-runner
-CONTRACT §1.4). These tests load the extensionless orchestrator script as a module,
-mirroring tests/test_visual_artifacts_config.py.
+and the orchestrator's in-script default (``DEFAULT_MODELS["epic_dev"]``) must **agree**,
+so an absent ``models:`` block can never silently resurrect a tool-call-incapable model
+(``llama3:8b`` — local-agent-runner CONTRACT §1.4). E26.2 set that agreed value to
+``local:qwen2.5-coder:14b``; P10-M34-E34.3 moved it to ``local:qwen3-coder:30b`` (below).
+The *agreement* is the invariant this file guards — the value is data. These tests load
+the extensionless orchestrator script as a module, mirroring
+tests/test_visual_artifacts_config.py.
 
 P9-M31-E31.2 (Hard Constraint 3, "policy consumed, not re-authored"; Deliverable 3)
 generalizes this guard to all five ``models:`` keys — a stale ``DEFAULT_MODELS["hq"]``
@@ -52,7 +54,12 @@ POLICY_PATH = (
 )
 CHAT_HIERARCHY_PATH = REPO_ROOT / "governance" / "systems" / "chat-hierarchy.md"
 
-EXPECTED_EPIC_DEV = "local:qwen2.5-coder:14b"
+# Moved from ``local:qwen2.5-coder:14b`` by Epic P10-M34-E34.3, applying the runtime
+# choice P10-M33 settled by running it: keep the Ollama runtime, raise the model tier.
+# E33.2 Run A dispatched the 14b against a real epic and returned exit 0 having changed
+# zero files; Run B did mergeable work on the same runtime at 30b, and E33.4 completed a
+# second real epic on it. Policy rows P6/P7 carry the citations.
+EXPECTED_EPIC_DEV = "local:qwen3-coder:30b"
 
 # The five `models:` keys, per the policy's "Mapping to .ai-project.yml" table
 # (model-routing-policy.md) — the guard target this file enforces.
@@ -62,7 +69,7 @@ MODEL_KEYS = ("hq", "phase", "milestone", "epic_dev", "epic_qa")
 # deliberately outside MODEL_KEYS, DEFAULT_MODELS, and model-routing-policy.md's own
 # mapping table (see this file's module docstring).
 MANUAL_ONLY_KEYS = ("creation", "epic_manual")
-EXPECTED_MANUAL_ONLY_VALUE = "remote:claude-opus-4-8"
+EXPECTED_MANUAL_ONLY_VALUE = "remote:claude-opus-5"
 
 FALSIFIED_NAMES = ("gpt-4o", "claude-3-5-sonnet", "qwen2.5-coder:7b", "llama3:8b")
 
@@ -129,7 +136,7 @@ def _chat_hierarchy_manual_mapping():
 # --- epic_dev (original E26.2 coverage, preserved verbatim) ----------------------
 
 
-def test_config_epic_dev_is_qwen_coder_14b():
+def test_config_epic_dev_is_expected_local_model():
     assert _config_models()["epic_dev"] == EXPECTED_EPIC_DEV
 
 

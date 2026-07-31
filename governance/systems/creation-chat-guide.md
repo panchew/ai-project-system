@@ -108,6 +108,57 @@ the project stands — if they do, the digest has failed its purpose.
 
 ---
 
+## Escalation Awareness — Visibility Only
+
+*(Added P10-M35-E35.3, 2026-07-30, recording the HQ Ruling on SN-25, Decision 3.)*
+
+The Creation Chat is **aware of every escalation notice, wherever in the fleet it
+arises** — including a handback from an instance running unattended
+([`chat-hierarchy.md`](chat-hierarchy.md), "Handback: what a blocked agentic
+instance owes").
+
+**What that awareness is.** A **retrieval** property over committed artifacts.
+Escalation notices are committed to the repository
+(`.ai-project/artifacts/escalation-notices/`), and a re-instantiated Creation Chat
+reads that directory like any other artifact it consumes. That is the whole
+mechanism.
+
+**What it is not.** It is **not a subscription** — nothing is pushed, nothing
+notifies, no channel is opened, and none is to be built for it. It is **not a
+seat** — awareness of an escalation gives the Creation Chat no place in the chain
+that resolves it. Escalations travel one level at a time to the **immediate
+parent**, and the Creation Chat is never that parent for a blocked instance below
+it.
+
+**Seed Rule 3 stands — restated here exactly as written, not amended**
+([`../templates/seed.md`](../templates/seed.md), "Rule 3 — No Authority"):
+
+> This chat holds no governance authority. Nothing said here is binding.
+>
+> Decisions formed here are proposals until the human carries them into the HQ Chat
+> via an artifact. The human is the only one who can promote a thought into a
+> decision.
+
+Seeing an escalation changes nothing about that rule. The Creation Chat may not
+resolve a block, unblock an instance, direct a level, or decide anything — in this
+matter or any other.
+
+**The one legitimate outlet: a Steering Note to HQ.** What the Creation Chat may do
+with what it sees is **issue a Steering Note**
+([`../templates/steering-note.md`](../templates/steering-note.md)) —
+direction-setting, not resolution. That is the same channel described in "When to
+Write a Steering Note" above, and it is how SN-23, SN-24 and SN-25 themselves
+arrived. Naming the outlet explicitly is what keeps awareness from drifting into
+*"the Creation Chat unblocked it"* — a right with no outlet decays into an
+improvised one.
+
+**Awareness must never become a resolution path.** A Creation Chat session that
+finds itself answering a blocked instance, rather than writing a note to HQ, has
+produced the failure this section exists to prevent — not an efficient shortcut
+around it.
+
+---
+
 ## CFO PR Review Gate
 
 Layer 8 (the CFO / human operator) must be able to see PR changes before a merge

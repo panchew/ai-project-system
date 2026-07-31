@@ -326,11 +326,51 @@ skipped). Fourth phase closed through the canonical **PSG §5C** sequence. See t
 - ✅ Governance at delivery: **PSG v2.3.0**, **AOG v2.10.0**, yml-spec **v2.5.0**, protocol
   **v1.4.0**
 
+### Phase P10 — Fleet Adoption and Local-Inference Proving
+
+The framework was done being built; of ten projects in `~/soft-dev`, none but the framework
+itself was confirmably on v7.0.0. P10 proved adoption for real: a proving pair ran genuine
+Agentic/Local epics end-to-end, the local-inference runtime question was settled by a run, the
+dormant fleet rolled forward, and the fleet-operator role already being performed by hand was
+written into governance with a handback obligation and a ratified execution matrix.
+
+| Milestone | Name | Epics | Status | PR |
+|-----------|------|-------|--------|-----|
+| **M33** | Proving Pair: v7.0.0 + First Real Agentic/Local Epic | E33.1–E33.4 (4) | ✅ Complete | #154 |
+| **M34** | Fleet Roll-forward | E34.1–E34.3 (3) | ✅ Complete | #155 |
+| **M35** | System-Operator Canonization | E35.1–E35.5 (5) | ✅ Complete | #159 |
+
+**Key Deliverables**:
+- ✅ Repeatable enrolled-project v7.0.0 bump procedure, grown from 7 to 11 documented failure
+  modes across three real applications (M33, M34)
+- ✅ Two real Agentic/Local epics run end-to-end on the proving pair (`local-agent-runner`,
+  `home_finance`), not synthetic demos; the Ollama-vs-llama.cpp runtime question settled by the
+  run's own evidence — keep Ollama, raise the model tier (M33)
+- ✅ Trustworthy burn/validation evidence out of the real run, `measure-token-burn` fixed only
+  as far as trusting that run's numbers required (P9-GH-2 closed to the extent M33 needed) (M33)
+- ✅ `ai-project-system-mcp`'s superseded `hq.agent.md` replaced with the canonical agent
+  (P6-GH-15 closed in the wild); `courtis`, `Getawayinsured2023`, `footboard` all reached
+  `framework_version: v7.0.0`; `.ai-project.yml` `models:` routing corrected off the model
+  proven to emit false-positive empty completions (M34)
+- ✅ `governance/systems/fleet-operator.md` — the fleet-operator role, its three duties, and
+  the normative no-authority-on-speech Authority Boundary, form-neutral (M35)
+- ✅ The handback rule: a blocked autonomous instance escalates to its immediate parent, one
+  level at a time, guaranteed to reach a manual level by construction (SN-22) — recorded
+  without closing P9-GH-1, which remains open (M35)
+- ✅ The execution matrix ratified — Phase and Milestone may run agentically — with **mode is
+  not authority** stated explicitly: Stage-2 acceptance and merge authorization still require
+  the human's key regardless of running mode (M35)
+- ✅ A blinded back-test of local-model Stage-2 review against five known-ground-truth defects
+  — **PASS 4 of 5, zero false alarms across ten runs** — necessary evidence, not by itself
+  sufficient to move `model-routing-policy.md` row P4 (M35)
+- ✅ Governance at delivery: **PSG v2.3.0**, **AOG v2.10.0** (both unchanged); new system-tier
+  references `governance/systems/fleet-operator.md` v1.2.0, `fleet-operator-brief.md` v1.0.0
+
 ---
 
 ## In Progress
 
-No active phase. P10 is not yet scoped.
+No active phase. The next phase is not yet scoped.
 
 ---
 
@@ -346,12 +386,14 @@ No active phase. P10 is not yet scoped.
 
 ## Current Focus
 
-Phases P1–P9 are **completed and consolidated to master** at **v7.0.0**.
+Phases P1–P10 are **completed and consolidated to master** at **v7.1.0**.
 
-**P10 is not yet scoped.** P9 closed 2026-07-20 having replaced the failed model-tier
-assumption with evidence-grounded policy, given the working levels a real dual-mode switch
-with a guardrail on both sides, and canonized the system-level participant field-adopted
-since 2026-07-16. Next-phase scoping is HQ/Creation Chat's call.
+**The next phase is not yet scoped.** P10 closed 2026-07-31 having proven fleet adoption for
+real rather than building new capability: real Agentic/Local epics run end-to-end on the
+proving pair, the local-inference runtime question settled by that run, the dormant fleet
+rolled forward to v7.0.0, and the fleet-operator role already running by hand written into
+governance with a handback obligation and a ratified execution matrix. Next-phase scoping is
+HQ/Creation Chat's call.
 
 See individual phase directories for detailed specs:
 - [`docs/phases/P1__System_Foundation_and_Adoption/`](../phases/P1__System_Foundation_and_Adoption/)
@@ -363,3 +405,4 @@ See individual phase directories for detailed specs:
 - [`docs/phases/P7__Agentic_Execution_and_Default_On_Visuals/`](../phases/P7__Agentic_Execution_and_Default_On_Visuals/)
 - [`docs/phases/P8__Visual_Artifacts_Activation/`](../phases/P8__Visual_Artifacts_Activation/)
 - [`docs/phases/P9__Context_Handling_and_Token_Efficiency/`](../phases/P9__Context_Handling_and_Token_Efficiency/)
+- [`docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/`](../phases/P10__Fleet_Adoption_and_Local_Inference_Proving/)

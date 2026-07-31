@@ -1,10 +1,10 @@
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
-# Spec: governance/ai-project-yml-spec.md v2.5.0
+# Spec: governance/ai-project-yml-spec.md v2.7.0
 
 governance:
   source: ./governance
-  version: "7.0.0"
+  version: "7.1.0"
   ref: master
 
 project:
@@ -29,14 +29,32 @@ cfo_review_gate: enabled
 # `creation` and `epic_manual` (added E31.3, P9-M31) are manual-chat-only keys with no
 # agentic dispatch surface — see governance/systems/chat-hierarchy.md "Manual Chat Model
 # Verification" for the mapping and governance/ai-project-yml-spec.md §3.4 for the schema.
+# The five paid-frontier keys moved claude-opus-4-8 -> claude-opus-5 on 2026-07-28 (HQ
+# Ruling, P10-M34 escalation): a same-tier version refresh after claude-opus-4-8 stopped
+# being offered in the harness. The policy's TIER rows (P1-P4) are untouched — only its
+# mapping table. See .ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__
+# ruling__paid-frontier-model-mapping-refresh.md.
+# The two agentic epic lanes moved qwen2.5-coder:14b -> qwen3-coder:30b on 2026-07-28
+# (Epic P10-M34-E34.3), applying the runtime choice M33 settled by running it: keep
+# Ollama, raise the model tier. E33.2 Run A proved the 14b returns exit 0 having done
+# nothing (0 tool rounds, 0 files changed); Run B did mergeable work on the same runtime
+# at 30b, and E33.4 ran a second real epic on it. Unlike the paid-frontier refresh above,
+# this IS a policy-row change (rows P6/P7 name the model in their own Decision column) and
+# carries new cited evidence per the policy's Change discipline.
+# Loadability envelope, honestly: qwen3-coder:30b (Q4_K_M, 18.6 GB) exceeds this box's
+# 16 GB VRAM and partially offloads to RAM (12.9 GB VRAM / 21.4 GB total). Like-for-like
+# on E33.2's epic it ran ~9.4 tok/s against the 14b's 12.2 - slower, but it finishes.
+# See docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/
+# P10-M33-E33.2__runtime-decision.md and .ai-project/artifacts/agentic-runs/
+# P10-M33-E33.2/run-record.md + P10-M33-E33.4/run-record.md.
 models:
-  hq: remote:claude-opus-4-8
-  phase: remote:claude-opus-4-8
-  milestone: remote:claude-opus-4-8
-  epic_dev: local:qwen2.5-coder:14b
-  epic_qa: local:qwen2.5-coder:14b
-  creation: remote:claude-opus-4-8
-  epic_manual: remote:claude-opus-4-8
+  hq: remote:claude-opus-5
+  phase: remote:claude-opus-5
+  milestone: remote:claude-opus-5
+  epic_dev: local:qwen3-coder:30b
+  epic_qa: local:qwen3-coder:30b
+  creation: remote:claude-opus-5
+  epic_manual: remote:claude-opus-5
 
 # Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
 # This repo is ENABLED (enabled: true) as of Epic E29.2 (P8-M29): the live local
