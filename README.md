@@ -6,9 +6,9 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — v7.0.0
+## 🎉 All Phases Complete — v7.1.0
 
-**The AI Project System was built using its own governance.** All nine phases (P1–P9) are complete and consolidated to `master` at **v7.0.0** with 363 tests passing (0 skipped).
+**The AI Project System was built using its own governance.** All ten phases (P1–P10) are complete and consolidated to `master` at **v7.1.0** with 366 tests passing (0 skipped).
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -111,6 +111,27 @@ per-instance manual/agentic mode switch for Phase/Milestone/Epic · a working re
 mismatch model guardrail · System HQ (the cross-project, execute-never-decide participant)
 canonized · reference-first artifact handoff replacing mandated body-echo (SN-23) · honest
 "no reduction observed yet" recapture finding reported plainly rather than shaped positive.
+
+### Phase P10 — Fleet Adoption and Local-Inference Proving (Complete)
+The framework was done being built; it had not yet been used. P10 proved adoption for real
+rather than building new capability: a proving pair ran the first genuine Agentic/Local epics
+end-to-end, the Ollama-vs-llama.cpp runtime question was settled by a run rather than a memo,
+the dormant fleet rolled forward to v7.0.0, and the fleet-operator role — already being
+performed by hand — was written into governance with a handback obligation and a ratified
+execution matrix.
+
+| Milestone | Focus | Key Deliverables |
+|-----------|-------|-------------------|
+| **M33** — Proving Pair: v7.0.0 + First Real Agentic/Local Epic | Prove adoption on two projects first | Repeatable v7.0.0 bump procedure (7→11 failure modes across the phase); two real Agentic/Local epics (`local-agent-runner`, `home_finance`); Ollama-vs-llama.cpp runtime decision from the run (keep Ollama, raise the model tier); trustworthy burn/validation evidence (P9-GH-2) |
+| **M34** — Fleet Roll-forward | Spread the proven levers | `ai-project-system-mcp`'s superseded-agent fix (P6-GH-15 closed in the wild); `courtis`, `Getawayinsured2023`, `footboard` all reached `framework_version: v7.0.0`; `models:` routing corrected off the model proven to emit false-positive empty completions |
+| **M35** — System-Operator Canonization | Write down the role already running by hand | `governance/systems/fleet-operator.md` — role, duties, no-authority-on-speech seam; the handback obligation (a blocked autonomous instance escalates to its immediate parent, one level at a time, terminating at a manual level by construction); the ratified execution matrix with **mode is not authority**; a blinded back-test of local-model Stage-2 review (PASS 4/5, 0 false alarms) |
+
+**P10 highlights:** adoption proven on real projects, not asserted · a runtime decision earned
+from a run, twice (Ollama kept; local-model Stage-2 review passed its back-test) · six enrolled
+projects confirmably at v7.0.0 · the fleet-operator role and its authority boundary written
+down before anything gets built against them · a blocked autonomous instance can now hand back,
+normatively, with the human reached by construction rather than by hope · an honest correction
+recorded mid-phase when a project's own config didn't say what two governing documents claimed.
 
 👉 **[Start using the system — manual or agentic](governance/guides/QUICK-START.md)**
 👉 **[Get started with P4 (team mode)](docs/team-collaboration/P4-governance-system-guide.md)** · **[Run the example](examples/team-project-example/README.md)**
@@ -608,13 +629,13 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9)
-✅ **99 Epics** delivered across **32 milestones** over **9 phases**
+### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9 + P10)
+✅ **111 Epics** delivered across **35 milestones** over **10 phases**
 
 ### Governance
 - PROJECT-SYSTEM-GUIDELINES.md v2.3.0 (effective 2026-07-02)
 - AI-OPERATING-GUIDELINES.md v2.10.0 (effective 2026-07-18)
-- Framework version: v7.0.0
+- Framework version: v7.1.0
 
 ---
 
@@ -668,14 +689,18 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P7 Complete** — Agentic Execution & Default-On Visuals (3 milestones, 10 Epics)
 - ✅ **Phase P8 Complete** — Visual Artifacts Activation (1 milestone, 3 Epics)
 - ✅ **Phase P9 Complete** — Context Handling and Token Efficiency (3 milestones, 10 Epics)
-- ✅ **99 total Epics** delivered across 32 milestones, 9 phases
+- ✅ **Phase P10 Complete** — Fleet Adoption and Local-Inference Proving (3 milestones, 12 Epics)
+- ✅ **111 total Epics** delivered across 35 milestones, 10 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
 - ✅ **First real, non-mocked agentic execution** — the system executes its own epics through the orchestrator on local models
 - ✅ **First real generative visual-artifact call from this repo's own suite** — `visual_artifacts.enabled: true`, endpoint test passing for real, not skipped
 - ✅ **Evidence-grounded model-tier policy** — real captured token-burn data replaces the failed local-only-at-Epic assumption; a working per-instance manual/agentic mode switch with a refuse-on-mismatch guardrail
 - ✅ **System HQ canonized** — the cross-project, execute-never-decide participant field-adopted since 2026-07-16 is now normative governance
-- ✅ **Governance stable** — v7.0.0 (effective 2026-07-20)
+- ✅ **Adoption proven on real projects** — six enrolled projects confirmably at `framework_version: v7.0.0`, with real Agentic/Local epics run end-to-end, not scaffolds
+- ✅ **Fleet-operator role canonized** — role, duties, and authority boundary written down (`governance/systems/fleet-operator.md`) before anything is built against them; a blocked autonomous instance can hand back to its immediate parent, normatively
+- ✅ **Execution matrix ratified** — Phase and Milestone may run agentically, with *mode is not authority* stated explicitly: Stage-2 acceptance and merge authorization still require the human's key
+- ✅ **Governance stable** — v7.1.0 (effective 2026-07-31)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
