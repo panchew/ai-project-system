@@ -1,7 +1,7 @@
 ---
 type: template
 status: active
-last_updated: 2026-06-17
+last_updated: 2026-07-30
 ---
 
 # Escalation Notice Template
@@ -11,7 +11,20 @@ hits a blocking or out-of-scope finding it cannot resolve within its own authori
 Escalation is always upward (Epic → Milestone → Phase → HQ); lateral escalation between
 siblings is prohibited.
 
-Used by: **any chat** (Epic / Milestone / Phase) → its **parent chat**.
+**It is also the carrier for a handback from an instance that is not a chat.** *(Added
+P10-M35-E35.3, 2026-07-30.)* An instance running unattended (Execution Mode `agentic` —
+[`../systems/chat-hierarchy.md`](../systems/chat-hierarchy.md)) has no chat in which a human
+notices a block and no human present to write the notice, and is **nonetheless subject to
+the same obligation**: a blocked agentic instance **MUST** surface the block to its
+**immediate parent** via this artifact. Read *"any chat"* throughout this template as **any
+instance of any level, attended or unattended.** The handback rule — its destination, the
+authority-bearing character of the parent's resolution, and the one-level routing it inherits
+— is normative in `../systems/chat-hierarchy.md` ("Handback: what a blocked agentic instance
+owes") and is not restated here. **This template's schema is unchanged by it**; a handback
+needs no new field.
+
+Used by: **any instance of any level** (Epic / Milestone / Phase), manual or agentic → its
+**parent chat**.
 Related: the [Rework Cycle](milestone-execution-chat-starter.md) (3 exhausted attempts is
 a common trigger) and the [Troubleshooting Guide](../../docs/team-collaboration/troubleshooting-guide.md).
 
@@ -53,7 +66,9 @@ status: open
 
 ## Trigger
 <Why this is being escalated: 3 rework attempts exhausted, out-of-scope finding,
-missing/contradictory spec, cross-milestone dependency, or authority conflict.>
+missing/contradictory spec, cross-milestone dependency, authority conflict, or an
+agentic instance blocked on judgment it cannot supply (handback — see
+`../systems/chat-hierarchy.md`).>
 
 ## What Was Attempted
 <Concrete steps already taken to resolve it without escalating. For a rework
