@@ -243,6 +243,212 @@ AOG/PSG "MUST" in this framework is enforced — by the agent's compliance with 
 documentation — not a technical impossibility-to-proceed. Stating this honestly is itself
 part of what this section requires of anything built on top of it.
 
+### Handback: what a blocked agentic instance owes
+
+*(Added P10-M35-E35.3, 2026-07-30, recording the HQ Ruling on SN-25, Decisions 1–2 and 7.)*
+
+The Execution Mode declaration above says an instance **may** run unattended. Until this
+section, nothing said what that instance owes anyone when it cannot finish. This section
+closes that gap.
+
+It records an **obligation only**. No mechanism in this repository implements, detects, or
+carries it — see "The signal this rule depends on is measured broken (P10-GH-7)" below,
+which a reader of this rule must not skip.
+
+#### The obligation
+
+An **agentic instance that becomes blocked** — one that has encountered something requiring
+judgment it cannot supply — **MUST surface the block.**
+
+Stopping without surfacing is non-compliant. Finishing anyway, on a guess about what the
+missing judgment would have been, is non-compliant. There is no third quiet exit: an
+autonomy that cannot hand back is not autonomy, it is an unattended process that fails
+silently (SN-25).
+
+The handback travels as an **escalation notice**
+(`governance/templates/escalation-notice.md`) — the artifact type that already exists for
+exactly this purpose. **No new artifact type and no new authority model** is created by this
+rule (HQ Ruling on SN-25, Decision 1).
+
+It MUST carry enough for the receiving level to act without re-deriving the situation:
+
+- **the nature of the blocker** — what judgment is missing, and why the instance cannot
+  supply it;
+- **what was attempted** — the concrete steps already taken before surfacing;
+- **what could not be resolved** — the specific decision or input needed to proceed.
+
+Those are the template's existing `## Trigger`, `## What Was Attempted`, and
+`## Decision Needed` sections. This rule adds **no field** to its schema.
+
+#### This rule binds instances that are not chats
+
+`PROJECT-SYSTEM-GUIDELINES.md` §13D speaks of *levels*; the escalation-notice template
+speaks of *"any chat."* An unattended agentic run is neither, in the ordinary reading — it
+has no chat in which a human notices a block, and no human present to write the notice.
+
+**It is nonetheless subject to this rule.** An agentic Phase, Milestone, or Epic instance is
+a level of the hierarchy for every purpose of the "Communication Protocol" below, and the
+absence of a human in the loop is the **reason the obligation binds**, not an exemption from
+it. The escalation-notice template carries the matching applicability statement at its own
+end of the cross-reference.
+
+#### The destination is the immediate parent — not "a human"
+
+The handback goes to the blocked instance's **immediate parent, and nowhere else.**
+
+It does **not** go to "a human." An instance has no way to identify a human and no standing
+to select one; a rule written that way would be a rule no instance could execute. (HQ Ruling
+on SN-25, Decision 1, amending SN-25's own first framing, which read *"summon a human."*)
+
+**The human is still reached — by construction, not by hope.** Each hop travels up exactly
+one level, and the chain Epic → Milestone → Phase → HQ → Creation is finite. Its top two
+rungs, **Creation Chat and HQ Chat, never take an Execution Mode declaration and never run
+agentically**: they are manual at all times, permanently, with no per-instance override
+possible (SN-22 — see "Creation Chat and HQ Chat: Manual-Only, Permanently" above). An
+escalation therefore **cannot escalate past a manual level**; it arrives at one in **at most
+three hops** from the deepest agentic level (Epic → Milestone → Phase → HQ), and at a manual
+level there is a human by definition. Termination is a **structural property of the
+hierarchy, guaranteed by SN-22** — not a hope that someone happens to be watching.
+
+That reasoning is written out here deliberately. A reader who sees only "immediate parent"
+will eventually re-derive *"but then the human never hears about it"*; the SN-22 termination
+argument is the answer, and it only works if it is on the page.
+
+The CFO's *"my chat opens ready for me to intervene"* is then correctly placed: it is the
+**surface behaviour** of a manual level receiving an escalation. How the arrival is
+presented is coordination, and coordination is P11's. Governance's part is that the notice
+must be emitted, must reach the parent, and must carry enough context to act on.
+
+#### The resolving intervention is authority-bearing
+
+When the parent resolves a handback, its resolution **carries authority.** It is not
+advisory input the blocked instance may weigh, discount, or proceed against. The blocked
+path stays blocked until the parent responds and sets the notice to `status: resolved` —
+the escalation-notice template's existing rule, which this section does not modify but does
+make load-bearing for unattended runs.
+
+**This does not widen what the parent may authorize.** *Mode is not authority* (HQ Ruling on
+SN-25, Decision 4): an instance running unattended holds exactly the authority its level
+always held, and authority-bearing acts — Stage-2 acceptance and merge authorization — still
+require the human's key whatever Execution Mode the instance is running in. A handback
+resolution is a **direction to the child**, not a new power for the resolver.
+
+#### Routing: exactly one level, per the protocol that already governs it
+
+Handback routing introduces **no new rule.** It is the framework's existing
+upward-communication rule applied to a new subject. That rule is normative in three surfaces
+that already agree, and is **cited here rather than restated** — a fourth copy is a fourth
+thing that can drift:
+
+| Surface | What it carries |
+|---|---|
+| `governance/PROJECT-SYSTEM-GUIDELINES.md` **§13D** (Mandatory) | Upward communication is 1-to-1; escalations travel up one level; no level skips its parent to reach a grandparent (SN-12b, 2026-06-25) |
+| `governance/AI-OPERATING-GUIDELINES.md` **§3.10** | The same rule for the operating tier |
+| **"Communication Protocol" → "Upward — 1-to-1, one level at a time"**, below in this document | The full protocol §13D defers to |
+
+Read those for the rule itself. What this section adds is only its **application to a
+handback**:
+
+- **The parent decides direction** — *resolve and return* to the child, or *issue its own
+  notice* one level up. That choice belongs to the parent, never to the child.
+- **No instance names a target above its parent.** Judgment about the problem stays nearest
+  the problem; judgment about *where it goes* stays with the level holding authority over it.
+- **Instance-judged routing was considered and rejected**, and the reason belongs in the
+  record: it lets **a child choose its own judge.** An Epic routing straight to HQ steps
+  around its Milestone Chat's Stage-2 authority, and the parent may never learn its own epic
+  is blocked.
+
+#### P9-GH-1 is not closed by this section
+
+**P9-GH-1 remains open, carried forward, and unowned.** Nothing in this section closes it,
+softens it, or partly addresses it.
+
+The two are adjacent, and a future reader will conflate them unless the record refuses to.
+**P9-GH-1 is a merge-authorization hole** in the Milestone and Phase Execution Chat Starter
+templates — the guard that routes merge authorization to the parent was never extended past
+the Epic templates. **This section is about where an escalation is addressed.** Both concern
+authority travelling between the same levels, and that is the whole of the resemblance:
+recording an escalation-routing rule patches no template, and no template was patched here.
+(HQ Ruling on SN-25, Decision 2.)
+
+#### The CFO is not a level in the chain
+
+The chain is Epic → Milestone → Phase → HQ → Creation. The **CFO (Layer 8) is not one of its
+rungs.** The CFO is the authority the whole chain serves and **may answer at any point
+without that being a bypass.** The one-level rule constrains **instances**; it does not
+constrain the human whose keys the gates exist to hold.
+
+**The obligation a direct answer creates is recording.** The decision must land where the
+level that would otherwise have ruled can see it — in the escalation notice's
+`## Resolution`, and in whatever spec the decision amends. An **unrecorded** direct answer is
+the failure mode here; the directness is not.
+
+Both halves have committed worked examples from P10-M34:
+
+- **Two hops, no level skipped.**
+  `.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`
+  — the M34 Milestone Chat could not open (it refused on a model mismatch, correctly, per
+  "Manual Chat Model Verification" above); its parent Phase Chat diagnosed the cause and
+  issued **its own** notice one level up to HQ; HQ ruled. The reach to HQ was *reached*, one
+  hop at a time, rather than guessed at from below.
+- **A direct CFO resolution, recorded.**
+  `.ai-project/artifacts/escalation-notices/2026-07-29T00_00_00Z__P10-M34__escalation_notice.md`
+  — resolved by direct CFO instruction to the Phase Chat rather than a round trip to HQ, on a
+  narrow, scope-*reducing* question. The notice carries the resolution in its `## Resolution`
+  section and the phase spec carries the matching amendment at v1.2.0. The Phase Chat flagged
+  the routing choice rather than normalizing it silently — that flagging is the standard, and
+  it should continue.
+
+#### Declining to act and surfacing the block are both required
+
+`governance/systems/fleet-operator.md` states that where an authority-shaped request cannot
+proceed, *"declining to act is a successful outcome for this role, not a failure to
+perform."* That is correct in its own frame: refusing a fleet-wide write on a spoken word is
+a success.
+
+**It is not a licence to stop silently.** Declining to act and surfacing the block are
+**both** required, and they are one sequence rather than two options: decline, **then**
+surface. An instance that stops without handing back has performed half the obligation — and
+the half it skipped is the one this section exists to impose. `fleet-operator.md` carries the
+matching statement at its own end of this cross-reference.
+
+#### Creation Chat awareness is visibility only
+
+The Creation Chat is aware of escalation notices wherever they arise, and that awareness is
+**never a resolution path**. It is recorded in
+`governance/systems/creation-chat-guide.md` ("Escalation Awareness — Visibility Only") and is
+not restated here.
+
+#### The signal this rule depends on is measured broken (P10-GH-7)
+
+This section records an obligation whose trigger **no working mechanism reliably detects.** A
+reader of the handback rule must meet that dependency in the same reading, not two documents
+away.
+
+**You cannot escalate on a block you cannot detect** — and detection is measured broken in
+**both** directions:
+
+- **False success.** P10-M33-**E33.2 Run A returned exit 0 having done zero work** — the
+  validation command would have passed on the unchanged repository.
+- **False failure.** P10-M33-**E33.4 returned exit 2 having produced complete, green work.**
+
+Corroborated across two projects on this stack: **the exit code is not a completion signal.**
+Compounding it, **G11 stands — `epic_qa` has zero captured runs.** The lane that would answer
+*"is this instance stuck, finished, or confidently wrong"* has a config key and a policy row
+and no evidence behind it, so the capability best placed to supply a trustworthy signal is
+the one never exercised.
+
+A handback mechanism built naively over this signal yields **constant false escalations** —
+the human becomes the bottleneck again, worse than before — **or silent no-ops that read as
+success.**
+
+This is **P10-GH-7** (HQ Ruling on SN-25, Decision 7; severity **High**, owner
+**unassigned**). It is **recorded here, not solved here.** Solving it is a prerequisite for
+the mechanism, not for this rule: the rule is written now precisely because recording it
+costs nothing and building on it costs everything. **P11 (Drivr) builds the detector, the
+channel, the mode switch, and the surfacing against these rules; none of them exists in this
+repository today** (HQ Ruling on SN-25, Decision 8).
+
 ---
 
 ## Level 0: Creation Chat (Project Bootstrap)
