@@ -214,6 +214,51 @@ delivered-track diagram is recorded in its respective milestone spec
 
 ---
 
+## Erratum — 1 correction (HQ Chat, 2026-07-31, post-closure)
+
+*Filed by the HQ Chat on independent validation of this declaration. The erroneous text above
+is **preserved, not rewritten** — the same annotate-don't-rewrite discipline this phase applied
+at phase spec v1.3.1 and to the closed M35 milestone spec. **No re-tag, no version change, no
+re-opening of the phase:** the record was wrong on one line; the delivery was not.*
+
+**E1 — "yml-spec unchanged" (§What P10 Delivered to `master` → Governance versions at delivery)
+is false.** `governance/ai-project-yml-spec.md` was at **v2.5.0** when P10 opened and is at
+**v2.7.0** at closure. It moved **twice inside the phase**:
+
+| Commit | Date | Change |
+|---|---|---|
+| `6ce2214` | 2026-07-28 | v2.5.0 → **v2.6.0** — the five paid-frontier `models` defaults refreshed `claude-opus-4-8` → `claude-opus-5` (HQ Ruling on the P10-M34 escalation) |
+| `a80033e` | 2026-07-28 | v2.6.0 → **v2.7.0** — the agentic epic lanes routed to `qwen3-coder:30b` (E34.3), which also changed policy rows P6/P7 |
+
+The last pre-P10 change to that file was `d7ee7cd` (2026-07-19), the day before this phase
+opened. The PSG v2.3.0 and AOG v2.10.0 "unchanged" claims on the same line are **correct** and
+independently re-verified; only the yml-spec clause is wrong.
+
+**Why this is corrected rather than left as a typo.** `ai-project-yml-spec.md` is one of the
+version numbers enrolled projects pin against, and P10's spine was *fleet adoption* — six
+projects were rolled forward during the same window in which the configuration contract moved
+twice. A future adoption pass reading this line would be told the contract held still while its
+own `.ai-project.yml` header carries `v2.7.0`. The correct statement is: **PSG and AOG were
+unchanged across P10; the yml-spec advanced v2.5.0 → v2.7.0, both bumps delivered by P10 work
+and both recorded in that file's own changelog.**
+
+**Two further observations, recorded as accurate-in-substance rather than corrected:**
+
+- *"zero `qwen2.5-coder:14b` remnants"* (M34 delivery) is true of the **live routing** —
+  `.ai-project.yml`'s `models:` block carries `local:qwen3-coder:30b` on both epic lanes. The
+  string does still occur in that file's own provenance comment and in test fixtures/stub tags,
+  all legitimately historical. No correction needed; noted so the phrase is not read as "the
+  string is gone from the repository."
+- The suite re-run at validation reproduced **366 passed, 0 failed, 0 skipped** and emitted one
+  `PytestUnhandledThreadExceptionWarning`. Consistent with **P10-GH-10** (flaky
+  `test_artifact_router.py::test_daemon_extensions_error_branches`), already carried forward.
+
+Everything else in this declaration was checked and holds: merge `bb727a5` on `master`, tag
+`v7.1.0` resolving to that commit, 12 epics across M33/M34/M35, no open PRs, and the E35.5
+premise-error escalation recorded `status: resolved`.
+
+---
+
 ## Sign-Off
 
 Phase P10 is closed. At `v7.1.0`, the AI Project System stopped being a framework that only

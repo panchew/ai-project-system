@@ -38,10 +38,36 @@ dataset cannot separate them (G4–G7), which is Hard-Constraint-compliant.
 | P1 | creation × all | **Paid frontier, manual** | CFO-facing inception judgment; manual-by-design (SN-22). Measured as level totals only — task split invisible to repo-write signals (report §3; G6). No `models:` key exists or is needed (report §7.2). | Task split gap-recorded (G6) | Creation ever entering agentic scope (no current plan) |
 | P2 | hq × all | **Paid frontier, manual** | Scoping/digest/coordination judgment feeding CFO decisions (report §3); manual-by-design (SN-22). Per-task split gap-recorded (G5). | Task split gap-recorded (G5) | HQ ever entering agentic scope (no current plan) |
 | P3 | phase × all | **Paid frontier** | Long-horizon governance judgment + review/closure authority; costliest sessions per unit (median $20.84 — report §2.2); errors propagate into merges (report §3). Per-task split inside mixed sessions gap-recorded (G4/G7), so selective offload is untargetable today. | Mixed-bucket attribution (G4, G7) | Within-session task segmentation landing (report §8) |
-| P4 | milestone × all | **Paid frontier** | Largest spend share (37% — report §2.2) *and* the level where Stage-2 accept authority lives; same mixed-bucket shape as phase (report §3; G4/G7). | Mixed-bucket attribution (G4, G7) | Same as P3 |
+| P4 | milestone × all | **Paid frontier** | Largest spend share (37% — report §2.2) *and* the level where Stage-2 accept authority lives; same mixed-bucket shape as phase (report §3; G4/G7). **Evaluated against local inference 2026-07-31 and not moved** — see the P4 note below. | Mixed-bucket attribution (G4, G7); local candidate established but **prescription variance unmeasured, search/absence-detection and tool-using verification untested** (G-P4-a/b/c) | Same as P3, **or** an evaluation clearing G-P4-a, G-P4-b and G-P4-c (HQ Ruling 2026-07-31) |
 | P5 | epic × execution | **Paid frontier today; designated local-offload experiment (M31)** | Highest-volume attributed cell, bounded and spec-driven (38 sessions, median $2.92 — report §2.2/§3): the best offload candidate *by shape*. Local capability unproven: one measured local run, 404 output tokens (dataset §5), input unmeasured (G9), no quality measure (G12). Paid remains the default until M31 dual-mode produces run evidence. | Local evidence thin (G9, G12) | M31 dual-mode runs at epic level |
 | P6 | epic × dev-agent lane (`epic_dev`) | **`local:qwen3-coder:30b`** — the local lane M31's runner uses when the P5 experiment runs | **Row changed on new cited evidence (P10-M33, applied P10-M34-E34.3).** The prior value `qwen2.5-coder:14b` was *falsified by running it*, not by argument: E33.2 **Run A** dispatched the then-configured `epic_dev`/`epic_qa` model against a real epic and returned **exit 0 having done nothing** — 0 tool rounds, 0 files changed, SN-3 markdown-plan mode. **Run B** — same epic, same Ollama runtime, `qwen3-coder:30b` — produced mergeable work; **E33.4** then ran a second real epic (`home_finance`) on the same model to complete, green work (275 examples, 0 failures). The model was the lever; the runtime was never the problem. Loadability envelope, recorded honestly: Q4_K_M/18.6 GB **exceeds** the proving box's 16 GB VRAM and **partially offloads to RAM** (12.9 GB VRAM / 21.4 GB total), running ~9.4 tok/s against the 14b's 12.2 on the same epic — slower, but it finishes. That is the ratified trade. Cited: `docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.2__runtime-decision.md`; `agentic-runs/P10-M33-E33.2/run-record.md`; `agentic-runs/P10-M33-E33.4/run-record.md`. | Two real epics on the new value, one comparative same-runtime pair; **no quality signal captured (G12 still open)**; input-token measurement gap (G9) unchanged. Exit codes proven unreliable in *both* directions on this stack (E33.2 Run A: exit 0, zero work; E33.4: exit 2, complete work) — verification reads the transcript and the target repo, never the exit status | A third real agentic epic on the raised tier disagreeing with these two, the first captured **quality** signal (G12), or a loadability change on the execution host (the partial RAM offload is the standing fragility) |
 | P7 | epic × qa-agent lane (`epic_qa`) | **`local:qwen3-coder:30b`** | **Referent updated; the reasoning is unchanged, and that is deliberate.** The QA role still has **zero** captured runs of its own — **G11 remains open**. M33 produced no isolated QA-role run because the runner dispatches dev and QA from one model in practice (E33.2 run record: *"Run A is the configured `epic_dev`/`epic_qa` model"*), so E33.2/E33.4 gave the **dev** lane its evidence, not this one. This row therefore does **not** move on new QA-lane evidence — none exists. It moves on exactly the reasoning it already carried, *gap-grounded interim default: the one local model with any run evidence* (report §7.2 standard), with the referent updated from `qwen2.5-coder:14b` — which E33.2 Run A falsified — to `qwen3-coder:30b`. No QA-lane evidence is claimed here. | Gap-grounded (**G11 open — zero captured QA-role runs**); evidence is dev-lane adjacent only (G9, G12) | The first **isolated QA-role** run — G11's own closure condition, still unfired; a dispatch change that gives the QA lane a separate model would fire it sooner |
+
+### Note on row P4 — Milestone × local inference, evaluated 2026-07-31, row unchanged
+
+P10-M35-E35.5 back-tested `qwen3.6:27b` (Q4_K_M) against five known-ground-truth defects from
+this repository's own history — pre-registered rubric, blinded packets, ten scored runs, every
+run committed including the ones that did not help. Result: **PASS at 4 of 5 with zero false
+alarms**, against a threshold written before any model ran.
+
+**HQ ruled the row unchanged** (`.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__milestone-locality-row-p4.md`).
+The evaluation earned **candidacy**, which was the bar the 2026-07-30 SN-25 ruling set for it —
+and candidacy is not adoption. The decisive finding is not the miss but its shape: the two runs
+on defect 5 produced **identical diagnoses and opposite prescriptions** at the same prompt and
+settings. At Milestone the remedy *is* the decision, so a prescription that depends on the
+sampling draw cannot hold Stage-2 accept authority. Behind that sit three untested faculties —
+measured prescription variance (**G-P4-a**), unassisted search and absence-detection over a real
+branch (**G-P4-b**), and tool-using verification of a claim before ruling on it (**G-P4-c**).
+
+What the evidence *does* establish, and what makes the candidacy real: the model reasoned
+correctly in **both** directions on exit-code untrust — rejecting exit 0 with zero work,
+accepting exit 2 with complete green work — from transcript, diff and suite result rather than
+the status code. That is the judgment **P10-GH-7** records as measured-broken in automated
+detection.
+
+Not evidence in either direction: `Getawayinsured2023` routes `milestone:` to **`remote:`**
+`qwen3.6:27b`. The "natural experiment" this policy's readers were once told existed does not
+exist on the locality axis (phase spec corrected at v1.3.1).
 
 ## Mapping to `.ai-project.yml` `models:` (the M31 guardrail target)
 
