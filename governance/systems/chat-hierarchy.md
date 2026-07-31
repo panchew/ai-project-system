@@ -109,6 +109,90 @@ Manual-Only, Permanently" below.
   always loadable — GPU-contention handling belongs to the routing policy, not to this
   section.
 
+### The execution matrix (ratified)
+
+*(Added P10-M35-E35.4, 2026-07-30.)*
+
+HQ ratified the execution matrix on 2026-07-30 (**HQ Ruling on SN-25, Decision 4**), restoring the
+E31.1 baseline recorded above at Phase and Milestone after SN-23 had narrowed P10's opening posture
+to Manual/Paid from Creation through Milestone. The table is reproduced here exactly as ratified:
+
+| Level | Execution Mode | Inference locality |
+|---|---|---|
+| Creation | Manual only (permanent, SN-22) | Remote |
+| HQ | Manual only (permanent, SN-22) | Remote |
+| Phase | Agentic or manual | Remote |
+| Milestone | Agentic or manual | Remote — **local under evaluation** |
+| Epic | Agentic or manual | Local or remote (in force, E34.3) |
+
+Three things this table does not say — each of which it would be read as saying if left to stand
+alone:
+
+**The Creation and HQ rows describe how those levels run; they are not a declaration those levels
+accept.** "Manual only" in those two cells means: manually, always, with no per-instance override
+possible. It does **not** mean Creation or HQ carries a manual Execution Mode declaration. Neither
+level's opener gains an Execution Mode field, then or now — see "Creation Chat and HQ Chat:
+Manual-Only, Permanently" below, whose effect these two rows restate and do not amend.
+
+**The locality column is a pointer, not an authority.** Inference locality is decided by
+`.ai-project/artifacts/reference/token-measurement/model-routing-policy.md` rows P1–P7, under that
+file's own **§Change discipline** (*"Policy rows change only with new cited evidence … never by
+assumption"*). That file is authoritative on locality and **wins on any divergence** with this
+column — the same relationship this document's "Manual Chat Model Verification" section below
+already has with it. A reader asking which locality applies at a level is answered by the policy
+rows, not finally by this table, which summarises them as of the ratification date.
+
+**Restoring the mode is not building the dispatcher.** At Phase and Milestone the ask was dispatch,
+not permission: this section already made Execution Mode normative at those levels, and the "What
+exists mechanically today" paragraph above — that the dispatch path is implemented for the **Epic**
+level only, and that *"no dispatch mechanism yet consumes a Phase/Milestone agentic declaration;
+wiring the orchestrator to those levels is future implementation work"* — **remains true after this
+ratification and is unmodified by it.** The matrix restores a *possibility*, not a default. No Phase
+or Milestone agentic run can be dispatched today, and nothing in this repository runs differently
+because the matrix was recorded.
+
+**SN-23 Ratified Decision #2 is superseded on the Execution Mode axis only.** Decision 2's own text
+is preserved verbatim in the P10 phase spec's Ratified Decisions and is **not reopened**. Its
+**Execution Mode axis is superseded** — Phase and Milestone may now run agentically or manually,
+restoring the P9-M31-E31.1 baseline that SN-23 had narrowed for P10's start. Its **locality axis
+stands**, with Milestone × local inference now under a directed evidence evaluation (P10-M35-E35.5)
+rather than settled either way: that cell is neither opened nor closed, and "under evaluation"
+records that the question is live and directed, not that it is unanswered by neglect. The
+supersession is recorded explicitly so that it is a decision rather than drift. This record agrees
+with the phase spec's **Ratified Decisions → Note on Decision 2** footnote; see also
+`.ai-project/artifacts/rulings/2026-07-30__ai-project-system-hq__ruling__sn-25-handback-and-execution-matrix.md`.
+
+### Mode is not authority
+
+*(Added P10-M35-E35.4, 2026-07-30. **This is the normative home of this rule.** Other sections of
+this document cite it rather than restating it, so the corpus holds one statement that cannot drift
+against a second.)*
+
+Restoring agentic Execution Mode at Phase and Milestone says an instance at those levels **may run
+unattended.** It does **not** widen what that instance may **authorize.** An instance running
+unattended holds exactly the authority its level always held.
+
+**Until ruled otherwise, authority-bearing acts — Stage-2 acceptance and merge authorization —
+still require the human's key, whatever Execution Mode the instance is running in.**
+
+**Mode is what may run; gates are what may be decided without a key.** Conflating the two would let
+a mode restoration silently widen authority, which is precisely the class of drift this framework
+exists to prevent. Per-level gates remain a requirement and stay revisitable (SN-24), and technical
+possibility remains not sufficient reason (HQ Ruling on SN-25, Decision 4) — the matrix is a bounded
+position, not a removal of limits.
+
+**Why this binds hardest at Milestone.** Milestone is where **Stage-2 accept authority** lives — the
+level whose errors propagate into merges, and the reason `model-routing-policy.md` row P4 reads paid
+frontier. A Milestone instance declared agentic may run its review work unattended; it may not
+accept a delivery or authorize a merge on its own signature.
+
+**Corollary, for the reader who knows the default-accept model.** PSG §11.6's accept-by-silence
+turns a parent's *silence* into acceptance. That model presumes a manual instance, where the human's
+key is present at the session by construction; the matrix does not extend it to an unattended one.
+An agentic instance's silence is not the silence §11.6 speaks of, and does not by itself accept a
+delivery. This follows from the rule above rather than adding to it — no new gate is created here,
+and none is removed.
+
 ### Declaration mechanism
 
 Execution Mode is declared **per instance**, not project-wide. A single project-wide
@@ -327,11 +411,12 @@ path stays blocked until the parent responds and sets the notice to `status: res
 the escalation-notice template's existing rule, which this section does not modify but does
 make load-bearing for unattended runs.
 
-**This does not widen what the parent may authorize.** *Mode is not authority* (HQ Ruling on
-SN-25, Decision 4): an instance running unattended holds exactly the authority its level
-always held, and authority-bearing acts — Stage-2 acceptance and merge authorization — still
-require the human's key whatever Execution Mode the instance is running in. A handback
-resolution is a **direction to the child**, not a new power for the resolver.
+**This does not widen what the parent may authorize.** *Mode is not authority* — **cited here, not
+restated:** see "Mode is not authority" above, which is that rule's normative home (HQ Ruling on
+SN-25, Decision 4). Applied to handback: an instance running unattended holds exactly the authority
+its level always held, so a handback resolution is a **direction to the child**, not a new power for
+the resolver. *(Citation form adopted P10-M35-E35.4, 2026-07-30; the rule this section states was
+unchanged by that Epic.)*
 
 #### Routing: exactly one level, per the protocol that already governs it
 
