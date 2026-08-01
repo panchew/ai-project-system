@@ -633,7 +633,7 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **111 Epics** delivered across **35 milestones** over **10 phases**
 
 ### Governance
-- PROJECT-SYSTEM-GUIDELINES.md v2.3.0 (effective 2026-07-02)
+- PROJECT-SYSTEM-GUIDELINES.md v2.4.0 (effective 2026-07-31)
 - AI-OPERATING-GUIDELINES.md v2.10.0 (effective 2026-07-18)
 - Framework version: v7.1.0
 

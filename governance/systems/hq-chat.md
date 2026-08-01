@@ -155,6 +155,68 @@ This ensures continuity and prevents context drift.
 
 ---
 
+## Review Diagram on HQ Rulings (Structural)
+
+*(Added 2026-07-31, CFO direction, alongside PSG §11.6.1.)*
+
+PSG **§11.6.1** makes Layer-8/the CFO the mandatory **diff reviewer** for HQ-authored deliveries,
+because HQ has no parent chat to review it. This section exists to make that review *cheap enough
+to actually perform*. A reviewer verifying a ruling should not have to open four files to confirm
+that what the ruling claims it changed is what it changed.
+
+**An HQ Ruling that amends a normative document SHOULD carry a Structural diagram** showing four
+things, and only these four:
+
+1. **Which documents were touched** by the ruling.
+2. **What changed in each** — named to the row, column, section or table, not "updated."
+3. **What was deliberately left untouched**, where the ruling claims a freeze or a
+   decision-column-unchanged.
+4. **Where authority flowed** — who decided, who applies, who reviews.
+
+**Structural only** (Mermaid/PlantUML — AOG §16.3 "Two modes"). It commits as a fenced code block
+inside the ruling itself, needs **no ComfyUI endpoint and no `visual_artifacts` configuration at
+all** (AOG §16.3/§16.8), renders in the PR diff, and is reviewable as text. This is the mode AOG
+§16 already tells you to prefer for most coverage.
+
+**Not Generative.** The ComfyUI track is a different capability with its own gating, and its
+precision-validation evidence in this repository is two recorded FAILs (P8-M29-E29.3). A diagram
+whose job is to let a reviewer *verify a claim* must be exact by construction; a generated image
+is not, and the evidence here says so.
+
+**SHOULD, not MUST.** A ruling that changes no normative document (a triage, a placement, a
+disposition) needs no diagram, and one is worse than none if it adds a box that the ruling's text
+does not support. The test is whether it shortens the reviewer's path to "this matches."
+
+**Worked example** — the 2026-07-31 row P4 ruling, whose central claim is that new evidence
+changed two columns and left the decision untouched:
+
+```mermaid
+graph TD
+  EV["E35.5 back-test<br/>PASS 4/5, 0 false alarms<br/>(new cited evidence)"]
+  HQ["HQ Ruling 2026-07-31<br/>row P4 stands"]
+  EV --> HQ
+
+  HQ -->|"decision column<br/>UNCHANGED"| P4D["policy row P4:<br/>Paid frontier"]
+  HQ -->|"confidence + revisit<br/>columns AMENDED"| P4C["row P4: cites the eval,<br/>names G-P4-a/b/c"]
+  HQ -->|"note ADDED<br/>above mapping table"| POL["model-routing-policy.md"]
+  HQ -->|"ratified table<br/>LEFT BYTE-INTACT<br/>pointer added beneath"| CH["chat-hierarchy.md<br/>execution matrix"]
+
+  CFO["Layer-8 / CFO"] -->|"diff review<br/>PSG §11.6.1"| HQ
+
+  classDef frozen stroke-dasharray: 5 5
+  class P4D,CH frozen
+```
+
+The dashed nodes are the freezes — the two claims a reviewer would otherwise have to open two
+files to check.
+
+**Note on this document:** `hq-chat.md` carries no version or changelog, like 10 of the 15
+documents in `governance/systems/`. Inventing one here under an adjacent edit is the corpus-wide
+convention change recorded as **P10-GH-8** and above this edit's authority, so none is added —
+the same call E35 made when it amended `chat-hierarchy.md` three times.
+
+---
+
 ## Relationship to Governance
 
 HQ mode operates under:
