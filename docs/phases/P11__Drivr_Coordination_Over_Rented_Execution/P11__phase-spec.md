@@ -4,7 +4,7 @@ name: "Drivr: Coordination over Rented Execution"
 status: scoping
 start_date: 2026-08-01
 planned_end_date: 2026-08-29
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Phase P11: Drivr — Coordination over Rented Execution
@@ -190,11 +190,35 @@ CFO in field practice, OpenCode + Ollama + `qwen3-coder:30b` working as `local-a
 future roster change must be a configuration decision, not a re-architecture; the milestone is
 successful only if a second adapter could be added without touching the coordination layer.
 
-> **Technical note, binding on whoever builds the OpenCode adapter:** Ollama defaults **every** model
-> to a **4,096-token context window** regardless of what the model supports, and OpenCode needs
-> roughly **16k+** to drive its tool-use loop. Silent truncation here presents as *model incompetence*.
-> A milestone-context test that hits this without knowing it produces a **false negative about the
-> model**, not a finding about the model.
+> **Technical note, binding on whoever builds the OpenCode adapter — corrected v1.0.1, now measured
+> rather than inherited.** The v1.0.0 text carried a warning that Ollama defaults every model to a
+> 4,096-token context window. **That is false on this host and was never verified before being
+> written into this spec.** Measured 2026-08-01 against **Ollama 0.30.0**:
+>
+> | Fact | Measured |
+> |---|---|
+> | `qwen3-coder:30b` loaded context | **32,768** (12.9 GB VRAM of 21.4 GB total; ~8.5 GB in RAM) |
+> | `qwen2.5-coder:7b` loaded context | **32,768**, wholly unconfigured |
+> | 20,530-token prompt, marker at position 0, **no options set** | marker recovered — no 4k truncation |
+> | same prompt, `/v1` + `options.num_ctx=2048` | marker **still** recovered |
+>
+> Two consequences. **The 4,096 default does not apply here** — Ollama 0.30.0 loads the model's own
+> context. And **the `/v1` OpenAI-compatible endpoint silently ignores `options` entirely**: forcing
+> `num_ctx=2048` changed nothing, so OpenCode cannot set the loaded context through that transport
+> and does not need to. (`local-agent-runner`'s native `/api/chat` *does* honour `options` — a real
+> transport difference, but **not** a retention argument for E37.4, since the default is already
+> correct.)
+>
+> **The surviving caution is an 8× overpack, and it is the one to build against.** `opencode.json`
+> declares `"context": 262144` for `qwen3-coder:30b` against **32,768** actually loaded. That
+> declared limit is what OpenCode uses to decide when to compact a conversation, so a long session
+> will pack past what Ollama holds and be truncated silently. **The adapter must derive the declared
+> limit from what `/api/ps` reports as loaded, not from the model's trained maximum.** Short tasks
+> are unaffected: B3.1's scoped context measured 7,819 bytes (~2,000 tokens).
+>
+> **Method is recorded so this correction is reproducible and so the next one is cheaper:** plant a
+> marker at position 0 of a prompt that exceeds the suspected limit, ask for it back, and read
+> `/api/ps` for `context_length`. Do not infer a context ceiling from an agent behaving badly.
 
 **`local-agent-runner`'s retention is a directed assessment with a real possibility of retirement**
 (A1.2), and it is **not** a judgment on the work: P9/P10's local-inference evidence — the runtime
@@ -383,7 +407,9 @@ the machine, and invokes one CLI engine through an interface a second engine cou
 - **E37.1 — Drivr repository inception + enrollment at v7.1.0**, using M33/E33.1's enrolled-project
   procedure (11 recorded failure modes — use them).
 - **E37.2 — The execution adapter surface + OpenCode adapter.** The interface is the deliverable;
-  OpenCode is its first implementation. Handle the Ollama 4,096-token context default explicitly.
+  OpenCode is its first implementation. **Derive the declared context limit from what `/api/ps`
+  reports as loaded**, not from the model's trained maximum — see the measured technical note in
+  §P11.2 (`opencode.json` declares 262,144 against 32,768 actually loaded).
 - **E37.3 — Three-state fleet registry + full classification pass.** Every project in `~/soft-dev`
   classified active/benched/archived, including the three P10 never listed. Fold in **P10-GH-5**
   (a validator for `ai-project-yml-spec.md` §4). **P10-GH-1** conditionally, per the Phase Chat.
@@ -534,7 +560,9 @@ The CFO (Layer 8) will accept P11 complete when:
 - **The Drivr repository** — does not exist at phase open; its creation is E37.1
 - **OpenCode** — the execution engine. Its open issue #14551 (`run` exits 0 on session errors) is a
   **dependency the CFO does not own and cannot patch freely**; M38 is designed on that assumption
-- **Ollama** — settled runtime (A1.3). Its 4,096-token default context is a live trap for the adapter
+- **Ollama** — settled runtime (A1.3), measured at **0.30.0**, loading `qwen3-coder:30b` at a
+  **32,768** context. The live trap is not a small default but the **8× gap between what
+  `opencode.json` declares (262,144) and what is actually loaded** — see §P11.2
 - **GPU / hardware** — one GPU, 16 GB VRAM shared with ComfyUI, `qwen3-coder:30b` partially offloading
   to RAM. This is the contention the scheduler exists for
 - **GitHub Copilot** — PR-reviewer configuration is CFO-side
@@ -684,4 +712,5 @@ different authority. That distinction is deliberate.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.0.1 | 2026-08-01 | **Factual correction, HQ, before any Phase Chat read the spec.** v1.0.0's binding technical note to the OpenCode adapter stated that Ollama defaults every model to a 4,096-token context. **It is false on this host.** The claim was inherited from the 2026-08-01 HQ Chat Opener and passed into this spec unverified — an HQ error, recorded rather than quietly overwritten. Measured against Ollama **0.30.0**: `qwen3-coder:30b` and `qwen2.5-coder:7b` both load at **32,768**, a 20,530-token prompt recovers a marker planted at position 0 with no options set, and the `/v1` endpoint **silently ignores `options`** (forcing `num_ctx=2048` changed nothing). The note is replaced with the measurements, the reproduction method, and the **real** caution: `opencode.json` declares 262,144 against 32,768 loaded — an **8× overpack** that bites long sessions, so the adapter must derive its declared limit from `/api/ps`. Touches §P11.2 (technical note; `local-agent-runner` transport difference recorded as **not** an E37.4 retention argument), §Milestones→M37 (E37.2), §Dependencies (Ollama). **No milestone, ordering, decision, or scope boundary is changed** — M38 still gates M39 and P10-GH-7 stands untouched, its E33.2/E33.4 evidence unaffected (those runs did not truncate). |
 | 1.0.0 | 2026-08-01 | Initial P11 phase spec. Four milestones (M36 Record Integrity and Documentation Hygiene — CFO-decided first; M37 Drivr Inception, Fleet Registry and Execution Adapter Surface; M38 Trustworthy Completion Signal; M39 Coordination — Scheduler, Derived Gate Queue and Thin Surface), ~18 epics, binding order M36 → M37 → M38 → M39. Scoped by SN-27 + Amendment 1 (spine: Drivr rents both halves — an app is made AI-powered by calling a CLI tool that owns the inference; execution is a pluggable adapter surface; three fleet states; scheduler; competing-model review findings-only; the leverage case as a choice). SN-26 and SN-28 placed in M36 per CFO ruling; the namespace question answered by HQ (one sequence per directory); SN-23 date-qualified rather than renumbered. P10-GH-7 in scope and gating M39; P10-GH-5 folded into M37; P9-GH-1/P10-GH-9 owned at M39; competing-model review un-parked. llama.cpp recorded **closed**, not parked. Four SN-27 proposals returned to the CFO with recorded fallbacks. |
