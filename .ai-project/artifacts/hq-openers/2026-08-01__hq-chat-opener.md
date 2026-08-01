@@ -129,8 +129,19 @@ System HQ codification.
 
 ### 6. Steering Notes carried by this opener — the complete set
 
-**Two, and only two: SN-26 and SN-27 (with Amendment 1).** Those are the Steering Notes HQ has
-not yet consumed.
+**Three: SN-26, SN-27 (with Amendment 1), and SN-28.** Those are the Steering Notes HQ has not yet
+consumed.
+
+**SN-28** — `.ai-project/artifacts/steering-notes/2026-08-01__creation-chat__steering-note__sn-numbering-unenforced.md`
+— records that Steering Note ID allocation is unenforced: **SN-23 and SN-1 are each claimed by two
+different notes**, and `AI-OPERATING-GUIDELINES.md` and `chat-hierarchy.md` both cite *"SN-23
+Decision 2"* meaning different decisions, one of which the latter declares superseded. Binding CFO
+decision in that note: **fix it, but inside P11, not before it.**
+
+A caution for this chat's own reading: **citations of "SN-23" in the corpus are ambiguous.** Where
+a document cites SN-23, check the date before relying on it — 2026-07-18 is reference-first /
+platform agnosticism; 2026-07-20 is the P10 adoption spine. This opener's Constraints section
+cites the 2026-07-20 note.
 
 Every other Steering Note in `.ai-project/artifacts/steering-notes/` has already been ruled on and
 is **deliberately not re-attached** — SN-23 (consumed by P10 opening, running and closing), SN-24
