@@ -127,13 +127,30 @@ owner is pointed at the ritual rather than at `seed.md`, which has carried the c
 shape P11's spine.** Record it; place it later, in a milestone with room, alongside the SN-1
 System HQ codification.
 
-### 6. Triage of the digest's remaining Open Decisions
+### 6. Steering Notes carried by this opener — the complete set
+
+**Two, and only two: SN-26 and SN-27 (with Amendment 1).** Those are the Steering Notes HQ has
+not yet consumed.
+
+Every other Steering Note in `.ai-project/artifacts/steering-notes/` has already been ruled on and
+is **deliberately not re-attached** — SN-23 (consumed by P10 opening, running and closing), SN-24
+(ruled `2026-07-28__...__sn-24-m35-operator-form.md`), SN-25 (ruled
+`2026-07-30__...__sn-25-handback-and-execution-matrix.md`), and SN-1 (ruled
+`2026-07-31__...__system-hq-routing-codification.md`).
+
+**The convention, stated so it holds for future openers:** an opener carries **unconsumed**
+Steering Notes as *agenda*, and **ruled** ones as *constraints* — cited by their ruling, never
+re-attached as notes. Re-attaching a ruled note invites HQ to re-decide what is already decided.
+This is why SN-24 appears in this opener's **Constraints** section rather than its agenda, and why
+SN-25 appears there only as *mode is not authority*.
+
+### 7. Triage of the digest's remaining Open Decisions
 
 | Digest item | Disposition per SN-27 |
 |---|---|
 | #1 What is P11's spine? | **Answered.** Agenda 1. |
 | #2 Block detection | **In scope, sequenced first.** Agenda 2. |
-| #3 SN-1 System HQ codification | Unchanged; needs a milestone with room. `[PROPOSED]` place beside SN-26. |
+| #3 SN-1 System HQ codification | **Already ruled and placed in P11** — `.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__system-hq-routing-codification.md` (D1–D4 accepted). P11 must *execute* it: a self-contained amendment to `system-hq.md`, Authority Boundary verbatim-frozen across three documents as a DoD item, reusing `steering_note` for the routed-to-B leg rather than inventing a type. No dependencies. `[PROPOSED]` place beside SN-26 in a documentation milestone. |
 | #4 P9-GH-1 / P10-GH-9 owner | Trigger is the first Phase/Milestone agentic dispatch. `[PROPOSED]` assign at the milestone that first touches dispatch, not at phase open. |
 | #5 `ai-stack`, `character-factory` | `[PROPOSED]` resolves as a side effect of the three-state registry — classification is registry work, not a separate decision. |
 | #6 Sidekick-for-external-projects | Unchanged. Brief-level identity question, not phase scope. |
