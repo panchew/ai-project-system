@@ -15,8 +15,10 @@ provenance: >
   Authored by the Creation Chat to instantiate an HQ Chat that opens P11. This is a
   SCOPING instantiation: the 2026-07-31 Progress Digest stated that HQ cannot scope a
   phase and that P11 waits on the Creation Chat for a spine. That spine is now filed
-  (SN-27 + Amendment 1). This opener carries it, plus SN-26, into HQ. To be filed
-  verbatim by the HQ Chat session it instantiates, for the artifact record.
+  (SN-27 + Amendment 1). This opener carries it, plus SN-26 and SN-28, into HQ, along
+  with two CFO rulings made in the same session: P11's first milestone is documentation
+  hygiene, and one duplicate-ID test is authorized as a hotfix. To be filed verbatim by
+  the HQ Chat session it instantiates, for the artifact record.
 ---
 
 # HQ Chat Opener — Project Control Room
@@ -45,7 +47,7 @@ per the rule.
 | **Project** | `ai-project-system` — the governance framework's own repository |
 | **Repo** | https://github.com/panchew/ai-project-system |
 | **Governance** | PSG v2.4.0 / AOG v2.10.0 |
-| **Framework** | v7.1.0 (tag), master at `8e56661` |
+| **Framework** | v7.1.0 (tag). `master` has since advanced with Creation Chat artifacts only — steering notes and this opener. No code or governance-document changes since the tag. |
 | **Phase status** | P10 closed 2026-07-31 (merge `bb727a5`, tag `v7.1.0`, closure `4598d4d`). **No phase open.** |
 | **Suite** | 366 passed / 0 failed / 0 skipped at P10 closure |
 | **Open PRs** | None |
@@ -89,7 +91,44 @@ hours of being made.
 
 **HQ's task:** open P11 with this spine and produce the Phase Execution Chat Starter.
 
-### 2. Sequence P10-GH-7 before any dispatch or scheduling work [HIGH]
+### 2. P11's FIRST milestone is documentation hygiene — CFO-decided [BINDING]
+
+**Ruled by the CFO, 2026-08-01, in the Creation Chat session that authored this opener.** Not a
+proposal for HQ to weigh. Four self-contained items, no dependencies on Drivr, before any Drivr
+work begins:
+
+1. **SN-28 Required actions 1–3** — answer the cross-entity namespace question, resolve the SN-23
+   citation ambiguity, add an ID allocation rule.
+2. **SN-26** — reconcile the three disagreeing Creation Chat re-instantiation surfaces; decide
+   whether this project renders its own `genesis.md`.
+3. **The SN-1 System HQ codification** — already ruled, already placed in P11 (see the triage
+   table below for its path and content).
+4. **SN-26's re-diagnosis of P10-GH-2** — amend the carry-forward text so a future owner is
+   pointed at the ritual rather than at `seed.md`.
+
+**Answer SN-28's namespace question before any renumbering is specified in the milestone spec.**
+Renumbering first would bake in an answer nobody gave.
+
+**Why this ordering, recorded so it is not re-litigated:** the CFO's instinct was to clean
+everything before P11 opened at all. The Creation Chat objected that amending normative documents
+outside any phase would mean no spec, no DoD, no Stage-2 review and no closure record — ungoverned
+work in the repository whose thesis is that work is governed. The ruling takes both: the cleanup
+lands **before any Drivr code exists** *and* lands **governed**.
+
+### 3. One hotfix is authorized to land before P11 opens [BINDING]
+
+**The duplicate-ID test** — SN-28 Required action 4, asserting no duplicate `id:` across
+`.ai-project/artifacts/steering-notes/`. CFO-classified as a **hotfix**: small, mechanical,
+self-contained, adds a test and changes no normative text. It is the only SN-28 item that prevents
+recurrence rather than describing it.
+
+**The carve-out is bounded by that property, not by diff size.** The moment an item in this bucket
+would edit a governance document, it leaves the bucket and goes to the milestone above.
+
+**HQ authorizes and executes or delegates it.** The Creation Chat does not — it produces artifacts
+and holds no authority.
+
+### 4. Sequence P10-GH-7 before any dispatch or scheduling work [HIGH]
 
 The spine's scheduler and derived gate queue both depend on knowing whether a run finished,
 stalled, or failed confidently wrong. That signal is **measured broken in two independent
@@ -101,13 +140,13 @@ SN-27 asks that this be treated as in-scope and sequenced first, rather than tri
 carry-forward. Amendment A1.5 sharpens it: if OpenCode becomes the sole engine, the problem
 concentrates in a dependency the CFO does not own.
 
-### 3. Record the llama.cpp trial as CLOSED, not parked [SN-27 A1.3]
+### 5. Record the llama.cpp trial as CLOSED, not parked [SN-27 A1.3]
 
 The CFO has dropped it by decision. Its Mac-class-hardware trigger is void. Left parked, a future
 phase re-inherits a decision already made. **The local-inference runtime question is closed;
 Ollama is settled, not provisionally chosen.** The *model* roster stays open — see A1.4.
 
-### 4. Carry the milestone-context question into P11 scope [SN-27 A1.4]
+### 6. Carry the milestone-context question into P11 scope [SN-27 A1.4]
 
 *Can `qwen3-coder:30b` handle the context of a milestone?* This is a **fourth axis** beside row
 P4's existing gates (G-P4-a prescription variance, G-P4-b unassisted search, G-P4-c tool-using
@@ -116,7 +155,7 @@ verification) — capacity at scale, which E35.5's blinded-packet method did not
 **Row P4's 2026-07-31 ruling is not reopened by this.** It is where an answer would eventually
 land.
 
-### 5. Record SN-26 — no action [MEDIUM]
+### 7. Record SN-26 — no action [MEDIUM]
 
 `.ai-project/artifacts/steering-notes/2026-07-31__creation-chat__steering-note__creation-reinstantiation-ritual.md`
 
@@ -127,7 +166,7 @@ owner is pointed at the ritual rather than at `seed.md`, which has carried the c
 shape P11's spine.** Record it; place it later, in a milestone with room, alongside the SN-1
 System HQ codification.
 
-### 6. Steering Notes carried by this opener — the complete set
+### 8. Steering Notes carried by this opener — the complete set
 
 **Three: SN-26, SN-27 (with Amendment 1), and SN-28.** Those are the Steering Notes HQ has not yet
 consumed.
@@ -155,7 +194,7 @@ re-attached as notes. Re-attaching a ruled note invites HQ to re-decide what is 
 This is why SN-24 appears in this opener's **Constraints** section rather than its agenda, and why
 SN-25 appears there only as *mode is not authority*.
 
-### 7. Triage of the digest's remaining Open Decisions
+### 9. Triage of the digest's remaining Open Decisions
 
 | Digest item | Disposition per SN-27 |
 |---|---|
@@ -212,15 +251,19 @@ are **proposals, not decisions**, and HQ should return them rather than treat th
 ## Next Actions for HQ
 
 1. Verify model per the prerequisite block above.
-2. Read SN-27 **including Amendment 1**, then SN-26.
+2. Read SN-27 **including Amendment 1**, then SN-26 and SN-28.
 3. **Open P11** with the SN-27 spine.
 4. **Produce the Phase Execution Chat Starter**, carrying SN-24's opener obligations forward —
    the four-project ecosystem, the headless-first inversion (*a dashboard is a surface for
    watching; the more agentic the machine, the less there is to watch*), and the
    infrastructure-is-not-a-platform caution, now answered by SN-27 decision 8.
-5. Sequence P10-GH-7 ahead of dispatch/scheduling work.
-6. Record the llama.cpp closure and the SN-26 re-diagnosis of P10-GH-2.
-7. File this opener verbatim in the artifact record.
+5. **Scope P11's first milestone as documentation hygiene** (Agenda 2) — CFO-decided, not open.
+   Answer SN-28's namespace question before specifying any renumbering.
+6. **Authorize the duplicate-ID test hotfix** (Agenda 3), or delegate it. It may land before P11
+   opens.
+7. Sequence P10-GH-7 ahead of dispatch/scheduling work (Agenda 4).
+8. Record the llama.cpp closure and SN-26's re-diagnosis of P10-GH-2.
+9. File this opener verbatim in the artifact record.
 
 ---
 

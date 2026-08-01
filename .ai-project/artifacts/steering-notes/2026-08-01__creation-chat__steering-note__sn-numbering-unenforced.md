@@ -11,7 +11,8 @@ concerns:
     title: Steering Note ID allocation is unenforced — SN-23 and SN-1 are each claimed by two different notes, and two normative documents cite "SN-23 Decision 2" meaning different decisions, one of which is superseded
 decisions:
   - "Fix, do not leave. The CFO directed that these be corrected."
-  - "OPEN — NOT YET DECIDED. Whether the correction happens BEFORE P11 opens or INSIDE it is unresolved. The CFO stated the assumption that cleanup happens before P11 work begins; the Creation Chat disagrees and argues for inside. The CFO has not ruled. See 'The one open disagreement' below."
+  - "RESOLVED 2026-08-01 by the CFO. The correction is P11's FIRST MILESTONE — a documentation-hygiene milestone, so the cleanup lands before any Drivr code exists and lands governed, with a spec, a DoD, a Stage-2 review and a closure record."
+  - "RESOLVED 2026-08-01 by the CFO. The duplicate-ID TEST gets HOTFIX treatment: small, mechanical, self-contained, and may land before P11 opens without waiting for the milestone. It is the only item that prevents recurrence rather than describing it."
 references:
   - "SN-26 (2026-07-31) — Creation Chat re-instantiation ritual; same documentation-hygiene bucket."
   - "SN-27 (2026-07-31) + Amendment 1 — P11 spine; unaffected by this note."
@@ -137,49 +138,45 @@ documentation milestone, or a pre-P11 pass — awaits the CFO's call on the open
 
 ---
 
-## The One Open Disagreement — before P11, or inside it?
+## Resolved — before P11, or inside it? Both, split by kind
 
-**This is not decided, and this note does not decide it.** It is recorded as an open disagreement
-because the Creation Chat holds no authority (Seed, Rule 3) and the CFO stated the opposite
-position.
+**Ruled by the CFO, 2026-08-01.** Recorded with the disagreement that preceded it, because the
+split is the substance of the answer and would be unreadable without it.
 
-**The CFO's stated assumption**, verbatim: *"I am saying this under the assumption that we can
-polish and clean everything that is doable before actually starting P11 work via the born-to-be
-HQ chat you already drafted."*
+**The disagreement.** The CFO's stated assumption was *"we can polish and clean everything that is
+doable before actually starting P11 work."* The Creation Chat disagreed: recording a defect is
+this chat's standing job and correctly happens outside any phase, but **amending normative
+documents is not.** A "clean everything before P11 opens" window would put edits to
+`AI-OPERATING-GUIDELINES.md`, `chat-hierarchy.md` and `artifact-communication-protocol.md` outside
+any phase, milestone or epic — no spec, no DoD, no Stage-2 review, no closure record — in the one
+repository whose entire thesis is that work is governed.
 
-**The Creation Chat's disagreement, and its reasoning.** Recording a defect is this chat's
-standing job and correctly happens now, outside any phase. **Amending normative documents is
-not.** A "clean everything before P11 opens" window would put edits to `AI-OPERATING-GUIDELINES.md`,
-`chat-hierarchy.md` and `artifact-communication-protocol.md` outside any phase, milestone or
-epic — with no spec, no DoD, no Stage-2 review and no closure record — in the one repository whose
-entire thesis is that work is governed. It would produce precisely the artifact this project keeps
-ruling against: normative changes with no reviewable record of why.
+**The ruling splits the work by kind, and takes both positions where each is right.**
 
-The same instinct is fully served by making these items **P11's first milestone**: the cleanup
-still happens before any Drivr code exists, and it happens governed. Nothing is delayed except
-the ungoverned-ness.
+| Kind | Placement | Why |
+|---|---|---|
+| **Normative amendments** — the namespace question, the SN-23 citation fix, the allocation rule (Required actions 1–3) | **P11's first milestone**, a documentation-hygiene milestone | The cleanup still lands before any Drivr code exists, and it lands governed. Nothing is delayed except the ungoverned-ness. |
+| **The duplicate-ID test** (Required action 4) | **Hotfix — may land before P11 opens** | Small, mechanical, self-contained. Closer to a hotfix than to a normative amendment; the objection above does not reach it. It is also the only item that *prevents recurrence* rather than describing it. |
 
-**Counter-consideration, stated fairly:** the CFO's instinct is not merely aesthetic. Opening P11
-on a corpus with a known-ambiguous identifier means the P11 Phase Chat inherits the ambiguity, and
-this note's own SN-28 number was allocated by the very mechanism it reports as unenforced. There
-is a real argument that a duplicate-ID **test** — Required action 4, small, self-contained,
-mechanical — is closer to a hotfix than to normative amendment, and could reasonably land before
-P11 without the objection above applying to it.
+**Why the hotfix carve-out is not a loophole.** It is bounded by exactly the property that makes it
+safe: it adds a test and changes no normative text. The moment an item in this bucket would edit a
+governance document, it leaves the bucket and goes to the milestone. That boundary is the rule, not
+the size of the diff.
 
-**This is the CFO's call.** It is recorded here so that whichever way it goes, it goes on purpose.
+**Who executes it.** Not this chat. The Creation Chat produces artifacts and holds no authority
+(Seed, Rule 3); writing a test into the repository is execution work. The hotfix is **HQ's to
+authorize and execute or delegate** — which is itself the answer to why a hotfix classification
+does not mean "anyone may now do it."
 
 ---
 
 ## Carry-Over Open Items
 
-1. **[PROPOSED — confirm]** This note, SN-26, the SN-1 System HQ codification (already ruled and
-   placed in P11), and the SN-26 re-diagnosis of P10-GH-2 form a coherent **documentation-hygiene
-   milestone**. Four self-contained items, no dependencies on Drivr, all needing a milestone with
-   room rather than analysis. Proposed as P11's first milestone — which satisfies the CFO's
-   instinct to clean before building, while keeping the cleanup governed.
-2. **[PROPOSED — confirm]** The duplicate-ID test (Required action 4) is the piece worth doing
-   even if the rest is deferred, since it is the only item that prevents recurrence rather than
-   describing it.
+1. ~~PROPOSED~~ **CONFIRMED by the CFO, 2026-08-01.** This note, SN-26, the SN-1 System HQ
+   codification (already ruled and placed in P11), and SN-26's re-diagnosis of P10-GH-2 form
+   **P11's first milestone** — documentation hygiene. Four self-contained items, no dependencies on
+   Drivr, needing a milestone with room rather than analysis.
+2. ~~PROPOSED~~ **CONFIRMED by the CFO, 2026-08-01** as a hotfix. See the ruling above.
 3. Whether other artifact families carry the same unenforced-ID risk — rulings, escalation
    notices, gap records (`P10-GH-*`) — was **not** audited. Only steering notes were checked. The
    `GH-` series in particular is allocated the same way and is cited far more widely.
@@ -191,8 +188,12 @@ P11 without the objection above applying to it.
 HQ Chat should:
 
 1. Record SN-28.
-2. **Do not act on the before-vs-inside-P11 question.** It is an open disagreement between the CFO and the Creation Chat, not a decision — see "The One Open Disagreement" above. Return it to the CFO.
-3. When scoping P11, consider the documentation-hygiene milestone proposed in Carry-Over 1, and
-   answer the namespace question in Required action 1 before any renumbering is specified.
-4. Note that Carry-Over 3 — whether rulings, escalation notices and `GH-` gap records share this
-   defect — is unaudited and may widen the scope of that milestone.
+2. **Scope P11's FIRST milestone as documentation hygiene**, per the CFO's ruling above — this
+   note's Required actions 1–3, SN-26, the SN-1 System HQ codification (already ruled and placed in
+   P11), and SN-26's re-diagnosis of P10-GH-2. Before any Drivr work.
+3. **Authorize and execute the duplicate-ID test as a hotfix** (Required action 4), or delegate it.
+   It may land before P11 opens. The Creation Chat does not execute it.
+4. **Answer the namespace question** (Required action 1) before any renumbering is specified in
+   that milestone's spec.
+5. Note that Carry-Over 3 — whether rulings, escalation notices and `GH-` gap records share this
+   defect — is **unaudited** and may widen the milestone's scope once looked at.
