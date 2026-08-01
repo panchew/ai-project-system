@@ -1,0 +1,15 @@
+{
+  "epic_id": "B3.1",
+  "model": "qwen3-coder:30b",
+  "runner": "/tmp/claude-1000/-home-panchew-soft-dev-ai-project-system/e7d11216-7e27-49ee-8e02-91c7e9d79fb5/scratchpad/lar-wrapper",
+  "endpoint": "runner-default",
+  "exit_code": 0,
+  "started_utc": "2026-08-01T23:07:49.412672+00:00",
+  "duration_ms": 123046,
+  "transcript": ".ai-project/artifacts/agentic-runs/B3.1/transcript.json",
+  "context": ".ai-project/artifacts/agentic-runs/B3.1/context.md",
+  "context_sources": [
+    "docs/bugfixes/B3.1__spec__steering-note-id-allocation-unenforced.md"
+  ],
+  "tools": ".ai-project/agents/tools.json"
+}
