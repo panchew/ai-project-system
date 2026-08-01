@@ -13,7 +13,11 @@ decisions:
   - "P11 is Drivr. The recorded direction of SN-24 becomes the phase spine. HQ may now produce the Phase Execution Chat Starter."
   - "An app is made AI-powered by calling a CLI tool that owns the inference. This is a different skill from using AI tools to write software, and it is the architectural basis of Drivr: Drivr does not implement inference, it invokes tools that do."
   - "Drivr must be able to use ANY CLI tool that empowers the work. The execution layer is a pluggable adapter surface, not a fixed choice of engine. local-agent-runner and OpenCode are today's roster, not the architecture."
-  - "Today's roster, as a starting point and not a constraint: Epics that run locally may choose their tool (local-agent-runner); OpenCode covers the rest, which is what unlocks any model from any provider with API keys and other auth methods."
+  - "SUPERSEDED BY AMENDMENT 1 — see below. Original text: Today's roster, as a starting point and not a constraint: Epics that run locally may choose their tool (local-agent-runner); OpenCode covers the rest, which is what unlocks any model from any provider with API keys and other auth methods."
+  - "AMENDMENT 1 — OpenCode covers the local lane too. OpenCode + Ollama + qwen3-coder:30b works as if it were local-agent-runner; verified by the CFO in field practice on the desktop version. The two-lane split is retired; one tool currently covers both local and cloud."
+  - "AMENDMENT 1 — local-agent-runner is retained only if it still provides something. If it does, keep it; otherwise the focus is pluggability — any CLI tool leveraging local or cloud, open-source or paid models."
+  - "AMENDMENT 1 — The local inference RUNTIME question is CLOSED. llama.cpp is no longer something the CFO wants to spend attention or time on; nothing else will be tried for local inference. Ollama is settled, not provisionally chosen."
+  - "AMENDMENT 1 — The local inference MODEL roster stays open. Two questions remain live: (a) whether qwen3-coder:30b can handle the context of a MILESTONE, and (b) whether any other open-source model runs with similar or better results. Keep an eye on newer models."
   - "The fleet has three states. ACTIVE = enrolled in the registry; receives time and attention. BENCHED = not currently receiving attention; may return. ARCHIVED = not planned to ever be touched again, though it can be brought back to life."
   - "The orchestrator schedules agentic runs to avoid overloading the system."
   - "Competing models review PRs — including GitHub Copilot as a PR reviewer — looking closely for performance, security, and scalability. They SURFACE FINDINGS ONLY. They hold no authority and resolve nothing."
@@ -217,6 +221,81 @@ raised.
 
 ---
 
+## Amendment 1 — 2026-08-01, Creation Chat
+
+Recorded after the note was filed and before HQ consumed it. The CFO's words, same session.
+The spine is unchanged; the execution roster and the local-inference questions are.
+
+### A1.1 — OpenCode covers the local lane too; the two-lane split is retired
+
+**OpenCode + Ollama + `qwen3-coder:30b` works as if it were `local-agent-runner`** — verified by
+the CFO in field practice, on the desktop version.
+
+This supersedes the roster table above. There is no local-vs-cloud tool split: **one tool
+currently covers both.** Binding decision 3 — *any CLI tool that empowers the work*, execution as
+a pluggable adapter surface — is **unaffected and is the reason this costs nothing.** The roster
+changed; the architecture did not. That is the adapter surface working as designed, on its first
+real test, two hours after being decided.
+
+### A1.2 — `local-agent-runner` is retained only if it still provides something
+
+The CFO: *"If `local-agent-runner` provides anything to the project, let's keep it. Otherwise,
+let's focus on pluggability."*
+
+This is a **directed assessment with a real possibility of retirement**, not a foregone
+conclusion in either direction. It is not a judgment on the work: P9/P10's local-inference
+evidence — the runtime decision, the 14b-vs-30b model-tier finding, the blinded review back-test —
+was evidence about *local agentic execution* and stands whatever happens to the engine that
+produced it.
+
+**[PROPOSED — confirm]** the assessment bar is *"names a capability P11 actually needs that
+OpenCode does not provide."* The two candidates worth checking before retiring it, so the
+assessment is evidence rather than vibe: its **library entry point** (`run(task, tools, model)`
+with custom in-process tool handlers) and its **JSON-schema argument coercion** for models that
+mistype tool arguments. OpenCode's `serve` mode may well cover the first. If neither survives
+contact with a real P11 need, retirement is the honest outcome.
+
+### A1.3 — The local-inference RUNTIME question is closed
+
+The CFO is **no longer interested in trying anything else for local inference**, and **llama.cpp
+is no longer something to spend attention or time on.**
+
+This **closes a parked item rather than deferring it.** P10 carried the llama.cpp + Qwen3.6 Q8_0
+trial as parked-on-trigger, pending Mac-class ~42 GB hardware. That trigger is now void: the item
+is closed by decision, not waiting on hardware. **HQ should record it as closed** so no future
+phase re-inherits it as an open parked item.
+
+**Ollama is settled, not provisionally chosen.** M33 decided to keep it by running it; this makes
+that permanent.
+
+### A1.4 — The local-inference MODEL roster stays open
+
+Distinct from A1.3, and the distinction is the point: **the runtime is settled; the models are
+not.** Two live questions, in the CFO's framing:
+
+1. **Can `qwen3-coder:30b` handle the context of a MILESTONE?** This is the sharpest open technical
+   question in the phase. It sits directly against **row P4**, which HQ ruled unchanged on
+   2026-07-31 — Milestone stays paid frontier — with three named gates behind it: measured
+   prescription variance (**G-P4-a**), unassisted search and absence-detection over a real branch
+   (**G-P4-b**), and tool-using verification before ruling (**G-P4-c**). The CFO is now naming a
+   fourth axis, **context capacity at milestone scale**, which E35.5's blinded-packet method did
+   not test. Row P4's ruling is not reopened by this note; it is where the answer would land.
+2. **Does any other open-source model run with similar or better results?** Standing watch item —
+   *keep an eye on newer models.* **[PROPOSED — confirm]** this is a recurring cheap re-test
+   against E35.5's existing back-test harness when a candidate appears, not a scheduled
+   investigation. The harness already exists and the ground truth is already committed, which is
+   what makes watching affordable.
+
+### A1.5 — What this sharpens about P10-GH-7
+
+If OpenCode becomes the sole engine, the untrustworthy completion signal is **no longer split
+across two codebases** — it concentrates entirely in OpenCode's open issue #14551 (`run` exits `0`
+on session errors). That is *better* for diagnosis and *worse* for control: one well-understood
+failure mode, in a dependency the CFO does not own. The Required action above is unchanged and, if
+anything, more urgent.
+
+---
+
 ## Next Action
 
 HQ Chat should:
@@ -232,3 +311,7 @@ HQ Chat should:
    2, 3, 4, 7 in Carry-Over, the state-transition rule and Drivr's propose-only role under the
    registry, and the engine-comparison spike.
 5. **Take no action on SN-26** beyond recording it, per that note's own instruction.
+6. **Record the llama.cpp trial as CLOSED, not parked** (Amendment A1.3). Its hardware trigger is
+   void; leaving it parked would let a future phase re-inherit a decision the CFO has already made.
+7. **Carry the milestone-context question into P11 scope** (Amendment A1.4) as a fourth axis
+   alongside row P4's G-P4-a/b/c gates. Row P4's ruling is not reopened by this note.
