@@ -11,7 +11,7 @@ concerns:
     title: Steering Note ID allocation is unenforced — SN-23 and SN-1 are each claimed by two different notes, and two normative documents cite "SN-23 Decision 2" meaning different decisions, one of which is superseded
 decisions:
   - "Fix, do not leave. The CFO directed that these be corrected."
-  - "Correction is P11 milestone work, not pre-P11 work. Recording defects is Creation Chat's standing job and happens now; amending normative documents is epic work and happens inside a governed phase with a spec, a DoD and a Stage-2 review."
+  - "OPEN — NOT YET DECIDED. Whether the correction happens BEFORE P11 opens or INSIDE it is unresolved. The CFO stated the assumption that cleanup happens before P11 work begins; the Creation Chat disagrees and argues for inside. The CFO has not ruled. See 'The one open disagreement' below."
 references:
   - "SN-26 (2026-07-31) — Creation Chat re-instantiation ritual; same documentation-hygiene bucket."
   - "SN-27 (2026-07-31) + Amendment 1 — P11 spine; unaffected by this note."
@@ -27,8 +27,9 @@ question during the 2026-07-31/08-01 Creation Chat session. **Two Steering Note 
 claimed by two different notes**, and in one case the collision reaches into normative documents
 that cite the ID by number. The root cause is that ID allocation has no enforcement of any kind.
 
-This note **records**; it does not fix. The CFO directed that it be fixed, and the binding
-decision below places that fix inside P11 rather than before it.
+This note **records**; it does not fix. The CFO directed that it be fixed. **When** the fix
+happens — before P11 opens, or inside it — is an open disagreement between the CFO and this chat,
+recorded below and left to the CFO.
 
 ---
 
@@ -112,8 +113,8 @@ sequence.
 
 `tests/` guards `.ai-project.yml` model-key divergence but nothing guards artifact IDs.
 
-**Required action:** HQ should place the correction in a P11 documentation milestone (see the
-binding decision below), covering four things:
+**Required action:** the correction covers four things. **Where it is placed** — a P11
+documentation milestone, or a pre-P11 pass — awaits the CFO's call on the open disagreement below.
 
 1. **Answer the namespace question** for cross-entity Steering Notes — prerequisite to any
    renumbering.
@@ -133,13 +134,39 @@ binding decision below), covering four things:
 ## Decisions Already Made
 
 1. **Fix, do not leave.** The CFO directed correction.
-2. **The correction is P11 milestone work, not pre-P11 work.** Recording a defect is the Creation
-   Chat's standing job and happens now, outside any phase, by design. **Amending normative
-   documents is epic work** and belongs inside a governed phase — with a spec, a DoD, a Stage-2
-   review and a closure record. A "clean everything up before P11 starts" window would be
-   ungoverned work in the one repository whose entire thesis is that work is governed, and it
-   would produce exactly the artifact this project keeps ruling against: changes to normative
-   documents with no reviewable record of why.
+
+---
+
+## The One Open Disagreement — before P11, or inside it?
+
+**This is not decided, and this note does not decide it.** It is recorded as an open disagreement
+because the Creation Chat holds no authority (Seed, Rule 3) and the CFO stated the opposite
+position.
+
+**The CFO's stated assumption**, verbatim: *"I am saying this under the assumption that we can
+polish and clean everything that is doable before actually starting P11 work via the born-to-be
+HQ chat you already drafted."*
+
+**The Creation Chat's disagreement, and its reasoning.** Recording a defect is this chat's
+standing job and correctly happens now, outside any phase. **Amending normative documents is
+not.** A "clean everything before P11 opens" window would put edits to `AI-OPERATING-GUIDELINES.md`,
+`chat-hierarchy.md` and `artifact-communication-protocol.md` outside any phase, milestone or
+epic — with no spec, no DoD, no Stage-2 review and no closure record — in the one repository whose
+entire thesis is that work is governed. It would produce precisely the artifact this project keeps
+ruling against: normative changes with no reviewable record of why.
+
+The same instinct is fully served by making these items **P11's first milestone**: the cleanup
+still happens before any Drivr code exists, and it happens governed. Nothing is delayed except
+the ungoverned-ness.
+
+**Counter-consideration, stated fairly:** the CFO's instinct is not merely aesthetic. Opening P11
+on a corpus with a known-ambiguous identifier means the P11 Phase Chat inherits the ambiguity, and
+this note's own SN-28 number was allocated by the very mechanism it reports as unenforced. There
+is a real argument that a duplicate-ID **test** — Required action 4, small, self-contained,
+mechanical — is closer to a hotfix than to normative amendment, and could reasonably land before
+P11 without the objection above applying to it.
+
+**This is the CFO's call.** It is recorded here so that whichever way it goes, it goes on purpose.
 
 ---
 
@@ -164,7 +191,7 @@ binding decision below), covering four things:
 HQ Chat should:
 
 1. Record SN-28.
-2. **Take no corrective action before P11 opens**, per binding decision 2.
+2. **Do not act on the before-vs-inside-P11 question.** It is an open disagreement between the CFO and the Creation Chat, not a decision — see "The One Open Disagreement" above. Return it to the CFO.
 3. When scoping P11, consider the documentation-hygiene milestone proposed in Carry-Over 1, and
    answer the namespace question in Required action 1 before any renumbering is specified.
 4. Note that Carry-Over 3 — whether rulings, escalation notices and `GH-` gap records share this
