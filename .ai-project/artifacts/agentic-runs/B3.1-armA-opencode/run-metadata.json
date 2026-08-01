@@ -1,0 +1,10 @@
+{
+  "arm": "A",
+  "engine": "opencode 1.18.10 (run, headless, --auto)",
+  "model": "ollama/qwen3-coder:30b",
+  "exit_code": 0,
+  "files_changed": 0,
+  "outcome": "off-task; analysed validate_reference_format for B#.# epic ids, concluded 'no bug', stopped",
+  "exit_honest": false,
+  "note": "Reproduces E33.2 Run A exactly: exit 0 having done zero work. Same shape as opencode issue #14551."
+}

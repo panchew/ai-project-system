@@ -1,0 +1,147 @@
+- [ ] Test exists asserting no duplicate `id:` across `.ai-project/artifacts/steering-notes/`
+- [ ] Failure message names the colliding ID and every file claiming it
+- [ ] Letter-suffixed sub-IDs (`SN-12a`) pass, with a test case proving they do
+- [ ] The two known collisions (`SN-23`, `SN-1`) are handled per option (a) or (b) above, with the
+      choice and reasoning recorded in the Delivery Notice
+- [ ] No regressions — full suite green against the **366** baseline, no skips introduced to route
+      around the change (an xfail under option (a) is a deliberate, documented exception, not a
+      route-around)
+- [ ] Delivery Notice committed
+- [ ] Merged to `master` with explicit human merge authorization
+
+<!-- scoped context: docs/bugfixes/B3.1__spec__steering-note-id-allocation-unenforced.md -->
+---
+epic_id: B3.1
+phase_id: P11
+category: bugfix
+severity: medium
+discovered_date: 2026-08-01
+reported_by: Creation Chat (SN-28), at CFO direction
+status: open
+---
+
+# Bugfix B3.1 — Steering Note ID allocation is unenforced; nothing detects a duplicate `id:`
+
+## Problem
+
+Steering Note IDs are allocated by whichever agent writes the note, by reading prior notes and
+incrementing. There is **no registry, no allocation rule, and no test** — allocation works exactly as
+well as the author's attention. An audit of `.ai-project/artifacts/steering-notes/` (SN-28,
+2026-08-01) found **28 IDs across 23 notes with two double-claimed**: `SN-23` is claimed by both
+`2026-07-18__creation-chat__steering-note__reference-dont-display.md` and
+`2026-07-20__creation-chat__steering-note__P10-adoption-spine.md`; `SN-1` by both
+`2026-06-12__creation-chat__steering-note.md` and
+`2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`.
+
+`tests/` guards `.ai-project.yml` model-key divergence but **nothing guards artifact IDs**, so both
+collisions accumulated silently and are now cited by number in normative documents.
+
+## Impact
+
+- **Severity:** Medium. Limited immediate impact with a manual workaround (cite by date), but it
+  degrades quietly and the two existing collisions took no more than a two-day gap between sessions
+  to occur.
+- **Affected component:** `.ai-project/artifacts/steering-notes/` and everything that cites a Steering
+  Note by number — including `AI-OPERATING-GUIDELINES.md`, `artifact-communication-protocol.md`,
+  `chat-hierarchy.md`, `fleet-operator.md`, `fleet-operator-brief.md`.
+- **Affected users:** any agent or human resolving an `SN-<n>` citation. The observed worst case: a
+  reader following `AI-OPERATING-GUIDELINES.md`'s *"SN-23 Decision 2"* citation reaches
+  `chat-hierarchy.md`'s supersession notice for a **different** SN-23 Decision 2 and concludes that
+  platform agnosticism was superseded. It was not.
+
+**Scope note on severity.** SN-28 rates the overall concern **High**. That rating belongs to the
+SN-23 **citation trap**, which this bugfix does not touch — the citation fix, the namespace rule and
+the allocation rule are normative amendments and land in **P11's first milestone (M36)**, per the
+CFO's 2026-08-01 ruling. What this bugfix fixes is the **absence of enforcement**, which is Medium.
+
+## Root Cause
+
+Known. There is no enforcement mechanism of any kind — no allocation rule in the Steering Note
+template or `creation-chat-guide.md`, and no test asserting uniqueness. Correctness depends entirely
+on each author reading the directory carefully. Both observed collisions are what that looks like when
+attention lapses: one across a two-day gap between sessions, one from an entity (System HQ, scribing
+for Layer-8/CFO) that reasonably believed it was starting its own sequence.
+
+## Fix
+
+Add a test asserting **no duplicate `id:` across `.ai-project/artifacts/steering-notes/`**.
+
+- Parse the front-matter `concerns[].id` values of every `*steering-note*.md` in that directory.
+- Fail with the colliding ID and **every** file claiming it, so the failure message is actionable
+  without further investigation.
+- **Sub-IDs with letter suffixes are valid and must not be flagged.** `SN-12a` and `SN-12b` in
+  `2026-06-25__creation-chat__steering-note.md` are correctly-suffixed sub-IDs of a single concern.
+  An earlier SN-28 pass mis-flagged them as a collision; the mis-flag was a regex artifact
+  (`SN-[0-9]*` truncating the letter suffix), not a record defect. **Do not reintroduce that regex.**
+- Place it alongside the existing artifact tests (`tests/test_ongoing_artifacts.py`,
+  `tests/test_artifact_parser.py` are the nearest neighbours). Reuse the existing front-matter parsing
+  helper rather than writing a third one.
+
+**The two existing collisions will make this test fail on arrival.** That is expected and is not a
+reason to weaken the test. Two options, and the choice is the Coding Agent's:
+
+- **(a)** land the test **xfail/skip-with-reason**, referencing M36/E36.1–E36.2 as the fix, and have
+  M36 flip it to a hard failure as part of its DoD; or
+- **(b)** land the test hard-failing on a branch that is **not merged** until M36 clears the
+  collisions.
+
+**(a) is recommended** — it puts the guard in the repository immediately, which is the point of the
+hotfix, and gives M36 a mechanical, verifiable completion signal. Whichever is chosen, record the
+reasoning in the Delivery Notice.
+
+## Definition of Done
+
+- [ ] Test exists asserting no duplicate `id:` across `.ai-project/artifacts/steering-notes/`
+- [ ] Failure message names the colliding ID and every file claiming it
+- [ ] Letter-suffixed sub-IDs (`SN-12a`) pass, with a test case proving they do
+- [ ] The two known collisions (`SN-23`, `SN-1`) are handled per option (a) or (b) above, with the
+      choice and reasoning recorded in the Delivery Notice
+- [ ] No regressions — full suite green against the **366** baseline, no skips introduced to route
+      around the change (an xfail under option (a) is a deliberate, documented exception, not a
+      route-around)
+- [ ] Delivery Notice committed
+- [ ] Merged to `master` with explicit human merge authorization
+
+## Acceptance Criteria
+
+- Adding a note with an already-claimed `id:` to `.ai-project/artifacts/steering-notes/` **fails the
+  suite**, and the failure names both the ID and the competing files.
+- Adding a note with a letter-suffixed sub-ID of an existing concern **passes**.
+- No normative document is modified by this bugfix. **If a fix appears to require editing a governance
+  document, stop and escalate to HQ** — that item belongs to M36, not here.
+
+---
+
+## HQ Authorization
+
+**Authorized by HQ Chat, 2026-08-01**, under the CFO's hotfix classification recorded in SN-28
+("Resolved — before P11, or inside it? Both, split by kind"). Ruling:
+`.ai-project/artifacts/rulings/2026-08-01__ai-project-system-hq__ruling__p11-opening-and-sn-26-27-28-triage.md`,
+Decision 5.
+
+**Vehicle:** Bugfix Epic (`governance/systems/bugfix-epic-workflow.md`, `docs/bugfixes/README.md`) —
+**not** a PSG §8A unplanned branch, which is by definition a proposal with no authority, integrable
+only through a planned Epic. The Bugfix Epic is this repository's own governed expedited path,
+precedented by B4.1.
+
+**Branch:** `bugfix/B3.1` from `master`. **Merge target:** `master`, with explicit human merge
+authorization.
+
+**Executed by an Epic-mode Coding Agent, not by HQ.** `governance/systems/hq-chat.md` is unambiguous
+that HQ is not a Coding Agent and does not modify source files; a ruling that suspended that rule for
+its own convenience would be worth less than the test it produced. HQ authored this spec and this
+authorization — those are HQ artifacts. `tests/` is not.
+
+**The carve-out is bounded by a property, not by diff size.** This bugfix adds a test and changes no
+normative text. **The moment any part of it would edit a governance document, it leaves this bucket
+and goes to M36.**
+
+**No Deployment Authorization or post-mortem is required.** This project has no production deploy, and
+`medium` severity does not trigger the post-mortem requirement (`docs/bugfixes/README.md`). The
+Delivery Authorization ceremony is retired on the happy path (Creation Chat steering note,
+2026-07-12); the in-chat merge authorization is preserved unchanged.
+
+**Related, not part of this bugfix:** SN-28 Required actions 1–3 (namespace answer, SN-23 citation
+fix, allocation rule) and SN-28 Carry-Over 3 (whether rulings, escalation notices and the `GH-` series
+share this defect — **unaudited**). All are **M36** scope. See
+`docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md` §P11.1.
