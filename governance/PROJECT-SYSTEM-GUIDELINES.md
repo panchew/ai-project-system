@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 2.3.0  
-**Effective Date:** 2026-07-02  
+**Version:** 2.4.0  
+**Effective Date:** 2026-07-31  
 **Status:** Current  
 
 ---
@@ -604,6 +604,26 @@ Default-accept removes the *mandatory Review Decision artifact on the happy path
 
 > **History:** SN-13 (P5) established this model; it has governed every delivery since P5. The Review Decision and Epic Review Seal artifacts themselves are unchanged — default-accept changes *when* they are issued, not *what* they are. Codified by E25.2 (P6-M25); closes GH-10.
 
+### 11.6.1 HQ-Authored Deliveries — No Parent, Therefore No Default-Accept
+
+Default-accept is defined above at the **parent-chat → child gate**, and it names three: Phase accepts Milestone, Milestone accepts Epic, HQ accepts Phase. **HQ's own output has no row in that list, because HQ has no parent chat.**
+
+This section closes that gap. It governs any delivery **authored by HQ Chat itself** — rulings, progress digests, errata, and any governance edit HQ applies directly under a recorded exception.
+
+**Default-accept MUST NOT be applied to an HQ-authored delivery. Silence is never acceptance here.**
+
+The reason is structural, not a matter of caution. Default-accept is safe *because a parent chat reviews* — silence stands in for a review that actually happened at the level above. Above HQ there is no such level: the **Creation Chat holds no governance authority** (Seed Rule 3) and therefore cannot be the reviewer, and no other chat sits higher. Applying default-accept to HQ output would mean silence standing in for a review that never occurred and could not occur.
+
+**The designated reviewer for HQ-authored deliveries is Layer-8 (the CFO), and the review is a diff review.**
+
+- **Authorization is not review.** "You may merge this" is authorization; "I have read the change and it matches the expectation" is review. §11.6's two-gate framing already distinguishes them — gate (A) Layer-8 human review, gate (B) the acceptance artifact. For this one class, **gate (A) is mandatory rather than merely available**, and gate (B) does not apply at all.
+- **An HQ-authored PR merges only after the CFO has reviewed the diff and said so.** `cfo_review_gate` (`.ai-project.yml`; see `governance/systems/creation-chat-guide.md` "CFO PR Review Gate") remains the mechanism; this section makes the gate non-optional for this class regardless of that toggle's setting.
+- **HQ MUST NOT merge its own delivery on authorization alone**, and MUST state plainly in any such PR that HQ authored it and no chat-level reviewer exists for it.
+
+**Relationship to P9-GH-1 / P10-GH-9 — stated so this is not misread as closing them.** Those record the same authority class seen from the *child* side: a child chat taking merge authorization directly and bypassing its parent's Stage-2 review, with the Milestone and Phase starter templates still unpatched. This section addresses the *top* of the chain, where the problem is not a bypassed parent but the absence of one. **It closes neither.** The two are complementary halves of the same concern and both remain open.
+
+> **History:** Established by CFO direction, 2026-07-31 — *"I am that reviewer for you… this is the spot where it's worth I am the bottleneck."* Prompted by two HQ-authored PRs (#165, #166) merged on direct authorization with no independent reviewer, a fact recorded in both merge bodies at the time rather than normalized silently.
+
 ---
 
 ## 12. Delivery Notice (Mandatory)
@@ -949,7 +969,8 @@ Structure is leverage.
 ## Changelog
 
 | Version | Date | Change |
-|---|---|---|
+|---------|------|--------|
+| 2.4.0 | 2026-07-31 | Added **§11.6.1 "HQ-Authored Deliveries — No Parent, Therefore No Default-Accept."** §11.6 defines default-accept at the parent-chat → child gate and names three (Phase↔Milestone, Milestone↔Epic, HQ↔Phase); **HQ's own output had no row, because HQ has no parent chat.** Default-accept is safe *because a parent reviews* — silence stands in for a review that happened one level up. Above HQ no such level exists: the Creation Chat holds no governance authority (Seed Rule 3) and cannot be the reviewer. So default-accept MUST NOT apply to HQ-authored deliveries (rulings, digests, errata, direct governance edits), silence is never acceptance there, **Layer-8/the CFO is the designated reviewer, and the review is a diff review** — authorization ("you may merge") is explicitly distinguished from review ("I read it and it matches"). §11.6's gate (A) becomes mandatory for this one class; gate (B) does not apply. HQ MUST NOT merge its own delivery on authorization alone and MUST state in the PR that no chat-level reviewer exists for it. Explicitly does **not** close P9-GH-1 or P10-GH-9, which record the same authority class from the child side (bypassed parent) rather than the top (absent parent). No existing rule changed; §11.6's model for the three parent→child gates is untouched. Established by CFO direction 2026-07-31 after PRs #165/#166 merged with no independent reviewer. |
 | 2.3.0 | 2026-07-02 | Added §11.6 "Default-Accept (SN-13)": the normative acceptance model at every parent-chat → child gate — **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) is accepted **by silence**, no Review Decision artifact, the merge + in-chat acknowledgment is the acceptance record; **exception path** = a Review Decision (and Epic-level Epic Review Seal) is issued only when a delivery is not clean. Two-gate framing made explicit: **Layer-8 human review preserved** (§11.5 "Human Review" and "Humans OWN review" stand); only the acceptance-artifact question changes. Reconciled the always-review surfaces: §11.5 flow last step + Key Rules (duplicate rule numbering also fixed — rules now 1–10), §12 exception-path sentence, §13A/§13B "issues … Review Decisions" clauses, §1A gate-scoping note (human-review steps preserved verbatim); wired §5C Step 6's by-reference pointer to §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
 | 2.2.0 | 2026-07-02 | Added §5C "Phase Closure": canonical, mandatory phase-closure sequence mirroring §1A/§5B — an ordered 9-step process with **README update, version bump, and git tag as mandatory automatic steps** (no out-of-band Steering Note required to close a phase); "phase complete vs. fully closed (delivered)" distinction; consolidation target `phase/P<id>` → `master`; phase-closure declaration as the recorded output, formalized as `governance/templates/phase-closure-declaration.md`. Reconciled the §5B consolidation-rules line that called phase closure "future work" to point at §5C. Closure acceptance stated by reference to SN-13 default-accept only (normative codification is E25.2). Applies P6 forward. Fixes P6-GH-12; E25.1 (P6-M25). |
 | 2.1.0 | 2026-06-23 | Renamed §13A "Phase Planning Chat Starter" and §13B "Milestone Planning Chat Starter" (removed "Execution" misnomer). Added Phase/Milestone Chat role summaries to §13A/13B with references to AI-OPERATING-GUIDELINES.md §3.6–3.7. Removed duplicate §13A section. Fixes P5-GH-7: "Execution" terminology was being copied into Phase/Milestone starters, causing generated starters to carry Epic-level rules. |
