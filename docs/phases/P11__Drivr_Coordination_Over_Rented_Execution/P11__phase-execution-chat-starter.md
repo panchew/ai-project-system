@@ -179,6 +179,16 @@ review and a closure record — before any Drivr code exists.
    position and nothing else.
 2. **E36.1 lands before E36.2.** The rule is applied before anything is renumbered. **No epic
    renumbers anything on its own initiative.**
+2a. **B3.1 has landed (merged `65f83fe`, 2026-08-02) and it obliges M36. Carry this into the
+   milestone's Definition of Done — it is not optional and it will break the suite if missed.**
+   `tests/test_steering_note_id_uniqueness.py` guards the corpus, and its real-corpus check is
+   marked `@pytest.mark.xfail(strict=True)` because `SN-23` and `SN-1` are double-claimed **today**.
+   `strict=True` means that the moment E36.1/E36.2 clear those collisions the check **XPASSes, and a
+   strict xfail turns an unexpected pass into a failure.** **M36 must remove the xfail marker in the
+   same epic that clears the last collision**, leaving the check as a plain passing test. This is
+   deliberate: it converts "did the cleanup actually happen?" from a judgment call into a mechanical
+   signal. A red suite here means the cleanup succeeded and the marker was left behind — not that
+   something broke.
 3. **SN-23 is NOT renumbered.** Citations carry the date: `SN-23 (2026-07-18)` = reference-first /
    platform agnosticism; `SN-23 (2026-07-20)` = the P10 adoption spine. The separating rule is
    normative and must be recorded: **a bookkeeping defect never rewrites a citation in a normative
@@ -217,8 +227,14 @@ the SN-1 ruling
 (`.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__system-hq-routing-codification.md`);
 the P11 opening ruling
 (`.ai-project/artifacts/rulings/2026-08-01__ai-project-system-hq__ruling__p11-opening-and-sn-26-27-28-triage.md`);
-phase spec §P11.1; `docs/bugfixes/B3.1__spec__steering-note-id-allocation-unenforced.md` (authorized
-separately, may already have landed — **do not re-scope it into M36**).
+phase spec §P11.1 (**v1.0.1** — its §P11.2 technical note was corrected 2026-08-02 with measured
+Ollama context data; the earlier 4,096-token claim was false, and the reproduction method is
+recorded there);
+`docs/bugfixes/B3.1__spec__steering-note-id-allocation-unenforced.md` + its Delivery Notice —
+**delivered and merged**, see constraint 2a; the engine-comparison field evidence
+`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md` (relevant to M37/M38,
+**not** to M36). **Do not re-scope B3.1 itself into M36** — it is delivered. M36's only
+obligation toward it is constraint 2a: remove the xfail marker when the last collision clears.
 
 ---
 
