@@ -150,6 +150,20 @@ review and a closure record — before any Drivr code exists.
 
 **Branch:** `milestone/M36` from `phase/P11` (which you branch from master)
 
+**Execution posture for M36's epics: manual / paid frontier. CFO decision, 2026-08-02 — binding.**
+Record it in the M36 milestone spec and carry it into every Epic Execution Chat Starter the
+Milestone Chat writes (`Execution Mode: manual`, `models.epic_manual`). **Do not route M36's epics
+to `local:`.**
+
+The reason, so it is not mistaken for a general ruling about local inference: M36's epics are
+**dense-prose governance amendments** — cross-file citation consistency, a byte-level verbatim
+freeze, reconciling three surfaces to one normative statement. The 2026-08-01/02 engine comparison
+measured `qwen3-coder:30b` at its weakest on exactly that shape (field evidence:
+`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`). **This is a judgment
+about the work's shape, not a restriction on the execution matrix** — the matrix still permits
+agentic-or-manual and local-or-remote at the Epic, and **M37's code-shaped epics are where the local
+lane gets tested.**
+
 **Indicative Epics (5):**
 
 - **E36.1 — Steering Note ID allocation rule + SN-23 date-qualified citations.** Apply the
