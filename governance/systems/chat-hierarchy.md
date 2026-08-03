@@ -114,7 +114,7 @@ Manual-Only, Permanently" below.
 *(Added P10-M35-E35.4, 2026-07-30.)*
 
 HQ ratified the execution matrix on 2026-07-30 (**HQ Ruling on SN-25, Decision 4**), restoring the
-E31.1 baseline recorded above at Phase and Milestone after SN-23 had narrowed P10's opening posture
+E31.1 baseline recorded above at Phase and Milestone after SN-23 (2026-07-20) had narrowed P10's opening posture
 to Manual/Paid from Creation through Milestone. The table is reproduced here exactly as ratified:
 
 | Level | Execution Mode | Inference locality |
@@ -162,10 +162,10 @@ ratification and is unmodified by it.** The matrix restores a *possibility*, not
 or Milestone agentic run can be dispatched today, and nothing in this repository runs differently
 because the matrix was recorded.
 
-**SN-23 Ratified Decision #2 is superseded on the Execution Mode axis only.** Decision 2's own text
+**SN-23 (2026-07-20) Ratified Decision #2 is superseded on the Execution Mode axis only.** Decision 2's own text
 is preserved verbatim in the P10 phase spec's Ratified Decisions and is **not reopened**. Its
 **Execution Mode axis is superseded** — Phase and Milestone may now run agentically or manually,
-restoring the P9-M31-E31.1 baseline that SN-23 had narrowed for P10's start. Its **locality axis
+restoring the P9-M31-E31.1 baseline that SN-23 (2026-07-20) had narrowed for P10's start. Its **locality axis
 stands**, with Milestone × local inference now under a directed evidence evaluation (P10-M35-E35.5)
 rather than settled either way: that cell is neither opened nor closed, and "under evaluation"
 records that the question is live and directed, not that it is unanswered by neglect. The

@@ -32,6 +32,22 @@ decisions:
     e.g. 2026-06-19__creation-chat__steering-note.md
   Storage: .ai-project/artifacts/steering-notes/
 
+  ID ALLOCATION — how to pick your SN-number (normative):
+  - The next ID is the HIGHEST EXISTING ID IN THE DIRECTORY PLUS ONE, regardless
+    of which chat issues the note. One sequence per steering-note directory.
+    (HQ Ruling 2026-08-01, Decision 3.)
+  - Sub-IDs keep the existing letter-suffix form (SN-12a, SN-12b). A sub-ID is a
+    DISTINCT ID, not a collision — it does not consume a new number.
+  - WHY, so the rule survives an edit that a bare rule would not: provenance is
+    ALREADY recorded, in `issuer_chat` and in the filename slug. The identifier
+    therefore names POSITION AND NOTHING ELSE. It does not encode who issued the
+    note, and must not be made to.
+  - The rule is mechanically checked by tests/test_steering_note_id_uniqueness.py
+    (bugfix B3.1) — it is enforced, not merely stated.
+  - If you find a collision that already exists, do NOT renumber on your own
+    initiative. See governance/systems/creation-chat-guide.md, "Steering Note ID
+    Allocation", for what a collision does and does not license.
+
   Front-matter fields:
   - artifact_type:    always `steering_note`
   - artifact_version: schema version (currently 1.0)
