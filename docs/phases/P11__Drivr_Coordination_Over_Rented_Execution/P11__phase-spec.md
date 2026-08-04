@@ -4,7 +4,7 @@ name: "Drivr: Coordination over Rented Execution"
 status: scoping
 start_date: 2026-08-01
 planned_end_date: 2026-08-29
-version: 1.0.1
+version: 1.0.2
 ---
 
 # Phase P11: Drivr — Coordination over Rented Execution
@@ -419,6 +419,14 @@ the machine, and invokes one CLI engine through an interface a second engine cou
 - **E37.5 — Milestone-context evidence for `qwen3-coder:30b`.** Fourth axis beside G-P4-a/b/c.
   Evidence only; does not decide row P4.
 
+- **E37.6 — System-tier versioning convention (P10-GH-8).** *(Added v1.0.2 per HQ Ruling
+  2026-08-04, resolving the M36 escalation.)* Give every document in `governance/systems/` a
+  `version` field and a `## Changelog`: seed the **ten** currently-unversioned documents at a
+  starting version with a first row recording that the convention was adopted, pointing at git for
+  prior history; leave the **seven** that already comply untouched. **No backdated reconstruction —
+  permanently out of scope, not deferred.** Mechanical by construction. Independent of E37.1–E37.5;
+  the Phase Chat sequences it anywhere in M37.
+
 **Sequencing:** E37.1 first — everything else needs the repository. E37.2 and E37.3 may run in
 parallel. This is the phase's largest milestone; **the Phase Chat may split it**, preserving E37.1's
 position and the M37 → M38 boundary.
@@ -686,7 +694,7 @@ level always held. **PSG §11.6.1** — the CFO is the mandatory diff reviewer f
 | llama.cpp trial | **CLOSED by decision**, not parked; trigger void | Out of Scope |
 | SN-26 | **Recorded, placed in M36**, shaped nothing in the spine | P11.1 |
 | SN-28 Carry-Over 3 (unaudited families) | **Bounded audit in M36. Reports; does not fix.** Escalates if it reaches the normative tier | P11.1 |
-| P10-GH-8 | **Not mandated.** Phase Chat may propose folding into M36 | Out of Scope |
+| P10-GH-8 | ~~Not mandated; Phase Chat may propose folding into M36~~ → **SCHEDULED as M37/E37.6** (HQ Ruling 2026-08-04). Its revisit trigger fired inside M36. Convention decided once for all 17 documents, forward-looking only; **not** a B-series bugfix; M36 stays at four items | P11.2 |
 | P9-GH-3, P10-GH-3/4/6/10, P8-GH-2, ComfyUI | **Parked** on existing triggers, restated | Out of Scope |
 | Seven SN-27 `[PROPOSED]` items | **Returned to the CFO unacted.** Items 5/6/7 independently re-decided on HQ's own authority | Open Items |
 
@@ -712,5 +720,6 @@ different authority. That distinction is deliberate.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.0.2 | 2026-08-04 | **P10-GH-8 scheduled, HQ Ruling 2026-08-04**, resolving the P11-M36 escalation (M36 Milestone Chat → Phase Chat → HQ). P10-GH-8's own revisit trigger fired inside M36: E36.1 added a 76-line normative section to `creation-chat-guide.md`, a document with no `version` and no `## Changelog`, and could not record it. Verified independently: **17** documents in `governance/systems/`, **7** compliant, **10** not — the set has not shrunk in five weeks. **The convention is decided once here** for all 17: `version` + `## Changelog`, unversioned documents seeded with a first row pointing at git for prior history, **no backdated reconstruction (permanently out of scope)**. **Vehicle declined:** not a B-series bugfix — it would edit ten governance documents, and the SN-28 Decision 5 carve-out is bounded at *"the moment an item would edit a governance document it leaves the bucket"*; nothing here is urgent and the escalation states twice that nothing is blocked. **Placement: M37 as standalone epic E37.6**, joining P10-GH-5 and conditional P10-GH-1 — M37 is already this phase's home for P10-GH hygiene. **M36 stays at four items** (Option A declined by the Phase Chat under its own authority, affirmed). Interim: M36's Closure Declaration MUST record its two unrecordable amendments explicitly. Touches §Milestones→M37 (+E37.6), §HQ Triage Decisions (P10-GH-8 row). No milestone ordering, decision, or scope boundary otherwise changes. |
 | 1.0.1 | 2026-08-01 | **Factual correction, HQ, before any Phase Chat read the spec.** v1.0.0's binding technical note to the OpenCode adapter stated that Ollama defaults every model to a 4,096-token context. **It is false on this host.** The claim was inherited from the 2026-08-01 HQ Chat Opener and passed into this spec unverified — an HQ error, recorded rather than quietly overwritten. Measured against Ollama **0.30.0**: `qwen3-coder:30b` and `qwen2.5-coder:7b` both load at **32,768**, a 20,530-token prompt recovers a marker planted at position 0 with no options set, and the `/v1` endpoint **silently ignores `options`** (forcing `num_ctx=2048` changed nothing). The note is replaced with the measurements, the reproduction method, and the **real** caution: `opencode.json` declares 262,144 against 32,768 loaded — an **8× overpack** that bites long sessions, so the adapter must derive its declared limit from `/api/ps`. Touches §P11.2 (technical note; `local-agent-runner` transport difference recorded as **not** an E37.4 retention argument), §Milestones→M37 (E37.2), §Dependencies (Ollama). **No milestone, ordering, decision, or scope boundary is changed** — M38 still gates M39 and P10-GH-7 stands untouched, its E33.2/E33.4 evidence unaffected (those runs did not truncate). |
 | 1.0.0 | 2026-08-01 | Initial P11 phase spec. Four milestones (M36 Record Integrity and Documentation Hygiene — CFO-decided first; M37 Drivr Inception, Fleet Registry and Execution Adapter Surface; M38 Trustworthy Completion Signal; M39 Coordination — Scheduler, Derived Gate Queue and Thin Surface), ~18 epics, binding order M36 → M37 → M38 → M39. Scoped by SN-27 + Amendment 1 (spine: Drivr rents both halves — an app is made AI-powered by calling a CLI tool that owns the inference; execution is a pluggable adapter surface; three fleet states; scheduler; competing-model review findings-only; the leverage case as a choice). SN-26 and SN-28 placed in M36 per CFO ruling; the namespace question answered by HQ (one sequence per directory); SN-23 date-qualified rather than renumbered. P10-GH-7 in scope and gating M39; P10-GH-5 folded into M37; P9-GH-1/P10-GH-9 owned at M39; competing-model review un-parked. llama.cpp recorded **closed**, not parked. Four SN-27 proposals returned to the CFO with recorded fallbacks. |
