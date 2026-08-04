@@ -98,7 +98,7 @@ review back-test — is evidence about *local agentic execution* and survives an
 | **Archived** | Not planned to ever be touched again — though it can be brought back to life. |
 
 **The orchestrator schedules agentic runs to avoid overloading the system.** This is the concrete
-form of SN-23 Ratified Decision #7 (*scheduler only when contention bites*): P10 ran the local
+form of SN-23 (2026-07-20) Ratified Decision #7 (*scheduler only when contention bites*): P10 ran the local
 lane by hand and the contention is real and measured — one GPU, 16 GB VRAM shared with ComfyUI,
 one heavy consumer at a time, `qwen3-coder:30b` already partially offloading to RAM.
 

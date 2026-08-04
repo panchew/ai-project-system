@@ -94,6 +94,80 @@ Write one:
 
 ---
 
+## Steering Note ID Allocation
+
+*(Added P11-M36-E36.1, 2026-08-03, recording SN-28 Required actions 1–3 and the
+HQ Ruling 2026-08-01, Decisions 3 and 4.)*
+
+### The allocation rule
+
+**The next ID is the highest existing ID in the steering-note directory plus one,
+regardless of which chat issues the note.** There is **one sequence per
+steering-note directory** — HQ, Creation Chat, and any other issuer draw from the
+same run of numbers (HQ Ruling 2026-08-01, Decision 3).
+
+**Sub-IDs keep the existing letter-suffix form** (`SN-12a`, `SN-12b`). A sub-ID is
+a **distinct ID, not a collision**, and it does not consume a new number.
+
+**The reason, recorded alongside the rule.** Provenance is **already** recorded —
+in the `issuer_chat` front-matter field and in the filename slug. The identifier
+therefore **names position and nothing else.** It does not encode who issued the
+note, and must not be made to. A rule whose reason is on the record survives an
+edit that a bare rule does not.
+
+The rule is mechanically checked by `tests/test_steering_note_id_uniqueness.py`
+(bugfix B3.1). An author can rely on it being **enforced, not merely stated** —
+but the guard catches a collision after the fact; it does not choose your ID for
+you. Apply the rule when you file.
+
+### When allocation has already failed: the separating rule
+
+A collision that already exists is a **bookkeeping defect**. Remediating it is
+governed by one rule:
+
+> **A bookkeeping defect never rewrites a citation in a normative document.**
+
+That resolves into two cases:
+
+- **Cited only in project-internal, non-normative artifacts** (steering notes,
+  rulings, digests, closure declarations, reference packets) → **renumber.**
+  Nothing load-bearing points at the ID, and the record is cheaper to correct
+  than to annotate.
+- **Cited in the normative tier** (`governance/`) → **date-qualify the
+  citations** — `SN-23 (2026-07-18)` — and **leave the collision visible rather
+  than laundered.** The normative tier's citations are load-bearing: a renumber
+  silently invalidates every document that points at the old ID, including
+  documents outside this repository.
+
+**No chat renumbers on its own initiative.** Renumbering is a ruled act, not a
+tidy-up an author performs while passing through.
+
+### The worked case: `SN-1` is renumbered, `SN-23` is not
+
+This asymmetry is a **principle applied**, not an inconsistency:
+
+- **`SN-1`** is cited only in project-internal artifacts, so the separating rule
+  sends it to *renumber*.
+- **`SN-23`** is cited across the normative tier, so the separating rule sends it
+  to *date-qualify*.
+
+**Both 2026-07-18 and 2026-07-20 keep `id: SN-23` permanently, by decision** (HQ
+Ruling 2026-08-01, Decision 4). This is a **ratified, deliberate outcome — not
+unfinished cleanup.** Do not "fix" it: renumbering either note would invalidate
+every citation that was corrected to disambiguate them.
+
+The two meanings, for anyone following a citation:
+
+| Citation | Note | Subject |
+|---|---|---|
+| `SN-23 (2026-07-18)` | `…__reference-dont-display.md` | reference-first artifact handoff / platform agnosticism |
+| `SN-23 (2026-07-20)` | `…__P10-adoption-spine.md` | the P10 adoption spine |
+
+Against B3.1's guard, the surviving `SN-23` collision is a **ratified, allowlisted
+exception**, not an outstanding defect.
+
+---
+
 ## When to Expect a Progress Digest
 
 The Creation Chat receives a Progress Digest (HQ → Creation Chat) using
@@ -147,8 +221,8 @@ matter or any other.
 with what it sees is **issue a Steering Note**
 ([`../templates/steering-note.md`](../templates/steering-note.md)) —
 direction-setting, not resolution. That is the same channel described in "When to
-Write a Steering Note" above, and it is how SN-23, SN-24 and SN-25 themselves
-arrived. Naming the outlet explicitly is what keeps awareness from drifting into
+Write a Steering Note" above, and it is how SN-23 (2026-07-20), SN-24 and SN-25
+themselves arrived. Naming the outlet explicitly is what keeps awareness from drifting into
 *"the Creation Chat unblocked it"* — a right with no outlet decays into an
 improvised one.
 
