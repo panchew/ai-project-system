@@ -16,6 +16,15 @@ purpose: P11 scoping handoff — P10 is closed; HQ cannot self-scope a phase
 Creation Chat sets the spine — so this digest exists to make that session start from the
 converged state rather than reconstruct it.
 
+> **Amendment 2026-08-04 (P11-M36-E36.2) — `SN-1` in this digest was renumbered to `SN-29`.**
+> Every `SN-1` below (Ruling summary #5, Open Decision #3, Open Decision #5) refers to the
+> Layer-8/CFO Steering Note
+> (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`),
+> which was filed claiming an ID already held by the 2026-06-12 Creation Chat note. **HQ Ruling
+> 2026-08-01, Decision 3** ruled it misnumbered and ordered the renumber to `SN-29`. The text is
+> left as issued rather than rewritten — it was correct at its date, and recording the rename here
+> keeps it legible *as* a rename. Nothing this digest reports is changed.
+
 ---
 
 ## Phase Status
