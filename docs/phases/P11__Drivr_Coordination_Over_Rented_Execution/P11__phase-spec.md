@@ -4,7 +4,7 @@ name: "Drivr: Coordination over Rented Execution"
 status: scoping
 start_date: 2026-08-01
 planned_end_date: 2026-08-29
-version: 1.0.3
+version: 1.1.0
 ---
 
 # Phase P11: Drivr — Coordination over Rented Execution
@@ -35,18 +35,22 @@ two-lane roster collapsed to one tool. **The roster changed; the architecture di
 a pluggable adapter surface is for, and it is the strongest available evidence that the surface, not
 the engine, was the right thing to commit to.
 
-Four milestones, in binding order:
+Five milestones, in binding order:
 
 1. **M36 — Record Integrity and Documentation Hygiene.** CFO-decided as the phase's first milestone.
    Four self-contained items with zero Drivr dependency: SN-28's namespace/citation/allocation fixes,
    SN-26's re-instantiation reconciliation, the SN-1 System HQ codification, and P10-GH-2's
    re-diagnosis. The cleanup lands **before any Drivr code exists** *and* lands **governed**.
-2. **M37 — Drivr Inception, Fleet Registry, and the Execution Adapter Surface.** The Drivr repository
+2. **M37 — Corpus Record Conventions.** Inserted 2026-08-05 at CFO direction. Two named items the
+   corpus needs to describe itself honestly: a `version` and `## Changelog` on every
+   `governance/systems/` document, and citation forms that resolve to exactly one artifact. Contents
+   **fixed at those two**, as M36's were fixed at four.
+3. **M38 — Drivr Inception, Fleet Registry, and the Execution Adapter Surface.** The Drivr repository
    does not exist yet. Create it, enroll it, give it a three-state fleet registry over every project
    on the machine, and give it one working CLI adapter (OpenCode) behind a surface built for more.
-3. **M38 — Trustworthy Completion Signal (P10-GH-7).** The phase's load-bearing technical risk, and
+4. **M39 — Trustworthy Completion Signal (P10-GH-7).** The phase's load-bearing technical risk, and
    the one thing renting an engine does *not* solve. Sequenced **before** anything that dispatches.
-4. **M39 — Coordination: Scheduler, Derived Gate Queue, and the Thin Surface.** The payload: a
+5. **M40 — Coordination: Scheduler, Derived Gate Queue, and the Thin Surface.** The payload: a
    scheduler that keeps the serialized lane busy without overloading the machine, a gate queue
    *derived* from governance state, a headless-first surface, and competing-model PR review that
    surfaces findings and holds no authority.
@@ -177,9 +181,52 @@ absorbs.
 deliveries** (Mermaid, fenced, no ComfyUI) — showing which documents were touched, what changed in
 each named to the section, what was deliberately frozen, and where authority flowed.
 
-### P11.2: Drivr Inception, Fleet Registry, and the Execution Adapter Surface (M37)
+### P11.2: Corpus Record Conventions (M37)
 
-**Drivr does not exist.** M37 creates it, enrolls it under this framework at v7.1.0 using M33/E33.1's
+**Inserted 2026-08-05 at CFO direction**, restructuring the phase from four milestones to five. The
+reason is recorded because the restructure was a correction to HQ's own drift: M38 had accumulated
+**seven** epics, four of them carry-forward hygiene HQ routed there one ruling at a time. *"The
+milestone with room"* had become *"the milestone things get put in"* — a pattern HQ named in the
+2026-08-05 ruling and constrained itself against, and which the CFO then resolved structurally rather
+than by further self-restraint.
+
+**Two named items, and the contents are fixed at them** — the same discipline the CFO applied to M36.
+**Not** a home for the parked `P10-GH-4`, `P10-GH-6` or `P10-GH-10`; adding to it requires a ruling,
+not a passing judgment. Without that fence the restructure moves the problem instead of fixing it.
+
+**1. The system-tier versioning convention (P10-GH-8).** Ten of seventeen `governance/systems/`
+documents carry neither a `version` field nor a `## Changelog`, and the set has not shrunk in five
+weeks — new documents are created with the convention, existing ones never gain it. E36.1
+demonstrated the cost inside one commit: **three amendments recorded with full provenance, two with
+none**, by one author under one spec. Every document gains both; the ten unversioned are seeded
+forward-looking with a row pointing at git for prior history. **No backdated reconstruction —
+permanently out of scope.**
+
+**2. Artifact-ID citation forms.** Not an ID collision — the `GH-` namespace held at 38 live IDs
+across six phases. A **citation-form** failure with SN-23's reader-level consequence: a shorthand
+resolving to more than one artifact, in the normative tier. The bare `GH-10` at
+`PROJECT-SYSTEM-GUIDELINES.md:605` is the sole namespace-stripped `GH-<n>` in the corpus, sitting in
+the framework's highest-authority document and ambiguous between two live items. Alongside it: `GH-`
+citations carry the phase prefix; escalation notices are cited by full filename, never by milestone
+key; and the `GH-` prefix names the **phase that filed it**, permanently.
+
+**Why here and not later.** Both are latent traps that compound with every amendment, and M36
+demonstrated the compounding inside a single milestone. Nothing in M38–M40 depends on either, so
+placement is a judgment about record integrity rather than about dependency — the same judgment that
+put M36 first.
+
+**What this costs, stated plainly.** Two of five milestones in a phase named for Drivr are
+documentation hygiene, and Drivr's first line of code moves out by one milestone. That is a real
+price against the phase's own leverage bar — *a way of working that transfers professionally* is
+served by Drivr existing, not by a perfectly versioned corpus. It is accepted deliberately: the items
+are small, they compound if left, and a phase about coordination over a governance record is poorly
+served by a governance record that cannot state what changed.
+
+---
+
+### P11.3: Drivr Inception, Fleet Registry, and the Execution Adapter Surface (M38)
+
+**Drivr does not exist.** M38 creates it, enrolls it under this framework at v7.1.0 using M33/E33.1's
 enrolled-project procedure, and gets it to the point where it can invoke one CLI engine and read the
 fleet.
 
@@ -206,7 +253,7 @@ successful only if a second adapter could be added without touching the coordina
 > context. And **the `/v1` OpenAI-compatible endpoint silently ignores `options` entirely**: forcing
 > `num_ctx=2048` changed nothing, so OpenCode cannot set the loaded context through that transport
 > and does not need to. (`local-agent-runner`'s native `/api/chat` *does* honour `options` — a real
-> transport difference, but **not** a retention argument for E37.4, since the default is already
+> transport difference, but **not** a retention argument for E38.4, since the default is already
 > correct.)
 >
 > **The surviving caution is an 8× overpack, and it is the one to build against.** `opencode.json`
@@ -224,7 +271,7 @@ successful only if a second adapter could be added without touching the coordina
 (A1.2), and it is **not** a judgment on the work: P9/P10's local-inference evidence — the runtime
 decision, the 14b-vs-30b model-tier finding, the blinded review back-test — was evidence about *local
 agentic execution* and stands whatever happens to the engine that produced it. The assessment **bar**
-is a returned proposal (see Open Items); if the CFO does not set one, M37 records the two candidate
+is a returned proposal (see Open Items); if the CFO does not set one, M38 records the two candidate
 capabilities worth checking — its **library entry point** (`run(task, tools, model)` with in-process
 tool handlers) and its **JSON-schema argument coercion** for models that mistype tool arguments —
 tests whether OpenCode's `serve` mode covers them, and reports **without retiring anything**.
@@ -258,10 +305,10 @@ the context of a **milestone**?* This is a **fourth axis** beside `model-routing
 existing gates — G-P4-a (measured prescription variance), G-P4-b (unassisted search and
 absence-detection over a real branch), G-P4-c (tool-using verification before ruling) — testing
 **capacity at scale**, which E35.5's blinded-packet method did not test. **Row P4's 2026-07-31 ruling
-is not reopened, and M37 does not decide it.** M37 produces the measurement; a further HQ call decides
+is not reopened, and M38 does not decide it.** M38 produces the measurement; a further HQ call decides
 the row.
 
-### P11.3: Trustworthy Completion Signal (M38)
+### P11.4: Trustworthy Completion Signal (M39)
 
 **The one thing renting does not solve, and the phase's load-bearing technical constraint.**
 
@@ -277,27 +324,27 @@ command does not await the event loop tracking error state (`anomalyco/opencode`
 A1.5 sharpens the consequence: if OpenCode becomes the sole engine, the failure mode **concentrates
 in a dependency the CFO does not own** — better for diagnosis, worse for control.
 
-**So M38's deliverable is not "fix the exit code."** It is **a completion judgment that does not rest
+**So M39's deliverable is not "fix the exit code."** It is **a completion judgment that does not rest
 on the exit code alone**, plus the first captured `epic_qa` runs. What a trustworthy judgment is built
 from is the Milestone Chat's design decision — transcript inspection, repository/artifact state
 delta, governance-state verification, a QA-role second pass, or a combination. What is **binding** is
 that the judgment must be **measured against the known cases**: E33.2 Run A must read as *did not
 complete*, and E33.4 must read as *completed*.
 
-**M39 cannot begin until M38 delivers.** A scheduler dispatching unattended runs, and a gate queue
+**M40 cannot begin until M39 delivers.** A scheduler dispatching unattended runs, and a gate queue
 derived from what governance says is outstanding, both depend on knowing whether a run finished,
 stalled, or failed confidently wrong. Building either over the current signal yields **constant false
 escalations** (the human becomes the bottleneck again, worse than before) or **silent no-ops that read
 as success**. M35's handback rule has had no detector beneath it in either engine since the day it was
-recorded; M38 is where that stops being true.
+recorded; M39 is where that stops being true.
 
 **Named, not scoped: P10-GH-10.** A ~10%-flaky `tests/test_artifact_router.py::test_daemon_extensions_error_branches`
-weakens "full suite green" as evidence, and M38's evidence is suite-shaped. Flagged for the Phase
+weakens "full suite green" as evidence, and M39's evidence is suite-shaped. Flagged for the Phase
 Chat's awareness; not this milestone's job.
 
-### P11.4: Coordination — Scheduler, Derived Gate Queue, and the Thin Surface (M39)
+### P11.5: Coordination — Scheduler, Derived Gate Queue, and the Thin Surface (M40)
 
-The payload, gated on M38.
+The payload, gated on M39.
 
 **The scheduler.** *The orchestrator schedules agentic runs to avoid overloading the system* (SN-27
 decision 6). This is the concrete form of **SN-23 (2026-07-20) Ratified Decision #7** — *scheduler
@@ -326,7 +373,7 @@ at least one competing model, looking closely for **performance, security, and s
 > anything.** No finding from any model carries authority, and no volume of agreement between models
 > converts into one. This is *mode is not authority* applied to a new participant class.
 
-**P9-GH-1 / P10-GH-9 get an owner here.** M39 is the milestone that first wires Phase/Milestone
+**P9-GH-1 / P10-GH-9 get an owner here.** M40 is the milestone that first wires Phase/Milestone
 agentic dispatch — which is P10-GH-9's own recorded trigger. P9-GH-1's merge-authorization-routing
 guard is patched at Epic level only; the Milestone and Phase starter templates remain unpatched. While
 Phase and Milestone ran manual by fixed posture, a human sat at those gates **by construction**; the
@@ -343,13 +390,13 @@ without addressing it is the exact combination P10-GH-9 was filed to prevent.**
   not deferred. The llama.cpp + Qwen3.6 Q8_0 trial's Mac-class-hardware trigger is **void**; the item
   does not carry forward and no future phase re-inherits it. **Ollama is settled, not provisionally
   chosen.**
-- **Deciding `model-routing-policy.md` row P4.** M37 gathers milestone-context evidence as a fourth
+- **Deciding `model-routing-policy.md` row P4.** M38 gathers milestone-context evidence as a fourth
   axis beside G-P4-a/b/c. **The 2026-07-31 ruling is not reopened**, and the decision is a further HQ
   call on the evidence.
 - **Push notifications and WhatsApp.** Deferred under SN-24, unchanged.
 - **Approval by chat reply.** Prohibited, not deferred. Signed one-time link only.
 - **Drivr executing fleet-state transitions.** A returned proposal (Drivr proposes, the CFO
-  transitions) and therefore **not** assumed. Until the CFO rules, M37 builds the registry with
+  transitions) and therefore **not** assumed. Until the CFO rules, M38 builds the registry with
   transitions as a **recorded human action**; nothing automatic.
 - **Any expansion of System HQ authority.** M36's codification records D1–D3 as practice already in
   use. The SN-21/SN-22 pin — System HQ is not a "mighty governing System Chat" — stands.
@@ -398,81 +445,94 @@ without addressing it is the exact combination P10-GH-9 was filed to prevent.**
 Mermaid diagram per `hq-chat.md` "Review Diagram on HQ Rulings" — documents touched, what changed named
 to the section, what was frozen, where authority flowed. Fenced, in-repo, no ComfyUI.
 
-### M37: Drivr Inception, Fleet Registry, and the Execution Adapter Surface
+### M37: Corpus Record Conventions
+
+**Goal:** Decide and apply the corpus's own metadata conventions once, so the record can state what
+changed and citations resolve to exactly one artifact.
+
+**Contents are FIXED at the two named items below** — CFO-directed, 2026-08-05, on the same principle
+that fixed M36 at four. **This milestone is not a home for the parked `P10-GH-4`, `P10-GH-6` or
+`P10-GH-10`.** Without that fence the restructure would move the "milestone with room" problem rather
+than fix it.
+
+**Indicative Epics:**
+- **E37.1 — System-tier versioning convention (P10-GH-8).** *(HQ Ruling 2026-08-04.)* Give every
+  document in `governance/systems/` a `version` field and a `## Changelog`: seed the **ten**
+  currently-unversioned documents at a starting version with a first row recording that the
+  convention was adopted, pointing at git for prior history; leave the **seven** that already comply
+  untouched. **No backdated reconstruction — permanently out of scope, not deferred.** Mechanical by
+  construction. **Its seeding row for `chat-hierarchy.md` must be written from the 2026-08-05
+  erratum, not from Decision 5's count** — M36 amended that document once, which Decision 5 omitted.
+- **E37.2 — Artifact-ID citation forms (`GH-`, escalation notices).** *(HQ Ruling 2026-08-05.)*
+  Disambiguate the bare `GH-10` at `PROJECT-SYSTEM-GUIDELINES.md:605` to `P6-GH-10` — the sole
+  namespace-stripped `GH-<n>` in the normative corpus; record that `GH-` citations in `governance/`
+  carry the phase prefix; record that escalation notices are cited by **full filename**, never by
+  milestone key; and record that the `GH-` prefix names the **phase that filed it**, permanently,
+  with `P6-GH-10…15` / `P7-GH-16…21` as **ratified historical exceptions that are not renumbered**.
+
+**Sequencing:** independent of each other and of everything downstream; nothing in M38–M40 depends on
+either. Placed here rather than later because both are latent citation and provenance traps that
+compound with every amendment, and M36 demonstrated the compounding inside a single milestone.
+
+### M38: Drivr Inception, Fleet Registry, and the Execution Adapter Surface
 
 **Goal:** Drivr exists as a governed repository, holds a three-state registry over every project on
 the machine, and invokes one CLI engine through an interface a second engine could be dropped into.
 
 **Indicative Epics:**
-- **E37.1 — Drivr repository inception + enrollment at v7.1.0**, using M33/E33.1's enrolled-project
+- **E38.1 — Drivr repository inception + enrollment at v7.1.0**, using M33/E33.1's enrolled-project
   procedure (11 recorded failure modes — use them).
-- **E37.2 — The execution adapter surface + OpenCode adapter.** The interface is the deliverable;
+- **E38.2 — The execution adapter surface + OpenCode adapter.** The interface is the deliverable;
   OpenCode is its first implementation. **Derive the declared context limit from what `/api/ps`
   reports as loaded**, not from the model's trained maximum — see the measured technical note in
-  §P11.2 (`opencode.json` declares 262,144 against 32,768 actually loaded).
-- **E37.3 — Three-state fleet registry + full classification pass.** Every project in `~/soft-dev`
+  §P11.3 (`opencode.json` declares 262,144 against 32,768 actually loaded).
+- **E38.3 — Three-state fleet registry + full classification pass.** Every project in `~/soft-dev`
   classified active/benched/archived, including the three P10 never listed. Fold in **P10-GH-5**
   (a validator for `ai-project-yml-spec.md` §4). **P10-GH-1** conditionally, per the Phase Chat.
-- **E37.4 — `local-agent-runner` retention assessment.** Against the CFO's bar if one arrives;
+- **E38.4 — `local-agent-runner` retention assessment.** Against the CFO's bar if one arrives;
   otherwise test the two candidate capabilities against OpenCode's `serve` mode and **report without
   retiring**.
-- **E37.5 — Milestone-context evidence for `qwen3-coder:30b`.** Fourth axis beside G-P4-a/b/c.
+- **E38.5 — Milestone-context evidence for `qwen3-coder:30b`.** Fourth axis beside G-P4-a/b/c.
   Evidence only; does not decide row P4.
 
-- **E37.6 — System-tier versioning convention (P10-GH-8).** *(Added v1.0.2 per HQ Ruling
-  2026-08-04, resolving the M36 escalation.)* Give every document in `governance/systems/` a
-  `version` field and a `## Changelog`: seed the **ten** currently-unversioned documents at a
-  starting version with a first row recording that the convention was adopted, pointing at git for
-  prior history; leave the **seven** that already comply untouched. **No backdated reconstruction —
-  permanently out of scope, not deferred.** Mechanical by construction. Independent of E37.1–E37.5;
-  the Phase Chat sequences it anywhere in M37.
+**Sequencing:** E38.1 first — everything else needs the repository. E38.2 and E38.3 may run in
+parallel. This is the phase's largest milestone; **the Phase Chat may split it**, preserving E38.1's
+position and the M38 → M39 boundary.
 
-- **E37.7 — Artifact-ID citation forms (`GH-`, escalation notices).** *(Added v1.0.3 per HQ Ruling
-  2026-08-05, resolving E36.5's audit escalation.)* Disambiguate the bare `GH-10` at
-  `PROJECT-SYSTEM-GUIDELINES.md:605` to `P6-GH-10` — the sole namespace-stripped `GH-<n>` in the
-  normative corpus; record that `GH-` citations in `governance/` carry the phase prefix; record that
-  escalation notices are cited by **full filename**, never by milestone key; and record that the
-  `GH-` prefix names the **phase that filed it**, permanently, with `P6-GH-10…15` / `P7-GH-16…21` as
-  **ratified historical exceptions that are not renumbered**. Independent of E37.1–E37.6.
-
-**Sequencing:** E37.1 first — everything else needs the repository. E37.2 and E37.3 may run in
-parallel. This is the phase's largest milestone; **the Phase Chat may split it**, preserving E37.1's
-position and the M37 → M38 boundary.
-
-### M38: Trustworthy Completion Signal (P10-GH-7)
+### M39: Trustworthy Completion Signal (P10-GH-7)
 
 **Goal:** A run's completion can be judged by something better than an exit code proven wrong in both
 directions on two independent engines, and the `epic_qa` lane has run for real.
 
 **Indicative Epics:**
-- **E38.1 — Completion judgment that does not rest on the exit code.** Design and build it; the
+- **E39.1 — Completion judgment that does not rest on the exit code.** Design and build it; the
   mechanism is the Milestone/Epic Chat's decision.
-- **E38.2 — Validate against the known cases.** **Binding:** E33.2 Run A must read *did not complete*;
+- **E39.2 — Validate against the known cases.** **Binding:** E33.2 Run A must read *did not complete*;
   E33.4 must read *completed*. A design that cannot be shown against both is not delivered.
-- **E38.3 — Exercise the `epic_qa` lane and close G11.** Capture the first real QA-role runs.
+- **E39.3 — Exercise the `epic_qa` lane and close G11.** Capture the first real QA-role runs.
 
-**Sequencing:** After M37 (needs a real adapter to measure). **Before M39, bindingly** — nothing in
-this phase dispatches or schedules an unattended run until M38 delivers.
+**Sequencing:** After M38 (needs a real adapter to measure). **Before M40, bindingly** — nothing in
+this phase dispatches or schedules an unattended run until M39 delivers.
 
-### M39: Coordination — Scheduler, Derived Gate Queue, and the Thin Surface
+### M40: Coordination — Scheduler, Derived Gate Queue, and the Thin Surface
 
 **Goal:** The lane runs without a human starting it, the gate queue is computed from governance state,
 the human approves in-app through a signed one-time link, and competing models surface findings that
 change nothing on their own.
 
 **Indicative Epics:**
-- **E39.1 — Serialized-lane scheduler.** One reasoning job at any instant; enrollment and concurrency
+- **E40.1 — Serialized-lane scheduler.** One reasoning job at any instant; enrollment and concurrency
   kept as separate axes.
-- **E39.2 — Derived gate queue.** Computed from governance state. Never hand-maintained.
-- **E39.3 — Headless-first thin surface + signed one-time-link approval.** Gates in-app only; no chat
+- **E40.2 — Derived gate queue.** Computed from governance state. Never hand-maintained.
+- **E40.3 — Headless-first thin surface + signed one-time-link approval.** Gates in-app only; no chat
   reply ever authorizes.
-- **E39.4 — Competing-model PR review (Copilot + at least one competitor).** Findings only, feeding
+- **E40.4 — Competing-model PR review (Copilot + at least one competitor).** Findings only, feeding
   §11.6.1; authority ceiling recorded in the epic spec, not assumed.
-- **E39.5 — P9-GH-1 / P10-GH-9.** Owner assigned here. Address the merge-authorization-routing guard
+- **E40.5 — P9-GH-1 / P10-GH-9.** Owner assigned here. Address the merge-authorization-routing guard
   before Phase/Milestone agentic dispatch is wired, or record explicitly why the wiring is safe
   without it.
 
-**Sequencing:** Last. Gated on M38. E39.5 lands **before or with** whatever first wires dispatch.
+**Sequencing:** Last. Gated on M39. E40.5 lands **before or with** whatever first wires dispatch.
 
 ---
 
@@ -563,22 +623,22 @@ The CFO (Layer 8) will accept P11 complete when:
 - **PSG §11.6.1** — the CFO as mandatory diff reviewer for HQ-authored deliveries; the ceiling
   competing-model review feeds and never substitutes for
 - **`governance/systems/chat-hierarchy.md`** — the ratified execution matrix, *mode is not authority*,
-  and the handback / one-level escalation rules M38 supplies a detector for
+  and the handback / one-level escalation rules M39 supplies a detector for
 - **`governance/systems/fleet-operator.md` + `fleet-operator-brief.md`** — the role P11's daemon is
   expected (not required) to implement, with its no-authority-on-speech Authority Boundary
-- **M33/E33.1's enrolled-project procedure** (11 recorded failure modes) — E37.1's lever
+- **M33/E33.1's enrolled-project procedure** (11 recorded failure modes) — E38.1's lever
 - **`.ai-project/artifacts/escalation-notices/`** — the existing artifact type handback travels as
-- **`model-routing-policy.md` row P4** and its G-P4-a/b/c gates — what M37's evidence sits beside
+- **`model-routing-policy.md` row P4** and its G-P4-a/b/c gates — what M38's evidence sits beside
 - **E35.5's back-test harness and committed ground truth** — what makes model-watch affordable
 - **`governance/systems/bugfix-epic-workflow.md` + `docs/bugfixes/`** — B3.1's vehicle
 
 ### External / CFO-side
-- **The Drivr repository** — does not exist at phase open; its creation is E37.1
+- **The Drivr repository** — does not exist at phase open; its creation is E38.1
 - **OpenCode** — the execution engine. Its open issue #14551 (`run` exits 0 on session errors) is a
-  **dependency the CFO does not own and cannot patch freely**; M38 is designed on that assumption
+  **dependency the CFO does not own and cannot patch freely**; M39 is designed on that assumption
 - **Ollama** — settled runtime (A1.3), measured at **0.30.0**, loading `qwen3-coder:30b` at a
   **32,768** context. The live trap is not a small default but the **8× gap between what
-  `opencode.json` declares (262,144) and what is actually loaded** — see §P11.2
+  `opencode.json` declares (262,144) and what is actually loaded** — see §P11.3
 - **GPU / hardware** — one GPU, 16 GB VRAM shared with ComfyUI, `qwen3-coder:30b` partially offloading
   to RAM. This is the contention the scheduler exists for
 - **GitHub Copilot** — PR-reviewer configuration is CFO-side
@@ -591,13 +651,13 @@ The CFO (Layer 8) will accept P11 complete when:
 **Estimate:** 4 Milestones, ~18 Epics.
 
 - M36 (Record Integrity and Documentation Hygiene): ~5 epics, in-repo documentation work, fast
-- M37 (Drivr Inception / Registry / Adapter Surface): ~5 epics, the largest; a new repository from zero
-- M38 (Trustworthy Completion Signal): ~3 epics; the long pole is validation against the known cases
-- M39 (Coordination): ~5 epics, gated on M38
+- M38 (Drivr Inception / Registry / Adapter Surface): ~5 epics, the largest; a new repository from zero
+- M39 (Trustworthy Completion Signal): ~3 epics; the long pole is validation against the known cases
+- M40 (Coordination): ~5 epics, gated on M39
 
-**~4 weeks**, deliberately loose. The estimate carries one honest risk: **M38's difficulty is unknown**
+**~4 weeks**, deliberately loose. The estimate carries one honest risk: **M39's difficulty is unknown**
 because nobody has yet built a completion judgment on this stack, and its failure mode is discovering
-that the trustworthy signal is expensive. If that happens, M38 escalates rather than M39 starting
+that the trustworthy signal is expensive. If that happens, M39 escalates rather than M40 starting
 early — **the ordering is binding, not a preference.**
 
 ---
@@ -638,7 +698,7 @@ early — **the ordering is binding, not a preference.**
 - `.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__system-hq-routing-codification.md`
   — SN-1 accepted, D1–D4, executed by M36/E36.4
 - `.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__milestone-locality-row-p4.md`
-  — row P4 stands; **not reopened** by M37's evidence
+  — row P4 stands; **not reopened** by M38's evidence
 - `.ai-project/artifacts/rulings/2026-07-30__ai-project-system-hq__ruling__sn-25-handback-and-execution-matrix.md`
   — handback, one-level escalation, the ratified matrix, *mode is not authority*
 
@@ -649,7 +709,7 @@ early — **the ordering is binding, not a preference.**
   carry-forward definitions (P9-GH-1/3, P10-GH-1…GH-10) verbatim
 - `docs/bugfixes/B3.1__spec__steering-note-id-allocation-unenforced.md` — authorized, may land before
   M36 opens
-- `anomalyco/opencode` issue **#14551** — `run` exits 0 on session errors; M38's external constraint
+- `anomalyco/opencode` issue **#14551** — `run` exits 0 on session errors; M39's external constraint
 
 ### Binding Decisions (settled — NOT for re-debate)
 
@@ -676,7 +736,7 @@ early — **the ordering is binding, not a preference.**
 - **A1.4** — **The MODEL roster stays open.** Milestone-context capacity is a fourth axis; row P4 not
   reopened.
 - **A1.5** — A sole engine concentrates the completion-signal problem in a dependency the CFO does not
-  own. M38 is more urgent, not less.
+  own. M39 is more urgent, not less.
 
 **From SN-24, carried unamended:** headless-first; the chat half is rented; gates in-app only; push
 and WhatsApp deferred; **inbound approval is never a chat reply**; the human is a node *inside* the
@@ -689,20 +749,20 @@ level always held. **PSG §11.6.1** — the CFO is the mandatory diff reviewer f
 
 | Item | Decision | Where |
 |---|---|---|
-| Milestone shape | **4 milestones**, M36 → M37 → M38 → M39, binding order | Milestones |
+| Milestone shape | **5 milestones**, M36 → M37 → M38 → M39 → M40, binding order. Restructured 2026-08-05 (CFO-directed): a second cleanup milestone inserted, Drivr shifted one slot | Milestones |
 | M36 first, contents fixed | **CFO ruling**, not HQ's call to revisit | P11.1 |
 | Namespace question (SN-28 RA1) | **Answered by HQ:** one sequence per directory, regardless of issuer | P11.1 |
 | SN-23 collision (SN-28 RA2) | **HQ ratifies date-qualification, no renumbering.** Rule: a bookkeeping defect never rewrites a normative citation | P11.1 |
 | Duplicate-ID test (SN-28 RA4) | **Authorized as B3.1**, medium severity, Bugfix Epic vehicle; **HQ delegates execution, does not perform it** | `docs/bugfixes/` |
-| P10-GH-7 | **In scope, M38 owns it, M39 gated on it** | P11.3 |
-| P10-GH-5 | **Folded into M37** — the registry reads every enrolled config | P11.2 |
-| P10-GH-1 | **Conditional fold-in to M37**, Phase Chat's judgment | P11.2 |
-| P9-GH-1 / P10-GH-9 | **Owner assigned at M39**, the milestone that wires dispatch (P10-GH-9's own trigger) | P11.4 |
-| Competing-model review | **Un-parked**, M39 owns it, findings-only ceiling explicit | P11.4 |
+| P10-GH-7 | **In scope, M39 owns it, M40 gated on it** | P11.4 |
+| P10-GH-5 | **Folded into M38** — the registry reads every enrolled config | P11.3 |
+| P10-GH-1 | **Conditional fold-in to M38**, Phase Chat's judgment | P11.3 |
+| P9-GH-1 / P10-GH-9 | **Owner assigned at M40**, the milestone that wires dispatch (P10-GH-9's own trigger) | P11.5 |
+| Competing-model review | **Un-parked**, M40 owns it, findings-only ceiling explicit | P11.5 |
 | llama.cpp trial | **CLOSED by decision**, not parked; trigger void | Out of Scope |
 | SN-26 | **Recorded, placed in M36**, shaped nothing in the spine | P11.1 |
 | SN-28 Carry-Over 3 (unaudited families) | **Bounded audit in M36. Reports; does not fix.** Escalates if it reaches the normative tier | P11.1 |
-| P10-GH-8 | ~~Not mandated; Phase Chat may propose folding into M36~~ → **SCHEDULED as M37/E37.6** (HQ Ruling 2026-08-04). Its revisit trigger fired inside M36. Convention decided once for all 17 documents, forward-looking only; **not** a B-series bugfix; M36 stays at four items | P11.2 |
+| P10-GH-8 | ~~Not mandated; Phase Chat may propose folding into M36~~ → **SCHEDULED as M37/E37.1** (HQ Ruling 2026-08-04; moved from M38/E38.6 by the 2026-08-05 restructure). Its revisit trigger fired inside M36. Convention decided once for all 17 documents, forward-looking only; **not** a B-series bugfix; M36 stays at four items | P11.2 |
 | P9-GH-3, P10-GH-3/4/6/10, P8-GH-2, ComfyUI | **Parked** on existing triggers, restated | Out of Scope |
 | Seven SN-27 `[PROPOSED]` items | **Returned to the CFO unacted.** Items 5/6/7 independently re-decided on HQ's own authority | Open Items |
 
@@ -713,10 +773,10 @@ affected milestone executes if no answer arrives:
 
 | Proposal | Fallback if unanswered |
 |---|---|
-| Drivr may *propose* a fleet-state transition, never execute one | M37 builds transitions as a **recorded human action**. Nothing automatic. |
-| The `local-agent-runner` retention bar (*"names a capability P11 needs that OpenCode does not provide"*) | E37.4 tests the two named candidate capabilities and **reports without retiring**. |
+| Drivr may *propose* a fleet-state transition, never execute one | M38 builds transitions as a **recorded human action**. Nothing automatic. |
+| The `local-agent-runner` retention bar (*"names a capability P11 needs that OpenCode does not provide"*) | E38.4 tests the two named candidate capabilities and **reports without retiring**. |
 | Model-watch as cheap re-tests against E35.5's harness rather than scheduled investigations | No watch is scheduled. The harness stays available; nothing is committed to. |
-| The engine-comparison spike (OpenCode `run` vs `local-agent-runner` on `proof/`, same model, same host) | Not run. M38 validates the completion signal against the known cases regardless of engine count. |
+| The engine-comparison spike (OpenCode `run` vs `local-agent-runner` on `proof/`, same model, same host) | Not run. M39 validates the completion signal against the known cases regardless of engine count. |
 
 Proposals 5, 6 and 7 from SN-27 (SN-1/SN-26 placement, P9-GH-1 owner timing, registry-resolves-the-
 unenrolled) are **also** returned, and are **independently decided by HQ** above — same destination,
@@ -728,6 +788,7 @@ different authority. That distinction is deliberate.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-08-05 | **Phase restructured from four milestones to five — CFO-directed.** A second cleanup milestone is inserted and Drivr shifts one slot. **Mapping: old M37 → M38, old M38 → M39, old M39 → M40; new M37 = Corpus Record Conventions.** Epic IDs shift with their milestones (old E37.x → E38.x, and so on); the two cleanup epics move out of Drivr's milestone entirely and become **E37.1** (system-tier versioning convention, was E38.6/E37.6) and **E37.2** (artifact-ID citation forms, was E38.7/E37.7). **Cause:** M38 had reached seven epics, four of them carry-forward hygiene HQ routed there one ruling at a time — HQ named the pattern and constrained itself; the CFO resolved it structurally. **Renumbering is permitted by this phase's own rule** (HQ Ruling 2026-08-01 Decision 4): the shifted IDs are cited only in project-internal, non-normative artifacts — the phase spec, the starter, two rulings and one field-evidence file, **none in `governance/`** — and had no specs, branches or artifacts at the time of the shift. **Prior citations are NOT rewritten.** M36's Closure Declaration and the 2026-08-04/05 rulings cite `M37/E37.6` and `M38/E38.7`; they were correct at their dates and this mapping carries the rename, per the SN-15 precedent. **The binding gate survives the renumber**: the completion signal still gates coordination (now M39 → M40); only the labels moved. **P10-GH-5 and P10-GH-1 stay with the registry in M38** — they were folded in for coupling to registry work, not for hygiene. New M37's contents are **fixed at its two named items**. No epic is added or removed by this restructure and the phase estimate is unchanged; work is re-shaped, not grown. Touches the Executive Summary, §Scope (new §P11.2, others renumbered), §Milestones, §Success and §Acceptance Criteria, §Dependencies, §Timeline and §HQ Triage Decisions. |
 | 1.0.3 | 2026-08-05 | **E37.7 added, HQ Ruling 2026-08-05**, resolving E36.5's bounded artifact-ID audit (SN-28 Carry-Over 3), escalated Epic → Milestone → Phase → HQ. The audit found **no ID collision** — the `GH-` namespace held at 38 live IDs across six phases — but a **citation-form** failure with SN-23's reader-level consequence: a shorthand resolving to more than one artifact, in the normative tier. Four answers, all placed in **E37.7**: disambiguate the bare `GH-10` at `PSG:605` (the only namespace-stripped `GH-<n>` in the corpus, in the highest-authority document); `GH-` citations carry the phase prefix in `governance/`; escalation notices are cited by **full filename** (two already share the `P10-M34` key, and the reporting notice was itself the second `P11-M36`); and the `GH-` prefix names the **phase that filed it**, permanently — *the record names the disposition, the identifier names the origin* — with the forward-allocated `P6-GH-10…15` / `P7-GH-16…21` **ratified as historical exceptions, not renumbered**. `rulings/` date-shorthand ambiguity affirmed report-and-leave (every `governance/` citation resolves). **Not a B-series bugfix** — it edits governance documents, the same boundary held on 2026-08-01 and 2026-08-04. **M36 not reopened.** HQ additionally constrains itself: **nothing further is placed in M37 without reconsidering the milestone's shape**, and the Phase Chat's permission to split M37 is upgraded from permitted to **recommended**. Touches §Milestones→M37 (+E37.7). No milestone ordering, decision, or scope boundary otherwise changes. |
 | 1.0.2 | 2026-08-04 | **P10-GH-8 scheduled, HQ Ruling 2026-08-04**, resolving the P11-M36 escalation (M36 Milestone Chat → Phase Chat → HQ). P10-GH-8's own revisit trigger fired inside M36: E36.1 added a 76-line normative section to `creation-chat-guide.md`, a document with no `version` and no `## Changelog`, and could not record it. Verified independently: **17** documents in `governance/systems/`, **7** compliant, **10** not — the set has not shrunk in five weeks. **The convention is decided once here** for all 17: `version` + `## Changelog`, unversioned documents seeded with a first row pointing at git for prior history, **no backdated reconstruction (permanently out of scope)**. **Vehicle declined:** not a B-series bugfix — it would edit ten governance documents, and the SN-28 Decision 5 carve-out is bounded at *"the moment an item would edit a governance document it leaves the bucket"*; nothing here is urgent and the escalation states twice that nothing is blocked. **Placement: M37 as standalone epic E37.6**, joining P10-GH-5 and conditional P10-GH-1 — M37 is already this phase's home for P10-GH hygiene. **M36 stays at four items** (Option A declined by the Phase Chat under its own authority, affirmed). Interim: M36's Closure Declaration MUST record its two unrecordable amendments explicitly. Touches §Milestones→M37 (+E37.6), §HQ Triage Decisions (P10-GH-8 row). No milestone ordering, decision, or scope boundary otherwise changes. |
 | 1.0.1 | 2026-08-01 | **Factual correction, HQ, before any Phase Chat read the spec.** v1.0.0's binding technical note to the OpenCode adapter stated that Ollama defaults every model to a 4,096-token context. **It is false on this host.** The claim was inherited from the 2026-08-01 HQ Chat Opener and passed into this spec unverified — an HQ error, recorded rather than quietly overwritten. Measured against Ollama **0.30.0**: `qwen3-coder:30b` and `qwen2.5-coder:7b` both load at **32,768**, a 20,530-token prompt recovers a marker planted at position 0 with no options set, and the `/v1` endpoint **silently ignores `options`** (forcing `num_ctx=2048` changed nothing). The note is replaced with the measurements, the reproduction method, and the **real** caution: `opencode.json` declares 262,144 against 32,768 loaded — an **8× overpack** that bites long sessions, so the adapter must derive its declared limit from `/api/ps`. Touches §P11.2 (technical note; `local-agent-runner` transport difference recorded as **not** an E37.4 retention argument), §Milestones→M37 (E37.2), §Dependencies (Ollama). **No milestone, ordering, decision, or scope boundary is changed** — M38 still gates M39 and P10-GH-7 stands untouched, its E33.2/E33.4 evidence unaffected (those runs did not truncate). |
