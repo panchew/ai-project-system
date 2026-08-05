@@ -23,6 +23,17 @@ provenance: >
 
 # HQ Chat Opener — Project Control Room
 
+> **Amendment 2026-08-04 (P11-M36-E36.2) — `SN-1` in this opener was renumbered to `SN-29`.**
+> The five references below to *"the SN-1 System HQ codification"* (Open item #3, the P11-scoping
+> note, the triage table row #3, and the two `[PROPOSED]` placement items) mean the Layer-8/CFO
+> Steering Note
+> (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`),
+> which was filed claiming an ID already held by the 2026-06-12 Creation Chat note. **HQ Ruling
+> 2026-08-01, Decision 3** ruled it misnumbered; E36.2 executed the renumber to `SN-29` on
+> 2026-08-04. The separate reference to *"SN-23 and SN-1 are each claimed by two different notes"*
+> describes the collision as it stood and is left alone — it remains true of that date. The text is
+> not rewritten; the rename is recorded here so it stays legible *as* a rename.
+
 ## ⚠ Prerequisite Verification — READ BEFORE ANYTHING ELSE
 
 Per the HQ Chat Opener template and `governance/systems/chat-hierarchy.md` "Manual Chat Model

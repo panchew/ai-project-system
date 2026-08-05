@@ -108,10 +108,22 @@ The human reviews and accepts both. Only then does governance begin.
 ### Rule 5 — Re-instantiation
 
 This chat may be reset at any time. Long-running sessions accumulate noise — reset is healthy,
-not failure. Before resetting, distill anything worth keeping into a Project Brief amendment
-or a Steering Note. Scratch thoughts that did not make it into an artifact were scratch.
+not failure. Before resetting, distill anything worth keeping into a Steering Note (or, where
+the project keeps one, a Project Brief amendment). Scratch thoughts that did not make it into
+an artifact were scratch.
 
-After reset, paste this Genesis artifact plus the current Project Brief into a new session.
+**How to re-open is defined in exactly one place:** `governance/systems/creation-chat-guide.md`,
+"Re-instantiation Ritual". Follow it there. This rule deliberately **does not restate** the
+ritual, so there is a single place for it to change (P11-M36-E36.3, 2026-08-04, per SN-26).
+That ritual re-opens a session by pasting **this Seed** and names the committed artifacts the
+session needs alongside it. **If you are a re-opened session and those artifacts were not passed
+to you, ask for them before proceeding.**
+
+**A re-opened session is not a new project.** The *Prerequisite Verification* above still applies
+and still runs first. After it, take direction from the latest Steering Note's Next Action —
+not from "What to Do Right Now" below, which is the inception opener for a project that does not
+yet exist.
+
 The Creation Chat continues as an institution regardless of which session window holds it.
 
 ---

@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-20
-version: 1.0.2
+version: 1.0.3
 ---
 
 # System HQ — Cross-Project System Participant (System Reference)
@@ -170,6 +170,113 @@ Artifacts are immutable once created; follow-ups create new versions (protocol r
 requester does not edit a filed request's `status` in place — it files a new versioned
 copy, or lets the `system_response` stand as the authoritative closure record.
 
+**Routing adds no status.** The five values above were reviewed against §Routing &
+Origination below and needed no additions. A request that System HQ routes onward to another
+governed project closes with `done` — the routing *is* the execution System HQ performed —
+and its `system_response` names the routing artifact, so the trail stays followable from the
+requesting project's own repo. `escalated` is likewise unchanged by routing: a review-,
+merge-, or scope-shaped request is escalated to the human, **never** routed onward as though
+some other project's chain could make that decision instead.
+
+---
+
+## Routing & Origination (normative)
+
+This section **records practice already in use.** It adds **no authority, no decision rights,
+and no new artifact type.** Every rule below describes something the desk already does; none
+of it enlarges what the desk may do.
+
+Source: the Layer-8/CFO Steering Note of 2026-07-31 (**`SN-29`**), decisions D1–D3, placed
+here by HQ Ruling 2026-07-31. **The Authority Boundary above is unchanged by all of it** —
+that is D4, and this amendment verified it byte-for-byte across all three documents that
+reproduce it (see this version's Changelog row). The §Out of Scope pin against growth toward
+a "mighty governing System Chat" (SN-21/SN-22) stands unamended.
+
+### Routing a request onward to another governed project (D1)
+
+The `system_request` → `system_response` pair above covers the ordinary case: project A asks,
+System HQ executes, the answer is written back into A. **Some work belongs to a different
+governed project B's chain.** When it does:
+
+- A files a `system_request` in its **own** repo, as always.
+- System HQ **either** executes it within the Authority Boundary, **or routes it to B via B's
+  own artifact channels** — never by acting inside B on A's behalf.
+- **Routing never commands.** B's chain receives *direction* and **triages it under its own
+  governance**, exactly as it would any other input. Whether B acts, when, and in what scope
+  are B's decisions — or the CFO's. They are not System HQ's, and not A's.
+
+**The routed-to-B leg reuses `steering_note`; no new artifact type exists.** The reason is
+load-bearing rather than incidental, and is recorded here so that it survives a later edit
+that a bare rule would not:
+
+> A `steering_note` **already encodes exactly the semantics D1 requires — direction, not
+> authorization.** That is the entire content of "routing never commands." Inventing a
+> `routing_request` would create an artifact whose authority semantics are **undefined on
+> arrival**, so the first thing a receiving chain would have to decide is whether it must
+> comply. **That question is precisely what D1 answers *no* to, and the existing type answers
+> it by construction.** A new type would not merely be a larger decision — it would be a
+> **worse** one.
+
+Issuer: System HQ. Target: project B's HQ Chat. The note is filed under B's own
+`steering-notes/` conventions, in B's repo.
+
+### Requests the CFO originates (D2)
+
+The CFO (Layer-8) may originate `system_request`s through System HQ, which **scribes** them.
+Origination is the CFO's; scribing is System HQ's. **This grants the desk no ability to
+initiate work of its own** — "no self-initiated work" is an Authority Boundary property and
+is unchanged.
+
+**Artifact type follows direction, not authorship:**
+
+| Direction | Type |
+|---|---|
+| A project → System HQ, asking for something beyond that project's own reach | `system_request` |
+| An instruction landing **in** a project, asking it to work | `steering_note` |
+
+#### The issuer-vs-scribe rule
+
+When System HQ writes down a request it did not originate, **the artifact records the true
+issuer — Layer-8/CFO — and not the scribe. The scribing artifact MUST name both**: who issued
+it, and who wrote it down.
+
+**The reason:** if the scribe ever becomes the apparent issuer, the record loses the ability
+to distinguish CFO-originated work from project-originated work — and that distinction is
+what makes the request chain auditable after the fact. A reader who cannot tell which of the
+two they are looking at cannot reconstruct who asked for the work.
+
+`SN-29` is itself a clean instance of the rule it establishes: an instruction landing in a
+project asking it to work, filed as a `steering_note`, with
+`issuer_chat: Layer-8/CFO (scribed by System HQ at CFO instruction)` — **both parties named
+in one field.** The rule was coherent in practice before it was coherent on paper, which is
+the SN-21 pattern.
+
+### Operating scope (D3)
+
+System HQ's operating scope is **primarily config and setup.** Planned work may be involved
+only in specific cases, and even then System HQ's role is **execution-only against artifact
+authorization**. **Scope and acceptance decisions remain with the project's chain or the
+CFO** — which is the Authority Boundary restated in the routing context, not an exception
+carved into it.
+
+### Worked example (informative)
+
+The 2026-07-31 `social-stories-creator` case, as recorded in `SN-29`: the project filed a
+ComfyUI verification request; System HQ **executed** the verification within its ordinary
+tool authority, then put the resulting **remediation decisions back into the project's own
+chain as a Steering Note** rather than deciding them itself. Execution was System HQ's; the
+decisions were not.
+
+**That instance is the adjacent form — route-back-to-A, not A→B** — because no governed
+project B was available for it: the ComfyUI host tree `ai-stack` is unregistered. It is
+offered as an illustration of the *shape* (execute what is executable; return every decision
+to a chain that owns it), not as an A→B instance.
+
+> **No true A→B routing instance has occurred yet.** Codifying a leg that has never run once
+> is **a known and accepted position here, not an oversight** — D1 was practised in its
+> adjacent form the same day it was decided. **The first genuine A→B routing instance should
+> be recorded in this document's Changelog when it occurs.**
+
 ---
 
 ## Discovery & Pickup (informative)
@@ -212,8 +319,14 @@ mistaken for it:
 - **Artifact Communication Protocol:** `governance/systems/artifact-communication-protocol.md`
 - **Daily re-instantiation seed:** `governance/systems/system-hq-seed.md`
 - **Field adoption record (informative, outside this repo):** `~/.ai-project/SYSTEM-GOVERNANCE.md`
-- **Source steering note:** SN-21
+- **Source steering note (canonization):** SN-21
   (`.ai-project/artifacts/steering-notes/2026-07-16__creation-chat__steering-note__system-hq-adoption.md`)
+- **Source steering note (§Routing & Origination):** `SN-29`
+  (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`,
+  D1–D4), accepted by
+  `.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__system-hq-routing-codification.md`
+  (Decisions 1–6). The concern was renumbered `SN-1` → `SN-29` on 2026-08-04 (P11-M36-E36.2);
+  citations of it as `SN-1` in artifacts dated on or before 2026-08-01 are correct for their date.
 - **Project System Guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md`
 - **AI Operating Guidelines:** `governance/AI-OPERATING-GUIDELINES.md`
 
@@ -226,3 +339,4 @@ mistaken for it:
 | 1.0.0 | 2026-07-20 | Initial release. Canonizes System HQ (field-adopted 2026-07-16, SN-21): the `system_request`/`system_response` schemas, storage/naming conventions, and status vocabulary (matching field usage, not reinvented); the normative Authority Boundary (execute-never-decide; `status: escalated` mandatory for review/merge/scope); and System HQ's out-of-hierarchy, cross-project, one-desk-per-machine nature. (P9-M32-E32.1) |
 | 1.0.1 | 2026-07-20 | Reference section gains a back-pointer to the daily re-instantiation seed (`system-hq-seed.md`, P9-M32-E32.2), closing the one-way-only cross-reference E32.2 correctly declined to edit unilaterally. Phase-closure hygiene, not a schema or authority change. |
 | 1.0.2 | 2026-07-30 | Reference section gains a back-pointer to `governance/systems/fleet-operator.md` (P10-M35-E35.1), which records the fleet-operator role as a **distinct** role. Cross-reference hygiene only: the Authority Boundary block is untouched (and therefore still word-for-word identical to its reproductions in `chat-hierarchy.md` and `system-hq-seed.md`), the §Out of Scope pin against expansion toward a "mighty governing System Chat" stands unamended, and no System HQ authority is added, removed, or reinterpreted. |
+| 1.0.3 | 2026-08-04 | Adds §Routing & Origination (normative), recording `SN-29` D1–D3 as **practice already in use**: routing a request onward to another governed project B via B's own artifact channels, where **routing never commands** and B's chain triages under its own governance (D1); CFO-originated requests that System HQ **scribes**, with the **issuer-vs-scribe rule** requiring the artifact to **name both** the true issuer (Layer-8/CFO) and the scribe, because losing that distinction is what would make the request chain unauditable (D2); and the operating scope — primarily config and setup, planned work only in specific cases and then execution-only against artifact authorization (D3). **The routed-to-B leg reuses `steering_note`; no new artifact type is created**, because that type already encodes *direction, not authorization* — the whole content of "routing never commands" — and the reason is recorded in the section itself rather than left to this row. Status vocabulary reviewed against the new section and **unchanged**: routing closes with the existing `done`, and `escalated` still governs every review-, merge-, or scope-shaped request. **No authority, no decision rights, and no artifact type are added, removed, or reinterpreted.** Per D4 the Authority Boundary block is untouched and was **shown** — not assumed — byte-identical across all **three** documents that carry it (this one, `system-hq-seed.md`, and `chat-hierarchy.md`'s annex): `sha256` prefix `baecaad4dbc2146c`, 11 lines each, measured before and after the edit with the command and both outputs committed at `docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.4__authority-boundary-byte-check.md`. The §Out of Scope pin against expansion toward a "mighty governing System Chat" (SN-21/SN-22) stands unamended. **No true A→B routing instance has occurred yet — an accepted position, not an oversight; the first genuine one should be recorded in this Changelog when it occurs.** (P11-M36-E36.4) |

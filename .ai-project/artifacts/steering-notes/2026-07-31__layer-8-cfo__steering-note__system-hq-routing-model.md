@@ -6,7 +6,7 @@ issuer_chat: Layer-8/CFO (scribed by System HQ at CFO instruction)
 target: HQ Chat
 project_name: ai-project-system
 concerns:
-  - id: SN-1
+  - id: SN-29
     severity: medium
     title: "system-hq.md records only the request→response pair; routing and human-originated requests are unrecorded field practice"
 decisions:
@@ -17,6 +17,17 @@ decisions:
 ---
 
 # Steering Note — Layer-8/CFO to HQ Chat (ai-project-system)
+
+> **Amendment 2026-08-04 (P11-M36-E36.2) — this note's concern was renumbered `SN-1` → `SN-29`.**
+> It was filed claiming `SN-1`, restarting a sequence that had already reached `SN-27`: numbered as
+> though System HQ keeps its own sequence, while filed into `ai-project-system`'s
+> `.ai-project/artifacts/steering-notes/`. **HQ Ruling 2026-08-01, Decision 3** ruled it misnumbered
+> and ordered the renumber; `SN-29` was allocated by the rule recorded in
+> `governance/systems/creation-chat-guide.md` §"Steering Note ID Allocation" (highest existing ID in
+> the directory plus one, regardless of issuing chat — P11-M36-E36.1), re-verified free at execution
+> time. **Citations of this note as "SN-1" in artifacts dated on or before 2026-08-01 are correct for
+> their date and mean this concern.** Nothing else about this note changed — D1–D4 and the Authority
+> Boundary freeze stand exactly as issued.
 
 ## Purpose
 
@@ -35,7 +46,7 @@ untouched.
 
 ## Concerns for HQ Triage
 
-### SN-1 — Routing and human-originated requests are unrecorded field practice [MEDIUM]
+### SN-29 — Routing and human-originated requests are unrecorded field practice [MEDIUM]
 
 **Detail:** `governance/systems/system-hq.md` (v1.0.2) defines System HQ as
 answering a `system_request` with a `system_response` written back into the

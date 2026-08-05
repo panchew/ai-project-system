@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-30
-version: 1.0.0
+version: 1.0.1
 ---
 
 # Fleet Operator — Standing Brief (System Reference)
@@ -271,7 +271,7 @@ merging — each act is judged by the role under which it is performed.
 - **Escalation Notice template (the artifact a handback travels as):**
   `governance/templates/escalation-notice.md`
 - **Field adoption record (informative, outside this repo):** `~/.ai-project/SYSTEM-GOVERNANCE.md`
-- **Source steering notes:** SN-22 (the open item this closes for the operator role); SN-23
+- **Source steering notes:** SN-22 (the open item this closes for the operator role); SN-23 (2026-07-20)
   (`.ai-project/artifacts/steering-notes/2026-07-20__creation-chat__steering-note__P10-adoption-spine.md`);
   SN-24 (`.ai-project/artifacts/steering-notes/2026-07-28__creation-chat__steering-note__M35-operator-form-change.md`)
 - **Binding rulings:**
@@ -289,4 +289,5 @@ merging — each act is judged by the role under which it is performed.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.0.1 | 2026-08-03 | **SN-23 citation date-qualified (SN-28; HQ Ruling 2026-08-01, Decision 4).** Two Steering Notes hold `id: SN-23` — 2026-07-18 (reference-first handoff / platform agnosticism) and 2026-07-20 (the P10 adoption spine). §Reference's source-steering-notes entry means the **2026-07-20** note and already disambiguated **by file path**; the date form `SN-23 (2026-07-20)` is added for one corpus-wide disambiguator rather than two. **Citation form only — no area, question, pointer, or authority changed, and neither note is renumbered.** Allocation and separating rules recorded in `governance/systems/creation-chat-guide.md`, "Steering Note ID Allocation". E36.1 (P11-M36). |
 | 1.0.0 | 2026-07-30 | Initial release. Records the **fleet operator's standing brief** — what the operator needs to know each cycle, as a standing set of **questions and pointers** rather than a status snapshot or a standing authorization. Five areas: its own boundary (placed first, so the limit is met before the work); scope of responsibility; lane state; governance-version currency, phrased strictly as **observe and propose**; and blocked work, carrying the **P10-GH-7** caveat that silence is not evidence nothing is blocked. **No fleet state is enumerated** — enrollment, live versions, and lane contents are machine-local, and each area points at its source instead. Consumption is **form-neutral** (re-read, boot-load, or consult) and the brief **carries no cadence of its own**. The Authority Boundary, the three duties, the sequencing reading, and the handback rule are **cited, not restated**. Extends P9-M32-E32.2's re-instantiation seed in content-shape (identity → boundary → how work is found → what to do first) while retiring its ritual form per the HQ Ruling on SN-24, Decisions 1–2; System HQ's own seed is a **different role's** artifact and is unaffected. No authority is created, widened, or narrowed, and no mechanism is built. (P10-M35-E35.2) |

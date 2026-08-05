@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-05-29
-version: 1.4.0
+version: 1.4.1
 ---
 
 # Artifact Communication Protocol (P4.1)
@@ -416,7 +416,7 @@ back the same way — by reference.
 
 *Fallback — no repo access?* For genuinely repo-less setups only, copy-paste
 transport remains documented in AI-OPERATING-GUIDELINES.md §3.1.1's fallback
-format (SN-23 Decision 2 — platform agnosticism preserved).
+format (SN-23 (2026-07-18) Decision 2 — platform agnosticism preserved).
 
 **CFO Benefit:** Layer-8 can visit any HQ Chat and see the latest Delivery Notices and Review Decisions in a structured format, making progress tracking across multiple projects trivial.
 
@@ -450,8 +450,9 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.4.1 | 2026-08-03 | **SN-23 citations date-qualified (SN-28; HQ Ruling 2026-08-01, Decision 4).** Two Steering Notes hold `id: SN-23` — 2026-07-18 (reference-first handoff / platform agnosticism) and 2026-07-20 (the P10 adoption spine). Both SN-23 citations in this document (§Integration with Manual Mode's repo-less fallback pointer, and the v1.3.0 changelog entry) mean the **2026-07-18** note and now carry the date form `SN-23 (2026-07-18)`. **Citation disambiguation only — no schema, storage rule, flow, or acceptance-model change, and neither note is renumbered.** Allocation and separating rules recorded in `governance/systems/creation-chat-guide.md`, "Steering Note ID Allocation". E36.1 (P11-M36). |
 | 1.4.0 | 2026-07-20 | Added a `## Reference` pointer to the new companion document `governance/systems/system-hq.md`, which canonizes the framework's first **cross-project** artifact pair (`system_request`/`system_response`) and the System HQ participant. Design Decision 1B (SN-21): the cross-project pair lives in a companion document rather than this document's intra-project `## Artifact Types` section, whose Core Principles and Communication Flow Diagram assume a single-project chain. No existing schema, example, flow diagram, or storage rule changed. (P9-M32-E32.1) |
 | 1.0.0 | 2026-05-29 | Initial release. Defines Completion Notice, Review Decision, Delivery Notice schemas and integration with manual & agentic modes. |
 | 1.1.0 | 2026-07-03 | Reconciled to default-accept (SN-13, PSG §11.6 / AOG §12): Review Decision reframed as the exception-path artifact; a clean delivery is accepted by silence. Ordering rule "Review Decision (Accept) MUST precede a Delivery Notice" scoped to the exception path. ACCEPT worked example reframed as accept-with-follow-ups; REJECT example and all schemas unchanged. (P6-M25-E25.4) |
-| 1.3.0 | 2026-07-18 | **Reference-first manual-mode handoff (SN-23).** §Integration with Manual Mode rewritten: artifacts are committed, git-tracked files handed to parent chats **by reference** (IDE-attach + one-line intent, or the canonical reference line) per the generalized AI-OPERATING-GUIDELINES.md §3.1.1 — cited, not restated; copy-paste transport retained as the documented **repo-less fallback** (SN-23 Decision 2). §Purpose "Problem Solved" annotated: transport is now solved by committed files + reference, not paste. Schemas, storage rules, agentic-mode flow, and the §11.6 acceptance model unchanged. Per SN-23 (CFO-ratified 2026-07-18); E30.4 (P9-M30). |
+| 1.3.0 | 2026-07-18 | **Reference-first manual-mode handoff (SN-23 (2026-07-18)).** §Integration with Manual Mode rewritten: artifacts are committed, git-tracked files handed to parent chats **by reference** (IDE-attach + one-line intent, or the canonical reference line) per the generalized AI-OPERATING-GUIDELINES.md §3.1.1 — cited, not restated; copy-paste transport retained as the documented **repo-less fallback** (SN-23 (2026-07-18) Decision 2). §Purpose "Problem Solved" annotated: transport is now solved by committed files + reference, not paste. Schemas, storage rules, agentic-mode flow, and the §11.6 acceptance model unchanged. Per SN-23 (2026-07-18), CFO-ratified; E30.4 (P9-M30). |
 | 1.2.0 | 2026-07-13 | Delivery-Notice terminology collision reconciled against PSG §12 / AOG §1A step 2 / AOG §10 (all three already agreed): the pre-review, execution-completion artifact (formerly "Completion Notice," §1) is renamed **Delivery Notice**. The separate post-merge "Delivery Notice" (formerly §3) is retired from the standard Epic/Milestone/Phase flow — direct verification found it unproduced across all seven recent P7 Epics (E26.1-3, E27.1-3, E28.1) and the canonical `epic-execution-chat-starter.md` template, which has fully converged on the single-artifact model. The Bugfix Workflow's continued, intentional two-artifact model (`bugfix-epic-workflow.md`) is explicitly carved out as an exception, not restated here. No PSG or AOG edit was needed — both already matched this direction. (P7-M28-E28.2; reverses the M28 Milestone spec's stated recommended default, with reasoning grounded in direct evidence — see the Epic spec) |

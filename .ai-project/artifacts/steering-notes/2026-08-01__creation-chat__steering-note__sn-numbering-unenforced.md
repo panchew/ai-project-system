@@ -21,6 +21,24 @@ references:
 
 # Steering Note — Creation Chat to HQ Chat
 
+> **Amendment 2026-08-04 (P11-M36-E36.2) — the `SN-1` collision this note reported is now cleared;
+> the later note was renumbered `SN-1` → `SN-29`.** Read the two kinds of `SN-1` below differently:
+>
+> - **Where this note reports the collision** (the audit table, the namespace-question section, the
+>   quoted CFO remark) the text is **left exactly as written** — it was an accurate report of the
+>   corpus on 2026-08-01, and that is the record's value.
+> - **Where it cites *"the SN-1 System HQ codification"*** as a related or bucketed item (front
+>   matter `related`, Decisions Already Made, Required actions) it means the Layer-8/CFO note
+>   (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`),
+>   which **now reads `SN-29`.**
+>
+> Remediation is complete: **HQ Ruling 2026-08-01, Decision 3** ordered the renumber (executed by
+> E36.2) and **Decision 4** ruled `SN-23`'s collision **permanent** — date-qualified rather than
+> renumbered, because it is cited across the normative tier. `SN-23` is therefore *not* outstanding
+> cleanup; it is a ratified exception, allowlisted with its citation in
+> `tests/test_steering_note_id_uniqueness.py`. **This note's own concern ID (`SN-28`) is
+> unaffected.**
+
 ## Purpose
 
 Records a defect in the Steering Note record itself, found while answering an unrelated CFO

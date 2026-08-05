@@ -27,9 +27,15 @@ but committed artifacts.
 
 ## Re-instantiation Ritual
 
+*(Amended P11-M36-E36.3, 2026-08-04, recording SN-26 Required actions 2, 3 and 4,
+and canonizing SN-26 Carry-Over 1 per HQ Ruling 2026-08-01, Decision 9.
+**This section is the single normative statement governing Creation Chat
+re-instantiation.** [`../templates/seed.md`](../templates/seed.md) Rule 5 cites it
+and does not restate it.)*
+
 A Creation Chat session does not live forever. Context fills, sessions end, chats
-get reset. The ritual preserves continuity across a reset using three committed
-artifacts and no session memory.
+get reset. The ritual preserves continuity across a reset using committed artifacts
+and no session memory.
 
 ### Step 1 — Before reset: produce and commit a Steering Note
 
@@ -56,29 +62,87 @@ Structured state, not a narrative. Capture exactly:
 
 If the next session would have to guess at any of these, the note is incomplete.
 
-### Step 3 — How to re-open: pass exactly three artifacts to the new session
+### Step 3 — How to re-open: paste the Seed, then pass the two current artifacts
 
-Open the new session with these three committed artifacts and nothing else:
+Open the new session by **pasting [`../templates/seed.md`](../templates/seed.md)**,
+with its `framework_version` front-matter field filled to the governance version the
+project is on. Then pass these committed artifacts, and nothing else:
 
-1. The project's committed **`genesis.md`** (project root or governance root).
-2. The **most recent Steering Note** from
+1. The **most recent Steering Note** from
    `.ai-project/artifacts/steering-notes/` (latest by ISO-date in the filename).
-3. The **most recent Progress Digest**, if one exists, from
+2. The **most recent Progress Digest**, if one exists, from
    `.ai-project/artifacts/progress-digests/` (latest by ISO-date).
 
-No chat transcript, no memory export — only these files.
+**One addition is permitted, and only one.** A project that holds a committed
+`genesis.md` may pass it as well, for original project identity. A project that has
+none **does not render one for this purpose** — see "Why the Seed opens the session"
+below. Otherwise: no chat transcript, no memory export, nothing else.
 
-### Step 4 — What the new session receives
+This is SN-26 Carry-Over 1's working practice, **canonized unchanged**.
+
+### Step 4 — The model check runs on this path (P9-M31-E31.3)
+
+Because Step 3 opens with the Seed, a re-instantiated session **runs the E31.3 model
+check before it does anything else** — the Seed's own *Prerequisite Verification*
+section is the first instruction it receives. Creation Chat is manual-only,
+permanently (SN-22); the session compares its harness-reported model identity against
+`.ai-project.yml`'s `models.creation`. **If both are present and disagree, the session
+stops and waits for human resolution.**
+
+The mapping, the self-report method's known limits, and the absent-block/absent-key
+permissive default are defined **once**, in [`chat-hierarchy.md`](chat-hierarchy.md)
+"Manual Chat Model Verification" — cited here, not restated.
+
+**Why this is a step and not an assumption.** A ritual whose artifacts carry no
+verification lets a session open against the wrong model and proceed. That is what
+happened on 2026-07-28: a Creation Chat ran `claude-opus-5` against a then-configured
+`remote:claude-opus-4-8` and opened anyway. The check existed in the templates and was
+absent from the path actually taken (SN-26). **The path now carries it.**
+
+### Step 5 — What the new session receives
 
 A complete picture of project state with no session memory required:
 
-- `genesis.md` gives project identity and Phase 1 boundaries.
-- The latest Steering Note gives open concerns, binding decisions, carry-overs,
-  and the next action.
-- The latest Progress Digest (if present) gives current phase/milestone status.
+- The **Seed** gives the Creation Chat's identity, its Rules of Engagement, and the
+  model check above.
+- The latest **Steering Note** gives open concerns, binding decisions, carry-overs,
+  and the next action. **Start there** — a re-opened session takes direction from the
+  Steering Note's Next Action, not from the Seed's inception prompt.
+- The latest **Progress Digest** (if present) gives current phase/milestone status.
+- A committed **`genesis.md`**, where a project has one, gives original project
+  identity and Phase 1 boundaries — historical context, not current state.
 
 The new session opens as if continuing uninterrupted. If it cannot, the gap is a
 defect in the pre-reset Steering Note (Step 2) — fix the note, not the ritual.
+
+### Why the Seed opens the session, and `genesis.md` may not exist
+
+*(The SN-26 decision, recorded so the reasoning survives the rule.)*
+
+`genesis.md` is a **bootstrap** artifact: it scopes project identity, Phase 1
+boundaries and team composition, and it is consumed **once**, by the first Phase Chat
+([`start-a-project.md`](start-a-project.md) Step 3). Re-instantiation is a
+**continuity** problem. The two were conflated, and the cost grows with the project:
+a repository well past Phase 1 that re-opens on `genesis.md` is handed **Phase 1 scope
+as its picture of the present**. That is a defect for **every** project past its first
+phase, not a quirk of any one of them.
+
+The Seed takes artifact #1's place because it **exists for every project** by
+construction, carries the Creation Chat's identity and rules, and — decisively —
+**causes verification to happen when pasted** (SN-26, Decisions Already Made 2).
+
+**`ai-project-system` renders no `genesis.md` and is not expected to.** It
+bootstrapped itself and reached P11 without one; authoring one now would be a
+backdated artifact whose Phase-1 content is inert. **No Project Brief is expected
+either, for re-instantiation purposes** — [`../templates/seed.md`](../templates/seed.md)
+Rule 4's Brief is the *inception* convergence target of the full path, and this
+repository's equivalent content lives in committed governance, phase specs, and the
+Steering Note / Progress Digest stream.
+
+**Scope limiter, deliberate.** That decides re-instantiation only. Whether a Project
+Brief would serve some **other** purpose here is a separate, parked, Brief-level
+question (SN-26 Carry-Over 2), and SN-26 says in terms that the two "should not be
+entangled." Nothing above rules on it.
 
 ---
 
@@ -91,6 +155,80 @@ Write one:
   commit a Steering Note so the concern reaches HQ immediately.
 - **After 3+ Bouncer Work log entries of the same type** — a detected pattern is
   a concern worth formalizing (see the loop below).
+
+---
+
+## Steering Note ID Allocation
+
+*(Added P11-M36-E36.1, 2026-08-03, recording SN-28 Required actions 1–3 and the
+HQ Ruling 2026-08-01, Decisions 3 and 4.)*
+
+### The allocation rule
+
+**The next ID is the highest existing ID in the steering-note directory plus one,
+regardless of which chat issues the note.** There is **one sequence per
+steering-note directory** — HQ, Creation Chat, and any other issuer draw from the
+same run of numbers (HQ Ruling 2026-08-01, Decision 3).
+
+**Sub-IDs keep the existing letter-suffix form** (`SN-12a`, `SN-12b`). A sub-ID is
+a **distinct ID, not a collision**, and it does not consume a new number.
+
+**The reason, recorded alongside the rule.** Provenance is **already** recorded —
+in the `issuer_chat` front-matter field and in the filename slug. The identifier
+therefore **names position and nothing else.** It does not encode who issued the
+note, and must not be made to. A rule whose reason is on the record survives an
+edit that a bare rule does not.
+
+The rule is mechanically checked by `tests/test_steering_note_id_uniqueness.py`
+(bugfix B3.1). An author can rely on it being **enforced, not merely stated** —
+but the guard catches a collision after the fact; it does not choose your ID for
+you. Apply the rule when you file.
+
+### When allocation has already failed: the separating rule
+
+A collision that already exists is a **bookkeeping defect**. Remediating it is
+governed by one rule:
+
+> **A bookkeeping defect never rewrites a citation in a normative document.**
+
+That resolves into two cases:
+
+- **Cited only in project-internal, non-normative artifacts** (steering notes,
+  rulings, digests, closure declarations, reference packets) → **renumber.**
+  Nothing load-bearing points at the ID, and the record is cheaper to correct
+  than to annotate.
+- **Cited in the normative tier** (`governance/`) → **date-qualify the
+  citations** — `SN-23 (2026-07-18)` — and **leave the collision visible rather
+  than laundered.** The normative tier's citations are load-bearing: a renumber
+  silently invalidates every document that points at the old ID, including
+  documents outside this repository.
+
+**No chat renumbers on its own initiative.** Renumbering is a ruled act, not a
+tidy-up an author performs while passing through.
+
+### The worked case: `SN-1` is renumbered, `SN-23` is not
+
+This asymmetry is a **principle applied**, not an inconsistency:
+
+- **`SN-1`** is cited only in project-internal artifacts, so the separating rule
+  sends it to *renumber*.
+- **`SN-23`** is cited across the normative tier, so the separating rule sends it
+  to *date-qualify*.
+
+**Both 2026-07-18 and 2026-07-20 keep `id: SN-23` permanently, by decision** (HQ
+Ruling 2026-08-01, Decision 4). This is a **ratified, deliberate outcome — not
+unfinished cleanup.** Do not "fix" it: renumbering either note would invalidate
+every citation that was corrected to disambiguate them.
+
+The two meanings, for anyone following a citation:
+
+| Citation | Note | Subject |
+|---|---|---|
+| `SN-23 (2026-07-18)` | `…__reference-dont-display.md` | reference-first artifact handoff / platform agnosticism |
+| `SN-23 (2026-07-20)` | `…__P10-adoption-spine.md` | the P10 adoption spine |
+
+Against B3.1's guard, the surviving `SN-23` collision is a **ratified, allowlisted
+exception**, not an outstanding defect.
 
 ---
 
@@ -147,8 +285,8 @@ matter or any other.
 with what it sees is **issue a Steering Note**
 ([`../templates/steering-note.md`](../templates/steering-note.md)) —
 direction-setting, not resolution. That is the same channel described in "When to
-Write a Steering Note" above, and it is how SN-23, SN-24 and SN-25 themselves
-arrived. Naming the outlet explicitly is what keeps awareness from drifting into
+Write a Steering Note" above, and it is how SN-23 (2026-07-20), SN-24 and SN-25
+themselves arrived. Naming the outlet explicitly is what keeps awareness from drifting into
 *"the Creation Chat unblocked it"* — a right with no outlet decays into an
 improvised one.
 
