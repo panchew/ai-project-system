@@ -18,6 +18,22 @@ by the Phase Chat under its own authority; Options B vs C escalated. Both layers
 **The routing was correct at every hop**, and the Phase Chat was right that a Phase Chat does not
 open B-series bugfixes. This ruling answers B vs C, and answers it with a fourth shape.
 
+> **ERRATUM 2026-08-05 — Decision 5's count is wrong. The verified figure is THREE amendments across
+> TWO unversioned documents, not two across one.** M36 amended `creation-chat-guide.md` twice (E36.1
+> +78, E36.3 +90) **and `chat-hierarchy.md` once** (E36.1, ±3, the SN-23 date-qualification).
+>
+> **The correction was in HQ's hands when this ruling was written.** The P11 Phase Chat's 2026-08-04
+> routing carried two corrections — one lowering the count (E36.4 adds no third), one raising it
+> (`chat-hierarchy.md` was omitted). **This ruling applied the first, verified it independently, and
+> dropped the second.** Verifying the correction that shrinks a number while ignoring the one that
+> grows it is asymmetric verification, and it produced a false count in a ruling about record
+> integrity.
+>
+> Caught by the M36 Closure Declaration's §D5 and corrected upward there. **Decision 5's obligation
+> is unaffected and was discharged.** Consequence for **E37.6**: `chat-hierarchy.md` carries one more
+> in-flight amendment than Decision 5 records, and its seeding row must be written from this erratum.
+> Full record: `.ai-project/artifacts/rulings/2026-08-05__ai-project-system-hq__ruling__artifact-id-citation-forms.md`.
+
 ---
 
 ## Verification — re-measured, not inherited
