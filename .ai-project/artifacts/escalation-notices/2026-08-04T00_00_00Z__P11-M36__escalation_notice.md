@@ -6,6 +6,10 @@ issued_by: Epic Chat (P11-M36-E36.5)
 issued_to: Milestone Chat (P11-M36) — one level up per SN-25; for routing to HQ, which owns the remediation decision
 date: 2026-08-04
 status: open
+routed_to: Phase Chat (P11) — for routing to HQ, which owns the remediation decision
+routed_on: 2026-08-04
+routed_by: Milestone Chat (P11-M36)
+milestone_chat_disposition: "Both findings independently verified and upheld. Nothing resolvable at this level — both reach `governance/`, and M36 is closed. Routed whole, with one sharpening to Finding 1."
 ---
 
 # Escalation Notice: two artifact families carry citation ambiguity that reaches the normative tier
@@ -143,3 +147,62 @@ upward, which is the outcome the Epic was scoped to produce.
 **A `GH-` ID has been renumbered before.** SN-15 (2026-06-28) reconciled `P6-GH-1` → `P6-GH-12` and
 `P6-GH-2` → `P6-GH-13`, and recorded the mapping. Those two IDs survive **only** as records of their
 own renumber, which is why the live `GH-` count is **38**, not the 40 the corpus records.
+
+---
+
+## Routing — Milestone Chat (P11-M36) → Phase Chat (P11), 2026-08-04
+
+**Routed whole. Nothing was resolvable at this level**, and nothing was fixed here either.
+
+**Why nothing resolves here.** Both findings live in `governance/` — the normative tier. A Milestone
+Chat amends normative documents only through an epic under its own milestone, and **M36 is closed**
+(Closure Declaration `03ff232`, five of five epics merged). Opening a sixth epic to absorb an audit
+finding is the precise scope expansion HQ Ruling 2026-08-01 **Decision 12** forbids: *"it may not
+widen it. It may only report."* **Escalating is not this chat deferring a call it could make — the
+call is not available to it.**
+
+### Both findings independently verified by this chat, not forwarded on trust
+
+| Claim | Verification |
+|---|---|
+| `PSG:605` carries a bare `GH-10` | ✅ confirmed post-merge on `milestone/M36` |
+| It is the **only** namespace-stripped `GH-<n>` under `governance/` | ✅ confirmed — a sweep for unprefixed `GH-<n>` returns **exactly one hit**; all other `GH-` citations in `governance/` carry a phase prefix (**9 distinct IDs, 22 occurrences**) |
+| `P5-GH-10` and `P6-GH-10` are live and unrelated | ✅ confirmed |
+| Two escalation notices share the `P10-M34` key | ✅ confirmed — `2026-07-28T20_00_00Z__…` and `2026-07-29T00_00_00Z__…` |
+| The shorthand appears in two normative documents | ✅ confirmed at `chat-hierarchy.md:271` and `ai-project-yml-spec.md:660` |
+| E36.5 fixed nothing | ✅ confirmed — no `governance/` or `tests/` file in its diff; `PSG:605` still bare |
+
+### One sharpening to Finding 1 — the finding is slightly stronger than stated
+
+E36.5 records that *"context resolves it to `P6-GH-10`. The identifier does not."* **The first half is
+weaker than it sounds.** The full sentence at `PSG:605`:
+
+> **History:** SN-13 **(P5)** established this model; it has governed every delivery **since P5**. The
+> Review Decision and Epic Review Seal artifacts themselves are unchanged — default-accept changes
+> *when* they are issued, not *what* they are. Codified by E25.2 **(P6-M25)**; closes **`GH-10`**.
+
+The nearest anchor is `(P6-M25)`, which points the right way — but the sentence opens with **two
+P5 anchors** (*"SN-13 (P5)"*, *"since P5"*) against that one P6 anchor. **A reader resolving by
+salience rather than by adjacency is pointed at `P5-GH-10`, which is the wrong item.** So context
+does not reliably resolve it either; it merely happens to for a careful reader who weights the last
+clause.
+
+That does not change the disposition — it is still HQ's call and still must not be fixed inside M36 —
+but it means Finding 1 should be read as *"neither the identifier nor the context reliably
+resolves,"* which is a closer match to the SN-23 shape than E36.5 claimed for itself.
+
+### What this chat is NOT asking for
+
+- **Not a reopening of M36.** Its Closure Declaration is committed with `is_final: false`; the
+  consolidation PR to `phase/P11` follows.
+- **Not a fix.** `PSG:605` is deliberately untouched, and this chat did not touch it either.
+- **Not urgency.** Nothing is blocked. Both are latent citation traps, not active failures.
+
+### For the Phase Chat
+
+The four questions E36.5 puts to HQ (§What is being asked) stand unamended. This chat adds no fifth
+and takes no position on any of them beyond the sharpening above — **placement and remediation are
+HQ's**, and the natural candidate is **M37**, which already carries `E37.6` and is this phase's home
+for P10-GH carry-forward hygiene. **That is an observation, not a recommendation.**
+
+**Status stays `open`.** HQ owns the answer.
