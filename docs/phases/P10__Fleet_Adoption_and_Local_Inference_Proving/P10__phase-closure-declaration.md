@@ -197,7 +197,7 @@ delivered-track diagram is recorded in its respective milestone spec
 | P9-GH-1 | **Merge-authorization-routing guard is patched at Epic level only.** Unchanged since P9 closure. The one-level escalation rule M35 canonized (`chat-hierarchy.md`, "Handback: what a blocked agentic instance owes") is **adjacent protection, not the same fix** — a routing rule patches no template. The Milestone/Phase Execution Chat Starter templates remain unpatched. Re-rated by P10-GH-9 below: the execution matrix raised its cost without touching it. | Medium (raised) |
 | P9-GH-3 | **Within-session task segmentation in `bin/measure-token-burn`.** Unowned, unchanged since P9 closure. `model-routing-policy.md` row P4 does not wait on it (HQ Ruling on SN-25, Decision 5) — it may be amended by other evidence independent of this trigger. | Low |
 | P10-GH-1 | **`framework_version` is convention-only**, not defined in `governance/ai-project-yml-spec.md` (E33.1 Failure Mode 4). All six fleet stamps this phase produced are therefore convention-only. Schema-blessing it is a framework capability change, correctly deferred out of every adoption epic that touched it. | Low |
-| P10-GH-2 | **Creation Chat's re-instantiation Seed does not implement the P9-M31-E31.3 model-verification check** other manual-chat surfaces carry. From the 2026-07-28 HQ Ruling on the paid-frontier mapping refresh. Unowned. | Medium |
+| P10-GH-2 | **Creation Chat's re-instantiation Seed does not implement the P9-M31-E31.3 model-verification check** other manual-chat surfaces carry. From the 2026-07-28 HQ Ruling on the paid-frontier mapping refresh. Unowned. **⚠ This premise is false and the item is re-diagnosed — see the amendment note below this table (2026-08-04, P11-M36-E36.5).** | Medium |
 | P10-GH-3 | **`model-routing-policy.md` row P1 (Creation, paid frontier, manual) does not match `.ai-project.yml`'s live `creation` key** in at least one observed configuration. From the 2026-07-28 HQ Ruling. Unowned. | Low |
 | P10-GH-4 | **`delivery_notice.merge_details` is structurally unfillable** by the canonical happy path (the notice is authored before the merge it would record). Measured repo-wide: 15 tracked notices carry the field, 1 filled, 14 placeholders — settled practice, not drift. Four candidate directions recorded in the carry-forward note (`P10-M34__carry-forward-note__P10-GH-4-delivery-notice-merge-details.md`); no recommendation made. Unowned. | Low |
 | P10-GH-5 | **`ai-project-yml-spec.md` §4's validation rules are normative but unenforced** — no validator exists in `bin/`; a malformed enrolled config degrades quietly. At filing, 2 of 5 enrolled projects were invalid; drift observed to 3 of 6 by phase close. Not closed by P10 — the epics that touched it fixed instances, not the absence of enforcement. Detail: `P10-M34__carry-forward-note__P10-GH-5-unenforced-yml-validation.md`. Unowned. | Medium |
@@ -211,6 +211,26 @@ delivered-track diagram is recorded in its respective milestone spec
 | — | **`model-routing-policy.md` row P4** (Milestone locality). Neither opened nor closed by P10. E35.5 produced necessary-but-not-sufficient evidence (PASS 4/5) for HQ to weigh, on a thinner-than-assumed evidence base after the `Getawayinsured2023` premise correction above. A further HQ call, not a P10 output. | — |
 | — | **The two unenrolled projects (`ai-stack`, `character-factory`)** — noted, not addressed, per SN-23. Still not P11's concern by default; revisit only if they need to be classified as real projects or leftovers. | — |
 | — | **Sidekick-for-external-projects** — an identity question (pivot vs. addition), Project-Brief territory, deliberately not decided in P10. Unchanged. | — |
+
+> **Amendment 2026-08-04 (P11-M36-E36.5) — P10-GH-2's premise in the table above is false, and the
+> item is re-diagnosed.** The original row is left unedited, deliberately; this note corrects it.
+>
+> `governance/templates/seed.md` has carried the E31.3 **Prerequisite Verification** section since
+> commit **`d7ee7cd` (2026-07-19)** — **nine days before** the 2026-07-28 HQ Ruling that filed this
+> gap — and `governance/templates/genesis.md` carries it from the same commit. The 2026-07-31
+> Creation Chat session, opened from `seed.md`, **ran the check.**
+>
+> **The real defect was the re-instantiation *ritual*, not the Seed.**
+> `governance/systems/creation-chat-guide.md` handed a re-opened session three artifacts, **none of
+> which carried a model check**, because the only one that would (`genesis.md`) is not rendered in
+> this project. As filed, P10-GH-2 pointed a future owner at a file that needed no change — and the
+> real defect would have survived the fix.
+>
+> **That defect is now CLOSED.** E36.3 (merged `d8f4871`) canonized a single re-instantiation ritual
+> that opens with the Seed and carries the E31.3 check as an explicit **Step 4**.
+>
+> **A future owner should read the ritual (`governance/systems/creation-chat-guide.md`), not
+> `seed.md`.** Sources: **SN-26** (Required action 1); **HQ Ruling 2026-08-01, Decision 8**.
 
 ---
 

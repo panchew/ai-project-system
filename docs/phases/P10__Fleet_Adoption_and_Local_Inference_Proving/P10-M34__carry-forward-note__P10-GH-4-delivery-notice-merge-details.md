@@ -96,3 +96,13 @@ weight, which is a framework-design judgment above a Milestone Chat's adjacency.
 - No renumbering or reinterpretation of P10-GH-1 (`framework_version` unschema'd), **P10-GH-2**
   (Creation Chat Seed does not implement the E31.3 verification), or **P10-GH-3** (policy row P1
   contradicts the live config). This is **P10-GH-4**, the next free identifier.
+
+  > **Amendment 2026-08-04 (P11-M36-E36.5) — the parenthetical gloss of P10-GH-2 above restates a
+  > false premise.** The original text is left unedited, deliberately. `governance/templates/seed.md`
+  > has carried the E31.3 check since **`d7ee7cd` (2026-07-19)**, nine days before the ruling that
+  > filed the gap. The real defect was `creation-chat-guide.md`'s re-instantiation ritual, and
+  > **E36.3 (merged `d8f4871`) has closed it.** Per **SN-26** (Required action 1) and **HQ Ruling
+  > 2026-08-01, Decision 8**.
+  >
+  > **This amendment corrects the gloss only.** It renumbers nothing, reopens nothing, and leaves
+  > this note's P10-GH-4 subject matter entirely untouched.
