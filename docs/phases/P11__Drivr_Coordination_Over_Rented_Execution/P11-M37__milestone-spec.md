@@ -1,0 +1,700 @@
+---
+milestone: M37
+name: Corpus Record Conventions
+phase: P11
+status: planned
+start_date: 2026-08-05
+epics:
+  - E37.1
+  - E37.2
+is_final: false
+---
+
+# Milestone M37 — Corpus Record Conventions
+
+## Purpose
+
+Decide and apply the corpus's own metadata conventions **once**, so that the record can state what
+changed and every citation resolves to exactly one artifact. Two named items, both executing rulings
+already on the record, both entirely in-repo, neither with any Drivr dependency.
+
+This milestone ensures:
+- **Every `governance/systems/` document can record its own amendments.** Ten of seventeen carry
+  neither a `version` field nor a `## Changelog`; all ten are seeded forward-looking, and the seven
+  that already comply are left untouched (E37.1).
+- **No citation in the normative tier resolves to more than one artifact.** The sole bare `GH-<n>` in
+  the corpus is disambiguated, `GH-` citations carry the phase prefix, escalation notices are cited by
+  full filename, and the `GH-` prefix is fixed as naming the phase that **filed** an item —
+  permanently (E37.2).
+
+**M37 is not P11's final milestone** (`is_final: false`). On its closure the Phase Chat proceeds to
+**M38 planning** — Drivr inception — per the binding order M36 → M37 → M38 → M39 → M40.
+
+---
+
+## ⚠ Read first — this milestone was inserted, and the numbers around it moved
+
+**P11 was restructured from four milestones to five on 2026-08-05, CFO-directed** (phase spec
+**v1.1.0**, merged `bfe2eca`). **M37 is the new milestone.** Everything that was M37 shifted:
+
+| was | is |
+|---|---|
+| — | **M37 — Corpus Record Conventions** (this milestone) |
+| M37 — Drivr Inception, Fleet Registry, Execution Adapter Surface | **M38** |
+| M38 — Trustworthy Completion Signal (P10-GH-7) | **M39** |
+| M39 — Coordination: Scheduler, Derived Gate Queue, Thin Surface | **M40** |
+
+**The two governing rulings predate the restructure and cite the old epic IDs.** They were correct at
+their dates and **are not rewritten** (per HQ Ruling 2026-08-01, Decision 4 — *a bookkeeping defect
+never rewrites a citation*, and the SN-15 precedent). Read them through this mapping:
+
+| Ruling says | Read as |
+|---|---|
+| `M37/E37.6` (2026-08-04 ruling — versioning convention) | **M37/E37.1** |
+| `M37/E37.7` or `M38/E38.7` (2026-08-05 ruling — citation forms) | **M37/E37.2** |
+
+**The binding gate survived the renumber:** the completion signal still gates coordination, now
+**M39 → M40**. Only labels moved; no epic was added or removed.
+
+**One consequence to note and not act on.** The 2026-08-05 ruling upgraded the Phase Chat's permission
+to **split M37** from *permitted* to *recommended*. **That recommendation is spent.** It applied to
+old-M37 at seven epics — the condition the restructure itself resolved by carving this milestone out.
+**New M37 has two epics and its contents are fixed at them; there is nothing to split.** The standing
+split permission now belongs to **M38**, which inherited old-M37's five Drivr epics and where the
+phase spec still records it.
+
+---
+
+## This Milestone Is Entirely In-Repo
+
+Like M36 and unlike the rest of P11, every M37 deliverable amends this framework's own corpus. There
+is no target project, no cross-repo bump, and **no Drivr dependency of any kind** — M38 creates Drivr,
+and nothing in M38–M40 depends on either M37 epic.
+
+**Placement is therefore a judgment about record integrity, not about dependency** — the same judgment
+that put M36 first. Both items are latent traps that compound with every amendment, and **M36
+demonstrated the compounding inside a single milestone**: one epic, one commit, one author, one spec
+recorded three amendments with full provenance and two with none.
+
+**Suite baseline: 377 passed / 0 failed / 0 skipped / 0 xfailed**, measured on `phase/P11` at planning
+time. Note `master` still reads 375 passed / 1 xfailed until `phase/P11` merges up at phase close —
+E36.2 converted B3.1's `xfail` to a pass and added one test. **Measure on the branch you are on.**
+
+---
+
+## Contents Are FIXED at Two Items (binding — CFO-directed, 2026-08-05)
+
+**M37 carries E37.1 and E37.2 and nothing else.** Same discipline the CFO applied to M36's four.
+
+**This milestone is NOT a home for `P10-GH-4`, `P10-GH-6` or `P10-GH-10`**, nor for any other parked
+carry-forward. **Adding to it requires a ruling, not a passing judgment.**
+
+**The reason is the milestone's own origin.** Old M37 reached **seven** epics, four of them
+carry-forward hygiene HQ routed there one ruling at a time. *"The milestone with room"* had become
+*"the milestone things get put in."* **HQ named that pattern and constrained itself against it**
+(2026-08-05 ruling: *"HQ places nothing further in M37 without first reconsidering the milestone's
+shape"*), and the CFO then resolved it structurally. **Without this fence the restructure moves the
+problem instead of fixing it** — and the fence is worth nothing if the first convenient item breaches
+it.
+
+**P10-GH-5 and conditional P10-GH-1 stay with the registry in M38.** They were folded in for coupling
+to registry work, not for hygiene, and they do not follow the hygiene epics here.
+
+---
+
+## Execution Posture (Phase Chat decision — recorded, with the reasoning)
+
+**Both M37 epics run manual / paid frontier.** Every Epic Execution Chat Starter carries
+`Execution Mode: manual` and routes to `models.epic_manual` (`remote:claude-opus-5`).
+
+**This is the Phase Chat's call, not a carried CFO decision.** The CFO's 2026-08-02 binding decision
+was scoped to M36's epics. M37's shape is the same in the way that mattered there:
+
+- **E37.2 is dense-prose normative authorship** — writing citation-form rules into the highest-authority
+  document in the framework. Identical in kind to M36's epics, and the 2026-08-01/02 engine comparison
+  measured `qwen3-coder:30b` at its weakest on exactly that shape
+  (`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`).
+- **E37.1 is *described* as mechanical, and is mechanical in structure but not in content.** Ten
+  documents each need a seeding row that states the convention was adopted and points at git for prior
+  history — and one of them, `chat-hierarchy.md`, must have its row written from the 2026-08-05
+  **erratum** rather than from the count in the ruling that scheduled the work. Ten near-identical
+  prose rows in the normative tier, one of which is deliberately different, is a shape where a small
+  consistency lapse lands in ten governance documents at once.
+
+**The stale note this supersedes.** The phase spec's remark that *"M37's code-shaped epics are where
+the local lane gets tested"* was written when M37 meant Drivr. **New M37 has no code-shaped epics.**
+That test now belongs to **M38**, and the phase spec's local-or-remote latitude at the Epic is
+untouched by this decision.
+
+> **An option left open rather than closed.** E37.1 is, on structure, the strongest local-lane
+> candidate this phase has offered so far — highly repetitive, mechanically verifiable, and with a
+> cheap ground truth (either all seventeen documents comply afterward or they do not). **If the CFO
+> wants an early local data point at low risk, E37.1 is where to take it**, and this spec's posture
+> should be overridden rather than worked around. Recorded as available, not chosen: the default above
+> stands unless the CFO says otherwise.
+
+---
+
+## Binding Constraints (settled — NOT for re-debate)
+
+These carry to every Epic under this Milestone.
+
+**1. E37.1 seeds forward-looking only. No backdated reconstruction — permanently out of scope, not
+deferred.** (HQ Ruling 2026-08-04, Decision 2.) Reconstructing weeks of amendment history from commit
+archaeology is the expensive, unreliable part, and dropping it is what makes this mechanical rather
+than corpus-wide. An epic that starts reconstructing history has left M37's scope.
+
+**2. The seven already-compliant documents are left untouched.** E37.1 seeds ten; it does not
+normalize, restyle or renumber the seven that already carry `version` + `## Changelog`.
+
+**3. `chat-hierarchy.md`'s seeding row is written from the 2026-08-05 erratum, NOT from HQ Ruling
+2026-08-04 Decision 5.** Decision 5 states the forward-looking count is *"two, not three"* and names
+both amendments as `creation-chat-guide.md`. **That count is wrong and HQ has footnoted it.** The
+verified count is **three amendments across two unversioned documents** — M36 amended
+`chat-hierarchy.md` once (E36.1, ±3, the SN-23 date-qualification including the
+Ratified-Decision-#2 supersession line). **An E37.1 seeding row written from Decision 5 would record
+that document as unamended by M36.**
+
+**4. Nothing is renumbered.** (HQ Ruling 2026-08-05, Decision 4.) `P6-GH-10…15` and `P7-GH-16…21` —
+forward-allocated and/or continuing a global counter — are **ratified historical exceptions, recorded
+as such and left in place.** The SN-15 precedent that a `GH-` ID *has* been renumbered before
+(`P6-GH-1` → `P6-GH-12`, `P6-GH-2` → `P6-GH-13`) is noted and **not followed**: those renumbers
+happened before the IDs had propagated into the normative tier, and these have. Third application of
+*a bookkeeping defect never rewrites a citation in a normative document.*
+
+**5. The `GH-` prefix names the phase that FILED an item. Permanently.** (2026-08-05, Decision 4.) Not
+the phase that will address it. **P10-GH-8 is the proof available today**: destined for M36, then
+parked, then scheduled to M37 — and its ID rightly never moved. Under the forward-allocation reading
+it would have had to change twice, invalidating every citation each time. Stated in the form this
+repository keeps arriving at: **the record names the disposition; the identifier names the origin.**
+Allocation restarts per phase; the prefix carries uniqueness.
+
+**6. E37.2's rules are recorded ONCE, where the corpus states such rules** — alongside E36.1's
+"Steering Note ID Allocation" section (`governance/systems/creation-chat-guide.md`, §line 161 at
+planning time) — **not duplicated into each artifact family's directory.** (2026-08-05, Decision 5.)
+Duplication into three copies free to drift is the defect class this phase has now closed twice.
+
+**7. The `rulings/` date-only ambiguity is report-and-leave, and is NOT in E37.2's scope.**
+(2026-08-05, Decision 6.) Two dates hold two rulings each and the shorthand is in live use ~14 times,
+but **every `governance/` citation resolves.** Affirmed as recorded, not actioned.
+
+**8. Every delivery that amends a normative document carries a Structural diagram** (Mermaid, fenced,
+in-repo, **no ComfyUI**) per `governance/systems/hq-chat.md` "Review Diagram on HQ Rulings" —
+documents touched, what changed named to the section, what was deliberately frozen, where authority
+flowed. **Both M37 epics amend the normative tier, so this fires for both.** It is what makes the
+CFO's mandatory §11.6.1 diff review cheap enough to actually perform — and E37.1's diff spans ten
+documents, which is precisely the case where a reviewer needs the map.
+
+**9. Neither epic reopens M36.** Its Closure Declaration is committed and its audit was scoped to
+report and did. E37.1 and E37.2 *execute* what that audit surfaced; they do not revisit it.
+
+---
+
+## Verified at planning time — measured, not inherited
+
+Re-measured on `phase/P11` rather than carried from the rulings. **Two figures differ from what the
+record states**, and both are recorded here so the epics do not inherit them.
+
+| Fact | Verified on `phase/P11` |
+|---|---|
+| `governance/systems/` documents | **17** |
+| Carrying `version` + `## Changelog` | **7** |
+| Carrying neither — E37.1's targets | **10** — `chat-hierarchy.md`, `creation-chat-guide.md`, `epic-execution-chat-starter.md`, `governance-propagation.md`, `hq-chat.md`, `hq-execution-chat-starter.md`, `milestone-execution-chat-starter.md`, `phase-execution-chat-starter.md`, `PROJECT-TRACKER-INTEGRATION-SYSTEM.md`, `start-a-project.md` |
+| Bare `GH-<n>` under `governance/` | **exactly one** — `PROJECT-SYSTEM-GUIDELINES.md:605` ✅ matches the ruling |
+| E36.1's allocation section anchor | `creation-chat-guide.md:161`, subsections at 166 / 187 / 209 |
+| Suite | **377 passed / 0 failed / 0 skipped / 0 xfailed** |
+
+> **Correction 1 — the `GH-` live-ID count is 39 today, not 38, and a naive sweep returns 41.**
+> The 2026-08-05 ruling states *"38 live IDs across six phases."* That was correct at its date. A
+> sweep of `docs/`, `governance/` and `.ai-project/` now returns **41 distinct `P<n>-GH-<m>` strings**.
+> The reconciliation:
+> - **+1 live:** `P11-GH-1` was filed after the ruling (mid-flight amendments don't reach working
+>   branches) → **39 live**.
+> - **−2 not live:** `P6-GH-1` and `P6-GH-2` appear in the corpus only as **pre-renumber historical
+>   references** — the SN-15 renumbering moved them to `P6-GH-12` / `P6-GH-13`. They are strings, not
+>   live IDs.
+>
+> **E37.2 will hit this.** Any inventory it produces must distinguish live IDs from historical
+> pre-renumber references, or it will either report 41 and overcount or report 38 and miss `P11-GH-1`.
+> **A stated inventory in a ruling is a floor, not an inventory** — M36's Finding 1, sixth instance,
+> and the lesson that a count in a ruling is a floor too.
+
+> **Correction 2 — the escalation-notice shorthand has three occurrences across two files, and one
+> file's path is misstated in the record.** The 2026-08-05 ruling names `chat-hierarchy.md:271` and
+> `ai-project-yml-spec.md:660`. Verified:
+> - `governance/systems/chat-hierarchy.md:271` — *"(P10-M34 Escalation Notice)"* ✅
+> - `governance/ai-project-yml-spec.md:660` — *"(P10-M34 Escalation Notice)"* ✅
+> - **`governance/ai-project-yml-spec.md:6`** — *"(P10-M34 escalation, 2026-07-28)"`* — **a third
+>   occurrence, lower-case, in the §Introduced In line, not named by the ruling.**
+>
+> Also: **`ai-project-yml-spec.md` lives at `governance/ai-project-yml-spec.md`, not under
+> `governance/systems/`.** It is therefore **not** one of E37.1's seventeen documents, and E37.2 must
+> not assume the two epics' file sets overlap there. **E37.2 performs its own exhaustive sweep**; the
+> ruling's two locations are a floor.
+
+---
+
+## Problem Statement
+
+**1. Ten of seventeen `governance/systems/` documents cannot record their own amendments**, and the
+set has not shrunk in five weeks — new documents are created with the convention, existing ones never
+gain it. **The gap is calcifying, not closing.** P10-GH-8's own revisit trigger fired inside M36, and
+the demonstration was one commit: E36.1 wrote precise changelog rows into
+`artifact-communication-protocol.md` (v1.4.1), `fleet-operator.md` (v1.2.1) and
+`fleet-operator-brief.md` (v1.0.1), and could record **nothing** for its single largest change — a
+~74-line new normative section in `creation-chat-guide.md`. **The convention works precisely where it
+exists and is silently absent where it does not**, by one author under one spec. That is structural,
+not a matter of diligence.
+
+The ten include the two most-amended and most-cited documents in the directory:
+`chat-hierarchy.md` — per P10-GH-8's own note, *"cited by more artifacts than any other document in
+the directory"* — and `creation-chat-guide.md`.
+
+**2. A shorthand in the normative tier resolves to more than one artifact.** This is **not** an ID
+collision: the `GH-` namespace held, and `rulings/` and `escalation-notices/` allocate no ID at all.
+It is a **citation-form** failure with SN-23's exact reader-level consequence:
+
+- The bare `GH-10` at `PROJECT-SYSTEM-GUIDELINES.md:605` is the **sole** namespace-stripped `GH-<n>`
+  in the corpus, sitting in **the framework's highest-authority document**, ambiguous between two live
+  and unrelated items (`P5-GH-10`, `P6-GH-10`). Worse than a bare identifier: that sentence opens with
+  **two P5 anchors** (*"SN-13 (P5)"*, *"since P5"*) against **one P6 anchor** (*"(P6-M25)"*), so
+  **neither the identifier nor the context reliably resolves it** — a reader weighting salience over
+  adjacency lands on the wrong item.
+- Two escalation notices already share the `P10-M34` key. **The notice that reported this was itself
+  the second `P11-M36` notice** — it instantiated the ambiguity it reported and counted itself in the
+  finding rather than exempting itself.
+- The `GH-` prefix **inverted mid-corpus**: P5's closure declaration forward-allocates
+  `P6-GH-10`/`P6-GH-11` (prefix = the phase that *will address* it), while P10 carries `P10-` IDs into
+  P11 unchanged (prefix = the phase that *filed* it). Both readings are live.
+
+---
+
+## Goals
+
+By the end of this milestone:
+
+1. **Every `governance/systems/` document carries a `version` field and a `## Changelog`** — the ten
+   unversioned seeded forward-looking with a first row recording the convention's adoption and
+   pointing at git for prior history; the seven compliant untouched; **no backdated reconstruction**
+   (E37.1).
+2. **`chat-hierarchy.md`'s seeding row records M36's amendment to it**, written from the 2026-08-05
+   erratum rather than from Decision 5's undercount (E37.1).
+3. **No citation in the normative tier resolves to more than one artifact** — `PSG:605`
+   disambiguated to `P6-GH-10`; `GH-` citations in `governance/` carry the phase prefix; escalation
+   notices cited by full filename (E37.2).
+4. **The `GH-` prefix's meaning is fixed and recorded** — it names the phase that **filed** an item,
+   permanently, with the forward-allocated ranges ratified as historical exceptions and **not
+   renumbered** (E37.2).
+5. **Both rule sets live in one place**, alongside E36.1's Steering Note ID Allocation section, cited
+   rather than duplicated (E37.2).
+6. **Both deliveries carry a Structural diagram**, so the CFO's mandatory §11.6.1 diff review stays
+   performable across a ten-document diff.
+
+---
+
+## Non-Goals
+
+This milestone explicitly does **not**:
+
+- **Reconstruct any document's prior amendment history.** Permanently out of scope, not deferred.
+- **Touch the seven already-compliant `governance/systems/` documents.**
+- **Renumber any `GH-` identifier.** The forward-allocated ranges are ratified exceptions.
+- **Act on the `rulings/` date-only ambiguity.** Report-and-leave, affirmed; not in scope.
+- **Absorb `P10-GH-4`, `P10-GH-6`, `P10-GH-10`, or any other parked carry-forward.** Contents are
+  fixed at two items; adding requires a ruling.
+- **Reopen M36** or revisit its closed audit.
+- **Split this milestone.** Two epics, fixed contents — the split recommendation was spent by the
+  restructure and now belongs to M38.
+- **Touch Drivr, the adapter surface, the fleet registry, the completion signal or the scheduler** —
+  M38–M40, in binding order.
+- **Produce Epic specs or Epic Execution Chat Starters at the Phase level** — the Milestone Chat's job
+  (adjacency).
+
+---
+
+## In Scope
+
+- **E37.1** — the system-tier versioning convention applied to all 17 `governance/systems/` documents.
+- **E37.2** — artifact-ID citation forms: the `PSG:605` disambiguation, the `GH-` phase-prefix rule,
+  the escalation-notice full-filename rule, and the prefix-means-filing-phase statement with its
+  ratified historical exceptions.
+
+## Out of Scope
+
+Everything under Non-Goals; additionally any M38/M39/M40 work of any kind.
+
+---
+
+## Hard Constraint (binding — carries to every Epic)
+
+**M37 records conventions and applies them mechanically. It builds no enforcement.**
+
+Both epics produce normative text plus its mechanical application. **Neither adds a test, a linter or
+a validator.** That boundary is not arbitrary — it is the same one HQ held twice in this phase
+(2026-08-01 Decision 5; 2026-08-04 Decision 3), and E36.4 held it under real pressure when handed a
+verification command and declining to promote it into a committed test.
+
+> **The specific temptation, named so it is recognized:** E37.1 gives seventeen documents a uniform
+> shape, which makes *"assert every `governance/systems/` document has a `version` and a
+> `## Changelog`"* a three-line test that would pass on delivery. **Do not write it.** B3.1's carve-out
+> exists for exactly that kind of guard and this milestone is not it; a convention-enforcing test is
+> its own scoped item, and inventing it here is how a fixed-contents milestone grows a third epic in
+> everything but name. **If an epic judges the guard valuable, it records the recommendation and
+> escalates — it does not build it.**
+
+If an epic finds itself writing enforcement, **it has drifted and must stop and escalate to the Phase
+Chat.**
+
+---
+
+## Planned Epics
+
+### Confirmed Epics
+
+- **E37.1 — System-tier versioning convention (P10-GH-8)**
+- **E37.2 — Artifact-ID citation forms (`GH-`, escalation notices)**
+
+> **Artifact scope (adjacency).** The Phase Chat produces only this Milestone spec and the Milestone
+> Execution Chat Starter. The **Milestone Chat** owns final epic planning and authors both Epic specs
+> and Epic Execution Chat Starters. **Contents are fixed at two items, so epic boundaries are not
+> adjustable in the way M36's were** — merging them is admissible only if the merged epic still keeps
+> the two rulings' deliverables separately verifiable, and splitting either is admissible only if
+> total scope does not grow.
+
+### Deferred Epics
+
+None. Neither epic's extent is conditional.
+
+---
+
+## Epic Detail
+
+### E37.1 — System-tier versioning convention (P10-GH-8)
+
+**Source:** HQ Ruling 2026-08-04 (P10-GH-8), Decisions 2 and 4 — read `M37/E37.6` as **E37.1**; the
+2026-08-05 erratum (Part 1); P10-M35's carry-forward note
+`docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35__carry-forward-note__P10-GH-8-unversioned-system-documents.md`.
+
+**Grounding:** the convention is **already decided** — this epic applies it. HQ decided it once for
+all seventeen documents precisely so it would not be settled per-document under a passing edit, which
+is what P10-M35's E35.1 correctly refused to do and what made the carry-forward note well-formed.
+
+**Deliverables:**
+
+1. **All ten unversioned `governance/systems/` documents seeded** with a `version` field and a
+   `## Changelog` section. Each seeding row records **that the convention was adopted on HQ Ruling
+   2026-08-04's authority** and **points at git for prior history**. Starting version is the Epic
+   Chat's design decision — pick one scheme, state it, apply it uniformly.
+2. **`chat-hierarchy.md`'s row written from the 2026-08-05 erratum** (constraint 3): it records that
+   **M36 amended this document once** — E36.1, ±3, two SN-23 citations date-qualified in normative
+   text, including the Ratified-Decision-#2 supersession statement. **Not from Decision 5's count,
+   which omits it.**
+3. **`creation-chat-guide.md`'s row records M36's two amendments** — E36.1's new "Steering Note ID
+   Allocation" section and E36.3's Re-instantiation Ritual reconciliation. Both are named in M36's
+   Closure Declaration §D5 as Amendments 1 and 2 of 3.
+4. **The seven compliant documents verified untouched** (constraint 2) — shown, not asserted.
+5. **No backdated reconstruction** (constraint 1). The seeding row is the first row; nothing before it
+   is invented.
+6. **A Structural diagram** (constraint 8). With ten documents in the diff this is the delivery where
+   the diagram does the most work — it must name which ten were seeded, which seven were frozen, and
+   that no history was reconstructed.
+
+**Definition of Done:**
+- [ ] All **17** `governance/systems/` documents carry a `version` field and a `## Changelog` —
+      verified by re-running the planning-time measurement, not asserted
+- [ ] The **ten** seeded documents each carry a first changelog row citing HQ Ruling 2026-08-04 and
+      pointing at git for prior history; the version scheme is stated once and applied uniformly
+- [ ] **`chat-hierarchy.md`'s row records M36's one amendment to it**, sourced from the 2026-08-05
+      erratum
+- [ ] `creation-chat-guide.md`'s row records M36's two amendments to it
+- [ ] The **seven** already-compliant documents are shown unchanged
+- [ ] **No reconstructed history anywhere** — no changelog row predates the seeding row
+- [ ] No test, linter or validator added (Hard Constraint)
+- [ ] A Structural Mermaid diagram accompanies the delivery
+- [ ] Full suite green (**377 / 0** baseline on `phase/P11`, no regressions, no new skips)
+
+**Acceptance Criteria:**
+- [ ] A reader opening any `governance/systems/` document can determine what changed in it since the
+      convention was adopted, and is told where to look for anything before that
+- [ ] A reader of `chat-hierarchy.md`'s changelog learns that M36 amended it — the fact Decision 5's
+      count would have lost
+
+**Sequencing:** first by the phase spec's own statement, though it has no hard dependency on E37.2.
+May run in parallel with E37.2 — see the file-contention note below.
+
+---
+
+### E37.2 — Artifact-ID citation forms (`GH-`, escalation notices)
+
+**Source:** HQ Ruling 2026-08-05, Decisions 1–5 — read `E37.7` / `E38.7` as **E37.2**; E36.5's audit
+`docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__artifact-id-audit.md`.
+
+**Grounding:** the four questions are **answered**; this epic executes them. The remediation at
+`PSG:605` is two characters, and **the cheapness is precisely why it goes through process** — E36.5
+named that hazard and declined to act on it, and HQ explicitly refused to undercut that judgment by
+doing informally what the Epic properly refused to do. **The same reasoning binds this epic: it is not
+a licence to make other "obviously right" two-character fixes it happens to notice.**
+
+**Deliverables:**
+
+1. **`PROJECT-SYSTEM-GUIDELINES.md:605`'s bare `GH-10` disambiguated to `P6-GH-10`** (Decision 1). The
+   sole namespace-stripped `GH-<n>` in the corpus, in the highest-authority document. Note the trap
+   E36.5 sharpened: the sentence carries two P5 anchors against one P6 anchor, so context misleads —
+   record the resolution's basis (`(P6-M25)`, E25.2) so a future reader can check it.
+2. **The `GH-` phase-prefix rule, recorded normatively** (Decision 2): any `GH-` identifier cited in a
+   `governance/` document is written in **full phase-prefixed form** (`P6-GH-10`), never bare. Prose
+   elsewhere may abbreviate where an unambiguous antecedent is adjacent; **the normative tier may
+   not.** This is the direct analogue of E36.1's SN-23 date-qualification rule, applied to the family
+   **cited far more widely than `SN-` ever was**.
+3. **The escalation-notice full-filename rule, recorded normatively** (Decision 3): an escalation
+   notice is cited by its **full filename**, never by milestone key — because **a milestone can raise
+   more than one notice**, and two already share `P10-M34`. Extend the statement to any artifact family
+   keyed by level rather than by identifier.
+4. **The prefix-meaning statement, recorded normatively** (Decision 4): the `GH-` prefix names the
+   phase that **filed** an item, permanently; allocation restarts per phase. Record **P10-GH-8 as the
+   worked proof** — destined for M36, parked, then scheduled to M37, its ID never moving — and record
+   `P6-GH-10…15` / `P7-GH-16…21` as **ratified historical exceptions that are not renumbered**, with
+   the reason (they have propagated into the normative tier; the SN-15 renumbers happened before
+   theirs had).
+5. **An exhaustive sweep of the three shorthand families**, treating the rulings' named locations as a
+   **floor** (see Correction 2). Known at planning time: `chat-hierarchy.md:271`,
+   `ai-project-yml-spec.md:660`, **and `ai-project-yml-spec.md:6`** — a third occurrence the ruling
+   does not name. **Distinguish live `GH-` IDs from pre-renumber historical references** (see
+   Correction 1) or the inventory will be wrong in one direction or the other.
+6. **All four rules recorded ONCE** (constraint 6), alongside E36.1's "Steering Note ID Allocation"
+   section in `creation-chat-guide.md` (§161 at planning time) — **not duplicated per directory.**
+   Where the rules must be visible elsewhere, cite rather than restate.
+7. **A Structural diagram** (constraint 8).
+
+**Definition of Done:**
+- [ ] `PROJECT-SYSTEM-GUIDELINES.md:605` reads `P6-GH-10`, with the resolution's basis recorded
+- [ ] **A sweep shows no remaining namespace-stripped `GH-<n>` anywhere under `governance/`** —
+      re-measured, not asserted
+- [ ] The `GH-` phase-prefix rule, the escalation-notice full-filename rule, and the
+      prefix-means-filing-phase statement are all recorded normatively, **in one place**, with the
+      other surfaces citing rather than restating
+- [ ] `P6-GH-10…15` / `P7-GH-16…21` are recorded as ratified historical exceptions with the reason;
+      **nothing is renumbered** (constraint 4)
+- [ ] The shorthand sweep is exhaustive and evidenced, covering **all three** known occurrences and
+      any others found; live IDs are distinguished from pre-renumber historical references
+- [ ] The `rulings/` date-only ambiguity is **not** actioned (constraint 7)
+- [ ] No test, linter or validator added (Hard Constraint)
+- [ ] A Structural Mermaid diagram accompanies the delivery
+- [ ] Full suite green (**377 / 0** baseline, no regressions, no new skips)
+
+**Acceptance Criteria:**
+- [ ] Every `GH-` citation and every escalation-notice citation in `governance/` resolves to exactly
+      one artifact — demonstrated by the sweep
+- [ ] A reader can determine, from the recorded rule alone, what prefix a newly filed gap record takes
+      and whether that prefix ever changes when the item's disposition does
+
+**Sequencing:** no hard dependency on E37.1; may run in parallel.
+
+---
+
+## Dependencies and Sequencing
+
+- **No dependency on any other P11 milestone.** Nothing in M38–M40 depends on either epic, and neither
+  depends on Drivr. M36 is closed and consolidated (`ebf426f`).
+- **E37.1 and E37.2 are independent and may run in parallel.** E37.1 is named first by the phase spec;
+  that is placement, not a dependency.
+- **⚠ File contention — the one real coordination point.** Both epics touch
+  `governance/systems/creation-chat-guide.md`: E37.1 adds its `version` field and `## Changelog`
+  section, E37.2 adds its rules alongside the existing §Steering Note ID Allocation (line 161). The
+  regions differ — front matter and a new tail section versus a mid-document insertion — but **if
+  E37.2 lands second it must add its own changelog row to the section E37.1 created**, and if it lands
+  first, E37.1's seeding row must record E37.2's change. **The Milestone Chat sequences or coordinates
+  these deliberately rather than discovering it at merge**, and whichever epic lands second owns
+  reconciling the changelog.
+- **M37 → M38 is binding** at the phase level. Phase closure does not begin until all five milestones
+  close.
+
+---
+
+## Definition of Done (Milestone)
+
+- [ ] E37.1 and E37.2 each meet their own Definition of Done
+- [ ] Both epic branches merged to `milestone/M37`
+- [ ] **All 17 `governance/systems/` documents carry `version` + `## Changelog`**; the ten seeded
+      forward-looking with a ruling-citing first row, the seven compliant shown untouched, **no
+      reconstructed history**
+- [ ] **`chat-hierarchy.md`'s seeding row records M36's amendment to it**, sourced from the 2026-08-05
+      erratum and not from Decision 5's count
+- [ ] **No namespace-stripped `GH-<n>` remains under `governance/`**; `PSG:605` reads `P6-GH-10`
+- [ ] The `GH-` phase-prefix rule, the escalation-notice full-filename rule, and the
+      prefix-means-filing-phase statement are recorded normatively **in one place**, with the ratified
+      historical exceptions named and nothing renumbered
+- [ ] The escalation-notice shorthand sweep is exhaustive, covering the third occurrence at
+      `ai-project-yml-spec.md:6` that the ruling does not name
+- [ ] **No test, linter or validator was added** (Hard Constraint) — and if either epic recommended
+      one, the recommendation is recorded and escalated, not built
+- [ ] Both deliveries carry a Structural Mermaid diagram (fenced, in-repo, no ComfyUI)
+- [ ] Both Epic Starters declare `Execution Mode: manual` and route to `models.epic_manual` — unless
+      the CFO overrides E37.1's posture, in which case the override is recorded
+- [ ] **M37's contents were not widened.** No parked carry-forward was absorbed; if one was proposed,
+      it was escalated rather than folded
+- [ ] Full suite green on `milestone/M37` (**377 / 0** baseline, no regressions, no new skips)
+- [ ] Milestone Closure Declaration produced (`is_final: false` — M38 planning follows)
+
+---
+
+## Acceptance Criteria (Milestone)
+
+1. **Every `governance/systems/` document can record its own amendments** — 17 of 17 compliant, ten
+   seeded forward-looking, seven untouched, no reconstructed history (E37.1).
+2. **`chat-hierarchy.md`'s changelog tells a reader that M36 amended it** — the fact HQ's own Decision
+   5 count would have lost (E37.1).
+3. **No citation in the normative tier resolves to more than one artifact** — `PSG:605` disambiguated,
+   no bare `GH-<n>` remaining, escalation notices cited by full filename (E37.2).
+4. **The `GH-` prefix's meaning is recorded as immutable-by-origin**, with the forward-allocated ranges
+   ratified as exceptions and nothing renumbered (E37.2).
+5. **Both rule sets live in one place and are cited elsewhere, not restated** (E37.2).
+6. **The milestone closed exactly as wide as it opened** — two items, no absorbed carry-forwards, no
+   enforcement built.
+7. **The full suite is green at milestone delivery** — 377 / 0, no regressions, no new skips.
+
+---
+
+## Prerequisites
+
+- This Milestone spec and its Milestone Execution Chat Starter are **git-tracked on `phase/P11`**
+  (verify with `git ls-files --error-unmatch <path>` on `phase/P11` — disk presence is not proof).
+- **M36 closed and consolidated** — PR #181 merged, `phase/P11` at `ebf426f`; Closure Declaration
+  accepted after one narrow D5 rework (Review Decision
+  `.ai-project/artifacts/review-decisions/2026-08-05T00_00_00Z__P11-M36__milestone_review_decision.md`,
+  resolved ACCEPT).
+- **`phase/P11` synced from master** (`c9edd25`) — carrying phase spec **v1.1.0**, the five-milestone
+  restructure, the 2026-08-04 and 2026-08-05 rulings, the D5 erratum, and P11-GH-1. **`milestone/M37`
+  branches from `phase/P11` after this sync**, not before.
+- **Governing rulings, both merged to master and present on `phase/P11`:**
+  - `.ai-project/artifacts/rulings/2026-08-04__ai-project-system-hq__ruling__p10-gh-8-versioning-convention.md`
+    (E37.1; read `E37.6` as `E37.1`)
+  - `.ai-project/artifacts/rulings/2026-08-05__ai-project-system-hq__ruling__artifact-id-citation-forms.md`
+    (E37.2 + the D5 erratum; read `E37.7`/`E38.7` as `E37.2`)
+- **E36.5's audit** —
+  `docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__artifact-id-audit.md`
+- **M36's Closure Declaration §D5** — the source for E37.1's `chat-hierarchy.md` and
+  `creation-chat-guide.md` seeding rows
+- Governance corpus at **PSG v2.4.0 / AOG v2.10.0**, **PSG §11.6.1 in force**
+- **P10-GH-10 awareness (measured, not estimated):**
+  `tests/test_artifact_router.py::test_daemon_extensions_error_branches` fails **~3 in 10 full-suite
+  runs** (M36 Finding 2), passing 5/5 in isolation, and is untouched by anything here. **A red suite on
+  that test alone is not evidence of a defect in either epic** — re-run and record both results.
+
+---
+
+## ⚠ P11-GH-1 — the spec channel does not reach running branches
+
+**P11-GH-1** (`05038ac`, filed by HQ 2026-08-04) records that PSG §13D's downward channel is broken in
+practice: *"that same source is not the same file across branches."* A parent amends the spec on its
+own branch; every child carries a copy frozen at branch time. **The parent writes once and the children
+see nothing.**
+
+It has fired twice already in this phase, and **this milestone is where it would fire third**: M36's
+Milestone Chat could not see Decision 5 through the spec channel, and `phase/P11` could not see spec
+v1.0.2 — which would have had this Phase Chat plan the *old* M37 (Drivr) instead of this one.
+
+**Interim practice, binding on the M37 Milestone Chat until P11-GH-1 is resolved** — recorded here
+because this document cannot update itself once you branch:
+
+1. **Before planning and again before each epic's execution, check whether `phase/P11` has moved**
+   (`git log --oneline milestone/M37..phase/P11`). Do not assume this spec is current.
+2. **The Phase Chat will notify you in-chat of any amendment**, and will not rely on the spec channel
+   alone. Treat an in-chat amendment notice as authoritative over this file's frozen copy.
+3. **If you find this spec contradicted by a merged ruling on `phase/P11`, the ruling wins** — report
+   the contradiction upward rather than reconciling it silently.
+
+---
+
+## Timeline
+
+**Target Start:** 2026-08-05
+**Target Completion:** 2026-08-10 (~5 days). Two bounded epics with no hard ordering between them and
+one coordination point. **E37.1 is broad but shallow** — ten near-identical seeding rows, where the
+risk is a consistency lapse replicated ten times rather than a hard problem. **E37.2 is narrow but
+sharp** — two characters in the highest-authority document, plus four normative rules whose whole value
+is precision. Neither carries a genuine unknown; both carry the possibility of a small error landing in
+the normative tier, which is what the diagram obligation and the exhaustive-sweep requirements exist to
+catch.
+
+**Actual Start:** Not started
+**Actual Completion:** Not started
+
+---
+
+## Visual Bindings
+
+**Visual binding**
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **What:** diagram
+- **Level:** Milestone
+- **State:** proposed
+
+```mermaid
+flowchart TB
+    subgraph FIXED["Contents FIXED at two items — CFO-directed 2026-08-05"]
+        E1["E37.1 — System-tier versioning convention<br/>(HQ Ruling 2026-08-04, was E37.6)<br/>seed the 10 unversioned<br/>governance/systems/ documents"]
+        E2["E37.2 — Artifact-ID citation forms<br/>(HQ Ruling 2026-08-05, was E37.7)<br/>PSG:605 GH-10 to P6-GH-10<br/>+ 4 normative rules, recorded ONCE"]
+    end
+
+    ERR["2026-08-05 ERRATUM<br/>Decision 5 said TWO amendments;<br/>verified THREE across TWO docs"]
+    ERR ==>|"chat-hierarchy.md's seeding row<br/>MUST come from here"| E1
+
+    E1 -->|"17 of 17 compliant"| OK1["every doc can record<br/>its own amendments"]
+    E2 -->|"one place: creation-chat-guide.md<br/>alongside E36.1's SN allocation section"| OK2["every citation resolves<br/>to exactly ONE artifact"]
+
+    CONT["⚠ FILE CONTENTION<br/>both touch creation-chat-guide.md<br/>whichever lands second<br/>reconciles the changelog"]
+    E1 -.-> CONT
+    E2 -.-> CONT
+
+    FROZEN["DELIBERATELY FROZEN<br/>the 7 already-compliant documents<br/>backdated reconstruction (permanent)<br/>P6-GH-10..15 / P7-GH-16..21 exceptions<br/>rulings/ date shorthand (report-and-leave)<br/>M36 (closed, not reopened)"]
+    E1 -.verifies untouched.-> FROZEN
+    E2 -.ratifies, renumbers nothing.-> FROZEN
+
+    NOENF["NO ENFORCEMENT BUILT<br/>no test, no linter, no validator<br/>recommend + escalate instead"]
+    E1 --> NOENF
+    E2 --> NOENF
+
+    FENCE["NOT a home for<br/>P10-GH-4 / P10-GH-6 / P10-GH-10<br/>adding requires a RULING"]
+    FIXED -.-> FENCE
+
+    OK1 --> DONE["M37 COMPLETE<br/>suite 377 / 0<br/>is_final: false"]
+    OK2 --> DONE
+    DONE --> M38["M38 planning — Drivr inception<br/>(binding: M37 to M38 to M39 to M40;<br/>M39 still gates M40)"]
+```
+
+- **Description:** M37's two fixed epics and the four things it deliberately does not change.
+  **Documents touched:** all ten unversioned `governance/systems/` documents (E37.1) plus
+  `PROJECT-SYSTEM-GUIDELINES.md` and `creation-chat-guide.md` (E37.2). **What is frozen:** the seven
+  already-compliant documents, backdated reconstruction (permanently), the ratified forward-allocated
+  `GH-` ranges, the `rulings/` date shorthand, and closed M36. **Where authority flowed:** nowhere new
+  — both epics execute rulings already issued. The erratum edge is the milestone's single most
+  skippable-looking and least skippable dependency. Proposed-track Structural diagram (AOG
+  §16.3/§16.6), Mermaid, no ComfyUI.
+
+---
+
+## Notes
+
+- **This milestone executes two rulings and makes none.** Every deliverable traces to HQ Ruling
+  2026-08-04 or 2026-08-05. Where a genuine design decision remains it is named and assigned to the
+  Epic Chat: E37.1's starting-version scheme, and E37.2's exact placement of the four rules within the
+  one section that holds them.
+- **Read the rulings through the renumbering table at the top.** Both predate the restructure and cite
+  `E37.6` / `E37.7` / `E38.7`. They were correct at their dates and are deliberately not rewritten.
+- **The two planning-time corrections are the milestone's own subject applied to itself.** The `GH-`
+  count is 39 live today (not the ruling's 38, and not a naive sweep's 41), and the escalation-notice
+  shorthand has a third occurrence in a file whose path the record misstates. **Both were found by
+  measuring rather than citing** — which is M36's Finding 1 lesson, and the reason this spec states
+  every inventory as a floor.
+- **The fence is the load-bearing rule here**, exactly as the Hard Constraint was in M36. This
+  milestone exists because a previous one became "the milestone things get put in." A third epic
+  arriving by convenience — most plausibly as a convention-enforcing test — would reproduce the defect
+  inside the milestone created to fix it.
+- **Default-accept (PSG §11.6 / AOG §12) governs delivery:** clean Epic deliveries are accepted by
+  silence; a Review Decision is the exception path only. Per SN-19, acceptance and the merge
+  instruction are **in-chat acts — no ceremonial artifact.** The harness enforces explicit human merge
+  authorization regardless.
+- **PSG §11.6.1 constrains what silence can accept.** Silence accepts *children's* clean deliveries,
+  never HQ's own output. Constraint 8's diagram obligation exists to keep the CFO's mandatory diff
+  review affordable — and with E37.1 spanning ten documents, that is not a formality.
