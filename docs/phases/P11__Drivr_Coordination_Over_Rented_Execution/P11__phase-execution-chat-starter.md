@@ -42,7 +42,7 @@ HQ Chat/human resolution before any planning or review work.
   exception path. Milestone merges land on `phase/P11`; when all milestones are closed, merge
   `phase/P11 → master` on HQ Accept via the **PSG §5C** nine-step closure sequence, ending with the
   Phase Closure Declaration (Step 9). There is no separate phase-delivery artifact beyond §5C's steps.
-- **Milestone ordering is BINDING: M36 → M37 → M38 → M39.** No milestone is independent in this phase.
+- **Milestone ordering is BINDING: M36 → M37 → M38 → M39 → M40.** No milestone is independent in this phase.
   The bindings are structural, not stylistic — see "Sequencing" below. If you believe an order change
   is warranted, that is an **escalation to HQ**, never a Phase-Chat decision.
 - **Artifact scope (adjacency).** You produce artifacts only for your direct parent or direct
@@ -92,7 +92,7 @@ HQ Chat/human resolution before any planning or review work.
   CLI tool that owns the inference.* Drivr rents its chat half (SN-24) **and its execution half**
   (SN-27). It implements no inference, owns no model loop, grows no engine, and spends its whole
   budget on coordination over governance state.
-- **The Drivr repository does not exist** (`~/soft-dev` verified 2026-08-01). Creating it is E37.1.
+- **The Drivr repository does not exist** (`~/soft-dev` verified 2026-08-01). Creating it is E38.1.
 - **The execution roster is one tool: OpenCode**, covering local and cloud (Amendment A1.1, verified
   by the CFO in field practice). `local-agent-runner`'s retention is a **directed assessment with a
   real possibility of retirement** (A1.2) — and explicitly **not** a judgment on the work it produced.
@@ -111,9 +111,10 @@ Milestone spec you write.
 | # | Milestone | Indicative Epics | Order |
 |---|---|---|---|
 | M36 | Record Integrity and Documentation Hygiene | E36.1–E36.5 | **First — CFO ruling** |
-| M37 | Drivr Inception, Fleet Registry, and the Execution Adapter Surface | E37.1–E37.5 | After M36 |
-| M38 | Trustworthy Completion Signal (P10-GH-7) | E38.1–E38.3 | After M37 |
-| M39 | Coordination: Scheduler, Derived Gate Queue, and the Thin Surface | E39.1–E39.5 | **After M38 — gated** |
+| M37 | Corpus Record Conventions | E37.1–E37.2 | After M36 |
+| M38 | Drivr Inception, Fleet Registry, and the Execution Adapter Surface | E38.1–E38.5 | After M37 |
+| M39 | Trustworthy Completion Signal (P10-GH-7) | E39.1–E39.3 | After M38 |
+| M40 | Coordination: Scheduler, Derived Gate Queue, and the Thin Surface | E40.1–E40.5 | **After M39 — gated** |
 
 > Epic identifiers are **indicative decomposition** from the phase spec. Final epic planning is each
 > Milestone Chat's authority; you produce Milestone specs and Milestone Execution Chat Starters, and
@@ -124,20 +125,21 @@ Milestone spec you write.
 - **M36 is first by CFO ruling** (2026-08-01, recorded in SN-28). The cleanup lands *before any Drivr
   code exists* **and** lands *governed*. It has zero Drivr dependency, so nothing is lost by putting
   it first and record integrity is gained.
-- **M37 before M38** — M38 must measure a completion signal, and there is nothing to measure until a
+- **M37 before M38** — M37 is independent of everything downstream; it is placed early because both its items are latent citation traps that compound with every amendment.
+- **M38 before M39** — M39 must measure a completion signal, and there is nothing to measure until a
   real adapter runs a real engine.
-- **M38 before M39, and this is the phase's hard gate.** P10 measured completion untrustworthy in
+- **M39 before M40, and this is the phase's hard gate.** P10 measured completion untrustworthy in
   **both** directions (E33.2 Run A: exit 0, zero work; E33.4: exit 2, complete green work), and
   OpenCode carries the same failure mode in its own open issue #14551. A scheduler and a derived gate
   queue **both depend on knowing whether a run finished, stalled, or failed confidently wrong.**
   Building either over the current signal yields constant false escalations or silent no-ops that read
-  as success. **If M38 proves harder than estimated, escalate — do not start M39 early.**
+  as success. **If M39 proves harder than estimated, escalate — do not start M40 early.**
 
 ---
 
 ## Session Objective
 
-Plan **Milestone M36 — Record Integrity and Documentation Hygiene** first. M37, M38 and M39 are
+Plan **Milestone M36 — Record Integrity and Documentation Hygiene** first. M37, M38, M39 and M40 are
 planned in later sessions of this Phase Chat, each only after its predecessor's planning is accepted.
 **Do not plan ahead of the binding order.**
 
@@ -161,7 +163,7 @@ freeze, reconciling three surfaces to one normative statement. The 2026-08-01/02
 measured `qwen3-coder:30b` at its weakest on exactly that shape (field evidence:
 `.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`). **This is a judgment
 about the work's shape, not a restriction on the execution matrix** — the matrix still permits
-agentic-or-manual and local-or-remote at the Epic, and **M37's code-shaped epics are where the local
+agentic-or-manual and local-or-remote at the Epic, and **M38's code-shaped epics are where the local
 lane gets tested.**
 
 **Indicative Epics (5):**
@@ -241,12 +243,12 @@ the SN-1 ruling
 (`.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__system-hq-routing-codification.md`);
 the P11 opening ruling
 (`.ai-project/artifacts/rulings/2026-08-01__ai-project-system-hq__ruling__p11-opening-and-sn-26-27-28-triage.md`);
-phase spec §P11.1 (**v1.0.1** — its §P11.2 technical note was corrected 2026-08-02 with measured
-Ollama context data; the earlier 4,096-token claim was false, and the reproduction method is
-recorded there);
+phase spec §P11.1 (**v1.1.0** — the phase was restructured to five milestones on 2026-08-05; its
+Ollama context note was corrected 2026-08-02 with measured data, the earlier 4,096-token claim being
+false, and the reproduction method is recorded in §P11.3);
 `docs/bugfixes/B3.1__spec__steering-note-id-allocation-unenforced.md` + its Delivery Notice —
 **delivered and merged**, see constraint 2a; the engine-comparison field evidence
-`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md` (relevant to M37/M38,
+`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md` (relevant to M38/M39,
 **not** to M36). **Do not re-scope B3.1 itself into M36** — it is delivered. M36's only
 obligation toward it is constraint 2a: remove the xfail marker when the last collision clears.
 
@@ -305,13 +307,13 @@ After M36 planning is accepted: "M36 deliverables accepted. Proceeding to M36 ex
 - **The following are CLOSED and must not be reopened, re-parked, or re-inherited:** the local
   inference **runtime** question (Ollama settled; llama.cpp dropped by decision, trigger void); the
   Steering Note **namespace** question (one sequence per directory); whether SN-23 gets renumbered
-  (it does not); `model-routing-policy.md` **row P4** (M37 gathers evidence only and does not decide
+  (it does not); `model-routing-policy.md` **row P4** (M38 gathers evidence only and does not decide
   it).
 - **Design decisions that are yours or your children's — pick a direction, document the reasoning,
   and proceed; do not escalate these:** how re-instantiation is reconciled to one statement (E36.3);
-  the adapter interface's shape (E37.2); the registry's storage form (E37.3); **what a trustworthy
-  completion judgment is built from** (E38.1); the scheduler's policy and the gate queue's derivation
-  mechanism (E39.1/E39.2).
+  the adapter interface's shape (E38.2); the registry's storage form (E38.3); **what a trustworthy
+  completion judgment is built from** (E39.1); the scheduler's policy and the gate queue's derivation
+  mechanism (E40.1/E40.2).
 - **Four SN-27 proposals are returned to the CFO and unowned.** Do not treat any of them as binding.
   Each has a recorded fallback in the phase spec's "Open Items — Returned to the CFO"; execute the
   fallback if no answer has arrived when the milestone reaches it.
