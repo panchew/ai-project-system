@@ -10,6 +10,9 @@ date: 2026-08-05
 decision: rework
 scope: one narrow correction — the D5 obligation is under-discharged
 blocking: consolidation PR #181
+resolution: accepted
+resolved_date: 2026-08-05
+resolution_commit: 461ac34
 ---
 
 # Stage-2 Review Decision — P11-M36 Milestone Closure Declaration: REWORK, one narrow correction
@@ -179,3 +182,40 @@ analysis than most closure records contain.
 
 The one correction is narrow, and it lands on a count the milestone inherited from its parent's parent
 rather than one it invented. **Fix §D5 and the declaration is accepted.**
+
+---
+
+## Resolution — ACCEPTED, 2026-08-05
+
+**Rework verified against the branch, not read.** Resolution commit `461ac34` on `milestone/M36`.
+
+Every item in §Required rework is discharged:
+
+| Required | Verified |
+|---|---|
+| Count corrected to **three** amendments across **two** unversioned documents | ✅ |
+| `chat-hierarchy.md` entry added — E36.1 (`4427ea9` / `f1a5e75`), +3/−3, lines ~117 and ~165–168 | ✅ **Amendment 3 of 3** |
+| No-`version`/no-`## Changelog` statement kept, applied to all three | ✅ |
+| HQ's D5 undercount recorded so the discrepancy is visible | ✅ with full provenance |
+| E36.4's and E36.5's zero-contributions stand as written | ✅ renumbered to *"no fourth"*, substance unchanged |
+
+**Independently re-verified at resolution:** suite on `milestone/M36` — **377 passed, 0 failed, 0
+skipped, 0 xfailed**. PR #181 `MERGEABLE` / `CLEAN` against `phase/P11`.
+
+**The rework exceeded what was asked, in two ways worth recording** because both are the milestone's
+own discipline applied to its own closure record:
+
+1. **The original claim is left visible** rather than silently overwritten — *"because the record's
+   honesty is this milestone's subject."* That is the same principle E36.2 applied to its rename
+   footnotes and E36.5 to the P10-GH-2 amendments, now applied reflexively.
+2. **A forward consequence was added that I did not ask for and should have:** *"the ten unversioned
+   documents E37.6 will seed carry one more in-flight amendment than HQ's ruling records — E37.6's
+   seeding row for that document should not be written from Decision 5's count."* That converts a
+   corrected count into a guard against the next chat inheriting the wrong one, which is the only
+   thing that actually stops this defect class from recurring.
+
+**Milestone P11-M36 — Record Integrity and Documentation Hygiene is ACCEPTED.** Consolidation
+authorized; `milestone/M36 → phase/P11` (PR #181) merges on the human's authorization, which was
+given 2026-08-05. `is_final: false` — the Phase Chat proceeds to M37 planning.
+
+**No further rework. This Review Decision is closed.**
