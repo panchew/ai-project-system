@@ -178,6 +178,28 @@ governance chat was able to run at all this week — an accidental escape hatch 
 be load-bearing. It must be closed on its merits, and closing it will make Creation Chat
 subject to the same halt this session began with. Owner: unassigned. Severity: Medium.
 
+> **Amendment 2026-08-04 (P11-M36-E36.5) — the P10-GH-2 paragraph above rests on a false premise,
+> and the item is re-diagnosed.** The original text is left unedited, deliberately; this note
+> corrects it. This amends **no other part of this ruling**.
+>
+> *"The Creation Chat Seed never picked it up"* is not what happened.
+> `governance/templates/seed.md` has carried the E31.3 **Prerequisite Verification** section since
+> commit **`d7ee7cd` (2026-07-19)** — **nine days before this ruling** — and
+> `governance/templates/genesis.md` carries it from the same commit. The 2026-07-31 Creation Chat
+> session, opened from `seed.md`, **ran the check.**
+>
+> **The real defect was the re-instantiation *ritual*, not the Seed.**
+> `governance/systems/creation-chat-guide.md` handed a re-opened session three artifacts, **none of
+> which carried a model check**, because the only one that would (`genesis.md`) is not rendered in
+> this project. That is why the 2026-07-28 session recorded above was able to open anyway — the
+> escape hatch was in the ritual, not in the Seed.
+>
+> **That defect is now CLOSED.** E36.3 (merged `d8f4871`) canonized a single re-instantiation ritual
+> that opens with the Seed and carries the E31.3 check as an explicit **Step 4**.
+>
+> **A future owner should read the ritual (`governance/systems/creation-chat-guide.md`), not
+> `seed.md`.** Sources: **SN-26** (Required action 1); **HQ Ruling 2026-08-01, Decision 8**.
+
 **P10-GH-3 — Policy row P1 contradicts the live config.** Row P1 states *"No `models:` key
 exists or is needed"* for the creation level; E31.3 then added `creation:` to `.ai-project.yml`
 anyway. `tests/test_model_config.py` does not catch it — `creation` and `epic_manual` sit

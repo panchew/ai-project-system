@@ -109,3 +109,13 @@ domain (a coordinator that reads every project's config is a plausible owner of 
 - No renumbering of P10-GH-1 (`framework_version` unschema'd), P10-GH-2 (Creation Seed lacks E31.3
   verification), P10-GH-3 (policy row P1 vs live config), or **P10-GH-4**
   (`delivery_notice.merge_details` structurally unfillable). This is **P10-GH-5**.
+
+  > **Amendment 2026-08-04 (P11-M36-E36.5) — the parenthetical gloss of P10-GH-2 above restates a
+  > false premise.** The original text is left unedited, deliberately. `governance/templates/seed.md`
+  > has carried the E31.3 check since **`d7ee7cd` (2026-07-19)**, nine days before the ruling that
+  > filed the gap. The real defect was `creation-chat-guide.md`'s re-instantiation ritual, and
+  > **E36.3 (merged `d8f4871`) has closed it.** Per **SN-26** (Required action 1) and **HQ Ruling
+  > 2026-08-01, Decision 8**.
+  >
+  > **This amendment corrects the gloss only.** It renumbers nothing, reopens nothing, and leaves
+  > this note's P10-GH-5 subject matter entirely untouched.

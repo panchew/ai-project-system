@@ -156,11 +156,28 @@ Full definitions in the Phase Closure Declaration. Priority order, not ID order:
 | **P10-GH-7** | **High** | Block detection untrustworthy both directions + G11 unexercised QA lane — prerequisite for any handback mechanism |
 | **P10-GH-9** | **High** (trigger-gated) | Agentic parents × default-accept × P9-GH-1; trigger is the first Phase/Milestone agentic dispatch |
 | P9-GH-1 | Medium (raised) | Merge-authorization routing guard patched at Epic level only; templates unpatched |
-| P10-GH-2 | Medium | Creation Chat's re-instantiation Seed lacks the E31.3 model-verification check |
+| P10-GH-2 | Medium | Creation Chat's re-instantiation Seed lacks the E31.3 model-verification check **⚠ false premise — re-diagnosed; see the note below this table** |
 | P10-GH-5 | Medium | `ai-project-yml-spec.md` §4 validation rules normative but unenforced; drift observed to 3 of 6 enrolled projects |
 | P10-GH-10 | Medium | Flaky `test_artifact_router.py` test weakens "full suite green" as evidence (~10% observed) |
 | P10-GH-1/3/4/6/8 | Low | Convention-only `framework_version`; row P1 vs live config; unfillable `merge_details`; starter-lint false positives; unversioned `governance/systems/` docs |
 | P9-GH-3 | Low | Within-session segmentation; **row P4 does not wait on it** |
+
+> **Amendment 2026-08-04 (P11-M36-E36.5) — P10-GH-2's one-line summary above is false, and the item
+> is re-diagnosed.** The original row is left unedited, deliberately; this note corrects it.
+>
+> `governance/templates/seed.md` has carried the E31.3 **Prerequisite Verification** section since
+> commit **`d7ee7cd` (2026-07-19)** — **nine days before** the 2026-07-28 HQ Ruling that filed the
+> gap — and `governance/templates/genesis.md` carries it from the same commit. The 2026-07-31
+> Creation Chat session, opened from `seed.md`, **ran the check.** The Seed does not lack it.
+>
+> **The real defect was the re-instantiation *ritual*, not the Seed.**
+> `governance/systems/creation-chat-guide.md` handed a re-opened session three artifacts, **none of
+> which carried a model check**, because the only one that would (`genesis.md`) is not rendered in
+> this project. **That defect is now CLOSED** — E36.3 (merged `d8f4871`) canonized a ritual that
+> opens with the Seed and carries the E31.3 check as an explicit **Step 4**.
+>
+> **A future owner should read the ritual (`governance/systems/creation-chat-guide.md`), not
+> `seed.md`.** Sources: **SN-26** (Required action 1); **HQ Ruling 2026-08-01, Decision 8**.
 
 **Parked, each on its own trigger, restated unchanged:** the llama.cpp + Qwen3.6 **Q8_0** trial
 (pending Mac-class ~42 GB hardware — the Q4_K_M back-test candidate is a different artifact and
