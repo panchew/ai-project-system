@@ -104,17 +104,34 @@ one.
 to unversioned `governance/systems/` documents, naming document and amendment and citing the ruling,
 *"so a future reader sees a decision rather than an oversight."*
 
-**M36 made exactly TWO such amendments. Both are to `governance/systems/creation-chat-guide.md`**,
-one of the ten `governance/systems/` documents carrying neither a `version` field nor a
-`## Changelog`.
+> **Corrected 2026-08-05 following the Phase Chat's Stage-2 review of this declaration**
+> (`.ai-project/artifacts/review-decisions/2026-08-05T00_00_00Z__P11-M36__milestone_review_decision.md`).
+> This section previously read *"M36 made exactly TWO such amendments. Both are to
+> `governance/systems/creation-chat-guide.md`."* **The verified count is THREE amendments across TWO
+> unversioned documents** — `chat-hierarchy.md` was omitted. The original claim is left visible here
+> because the record's honesty is this milestone's subject.
+>
+> **HQ Ruling 2026-08-04's own Decision 5 text undercounts**, stating *"the forward-looking count is
+> **two**, not three,"* and naming both as `creation-chat-guide.md`. **This declaration corrects it
+> upward.** The correction is not new information to HQ: the P11 Phase Chat's routing of the
+> 2026-08-03 escalation (2026-08-04) stated it explicitly — *"E36.1 amended **two** unversioned
+> system-tier documents, not one — `chat-hierarchy.md` (+3/−3, SN-23 date-qualification) as well"* —
+> and the ruling absorbed the Phase Chat's other correction while dropping this one. **HQ is notified
+> via this declaration and via the Phase Chat's review.**
 
-**Amendment 1 of 2 — E36.1 (`f1a5e75`, 2026-08-03).** A new normative section, **"Steering Note ID
+**M36 made THREE such amendments, across TWO of the ten `governance/systems/` documents carrying
+neither a `version` field nor a `## Changelog`** — `creation-chat-guide.md` (twice) and
+`chat-hierarchy.md` (once). Measured across the full milestone diff `dd9b310..milestone/M36`, in
+which **six** `governance/systems/` documents were amended; the other four are versioned and recorded
+themselves normally.
+
+**Amendment 1 of 3 — E36.1 (`f1a5e75`, 2026-08-03).** A new normative section, **"Steering Note ID
 Allocation"** (~74 lines, now at lines 97–170), recording: the allocation rule (highest existing ID
 in the directory plus one, regardless of issuing entity) with its reason; the separating rule
 *a bookkeeping defect never rewrites a citation in a normative document*; and the explicit statement
 that **SN-23 is not renumbered, and why**, with the two-meaning disambiguation table.
 
-**Amendment 2 of 2 — E36.3 (`d8f4871`, 2026-08-04).** The **Re-instantiation Ritual** section
+**Amendment 2 of 3 — E36.3 (`d8f4871`, 2026-08-04).** The **Re-instantiation Ritual** section
 (lines 28–84) rewritten to become the **single normative statement** governing Creation Chat
 re-instantiation. Step 3 opens a re-instantiated session with `seed.md` plus the latest Steering Note
 plus the latest Progress Digest — **SN-26 Carry-Over 1 canonized unchanged**, discharging HQ Ruling
@@ -123,10 +140,31 @@ rather than the required artifact #1. A new **Step 4** places the P9-M31-E31.3 m
 canonized path itself**. A new subsection, *"Why the Seed opens the session, and `genesis.md` may not
 exist,"* records the bootstrap-vs-continuity diagnosis.
 
-**No `version` field and no `## Changelog` were added to either amendment** — P10-GH-8 is ruled to
-**M37/E37.6**. The document's existing inline-dated-note precedent was used instead.
+**Amendment 3 of 3 — E36.1 (`4427ea9`, merged `f1a5e75`, 2026-08-03), `governance/systems/chat-hierarchy.md`.**
+**+3 / −3.** Two SN-23 citations date-qualified in **normative text**: the §Execution Mode
+ratification note (line ~117) and the **Ratified-Decision-#2 supersession statement** (lines
+~165–168), each `SN-23` → `SN-23 (2026-07-20)`.
 
-**E36.4 added no third**, as HQ verified independently: its `chat-hierarchy.md` annex is byte-frozen
+> **This is the smallest amendment in the milestone and the least skippable.** Line 165 reads
+> *"**SN-23 (2026-07-20) Ratified Decision #2 is superseded on the Execution Mode axis only**"* — and
+> **that sentence is one half of the High-severity citation trap M36 exists to close.** It is the
+> supersession notice a reader following `AI-OPERATING-GUIDELINES.md`'s citation used to land on
+> before wrongly concluding platform agnosticism had been superseded. **Acceptance Criterion 1 cites
+> this exact line.** M36 cannot claim that fix as its headline achievement and simultaneously treat
+> the amendment that delivered it as too small to record here.
+>
+> `chat-hierarchy.md` is also, per P10-GH-8's own carry-forward note, *"cited by more artifacts than
+> any other document in the directory."* It carries no `version` and no `## Changelog`, so **this
+> amendment is recorded nowhere else** — which is exactly the oversight D5 exists to prevent.
+
+**No `version` field and no `## Changelog` were added to any of the three amendments** — P10-GH-8 is
+ruled to **M37/E37.6**. Each document's existing inline-dated-note precedent was used instead.
+
+**Consequence for E37.6, stated so it is not discovered late:** the ten unversioned documents E37.6
+will seed carry **one more in-flight amendment than HQ's ruling records** — `chat-hierarchy.md`'s.
+E37.6's seeding row for that document should not be written from Decision 5's count.
+
+**E36.4 added no fourth**, as HQ verified independently: its `chat-hierarchy.md` annex is byte-frozen
 and *shown* identical rather than amended, and its substantive edit landed in `system-hq.md`, which
 **is** versioned (bumped v1.0.2 → v1.0.3 with a changelog row). **E36.5 added none** — no
 `governance/` file appears in its diff.
@@ -160,10 +198,15 @@ ambiguities, and **escalated both rather than fixing either.**
 
 ## Findings
 
-### 1. The count-omission pattern — five instances, one root shape
+### 1. The count-omission pattern — six instances, one root shape, two distinct causes
 
-M36 produced **five** instances of the same defect: *a record stating a count that omits its own
-contribution.* Recorded as one finding rather than five corrections, because the shape is the point.
+M36 produced **six** instances of the same defect: *a record stating a count that omits part of its
+subject.* Recorded as one finding rather than six corrections, because the shape is the point.
+
+> **Instance 6 was added 2026-08-05, after the Phase Chat's Stage-2 review of this declaration found
+> §D5 undercounting** — see the corrected §D5 above. It is recorded here rather than only there
+> because it is the **most instructive** of the six and because leaving the finding at five, once the
+> sixth is known, would be the very defect the finding describes.
 
 | # | Record | Stated | Actual |
 |---|---|---|---|
@@ -172,14 +215,31 @@ contribution.* Recorded as one finding rather than five corrections, because the
 | 3 | E36.2's spec (mine) | 3 citing artifacts / 10 occurrences | **seven** / 21 |
 | 4 | E36.2's spec (mine) | suite would be **376** | **377** — omitted the test constraint 2a mandates |
 | 5 | E36.5's spec (mine) | 4 P10-GH-2 restatements | **seven** |
+| 6 | **§D5 of this declaration (mine)** | **2 unversioned amendments, 1 document** | **three across two** |
 
-**Every one was caught by re-measuring rather than inheriting.** That is the only control that has
-worked on this class, and it is worth carrying into M37 explicitly: **a stated inventory in a spec is
-a floor, and the author is the party least able to see what they omitted.**
+**Instances 1–5 share one cause: an author omitting their own contribution**, and every one was
+caught by the same control — **re-measuring rather than inheriting.**
 
-**Three of the five are mine**, and instance 5 was caught by the epic I had specified — E36.5
-correctly applied my stated **rule** over my worked **example** and flagged the departure instead of
-absorbing it. That is the behaviour the milestone was built to produce.
+**Instance 6 has the opposite cause, and that is why it matters most.** §D5's count was not invented;
+it was **inherited from HQ Ruling 2026-08-04's own Decision 5 text** (*"the forward-looking count is
+two, not three"*), which reads as canon because it is a merged ruling. I had both primary facts in
+hand — I verified E36.1's `chat-hierarchy.md` hunks myself during its Stage-2 review, and I verified
+`chat-hierarchy.md` as unversioned myself when raising the P10-GH-8 escalation — **and used the
+inherited number anyway.** This is the one place in the milestone where the control that caught the
+other five was not applied.
+
+**The lesson generalizes, and is the finding's real content: a count in a ruling is a floor too.**
+Authority makes a number harder to question, not more likely to be right. The correction had even
+survived one hop — the Phase Chat's routing stated it explicitly on 2026-08-04 — and died at the
+next when the ruling absorbed one half of it. **A correction that survives one hop and dies at the
+next is worse than one never made**, because everyone downstream then has a ratified number to point
+at.
+
+**Four of the six are mine.** Instance 5 was caught by the epic I had specified — E36.5 correctly
+applied my stated **rule** over my worked **example** and flagged the departure instead of absorbing
+it. Instance 6 was caught by my parent applying to my closure record exactly the standard I had
+applied to an epic inside it. **Both are the behaviour the milestone was built to produce**, working
+in both directions of the chain.
 
 ### 2. P10-GH-10 is worse than recorded — measured, not estimated
 
