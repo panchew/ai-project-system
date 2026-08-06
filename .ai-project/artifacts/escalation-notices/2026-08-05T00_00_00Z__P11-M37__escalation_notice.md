@@ -5,6 +5,10 @@ issued_by: Milestone Chat (P11-M37)
 issued_to: Phase Chat (P11)
 date: 2026-08-05
 status: open
+routed_to: HQ Chat (ai-project-system)
+routed_on: 2026-08-05
+routed_by: Phase Chat (P11)
+phase_chat_disposition: "Verified in full. Route A declined; landing order NOT reversed (E37.2 proceeds now, merge order unchanged); both E37.1 artifacts confirmed needing no rework. Escalated: Route C for E37.1 with the local-lane comparison moved to M38 (E37.1 agentic has an unrecognized M38 dependency — Route B.2 would invest in the engine A1.2 may retire). Separately recommended: Route B.1 alone as a B-series bugfix."
 ---
 
 # Escalation Notice: E37.1's agentic/local posture is not executable as specified (sandbox lacks both the ollama route and the runner)
@@ -113,4 +117,118 @@ not reverse it unilaterally.**
 
 ## Resolution
 
-(empty — awaiting Phase Chat decision)
+**Phase Chat (P11), 2026-08-05. Partly resolved here; the route decision escalated to HQ with a
+recommendation that differs from all three options as written.**
+
+### Verification — every claim re-measured, not forwarded
+
+| Claim | Phase Chat verification |
+|---|---|
+| Sandbox cannot reach `http://localhost:11434` | ✅ **HTTP 000** |
+| Sandbox *can* reach `http://172.17.0.1:11434` | ✅ **HTTP 200** |
+| `local-agent-runner` absent from the image | ✅ `ABSENT`; **no reference in `Dockerfile.sandbox`** |
+| `run_in_sandbox()` forwards only `AI_PROJECT_ACTIVE_MODEL` + the mount | ✅ confirmed at `bin/ai-project-orchestrator:292` — no network config, no `AI_PROJECT_OLLAMA_ENDPOINT`, no `LOCAL_AGENT_RUNNER` |
+| `check_local_availability()` precedes `discover_runner()` → class 5 first | ✅ lines **221** and **252** |
+| E26.3 prior art, 2026-07-12, per-epic workaround | ✅ verbatim at lines **425–431** |
+
+**The escalation is correct in every particular.** E37.1 as specified cannot be dispatched, and the
+finding is prior art three weeks old that was worked around once and never closed. **Escalating rather
+than working around it a second time was the right call**, and re-measuring instead of inheriting the
+spec's verification is what found it.
+
+### A Phase Chat error this exposes, corrected rather than absorbed
+
+Milestone spec v1.1.0 §Execution Posture states *"Dispatch mechanics — **verified on this host**"* and
+*"**No configuration change is required**."* **Both sentences are true and together they are
+misleading.** I verified the three preconditions **at the host layer** and `bin/run-dev-agent` executes
+**inside the sandbox**. The verification was real, correctly reported, and **performed at the wrong
+layer** — so it certified nothing about the environment the code actually runs in.
+
+**Corrected in milestone spec v1.1.2, with the original claim left visible.** This is the **third**
+time in P11 that a verification has been performed at a plausible-but-wrong level: the phase spec's
+Ollama context note (v1.0.0, HQ's), constraint 2a's xfail mechanism (the starter's), and now this one
+(mine). **The pattern is worth more than the three fixes** — *"verify, do not inherit"* is satisfied by
+measuring something, and says nothing about whether you measured the right thing.
+
+### The strategic problem none of the three routes accounts for
+
+**Route B.2 would install `local-agent-runner` into the sandbox image — the engine P11 has already
+decided against.**
+
+- **SN-27 Amendment A1.1:** the execution roster is **one tool, OpenCode**, covering local and cloud.
+- **A1.2:** `local-agent-runner`'s retention is a **directed assessment with a real possibility of
+  retirement**, and that assessment is **M38/E38.4** — *after* M37 in binding order.
+- **Verified now: OpenCode 1.18.10 is already installed on this host** (`/home/panchew/.opencode/bin/opencode`).
+- **`bin/run-dev-agent`'s `discover_runner()` hard-codes `local-agent-runner`** (line 203) as the only
+  binary it will find, via `LOCAL_AGENT_RUNNER` or `PATH`.
+
+So the dispatch chain is pinned to the engine the phase is considering retiring, and teaching it to use
+OpenCode instead **is M38/E38.2's execution adapter surface** — the milestone that binding order places
+*after* this one.
+
+> **The finding, larger than the blocker:** **E37.1's agentic/local posture has an unrecognized
+> dependency on M38.** It cannot be executed as specified without either building throwaway scaffolding
+> around a possibly-retired engine, or pulling M38's adapter surface forward into M37 — which would
+> breach both the fixed-contents fence and the binding milestone order.
+
+### Decisions taken here (Phase Chat authority)
+
+**1. The landing order is NOT reversed, and M37 is NOT blocked in full.** The Milestone Chat framed
+this as a landing-order question; **the contention is on merge order only.** This spec's §Dependencies
+already says the two epics *"may run in parallel"* and that *"whichever epic lands second owns
+reconciling the changelog."*
+
+**So: E37.2 proceeds to planning and execution immediately, and merge order stays E37.1 first.** That
+recovers the milestone's throughput without paying the cost the reversal would incur — and that cost is
+real: if E37.2 merged first, `creation-chat-guide.md` would gain a **second** non-uniform seeding row,
+and **G1's entire premise is that there is exactly one.** Reversing would double the flattening risk on
+the very run G1 exists to protect. **The order and the posture are coupled, so reversing now would
+pre-commit the risk profile before HQ has decided the posture.** The Milestone Chat was right not to do
+it unilaterally.
+
+**2. Route A is declined.** Unsandboxed execution gives an unsupervised local model unrestricted write
+access to the working tree, on the epic that amends **ten governance documents**, with **G2 existing
+precisely because the exit code will not reveal that it went wrong.** The Milestone Chat does not
+recommend it; neither do I. E26.3's authorization was for one epic in a different risk class and is not
+precedent for this one.
+
+**3. Both E37.1 artifacts are confirmed as needing no rework for this.** The blocker is environmental,
+not specificational, exactly as the escalation states.
+
+### Escalated to HQ, with the Phase Chat's recommendation
+
+**Route C for E37.1 now — and the local-lane comparison moves to M38, not away.** Not mine to decide:
+the CFO chose the split posture, so unwinding it is the CFO's call.
+
+**Why this is preserving the CFO's intent rather than discarding it.** The decision's purpose was an
+early, low-risk local data point with a cheap ground truth. Getting it here now costs: scaffolding for
+an engine under retirement assessment, an unsandboxed run on ten governance documents, or M38 work
+pulled forward. **In M38 the same comparison is native** — the adapter surface exists by then, OpenCode
+is the engine, and the run is code-shaped work that the phase spec always reserved as the local lane's
+real test. The evidence arrives one milestone later and **better**, against the engine that will still
+be there.
+
+**Separately, and recommended for authorization now: Route B.1 as a B-series bugfix.**
+
+The endpoint gap is **engine-agnostic, mechanical, and blocks every future agentic/local epic through
+the sandbox — including M38's.** Either forward `AI_PROJECT_OLLAMA_ENDPOINT` / add `--network host` in
+`run_in_sandbox()`, or document the `dev_command` prefix. **It edits no governance document**, which is
+precisely the boundary HQ drew on 2026-08-01 (Decision 5) and held on 2026-08-04 (Decision 3) and
+2026-08-05 (Decision 5) — and unlike P10-GH-8, where HQ noted *"nothing here is urgent"* and *"the
+escalation says twice nothing is blocked,"* **here something is demonstrably blocked.** Both of HQ's
+stated reasons for declining the B-series vehicle are absent.
+
+**B.2 is explicitly NOT recommended** — it is the part that invests in the possibly-retired engine, and
+it should wait for M38's adapter surface to make it unnecessary.
+
+**Placement is HQ's**, per SN-28: the hotfix classification is *"HQ's to authorize and execute or
+delegate."* A Phase Chat does not open B-series bugfixes.
+
+### Impact of this resolution
+
+- **M37 is not blocked in full.** E37.2 proceeds now; merge order unchanged.
+- **E37.1 waits on one HQ decision**, not on enabling work being scoped.
+- **Nothing has been executed and no governance record is at risk**, as the escalation states.
+- **The wider gap is escalated with an owner recommendation**, so it is closed once for P11 rather than
+  worked around per-epic a second time — which was the escalation's own central point, and it is
+  correct.
