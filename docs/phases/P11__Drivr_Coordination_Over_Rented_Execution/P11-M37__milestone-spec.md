@@ -102,19 +102,40 @@ to registry work, not for hygiene, and they do not follow the hygiene epics here
 
 ---
 
-## Execution Posture — SPLIT (binding; CFO decision 2026-08-05, amending v1.0.0's uniform posture)
+## Execution Posture — UNIFORM manual / paid (v1.1.3; HQ Ruling 2026-08-06, Decision 2)
 
-**The two epics run under different postures, deliberately.**
+**Both epics run manual / paid frontier.** Every Epic Execution Chat Starter carries
+`Execution Mode: manual` and routes to `models.epic_manual` (`remote:claude-opus-5`).
 
 | Epic | Execution Mode | Model key | Resolves to |
 |---|---|---|---|
-| **E37.1** | **`agentic`** | **`models.epic_dev`** | **`local:qwen3-coder:30b`** |
+| **E37.1** | `manual` | `models.epic_manual` | `remote:claude-opus-5` |
 | **E37.2** | `manual` | `models.epic_manual` | `remote:claude-opus-5` |
 
-**This supersedes v1.0.0 of this spec**, which put both epics on manual/paid as the Phase Chat's own
-call while explicitly leaving the E37.1 override open. **The CFO took that option on 2026-08-05.** The
-Phase Chat's reasoning for the original default is preserved below, because it is the reason the
-guardrails exist rather than an argument against the decision.
+> **⚠ The split posture is reverted. v1.1.0–v1.1.2's agentic/local declaration for E37.1 is superseded,
+> and is preserved below rather than deleted** because the decision, the reasoning and the guardrails it
+> produced all remain load-bearing.
+>
+> **Why it reverted — the premise was false, not the decision wrong.** The CFO chose the split on
+> 2026-08-05 on the understanding that agentic/local dispatch worked. **It does not, and has not since
+> 2026-07-12.** The M37 Milestone Chat found it, the Phase Chat verified it, and **HQ added the
+> measurement that decided it: with the endpoint gap fixed, `local-agent-runner` is *still absent* from
+> the sandbox image** — so the endpoint fix alone does not unblock E37.1, and the posture depends on
+> **M38/E38.2's adapter surface** under every route that keeps it. That dependency is not optional.
+> Full detail in §Dispatch mechanics below and in
+> `.ai-project/artifacts/rulings/2026-08-06__ai-project-system-hq__ruling__m37-dispatch-and-sandbox-endpoint.md`.
+>
+> **The CFO's intent is preserved, not discarded.** The local/paid controlled comparison **moves to
+> M38 as `E38.6`** (phase spec v1.1.1), where it is native: the adapter surface exists, OpenCode is the
+> engine, and the work is code-shaped. **The evidence arrives one milestone later and better.**
+> The CFO may override this ruling on either point.
+>
+> **Two guardrails SURVIVE the revert, in adapted form — see §Guardrails.** They were written to bound
+> an agentic run, but neither risk they address is agentic-specific.
+
+**v1.0.0's original reasoning for uniform manual/paid therefore stands again**, and is stated below as
+the caution that produced the guardrails rather than as an argument against a decision no longer in
+force.
 
 **Why E37.1 and not E37.2.** E37.1 is the strongest local-lane candidate this phase has offered:
 highly repetitive, mechanically verifiable, and carrying a **cheap ground truth** — after the run,
@@ -146,45 +167,113 @@ from the erratum. This removes E37.1's single judgment call and converts constra
 into transcription. **The Milestone Chat authors that literal string** — sourced from the 2026-08-05
 erratum and M36's Closure Declaration §D5 — and E37.1 copies it.
 
-**G2 — Completion is judged externally and mechanically, never from the exit code.** P10-GH-7 stands:
-the exit code is untrustworthy in **both** directions on this stack (E33.2 Run A: exit 0, zero work;
-E33.4: exit 2, complete green work). E37.1's acceptance rests on the re-measurement in its DoD — 17 of
-17 compliant, seven shown untouched, no reconstructed history — **run by the reviewer, not reported by
-the run.** A green exit is not evidence and a red exit is not a verdict.
+**G2 — Completion is judged externally and mechanically, never from the executor's own report.**
+P10-GH-7 stands: on this stack the exit code is untrustworthy in **both** directions (E33.2 Run A: exit
+0, zero work; E33.4: exit 2, complete green work). E37.1's acceptance rests on the re-measurement in its
+DoD — 17 of 17 compliant, seven shown untouched, no reconstructed history — **run by the reviewer, not
+reported by the run.**
 
-### What does NOT change because E37.1 is agentic
+> **Both guardrails SURVIVE the v1.1.3 revert to manual/paid, and G2 is restated for a manual executor.**
+> They were written to bound an agentic run, but **neither risk they address is agentic-specific:**
+>
+> - **G1 stands unchanged.** The trap it closes is the 2026-08-04 Decision 5 undercount, and **HQ itself
+>   walked into it** — a paid frontier chat, in a ruling about record integrity. M36 supplies four more
+>   instances of a paid frontier chat miscounting, **three of them in specs this Phase Chat wrote.**
+>   A verbatim literal removes a derivation step for **any** executor; it was never really about model
+>   tier.
+> - **G2 restated for manual execution.** There is no exit code to distrust, so the rule becomes its
+>   general form: **the reviewer re-measures; the delivery's claim is not the evidence.** That is
+>   precisely the practice that caught M36's D5 undercount at Stage 2, and it is unchanged in force.
+>
+> **Do not delete either guardrail when reverting E37.1's posture.**
 
-- **Mode is not authority.** Stage-2 acceptance and merge authorization remain human-keyed. An agentic
-  Epic holds exactly the authority the Epic level always held.
+### What does NOT change with the posture — under either declaration
+
+- **Mode is not authority.** Stage-2 acceptance and merge authorization remain human-keyed, in every
+  mode. An Epic holds exactly the authority the Epic level always held.
 - **The Milestone Chat's Stage-2 review is unchanged in depth**, and remains manual/paid.
-- **All nine binding constraints and the Hard Constraint apply identically.** Agentic mode is not a
-  licence to build enforcement, reconstruct history, or renumber anything.
-- **G11 is not closed by this.** `epic_qa` has **no dispatch mechanism** — `bin/ai-project-orchestrator`
-  records that building one is out of scope — so an agentic E37.1 exercises the **dev lane only**.
-  Closing G11 remains M39's job and must not be claimed here.
+- **All nine binding constraints and the Hard Constraint apply identically.** No mode is a licence to
+  build enforcement, reconstruct history, or renumber anything.
+- **G11 is not closed by anything in M37.** `epic_qa` has **no dispatch mechanism** —
+  `bin/ai-project-orchestrator` records that building one is out of scope. Under the reverted posture
+  **no lane is exercised at all**, so the point is moot here and stronger elsewhere: **closing G11
+  remains M39's and must not be claimed by this milestone.**
+- **The verification-layer rule (`P11-GH-2`, ratified 2026-08-06) applies to every claim in this
+  milestone:** a verification **states the layer it was performed at, and the layer the verified thing
+  executes at. Where those differ, the verification is not evidence.** This spec's own §Dispatch
+  mechanics is the worked counter-example.
 
-### Dispatch mechanics — verified on this host, 2026-08-05
+### Dispatch mechanics — ⚠ CORRECTED v1.1.2: the original verification was done at the wrong layer
+
+> **Correction, Phase Chat, 2026-08-05, on the M37 Milestone Chat's escalation
+> (`.ai-project/artifacts/escalation-notices/2026-08-05T00_00_00Z__P11-M37__escalation_notice.md`).**
+>
+> This section originally read **"Dispatch mechanics — verified on this host"** and **"No configuration
+> change is required."** **Both sentences are true, and together they are misleading. The original text
+> is left visible below rather than overwritten.**
+>
+> The three preconditions were verified **at the host layer**. **`bin/run-dev-agent` executes inside the
+> Docker sandbox**, and two further preconditions fail there — neither covered by that verification:
+>
+> | # | Precondition | Result |
+> |---|---|---|
+> | 4 | Ollama reachable **from inside the sandbox** | **FAILS** — `localhost:11434` returns HTTP 000; `172.17.0.1:11434` (bridge gateway) returns 200 |
+> | 5 | `local-agent-runner` on PATH **inside the sandbox** | **FAILS** — absent from the image; `Dockerfile.sandbox` has no install step |
+>
+> `run_in_sandbox()` (`bin/ai-project-orchestrator:292`) forwards only `AI_PROJECT_ACTIVE_MODEL` and the
+> project mount — **no network config, no `AI_PROJECT_OLLAMA_ENDPOINT`, no `LOCAL_AGENT_RUNNER`**. And
+> `check_local_availability()` (line 221) runs before `discover_runner()` (line 252), so **precondition 4
+> fails first with exit class 5** and fixing only that surfaces 5 as exit 3.
+>
+> **So "no configuration change is required" was wrong**, and **E37.1 as specified cannot be dispatched.**
+> This is prior art, not a new discovery: P7-M26-E26.3's spec records both failures on **2026-07-12** and
+> authorized a per-epic workaround. **The gap has been open three weeks.**
+>
+> **The pattern this belongs to, which matters more than the fix.** This is the **third** verification in
+> P11 performed at a plausible-but-wrong level — the phase spec's Ollama context note (v1.0.0, HQ's),
+> the P11 starter's constraint 2a xfail mechanism, and now this one (the Phase Chat's).
+> ***"Verify, do not inherit" is satisfied by measuring something, and says nothing about whether you
+> measured the right thing.*** Every epic under this milestone should read the instruction that way.
+>
+> **Also recorded, and larger than the blocker:** Route B's runner fix would install
+> `local-agent-runner` into the sandbox image — **the engine SN-27 A1.1 replaced with OpenCode and A1.2
+> put under retirement assessment at M38/E38.4.** OpenCode 1.18.10 is already installed on this host, and
+> `discover_runner()` hard-codes `local-agent-runner`. Teaching the chain to use OpenCode **is M38/E38.2's
+> execution adapter surface.** **E37.1's agentic/local posture therefore carries an unrecognized
+> dependency on M38** — a milestone binding order places after this one. Routed to HQ with the Phase
+> Chat's recommendation: **Route C for E37.1 now, the local-lane comparison moved to M38 rather than
+> dropped**, plus the endpoint fix alone as a B-series item.
+>
+> **Status: E37.1's posture awaits an HQ decision.** Until it lands, **E37.1 is not dispatched.** E37.2
+> proceeds — see the note under §Dependencies.
+
+**Original text, preserved (host-layer only, and therefore not sufficient):**
 
 **No configuration change is required.** `.ai-project.yml` already carries
 `epic_dev: local:qwen3-coder:30b`. Verified present and reachable at planning time:
 
 | Precondition | State |
 |---|---|
-| Ollama endpoint `http://localhost:11434` | reachable |
+| Ollama endpoint `http://localhost:11434` | reachable **from the host** |
 | `qwen3-coder:30b` | present (alongside `qwen3.6:27b`, `qwen2.5-coder:14b/7b`) |
 | Sandbox image `ai-project-sandbox:latest` | present |
 
-**E37.1 must be DISPATCHED, not opened.** `bin/ai-project-orchestrator` resolves `epic_dev` from
+> **Superseded at v1.1.3 — no M37 epic is dispatched.** Both epics are `manual` / `models.epic_manual`
+> and **both carry the E31.3 manual model check.** The dispatch instructions that stood here are
+> retained below as the record of what agentic execution *would* have required, and as the reference
+> for **M38/E38.6**, which inherits this comparison and will need them once the adapter surface exists.
+
+**~~E37.1 must be DISPATCHED, not opened.~~** `bin/ai-project-orchestrator` resolves `epic_dev` from
 `.ai-project.yml`, exports `AI_PROJECT_ACTIVE_MODEL`, and runs inside the sandbox; `bin/run-dev-agent`
 maps `local:<tag>` to the bare ollama tag and refuses loudly with **exit class 5** if the local model
 is genuinely unavailable (P9-M31-E31.2, *"local loadability is never assumed"*). **Pasting an agentic
 starter into a chat window is a manual run wearing an agentic label** — the declaration and the
-dispatch must agree.
+dispatch must agree. *(Retained as reference; not in force for M37.)*
 
-**Model verification differs for agentic instances.** E37.1 does **not** perform the E31.3 manual
-self-report check against `epic_manual`; it verifies against `epic_dev`/`epic_qa` through E31.2's
-dispatch-time guard. The Epic Starter template already encodes this — do not add the manual check to an
-agentic starter.
+**~~Model verification differs for agentic instances.~~** An agentic instance verifies against
+`epic_dev`/`epic_qa` through E31.2's dispatch-time guard rather than the E31.3 manual self-report check.
+*(Retained as reference. **Under v1.1.3 both M37 starters are manual and both DO carry the E31.3
+check.**)*
 
 **The stale phase-spec note, restated.** *"M37's code-shaped epics are where the local lane gets
 tested"* was written when M37 meant Drivr; new M37 has no code-shaped epics. **That note is superseded
@@ -448,11 +537,16 @@ is what P10-M35's E35.1 correctly refused to do and what made the carry-forward 
    text, including the Ratified-Decision-#2 supersession statement. **Not from Decision 5's count,
    which omits it.**
 
-   > **Guardrail G1 applies here and is binding.** Because E37.1 runs **agentic / local**, the
-   > Milestone Chat must put this row into E37.1's Epic spec **as a verbatim literal string to be
+   > **Guardrail G1 applies here and is binding — and it SURVIVES the v1.1.3 revert to manual/paid.**
+   > The Milestone Chat must put this row into E37.1's Epic spec **as a verbatim literal string to be
    > copied**, not as instructions for deriving it. This is the epic's only non-uniform row among ten
    > and therefore its only judgment call; G1 converts it into transcription. **The Milestone Chat
    > authors the string** from the 2026-08-05 erratum and M36's Closure Declaration §D5.
+   >
+   > **G1 was never really about model tier.** The trap is the 2026-08-04 Decision 5 undercount, and
+   > **HQ walked into it** — a paid frontier chat, in a ruling about record integrity. M36 records four
+   > more paid-frontier miscounts, **three in specs this Phase Chat wrote.** A verbatim literal removes
+   > a derivation step for **any** executor.
 3. **`creation-chat-guide.md`'s row records M36's two amendments** — E36.1's new "Steering Note ID
    Allocation" section and E36.3's Re-instantiation Ritual reconciliation. Both are named in M36's
    Closure Declaration §D5 as Amendments 1 and 2 of 3.
@@ -476,24 +570,21 @@ is what P10-M35's E35.1 correctly refused to do and what made the carry-forward 
 - [ ] No test, linter or validator added (Hard Constraint)
 - [ ] A Structural Mermaid diagram accompanies the delivery
 - [ ] Full suite green (**377 / 0** baseline on `phase/P11`, no regressions, no new skips)
-- [ ] **Agentic-posture items (E37.1 only):** the Epic Starter declares `Execution Mode: agentic` and
-      routes to `models.epic_dev`; the epic was **dispatched through `bin/ai-project-orchestrator`**,
-      not opened as a chat; the `chat-hierarchy.md` row was carried verbatim per **G1**; and
-      **completion was judged by the reviewer's own re-measurement, not by the run's exit code**
-      (**G2** / P10-GH-7)
-- [ ] **G11 is not claimed.** The delivery states that only the dev lane ran and that `epic_qa` remains
-      unexercised
+- [ ] **Posture items (v1.1.3):** the Epic Starter declares `Execution Mode: manual` and routes to
+      `models.epic_manual`, and carries the **E31.3 manual model check**; the `chat-hierarchy.md` row was
+      carried **verbatim** per **G1**; and **completion was judged by the reviewer's own re-measurement,
+      not by the delivery's claim** (**G2**, general form)
+- [ ] **G11 is not claimed** — no lane was exercised under the reverted posture; closing it stays M39's
 
 **Acceptance Criteria:**
 - [ ] A reader opening any `governance/systems/` document can determine what changed in it since the
       convention was adopted, and is told where to look for anything before that
 - [ ] A reader of `chat-hierarchy.md`'s changelog learns that M36 amended it — the fact Decision 5's
       count would have lost
-- [ ] **The local-lane outcome is recorded as evidence either way** — what the agentic run produced,
-      what the reviewer's re-measurement found, and where the two disagreed if they did. A failed or
-      partial agentic run is a **usable result**, not a delivery failure: the epic's substance can be
-      completed manually and the local-lane finding still stands as the evidence this posture was
-      chosen to gather
+- [ ] **The relocation is recorded, not silently dropped** — this epic's delivery states that the
+      local/paid controlled comparison moved to **M38/E38.6** by HQ Ruling 2026-08-06, and why (agentic
+      dispatch was never executable; with the endpoint fixed the runner is still absent). A future reader
+      must not conclude the CFO's decision was abandoned
 
 **Sequencing:** first by the phase spec's own statement, though it has no hard dependency on E37.2.
 May run in parallel with E37.2 — see the file-contention note below.
@@ -582,6 +673,24 @@ a licence to make other "obviously right" two-character fixes it happens to noti
   first, E37.1's seeding row must record E37.2's change. **The Milestone Chat sequences or coordinates
   these deliberately rather than discovering it at merge**, and whichever epic lands second owns
   reconciling the changelog.
+> **⚠ Sequencing decision, Phase Chat 2026-08-05 (v1.1.2), RESOLVED at v1.1.3 — nothing is blocked.**
+> E37.1's posture question is answered (HQ Ruling 2026-08-06, Decision 2: manual/paid), so **E37.1 is no
+> longer blocked at all.** The Milestone Chat asked whether to reverse the landing order; **the answer
+> was and remains no.** The contention above is on **merge order**, not work order — so **E37.2 is
+> planned and executed immediately, and merge order stays E37.1 first**, a call HQ upheld with its
+> reasoning.
+>
+> **Why not reverse.** If E37.2 merged first, `creation-chat-guide.md` would gain a **second**
+> non-uniform seeding row — and **G1's entire premise is that there is exactly one.** Reversing would
+> double the flattening risk on the very run G1 exists to protect. **The order and the posture are
+> coupled**, so reversing before HQ rules would pre-commit the risk profile. The Milestone Chat was
+> right to escalate rather than decide it.
+>
+> **HQ took Route C, so the coupling has dissolved:** with both epics manual/paid there is no agentic run
+> for a second non-uniform row to endanger. **The order still stands as originally set** — E37.1 first —
+> because `creation-chat-guide.md` reads more cleanly with one seeding row that records M36's two
+> amendments than with one that also has to record E37.2's. **Cleanliness now, not risk.**
+
 - **M37 → M38 is binding** at the phase level. Phase closure does not begin until all five milestones
   close.
 
@@ -605,13 +714,13 @@ a licence to make other "obviously right" two-character fixes it happens to noti
 - [ ] **No test, linter or validator was added** (Hard Constraint) — and if either epic recommended
       one, the recommendation is recorded and escalated, not built
 - [ ] Both deliveries carry a Structural Mermaid diagram (fenced, in-repo, no ComfyUI)
-- [ ] **The split posture was honoured** — E37.1's Starter declares `Execution Mode: agentic` routing to
-      `models.epic_dev` and was **dispatched** through the orchestrator; E37.2's declares
-      `Execution Mode: manual` routing to `models.epic_manual`
+- [ ] **Both Starters declare `Execution Mode: manual` routing to `models.epic_manual`** (v1.1.3), each
+      carrying the E31.3 manual model check
 - [ ] **G1 discharged** — E37.1's Epic spec carried the `chat-hierarchy.md` row as a verbatim literal
-- [ ] **G2 discharged** — E37.1's completion was judged by external re-measurement, with the exit code
-      recorded but not relied on
-- [ ] **The local-lane result is recorded as evidence**, whatever it was, and **G11 is not claimed**
+- [ ] **G2 discharged** — E37.1's completion was judged by the reviewer's own re-measurement, not by the
+      delivery's claim
+- [ ] **The relocation is recorded** — the local/paid comparison moved to **M38/E38.6**, not dropped, and
+      **G11 is not claimed** by this milestone
 - [ ] **M37's contents were not widened.** No parked carry-forward was absorbed; if one was proposed,
       it was escalated rather than folded
 - [ ] Full suite green on `milestone/M37` (**377 / 0** baseline, no regressions, no new skips)
@@ -632,9 +741,8 @@ a licence to make other "obviously right" two-character fixes it happens to noti
 5. **Both rule sets live in one place and are cited elsewhere, not restated** (E37.2).
 6. **The milestone closed exactly as wide as it opened** — two items, no absorbed carry-forwards, no
    enforcement built.
-7. **The split posture was honoured and its result recorded as evidence** — E37.1 ran agentic/local
-   through the orchestrator under G1 and G2; E37.2 ran manual/paid; the local-lane outcome is recorded
-   whatever it was, and **G11 is not claimed** (dev lane only).
+7. **Both epics ran manual/paid under G1 and G2** (v1.1.3), and the local/paid comparison is recorded as
+   **relocated to M38/E38.6** rather than abandoned — with **G11 not claimed** by this milestone.
 8. **The full suite is green at milestone delivery** — 377 / 0, no regressions, no new skips.
 
 ---
@@ -717,15 +825,17 @@ catch.
 ```mermaid
 flowchart TB
     subgraph FIXED["Contents FIXED at two items — CFO-directed 2026-08-05"]
-        E1["E37.1 — System-tier versioning convention<br/>(HQ Ruling 2026-08-04, was E37.6)<br/>seed the 10 unversioned<br/>governance/systems/ documents<br/><br/>AGENTIC / LOCAL — epic_dev<br/>local:qwen3-coder:30b"]
+        E1["E37.1 — System-tier versioning convention<br/>(HQ Ruling 2026-08-04, was E37.6)<br/>seed the 10 unversioned<br/>governance/systems/ documents<br/><br/>MANUAL / PAID — epic_manual<br/>(v1.1.3: agentic REVERTED,<br/>dispatch never worked)"]
         E2["E37.2 — Artifact-ID citation forms<br/>(HQ Ruling 2026-08-05, was E37.7)<br/>PSG:605 GH-10 to P6-GH-10<br/>+ 4 normative rules, recorded ONCE<br/><br/>MANUAL / PAID — epic_manual<br/>remote:claude-opus-5"]
     end
 
-    GUARD["GUARDRAILS on E37.1's agentic run<br/>G1 chat-hierarchy.md row quoted VERBATIM<br/>in the Epic spec — transcription, not reasoning<br/>G2 completion judged by external re-measurement,<br/>NEVER the exit code (P10-GH-7, wrong both ways)<br/><br/>MODE IS NOT AUTHORITY — Stage-2 + merge stay human-keyed<br/>G11 NOT closed: epic_qa has no dispatch, dev lane only"]
+    GUARD["GUARDRAILS — SURVIVE the posture revert<br/>G1 chat-hierarchy.md row quoted VERBATIM<br/>(HQ itself walked into the undercount —<br/>never was about model tier)<br/>G2 reviewer RE-MEASURES; the delivery's<br/>claim is not the evidence<br/><br/>MODE IS NOT AUTHORITY — Stage-2 + merge human-keyed<br/>G11 NOT closed by M37 — stays M39's"]
     E1 ==> GUARD
 
-    SPLIT["The split is the point:<br/>one local + one paid in one milestone<br/>= CONTROLLED comparison,<br/>evidence M38/M39 want"]
-    FIXED -.-> SPLIT
+    MOVED["Local/paid comparison RELOCATED<br/>to M38 / E38.6 — NOT dropped<br/>native there: adapter surface + OpenCode<br/>+ code-shaped work<br/><br/>Why: agentic dispatch never worked.<br/>Endpoint fixed -> runner STILL absent<br/>(HQ Ruling 2026-08-06)"]
+    FIXED -.-> MOVED
+    B21["Bugfix B2.1 (High) — sandbox<br/>cannot reach the ollama endpoint<br/>authorized, delegated, NOT M37 scope"]
+    MOVED -.-> B21
 
     ERR["2026-08-05 ERRATUM<br/>Decision 5 said TWO amendments;<br/>verified THREE across TWO docs"]
     ERR ==>|"chat-hierarchy.md's seeding row<br/>MUST come from here"| E1
@@ -768,6 +878,8 @@ flowchart TB
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.3 | 2026-08-06 | **Posture reverted to UNIFORM manual/paid — HQ Ruling 2026-08-06, Decision 2**, resolving the M37 dispatch escalation. **The split was not wrong; its premise was false.** The CFO chose it believing agentic/local dispatch worked; it has not since **2026-07-12**, and **HQ added the measurement that decided it: with the endpoint gap fixed, `local-agent-runner` is *still absent* from the sandbox image** — so E37.1's posture depends on **M38/E38.2's adapter surface** under every route that keeps it, which binding order places after M37. That conjunction is the one measurement the Phase Chat implied but never made; HQ made it. **Route A declined (affirmed); Route B.2 declined** with a revisit trigger (only if E38.4 retains the runner *and* the adapter does not cover sandboxed dispatch). **The CFO's intent is preserved, not discarded: the local/paid controlled comparison relocates to `M38/E38.6`** (phase spec v1.1.1), native there. **The endpoint gap is authorized as Bugfix `B2.1` (High)**, delegated, with a post-mortem scoped to the real finding — *a gap documented in E26.3 was worked around per-epic for three weeks rather than filed.* **Not M37 scope.** **G1 and G2 SURVIVE the revert**, and this is a deliberate call rather than an oversight: G1's trap is the Decision 5 undercount, which **HQ itself walked into** as a paid frontier chat in a ruling about record integrity — with four more paid-frontier miscounts in M36, three in specs this Phase Chat wrote — so a verbatim literal was never about model tier; and G2 restates to its general form, **the reviewer re-measures and the delivery's claim is not the evidence**, which is exactly what caught M36's D5 undercount at Stage 2. **`P11-GH-2`'s ratified practice is carried into this spec as binding on every claim in it:** a verification states the layer it was performed at and the layer the verified thing executes at; **where those differ, the verification is not evidence.** **One correction to the ruling, flagged upward:** Decision 2 states *"E37.1's two artifacts need no rework."* True of the *blocker*, which is environmental — but the Milestone Chat had already reworked both to agentic (`5fb7540`, `64efc02`), so under Route C they now **mismatch the posture and need a small, specified revert** (see §Notes). **Split-M37 permission confirmed spent** (Decision 6), as recorded at v1.1.0. **Sequencing resolved:** nothing is blocked; E37.2 proceeds and merge order stays E37.1 first — upheld by HQ. Touches §Execution Posture (rewritten), §Guardrails, §Dispatch mechanics (struck, retained as M38/E38.6 reference), §Epic Detail→E37.1, §Dependencies, §Definition of Done, §Acceptance Criteria, §Visual Bindings, §Notes. **No epic, constraint, ordering or scope boundary changes**; contents stay fixed at two. |
+| 1.1.2 | 2026-08-05 | **Dispatch-mechanics verification corrected — it was done at the wrong layer.** On the M37 Milestone Chat's escalation (`.ai-project/artifacts/escalation-notices/2026-08-05T00_00_00Z__P11-M37__escalation_notice.md`), which re-measured rather than inheriting and was **correct in every particular** (Phase Chat re-verified all six claims). v1.1.0's §Execution Posture said *"verified on this host"* and *"no configuration change is required"* — **both true, together misleading, and the original is left visible.** The three preconditions were checked at the **host** layer; `bin/run-dev-agent` runs **inside the Docker sandbox**, where two more fail: ollama is unreachable at `localhost:11434` (HTTP **000**; the bridge gateway `172.17.0.1:11434` returns **200**) and `local-agent-runner` is **absent from the image**. `run_in_sandbox()` forwards only `AI_PROJECT_ACTIVE_MODEL` and the mount; `check_local_availability()` precedes `discover_runner()`, so dispatch dies at **exit class 5** having done nothing. **Prior art, not new:** P7-M26-E26.3 recorded both failures on 2026-07-12 and worked around them per-epic — **open three weeks.** **Pattern named:** third P11 verification at a plausible-but-wrong level (phase spec's Ollama note, the starter's constraint 2a, now this) — *"verify, do not inherit" is satisfied by measuring something and says nothing about whether you measured the right thing.* **Larger finding:** Route B's runner fix would invest in `local-agent-runner`, the engine **A1.1 replaced with OpenCode** and **A1.2 put under retirement assessment at M38/E38.4** (OpenCode 1.18.10 verified already on the host; `discover_runner()` hard-codes the old runner) — so **E37.1's agentic posture carries an unrecognized dependency on M38/E38.2's adapter surface**, a milestone *after* this one. **Phase Chat decided:** Route A declined (unsandboxed write access across ten governance documents, with G2 existing because the exit code will not reveal failure); **landing order NOT reversed** — the contention is on *merge* order only, so **E37.2 proceeds to execution now with merge order unchanged**, avoiding a **second** non-uniform row in `creation-chat-guide.md` when G1's premise is that there is exactly one; both E37.1 artifacts confirmed as needing **no rework** (the blocker is environmental). **Escalated to HQ:** Route C for E37.1 with the local-lane comparison **moved to M38, not dropped**, plus **Route B.1 alone recommended as a B-series bugfix** (edits no governance document — HQ's own boundary — and unlike P10-GH-8 something *is* blocked). **B.2 not recommended.** Touches §Execution Posture→Dispatch mechanics, §Dependencies (E37.2-proceeds note), §Amendment History. **No epic, constraint, ordering or scope boundary changes**; contents stay fixed at two. |
 | 1.1.1 | 2026-08-05 | **Correction to v1.1.0's own record, by the Phase Chat, on discovering it was wrong.** v1.1.0's entry closes with *"**Amended before `milestone/M37` existed**, so the amendment reaches the branch by construction rather than through the channel P11-GH-1 records as broken."* **That is false and is left visible below rather than overwritten.** `milestone/M37` already existed when the amendment was written, with two commits on it — the Milestone Chat's E37.1 Epic spec (`01f818f`) and Epic Execution Chat Starter (`8226082`). **What actually happened:** the shared worktree had been left on `milestone/M37`, the Phase Chat did not check the branch before committing, and the amendment commit landed on **`milestone/M37`** instead of `phase/P11`; the accompanying `git push origin phase/P11` pushed an unchanged ref and was a silent no-op. So `phase/P11` — the branch HQ reviews through PR #173 — carried **v1.0.0's uniform manual posture** while the amendment sat on the child branch. Corrected by cherry-picking the amendment onto `phase/P11` (`12a29ae`). **The posture decision itself, the split, both guardrails and every other statement in v1.1.0 stand unchanged** — only the claim about *when and where it landed* was wrong. **Two consequences recorded rather than absorbed:** (1) P11-GH-1's failure mode occurred **in the opposite direction to the one predicted** — the child could see the amendment and the *parent* could not, which is a case the gap record does not describe; (2) **E37.1's Epic spec and Starter were authored under v1.0.0** and declare `Execution Mode: manual` / `models.epic_manual`, so they require rework to the split posture plus G1 and G2 — notified to the Milestone Chat as a mid-flight amendment, not reached into. This correction is filed under the same standard the Phase Chat applied to E36.1 and to M36's Closure Declaration: a record stating something verifiably untrue is corrected with the original left legible, whoever authored it. |
 | 1.1.0 | 2026-08-05 | **Execution posture SPLIT — CFO decision.** v1.0.0 put both epics on manual/paid as the Phase Chat's own call while explicitly leaving the E37.1 override open; the CFO took that option the same day. **E37.1 → `Execution Mode: agentic`, `models.epic_dev` (`local:qwen3-coder:30b`); E37.2 unchanged at manual/paid.** Two guardrails added and binding: **G1** — the `chat-hierarchy.md` changelog row is quoted **verbatim** in E37.1's Epic spec, converting the epic's only non-uniform row from reasoning into transcription; **G2** — completion is judged by the reviewer's external re-measurement and **never** by the exit code (P10-GH-7, untrustworthy in both directions). Recorded explicitly as unchanged by the switch: *mode is not authority* (Stage-2 accept and merge stay human-keyed), all nine binding constraints and the Hard Constraint, the Milestone Chat's Stage-2 depth, and that **G11 is not closed** — `epic_qa` has no dispatch mechanism, so only the dev lane runs. Dispatch mechanics verified on this host (ollama reachable, `qwen3-coder:30b` present, `ai-project-sandbox:latest` present); **no `.ai-project.yml` change required**, and E37.1 must be **dispatched through `bin/ai-project-orchestrator`**, not opened as a chat. Touches §Execution Posture (rewritten), §Epic Detail→E37.1 (G1 note, agentic DoD items, evidence-either-way acceptance criterion), §Definition of Done, §Acceptance Criteria (+7), §Visual Bindings. **No epic, constraint, ordering or scope boundary otherwise changes** — the contents stay fixed at two items and the fence stands. **Amended before `milestone/M37` existed**, so the amendment reaches the branch by construction rather than through the channel P11-GH-1 records as broken. |
 | 1.0.0 | 2026-08-05 | Initial M37 Stage-1 spec. Two epics with contents fixed by CFO direction: E37.1 system-tier versioning convention (HQ Ruling 2026-08-04, was `E37.6`), E37.2 artifact-ID citation forms (HQ Ruling 2026-08-05, was `E37.7`). Nine binding constraints, the no-enforcement Hard Constraint, the renumbering table for both pre-restructure rulings, and two planning-time corrections measured rather than inherited (the `GH-` live-ID count is 39 not 38, with a naive sweep returning 41; the escalation-notice shorthand has three occurrences not two, and `ai-project-yml-spec.md` sits at `governance/` not `governance/systems/`). |
@@ -792,10 +904,26 @@ flowchart TB
   reviews — did not**, because a push to an unchanged ref succeeds silently. A gap record written from
   one instance described one direction; the mechanism has two. **Worth carrying into P11-GH-1 rather
   than leaving in this spec's notes.**
-- **A failed agentic run on E37.1 is a result, not a setback.** The epic's substance can be completed
-  manually and the local-lane finding still stands as the evidence this posture was chosen to gather.
-  Recording that up front is what keeps the experiment honest — an experiment whose only acceptable
-  outcome is success is not gathering evidence.
+- **The agentic experiment was never run, and that is itself the result.** Pre-declaring at v1.1.0 that
+  a failed or partial run would be a *usable result* is what made this cheap to unwind: the finding
+  turned out to be *"dispatch has been broken since 2026-07-12 and was worked around per-epic for three
+  weeks"* — more valuable than the comparison would have been, and obtained without executing anything.
+  **An experiment whose only acceptable outcome is success is not gathering evidence**, and this is the
+  case in point. The comparison itself moves to **M38/E38.6**, where it is native.
+- **E37.1's two artifacts need a small, specified revert — and this departs from the ruling's letter.**
+  HQ Ruling 2026-08-06 Decision 2 says *"E37.1's two artifacts need no rework."* That is true of the
+  **blocker**, which is environmental — but the Milestone Chat had already reworked both to agentic
+  (`5fb7540`, `64efc02`) before the ruling, so under Route C they now declare a posture the spec no
+  longer sets. **What to change, and nothing beyond it:**
+  - **Starter:** `Execution Mode: agentic` → `manual`; `models.epic_dev` → `models.epic_manual`;
+    **restore the E31.3 manual model check**; remove the orchestrator-dispatch instructions.
+  - **Epic spec:** posture references updated to manual/paid; **G1 and G2 KEPT** — G2 in its general
+    form (*the reviewer re-measures; the delivery's claim is not the evidence*).
+  - **Keep the "why manual" analysis both artifacts already contain.** It identified the
+    one-row-among-ten risk independently and is the reasoning G1 rests on.
+  Flagged to HQ rather than silently absorbed, because a ruling saying "no rework" while rework is
+  needed would otherwise read to a future owner as either the ruling being wrong or the rework being
+  unauthorized. It is neither: the ruling addressed the blocker and this addresses the posture fields.
 - **This milestone executes two rulings and makes none.** Every deliverable traces to HQ Ruling
   2026-08-04 or 2026-08-05. Where a genuine design decision remains it is named and assigned to the
   Epic Chat: E37.1's starting-version scheme, and E37.2's exact placement of the four rules within the
