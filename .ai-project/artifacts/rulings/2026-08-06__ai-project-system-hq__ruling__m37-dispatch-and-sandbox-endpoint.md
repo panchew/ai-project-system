@@ -59,7 +59,24 @@ the premise it rested on is false.** The split was chosen on the understanding t
 it does not, and has not since 2026-07-12. **Decision 3 preserves the intent rather than discarding
 it.** The CFO may override this ruling on either point.
 
-**E37.1's two artifacts need no rework** — the blocker is environmental, as the escalation says.
+~~**E37.1's two artifacts need no rework** — the blocker is environmental, as the escalation says.~~
+
+> **ERRATUM 2026-08-06, same day, raised from the executing end by the P11-M37 Milestone Chat.**
+> **Rework was needed, and this ruling had no standing to say otherwise.** `5fb7540` and `64efc02`
+> (2026-08-05) had already reworked both artifacts *into* agentic posture, so **Route C's revert was
+> itself rework** — four specific changes, performed at `5f8b5ea`, **authorized by the milestone
+> spec's §Notes and not by this ruling.**
+>
+> The claim was inherited from the escalation's `phase_chat_disposition` (*"both E37.1 artifacts
+> confirmed needing no rework"*), where it was true **only while the posture stood**. **Adopting
+> Route C invalidated it in the same document that adopted it**, and HQ carried it through anyway.
+>
+> **This is the second instance of a distinct HQ failure mode** — not P11-GH-2's wrong-layer
+> verification, but *a premise inherited from an input and not re-tested against the decision the
+> ruling itself just made*. The first was starter constraint 2a, where HQ ruled SN-23 is never
+> renumbered and then wrote a constraint premised on it renumbering. **Both are internal
+> contradictions inside a single HQ artifact.** Recorded as a sibling pattern on `P11-GH-2`; whether
+> it earns its own record is the CFO's call, not HQ's, since HQ is the party it indicts.
 
 ## Decision 3 — The local/paid controlled comparison **moves to M38**. Not dropped.
 
