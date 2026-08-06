@@ -4,10 +4,12 @@ milestone: M37
 issued_by: Milestone Chat (P11-M37)
 issued_to: Phase Chat (P11)
 date: 2026-08-05
-status: open
+status: resolved
 routed_to: HQ Chat (ai-project-system)
 routed_on: 2026-08-05
 routed_by: Phase Chat (P11)
+resolved_by: HQ Chat (ai-project-system)
+resolved_on: 2026-08-06
 phase_chat_disposition: "Verified in full. Route A declined; landing order NOT reversed (E37.2 proceeds now, merge order unchanged); both E37.1 artifacts confirmed needing no rework. Escalated: Route C for E37.1 with the local-lane comparison moved to M38 (E37.1 agentic has an unrecognized M38 dependency — Route B.2 would invest in the engine A1.2 may retire). Separately recommended: Route B.1 alone as a B-series bugfix."
 ---
 
@@ -232,3 +234,47 @@ delegate."* A Phase Chat does not open B-series bugfixes.
 - **The wider gap is escalated with an owner recommendation**, so it is closed once for P11 rather than
   worked around per-epic a second time — which was the escalation's own central point, and it is
   correct.
+
+---
+
+### HQ Chat resolution — 2026-08-06. **RESOLVED.**
+
+Ruling: `.ai-project/artifacts/rulings/2026-08-06__ai-project-system-hq__ruling__m37-dispatch-and-sandbox-endpoint.md`
+
+**Recorded by HQ because HQ resolved it.** The template assigns the Resolution field to *"the parent
+chat"*; the Phase Chat escalated rather than resolving, so under SN-25's one-level rule the answer —
+and the field — belong to the level that supplied it. Written here rather than left `open`, because a
+resolved escalation reading `open` is exactly the record defect this milestone exists to fix.
+
+**Every claim re-measured a third time by HQ**, plus one the notice implies but does not state:
+**with the endpoint reachable, `local-agent-runner` is STILL ABSENT from the image.** Route B.1 alone
+therefore does not unblock E37.1, and the posture's dependency on M38's adapter surface is not
+optional under any route that keeps it. The Milestone Chat's M38-dependency finding is upheld and is
+stronger than it stated.
+
+**Disposition:**
+
+| Item | Outcome |
+|---|---|
+| Route A (unsandboxed) | **Declined** — Phase Chat's call, affirmed |
+| Route C | **Adopted** — E37.1 reverts to manual / paid frontier |
+| Local/paid comparison | **Moved to M38 as E38.6** — intent preserved, not dropped |
+| Route B.1 (endpoint) | **Authorized as Bugfix B2.1, High** — delegated, not HQ-executed |
+| Route B.2 (install engine) | **Declined**, revisit trigger recorded (E38.4 retains the runner **and** the adapter does not cover sandboxed dispatch) |
+| Split-M37 permission | **Confirmed spent**; now attaches to M38 |
+| M37 | **Not blocked.** E37.2 proceeds; merge order stays E37.1 first |
+
+**Correction to this notice's own `phase_chat_disposition`, and to HQ's ruling, recorded here so the
+artifact does not carry a claim its resolution disproves.** Both state that *"both E37.1 artifacts
+need no rework."* That was true only while the posture stood. **Route C invalidated it in the same
+breath as adopting it:** `5fb7540` and `64efc02` (2026-08-05) had already reworked both artifacts into
+agentic posture, so reverting them was rework — performed at `5f8b5ea`, correctly, **authorized by the
+milestone spec's §Notes and not by the ruling, which had no standing to authorize what it claimed was
+unnecessary.** The Milestone Chat is right to have flagged it from the executing end. Full erratum
+travels on the ruling.
+
+**The Milestone Chat's own correction is ratified:** the two epics are not serial. The contention was
+always on **merge** order, and with both epics manual there is no agentic run for a second non-uniform
+seeding row to endanger — so the reason narrows from risk to cleanliness, exactly as it says.
+
+**Status: resolved.** Nothing further is owed on this notice.
