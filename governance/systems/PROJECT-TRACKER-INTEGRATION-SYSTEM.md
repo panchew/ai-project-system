@@ -1,3 +1,9 @@
+---
+type: system
+status: active
+version: 1.0.0
+---
+
 # PROJECT TRACKER INTEGRATION SYSTEM
 *(System Reference – Canonical ↔ External Work Tracking Mapping)*
 
@@ -172,3 +178,11 @@ External trackers coordinate people.
 The Project System coordinates intent.
 
 Integration translates between the two — it does not blur them.
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/PROJECT-TRACKER-INTEGRATION-SYSTEM.md`. |

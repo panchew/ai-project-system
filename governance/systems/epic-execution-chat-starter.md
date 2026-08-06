@@ -2,6 +2,7 @@
 type: template
 status: active
 last_updated: 2026-07-18
+version: 1.0.0
 ---
 
 
@@ -75,3 +76,11 @@ format.
 
 Canonical rule: AI-OPERATING-GUIDELINES.md §3.1.1 (reference-first artifact
 handoff; cited, not restated)
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/epic-execution-chat-starter.md`. |

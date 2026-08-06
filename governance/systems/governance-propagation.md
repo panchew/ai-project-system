@@ -1,3 +1,9 @@
+---
+type: system
+status: active
+version: 1.0.0
+---
+
 # Governance Propagation Model
 
 ## Authority Declaration
@@ -37,3 +43,11 @@ Projects must use the template in `governance/templates/governance-source.md` to
 ---
 
 For questions or clarifications, refer to the Epic E3.1 spec or contact the maintainers of this repository.
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/governance-propagation.md`. |
