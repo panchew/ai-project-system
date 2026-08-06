@@ -2,6 +2,7 @@
 type: system
 status: active
 effective_date: 2026-04-23
+version: 1.0.0
 ---
 
 # Phase Execution Chat Starter — System Reference
@@ -129,3 +130,11 @@ A Phase Chat session follows this sequence:
 - **Child mode:** Milestone mode (in `governance/agents/governance.agent.md`)
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13A
 - **Delivery wrapping rule:** `governance/AI-OPERATING-GUIDELINES.md` §3.1.1
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/phase-execution-chat-starter.md`. |

@@ -1,3 +1,9 @@
+---
+type: system
+status: active
+version: 1.0.0
+---
+
 # Creation Chat Guide — Ongoing Operation
 
 **Status:** Active
@@ -379,3 +385,11 @@ becomes a funded Epic that removes the manual work.
 - [`../templates/steering-note.md`](../templates/steering-note.md)
 - [`../templates/progress-digest.md`](../templates/progress-digest.md)
 - [`../templates/bouncer-work-log.md`](../templates/bouncer-work-log.md)
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/creation-chat-guide.md`. **Two earlier amendments are recorded here because they landed while this document could not record them**, per M36's Milestone Closure Declaration §D5 (Amendments 1 and 2 of 3): **(1)** E36.1 (P11-M36, merged `f1a5e75`, 2026-08-03) added the normative section **"Steering Note ID Allocation"** (~74 lines) — the allocation rule, the separating rule *a bookkeeping defect never rewrites a citation in a normative document*, and the statement that `SN-23` is not renumbered, with its two-meaning disambiguation table; **(2)** E36.3 (P11-M36, merged `d8f4871`, 2026-08-04) rewrote the **Re-instantiation Ritual** as the single normative statement governing Creation Chat re-instantiation, canonizing SN-26 Carry-Over 1 unchanged and adding a new **Step 4** placing the P9-M31-E31.3 model check on the canonized path. |

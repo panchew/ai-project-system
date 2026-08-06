@@ -2,6 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-20
+version: 1.0.0
 ---
 
 # Chat Hierarchy — System Reference
@@ -1106,3 +1107,11 @@ it without a second hop. The two statements must always agree; on any divergence
 - **Epic Template:** `governance/templates/epic-execution-chat-starter.md`
 - **Project System Guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md`
 - **AI Operating Guidelines:** `governance/AI-OPERATING-GUIDELINES.md`
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/chat-hierarchy.md`. **One earlier amendment is recorded here because it landed while this document could not record it:** E36.1 (P11-M36, `4427ea9`, merged `f1a5e75`, 2026-08-03), **+3 / −3** — two `SN-23` citations date-qualified to `SN-23 (2026-07-20)` in **normative text**, at the §Execution Mode ratification note and at the **Ratified-Decision-#2 supersession statement**. Recorded per M36's Milestone Closure Declaration §D5, which records **three** amendments across **two** unversioned documents — **not** per HQ Ruling 2026-08-04 Decision 5, whose count of *"two"* omits this document and is footnoted as an erratum by HQ Ruling 2026-08-05, Part 1. |
