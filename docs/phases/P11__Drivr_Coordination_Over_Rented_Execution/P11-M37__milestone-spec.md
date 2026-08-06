@@ -163,14 +163,58 @@ the run.** A green exit is not evidence and a red exit is not a verdict.
   records that building one is out of scope — so an agentic E37.1 exercises the **dev lane only**.
   Closing G11 remains M39's job and must not be claimed here.
 
-### Dispatch mechanics — verified on this host, 2026-08-05
+### Dispatch mechanics — ⚠ CORRECTED v1.1.2: the original verification was done at the wrong layer
+
+> **Correction, Phase Chat, 2026-08-05, on the M37 Milestone Chat's escalation
+> (`.ai-project/artifacts/escalation-notices/2026-08-05T00_00_00Z__P11-M37__escalation_notice.md`).**
+>
+> This section originally read **"Dispatch mechanics — verified on this host"** and **"No configuration
+> change is required."** **Both sentences are true, and together they are misleading. The original text
+> is left visible below rather than overwritten.**
+>
+> The three preconditions were verified **at the host layer**. **`bin/run-dev-agent` executes inside the
+> Docker sandbox**, and two further preconditions fail there — neither covered by that verification:
+>
+> | # | Precondition | Result |
+> |---|---|---|
+> | 4 | Ollama reachable **from inside the sandbox** | **FAILS** — `localhost:11434` returns HTTP 000; `172.17.0.1:11434` (bridge gateway) returns 200 |
+> | 5 | `local-agent-runner` on PATH **inside the sandbox** | **FAILS** — absent from the image; `Dockerfile.sandbox` has no install step |
+>
+> `run_in_sandbox()` (`bin/ai-project-orchestrator:292`) forwards only `AI_PROJECT_ACTIVE_MODEL` and the
+> project mount — **no network config, no `AI_PROJECT_OLLAMA_ENDPOINT`, no `LOCAL_AGENT_RUNNER`**. And
+> `check_local_availability()` (line 221) runs before `discover_runner()` (line 252), so **precondition 4
+> fails first with exit class 5** and fixing only that surfaces 5 as exit 3.
+>
+> **So "no configuration change is required" was wrong**, and **E37.1 as specified cannot be dispatched.**
+> This is prior art, not a new discovery: P7-M26-E26.3's spec records both failures on **2026-07-12** and
+> authorized a per-epic workaround. **The gap has been open three weeks.**
+>
+> **The pattern this belongs to, which matters more than the fix.** This is the **third** verification in
+> P11 performed at a plausible-but-wrong level — the phase spec's Ollama context note (v1.0.0, HQ's),
+> the P11 starter's constraint 2a xfail mechanism, and now this one (the Phase Chat's).
+> ***"Verify, do not inherit" is satisfied by measuring something, and says nothing about whether you
+> measured the right thing.*** Every epic under this milestone should read the instruction that way.
+>
+> **Also recorded, and larger than the blocker:** Route B's runner fix would install
+> `local-agent-runner` into the sandbox image — **the engine SN-27 A1.1 replaced with OpenCode and A1.2
+> put under retirement assessment at M38/E38.4.** OpenCode 1.18.10 is already installed on this host, and
+> `discover_runner()` hard-codes `local-agent-runner`. Teaching the chain to use OpenCode **is M38/E38.2's
+> execution adapter surface.** **E37.1's agentic/local posture therefore carries an unrecognized
+> dependency on M38** — a milestone binding order places after this one. Routed to HQ with the Phase
+> Chat's recommendation: **Route C for E37.1 now, the local-lane comparison moved to M38 rather than
+> dropped**, plus the endpoint fix alone as a B-series item.
+>
+> **Status: E37.1's posture awaits an HQ decision.** Until it lands, **E37.1 is not dispatched.** E37.2
+> proceeds — see the note under §Dependencies.
+
+**Original text, preserved (host-layer only, and therefore not sufficient):**
 
 **No configuration change is required.** `.ai-project.yml` already carries
 `epic_dev: local:qwen3-coder:30b`. Verified present and reachable at planning time:
 
 | Precondition | State |
 |---|---|
-| Ollama endpoint `http://localhost:11434` | reachable |
+| Ollama endpoint `http://localhost:11434` | reachable **from the host** |
 | `qwen3-coder:30b` | present (alongside `qwen3.6:27b`, `qwen2.5-coder:14b/7b`) |
 | Sandbox image `ai-project-sandbox:latest` | present |
 
@@ -582,6 +626,21 @@ a licence to make other "obviously right" two-character fixes it happens to noti
   first, E37.1's seeding row must record E37.2's change. **The Milestone Chat sequences or coordinates
   these deliberately rather than discovering it at merge**, and whichever epic lands second owns
   reconciling the changelog.
+> **⚠ Sequencing decision, Phase Chat 2026-08-05 (v1.1.2) — E37.2 proceeds now.** E37.1 is blocked on an
+> HQ posture decision (see §Execution Posture's correction). The Milestone Chat asked whether to reverse
+> the landing order; **the answer is no, and it is not needed.** The contention above is on **merge
+> order**, not work order — so **E37.2 is planned and executed immediately, and merge order stays E37.1
+> first.** M37 is therefore **not blocked in full.**
+>
+> **Why not reverse.** If E37.2 merged first, `creation-chat-guide.md` would gain a **second**
+> non-uniform seeding row — and **G1's entire premise is that there is exactly one.** Reversing would
+> double the flattening risk on the very run G1 exists to protect. **The order and the posture are
+> coupled**, so reversing before HQ rules would pre-commit the risk profile. The Milestone Chat was
+> right to escalate rather than decide it.
+>
+> If HQ takes Route C (E37.1 manual/paid), this coupling dissolves and both epics merge in the original
+> order with no further decision needed.
+
 - **M37 → M38 is binding** at the phase level. Phase closure does not begin until all five milestones
   close.
 
@@ -768,6 +827,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.2 | 2026-08-05 | **Dispatch-mechanics verification corrected — it was done at the wrong layer.** On the M37 Milestone Chat's escalation (`.ai-project/artifacts/escalation-notices/2026-08-05T00_00_00Z__P11-M37__escalation_notice.md`), which re-measured rather than inheriting and was **correct in every particular** (Phase Chat re-verified all six claims). v1.1.0's §Execution Posture said *"verified on this host"* and *"no configuration change is required"* — **both true, together misleading, and the original is left visible.** The three preconditions were checked at the **host** layer; `bin/run-dev-agent` runs **inside the Docker sandbox**, where two more fail: ollama is unreachable at `localhost:11434` (HTTP **000**; the bridge gateway `172.17.0.1:11434` returns **200**) and `local-agent-runner` is **absent from the image**. `run_in_sandbox()` forwards only `AI_PROJECT_ACTIVE_MODEL` and the mount; `check_local_availability()` precedes `discover_runner()`, so dispatch dies at **exit class 5** having done nothing. **Prior art, not new:** P7-M26-E26.3 recorded both failures on 2026-07-12 and worked around them per-epic — **open three weeks.** **Pattern named:** third P11 verification at a plausible-but-wrong level (phase spec's Ollama note, the starter's constraint 2a, now this) — *"verify, do not inherit" is satisfied by measuring something and says nothing about whether you measured the right thing.* **Larger finding:** Route B's runner fix would invest in `local-agent-runner`, the engine **A1.1 replaced with OpenCode** and **A1.2 put under retirement assessment at M38/E38.4** (OpenCode 1.18.10 verified already on the host; `discover_runner()` hard-codes the old runner) — so **E37.1's agentic posture carries an unrecognized dependency on M38/E38.2's adapter surface**, a milestone *after* this one. **Phase Chat decided:** Route A declined (unsandboxed write access across ten governance documents, with G2 existing because the exit code will not reveal failure); **landing order NOT reversed** — the contention is on *merge* order only, so **E37.2 proceeds to execution now with merge order unchanged**, avoiding a **second** non-uniform row in `creation-chat-guide.md` when G1's premise is that there is exactly one; both E37.1 artifacts confirmed as needing **no rework** (the blocker is environmental). **Escalated to HQ:** Route C for E37.1 with the local-lane comparison **moved to M38, not dropped**, plus **Route B.1 alone recommended as a B-series bugfix** (edits no governance document — HQ's own boundary — and unlike P10-GH-8 something *is* blocked). **B.2 not recommended.** Touches §Execution Posture→Dispatch mechanics, §Dependencies (E37.2-proceeds note), §Amendment History. **No epic, constraint, ordering or scope boundary changes**; contents stay fixed at two. |
 | 1.1.1 | 2026-08-05 | **Correction to v1.1.0's own record, by the Phase Chat, on discovering it was wrong.** v1.1.0's entry closes with *"**Amended before `milestone/M37` existed**, so the amendment reaches the branch by construction rather than through the channel P11-GH-1 records as broken."* **That is false and is left visible below rather than overwritten.** `milestone/M37` already existed when the amendment was written, with two commits on it — the Milestone Chat's E37.1 Epic spec (`01f818f`) and Epic Execution Chat Starter (`8226082`). **What actually happened:** the shared worktree had been left on `milestone/M37`, the Phase Chat did not check the branch before committing, and the amendment commit landed on **`milestone/M37`** instead of `phase/P11`; the accompanying `git push origin phase/P11` pushed an unchanged ref and was a silent no-op. So `phase/P11` — the branch HQ reviews through PR #173 — carried **v1.0.0's uniform manual posture** while the amendment sat on the child branch. Corrected by cherry-picking the amendment onto `phase/P11` (`12a29ae`). **The posture decision itself, the split, both guardrails and every other statement in v1.1.0 stand unchanged** — only the claim about *when and where it landed* was wrong. **Two consequences recorded rather than absorbed:** (1) P11-GH-1's failure mode occurred **in the opposite direction to the one predicted** — the child could see the amendment and the *parent* could not, which is a case the gap record does not describe; (2) **E37.1's Epic spec and Starter were authored under v1.0.0** and declare `Execution Mode: manual` / `models.epic_manual`, so they require rework to the split posture plus G1 and G2 — notified to the Milestone Chat as a mid-flight amendment, not reached into. This correction is filed under the same standard the Phase Chat applied to E36.1 and to M36's Closure Declaration: a record stating something verifiably untrue is corrected with the original left legible, whoever authored it. |
 | 1.1.0 | 2026-08-05 | **Execution posture SPLIT — CFO decision.** v1.0.0 put both epics on manual/paid as the Phase Chat's own call while explicitly leaving the E37.1 override open; the CFO took that option the same day. **E37.1 → `Execution Mode: agentic`, `models.epic_dev` (`local:qwen3-coder:30b`); E37.2 unchanged at manual/paid.** Two guardrails added and binding: **G1** — the `chat-hierarchy.md` changelog row is quoted **verbatim** in E37.1's Epic spec, converting the epic's only non-uniform row from reasoning into transcription; **G2** — completion is judged by the reviewer's external re-measurement and **never** by the exit code (P10-GH-7, untrustworthy in both directions). Recorded explicitly as unchanged by the switch: *mode is not authority* (Stage-2 accept and merge stay human-keyed), all nine binding constraints and the Hard Constraint, the Milestone Chat's Stage-2 depth, and that **G11 is not closed** — `epic_qa` has no dispatch mechanism, so only the dev lane runs. Dispatch mechanics verified on this host (ollama reachable, `qwen3-coder:30b` present, `ai-project-sandbox:latest` present); **no `.ai-project.yml` change required**, and E37.1 must be **dispatched through `bin/ai-project-orchestrator`**, not opened as a chat. Touches §Execution Posture (rewritten), §Epic Detail→E37.1 (G1 note, agentic DoD items, evidence-either-way acceptance criterion), §Definition of Done, §Acceptance Criteria (+7), §Visual Bindings. **No epic, constraint, ordering or scope boundary otherwise changes** — the contents stay fixed at two items and the fence stands. **Amended before `milestone/M37` existed**, so the amendment reaches the branch by construction rather than through the channel P11-GH-1 records as broken. |
 | 1.0.0 | 2026-08-05 | Initial M37 Stage-1 spec. Two epics with contents fixed by CFO direction: E37.1 system-tier versioning convention (HQ Ruling 2026-08-04, was `E37.6`), E37.2 artifact-ID citation forms (HQ Ruling 2026-08-05, was `E37.7`). Nine binding constraints, the no-enforcement Hard Constraint, the renumbering table for both pre-restructure rulings, and two planning-time corrections measured rather than inherited (the `GH-` live-ID count is 39 not 38, with a naive sweep returning 41; the escalation-notice shorthand has three occurrences not two, and `ai-project-yml-spec.md` sits at `governance/` not `governance/systems/`). |
