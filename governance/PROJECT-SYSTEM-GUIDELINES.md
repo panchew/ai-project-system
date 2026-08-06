@@ -602,7 +602,7 @@ Default-accept does **not** remove the human from the loop. Two distinct gates e
 
 Default-accept removes the *mandatory Review Decision artifact on the happy path*, not the *human's review*.
 
-> **History:** SN-13 (P5) established this model; it has governed every delivery since P5. The Review Decision and Epic Review Seal artifacts themselves are unchanged — default-accept changes *when* they are issued, not *what* they are. Codified by E25.2 (P6-M25); closes GH-10.
+> **History:** SN-13 (P5) established this model; it has governed every delivery since P5. The Review Decision and Epic Review Seal artifacts themselves are unchanged — default-accept changes *when* they are issued, not *what* they are. Codified by E25.2 (P6-M25); closes **`P6-GH-10`** — *"formally codify SN-13 default-accept into AOG, PSG and the Execution Chat Starter templates"*, filed in P5's closure declaration and forward-allocated to P6. **The resolution rests on the `(P6-M25)` / E25.2 anchor, not on this sentence's two P5 anchors**, which point at the unrelated `P5-GH-10`. Cited in full form per `governance/systems/creation-chat-guide.md` §Artifact ID Citation Forms.
 
 ### 11.6.1 HQ-Authored Deliveries — No Parent, Therefore No Default-Accept
 
