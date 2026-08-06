@@ -102,36 +102,94 @@ to registry work, not for hygiene, and they do not follow the hygiene epics here
 
 ---
 
-## Execution Posture (Phase Chat decision — recorded, with the reasoning)
+## Execution Posture — SPLIT (binding; CFO decision 2026-08-05, amending v1.0.0's uniform posture)
 
-**Both M37 epics run manual / paid frontier.** Every Epic Execution Chat Starter carries
-`Execution Mode: manual` and routes to `models.epic_manual` (`remote:claude-opus-5`).
+**The two epics run under different postures, deliberately.**
 
-**This is the Phase Chat's call, not a carried CFO decision.** The CFO's 2026-08-02 binding decision
-was scoped to M36's epics. M37's shape is the same in the way that mattered there:
+| Epic | Execution Mode | Model key | Resolves to |
+|---|---|---|---|
+| **E37.1** | **`agentic`** | **`models.epic_dev`** | **`local:qwen3-coder:30b`** |
+| **E37.2** | `manual` | `models.epic_manual` | `remote:claude-opus-5` |
 
-- **E37.2 is dense-prose normative authorship** — writing citation-form rules into the highest-authority
-  document in the framework. Identical in kind to M36's epics, and the 2026-08-01/02 engine comparison
-  measured `qwen3-coder:30b` at its weakest on exactly that shape
-  (`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`).
-- **E37.1 is *described* as mechanical, and is mechanical in structure but not in content.** Ten
-  documents each need a seeding row that states the convention was adopted and points at git for prior
-  history — and one of them, `chat-hierarchy.md`, must have its row written from the 2026-08-05
-  **erratum** rather than from the count in the ruling that scheduled the work. Ten near-identical
-  prose rows in the normative tier, one of which is deliberately different, is a shape where a small
-  consistency lapse lands in ten governance documents at once.
+**This supersedes v1.0.0 of this spec**, which put both epics on manual/paid as the Phase Chat's own
+call while explicitly leaving the E37.1 override open. **The CFO took that option on 2026-08-05.** The
+Phase Chat's reasoning for the original default is preserved below, because it is the reason the
+guardrails exist rather than an argument against the decision.
 
-**The stale note this supersedes.** The phase spec's remark that *"M37's code-shaped epics are where
-the local lane gets tested"* was written when M37 meant Drivr. **New M37 has no code-shaped epics.**
-That test now belongs to **M38**, and the phase spec's local-or-remote latitude at the Epic is
-untouched by this decision.
+**Why E37.1 and not E37.2.** E37.1 is the strongest local-lane candidate this phase has offered:
+highly repetitive, mechanically verifiable, and carrying a **cheap ground truth** — after the run,
+either all seventeen `governance/systems/` documents carry `version` + `## Changelog` or they do not,
+checkable in one command. E37.2 is two characters in the framework's highest-authority document plus
+four normative rules whose whole value is precision; there is no upside to risking it.
 
-> **An option left open rather than closed.** E37.1 is, on structure, the strongest local-lane
-> candidate this phase has offered so far — highly repetitive, mechanically verifiable, and with a
-> cheap ground truth (either all seventeen documents comply afterward or they do not). **If the CFO
-> wants an early local data point at low risk, E37.1 is where to take it**, and this spec's posture
-> should be overridden rather than worked around. Recorded as available, not chosen: the default above
-> stands unless the CFO says otherwise.
+**The split is itself the point.** Running one epic local and one paid inside a single milestone, on
+work of comparable subject and adjacent files, produces a **controlled comparison** rather than one
+ambiguous result. That evidence is wanted by M38 and M39; this is a low-risk place to start collecting
+it.
+
+### The Phase Chat's original caution, preserved — it is what the guardrails address
+
+- **E37.2 is dense-prose normative authorship**, and the 2026-08-01/02 engine comparison measured
+  `qwen3-coder:30b` at its weakest on exactly that shape
+  (`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`). **Unchanged: E37.2
+  stays manual/paid.**
+- **E37.1 is mechanical in structure but not uniformly in content.** Nine documents take a
+  near-identical seeding row; **`chat-hierarchy.md` takes a deliberately different one** sourced from
+  the 2026-08-05 erratum (constraint 3). *"One exception among ten uniform items"* is precisely the
+  shape a weaker model flattens, and a flattening lands in ten governance documents at once.
+
+### Guardrails — binding on E37.1's Epic spec
+
+**G1 — The `chat-hierarchy.md` changelog row is quoted VERBATIM in the Epic spec.** The Epic spec must
+carry the exact row text as a literal string to be copied, **not** a description of how to derive it
+from the erratum. This removes E37.1's single judgment call and converts constraint 3 from reasoning
+into transcription. **The Milestone Chat authors that literal string** — sourced from the 2026-08-05
+erratum and M36's Closure Declaration §D5 — and E37.1 copies it.
+
+**G2 — Completion is judged externally and mechanically, never from the exit code.** P10-GH-7 stands:
+the exit code is untrustworthy in **both** directions on this stack (E33.2 Run A: exit 0, zero work;
+E33.4: exit 2, complete green work). E37.1's acceptance rests on the re-measurement in its DoD — 17 of
+17 compliant, seven shown untouched, no reconstructed history — **run by the reviewer, not reported by
+the run.** A green exit is not evidence and a red exit is not a verdict.
+
+### What does NOT change because E37.1 is agentic
+
+- **Mode is not authority.** Stage-2 acceptance and merge authorization remain human-keyed. An agentic
+  Epic holds exactly the authority the Epic level always held.
+- **The Milestone Chat's Stage-2 review is unchanged in depth**, and remains manual/paid.
+- **All nine binding constraints and the Hard Constraint apply identically.** Agentic mode is not a
+  licence to build enforcement, reconstruct history, or renumber anything.
+- **G11 is not closed by this.** `epic_qa` has **no dispatch mechanism** — `bin/ai-project-orchestrator`
+  records that building one is out of scope — so an agentic E37.1 exercises the **dev lane only**.
+  Closing G11 remains M39's job and must not be claimed here.
+
+### Dispatch mechanics — verified on this host, 2026-08-05
+
+**No configuration change is required.** `.ai-project.yml` already carries
+`epic_dev: local:qwen3-coder:30b`. Verified present and reachable at planning time:
+
+| Precondition | State |
+|---|---|
+| Ollama endpoint `http://localhost:11434` | reachable |
+| `qwen3-coder:30b` | present (alongside `qwen3.6:27b`, `qwen2.5-coder:14b/7b`) |
+| Sandbox image `ai-project-sandbox:latest` | present |
+
+**E37.1 must be DISPATCHED, not opened.** `bin/ai-project-orchestrator` resolves `epic_dev` from
+`.ai-project.yml`, exports `AI_PROJECT_ACTIVE_MODEL`, and runs inside the sandbox; `bin/run-dev-agent`
+maps `local:<tag>` to the bare ollama tag and refuses loudly with **exit class 5** if the local model
+is genuinely unavailable (P9-M31-E31.2, *"local loadability is never assumed"*). **Pasting an agentic
+starter into a chat window is a manual run wearing an agentic label** — the declaration and the
+dispatch must agree.
+
+**Model verification differs for agentic instances.** E37.1 does **not** perform the E31.3 manual
+self-report check against `epic_manual`; it verifies against `epic_dev`/`epic_qa` through E31.2's
+dispatch-time guard. The Epic Starter template already encodes this — do not add the manual check to an
+agentic starter.
+
+**The stale phase-spec note, restated.** *"M37's code-shaped epics are where the local lane gets
+tested"* was written when M37 meant Drivr; new M37 has no code-shaped epics. **That note is superseded
+in a second way now:** the local lane gets its first M37-era test here, on prose-shaped work, by CFO
+decision — and M38's code-shaped test still stands ahead of it.
 
 ---
 
@@ -389,6 +447,12 @@ is what P10-M35's E35.1 correctly refused to do and what made the carry-forward 
    **M36 amended this document once** — E36.1, ±3, two SN-23 citations date-qualified in normative
    text, including the Ratified-Decision-#2 supersession statement. **Not from Decision 5's count,
    which omits it.**
+
+   > **Guardrail G1 applies here and is binding.** Because E37.1 runs **agentic / local**, the
+   > Milestone Chat must put this row into E37.1's Epic spec **as a verbatim literal string to be
+   > copied**, not as instructions for deriving it. This is the epic's only non-uniform row among ten
+   > and therefore its only judgment call; G1 converts it into transcription. **The Milestone Chat
+   > authors the string** from the 2026-08-05 erratum and M36's Closure Declaration §D5.
 3. **`creation-chat-guide.md`'s row records M36's two amendments** — E36.1's new "Steering Note ID
    Allocation" section and E36.3's Re-instantiation Ritual reconciliation. Both are named in M36's
    Closure Declaration §D5 as Amendments 1 and 2 of 3.
@@ -412,12 +476,24 @@ is what P10-M35's E35.1 correctly refused to do and what made the carry-forward 
 - [ ] No test, linter or validator added (Hard Constraint)
 - [ ] A Structural Mermaid diagram accompanies the delivery
 - [ ] Full suite green (**377 / 0** baseline on `phase/P11`, no regressions, no new skips)
+- [ ] **Agentic-posture items (E37.1 only):** the Epic Starter declares `Execution Mode: agentic` and
+      routes to `models.epic_dev`; the epic was **dispatched through `bin/ai-project-orchestrator`**,
+      not opened as a chat; the `chat-hierarchy.md` row was carried verbatim per **G1**; and
+      **completion was judged by the reviewer's own re-measurement, not by the run's exit code**
+      (**G2** / P10-GH-7)
+- [ ] **G11 is not claimed.** The delivery states that only the dev lane ran and that `epic_qa` remains
+      unexercised
 
 **Acceptance Criteria:**
 - [ ] A reader opening any `governance/systems/` document can determine what changed in it since the
       convention was adopted, and is told where to look for anything before that
 - [ ] A reader of `chat-hierarchy.md`'s changelog learns that M36 amended it — the fact Decision 5's
       count would have lost
+- [ ] **The local-lane outcome is recorded as evidence either way** — what the agentic run produced,
+      what the reviewer's re-measurement found, and where the two disagreed if they did. A failed or
+      partial agentic run is a **usable result**, not a delivery failure: the epic's substance can be
+      completed manually and the local-lane finding still stands as the evidence this posture was
+      chosen to gather
 
 **Sequencing:** first by the phase spec's own statement, though it has no hard dependency on E37.2.
 May run in parallel with E37.2 — see the file-contention note below.
@@ -529,8 +605,13 @@ a licence to make other "obviously right" two-character fixes it happens to noti
 - [ ] **No test, linter or validator was added** (Hard Constraint) — and if either epic recommended
       one, the recommendation is recorded and escalated, not built
 - [ ] Both deliveries carry a Structural Mermaid diagram (fenced, in-repo, no ComfyUI)
-- [ ] Both Epic Starters declare `Execution Mode: manual` and route to `models.epic_manual` — unless
-      the CFO overrides E37.1's posture, in which case the override is recorded
+- [ ] **The split posture was honoured** — E37.1's Starter declares `Execution Mode: agentic` routing to
+      `models.epic_dev` and was **dispatched** through the orchestrator; E37.2's declares
+      `Execution Mode: manual` routing to `models.epic_manual`
+- [ ] **G1 discharged** — E37.1's Epic spec carried the `chat-hierarchy.md` row as a verbatim literal
+- [ ] **G2 discharged** — E37.1's completion was judged by external re-measurement, with the exit code
+      recorded but not relied on
+- [ ] **The local-lane result is recorded as evidence**, whatever it was, and **G11 is not claimed**
 - [ ] **M37's contents were not widened.** No parked carry-forward was absorbed; if one was proposed,
       it was escalated rather than folded
 - [ ] Full suite green on `milestone/M37` (**377 / 0** baseline, no regressions, no new skips)
@@ -551,7 +632,10 @@ a licence to make other "obviously right" two-character fixes it happens to noti
 5. **Both rule sets live in one place and are cited elsewhere, not restated** (E37.2).
 6. **The milestone closed exactly as wide as it opened** — two items, no absorbed carry-forwards, no
    enforcement built.
-7. **The full suite is green at milestone delivery** — 377 / 0, no regressions, no new skips.
+7. **The split posture was honoured and its result recorded as evidence** — E37.1 ran agentic/local
+   through the orchestrator under G1 and G2; E37.2 ran manual/paid; the local-lane outcome is recorded
+   whatever it was, and **G11 is not claimed** (dev lane only).
+8. **The full suite is green at milestone delivery** — 377 / 0, no regressions, no new skips.
 
 ---
 
@@ -633,9 +717,15 @@ catch.
 ```mermaid
 flowchart TB
     subgraph FIXED["Contents FIXED at two items — CFO-directed 2026-08-05"]
-        E1["E37.1 — System-tier versioning convention<br/>(HQ Ruling 2026-08-04, was E37.6)<br/>seed the 10 unversioned<br/>governance/systems/ documents"]
-        E2["E37.2 — Artifact-ID citation forms<br/>(HQ Ruling 2026-08-05, was E37.7)<br/>PSG:605 GH-10 to P6-GH-10<br/>+ 4 normative rules, recorded ONCE"]
+        E1["E37.1 — System-tier versioning convention<br/>(HQ Ruling 2026-08-04, was E37.6)<br/>seed the 10 unversioned<br/>governance/systems/ documents<br/><br/>AGENTIC / LOCAL — epic_dev<br/>local:qwen3-coder:30b"]
+        E2["E37.2 — Artifact-ID citation forms<br/>(HQ Ruling 2026-08-05, was E37.7)<br/>PSG:605 GH-10 to P6-GH-10<br/>+ 4 normative rules, recorded ONCE<br/><br/>MANUAL / PAID — epic_manual<br/>remote:claude-opus-5"]
     end
+
+    GUARD["GUARDRAILS on E37.1's agentic run<br/>G1 chat-hierarchy.md row quoted VERBATIM<br/>in the Epic spec — transcription, not reasoning<br/>G2 completion judged by external re-measurement,<br/>NEVER the exit code (P10-GH-7, wrong both ways)<br/><br/>MODE IS NOT AUTHORITY — Stage-2 + merge stay human-keyed<br/>G11 NOT closed: epic_qa has no dispatch, dev lane only"]
+    E1 ==> GUARD
+
+    SPLIT["The split is the point:<br/>one local + one paid in one milestone<br/>= CONTROLLED comparison,<br/>evidence M38/M39 want"]
+    FIXED -.-> SPLIT
 
     ERR["2026-08-05 ERRATUM<br/>Decision 5 said TWO amendments;<br/>verified THREE across TWO docs"]
     ERR ==>|"chat-hierarchy.md's seeding row<br/>MUST come from here"| E1
@@ -674,8 +764,26 @@ flowchart TB
 
 ---
 
+## Amendment History
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.1.0 | 2026-08-05 | **Execution posture SPLIT — CFO decision.** v1.0.0 put both epics on manual/paid as the Phase Chat's own call while explicitly leaving the E37.1 override open; the CFO took that option the same day. **E37.1 → `Execution Mode: agentic`, `models.epic_dev` (`local:qwen3-coder:30b`); E37.2 unchanged at manual/paid.** Two guardrails added and binding: **G1** — the `chat-hierarchy.md` changelog row is quoted **verbatim** in E37.1's Epic spec, converting the epic's only non-uniform row from reasoning into transcription; **G2** — completion is judged by the reviewer's external re-measurement and **never** by the exit code (P10-GH-7, untrustworthy in both directions). Recorded explicitly as unchanged by the switch: *mode is not authority* (Stage-2 accept and merge stay human-keyed), all nine binding constraints and the Hard Constraint, the Milestone Chat's Stage-2 depth, and that **G11 is not closed** — `epic_qa` has no dispatch mechanism, so only the dev lane runs. Dispatch mechanics verified on this host (ollama reachable, `qwen3-coder:30b` present, `ai-project-sandbox:latest` present); **no `.ai-project.yml` change required**, and E37.1 must be **dispatched through `bin/ai-project-orchestrator`**, not opened as a chat. Touches §Execution Posture (rewritten), §Epic Detail→E37.1 (G1 note, agentic DoD items, evidence-either-way acceptance criterion), §Definition of Done, §Acceptance Criteria (+7), §Visual Bindings. **No epic, constraint, ordering or scope boundary otherwise changes** — the contents stay fixed at two items and the fence stands. **Amended before `milestone/M37` existed**, so the amendment reaches the branch by construction rather than through the channel P11-GH-1 records as broken. |
+| 1.0.0 | 2026-08-05 | Initial M37 Stage-1 spec. Two epics with contents fixed by CFO direction: E37.1 system-tier versioning convention (HQ Ruling 2026-08-04, was `E37.6`), E37.2 artifact-ID citation forms (HQ Ruling 2026-08-05, was `E37.7`). Nine binding constraints, the no-enforcement Hard Constraint, the renumbering table for both pre-restructure rulings, and two planning-time corrections measured rather than inherited (the `GH-` live-ID count is 39 not 38, with a naive sweep returning 41; the escalation-notice shorthand has three occurrences not two, and `ai-project-yml-spec.md` sits at `governance/` not `governance/systems/`). |
+
+---
+
 ## Notes
 
+- **On the posture amendment.** The switch was the CFO's call on an option this spec deliberately left
+  open, taken the same day the spec landed and **before `milestone/M37` existed** — which is why it is
+  a clean amendment rather than a P11-GH-1 casualty. The Phase Chat's original caution is preserved in
+  §Execution Posture rather than deleted, because it is precisely what G1 and G2 address: the risk was
+  never the ten repetitive rows, it was the one row that is deliberately different.
+- **A failed agentic run on E37.1 is a result, not a setback.** The epic's substance can be completed
+  manually and the local-lane finding still stands as the evidence this posture was chosen to gather.
+  Recording that up front is what keeps the experiment honest — an experiment whose only acceptable
+  outcome is success is not gathering evidence.
 - **This milestone executes two rulings and makes none.** Every deliverable traces to HQ Ruling
   2026-08-04 or 2026-08-05. Where a genuine design decision remains it is named and assigned to the
   Epic Chat: E37.1's starting-version scheme, and E37.2's exact placement of the four rules within the

@@ -265,27 +265,73 @@ see Decision 5, and `phase/P11` could not see spec v1.0.2.
 
 ---
 
-## Execution Posture for M37's Epics
+## Execution Posture for M37's Epics — SPLIT (binding, CFO decision 2026-08-05)
 
-**Both Epic Execution Chat Starters declare `Execution Mode: manual` and route to
-`models.epic_manual` (`remote:claude-opus-5`).**
+**The two epics run under different postures. This is deliberate and is not a drafting inconsistency.**
 
-This is the **Phase Chat's** decision, not a carried CFO decision — the CFO's 2026-08-02 ruling was
-scoped to M36. The reasoning: E37.2 is dense-prose normative authorship in the framework's
-highest-authority document, and E37.1 is ten near-identical prose rows in the normative tier **one of
-which is deliberately different** — a shape where one consistency lapse lands in ten governance
-documents at once. The 2026-08-01/02 engine comparison measured `qwen3-coder:30b` weakest on exactly
-that shape.
+| Epic | `Execution Mode` | Model key | Resolves to |
+|---|---|---|---|
+| **E37.1** | **`agentic`** | **`models.epic_dev`** | **`local:qwen3-coder:30b`** |
+| **E37.2** | `manual` | `models.epic_manual` | `remote:claude-opus-5` |
 
-**The phase spec's older remark that "M37's code-shaped epics are where the local lane gets tested" is
-stale** — it was written when M37 meant Drivr. **New M37 has no code-shaped epics; that test belongs to
-M38.**
+The milestone spec's v1.0.0 put both on manual/paid as the Phase Chat's own call while explicitly
+leaving the E37.1 override open. **The CFO took that option** (spec v1.1.0, §Amendment History).
 
-> **If the CFO overrides this for E37.1, follow the override and record it.** E37.1 is on structure the
-> strongest local-lane candidate the phase has offered — repetitive, mechanically verifiable, cheap
-> ground truth (either all seventeen documents comply afterward or they do not). The Phase Chat left
-> that option explicitly open rather than closing it. **Do not route locally on your own initiative;
-> do not resist a CFO override.**
+**Why the split, so you can defend it:** E37.1 is repetitive, mechanically verifiable, and carries a
+**cheap ground truth** — afterwards either all seventeen documents comply or they do not, checkable in
+one command. E37.2 is two characters in the framework's highest-authority document plus four normative
+rules whose whole value is precision, with no upside to risking it. **Running one local and one paid in
+one milestone is a controlled comparison** rather than one ambiguous result, and that evidence is wanted
+by M38 and M39.
+
+### Two guardrails you must implement — they are the reason the switch is safe
+
+**G1 — put the `chat-hierarchy.md` changelog row into E37.1's Epic spec as a VERBATIM literal string.**
+Not instructions for deriving it from the erratum — the actual text, to be copied. **You author that
+string**, from the 2026-08-05 erratum and M36's Closure Declaration §D5. This is E37.1's only
+non-uniform row among ten and therefore its only judgment call; G1 turns it into transcription. *"One
+exception among ten uniform items"* is exactly the shape a weaker model flattens, and a flattening lands
+in ten governance documents at once.
+
+**G2 — judge E37.1's completion yourself, mechanically. Never from the exit code.** P10-GH-7 stands:
+the exit code is untrustworthy in **both** directions on this stack (E33.2 Run A returned exit 0 having
+done zero work; E33.4 returned exit 2 having produced complete, green work). Acceptance rests on **your
+own re-measurement** — 17 of 17 compliant, the seven shown untouched, no reconstructed history. **Record
+the exit code; do not rely on it.** A green exit is not evidence and a red exit is not a verdict.
+
+### What does NOT change because E37.1 is agentic
+
+- **Mode is not authority.** Stage-2 acceptance and merge authorization stay human-keyed. An agentic
+  Epic holds exactly the authority the Epic level always held.
+- **Your Stage-2 review does not get lighter.** Same depth, and your own instance stays manual/paid.
+- **All nine binding constraints and the Hard Constraint apply identically.** Agentic mode is not a
+  licence to build enforcement, reconstruct history, or renumber anything.
+- **G11 is NOT closed by this, and must not be claimed.** `epic_qa` has **no dispatch mechanism** —
+  `bin/ai-project-orchestrator` says so in its own comments — so an agentic E37.1 exercises the **dev
+  lane only**. Closing G11 remains M39's.
+
+### Dispatch mechanics — verified on this host 2026-08-05, no config change needed
+
+`.ai-project.yml` already carries `epic_dev: local:qwen3-coder:30b`. Verified present: the ollama
+endpoint at `http://localhost:11434` is reachable, `qwen3-coder:30b` is pulled, and
+`ai-project-sandbox:latest` exists.
+
+- **E37.1 must be DISPATCHED, not opened.** `bin/ai-project-orchestrator` resolves `epic_dev`, exports
+  `AI_PROJECT_ACTIVE_MODEL`, and runs inside the sandbox; `bin/run-dev-agent` maps `local:<tag>` to the
+  bare ollama tag and refuses loudly with **exit class 5** if the model is genuinely unavailable
+  (P9-M31-E31.2 — *"local loadability is never assumed"*). **Pasting an agentic starter into a chat
+  window is a manual run wearing an agentic label.** The declaration and the dispatch must agree.
+- **Do NOT put the E31.3 manual model check in E37.1's starter.** Agentic instances verify against
+  `epic_dev`/`epic_qa` through E31.2's dispatch-time guard instead — the Epic Starter template already
+  encodes this distinction. E37.2's starter **does** carry the manual check, against `epic_manual`.
+- **You do not dispatch directly.** E37.1's starter goes to the Phase Chat, which authorizes the launch,
+  exactly as for a manual epic.
+
+> **A failed or partial agentic run on E37.1 is a usable result, not a delivery failure.** The epic's
+> substance can be completed manually and the local-lane finding still stands as the evidence this
+> posture was chosen to gather. **Record what happened either way** — what the run produced, what your
+> re-measurement found, and where the two disagreed. An experiment whose only acceptable outcome is
+> success is not gathering evidence.
 
 ---
 
@@ -296,10 +342,15 @@ Produce, **one Epic's set at a time**:
 1. **Epic spec** — `P11-M37-E37.<n>__spec__<epic-name>.md` covering: goals and scope; the binding
    constraints that apply, **reproduced rather than cited**; deliverables; Definition of Done —
    including the Structural diagram obligation and the Hard Constraint's no-enforcement rule;
-   dependencies and prerequisites; acceptance criteria.
-2. **Epic Execution Chat Starter** — using `governance/templates/epic-execution-chat-starter.md`, with
-   `Execution Mode: manual`, `models.epic_manual` routing, and a branch check as its first
-   prerequisite.
+   dependencies and prerequisites; acceptance criteria. **For E37.1, the spec must additionally carry
+   the `chat-hierarchy.md` changelog row as a verbatim literal string (G1).**
+2. **Epic Execution Chat Starter** — using `governance/templates/epic-execution-chat-starter.md`, with a
+   branch check as its first prerequisite and **the posture from the split table above**:
+   - **E37.1** — `Execution Mode: agentic`, routing to `models.epic_dev`. **No E31.3 manual model
+     check** (agentic instances use E31.2's dispatch-time guard). State that it is **dispatched through
+     `bin/ai-project-orchestrator`**, not opened as a chat.
+   - **E37.2** — `Execution Mode: manual`, routing to `models.epic_manual`, **with** the E31.3 manual
+     model check.
 
 Commit both to `milestone/M37`, then hand off **reference-first per AOG §3.1.1** — committed path plus a
 one-line summary, never the body echoed into chat. Four-backtick fenced full-body form only for a
@@ -349,8 +400,10 @@ Do NOT proceed to execution or merge without Phase Chat acceptance.
 This Milestone Chat session is complete when:
 
 - [ ] An Epic spec has been produced and accepted for both Epics
-- [ ] An Epic Execution Chat Starter has been produced and accepted for both, each declaring
-      `Execution Mode: manual` and routing to `models.epic_manual` (or recording a CFO override)
+- [ ] An Epic Execution Chat Starter has been produced and accepted for both, **each carrying its own
+      posture per the split table** — E37.1 `agentic` / `models.epic_dev`, E37.2 `manual` /
+      `models.epic_manual`
+- [ ] **G1 is discharged** — E37.1's Epic spec carries the `chat-hierarchy.md` row as a verbatim literal
 - [ ] In-chat acceptance has been acknowledged for both (SN-19 — no artifact)
 - [ ] The Phase Chat has declared the Milestone planning session complete
 
@@ -361,6 +414,12 @@ On **M37 execution** completion (both epics merged to `milestone/M37`), produce 
 Declaration with `is_final: false` — it hands back to the Phase Chat for **M38 planning**, not phase
 closure. **If either epic recommended an enforcement guard, the Closure Declaration records the
 recommendation and its escalation** — it does not record a built one.
+
+**The Closure Declaration must additionally record the local-lane result** (E37.1's split posture):
+what the agentic run produced, the exit code it returned, what your own re-measurement found, and
+**where the two disagreed if they did** — that disagreement is the most valuable single datum this
+milestone can produce, and it feeds M39's completion-signal work directly. **State explicitly that G11
+is not closed** and that only the dev lane ran.
 
 ---
 
