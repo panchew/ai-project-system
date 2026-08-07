@@ -10,6 +10,9 @@ date: 2026-08-06
 decision: accept
 scope: milestone ACCEPTED; one annotation in the declaration requires correction before consolidation
 blocking: consolidation only, and only until the annotation is corrected
+resolution: accepted
+resolved_date: 2026-08-07
+resolution_commit: 55d126d
 ---
 
 # Stage-2 Review Decision — P11-M37: MILESTONE ACCEPTED, one annotation to correct
@@ -160,3 +163,56 @@ and four citation-form rules live in one place, applicable by someone who never 
 
 The one correction is an annotation, and it lands on the same mechanism the declaration is the best
 existing account of. **Correct DoD item 3 and this declaration is accepted as filed.**
+
+---
+
+## Resolution — ACCEPTED, 2026-08-07
+
+**Rework verified against the branch, not read.** Resolution commit `55d126d` on `milestone/M37`,
+**49 insertions / 4 deletions in one file** — containment confirmed, nothing else touched.
+
+| Required | Verified |
+|---|---|
+| DoD row 3 amended to the measured state | ✅ ten seeded with a forward-looking **first** row; the two second rows named as *"the convention working as intended, not an exception to it"* |
+| Original annotation left **visible** | ✅ struck in place, and quoted again in the Finding 2 entry |
+| Added to Finding 2's tally as **instance eight** | ✅ new *"Instance eight"* subsection; running tally updated **seven → eight**, and the paid-frontier count **five → six** |
+| No re-run, no epic reopened, no merge revisited | ✅ |
+| Suite | ✅ **377 passed / 0 failed / 0 skipped / 0 xfailed**, re-run at resolution |
+
+### The rework improved on what I asked for, and the improvement is mine to credit
+
+I diagnosed the defect as *"a count authored in the same session as the table containing the right data,
+without recounting from it"* — the mechanism Finding 2 already named. **The Milestone Chat found that
+incomplete and produced a better account:**
+
+> *"The verification string 'exactly one changelog row per seeded document' **was true when I wrote it** —
+> at E37.1's Stage-2 review, before E37.2 merged. It was then carried into a document written after the
+> second merge without being re-run. This declaration's own post-merge block *was* re-measured and is
+> correct; the DoD table beside it carried a stale string. So: **re-measuring somewhere in a document is
+> not re-measuring everywhere in it**, and a claim that was true at its authoring is not thereby true at
+> its filing. That is `P11-GH-2`'s layer rule displaced onto the **time axis** rather than the
+> environment axis."*
+
+**That is a materially different mechanism from the one I named, and the better fit.** Mine described an
+omission; this describes **staleness** — a true claim outliving the state that made it true. It also does
+something neither my Review Decision nor `P11-GH-2` had done: it identifies the layer rule and the
+line-numbers-are-a-floor finding (Finding 4) as **the same rule on two different axes**, environment and
+time. **Recommended to HQ for folding into `P11-GH-2`**, which currently records only the environment
+axis; the time axis is the one that will bite a closure declaration, because closure declarations are
+written after the last merge and quote work verified before it.
+
+**The self-referential detail is worth keeping too:** this instance was caught by the Phase Chat
+re-measuring a claim inside a document that had just finished insisting on re-measurement. That is the
+strongest available argument that the practice has to be mechanical rather than cultural.
+
+### Disposition
+
+**Milestone P11-M37 — Corpus Record Conventions is ACCEPTED.** All thirteen DoD items met, all seven
+acceptance criteria hold, contents fixed at two epics from open to close, no enforcement built, suite
+green. **No further rework. This Review Decision is closed.**
+
+**Consolidation authorized on the human's merge authorization** — `milestone/M37 → phase/P11`.
+`is_final: false`, so on consolidation the Phase Chat proceeds to **M38 planning** (Drivr inception,
+fleet registry, execution adapter surface), carrying forward: the local/paid comparison at **E38.6**,
+**B2.1** still needing a dispatcher, the standing **split permission** now attaching to M38, and
+**Finding 3's metavariable constraint** binding on any future enforcement guard.
