@@ -63,7 +63,7 @@ suite:                                           377 passed / 0 failed
 |---|---|---|
 | 1 | E37.1 and E37.2 each meet their own DoD | ✅ verified per epic |
 | 2 | Both epic branches merged to `milestone/M37` | ✅ `61fe789`, `a5ee6f8` |
-| 3 | All 17 `governance/systems/` documents carry `version` + `## Changelog`; ten seeded forward-looking, seven shown untouched, no reconstructed history | ✅ 17/17; exactly one changelog row per seeded document |
+| 3 | All 17 `governance/systems/` documents carry `version` + `## Changelog`; ten seeded forward-looking, seven shown untouched, no reconstructed history | ✅ 17/17; ten seeded with a forward-looking **first** row; **`chat-hierarchy.md` and `creation-chat-guide.md` each carry a second row recording E37.2's amendments — the convention working as intended, not an exception to it.** ~~*(original, struck 2026-08-07: "exactly one changelog row per seeded document" — false; see the correction below)*~~ |
 | 4 | `chat-hierarchy.md`'s seeding row records M36's amendment to it, sourced from the 2026-08-05 erratum and not Decision 5's count | ✅ byte-identical to the G1 literal |
 | 5 | No namespace-stripped `GH-<n>` remains under `governance/`; `PSG:605` reads `P6-GH-10` | ✅ sweep returns 0 |
 | 6 | The `GH-` phase-prefix rule, the escalation-notice full-filename rule, and the prefix-means-filing-phase statement recorded normatively **in one place**, exceptions named, nothing renumbered | ✅ one section; `PSG:605` cites rather than restates |
@@ -74,6 +74,28 @@ suite:                                           377 passed / 0 failed
 | 11 | **M37's contents were not widened.** No parked carry-forward absorbed; anything proposed was escalated | ✅ two epics at open and at close |
 | 12 | Full suite green on `milestone/M37` (377 / 0 baseline, no regressions, no new skips) | ✅ 377 / 0 |
 | 13 | Milestone Closure Declaration produced (`is_final: false` — M38 planning follows) | ✅ this document |
+
+> **Correction, 2026-08-07 — DoD row 3's verification was false, and the original is left visible
+> above.** It read *"exactly one changelog row per seeded document."* **Measured post-merge on
+> `milestone/M37`: two of the ten carry two rows.**
+>
+> | Document | Version | Rows |
+> |---|---|---|
+> | `chat-hierarchy.md` | 1.1.0 | **2** — `1.0.0` seeding (2026-08-05) + `1.1.0` E37.2's citation fix (2026-08-06) |
+> | `creation-chat-guide.md` | 1.1.0 | **2** — `1.0.0` seeding + `1.1.0` E37.2's new section |
+> | the other eight | 1.0.0 | 1 |
+>
+> **The second rows are correct, and they are this milestone's own success rather than a defect.**
+> Milestone spec v1.1.3 requires that the ten *"each carry a **first** changelog row citing HQ Ruling
+> 2026-08-04 and pointing at git for prior history."* **It never required exactly one** — requiring
+> that would have forbidden the documents from recording anything for the remainder of the milestone,
+> which is the opposite of what E37.1 existed to enable. **No DoD item was unmet; only the annotation
+> was wrong.**
+>
+> **Raised by the Phase Chat's Stage-2 review of this declaration** (Review Decision
+> `.ai-project/artifacts/review-decisions/2026-08-06T00_00_00Z__P11-M37__milestone_review_decision.md`)
+> and re-measured by this Milestone Chat before correcting. **No epic reopened, no merge revisited, no
+> re-run required** — the suite is untouched by this correction.
 
 ---
 
@@ -154,9 +176,32 @@ v1.2.1 with the original struck, not overwritten.
 spec and delivery) — each correct at its date, as `P11-GH-1` and then `P11-GH-2` were filed. **A naive
 sweep returns 42** by counting two pre-renumber historical strings.
 
-> **Running tally: seven instances in this phase of a record stating a count that omits its own
-> contribution; five of them authored by paid frontier chats, including HQ's own Decision 5.** This is
-> the argument *for* G1, not against it. **Every one was caught by re-measurement rather than review.**
+### Instance eight — this declaration, corrected 2026-08-07
+
+**DoD row 3 claimed *"exactly one changelog row per seeded document."* Two of the ten carry two.**
+Raised by the Phase Chat's Stage-2 review of this document; re-measured before correcting; the
+original left visible in the table above.
+
+**The mechanism is the one Finding 2 already names, applied to Finding 2's own document.** *"The count
+was authored in the same session as the table containing the right data, without recounting from it."*
+**Acceptance Criterion 2 of this declaration held the right data** — it states that
+`chat-hierarchy.md` *"has since used that capability: E37.2's own amendment to it is recorded in a
+second row, which would have been unrecordable four days ago."* **DoD row 3, a few paragraphs earlier,
+was written without recounting from it.**
+
+**The sharper version of the mechanism, because this instance adds one.** The verification string
+*"exactly one changelog row per seeded document"* **was true when I wrote it** — at E37.1's Stage-2
+review, before E37.2 merged. It was then **carried into a document written after the second merge
+without being re-run.** This declaration's own post-merge block *was* re-measured and is correct;
+**the DoD table beside it carried a stale string.** So: **re-measuring somewhere in a document is not
+re-measuring everywhere in it**, and a claim that was true at its authoring is not thereby true at its
+filing. That is `P11-GH-2`'s layer rule displaced onto the time axis rather than the environment axis.
+
+> **Running tally: eight instances in this phase of a record stating a count that omits or misstates
+> its own contribution; six of them authored by paid frontier chats, including HQ's own Decision 5 and
+> now this declaration.** This is the argument *for* G1, not against it. **Every one was caught by
+> re-measurement rather than by reading** — this one by the Phase Chat re-measuring a claim in a
+> document that had itself just finished insisting on re-measurement.
 
 ### 3. The metavariable trap — a design constraint no guard author could otherwise learn
 
