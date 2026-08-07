@@ -101,3 +101,33 @@ interim practice, recorded for the same reason.
 Direction 4 is not a joke and should be weighed seriously: **the review chain caught every instance,
 including both of HQ's.** The question is whether that is a property of the design or of the
 attention currently being paid to it — and that question cannot be answered from three instances.
+
+
+---
+
+## Sibling pattern — added 2026-08-06, distinct from the above and not folded into it
+
+A second HQ failure mode surfaced the day this note was filed. It is **not** a wrong-layer
+verification, and merging the two would blur both:
+
+> **A premise is inherited from an input and not re-tested against the decision the artifact itself
+> just made.**
+
+| # | Instance | The decision | The premise it invalidated, carried anyway |
+|---|---|---|---|
+| 1 | Starter constraint 2a | HQ Ruling 2026-08-01 **D4: SN-23 is never renumbered** | *"the moment E36.1/E36.2 clear those collisions the check XPASSes"* — it can never clear, so it can never XPASS |
+| 2 | HQ Ruling 2026-08-06 | **Route C: revert E37.1 to manual/paid** | *"E37.1's two artifacts need no rework"* — reverting them **was** rework; `5fb7540`/`64efc02` had already made them agentic |
+
+**Both are internal contradictions inside a single HQ artifact**, between a decision and a premise
+sitting a few paragraphs apart. Neither would be caught by measuring more carefully: the measurement
+was never the weak link. **The check that would catch them is re-reading the artifact's own claims
+against its own decisions before issuing it** — cheap, and not currently performed.
+
+Instance 2 was caught **from the executing end**, by the Milestone Chat applying the ruling and
+finding that doing so required work the ruling said was unnecessary. Instance 1 was caught by the
+Phase Chat. **Neither was caught by HQ.**
+
+**Recorded here rather than filed as `P11-GH-3`, deliberately.** Two instances is the bar this phase
+used for P11-GH-1, so it arguably qualifies — but **HQ is the party this pattern indicts, and HQ
+electing to keep it as a sub-heading of someone else's note is exactly the judgment it should not
+make about itself.** Whether it earns its own record is the CFO's call.
