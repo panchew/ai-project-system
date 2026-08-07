@@ -2,6 +2,7 @@
 type: system
 status: active
 effective_date: 2026-06-17
+version: 1.0.0
 ---
 
 # HQ Execution Chat Starter — System Reference
@@ -369,3 +370,11 @@ Walk through it with the
 - **Roles & Authorization (P4.3):** [`roles-authorization-team-governance.md`](roles-authorization-team-governance.md)
 - **P4 entry point:** [P4 Governance System Guide](../../docs/team-collaboration/P4-governance-system-guide.md)
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13, §18
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/hq-execution-chat-starter.md`. |

@@ -2,6 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-20
+version: 1.1.0
 ---
 
 # Chat Hierarchy — System Reference
@@ -268,7 +269,8 @@ E31.2's surface, untouched here.
 **Values are versions; the decision behind them is a tier.** These five cells named
 `remote:claude-opus-4-8` until 2026-07-28, when that version stopped being offered in the
 harness surface in use and this guardrail — correctly — halted every manual chat at once
-(P10-M34 Escalation Notice). HQ refreshed all five to `remote:claude-opus-5`, the same
+(`.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`).
+HQ refreshed all five to `remote:claude-opus-5`, the same
 line's successor. What the policy actually decides is *paid frontier* (rows P1–P4); only
 this table and `model-routing-policy.md`'s mapping table name a version, and a version can
 be deprecated where a tier cannot. Expect this refresh to recur at every future
@@ -1106,3 +1108,12 @@ it without a second hop. The two statements must always agree; on any divergence
 - **Epic Template:** `governance/templates/epic-execution-chat-starter.md`
 - **Project System Guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md`
 - **AI Operating Guidelines:** `governance/AI-OPERATING-GUIDELINES.md`
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.1.0 | 2026-08-06 | **Escalation-notice citation form applied** (E37.2, P11-M37, executing HQ Ruling 2026-08-05, Decision 3). The single citation of an escalation notice **by milestone key** — the *"`P<n>-M<n>` Escalation Notice"* short form, in the §Manual Chat Model Verification note explaining why the five paid-frontier cells changed version on 2026-07-28 — replaced with the notice's **full filename**, `.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`. **The milestone key could not identify it: two notices share `P10-M34`**, and this document already cites both correctly by full filename elsewhere, so the one remaining short form was the outlier. The rule itself is recorded once, in [`creation-chat-guide.md`](creation-chat-guide.md) §Artifact ID Citation Forms; this document **cites it rather than restating it**. **Authorized by the P11-M37 Milestone Chat's Review Decision of 2026-08-06** (E37.2 spec v1.1.0, §Conflict resolution), resolving a contradiction between that spec's in-scope-surfaces clause and its do-not-touch list. **Nothing else in this document changed** — no renumbering, and E37.1's `1.0.0` seeding row is unaltered. |
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/chat-hierarchy.md`. **One earlier amendment is recorded here because it landed while this document could not record it:** E36.1 (P11-M36, `4427ea9`, merged `f1a5e75`, 2026-08-03), **+3 / −3** — two `SN-23` citations date-qualified to `SN-23 (2026-07-20)` in **normative text**, at the §Execution Mode ratification note and at the **Ratified-Decision-#2 supersession statement**. Recorded per M36's Milestone Closure Declaration §D5, which records **three** amendments across **two** unversioned documents — **not** per HQ Ruling 2026-08-04 Decision 5, whose count of *"two"* omits this document and is footnoted as an erratum by HQ Ruling 2026-08-05, Part 1. |
