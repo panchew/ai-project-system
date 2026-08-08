@@ -160,7 +160,19 @@ All ten are in the Milestone spec. Summarised so no Epic spec is written without
 4. **Three registry states, the CFO's definitions** — active / benched / archived. **Dropping from a
    phase's scope is not a registry state** (`fieldledger-assesment` still gets classified).
 5. **Drivr does NOT execute fleet-state transitions** — recorded human action only.
-6. **E38.4 reports; it retires nothing.**
+6. **E38.4 reports; it retires nothing** — and it tests **three** candidates, not two: **C1** the
+   library entry point, **C2** JSON-schema argument coercion, and **C3 an honest exit code + a
+   machine-readable `status` field** *(added on HQ's Stage-1 review — the candidate measured evidence
+   actually found)*. **Required reading:**
+   `.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`. Measured same task,
+   same model, same host: the runner emitted exit **2** + `max_iterations_exceeded`; **OpenCode emitted
+   neither and exited 0 on zero work.** **M39's whole deliverable is a trustworthy completion signal and
+   one engine on the roster already has one** — an assessment concluding *"nothing OpenCode lacks"*
+   without testing C3 would retire the only engine that has it. Same evidence binds E38.4's **method**:
+   assess C3 from **structured output, never an engine's self-report** (its prose lied in both arms), and
+   **verify E38.4's own harness against a known-nonzero case** before trusting any exit code (Arm B's was
+   first misread as 0). **C3 is assessed, not built — the judgment is M39's.** Note the evidence predates
+   the restructure: where it says *"M38"* it means **today's M39**.
 7. **E38.5 produces evidence; row P4 is not decided.**
 8. **G11 is not closed by M38** unless a real `epic_qa` run is captured and stated. It is M39's.
 9. **Structural diagram** on any delivery amending a normative document **in this repo** (P10-GH-1's

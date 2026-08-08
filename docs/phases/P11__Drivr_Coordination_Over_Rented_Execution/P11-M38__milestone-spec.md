@@ -116,8 +116,10 @@ STAGE B — evidence       E38.4  local-agent-runner retention assessment
 
 **The gate is binding, and here is why it is not bureaucracy.** All three Stage B epics are evidence
 *about an engine invoked through an adapter*:
-- **E38.4** asks whether OpenCode's `serve` mode covers two capabilities `local-agent-runner` provides.
-  Answerable only against a real adapter; a memo about what `serve` probably does is not an assessment.
+- **E38.4** asks whether OpenCode's `serve` mode covers **three** capabilities `local-agent-runner`
+  provides — including **C3, the honest exit code and machine-readable `status`** that measured evidence
+  found. Answerable only against a real adapter; a memo about what `serve` probably does is not an
+  assessment.
 - **E38.5** needs a way to run milestone-scale work through the engine at all.
 - **E38.6** is *stated in the phase spec* as depending on the adapter surface existing.
 
@@ -253,11 +255,15 @@ classifying.
 assumed**: M38 builds transitions as a **recorded human action**. Nothing automatic. If the CFO rules
 otherwise mid-milestone, that is an amendment, not an epic's discretion.
 
-**6. E38.4 reports; it does not retire.** Against the CFO's bar if one arrives; otherwise test the two
-named candidate capabilities — the **library entry point** (`run(task, tools, model)` with in-process
-tool handlers) and **JSON-schema argument coercion** for models that mistype tool arguments — against
-OpenCode's `serve` mode, and **report without retiring anything.** P9/P10's local-inference evidence
-stands whatever happens to the engine that produced it; **retirement is not a judgment on the work.**
+**6. E38.4 reports; it does not retire.** Against the CFO's bar if one arrives; otherwise test **three**
+candidate capabilities against OpenCode's `serve` mode and **report without retiring anything.** P9/P10's
+local-inference evidence stands whatever happens to the engine that produced it; **retirement is not a
+judgment on the work.**
+
+- **C1 — the library entry point:** `run(task, tools, model)` with in-process tool handlers (Amendment 1).
+- **C2 — JSON-schema argument coercion** for models that mistype tool arguments (Amendment 1).
+- **C3 — an honest exit code and a machine-readable `status` field.** *(Added v1.1.0 on HQ's Stage-1
+  review; the candidate **measured evidence actually found**, and not one Amendment 1 named.)*
 
 **7. E38.5 produces evidence and decides nothing.** Milestone-context capacity is a **fourth axis**
 beside `model-routing-policy.md` row P4's G-P4-a/b/c. **Row P4's 2026-07-31 ruling is not reopened and
@@ -317,8 +323,10 @@ By the end of this milestone:
    (E38.2).
 4. **Every project on the machine carries a registry classification**, and
    `ai-project-yml-spec.md` §4 is **enforced by a validator** (E38.3, P10-GH-5, P10-GH-1).
-5. **`local-agent-runner`'s retention has an evidence-based answer** — kept for a named capability
-   OpenCode does not provide, or reported as retirable — **without anything being retired** (E38.4).
+5. **`local-agent-runner`'s retention has an evidence-based answer** across **all three** candidate
+   capabilities — including **C3, the honest exit code and machine-readable `status`** that measured
+   evidence found — **without anything being retired**, and with C3's result stated as an input M39 can
+   use (E38.4).
 6. **Milestone-context capacity is measured** as a fourth axis, **without row P4 being decided** (E38.5).
 7. **The CFO's local/paid controlled comparison is run and recorded**, native at last (E38.6).
 
@@ -552,24 +560,83 @@ model-tier finding, the blinded review back-test — was evidence about *local a
 stands whatever happens to the engine that produced it.
 
 **Deliverables:**
-1. **Assessment against the CFO's bar if one has arrived.** If not, the recorded fallback: test the two
-   named candidate capabilities against OpenCode's `serve` mode —
-   - the **library entry point**: `run(task, tools, model)` with in-process tool handlers;
-   - **JSON-schema argument coercion** for models that mistype tool arguments.
+1. **Assessment against the CFO's bar if one has arrived.** If not, the recorded fallback: test **three**
+   candidate capabilities against OpenCode's `serve` mode —
+   - **C1 — the library entry point**: `run(task, tools, model)` with in-process tool handlers;
+   - **C2 — JSON-schema argument coercion** for models that mistype tool arguments;
+   - **C3 — an honest exit code and a machine-readable `status` field.**
 2. **A recorded outcome with reasons** — kept for a named capability OpenCode does not provide, or
    reportable as retirable. **Nothing is retired by this epic** (constraint 6).
 3. **A note on Route B.2's revisit trigger**: it fires only if this assessment **retains** the runner
    *and* E38.2's adapter does not cover sandboxed dispatch. **State whether it fired.**
 
+> ### ⚠ C3 is the candidate measured evidence found, and it is the load-bearing one
+> *(Added v1.1.0 on HQ's Stage-1 review. Source:
+> `.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`, **Finding 2** — which
+> neither M38 artifact cited at v1.0.0. That omission was the review's finding and it was correct.)*
+>
+> **Measured, same task, same model, same host:**
+>
+> | | OpenCode | `local-agent-runner` |
+> |---|---|---|
+> | Exit code | **0** | **2** (`EXIT_DID_NOT_CONVERGE`) |
+> | Structured status | *none emitted* | `max_iterations_exceeded` |
+> | Exit code honest? | **No** | **Yes** |
+>
+> **OpenCode exited 0 having done zero work** — P10-GH-7's false-positive side, reproduced on the engine
+> A1.1 made the sole roster. The field evidence names C3 in terms: *"a real `local-agent-runner`
+> retention argument, and **not the one first proposed**… a concrete instance of 'names a capability P11
+> actually needs that OpenCode does not provide' — and it is **not** among the two candidates Amendment 1
+> named. **It arrived from a failed run rather than from a list.**"*
+>
+> **Why omitting it would have been expensive in the worst available direction:** **M39's entire
+> deliverable is a trustworthy completion signal, and one engine on the roster already supplies one.** An
+> assessment concluding *"nothing OpenCode lacks"* while never testing the capability the next milestone
+> exists to build would retire the only engine that already has it, and M39 would then build from zero
+> what it could have inherited. **A1.5's warning becomes concrete here:** a sole engine concentrates the
+> completion-signal problem in a dependency the CFO does not own.
+>
+> **Read the field evidence through the restructure.** It was written **2026-08-02**, before the
+> 2026-08-05 renumber, so where it says *"M38's entire deliverable is a completion judgment"* and
+> *"Rule for M38: trust the harness's structured status"* it means **today's M39**. Do not read those
+> lines as scoping work into this milestone — that is precisely the Hard Constraint drift below.
+>
+> **Two further obligations the same evidence imposes on E38.4's own method:**
+>
+> - **Finding 3 — never trust an agent's self-report.** In both arms the prose lied: OpenCode's
+>   `final_answer` claimed it *"successfully created a test file… that implements the required
+>   functionality"* while its own status said `max_iterations_exceeded` and its exit code said 2. **The
+>   structured signal was the correct one in the same run.** C3 must be assessed from structured output,
+>   never from what an engine says about itself.
+> - **The recorded measurement error — verify the harness before trusting it as evidence.** Arm B's exit
+>   code was **first recorded as 0** and was wrong: a wrapper invoked `main()` and discarded its return
+>   value where `local_agent_runner/cli.py` uses `sys.exit(main())`. The runner was honest throughout, and
+>   the false reading *"was one step from being filed as 'both engines share the false-zero bug.'"*
+>   **E38.4 must verify its own harness against a known-nonzero case before treating any exit code it
+>   reports as evidence.** This is the same class as `P11-GH-2` — measuring the wrong thing carefully.
+>
+> **C3 is assessed, not built.** Determining whether an engine already emits a trustworthy signal is
+> evidence-gathering. **Building a completion judgment over it is M39's**, and E38.4 must not start one
+> (Hard Constraint). Its finding is an **input** to M39, delivered before M39 is planned — which is the
+> whole value of catching this now.
+
 **Definition of Done:**
-- [ ] Both candidate capabilities tested against OpenCode's `serve` mode **for real**, not reasoned about
-- [ ] A retain-or-retirable judgment recorded with its reasons
-- [ ] **Nothing retired**
+- [ ] **All three** candidate capabilities tested against OpenCode's `serve` mode **for real**, not
+      reasoned about — **C3 included**
+- [ ] **C3 assessed from structured output, never from an engine's self-report** (Finding 3)
+- [ ] **E38.4's own harness verified against a known-nonzero case** before any exit code it reports is
+      treated as evidence (the recorded measurement error)
+- [ ] A retain-or-retirable judgment recorded with its reasons, **naming C3's result explicitly** rather
+      than folding it into a summary
+- [ ] **Nothing retired**; **no completion judgment built** (Hard Constraint — C3 is assessed, M39 builds)
+- [ ] The finding is stated as **an input to M39**, with the field evidence cited
 - [ ] Route B.2's trigger state explicitly reported
 
 **Acceptance Criteria:**
 - [ ] A reader can state, from the assessment alone, what `local-agent-runner` provides that OpenCode
-      does not — or that nothing does
+      does not — or that nothing does — **with C3 answered on its own terms**
+- [ ] **M39's planner can tell from this epic whether a trustworthy signal already exists on the roster**,
+      and does not have to rediscover it
 
 **Sequencing:** **Stage B — after E38.2 delivers.** Testing `serve` mode against a real adapter is the
 assessment; a memo about what `serve` probably does is not.
@@ -687,6 +754,10 @@ times in this phase.
 - **B2.1 delivered** — `bin/ai-project-orchestrator` forwards `AI_PROJECT_OLLAMA_ENDPOINT` (loopback
   rewritten to the gateway) and `LOCAL_AGENT_RUNNER` when set. **Verified from inside the container:
   HTTP 200.** Post-mortem filed. **Suite 393.**
+- **`.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md`** — **required reading
+  for E38.4** (Finding 2 = candidate C3; Finding 3 = never trust an agent's self-report; the recorded
+  measurement error = verify your harness before trusting its exit codes). **Written 2026-08-02, before
+  the restructure: where it says "M38" it means today's M39.**
 - **Governing references:** phase spec **§P11.3** (full, including the measured Ollama/context note);
   SN-27 + Amendment 1; HQ Ruling 2026-08-01 (P10-GH-5 fold-in, D11); HQ Ruling 2026-08-06 (E38.6's
   relocation, B2.1, Route B.2's decline + trigger); `docs/bugfixes/B2.1__*`;
@@ -727,7 +798,9 @@ times in this phase.
 - [ ] **A validator enforces `ai-project-yml-spec.md` §4** and has been run against the real fleet
 - [ ] **P10-GH-1 is folded in or recorded as parked with the registry's reason** — never silence
 - [ ] **Fleet-state transitions are a recorded human action**; nothing automatic exists
-- [ ] **`local-agent-runner`'s retention is answered on evidence, and nothing was retired**
+- [ ] **`local-agent-runner`'s retention is answered on evidence across all three candidates — C3
+      included, assessed from structured output, with E38.4's own harness verified against a
+      known-nonzero case — and nothing was retired**
 - [ ] **Milestone-context capacity is measured, and row P4 is explicitly not decided**
 - [ ] **The local/paid comparison is run and recorded both ways**, under G1 and G2
 - [ ] **Nothing from M39/M40 was built** — no completion judgment, no scheduler, no gate queue
@@ -747,7 +820,9 @@ times in this phase.
    answered rather than left open (E38.2).
 3. **The fleet is a data structure** — all 14 directories classified, including the project no phase
    artifact names, with §4 enforced by a validator that demonstrably fails on invalid input (E38.3).
-4. **`local-agent-runner`'s retention rests on evidence, and nothing was retired** (E38.4).
+4. **`local-agent-runner`'s retention rests on evidence across all three candidates, and nothing was
+   retired** — with **C3 answered on its own terms**, so M39's planner can tell whether a trustworthy
+   completion signal already exists on the roster rather than rediscovering it (E38.4).
 5. **Milestone-context capacity is measured as a fourth axis, with row P4 untouched** (E38.5).
 6. **The CFO's local/paid comparison is run and recorded both ways**, its outcome usable whichever way
    it fell (E38.6).
@@ -796,7 +871,7 @@ flowchart TB
     E2 ==> GATE
 
     subgraph SB["STAGE B — evidence"]
-        E4["E38.4 — runner retention<br/>REPORT, retire nothing"]
+        E4["E38.4 — runner retention<br/>THREE candidates: C1 library entry,<br/>C2 schema coercion,<br/>C3 honest exit code + status<br/>(C3 = what measured evidence found)<br/>REPORT, retire nothing"]
         E5["E38.5 — milestone-context evidence<br/>4th axis; row P4 NOT decided"]
         E6["E38.6 — local/paid comparison<br/>the CFO's decision, arriving where<br/>it works; G1 + G2 still binding"]
     end
@@ -813,6 +888,9 @@ flowchart TB
 
     NOSPLIT["SPLIT DECLINED — Phase Chat<br/>the 7-epic condition was removed by the<br/>restructure; 6 remaining are one subject;<br/>a split forces a 2nd renumber in days<br/><br/>Triggers: a 7th epic, or E38.2 outgrowing an epic"]
     SA -.-> NOSPLIT
+
+    M39IN["C3's result is an INPUT to M39<br/>one engine on the roster already emits<br/>an honest exit code + machine-readable status;<br/>OpenCode exited 0 on ZERO WORK<br/><br/>Assessed here, NOT built here"]
+    E4 ==> M39IN
 
     E4 --> DONE["M38 COMPLETE<br/>suite 393 · Drivr baseline stated<br/>is_final: false"]
     E5 --> DONE
@@ -836,6 +914,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-08-07 | **E38.4 gains a third retention candidate — HQ's Stage-1 review, and the finding was correct.** v1.0.0 tested only Amendment 1's two named capabilities (the library entry point; JSON-schema argument coercion) and **cited `.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md` zero times in either M38 artifact.** That evidence records a **third**, in terms, as *"a real `local-agent-runner` retention argument, and **not the one first proposed**"*: measured on the same task, same model, same host — `local-agent-runner` emitted **an honest exit code (2, `EXIT_DID_NOT_CONVERGE`) and a machine-readable `status` (`max_iterations_exceeded`)**; **OpenCode emitted neither and exited 0 having done zero work**, reproducing P10-GH-7's false-positive side on the engine A1.1 made the sole roster. Added as **C3**. **Why the omission was expensive in the worst available direction: M39's entire deliverable is a trustworthy completion signal, and one engine on the roster already supplies one** — an assessment concluding *"nothing OpenCode lacks"* without testing C3 would retire the only engine that has it, and M39 would build from zero what it could have inherited (**A1.5** made concrete). Two further obligations taken from the same evidence onto E38.4's **method**: **Finding 3** — the agent's prose lied in *both* arms, so C3 is assessed from **structured output, never an engine's self-report**; and the **recorded measurement error** — Arm B's exit code was first read as 0 because a wrapper discarded `main()`'s return value, *"one step from being filed as 'both engines share the false-zero bug'"* — so **E38.4 must verify its own harness against a known-nonzero case** before trusting any exit code as evidence (the `P11-GH-2` class: measuring the wrong thing carefully). **C3 is assessed, not built** — the completion judgment is M39's and E38.4 must not start one; its finding is an **input** to M39, delivered before M39 is planned. Also recorded: the field evidence predates the 2026-08-05 restructure, so its *"M38"* means **today's M39** — do not read it as scoping work into this milestone. Touches §Binding Constraints 6, §Epic Detail→E38.4, §Goals, §Definition of Done, §Acceptance Criteria, §Prerequisites, §Visual Bindings. **No epic, ordering, gate or scope boundary otherwise changes**; contents stay at six epics and the split stays declined. |
 | 1.0.0 | 2026-08-07 | Initial M38 Stage-1 spec. Six epics in two binding stages with a gate at E38.2's delivery, **in place of the split HQ recommended** — declined with reasoning and two revisit triggers. Ten binding constraints, the rents-not-builds Hard Constraint with M39/M40 drift named explicitly, and **P10-GH-1 folded in** by the Phase Chat's assigned judgment with a stated escape. Four planning-time measurements taken **inside the container rather than on the host** (the M37 lesson): B2.1 works end-to-end (HTTP 200) but **no engine is reachable in the sandbox** — `local-agent-runner` and `opencode` both absent — making that E38.2's load-bearing design question. Two findings: **`panchew-io` is enrolled and named in no phase artifact** (14 project directories, not the phase spec's list), and **6 of 12 enrolled configs omit `framework_version`**, including this repository. Suite baseline restated at **393** — B2.1 added 16 tests and M37's 377 is stale. |
 
 ---
