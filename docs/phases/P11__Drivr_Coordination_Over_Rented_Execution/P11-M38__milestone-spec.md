@@ -197,6 +197,18 @@ the time, or the scope it was taken at differs from the one it is cited for.**
 > absent from a list; **this one is inside the governance system and invisible to the record.** E38.3's
 > classification pass must cover it, and the phase spec's project list is a **floor, not an inventory.**
 
+> **Method note added at v1.1.1, from the E38.1 Epic Chat.** A naive `grep framework_version` over the
+> fleet **can match a comment line** in configs that carry it, so a present/absent count must require a
+> real key at line start (`^\s*framework_version\s*:`) and exclude comments. **Re-measured that way, the
+> 6-of-12 figure below is unchanged and the same six projects** — but the original measurement would have
+> miscounted had any config carried the field only in a comment. **The number was right; the method was
+> fragile.** E38.3's validator must use the strict form.
+>
+> **Suite invocation, corrected at v1.1.1 — this cost the E38.1 Epic Chat three attempts.** Bare
+> `pytest -q` **fails with 3 collection errors** (`python` is absent from PATH and `.venv` has no
+> pytest). Use **`PYTHONPATH=. pytest -q`** or `python3 -m pytest -q` — both give **393 passed**. Every
+> Epic Starter under M38 must carry the working invocation, not a bare `pytest`.
+
 > **Finding 2 — half the enrolled fleet is silent on `framework_version`.** Six of twelve, including
 > **this repository itself.** This is directly load-bearing for **P10-GH-1** (see the fold-in decision
 > below), and for **P10-GH-5**: a validator built over `ai-project-yml-spec.md` §4 will meet six configs
@@ -427,9 +439,35 @@ discovered rather than assumed — but none is deferred.
 1. **The Drivr repository created**, with whatever minimum structure its language/runtime choice
    implies. **Stack choice is E38.1's design decision** — SN-24's *headless-first* and *"as agentic as we
    can → lightest infrastructure"* are the constraints, not a named technology.
-2. **Enrolled under this framework**, using **M33/E33.1's procedure and its 11 recorded failure modes**
-   — *use them, do not rediscover them.* Enrollment includes `.ai-project.yml` with a `models` block and
-   a `framework_version`.
+2. **Enrolled under this framework.** ⚠ **Corrected at v1.1.1 — this deliverable pointed at the wrong
+   procedure.** Enrollment includes `.ai-project.yml` with a `models` block and a `framework_version`.
+
+   > **~~using M33/E33.1's procedure and its 11 recorded failure modes — *use them, do not rediscover
+   > them.*~~** Original text, struck and left visible.
+   >
+   > **The procedure explicitly excludes this Epic's case.**
+   > `.ai-project/artifacts/reference/v7-bump-procedure/README.md` §Scope says, verbatim: *"This bumps
+   > **enrolled** projects — a project that already has a governance submodule … and a `.ai-project.yml`.
+   > It is **not** the enrollment path for a brand-new project (that is `bin/ai-project-init`)."*
+   > **Drivr is brand-new, so the pointer was wrong.**
+   >
+   > **Corrected:** **`bin/ai-project-init` is the enrollment path.** The procedure's **11 failure
+   > modes remain required reading as a hazard checklist**, each classified explicitly at delivery —
+   > *fired / applicable and avoided / structurally inapplicable*. **The reasoning behind the original
+   > text was right** (those modes are hard-won and must not be rediscovered); only the pointer was
+   > wrong.
+   >
+   > **Found and resolved by the E38.1 Epic spec** rather than escalated — correctly, since it is a
+   > pointer imprecision the epic could fix within its own scope, and it flagged it upward for exactly
+   > this amendment. **The imprecision was the Phase Chat's.**
+   >
+   > **Two consequences the epic recorded and this spec now carries:**
+   > - **`bin/ai-project-init` writes neither `framework_version` nor `models:`, and defaults
+   >   `submodule_path: governance/` — not `.governance`.** Verified. So **enrollment is `init` plus two
+   >   recorded additions**, and any command written against `.governance` will not work on Drivr.
+   > - **Drivr is stamped `v7.1.0`** — the current tag — **not the fleet's `v7.0.0`**, making it the only
+   >   project on the machine at v7.1.0. Its `framework_version` is therefore **convention-only until
+   >   E38.3 folds in P10-GH-1**, and **E38.1 must not get ahead of that pass.**
 3. **Confirmation evidence captured from Drivr and committed here** (the M33/M34 pattern) — a
    cross-repo claim is not verifiable by reading this repo.
 4. **Drivr's own test baseline established and recorded** — it does not inherit this repo's 393.
@@ -914,6 +952,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.1 | 2026-08-08 | **Corrections from the E38.1 Epic Chat's Stage-1 set, all four findings verified by the Phase Chat.** **(a) E38.1's deliverable 2 pointed at the wrong procedure** — `.ai-project/artifacts/reference/v7-bump-procedure/README.md` §Scope says verbatim that it *"is **not** the enrollment path for a brand-new project (that is `bin/ai-project-init`)"*, and Drivr is brand-new. Original text struck and left visible; corrected to **`init` is the path, with the 11 failure modes retained as a hazard checklist classified individually at delivery**. **The reasoning was right and only the pointer was wrong; the imprecision was the Phase Chat's**, and the epic resolved it in-scope while flagging it upward rather than escalating. **(b) Two consequences now carried in the spec:** `bin/ai-project-init` writes **neither `framework_version` nor `models:`** and defaults **`submodule_path: governance/`, not `.governance`** — so enrollment is *init plus two recorded additions*, and commands written against `.governance` will not work on Drivr; and **Drivr is stamped `v7.1.0`** (the current tag, not the fleet's `v7.0.0`), making it the only project on the machine at v7.1.0, with its `framework_version` **convention-only until E38.3's P10-GH-1 pass** — which E38.1 must not get ahead of. **(c) Method note:** a naive `grep framework_version` can match a comment line, so counts must require a real key at line start; **re-measured strictly, v1.1.0's 6-of-12 figure and the same six projects hold — the number was right, the method was fragile** — and E38.3's validator must use the strict form. **(d) Suite invocation corrected:** bare `pytest -q` **fails with 3 collection errors**; use `PYTHONPATH=. pytest -q` or `python3 -m pytest -q` (both **393 passed**), and every M38 Epic Starter must carry the working form. Also verified and accepted as recorded: **P6-GH-15 is closed on the tool but the installed agent is an out-of-band copy**, so it must be verified by reading the file in Drivr (FM3's lesson), with one cosmetic residue at `bin/ai-project-init:408` — a *"Failed to stage HQ agent file"* message on a line staging `governance.agent.md` — **deliberately left**. **No epic, ordering, gate or scope boundary changes**; six epics, split still declined. |
 | 1.1.0 | 2026-08-07 | **E38.4 gains a third retention candidate — HQ's Stage-1 review, and the finding was correct.** v1.0.0 tested only Amendment 1's two named capabilities (the library entry point; JSON-schema argument coercion) and **cited `.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md` zero times in either M38 artifact.** That evidence records a **third**, in terms, as *"a real `local-agent-runner` retention argument, and **not the one first proposed**"*: measured on the same task, same model, same host — `local-agent-runner` emitted **an honest exit code (2, `EXIT_DID_NOT_CONVERGE`) and a machine-readable `status` (`max_iterations_exceeded`)**; **OpenCode emitted neither and exited 0 having done zero work**, reproducing P10-GH-7's false-positive side on the engine A1.1 made the sole roster. Added as **C3**. **Why the omission was expensive in the worst available direction: M39's entire deliverable is a trustworthy completion signal, and one engine on the roster already supplies one** — an assessment concluding *"nothing OpenCode lacks"* without testing C3 would retire the only engine that has it, and M39 would build from zero what it could have inherited (**A1.5** made concrete). Two further obligations taken from the same evidence onto E38.4's **method**: **Finding 3** — the agent's prose lied in *both* arms, so C3 is assessed from **structured output, never an engine's self-report**; and the **recorded measurement error** — Arm B's exit code was first read as 0 because a wrapper discarded `main()`'s return value, *"one step from being filed as 'both engines share the false-zero bug'"* — so **E38.4 must verify its own harness against a known-nonzero case** before trusting any exit code as evidence (the `P11-GH-2` class: measuring the wrong thing carefully). **C3 is assessed, not built** — the completion judgment is M39's and E38.4 must not start one; its finding is an **input** to M39, delivered before M39 is planned. Also recorded: the field evidence predates the 2026-08-05 restructure, so its *"M38"* means **today's M39** — do not read it as scoping work into this milestone. Touches §Binding Constraints 6, §Epic Detail→E38.4, §Goals, §Definition of Done, §Acceptance Criteria, §Prerequisites, §Visual Bindings. **No epic, ordering, gate or scope boundary otherwise changes**; contents stay at six epics and the split stays declined. |
 | 1.0.0 | 2026-08-07 | Initial M38 Stage-1 spec. Six epics in two binding stages with a gate at E38.2's delivery, **in place of the split HQ recommended** — declined with reasoning and two revisit triggers. Ten binding constraints, the rents-not-builds Hard Constraint with M39/M40 drift named explicitly, and **P10-GH-1 folded in** by the Phase Chat's assigned judgment with a stated escape. Four planning-time measurements taken **inside the container rather than on the host** (the M37 lesson): B2.1 works end-to-end (HTTP 200) but **no engine is reachable in the sandbox** — `local-agent-runner` and `opencode` both absent — making that E38.2's load-bearing design question. Two findings: **`panchew-io` is enrolled and named in no phase artifact** (14 project directories, not the phase spec's list), and **6 of 12 enrolled configs omit `framework_version`**, including this repository. Suite baseline restated at **393** — B2.1 added 16 tests and M37's 377 is stale. |
 
