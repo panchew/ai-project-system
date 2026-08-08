@@ -36,6 +36,17 @@ DEFAULT_MODELS = {
 # gpu-coexistence.md) for the adjacent GPU-contention case. P9-M31-E31.2.
 LOCAL_UNAVAILABLE_EXIT = 5
 
+# Sandbox → host reachability (Bugfix B2.1). A container's `localhost` is its own
+# loopback, not the host's, so an endpoint that is correct on the host is severed
+# inside the sandbox. `host-gateway` is Docker's own name for "the host from in
+# here" — resolving it is the daemon's job, which is why no gateway address is
+# written down anywhere in this file. `AI_PROJECT_SANDBOX_GATEWAY` overrides the
+# alias for setups where the magic name is unavailable (accepts a hostname or a
+# literal address; an address is used as-is and no --add-host is emitted).
+DEFAULT_SANDBOX_GATEWAY = "host.docker.internal"
+DEFAULT_OLLAMA_ENDPOINT = "http://localhost:11434"
+LOOPBACK_HOSTNAMES = ("localhost", "127.0.0.1", "::1", "0.0.0.0")
+
 # Visual artifacts (VA-1) config layer. The block is optional and default-on: an
 # absent block means the capability is enabled; `enabled: false` is the explicit
 # opt-out. See governance/ai-project-yml-spec.md §3.5 and §4 rules 18–25.
@@ -289,24 +300,82 @@ def validate_mount_options(mount_str):
     if host_path_str and container_path_str:
         validate_paths(host_path_str, container_path_str)
 
+def resolve_sandbox_gateway():
+    """The name (or address) by which the sandbox reaches the host it runs on."""
+    return os.environ.get("AI_PROJECT_SANDBOX_GATEWAY", "").strip() or DEFAULT_SANDBOX_GATEWAY
+
+
+def gateway_needs_add_host(gateway):
+    """True when the gateway is a name Docker must resolve, false for a literal address."""
+    import ipaddress
+    try:
+        ipaddress.ip_address(gateway)
+    except ValueError:
+        return True
+    return False
+
+
+def sandbox_ollama_endpoint(host_endpoint, gateway):
+    """Rewrite a host-side Ollama endpoint into one that resolves from inside the sandbox.
+
+    Only the loopback names are rewritten: an endpoint already naming a routable host
+    is reachable from the container as written, and rewriting it would break it.
+    """
+    parsed = urlparse(host_endpoint)
+    if parsed.hostname is None or parsed.hostname.lower() not in LOOPBACK_HOSTNAMES:
+        return host_endpoint
+
+    netloc = gateway if ":" not in gateway else f"[{gateway}]"
+    if parsed.port is not None:
+        netloc = f"{netloc}:{parsed.port}"
+    return parsed._replace(netloc=netloc).geturl()
+
+
 def run_in_sandbox(image, command, active_model):
-    """Mounts the project root inside an isolated Docker sandbox container, injecting active model metadata."""
+    """Mounts the project root inside an isolated Docker sandbox container, injecting active model metadata.
+
+    Also forwards what the container needs to reach the host's inference endpoint
+    (B2.1): ``AI_PROJECT_OLLAMA_ENDPOINT``, rewritten from loopback to the gateway
+    (``AI_PROJECT_SANDBOX_GATEWAY``, default ``host.docker.internal``), and
+    ``LOCAL_AGENT_RUNNER`` when set. Both are consumed by bin/run-dev-agent.
+    """
     import uuid
     container_name = f"ai-project-sandbox-{os.getpid()}-{uuid.uuid4().hex[:8]}"
     ACTIVE_CONTAINERS.append(container_name)
-    
+
+    # B2.1: the container must be able to reach the host's inference endpoint. Left
+    # unforwarded, bin/run-dev-agent's local-availability preflight exits 5 before
+    # any work happens — the container's own loopback answers nothing.
+    gateway = resolve_sandbox_gateway()
+    host_endpoint = os.environ.get("AI_PROJECT_OLLAMA_ENDPOINT", "").strip() or DEFAULT_OLLAMA_ENDPOINT
+    container_endpoint = sandbox_ollama_endpoint(host_endpoint, gateway)
+
     # Pass active model as an environment variable to allow the container scripts to route appropriately
     docker_cmd = [
         "docker", "run", "--rm",
         "--name", container_name,
         "--label", f"orchestrator-pid={os.getpid()}",
         "-e", f"AI_PROJECT_ACTIVE_MODEL={active_model}",
+        "-e", f"AI_PROJECT_OLLAMA_ENDPOINT={container_endpoint}",
+    ]
+
+    if gateway_needs_add_host(gateway):
+        docker_cmd += ["--add-host", f"{gateway}:host-gateway"]
+
+    # Forwarded only when set: bin/run-dev-agent treats an empty value as unset and
+    # falls back to PATH discovery, so injecting an empty override changes nothing
+    # but makes the container's environment lie about what was configured.
+    runner_override = os.environ.get("LOCAL_AGENT_RUNNER", "").strip()
+    if runner_override:
+        docker_cmd += ["-e", f"LOCAL_AGENT_RUNNER={runner_override}"]
+
+    docker_cmd += [
         "-v", f"{PROJECT_ROOT}:/workspace",
         "-w", "/workspace",
         image,
         "sh", "-c", command
     ]
-    
+
     # Enforce file boundaries and volume mount validations
     try:
         validate_volume_mounts(docker_cmd)
