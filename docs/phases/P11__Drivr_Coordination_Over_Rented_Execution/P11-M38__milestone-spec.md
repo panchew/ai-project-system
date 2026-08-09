@@ -158,20 +158,54 @@ it twice.**
 governance state. Nothing in the spine requires it to borrow this repo's sandbox. Admissible directions,
 none preferred here:
 
-- **Drivr runs on the host** and invokes OpenCode directly — lightest, matching *"as agentic as we can →
-  lightest infrastructure,"* but gives up sandbox isolation and must say so explicitly.
-- **Drivr owns its own container** with OpenCode installed — preserves isolation; Drivr's own
-  infrastructure, not this repo's.
-- **This repo's sandbox gains OpenCode** — smallest change here, but couples Drivr's execution to this
-  repository's image and re-opens the Route B.2 shape one engine over.
+- **Direction A — Drivr runs on the host** and invokes OpenCode directly. Lightest, matching *"as agentic
+  as we can → lightest infrastructure,"* but **gives up sandbox isolation and must say so explicitly.**
+  **In scope for E38.2.**
+- **Direction B — Drivr owns its own container** with OpenCode installed. Preserves isolation; **Drivr's
+  own infrastructure, not this repo's.** Must resolve OpenCode's `localhost` baseURL (see constraint 3's
+  note). **In scope for E38.2.**
+- **~~Direction C — this repo's sandbox gains OpenCode~~** — ⚠ **REMOVED from E38.2's scope at v1.1.2.
+  See below.**
 
-**This is E38.2's decision to make, document, and proceed on — NOT an escalation.** What is **binding**
-is that **the epic states which direction it took and why, and demonstrates an engine actually invoked
-end-to-end.** An adapter surface that has never invoked a real engine is a design document, not a
-deliverable.
+> **⚠ Direction C is repriced and removed from E38.2's admissible set. Phase Chat decision, v1.1.2, on
+> the E38.2 Epic Chat's finding — verified independently.**
+>
+> **v1.1.0 called Direction C the "smallest change here." It is very possibly the largest, and it is not
+> `apk add`.** Measured:
+>
+> | Fact | Verified |
+> |---|---|
+> | Sandbox base image | **Alpine Linux** — `/lib/ld-musl-x86_64.so.1` present, **`/lib64/ld-linux-x86-64.so.2` absent** |
+> | `opencode` binary | **glibc-linked** — `interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux`, **171 MiB** |
+> | Host binary mounted into the container and run | **`sh: /tmp/opencode: not found`** — musl's message for a **missing ELF interpreter**, not a missing file |
+>
+> **This is an ABI incompatibility, not a packaging gap.** Direction C therefore means **rebasing the
+> sandbox image off Alpine**, which changes **every sandboxed operation in this framework** — not
+> Drivr's execution alone.
+>
+> **Why that puts it outside E38.2, and outside M38:** re-platforming this repository's shared sandbox
+> image is **neither Drivr work nor M38 scope.** M38 builds Drivr; it does not re-platform the framework's
+> own infrastructure. It is also **the same shape HQ declined as Route B.2** on 2026-08-06 — reshaping
+> this repo's execution substrate to serve one epic's dispatch need — one engine over. **Directions A and
+> B require none of it**, which is the entire point of Drivr being a separate repository.
+>
+> **If E38.2 concludes Direction C is the only viable path, that is an escalation, not an epic
+> absorption** — and it is the split trigger firing. The Epic Chat flagged it as the likeliest path there
+> *"so the escalation is cheap rather than embarrassing,"* which is the right instinct and is why this is
+> being narrowed now rather than after it has been priced.
+
+**Between A and B, this is E38.2's decision to make, document, and proceed on — NOT an escalation.** What
+is **binding** is that **the epic states which direction it took and why, and demonstrates an engine
+actually invoked end-to-end.** An adapter surface that has never invoked a real engine is a design
+document, not a deliverable.
 
 **If the answer costs more than E38.2 can hold, that is the split trigger firing** — escalate, do not
 absorb.
+
+> **Out of scope and explicitly not authorized: rewiring `bin/run-dev-agent`'s `discover_runner()`
+> through Drivr's adapter.** The Epic Chat correctly quoted it as the anti-pattern the interface designs
+> away from and placed it out of scope. **Confirmed** — replacing the framework's own dispatcher is a far
+> larger change than it looks and nobody has authorized it.
 
 ---
 
@@ -251,11 +285,48 @@ epic that starts writing a model loop has left the phase, not just the milestone
 second adapter could be added without touching the coordination layer** — *demonstrated by the
 interface, not asserted.* Today's roster is **one tool: OpenCode** (A1.1).
 
-**3. Derive the declared context limit from what `/api/ps` reports as LOADED**, never from the model's
-trained maximum. `opencode.json` declares `"context": 262144` for `qwen3-coder:30b` against **32,768**
-actually loaded — an **8× overpack** that makes long sessions truncate silently. Ollama measured at
-**0.30.0**; the `/v1` endpoint **silently ignores `options`**, so the adapter cannot set the loaded
-context through that transport and does not need to. Full measured note: phase spec §P11.3.
+**3. The declared context limit must never be the trained maximum.** ⚠ **Restated at v1.1.2 — the
+original form was not directly executable.**
+
+> **~~Derive the declared context limit from what `/api/ps` reports as LOADED, never from the model's
+> trained maximum.~~** Original text, struck and left visible.
+>
+> **Found by the E38.2 Epic Chat and verified by the Phase Chat. The trap is worse than the original
+> constraint described:**
+>
+> | Endpoint | Answers when nothing is loaded? | What it reports for `qwen3-coder:30b` |
+> |---|---|---|
+> | **`/api/ps`** | **No — returns `{"models":[]}`** | 32,768 (correct), but **only after a model is loaded** |
+> | **`/api/show`** | **Always** | **262,144** — `qwen3moe.context_length`, the trained maximum |
+>
+> **`opencode.json` declares `"context": 262144`. `/api/show` reports `262144`. They are the same
+> number.** So the 8× overpack is **not a typo and not arbitrary** — it is exactly what you get from the
+> endpoint that answers without being asked twice. **The endpoint that reliably answers gives the wrong
+> number; the endpoint that gives the right number is unreliable.** That is the actual defect, and the
+> original constraint pointed at the unreliable half of it.
+>
+> **The binding rule, in the Epic's formulation, which is better than mine:** **an empty `/api/ps` must
+> never degrade to "use the trained maximum."** Failing closed, loading first, caching a previously
+> observed value, or requiring a loaded model are all admissible; **silently substituting `/api/show`'s
+> answer is not**, because that is the observed origin of the overpack.
+>
+> **How to resolve the ordering is E38.2's design decision.** Verified on `qwen2.5-coder:7b`
+> (`qwen2.context_length = 32768`) rather than loading a 30B onto the GPU shared with ComfyUI — the right
+> call, and the pattern holds on the 30B, which `/api/show` answers for without loading it.
+>
+> **Also recorded, not chased:** `llama3.1:8b` declares **131,072** in `opencode.json`, unverified —
+> possibly a second overpack; and **`qwen3.6:27b` is present in Ollama but absent from
+> `opencode.json`.** Neither is E38.2's to fix.
+
+Ollama measured at **0.30.0**; the `/v1` endpoint **silently ignores `options`**, so the adapter cannot
+set the loaded context through that transport and does not need to. Full measured note: phase spec
+§P11.3.
+
+> **OpenCode's config is host-level and outside every mount.** It lives at
+> `~/.config/opencode/opencode.json` with `"baseURL": "http://localhost:11434/v1"` — and **inside a
+> container, `localhost` means the container.** That is **B2.1's mistake class, one layer over**: B2.1
+> fixed loopback-vs-gateway for the framework's own dispatcher, and OpenCode's own config carries the
+> same assumption untouched. Any direction that runs OpenCode in a container must resolve it.
 
 **4. The registry has three states, and the definitions are the CFO's:** **active** (enrolled; receives
 time and attention), **benched** (not currently receiving attention; may return), **archived** (not
@@ -952,6 +1023,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.2 | 2026-08-08 | **Corrections from the E38.2 Epic Chat's Stage-1 set, all verified by the Phase Chat.** **(a) Constraint 3 was not directly executable and pointed at the unreliable half of the defect.** `/api/ps` returns **`{"models":[]}`** when nothing is loaded; `/api/show` **always** answers and reports **262,144** for `qwen3-coder:30b` (`qwen3moe.context_length`) — **the exact number `opencode.json` declares.** So the 8× overpack is neither a typo nor arbitrary: it is what the endpoint that answers without being asked twice returns. **The endpoint that reliably answers gives the wrong number; the endpoint that gives the right number is unreliable.** Restated with the Epic's own formulation, which is better than the original: **an empty `/api/ps` must never degrade to "use the trained maximum"** — fail closed, load first, or cache, but never substitute `/api/show`. Ordering resolution is E38.2's design decision. Verified on `qwen2.5-coder:7b` rather than loading a 30B onto the ComfyUI-shared GPU — the right call. **(b) Direction C is repriced and REMOVED from E38.2's scope.** v1.1.0 called it the *"smallest change here"*; it is very possibly the largest and it is **not `apk add`**. The sandbox image is **Alpine (musl)** with **no `/lib64/ld-linux-x86-64.so.2`**, and `opencode` is a **glibc-linked 171 MiB** binary — mounting the host binary in and running it yields **`sh: /tmp/opencode: not found`**, musl's message for a missing ELF interpreter. **An ABI incompatibility, not a packaging gap**, so Direction C means rebasing the image off Alpine and changing **every sandboxed operation in the framework** — neither Drivr work nor M38 scope, and **the same shape HQ declined as Route B.2**, one engine over. **Directions A (host) and B (Drivr's own container) remain in scope; if C proves the only path, that is an escalation and the split trigger, not an absorption.** **(c) OpenCode's config is host-level and outside every mount** — `~/.config/opencode/opencode.json`, `baseURL http://localhost:11434/v1`, and inside a container `localhost` means the container: **B2.1's mistake class one layer over**, which Direction B must resolve. **(d) Recorded, not chased:** `llama3.1:8b` declares **131,072** unverified (possibly a second overpack); **`qwen3.6:27b` is in Ollama but absent from `opencode.json`.** **(e) Confirmed out of scope and unauthorized:** rewiring `bin/run-dev-agent`'s `discover_runner()` through Drivr's adapter — correctly quoted by the Epic as the anti-pattern the interface designs away from. **No epic, ordering, gate or scope boundary otherwise changes**; six epics, split still declined. |
 | 1.1.1 | 2026-08-08 | **Corrections from the E38.1 Epic Chat's Stage-1 set, all four findings verified by the Phase Chat.** **(a) E38.1's deliverable 2 pointed at the wrong procedure** — `.ai-project/artifacts/reference/v7-bump-procedure/README.md` §Scope says verbatim that it *"is **not** the enrollment path for a brand-new project (that is `bin/ai-project-init`)"*, and Drivr is brand-new. Original text struck and left visible; corrected to **`init` is the path, with the 11 failure modes retained as a hazard checklist classified individually at delivery**. **The reasoning was right and only the pointer was wrong; the imprecision was the Phase Chat's**, and the epic resolved it in-scope while flagging it upward rather than escalating. **(b) Two consequences now carried in the spec:** `bin/ai-project-init` writes **neither `framework_version` nor `models:`** and defaults **`submodule_path: governance/`, not `.governance`** — so enrollment is *init plus two recorded additions*, and commands written against `.governance` will not work on Drivr; and **Drivr is stamped `v7.1.0`** (the current tag, not the fleet's `v7.0.0`), making it the only project on the machine at v7.1.0, with its `framework_version` **convention-only until E38.3's P10-GH-1 pass** — which E38.1 must not get ahead of. **(c) Method note:** a naive `grep framework_version` can match a comment line, so counts must require a real key at line start; **re-measured strictly, v1.1.0's 6-of-12 figure and the same six projects hold — the number was right, the method was fragile** — and E38.3's validator must use the strict form. **(d) Suite invocation corrected:** bare `pytest -q` **fails with 3 collection errors**; use `PYTHONPATH=. pytest -q` or `python3 -m pytest -q` (both **393 passed**), and every M38 Epic Starter must carry the working form. Also verified and accepted as recorded: **P6-GH-15 is closed on the tool but the installed agent is an out-of-band copy**, so it must be verified by reading the file in Drivr (FM3's lesson), with one cosmetic residue at `bin/ai-project-init:408` — a *"Failed to stage HQ agent file"* message on a line staging `governance.agent.md` — **deliberately left**. **No epic, ordering, gate or scope boundary changes**; six epics, split still declined. |
 | 1.1.0 | 2026-08-07 | **E38.4 gains a third retention candidate — HQ's Stage-1 review, and the finding was correct.** v1.0.0 tested only Amendment 1's two named capabilities (the library entry point; JSON-schema argument coercion) and **cited `.ai-project/artifacts/field-evidence/2026-08-02__B3.1-engine-comparison.md` zero times in either M38 artifact.** That evidence records a **third**, in terms, as *"a real `local-agent-runner` retention argument, and **not the one first proposed**"*: measured on the same task, same model, same host — `local-agent-runner` emitted **an honest exit code (2, `EXIT_DID_NOT_CONVERGE`) and a machine-readable `status` (`max_iterations_exceeded`)**; **OpenCode emitted neither and exited 0 having done zero work**, reproducing P10-GH-7's false-positive side on the engine A1.1 made the sole roster. Added as **C3**. **Why the omission was expensive in the worst available direction: M39's entire deliverable is a trustworthy completion signal, and one engine on the roster already supplies one** — an assessment concluding *"nothing OpenCode lacks"* without testing C3 would retire the only engine that has it, and M39 would build from zero what it could have inherited (**A1.5** made concrete). Two further obligations taken from the same evidence onto E38.4's **method**: **Finding 3** — the agent's prose lied in *both* arms, so C3 is assessed from **structured output, never an engine's self-report**; and the **recorded measurement error** — Arm B's exit code was first read as 0 because a wrapper discarded `main()`'s return value, *"one step from being filed as 'both engines share the false-zero bug'"* — so **E38.4 must verify its own harness against a known-nonzero case** before trusting any exit code as evidence (the `P11-GH-2` class: measuring the wrong thing carefully). **C3 is assessed, not built** — the completion judgment is M39's and E38.4 must not start one; its finding is an **input** to M39, delivered before M39 is planned. Also recorded: the field evidence predates the 2026-08-05 restructure, so its *"M38"* means **today's M39** — do not read it as scoping work into this milestone. Touches §Binding Constraints 6, §Epic Detail→E38.4, §Goals, §Definition of Done, §Acceptance Criteria, §Prerequisites, §Visual Bindings. **No epic, ordering, gate or scope boundary otherwise changes**; contents stay at six epics and the split stays declined. |
 | 1.0.0 | 2026-08-07 | Initial M38 Stage-1 spec. Six epics in two binding stages with a gate at E38.2's delivery, **in place of the split HQ recommended** — declined with reasoning and two revisit triggers. Ten binding constraints, the rents-not-builds Hard Constraint with M39/M40 drift named explicitly, and **P10-GH-1 folded in** by the Phase Chat's assigned judgment with a stated escape. Four planning-time measurements taken **inside the container rather than on the host** (the M37 lesson): B2.1 works end-to-end (HTTP 200) but **no engine is reachable in the sandbox** — `local-agent-runner` and `opencode` both absent — making that E38.2's load-bearing design question. Two findings: **`panchew-io` is enrolled and named in no phase artifact** (14 project directories, not the phase spec's list), and **6 of 12 enrolled configs omit `framework_version`**, including this repository. Suite baseline restated at **393** — B2.1 added 16 tests and M37's 377 is stale. |
