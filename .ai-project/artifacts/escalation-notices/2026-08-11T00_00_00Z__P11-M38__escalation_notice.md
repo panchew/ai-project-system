@@ -163,18 +163,16 @@ plus `native` and `not_applicable`, and records the two-copy cases in a note.
 
 ---
 
-## A fourth item, reported but not escalated for a ruling
+## A fourth item, reported and resolved before merge
 
-**The two governing documents render the CFO's three state definitions differently**, and both claim
-the text is verbatim. The Epic Spec's §Scope-1 table reads *"Not planned to ever be touched again —
-though it can be brought back to life"*; the Epic Execution Chat Starter's inline parenthetical reads
-*"though it can be brought back"*, and omits *"Enrolled in the registry."* from `Active`. **The
-starter outranks the spec** in the governance hierarchy.
+**At the time of this Epic's execution, the two governing documents rendered the CFO's three state
+definitions differently** while both claimed verbatim reproduction. The registry used the Epic
+Spec's exact table and reported the discrepancy rather than resolving it unilaterally.
 
-The registry reproduces the **spec's table form**, on the reading that the starter's parenthetical is
-a compression of it, and **records the discrepancy in the file itself** rather than picking one
-silently. Raised here because this milestone's lineage spent two milestones on citation integrity;
-**it needs a correction to one document, not a ruling.**
+The Milestone Chat subsequently corrected the Epic Execution Chat Starter in `milestone/M38` commit
+`e9ab7d5` (2026-08-11). It now carries the same exact CFO strings and records the provenance of the
+correction. This section remains as point-in-time evidence; there is no outstanding discrepancy and
+no further ask.
 
 ---
 
@@ -185,6 +183,6 @@ silently. Raised here because this milestone's lineage spent two milestones on c
 | 1 | `bin/ai-project-init` produces §4-invalid configs; two validators, different contracts | **Route it.** A bugfix epic is the obvious shape; the blast radius is every future enrollment. |
 | 2 | §4's unknown-key gap; three unblessed drift fields | **A ruling**, or an explicit park. E38.3's recommendation is in Escalation 2 and is a recommendation only. |
 | 3 | Finding 6's measurement layer | **Note it against `P11-GH-2`.** Nothing to fix; the corrected measurement is in the registry. |
-| 4 | The two renderings of the CFO's state definitions | **A correction to one document.** No ruling needed. |
+| 4 | The execution-time two-rendering defect in the CFO's state definitions | **Resolved.** The Milestone Chat corrected the Starter in `e9ab7d5`; no further action. |
 
-**None of the four blocks E38.3's delivery.**
+**None of the four blocks E38.3's delivery; item 4 is resolved before merge.**

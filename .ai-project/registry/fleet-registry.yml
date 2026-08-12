@@ -57,15 +57,14 @@ fleet_root: ~/soft-dev
 # The definitions are the CFO's and are reproduced verbatim. They are not this Epic's
 # to reword, narrow, or extend.
 #
-# ⚠ CITATION NOTE, recorded rather than smoothed: the two governing documents render
-# these definitions differently. The Epic Spec's §Scope-1 table reads as reproduced
-# below; the Epic Execution Chat Starter renders them as an inline parenthetical
-# ("...though it can be brought back"), omitting "Enrolled in the registry." and ending
-# "brought back" rather than "brought back to life". Both documents claim the text is
-# verbatim, and the starter outranks the spec in the governance hierarchy. The spec's
-# table form is reproduced here because it is the fuller, table-form reproduction and
-# the starter's reads as a parenthetical compression of it. The discrepancy is reported
-# to the Milestone Chat rather than resolved unilaterally.
+# ⚠ CITATION HISTORY: on this Epic's execution branch, the two governing documents
+# rendered these definitions differently while both claimed verbatim reproduction. The
+# registry used the Epic Spec's fuller table form and reported the discrepancy rather
+# than resolving it unilaterally. Before merge, the Milestone Chat corrected the Epic
+# Execution Chat Starter in milestone/M38 commit e9ab7d5 (2026-08-11): it now carries
+# the same exact CFO strings below and records why the earlier paraphrase was defective.
+# The discrepancy is therefore preserved here as point-in-time evidence and resolved
+# history, not as a present conflict between governing documents.
 
 states:
   active:
@@ -143,9 +142,13 @@ enumeration:
 validation:
   measured: 2026-08-11
   command: bin/ai-project-validate --fleet ~/soft-dev
+  fleet_configs: 13
   invalid_configs: 4
   total_errors: 8
-  total_warnings: 14
+  fleet_total_warnings: 12
+  raw_configs_checked: 15
+  raw_total_warnings: 14
+  excluded_worktree_configs: 2
 
 # ============================================================================
 # TRANSITIONS — a recorded human action. Nothing automatic.

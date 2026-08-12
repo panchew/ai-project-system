@@ -128,6 +128,28 @@ def test_worktrees_are_excluded_and_the_exclusion_is_stated(registry):
         assert worktree not in names
 
 
+def test_fleet_and_raw_warning_totals_are_distinct_and_derived(registry):
+    """The raw ``--fleet`` run included two worktree configs. Its warning total must
+    not be presented as the total for the 13 enrolled fleet projects."""
+    validation = registry["validation"]
+    projects = registry["projects"]
+    enrolled = [project for project in projects if project["enrolled"]]
+
+    assert validation["fleet_configs"] == len(enrolled)
+    assert validation["fleet_total_warnings"] == sum(
+        len(project["section_4_warnings"]) for project in enrolled
+    )
+    assert validation["excluded_worktree_configs"] == len(
+        registry["enumeration"]["excluded_as_worktrees"]
+    )
+    assert validation["raw_configs_checked"] == (
+        validation["fleet_configs"] + validation["excluded_worktree_configs"]
+    )
+    assert validation["raw_total_warnings"] == 14
+    assert validation["fleet_total_warnings"] == 12
+    assert validation["raw_total_warnings"] != validation["fleet_total_warnings"]
+
+
 # ---------------------------------------------------------------------------
 # Binding Constraint 5 — nothing automatic. The guard that matters most.
 # ---------------------------------------------------------------------------
