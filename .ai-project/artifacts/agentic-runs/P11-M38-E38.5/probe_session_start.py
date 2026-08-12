@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Deterministic marker probe: Milestone Chat session-start corpus.
 
-Constructs the prescribed session-start corpus (147,571 bytes of source
-content plus a 55-byte section-boundary residue from the original line-range
-extraction; the probe actually tested the 147,626-byte superset), places a
+Rebuilds the HISTORICAL RUN corpus (147,626 bytes — the prescribed 147,571
+bytes of source content plus a 55-byte section-boundary residue), places a
 unique marker at position 0, sends it through the Ollama /api/generate
 endpoint, and records the raw structured response.
 
 Every source is commit-anchored to PINNED_COMMIT. Re-running this script
-with the same commit available rebuilds the identical tested bytes.
+with the same commit available reproduces the identical tested bytes as
+the 2026-08-12T12:05:48 run.
 """
 
 import json, os, subprocess, sys, time
@@ -62,13 +62,15 @@ sections['milestone_spec'] = git_show(BASE_REF, f'{PHASE_DIR}/P11-M38__milestone
 # 1c. Phase spec §P11.3 (lines 227-309)
 sections['p11_3'] = extract(BASE_REF, PHASE_SPEC_PATH, 227, 309)
 
-# 1d. Phase spec §Milestones M38 entry (lines 477-511)
-# Line 512 is ### M39: Trustworthy Completion Signal — excluded from the defined scope.
-sections['m38_milestones'] = extract(BASE_REF, PHASE_SPEC_PATH, 477, 511)
+# 1d. Phase spec §Milestones M38 entry (lines 477-512)
+# Range 477-511 is the prescribed scope (147,571 bytes total). Lines 512 (next
+# heading) and 627-628 (trailing separator) add a 55-byte boundary residue.
+# This script reproduces the HISTORICAL RUN (147,626 bytes) — the ranges below
+# match the run. See the Delivery Notice for the 147,571-byte prescribed scope.
+sections['m38_milestones'] = extract(BASE_REF, PHASE_SPEC_PATH, 477, 512)
 
-# 1e. Phase spec §Acceptance Criteria (lines 585-626)
-# Lines 627-628 are the closing --- separator and blank — excluded from the defined scope.
-sections['acceptance'] = extract(BASE_REF, PHASE_SPEC_PATH, 585, 626)
+# 1e. Phase spec §Acceptance Criteria (lines 585-628)
+sections['acceptance'] = extract(BASE_REF, PHASE_SPEC_PATH, 585, 628)
 
 # ══════════════════════════════════════════════════════════════════════
 # 2. PSG SESSION-START SECTIONS
