@@ -1,0 +1,23 @@
+{
+  "models": [
+    {
+      "name": "qwen3-coder:30b",
+      "model": "qwen3-coder:30b",
+      "size": 21350066420,
+      "digest": "06c1097efce0431c2045fe7b2e5108366e43bee1b4603a7aded8f21689e90bca",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "qwen3moe",
+        "families": [
+          "qwen3moe"
+        ],
+        "parameter_size": "30.5B",
+        "quantization_level": "Q4_K_M"
+      },
+      "expires_at": "2026-08-12T18:17:04.567830053Z",
+      "size_vram": 12923363655,
+      "context_length": 32768
+    }
+  ]
+}
