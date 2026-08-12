@@ -1,9 +1,9 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.7.0  
+**Version:** 2.8.0  
 **Status:** Active  
-**Effective Date:** 2026-07-28  
-**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29); `models` defaults refreshed to the measurement-grounded mapping in Epic E30.2 (P9-M30); `models.creation` and `models.epic_manual` keys added (manual-chat-only, no agentic dispatch surface) in Epic E31.3 (P9-M31); the five paid-frontier `models` defaults refreshed `claude-opus-4-8` → `claude-opus-5` by HQ Ruling (`.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`); the two agentic epic-lane `models` defaults moved `qwen2.5-coder:14b` → `qwen3-coder:30b` on M33 run evidence in Epic E34.3 (P10-M34)
+**Effective Date:** 2026-08-11  
+**Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29); `models` defaults refreshed to the measurement-grounded mapping in Epic E30.2 (P9-M30); `models.creation` and `models.epic_manual` keys added (manual-chat-only, no agentic dispatch surface) in Epic E31.3 (P9-M31); the five paid-frontier `models` defaults refreshed `claude-opus-4-8` → `claude-opus-5` by HQ Ruling (`.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`); the two agentic epic-lane `models` defaults moved `qwen2.5-coder:14b` → `qwen3-coder:30b` on M33 run evidence in Epic E34.3 (P10-M34); optional top-level `framework_version` given a schema entry and §4 rule 3's field count corrected in Epic E38.3 (P11-M38)
 
 ---
 
@@ -36,6 +36,10 @@ The file MUST be at the repository root. No other location is valid.
 ```yaml
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
+
+framework_version: <string>  # OPTIONAL. Framework version this project has ADOPTED,
+                             # as distinct from governance.version (what it PINS).
+                             # Accepts a bare or v-prefixed semver. Full spec: §3.6.
 
 governance:
   source: <string>       # REQUIRED. URL or path to governance source repository.
@@ -486,13 +490,77 @@ visual_artifacts:
 
 ---
 
+### 3.6 Optional Fields — `framework_version` (Adoption Stamp)
+
+The `framework_version` field is **optional** and lives at the **top level**, not inside `governance:`.
+
+| Property | Value |
+|----------|-------|
+| Type | String |
+| Required | No |
+| Default | None — an absent field is valid and carries no implied value |
+| Format | Semantic version, bare or `v`-prefixed (`7.1.0`, `v7.1.0`) |
+| Constraint | When present, must be a non-empty string matching `^v?\d+\.\d+\.\d+$` |
+| Validation Error | `"Invalid framework_version: '<value>'. Must be a non-empty string matching ^v?\d+\.\d+\.\d+$."` |
+
+Declares the framework version this project has **adopted** — the released version whose roll-forward
+procedure the project has actually been through.
+
+**It is not a duplicate of `governance.version`, even though it usually agrees with it.** The two
+fields answer different questions:
+
+| Field | Question it answers |
+|-------|---------------------|
+| `governance.version` | Which governance version does this project **pin**? |
+| `framework_version` | Which framework version has this project **adopted**? |
+
+A project can pin a version it has not yet adopted (the submodule moves before the roll-forward
+completes) or carry an adoption stamp against a pin that has since changed. **When they disagree,
+that disagreement is the signal** — it is precisely the drift this field exists to make visible.
+
+> **Measured, and recorded honestly (2026-08-11, Epic E38.3):** across every config on the reference
+> machine that carried the field — **7 of 13 enrolled projects** — `framework_version` and
+> `governance.version` named the **same version, 7 times out of 7**. The field is therefore
+> *currently* redundant in practice. It is defined here anyway because the redundancy is a property
+> of a fleet that was stamped and pinned in the same operation, not a property of the field's
+> meaning. Tooling **must not** infer one from the other.
+
+**Why optional.** At 2026-08-11, **6 of 13** enrolled projects on the reference machine carried no
+stamp at all. Making the field required would have declared six otherwise-valid configs invalid on a
+rule that did not exist the day before, which is a fleet-wide reconciliation, not a schema entry.
+
+**Why the `v` prefix is accepted.** Every stamp in existence when this entry was written was
+`v`-prefixed (`v7.0.0` ×6, `v7.1.0` ×1), because the value records a released **tag name**. Requiring
+a bare semver — the form `governance.version` requires under rule 5 — would have invalidated all
+seven. The spec records the convention that exists rather than legislating a new one.
+
+**Valid examples:**
+```yaml
+framework_version: v7.1.0    # the released tag adopted (fleet convention)
+framework_version: 7.1.0     # bare semver, also accepted
+```
+
+**Invalid:**
+```yaml
+framework_version: latest    # non-pinned refs are not allowed
+framework_version: v7        # not a full MAJOR.MINOR.PATCH
+framework_version: ""        # must be non-empty when present
+```
+
+**Self-referential repositories.** The governance source itself (§8) pins `governance.version` to its
+own released version, so for that one repository the two fields would record the same fact **by
+construction** rather than by coincidence. The governance source is therefore **not expected** to
+carry `framework_version`, and its absence there is a documented exemption rather than missing data.
+
+---
+
 ## 4. Validation Rules
 
 A `.ai-project.yml` file is **valid** when all of the following are true:
 
 1. The file exists at the repository root as `.ai-project.yml`
 2. The file is valid YAML (parseable without errors)
-3. All four required fields are present: `governance.source`, `governance.version`, `governance.ref`, `project.name`, `project.description`
+3. All five required fields are present: `governance.source`, `governance.version`, `governance.ref`, `project.name`, `project.description`
 4. `governance.source` is an HTTPS URL or a relative path starting with `./` or `../`
 5. `governance.version` is a quoted semver string matching `\d+\.\d+\.\d+`
 6. `governance.ref` is a non-empty string
@@ -528,7 +596,21 @@ When the `visual_artifacts` block is present, the following additional validatio
 24. The entire `visual_artifacts` block is optional; an **absent** block is valid and means the capability is **enabled** at its documented defaults (no error, no warning)
 25. `visual_artifacts.visual_required_for_specs`, when present, must be a boolean (`true`/`false`)
 
-A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, any `visual_artifacts` value violates rules 19–21 or 25, or the file is not valid YAML.
+When the top-level `framework_version` field is present, the following additional validation rule applies:
+
+26. `framework_version`, when present, must be a non-empty string matching `^v?\d+\.\d+\.\d+$` (see Section 3.6). The field is **optional**: an absent `framework_version` is valid and is not a warning.
+
+A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, any `visual_artifacts` value violates rules 19–21 or 25, `framework_version` is present and violates rule 26, or the file is not valid YAML.
+
+> **Unknown keys outside `overrides`, `models` and `visual_artifacts` are not covered by any rule
+> above, and that gap is open.** Rules 11, 16 and 22 mandate a warning for unknown keys inside those
+> three blocks. **There is no rule for unknown keys at the top level or inside `governance:` and
+> `project:`** — so error, warn and ignore are all equally unsupported by this document. Three such
+> keys exist in live configs today (`created_at`, `submodule_path`, `cfo_review_gate`); the first two
+> are written by `bin/ai-project-init`. The reference implementation
+> (`bin/ai-project-validate`) **warns** and reports those findings with **no rule number**, so its
+> treatment is never mistaken for enforcement of this section. Closing the gap — and deciding whether
+> those three fields warrant schema entries of their own — is escalated, not settled here.
 
 ---
 
@@ -656,6 +738,7 @@ at its documented defaults and remains valid. Setting `enabled: false` is the ex
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.8.0 | 2026-08-11 | **`framework_version` given a schema entry (`P10-GH-1`), and §4 rule 3's field count corrected.** **(a) New §3.6** defines the optional top-level `framework_version` — the version a project has **adopted**, as against `governance.version`, which is what it **pins** — with a §3.1 schema-block entry and **new §4 rule 26** (non-empty string matching `^v?\d+\.\d+\.\d+$` when present). It is **optional** and the `v` prefix is **accepted**, both deliberately: measured on the reference machine on **2026-08-11** across **13 enrolled projects**, **6 carried no stamp** and **all 7 that did were `v`-prefixed** (`v7.0.0` ×6, `v7.1.0` ×1), so requiring the field, or requiring the bare semver form rule 5 imposes on `governance.version`, would have invalidated six or seven live configs respectively — a fleet-wide reconciliation rather than a schema entry. Recorded honestly in §3.6: in all **7 of 7** configs carrying both, the two fields named the **same version**, so the field is *currently* redundant in practice; it is defined anyway because that is a property of a fleet stamped and pinned in one operation, not of the field's meaning, and tooling **must not** infer either field from the other. **(b) §4 rule 3 read *"All four required fields"* while listing five** — from v1.0.0 (2026-04-20) until this row. §3.1 marks five REQUIRED and §3.2 documents five, so **five is right and the word was wrong**; the count is now **five**. **This correction is standalone, not a consequence of (a):** `framework_version` is optional and therefore never belonged in rule 3's list, so blessing it moved the count from a wrong four to a right five rather than to six. **(c) §4 gains a closing note recording an open gap it does not close:** rules 11, 16 and 22 mandate a warning for unknown keys inside `overrides`, `models` and `visual_artifacts`, and **no rule of this section covers unknown keys at the top level or inside `governance:` / `project:`**. Three such keys are live today — `created_at`, `submodule_path` (both written by `bin/ai-project-init`) and `cfo_review_gate` — and **none of the three is blessed here**; the reference implementation warns and reports them with no rule number, and the gap is escalated. **No existing rule was renumbered, no existing field changed, and no default moved.** New reference implementation: `bin/ai-project-validate` (`P10-GH-5`, first enforcement of this section since it was written), with `tests/test_ai_project_validate.py`. Derivation: `docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.3__delivery-notice.md` (Epic E38.3, P11-M38). |
 | 2.7.0 | 2026-07-28 | The two **agentic epic-lane** `models` defaults — `epic_dev` and `epic_qa` — moved `local:qwen2.5-coder:14b` → `local:qwen3-coder:30b`, applying the runtime choice P10-M33 settled by running it (**keep Ollama, raise the model tier**). Unlike 2.6.0 this is a **policy-row change, not a mapping refresh**: `model-routing-policy.md`'s rows **P6/P7 name the model in their own Decision column**, so the file's **Change discipline** is engaged and is satisfied with new cited evidence — E33.2 **Run A** (the 14b: exit 0, 0 tool rounds, 0 files changed on a real epic), **Run B** (same epic, same Ollama runtime, 30b: mergeable work), and **E33.4** (a second real epic, `home_finance`, complete and green). P7 moves on its **existing** gap-grounded interim reasoning with the referent updated — **G11 (zero captured QA-role runs) remains open** and no QA-lane evidence is claimed. Loadability envelope recorded: Q4_K_M/18.6 GB exceeds a 16 GB-VRAM box and partially offloads to RAM (12.9 GB VRAM / 21.4 GB total, ~9.4 tok/s vs 12.2) — slower, but it finishes. Updated §3.1 schema comments, §3.4 field table defaults/examples + new agentic-lane sizing note, and format-constraint examples. The five paid-frontier keys are **untouched** (different surface, different gate). No field, key, or validation rule changed — value/documentation refresh only. Derivation: `docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.2__runtime-decision.md` + `.ai-project/artifacts/agentic-runs/P10-M33-E33.2/run-record.md` + `.../P10-M33-E33.4/run-record.md` (Epic E34.3, P10-M34). |
 | 2.6.0 | 2026-07-28 | The five paid-frontier `models` defaults — `hq`, `phase`, `milestone`, `creation`, `epic_manual` — refreshed `remote:claude-opus-4-8` → `remote:claude-opus-5` after `claude-opus-4-8` stopped being offered in the harness surface in use, halting every manual governance chat under the P9-M31-E31.3 verification guardrail (`.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`). A **same-tier version refresh**, not a policy change: `model-routing-policy.md`'s rows P1–P4 decide *"Paid frontier"* and `claude-opus-5` is paid frontier, so the M30 evidence process was not re-run — see that file's new **Mapping revisit trigger — model unavailability**. Updated §3.1 schema comments, §3.4 field table defaults/examples, and format-constraint examples. `epic_dev`/`epic_qa` unchanged (agentic lanes, different surface). No field, key, or validation rule changed — value/documentation refresh only. Derivation: `.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md` (HQ Chat, ai-project-system). |
 | 2.5.0 | 2026-07-19 | Added two new **manual-chat-only** `models` keys, `creation` and `epic_manual` (default `remote:claude-opus-4-8` for both) — neither has an agentic dispatch surface; both exist solely as verification targets for the manual-mode startup guardrail (Hard Constraint, P9-M31-E31.3). Updated §3.1 schema comments, §3.4 field table + new provenance note, and §4 validation rule 15's recognized-field list. No existing key's default, format, or validation behavior changed. Derivation: governance source repo `governance/systems/chat-hierarchy.md` "Manual Chat Model Verification" (Epic E31.3, P9-M31), consuming `.ai-project/artifacts/reference/token-measurement/model-routing-policy.md` policy rows P1 and P5 without editing them. |
