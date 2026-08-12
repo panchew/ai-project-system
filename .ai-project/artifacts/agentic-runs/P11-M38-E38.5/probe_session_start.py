@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
 """Deterministic marker probe: Milestone Chat session-start corpus.
 
-Constructs the exact 147,626-byte session-start corpus defined in the E38.5
-Delivery Notice, places a unique marker at position 0, sends it through the
-Ollama /api/generate endpoint, and records the raw structured response.
+Constructs the prescribed session-start corpus (147,571 bytes of source
+content plus a 55-byte section-boundary residue from the original line-range
+extraction; the probe actually tested the 147,626-byte superset), places a
+unique marker at position 0, sends it through the Ollama /api/generate
+endpoint, and records the raw structured response.
 
-Every source is commit-anchored. The script itself is the construction
-manifest — a reader can reproduce the exact tested bytes by running it.
+Every source is commit-anchored to PINNED_COMMIT. Re-running this script
+with the same commit available rebuilds the identical tested bytes.
 """
 
 import json, os, subprocess, sys, time
 
-REPO = '/home/panchew/soft-dev/ai-project-system'
-BASE_REF = 'milestone/M38'   # source documents
+REPO = subprocess.run(['git', 'rev-parse', '--show-toplevel'],
+                       capture_output=True, text=True).stdout.strip()
+PINNED_COMMIT = '7f8b0c126e3701058d6e4d4c8cee22409acea46a'  # milestone/M38 at measurement
+BASE_REF = PINNED_COMMIT       # source documents: pinned to the recorded commit
 MARKER = 'MARKER_E385_SESSION_START_PROBE_20260812'
 OUTDIR = os.path.join(REPO, '.ai-project/artifacts/agentic-runs/P11-M38-E38.5')
 
@@ -33,9 +37,9 @@ def extract(ref, path, start, end):
     return ''.join(lines[start-1:end])
 
 # ── Source commit anchor ──────────────────────────────────────────────
-base_commit = subprocess.run(
-    ['git', 'rev-parse', BASE_REF], capture_output=True, text=True, cwd=REPO
-).stdout.strip()
+# PINNED_COMMIT is the extraction commit; BASE_REF used here as descriptive provenance
+# since the script no longer resolves it dynamically.
+base_commit = PINNED_COMMIT
 
 # ── Phase spec base path ──────────────────────────────────────────────
 PHASE_DIR = 'docs/phases/P11__Drivr_Coordination_Over_Rented_Execution'
@@ -58,11 +62,13 @@ sections['milestone_spec'] = git_show(BASE_REF, f'{PHASE_DIR}/P11-M38__milestone
 # 1c. Phase spec §P11.3 (lines 227-309)
 sections['p11_3'] = extract(BASE_REF, PHASE_SPEC_PATH, 227, 309)
 
-# 1d. Phase spec §Milestones M38 entry (lines 477-512)
-sections['m38_milestones'] = extract(BASE_REF, PHASE_SPEC_PATH, 477, 512)
+# 1d. Phase spec §Milestones M38 entry (lines 477-511)
+# Line 512 is ### M39: Trustworthy Completion Signal — excluded from the defined scope.
+sections['m38_milestones'] = extract(BASE_REF, PHASE_SPEC_PATH, 477, 511)
 
-# 1e. Phase spec §Acceptance Criteria (lines 585-628)
-sections['acceptance'] = extract(BASE_REF, PHASE_SPEC_PATH, 585, 628)
+# 1e. Phase spec §Acceptance Criteria (lines 585-626)
+# Lines 627-628 are the closing --- separator and blank — excluded from the defined scope.
+sections['acceptance'] = extract(BASE_REF, PHASE_SPEC_PATH, 585, 626)
 
 # ══════════════════════════════════════════════════════════════════════
 # 2. PSG SESSION-START SECTIONS
