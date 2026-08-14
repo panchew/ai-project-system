@@ -24,10 +24,12 @@ The blinding addresses the contamination risk unique to this Epic: a local arm w
 |---|---|
 | `rubric.md` | The **pre-registered** scoring rubric. Committed with the packet, before any run. |
 | `packets/packet-1-registry-validation.md` | Blinded comparison packet — fleet registry validation fix. |
-| `protocol-correction-addendum.md` | **Pre-registered** authorization for replacement runs (Review Decision Findings 1/2). |
+| `protocol-correction-addendum.md` | **Pre-registered** v1 addendum — authorizes local run 2 + paid run 2 (Review Decision Findings 1/2). |
+| `protocol-correction-addendum-v2.md` | **Pre-registered** v2 addendum — authorizes paid run 3 (Re-review 01 Finding 1). |
+| `erratum-addendum-v1-timestamp.md` | Records the addendum v1 front-matter timestamp error (Re-review 01 Finding 2). |
 | `runs/local/` | Local arm runs: run 1 (invalid: host, not container), run 2 (valid: Drivr adapter, container). |
-| `runs/paid/` | Paid arm runs: run 1 (invalid: repo access), run 2 (valid: packet-only). |
-| `scores.md` | Scored valid pair (local run 2 = MISS, paid run 2 = CATCH). |
+| `runs/paid/` | Paid arm runs: run 1 (invalid: repo access), run 2 (invalid: programmatic subagent), run 3 (valid: Claude Code CLI packet-only), sealed input. |
+| `scores.md` | Scored valid pair (local run 2 = MISS, paid run 3 = CATCH). |
 | `judgment.md` | Recomputed judgment from the valid pair. |
 
 ## The material
@@ -38,29 +40,43 @@ The blinding addresses the contamination risk unique to this Epic: a local arm w
 
 **Why this material:** It is code-shaped (YAML data + Python test), its ground truth is knowable from a committed fix, and the pre-fix state is reconstructable from git without revealing the answer.
 
-## Protocol history and the resubmission
+## Protocol history and the resubmissions
 
-The original submission had two invalid runs. The Milestone Chat rejected it (Review Decision
-2026-08-14T19:06:56Z, REJECT/action: rework):
-
+### Original submission
 - **Paid run 1** violated the packet-only condition: it had repository access and read the
   committed answer. **INVALID — retrieval, not capability.**
 - **Local run 1** ran directly on the host, not through the registered ContainerEnvironment.
   **INVALID (environment mismatch).**
 
-The `protocol-correction-addendum.md` (committed **before** any replacement run) authorized
-exactly one replacement for each, froze the replacement conditions, and required both
-original runs be preserved as invalid trials.
+### Re-review 01 (Review Decision 2026-08-14T19:06:56Z)
+The first correction addendum (v1) authorized one replacement per invalid arm. Valid pair
+was local run 2 (Drivr adapter, container) = MISS and paid run 2 (programmatic subagent,
+packet-only) = CATCH. **Paid run 2 was rejected** by Re-review 01 (Review Decision
+2026-08-14T20:22:53Z) as a programmatic subagent with instructed-not-sandboxed isolation.
+
+### Re-review 02 (current — Review Decision 2026-08-14T20:22:53Z)
+The second correction addendum (v2) classified paid run 2 INVALID, authorized exactly one
+**paid run 3** as a genuinely fresh, human-operated manual packet-only session, and committed
+the sealed input before the run.
 
 **Valid pair (scored):** local run 2 (Drivr OpenCodeAdapter, ContainerEnvironment) = MISS;
-paid run 2 (fresh packet-only session, non-contaminated) = CATCH. See `scores.md` and
-`judgment.md`.
+paid run 3 (Claude Code CLI, model claude-opus-5, packet-only, no filesystem/shell/search
+tools) = CATCH. See `scores.md` and `judgment.md`.
 
 ## Commit order proof
 
-| Commit | Time | Contents |
+**Current branch IDs** (post-rebase; the pre-rebase IDs are labelled in parentheses where
+they carry the original timestamp proof):
+
+| Commit | Time (commit) | Contents |
 |---|---|---|
-| `fc8d008` | 2026-08-12 | **rubric + packet + README** — before any run |
-| `8f0edd9` | 2026-08-12 | run 1 outputs + original scoring + original Delivery Notice |
-| `0acf32b` | 2026-08-14 | **protocol-correction-addendum** — before any replacement run |
-| `f251b0d` | 2026-08-14 | run 2 outputs + resubmission scoring/judgment |
+| `628594b` (was `fc8d008`) | 2026-08-12 | **rubric + packet + README** — before any run |
+| `1b5c2e1` (was `8f0edd9`) | 2026-08-12 | run 1 outputs + original scoring + original Delivery Notice |
+| `c418efd` (was `0acf32b`) | 2026-08-14 13:14:32 -0600 | **protocol-correction-addendum v1** — before run 2 (timestamp erratum: front matter said 19:30:00Z) |
+| `e567293` (was `f251b0d`) | 2026-08-14 | run 2 outputs + resubmission scoring/judgment |
+| `2b0e884` | 2026-08-14 14:35:35 -0600 | **protocol-correction-addendum v2 + sealed input** — before paid run 3 |
+| `0e736f0` | 2026-08-14 | paid run 3 outputs + re-review-01 scoring/judgment + erratum |
+
+The sealed input (`runs/paid/sealed-input-run-3.txt`) is 42,875 bytes, MD5
+`450dcfb78800f13ff39cabf4bcf1907f`, byte-for-byte identical to the input the reviewer
+independently recovered for run 2.
