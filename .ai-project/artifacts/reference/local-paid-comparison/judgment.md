@@ -5,62 +5,64 @@ milestone: M38
 epic: E38.6
 type: reference
 status: complete
-last_updated: 2026-08-12
+last_updated: 2026-08-14
 ---
 
-# Judgment — Local/Paid Controlled Comparison (E38.6)
+# Judgment (resubmission) — Local/Paid Controlled Comparison (E38.6)
 
 ## Verdict
 
-**No tier comparison was produced. The comparison failed on its blinding, and that failure is the finding.**
+**On the one task, on this material, the paid arm (claude-opus-5) produced a CATCH and the
+local arm (qwen3-coder:30b) produced a MISS.** Both runs are valid, protocol-conforming, and
+comparable.
 
-## Why
+## The valid result
 
-The comparison was designed to run the same work two ways on blinded material. It ran the
-work two ways, but **only the local arm was blinded**. The paid arm had repository access
-and read the committed answer (`927b7fa`) from git — producing a "perfect" result that was
-**retrieval, not capability**. The local arm, properly blinded in an isolated git-free
-workspace, had to derive the fix and produced a partial result.
+| | Local run 2 | Paid run 2 |
+|---|---|---|
+| Fleet warning total | **10 (wrong; correct is 12)** | **12 (correct)** |
+| Raw total | 14 | 14 |
+| Excluded contribution | not correctly attributed | 2 (correct) |
+| Structural invariant test | absent | present (`raw == fleet + excluded`) |
+| Verdict | **MISS** | **CATCH** |
 
-**Neither result supports any conclusion about which tier is better at this work.** The
-asymmetry (Finding 3, B3.1's confound reproduced one level up) is unstated nowhere in this
-record — it is stated plainly in `scores.md`.
+The paid arm derived the fleet total two independent ways (sum of per-project warnings; sum
+of the schema-drift occurrence counts), attributed the 2-warning gap to the two worktree
+checkouts of `ai-project-system`, and added 8 tests guarding the split. The local arm
+separated the totals but computed the fleet total **wrong** (10 instead of 12) and
+mis-attributed the gap to the unenrolled projects.
 
-## What this comparison demonstrates
+## Why this is now a real result (and what changed)
 
-1. **The contamination risk the Epic warned about is real, not theoretical.** The spec said:
-   *"an arm that reads the answer is not being measured on the work — and it would look like
-   an excellent result."* That is precisely what happened. A paid frontier model with
-   repository access, given a task whose answer is committed, returns the committed answer
-   and looks perfect. **This is the most misleading possible outcome for a routing decision
-   — and it is exactly why the blinding discipline exists.**
+The original submission's paid run was contaminated (read the committed answer from git).
+Per the review decision, it was preserved as an INVALID trial and **one replacement paid run
+was authorized** under frozen packet-only conditions. The replacement is non-contaminated:
+field-name and test-name overlap with the committed answer are both **zero**, and its
+structure **diverges** from the committed answer (it retires `invalid_configs`/`total_errors`
+that the answer keeps). Its numbers agree with the answer only because they are derivable
+from the pre-fix registry — which is the task.
 
-2. **The blinding worked when enforced.** The local arm, with no git and no answer, derived
-   the two headline numbers correctly (12 fleet / 14 raw) and separated the totals. It did
-   not complete the task to the pre-registered bar (derived fields incomplete, test weak) —
-   but it was genuinely measured on the work.
-
-3. **The method is reusable.** The material, packet, rubric, and run outputs are committed
-   and auditable. Someone could run it again with **both** arms blinded — or, more
-   honestly, choose material whose answer is **not** in git at all, so the blinding is
-   structural rather than environmental.
+The local arm was also rerun under the registered Drivr adapter + ContainerEnvironment (run
+1 had run on the host). Both run-2 arms are valid and comparable.
 
 ## What this does NOT establish
 
-- **It does NOT establish that the local tier is better than the paid tier**, or the
-  reverse. The two arms ran under non-comparable conditions.
-- **It does NOT establish that either tier is unsuitable for code-shaped work.** The local
-  arm showed partial ability; the paid arm showed no ability *because it was not measured*.
+- **It does NOT establish that the paid tier is generally better than the local tier.** This
+  is **one task, n=1 per arm**. A single data point cannot carry a general claim, and it is
+  offered as evidence, not as a decision.
+- **It does NOT establish that the local tier is unsuitable for code-shaped work.** Local run
+  2 got the concept right (separate the totals) and only the fleet number wrong. Local run 1
+  got both headline numbers right. A poor or partial single result is evidence, not a verdict.
 - **It does NOT move any routing policy.** `model-routing-policy.md` is unmodified. Row P4,
-  P6, P7 untouched.
-- **It does NOT close G11.** This ran real agentic work through a real adapter but was not
-  an `epic_qa` run (Constraint 8).
-- **It does NOT recommend re-running B3.1's engine comparison.** This was a tier comparison
-  attempt; it failed on blinding, not on engine.
+  P6, P7 untouched. The "do not write the therefore" is honoured.
+- **It does NOT close G11** (Constraint 8). This ran real agentic work through a real adapter
+  but was not an `epic_qa` run.
+- **It does NOT re-run B3.1's engine comparison.** This is a tier comparison on one task.
+- **It does NOT decide row P4.** That is a further HQ call using all four axes together.
 
 ## The honest sentence
 
-**The value of this Epic is in its method, which worked: it caught the contamination it was
-designed to catch, before a misleading result could be cited.** The CFO's split-posture
-question remains unanswered on this evidence — and recording that honestly is a success
-outcome, not a failure. Let someone else write the "therefore."
+**The CFO's split-posture question now has a first, valid, controlled data point: on this
+one code-shaped task, the paid arm's output was correct and complete, and the local arm's was
+partial and wrong on the key number.** Both arms ran validly and comparably. The sample is
+one. Let the CFO and M39 write the "therefore" on a larger body of evidence.
