@@ -49,10 +49,11 @@ The blinding addresses the contamination risk unique to this Epic: a local arm w
   **INVALID (environment mismatch).**
 
 ### Re-review 01 (Review Decision 2026-08-14T19:06:56Z)
-The first correction addendum (v1) authorized one replacement per invalid arm. Valid pair
-was local run 2 (Drivr adapter, container) = MISS and paid run 2 (programmatic subagent,
-packet-only) = CATCH. **Paid run 2 was rejected** by Re-review 01 (Review Decision
-2026-08-14T20:22:53Z) as a programmatic subagent with instructed-not-sandboxed isolation.
+The first correction addendum (v1) authorized one replacement per invalid arm. The
+re-review-01 submission paired local run 2 (Drivr adapter, container) = MISS with paid run 2
+(programmatic subagent, packet-only). **Paid run 2 was rejected** by Re-review 01 (Review
+Decision 2026-08-14T20:22:53Z) as a programmatic subagent with instructed-not-sandboxed
+isolation — not a valid manual arm.
 
 ### Re-review 02 (current — Review Decision 2026-08-14T20:22:53Z)
 The second correction addendum (v2) classified paid run 2 INVALID, authorized exactly one
@@ -65,17 +66,28 @@ tools) = CATCH. See `scores.md` and `judgment.md`.
 
 ## Commit order proof
 
-**Current branch IDs** (post-rebase; the pre-rebase IDs are labelled in parentheses where
-they carry the original timestamp proof):
+**Current branch IDs** at the reviewed head (re-review 02, Review Decision
+2026-08-14T22:13:05Z). These are the IDs a fresh reader resolves from the delivered branch.
+Earlier pre-rebase IDs are not listed because they are no longer resolvable as current
+ancestors; the commit content and ordering are what matter and are unchanged.
 
-| Commit | Time (commit) | Contents |
-|---|---|---|
-| `628594b` (was `fc8d008`) | 2026-08-12 | **rubric + packet + README** — before any run |
-| `1b5c2e1` (was `8f0edd9`) | 2026-08-12 | run 1 outputs + original scoring + original Delivery Notice |
-| `c418efd` (was `0acf32b`) | 2026-08-14 13:14:32 -0600 | **protocol-correction-addendum v1** — before run 2 (timestamp erratum: front matter said 19:30:00Z) |
-| `e567293` (was `f251b0d`) | 2026-08-14 | run 2 outputs + resubmission scoring/judgment |
-| `2b0e884` | 2026-08-14 14:35:35 -0600 | **protocol-correction-addendum v2 + sealed input** — before paid run 3 |
-| `0e736f0` | 2026-08-14 | paid run 3 outputs + re-review-01 scoring/judgment + erratum |
+| Commit | Contents |
+|---|---|
+| `0a46e34` | **rubric + packet + README** — pre-registered before any run |
+| `3b0c509` | run 1 outputs + original scoring + original Delivery Notice |
+| `d297a1b` | **protocol-correction-addendum v1** — before run 2 (timestamp erratum recorded separately) |
+| `679f796` | run 2 outputs + resubmission scoring/judgment |
+| `ea6ddcf` | **protocol-correction-addendum v2 + sealed input** — before paid run 3 |
+| `3a63b3d` | paid run 3 outputs + re-review-01 scoring/judgment + erratum |
+| `a68abc1` | Delivery Notice v3 — re-review 02 request |
+
+The ordering that matters is: `0a46e34` (rubric) precedes every run; `d297a1b` (addendum
+v1) precedes run 2; `ea6ddcf` (addendum v2 + sealed input) precedes paid run 3. This is
+provable from git ancestry at the reviewed head.
+
+The sealed input (`runs/paid/sealed-input-run-3.txt`) is 42,875 bytes, MD5
+`450dcfb78800f13ff39cabf4bcf1907f`, byte-for-byte identical to the input the reviewer
+independently recovered for run 2.
 
 The sealed input (`runs/paid/sealed-input-run-3.txt`) is 42,875 bytes, MD5
 `450dcfb78800f13ff39cabf4bcf1907f`, byte-for-byte identical to the input the reviewer

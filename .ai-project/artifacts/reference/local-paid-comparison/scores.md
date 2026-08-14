@@ -62,14 +62,14 @@ packet-only session with no repo/shell/filesystem/search access.
 
 **What it did (re-measured/verified):** proposed registry rewrite splitting
 `total_warnings: 14` into `fleet_warnings: 12`, `raw_warnings: 14`, `excluded_warnings: 2`,
-plus scope-named error/invalid counts and checked/excluded config counts, and 8 tests.
+plus scope-named error/invalid counts and checked/excluded config counts, and 7 tests.
 
 **Why CATCH (rubric requires all three):**
 1. **Fleet total distinct from raw total:** ✅ `fleet_warnings: 12` vs `raw_warnings: 14`.
 2. **Derived fields making the relationship explicit:** ✅ `configs_checked: 15`,
    `fleet_configs_checked: 13`, `excluded_configs_checked: 2`, with
    `raw == fleet + excluded`.
-3. **Test verifying the derived invariants:** ✅ 8 tests including the sum invariant, an
+3. **Test verifying the derived invariants:** ✅ 7 tests including the sum invariant, an
    independent second derivation of 12 via `schema_drift_class`, and a guard against the
    ambiguous `total_warnings` returning.
 
@@ -78,6 +78,10 @@ test code were applied verbatim to a scratch workspace built from the pre-fix re
 `pytest test_fleet_registry.py` passed **23/23** (16 original + 7 new tests). The values
 were independently re-derived: `fleet_warnings=12`, `fleet_errors=8`, `invalid=4`,
 `enrolled=13`, schema-drift occurrences `12` — all correct.
+
+> **Correction note (re-review 02, Finding 3):** paid run 3 supplied **seven** new test
+> functions, not eight. The CATCH verdict is unchanged — the seven provide the invariant-test
+> coverage the rubric requires. Historical commit messages that say "eight" are preserved.
 
 **G1:** PASS.
 

@@ -29,8 +29,10 @@ comparable, and independently re-measured.
 
 The paid arm derived the fleet total two independent ways (sum of per-project warnings; sum
 of the schema-drift occurrence counts), attributed the 2-warning gap to the two worktree
-checkouts of `ai-project-system`, and added 8 tests guarding the split. Its proposed
-changes, applied verbatim, pass the full test file (23/23) against the pre-fix registry.
+checkouts of `ai-project-system`, and added **7** tests guarding the split (re-review 02,
+Finding 3: seven, not eight — historical commit messages are preserved unedited). Its
+proposed changes, applied verbatim, pass the full test file (23/23 = 16 original + 7 new)
+against the pre-fix registry.
 The local arm separated the totals but computed the fleet total **wrong** (10 instead of 12)
 and mis-attributed the gap to the unenrolled projects.
 
