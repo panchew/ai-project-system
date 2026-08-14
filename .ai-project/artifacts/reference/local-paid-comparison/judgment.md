@@ -8,42 +8,43 @@ status: complete
 last_updated: 2026-08-14
 ---
 
-# Judgment (resubmission) — Local/Paid Controlled Comparison (E38.6)
+# Judgment (re-review 01) — Local/Paid Controlled Comparison (E38.6)
 
 ## Verdict
 
 **On the one task, on this material, the paid arm (claude-opus-5) produced a CATCH and the
-local arm (qwen3-coder:30b) produced a MISS.** Both runs are valid, protocol-conforming, and
-comparable.
+local arm (qwen3-coder:30b) produced a MISS.** Both runs are valid, protocol-conforming,
+comparable, and independently re-measured.
 
 ## The valid result
 
-| | Local run 2 | Paid run 2 |
+| | Local run 2 | Paid run 3 |
 |---|---|---|
 | Fleet warning total | **10 (wrong; correct is 12)** | **12 (correct)** |
 | Raw total | 14 | 14 |
 | Excluded contribution | not correctly attributed | 2 (correct) |
 | Structural invariant test | absent | present (`raw == fleet + excluded`) |
+| Isolation | container (Drivr adapter) | packet-only, no fs/shell/search tools |
 | Verdict | **MISS** | **CATCH** |
 
 The paid arm derived the fleet total two independent ways (sum of per-project warnings; sum
 of the schema-drift occurrence counts), attributed the 2-warning gap to the two worktree
-checkouts of `ai-project-system`, and added 8 tests guarding the split. The local arm
-separated the totals but computed the fleet total **wrong** (10 instead of 12) and
-mis-attributed the gap to the unenrolled projects.
+checkouts of `ai-project-system`, and added 8 tests guarding the split. Its proposed
+changes, applied verbatim, pass the full test file (23/23) against the pre-fix registry.
+The local arm separated the totals but computed the fleet total **wrong** (10 instead of 12)
+and mis-attributed the gap to the unenrolled projects.
 
-## Why this is now a real result (and what changed)
+## Why this is now a compliant result
 
-The original submission's paid run was contaminated (read the committed answer from git).
-Per the review decision, it was preserved as an INVALID trial and **one replacement paid run
-was authorized** under frozen packet-only conditions. The replacement is non-contaminated:
-field-name and test-name overlap with the committed answer are both **zero**, and its
-structure **diverges** from the committed answer (it retires `invalid_configs`/`total_errors`
-that the answer keeps). Its numbers agree with the answer only because they are derivable
-from the pre-fix registry — which is the task.
+The review's first re-review rejected paid run 2 (programmatic subagent, instructed-not-
+sandboxed isolation). Per the second protocol-correction addendum (committed before run 3),
+**paid run 3** was run as a **genuinely fresh, human-operated manual session** via Claude
+Code CLI: model `claude-opus-5`, in an empty non-repo directory, with **all
+filesystem/shell/search tools disallowed**, receiving **only the sealed packet**. The run
+record confirms zero tool_use events and no file-access capability. This closes Finding 1.
 
-The local arm was also rerun under the registered Drivr adapter + ContainerEnvironment (run
-1 had run on the host). Both run-2 arms are valid and comparable.
+The timestamp erratum and commit-order corrections required by Finding 2 are recorded in the
+Delivery Notice.
 
 ## What this does NOT establish
 
@@ -62,7 +63,8 @@ The local arm was also rerun under the registered Drivr adapter + ContainerEnvir
 
 ## The honest sentence
 
-**The CFO's split-posture question now has a first, valid, controlled data point: on this
-one code-shaped task, the paid arm's output was correct and complete, and the local arm's was
-partial and wrong on the key number.** Both arms ran validly and comparably. The sample is
-one. Let the CFO and M39 write the "therefore" on a larger body of evidence.
+**The CFO's split-posture question now has a compliant, valid, controlled data point: on
+this one code-shaped task, the paid arm's output was correct and complete, and the local
+arm's was partial and wrong on the key number.** Both arms ran validly and comparably, and
+the paid arm's protocol compliance is now verified. The sample is one. Let the CFO and M39
+write the "therefore" on a larger body of evidence.
