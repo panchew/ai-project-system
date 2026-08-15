@@ -1,0 +1,76 @@
+{
+  "arm": "paid",
+  "run": 2,
+  "model": "claude-opus-5",
+  "engine": "claude-code fresh subagent context (operator-dispatched)",
+  "environment": "host",
+  "adapter": null,
+  "wall_start_iso": "2026-08-14T19:39:33Z",
+  "wall_end_iso": "2026-08-14T19:48:31Z",
+  "wall_start_epoch_s": 1786736373.5705962,
+  "wall_end_epoch_s": 1786736911.641128,
+  "wall_duration_s": 538.07,
+  "wall_basis": "operator wall-clock, timestamp immediately before dispatch to immediately after return. INFLATED AND NOT COMPARABLE: the operator performed unrelated work (reading rubric.md, a status poll) while the arm ran. Use execution_duration_ms.",
+  "execution_duration_ms": 299019,
+  "execution_duration_basis": "arm context runtime, dispatch to final message. This is the figure comparable to the local arm's adapter_duration_ms (237200).",
+  "exit_code": 0,
+  "timed_out": false,
+  "files_changed": [],
+  "deliverable": "text in final message (proposed registry YAML + test code); the arm was forbidden to write files",
+  "tool_calls_total": 1,
+  "tool_calls": [
+    "Read(e38.6-paid-run2-sealed/PACKET.txt)"
+  ],
+  "tool_calls_verification": "self-report and raw JSONL transcript scan agree: exactly one tool_use, name=Read",
+  "packet_md5": "450dcfb78800f13ff39cabf4bcf1907f",
+  "packet_bytes": 42875,
+  "packet_identical_to_run1_packet": true,
+  "unenforced_constraints": [
+    "ISOLATION INSTRUCTED, NOT SANDBOXED. The local arm's isolation was enforced by ContainerEnvironment (only /work mounted). This arm ran on the host with tool access available and was restrained by instruction only. Verified post-hoc (1 tool call, Read of the sealed packet) but not enforced a priori.",
+    "SESSION TYPE. The addendum specifies 'a fresh manual session at models.epic_manual'. This was a fresh claude-opus-5 context dispatched programmatically from an operator session, not a human-pasted chat. Whether that satisfies 'manual' is a reviewer call, not an operator call.",
+    "OPERATOR PRIOR EXPOSURE. The dispatching operator had already read paid-arm-run-1.md (which quotes the committed answer) before dispatch. The arm context had not: it received PACKET.txt and nothing else, and inherited no operator conversation history."
+  ],
+  "noncontamination_evidence": {
+    "committed_answer_commit": "927b7fa",
+    "committed_answer_new_fields": [
+      "fleet_configs",
+      "raw_configs_checked",
+      "fleet_total_warnings",
+      "raw_total_warnings",
+      "excluded_worktree_configs"
+    ],
+    "run2_new_fields": [
+      "configs_checked",
+      "fleet_configs_checked",
+      "excluded_configs",
+      "excluded_as_worktrees",
+      "fleet_warnings",
+      "raw_warnings",
+      "excluded_warnings",
+      "fleet_errors",
+      "raw_errors",
+      "excluded_errors",
+      "fleet_invalid_configs",
+      "raw_invalid_configs",
+      "excluded_invalid_configs"
+    ],
+    "field_name_overlap_with_committed_answer": 0,
+    "committed_answer_test_name": "test_fleet_and_raw_warning_totals_are_distinct_and_derived",
+    "run2_test_names_matching_committed": 0,
+    "run2_test_count": 8,
+    "structural_divergence": "run 2 RETIRES invalid_configs and total_errors (and adds a test forbidding their return); commit 927b7fa KEEPS both. A contaminated run would not delete fields the answer preserves.",
+    "value_agreement": "values agree (12/14/15/13/8/4) because they are derivable from the pre-fix registry, which is the task; naming and structure diverge completely"
+  },
+  "operator_number_verification": {
+    "sum_section_4_warnings_enrolled": 12,
+    "sum_section_4_errors_enrolled": 8,
+    "invalid_enrolled_configs": 4,
+    "enrolled": 13,
+    "prefix_total_warnings": 14,
+    "excluded_as_worktrees": [
+      "worktree-epic-E38.2",
+      "worktree-epic-E38.3"
+    ],
+    "verdict": "every figure the arm produced is correct and internally consistent against the pre-fix registry"
+  }
+}
