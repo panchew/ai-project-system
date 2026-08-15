@@ -4,7 +4,9 @@ milestone: M19
 issued_by: Milestone Chat (P4-M19 — Creation Chat Completion and Bugfix Workflow)
 issued_to: Phase Chat (P4 — Team Collaboration and Artifact-Driven Communication)
 date: 2026-06-20
-status: open
+resolved_by: HQ Chat (ai-project-system)
+resolved_on: 2026-08-07
+status: resolved
 ---
 
 # Escalation Notice: Process gaps surfaced during M19 execution (non-blocking, for future-work hardening)
@@ -107,4 +109,50 @@ chats run concurrently and as execution moves toward agentic mode.
 
 ## Resolution
 
-(empty — awaiting Phase Chat decision; system-level items to be forwarded to HQ Chat)
+**HQ Chat, 2026-08-07. RESOLVED — seven weeks late, and the lateness is the first finding.**
+
+**Recorded by HQ rather than the Phase Chat this notice addressed.** P4 closed without writing this
+field, and the notice itself directs the system-level items to HQ. Six phase closures passed over an
+escalation reading `open`.
+
+### Every ask was implemented — in P5, weeks before this closure
+
+| Ask | Disposition |
+|---|---|
+| **1.** Verify "committed" prerequisites against git, not disk | **DONE — `P5-M20-E20.1` (`c54efba`).** Both the Milestone and Epic starter templates now require `git ls-files --error-unmatch <path>` on the expected branch, and carry this notice's own *false-green* reasoning nearly verbatim. |
+| **2.** Establish a working-tree isolation convention | **DONE — `P5-M20-E20.2` (`f4c3a30`).** `governance/systems/chat-hierarchy.md` §"One `git worktree` per concurrently-active chat", with practical guidance and a worked example; mirrored in `AI-OPERATING-GUIDELINES.md`. |
+| **3.** Should the Steering Note also exist on `milestone/M19`? | **MOOT.** P4 is closed. The Milestone Chat's own view — arriving via the E19.2 merge is acceptable — stood and needed no action. |
+| **4.** Ratify the CFO/Creation scope-direction routing rule | **DONE.** `chat-hierarchy.md:917` and `AI-OPERATING-GUIDELINES.md:553`: *Steering Note → HQ Chat → spec amendment → Milestone Chat re-issues the amended starter.* An Epic executes only against its committed, re-issued starter. |
+
+**So this was a record defect, not an open question.** The work was done and the artifact was never
+updated — which is the same class M36 and M37 were run to clean, found in the escalation record rather
+than the citation record.
+
+### The second finding is live, and it is larger than the first
+
+**Gap 2's rule exists and is not observed.** Measured 2026-08-07 on this repository:
+`git worktree list` returns **one tree**, shared by every chat in P11.
+
+- The M36 milestone spec flagged the hazard (Finding 4).
+- The M37 Milestone Chat hit it and called it *"the third occurrence in this phase."*
+- HQ found the tree parked on `milestone/M37` on arrival — a fourth — and then switched branches in
+  that same shared tree repeatedly across this session.
+
+**The convention was written in direct response to this notice and changed nothing about the
+behaviour.** It is a practice, not a mechanism, and it depends on someone remembering — which for
+seven weeks nobody has. This is the same terminal observation `P11-GH-1` and `P11-GH-2` both reach.
+
+**This notice predicted it in terms:** the cost would grow *"as the system moves from manual mode
+toward concurrent/agentic execution."* It has. `~/soft-dev/drivr` now exists (P11-M38/E38.1), M38's
+Stage B runs five further epics across two repositories, and the adapter surface dispatches runs.
+
+### Recommendation carried forward — not a new convention
+
+**Worktree allocation belongs to whatever dispatches the run.** A coordination daemon that decides
+*when* a run happens is the natural owner of *which tree it gets*, and allocating one per dispatched
+run converts Gap 2 from something people remember into something the system does. Recorded against
+**M40/E40.1** (the serialized-lane scheduler) as a consideration for that epic, **not placed as scope**
+— it is the first candidate in this phase that would turn an interim practice into a mechanism rather
+than adding a fifth one.
+
+**Status: resolved.** Nothing further is owed on this notice.
