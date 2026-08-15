@@ -1,0 +1,67 @@
+{
+  "layer": "host",
+  "date": "2026-08-12",
+  "binary_version": "1.18.10",
+  "sdk_version": "1.15.13",
+  "plugin_version": "1.15.13",
+  "serve": {
+    "openapi": "3.1.0",
+    "path_count": 162,
+    "probe_tool_registered": true
+  },
+  "c2": [
+    {
+      "declared_schema": "count: z.number()",
+      "model_argument": 8,
+      "handler_received": 8,
+      "runtime_type": "number",
+      "structured_tool_status": "completed"
+    },
+    {
+      "declared_schema": "count: z.number()",
+      "model_argument": "\"8\"",
+      "handler_received": "\"8\"",
+      "runtime_type": "string",
+      "structured_tool_status": "completed"
+    },
+    {
+      "declared_schema": "count: z.number()",
+      "model_argument": "banana",
+      "handler_received": "banana",
+      "runtime_type": "string",
+      "structured_tool_status": "completed"
+    }
+  ],
+  "c3": {
+    "ordinary_finish": {
+      "http_status": 200,
+      "assistant_finish": "stop"
+    },
+    "crash": {
+      "cause": "nonexistent Ollama model",
+      "http_status": 500,
+      "error_name": "UnknownError",
+      "message": "Unexpected server error. Check server logs for details.",
+      "ref": "err_44956b08"
+    },
+    "abort": {
+      "prompt_async_http_status": 204,
+      "status_while_running": "busy",
+      "abort_http_status": 200,
+      "abort_response": true,
+      "event": "session.error",
+      "error_name": "MessageAbortedError",
+      "message": "Aborted",
+      "status_after": "idle"
+    },
+    "step_ceiling": {
+      "config": {"agent": {"build": {"maxSteps": 1}}},
+      "server_log_sequence": ["loop step=0", "process", "loop step=1", "exiting loop"],
+      "assistant_finish": "stop",
+      "step_finish_reason": "stop",
+      "tool_executed": false,
+      "session_error": null,
+      "session_status_after": {}
+    }
+  }
+}

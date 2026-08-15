@@ -1,0 +1,46 @@
+{
+  "A_known_nonzero_runner_config_error": {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "local_agent_runner.cli",
+      "--task-text",
+      "this invocation is deliberately malformed and must never reach the loop",
+      "--tools",
+      "/nonexistent/definitely-not-a-tools-file.json"
+    ],
+    "duration_ms": 130,
+    "exit_code": 3,
+    "stderr": "local-agent-runner: cannot read tools file '/nonexistent/definitely-not-a-tools-file.json': [Errno 2] No such file or directory: '/nonexistent/definitely-not-a-tools-file.json'\n",
+    "stdout": "",
+    "timed_out": false
+  },
+  "B_known_zero": {
+    "command": [
+      "/bin/true"
+    ],
+    "duration_ms": 1,
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "C_known_nonzero_independent": {
+    "command": [
+      "/bin/false"
+    ],
+    "duration_ms": 2,
+    "exit_code": 1,
+    "stderr": "",
+    "stdout": "",
+    "timed_out": false
+  },
+  "D_falsification_discarded_return": {
+    "defect_reproduced": true,
+    "faulty_wrapper_reading": 0,
+    "harness_agrees_with_truth": true,
+    "harness_reading_case_A": 3,
+    "runner_stderr": "local-agent-runner: cannot read tools file '/nonexistent/definitely-not-a-tools-file.json': [Errno 2] No such file or directory: '/nonexistent/definitely-not-a-tools-file.json'",
+    "true_return_of_main": 3
+  }
+}
