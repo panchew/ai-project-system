@@ -55,7 +55,7 @@ re-review-01 submission paired local run 2 (Drivr adapter, container) = MISS wit
 Decision 2026-08-14T20:22:53Z) as a programmatic subagent with instructed-not-sandboxed
 isolation — not a valid manual arm.
 
-### Re-review 02 (current — Review Decision 2026-08-14T20:22:53Z)
+### Re-review 02 (Review Decision 2026-08-14T20:22:53Z)
 The second correction addendum (v2) classified paid run 2 INVALID, authorized exactly one
 **paid run 3** as a genuinely fresh, human-operated manual packet-only session, and committed
 the sealed input before the run.
@@ -84,10 +84,6 @@ ancestors; the commit content and ordering are what matter and are unchanged.
 The ordering that matters is: `0a46e34` (rubric) precedes every run; `d297a1b` (addendum
 v1) precedes run 2; `ea6ddcf` (addendum v2 + sealed input) precedes paid run 3. This is
 provable from git ancestry at the reviewed head.
-
-The sealed input (`runs/paid/sealed-input-run-3.txt`) is 42,875 bytes, MD5
-`450dcfb78800f13ff39cabf4bcf1907f`, byte-for-byte identical to the input the reviewer
-independently recovered for run 2.
 
 The sealed input (`runs/paid/sealed-input-run-3.txt`) is 42,875 bytes, MD5
 `450dcfb78800f13ff39cabf4bcf1907f`, byte-for-byte identical to the input the reviewer
