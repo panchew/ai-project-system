@@ -70,13 +70,38 @@ measured evidence.**
    narrow question, **and not sufficient as a completion judgment.** An epic that builds the judgment
    on `status` alone fails the first known case.
 3. **The two cases are mirror images that defeat every single signal.** In Run A the prose lies and
-   the structured status lies; in E33.4 the prose is right and the structured status lies. **The only
-   signal correct in both is repository/artifact state delta** — which is evidence for a direction,
-   **not a decision this spec is making.**
+   the structured status lies; in E33.4 the prose is right and the structured status lies.
 
-> **E39.1 may build its judgment from anything it can defend** — transcript inspection, state delta,
-> governance-state verification, a QA-role second pass, or a combination. **What it may not do is
-> adopt exit code or `status` alone**, because the preserved evidence already shows both failing.
+   > **⚠ CORRECTED at v1.0.1 — and the correction is the Phase Chat's.** v1.0.0 continued: *"The only
+   > signal correct in both is repository/artifact state delta."* **E39.1's F2 falsified that as
+   > written, by measurement.**
+   >
+   > **The table row above is accurate as GROUND TRUTH about what each run itself did. It is NOT a
+   > description of a computable input, and v1.0.0 presented it as one.**
+   >
+   > **Measured** (verified independently by the Phase Chat from
+   > `…/P10-M33-E33.2/transcript-A-qwen2.5-coder-14b__run-metadata.json`, a **sidecar the Phase Chat
+   > had not read** when v1.0.0 was written): Run A started **22:40:27.742Z** and ran **18,370 ms**,
+   > ending ≈**22:40:46Z**. `local-agent-runner`'s commit **`4ec1e8f`** is dated **22:45:44Z** — **4 min
+   > 58 s AFTER Run A ended** — and per the run-record it carries **Run B's** work.
+   >
+   > **So a judgment asking *"did the target repo gain this epic's work?"* answers YES for Run A and
+   > returns *completed* — the wrong verdict on the very case the milestone binds.**
+   >
+   > **Repository-state delta is correct only when window-scoped to the run and attributed to it.**
+   > That remains an available direction; the naive form is ruled out with the other two.
+   >
+   > **This is `P11-GH-2`'s scope axis in my own spec** — ground truth described as though it were an
+   > available signal — and a second lesson besides: I read *a* file in the evidence directory and
+   > treated it as *the* evidence. **The directory holds a `context.md`, a `run-record.md`, two
+   > transcripts and a run-metadata sidecar.** Every inventory is a floor, including an evidence
+   > directory.
+
+> **E39.1 may build its judgment from anything it can defend** — transcript inspection, **window-scoped
+> and attributed** state delta, governance-state verification, an in-artifact effect ledger, or a
+> combination. **What it may not do is adopt exit code or `status` alone**, because the preserved
+> evidence already shows both failing — **nor naive repository-state delta, which F2 shows failing Run
+> A.**
 
 ---
 
@@ -470,6 +495,14 @@ flowchart TB
   E39.3's shape depends on whether E39.1's mechanism includes a QA second pass. **Deliberately not
   built:** everything in M40, which this milestone gates. Proposed-track Structural diagram (AOG
   §16.3/§16.6), Mermaid, no ComfyUI.
+
+---
+
+## Amendment History
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.0.1 | 2026-08-15 | **A direction in v1.0.0 was falsified by measurement, and the error was the Phase Chat's.** v1.0.0's §finding concluded *"the only signal correct in both is repository/artifact state delta."* **E39.1's F2 disproves it as written.** The table row *"repository state: no commit / commit + green suite"* is accurate as **ground truth about what each run did** and v1.0.0 presented it as **a computable input**, which it is not. Verified independently by the Phase Chat from `…/P10-M33-E33.2/transcript-A-qwen2.5-coder-14b__run-metadata.json` — **a sidecar the Phase Chat had not read**: Run A started **22:40:27.742Z**, ran **18,370 ms**, ended ≈**22:40:46Z**; `local-agent-runner`'s `4ec1e8f` is dated **22:45:44Z**, **4 min 58 s later**, and carries **Run B's** work. **A naive "did the target repo gain this epic's work?" returns *completed* for Run A — the wrong verdict on the very case constraint 1 binds.** Corrected: repository-state delta is admissible **only window-scoped to the run and attributed to it**; the naive form joins exit code and `status` alone on the ruled-out list. **Two lessons recorded, both mine:** this is `P11-GH-2`'s **scope axis inside my own spec** — ground truth described as an available signal; and I read *one* file in the evidence directory and treated it as *the* evidence, when it holds a `context.md`, a `run-record.md`, two transcripts and a metadata sidecar. **Every inventory is a floor, including an evidence directory.** Also accepted from E39.1's set: the **QA-pass coupling decided at planning time** — no model-generated judgment may be load-bearing on the verdict, so E39.1 does **not** build the QA dispatch path and E39.3 inherits that decision rather than discovering it. **No epic, ordering, constraint or scope boundary otherwise changes.** |
 
 ---
 
