@@ -1,0 +1,419 @@
+#!/usr/bin/env python3
+"""run-qa-agent — the QA-role dispatch for the ``epic_qa`` lane (Epic P11-M39-E39.3).
+
+G11 has stood open across three phases as *"``epic_qa`` has no dispatch path"*. Measured
+on the host on 2026-08-16, that account is not quite right, and the correction is what
+this script is: **model routing exists and the dispatch seam exists; only the QA-role
+task construction never did.** ``bin/ai-project-orchestrator`` says so in its own words
+at ``handle_epic_execution`` (lines 419-426), quoted verbatim because it is the one
+non-uniform element in the lane:
+
+    Honesty note: qa_model is resolved and logged here, but no code path in this
+    dispatch surface actually invokes it as an LLM today -- validation_command is an
+    arbitrary shell command (e.g. test/lint), not routed through bin/run-dev-agent, so
+    P7 has no real local-unavailable code path to guard [...] Building a QA-role
+    dispatch mechanism is out of scope (Non-Goals).
+
+This is that mechanism, built to the narrowest shape that satisfies the five-criterion
+bar in the Epic spec's §What makes a run a genuine ``epic_qa`` run.
+
+**It is a sibling of ``bin/run-dev-agent``, not a fork of it.** The shared machinery —
+``resolve_model``'s local-tag mapping, ``check_local_availability``'s Hard-Constraint-4
+preflight, ``discover_runner``, ``extract_dod`` — is *imported* from that adapter at
+runtime rather than copied, so the two cannot drift. Exactly three things differ, and
+they are exactly the three the role requires:
+
+1. **The task text** (criterion 1). ``run-dev-agent`` hardwires
+   ``task_text = extract_dod(...)``: *implement this Definition of Done*. Here the task
+   is an assessment — judge stated work against a stated standard and return a verdict.
+   **Changing the model does not change the role; changing the task is what does.**
+2. **The tool set** (criterion 2). ``.ai-project/agents/qa-tools.json``, read-only, in
+   place of ``.ai-project/agents/tools.json``, whose ``enabled`` list carries
+   ``write_file``, ``edit_file`` and ``git`` with ``add``/``commit``. An agent that can
+   commit is not assessing work; it is doing work.
+3. **The artifact paths** (criterion 4). ``qa-transcript.json``, ``qa-context.md`` and
+   ``qa-run-metadata.json`` — never the plain ``transcript.json`` / ``run-metadata.json``
+   the dev adapter writes. Four preserved run directories hold those plain names, one of
+   them the only surviving copy of a binding case's ``exit_code``, and this script
+   refuses to overwrite any existing file at all (``_refuse_collisions``) rather than
+   relying on the distinct names alone.
+
+**Routing (criterion 3) is not a parameter.** There is deliberately no ``--model`` flag
+and no environment override: ``resolve_qa_model`` reads ``models.epic_qa`` out of
+``.ai-project.yml`` and records the file's ``sha256`` alongside the raw value, so the
+model provably comes from the config rather than from a hand. Dispatching on the host
+(the route with precedent — P7-M26-E26.3 and P10-M33-E33.2 both did) bypasses the
+orchestrator's ``AI_PROJECT_ACTIVE_MODEL`` injection, which is precisely why the value is
+re-derived from the same config file the orchestrator would have read. If
+``AI_PROJECT_ACTIVE_MODEL`` *is* present (the sandbox route), it must **agree** with the
+config or this script exits 3 — an injected value is accepted as corroboration, never as
+an alternative source.
+
+**Authority (criterion 5): none.** The verdict is advisory evidence. Nothing in this
+repository consumes it, no exit code is derived from its content, and
+``"authority": "advisory"`` is written into the metadata so the artifact says so itself.
+M39 judges; it does not act on its judgment.
+
+Exit codes follow ``run-dev-agent``'s convention exactly: 3 for adapter-detected
+configuration problems, 5 for local-unavailable (endpoint unreachable or model not
+pulled, checked before the runner is invoked), and once the runner is invoked its own
+code (0/2/3/4) is returned unaltered. **An exit code here reports whether the QA run
+completed, never whether the assessed work passed.**
+"""
+
+import argparse
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import yaml
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEV_ADAPTER = REPO_ROOT / "bin" / "run-dev-agent"
+
+YML_CONFIG = Path(".ai-project.yml")
+QA_TOOLS_JSON = Path(".ai-project") / "agents" / "qa-tools.json"
+ARTIFACT_ROOT = Path(".ai-project") / "artifacts" / "agentic-runs"
+
+# The four epic_id values whose preserved directories hold the plain filenames the dev
+# adapter writes (Epic spec §F3, sharpened at v1.0.1). P10-M33-E33.4's run-metadata.json
+# is the only place that binding case's exit_code: 2 exists; the three *-PROVE dirs are
+# three of E39.2's four held-out cases. Refused unconditionally -- the distinct QA
+# filenames below already make a collision impossible, so this list is the second lock,
+# not the first.
+FORBIDDEN_EPIC_IDS = frozenset({
+    "P10-M33-E33.4",
+    "P7-M26-E26.3-PROVE",
+    "P9-M31-E31.1-PROVE",
+    "P9-M31-E31.2-PROVE",
+})
+
+QA_TASK_TEMPLATE = """\
+You are a QA reviewer. Your job is to ASSESS work that already exists. You are not \
+implementing anything, and you have no tools that could: you can read files and list \
+directories, and nothing else.
+
+THE STANDARD you are assessing against is reproduced in your context under the heading
+"STANDARD". It is a list of numbered claims about how {work_label} is supposed to behave.
+
+THE WORK you are assessing is the file(s) listed in your context under "WORK". Read them \
+with the read_file tool and judge each claim against what you actually find in the source \
+-- not against what the standard says about itself.
+
+For EACH numbered claim, report exactly one line in this form:
+
+    <number>. MET | NOT MET | UNCLEAR -- <the evidence you read, naming the function or \
+line you used>
+
+Then, as the final line of your answer and on a line of its own, report:
+
+    VERDICT: PASS
+
+if every claim is MET, or
+
+    VERDICT: FAIL
+
+if any claim is NOT MET or UNCLEAR.
+
+Do not propose changes, do not write code, and do not restate the standard back. Report \
+findings and a verdict.
+"""
+
+
+def _load_dev_adapter():
+    """Import ``bin/run-dev-agent`` as a module so its machinery is reused, not copied.
+
+    The adapter has no ``.py`` suffix (it is an executable on the orchestrator's
+    ``dev_command`` path), and ``spec_from_file_location`` returns ``None`` for a path
+    whose suffix matches no registered loader -- so the loader is named explicitly.
+    Importing runs only module-level definitions; ``main()`` is guarded by ``__main__``.
+    """
+    loader = importlib.machinery.SourceFileLoader("run_dev_agent", str(DEV_ADAPTER))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None or spec.loader is None:
+        print(
+            f"[run-qa-agent] cannot load the dev adapter at {DEV_ADAPTER}",
+            file=sys.stderr,
+        )
+        sys.exit(3)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+dev = _load_dev_adapter()
+
+EXIT_CONFIG = dev.EXIT_CONFIG
+DEFAULT_OLLAMA_ENDPOINT = dev.DEFAULT_OLLAMA_ENDPOINT
+
+
+def fail(message):
+    """One-line reason on stderr, config-error exit -- ``run-dev-agent``'s class 3."""
+    print(f"[run-qa-agent] {message}", file=sys.stderr)
+    sys.exit(EXIT_CONFIG)
+
+
+def resolve_qa_model(config_path=YML_CONFIG, env=None):
+    """Criterion 3: the model provably comes from ``.ai-project.yml``'s ``models.epic_qa``.
+
+    Returns ``(tag, is_local, provenance)``. There is no flag and no environment variable
+    that can select a *different* model: ``AI_PROJECT_ACTIVE_MODEL``, when present, is
+    required to match the configured value and is recorded as corroboration. The config
+    file's ``sha256`` goes into the provenance so a reviewer can bind the recorded model
+    to the exact bytes it was read from.
+    """
+    env = {} if env is None else env
+    if not Path(config_path).exists():
+        fail(f"{config_path} not found -- models.epic_qa cannot be resolved from config")
+    raw_bytes = Path(config_path).read_bytes()
+    try:
+        data = yaml.safe_load(raw_bytes.decode()) or {}
+    except (ValueError, yaml.YAMLError) as e:
+        fail(f"cannot parse {config_path}: {e}")
+    models = data.get("models") if isinstance(data, dict) else None
+    if not isinstance(models, dict) or not str(models.get("epic_qa", "")).strip():
+        fail(f"{config_path} has no models.epic_qa -- no default is assumed")
+    configured = str(models["epic_qa"]).strip()
+
+    injected = str(env.get("AI_PROJECT_ACTIVE_MODEL", "")).strip()
+    if injected and injected != configured:
+        fail(
+            f"AI_PROJECT_ACTIVE_MODEL {injected!r} disagrees with {config_path}'s "
+            f"models.epic_qa {configured!r} -- refusing to run under a hand-picked model"
+        )
+
+    if configured.startswith("local:"):
+        tag = configured[len("local:"):].strip()
+        if not tag:
+            fail(f"models.epic_qa {configured!r} has an empty tag after 'local:'")
+        is_local = True
+    else:
+        tag, is_local = configured, False
+
+    provenance = {
+        "source": f"{config_path}:models.epic_qa",
+        "configured_value": configured,
+        "resolved_tag": tag,
+        "config_sha256": hashlib.sha256(raw_bytes).hexdigest(),
+        "active_model_env": injected or "(unset)",
+        "env_agrees_with_config": bool(injected) and injected == configured,
+    }
+    return tag, is_local, provenance
+
+
+def extract_standard(standard_path, section):
+    """The stated standard: one named markdown section of a committed file.
+
+    Reuses ``run-dev-agent.extract_dod``'s heading-to-next-same-or-higher-heading walk
+    when the section is a Definition of Done; otherwise applies the same rule to the
+    named heading. A missing or empty section is a config error -- never a silent
+    fallback to "the whole file", which would quietly turn a bounded assessment into an
+    unbounded one.
+    """
+    try:
+        text = Path(standard_path).read_text()
+    except OSError as e:
+        fail(f"cannot read standard {standard_path}: {e}")
+    if section == "Definition of Done":
+        return dev.extract_dod(text, standard_path)
+
+    match = re.search(
+        r"^(#{2,3})\s+%s\b.*$" % re.escape(section), text, re.MULTILINE
+    )
+    if not match:
+        fail(f"no '{section}' section found in {standard_path}")
+    level = len(match.group(1))
+    rest = text[match.end():]
+    nxt = re.compile(r"^#{1,%d}\s+\S" % level, re.MULTILINE).search(rest)
+    body = rest[: nxt.start()] if nxt else rest
+    if not body.strip():
+        fail(f"'{section}' section in {standard_path} is empty")
+    return f"{match.group(0)}\n{body}".strip()
+
+
+def _refuse_collisions(paths):
+    """Criterion 4, second lock: refuse to overwrite ANY existing file.
+
+    The QA filenames are already distinct from the dev adapter's, so this cannot fire in
+    normal use. It exists because the failure it guards is unrecoverable -- the preserved
+    corpus is this milestone's whole subject, and 'the filenames are different' is a
+    claim about a string, while 'the file did not exist' is a claim about the disk.
+    """
+    existing = [str(p) for p in paths if Path(p).exists()]
+    if existing:
+        fail(
+            "refusing to overwrite existing artifact(s): "
+            + ", ".join(existing)
+            + " -- preserved run evidence is never regenerated (Epic spec §F3)"
+        )
+
+
+def build_qa_context(artifact_dir, standard_path, section, standard_text, work_paths):
+    """Write the exact context handed to the runner, so the inputs are auditable.
+
+    Scoped material only: the named standard section and a manifest of the work paths.
+    The work files are NOT inlined -- the agent reads them itself with ``read_file``,
+    which is what makes the read-only tool set load-bearing rather than decorative.
+    """
+    manifest = "\n".join(f"- {p}" for p in work_paths)
+    context = (
+        f"<!-- QA context: standard = {standard_path} § {section} -->\n"
+        f"## STANDARD\n\n{standard_text}\n\n"
+        f"## WORK\n\n"
+        f"Read these files with the read_file tool and assess them against the standard "
+        f"above:\n\n{manifest}\n"
+    )
+    path = artifact_dir / "qa-context.md"
+    path.write_text(context)
+    return path
+
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(
+        prog="run-qa-agent",
+        description=(
+            "Dispatch a QA-role assessment under .ai-project.yml's models.epic_qa. "
+            "Assesses stated work against a stated standard and returns a verdict; "
+            "the verdict is advisory evidence and is never authoritative."
+        ),
+    )
+    parser.add_argument("--epic-id", required=True, help="run identity; names the artifact directory")
+    parser.add_argument("--standard", required=True, help="path to the committed file holding the standard")
+    parser.add_argument(
+        "--standard-section",
+        default="Definition of Done",
+        help="markdown section of --standard that IS the standard (default: Definition of Done)",
+    )
+    parser.add_argument(
+        "--work", required=True, action="append",
+        help="path to a file the QA agent must assess; repeatable",
+    )
+    parser.add_argument(
+        "--work-label", default="the work",
+        help="short noun phrase naming what is being assessed, used in the task text",
+    )
+    parser.add_argument("--endpoint", default="", help="ollama endpoint (default: the runner's own)")
+    parser.add_argument("--max-iterations", type=int, default=12, help="runner loop ceiling")
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
+    args = parse_args(argv)
+
+    epic_id = args.epic_id.strip()
+    if not epic_id:
+        fail("--epic-id is empty")
+    if epic_id in FORBIDDEN_EPIC_IDS:
+        fail(
+            f"--epic-id {epic_id!r} names a preserved run directory (Epic spec §F3) -- "
+            "refused unconditionally"
+        )
+
+    model, is_local, provenance = resolve_qa_model(env=dict(os.environ))
+
+    endpoint = args.endpoint.strip()
+    if is_local:
+        dev.check_local_availability(model, endpoint or DEFAULT_OLLAMA_ENDPOINT)
+
+    if not QA_TOOLS_JSON.exists():
+        fail(f"read-only QA tool set not found: {QA_TOOLS_JSON}")
+    tools_bytes = QA_TOOLS_JSON.read_bytes()
+    try:
+        tools_data = json.loads(tools_bytes)
+    except ValueError as e:
+        fail(f"invalid JSON in {QA_TOOLS_JSON}: {e}")
+    # Criterion 2, enforced here as well as advertised there: the adapter refuses to
+    # dispatch under a tool set that could mutate the tree, so the guarantee does not
+    # depend on the QA tool set staying read-only after this epic ends.
+    mutating = sorted(
+        set(tools_data.get("enabled") or []) & {"write_file", "edit_file", "git", "run_command"}
+    )
+    if mutating:
+        fail(
+            f"{QA_TOOLS_JSON} enables tool(s) that can mutate the working tree: "
+            + ", ".join(mutating)
+            + " -- a QA run is an assessment, not an implementation (criterion 2)"
+        )
+
+    for path in args.work:
+        if not Path(path).exists():
+            fail(f"work path not found: {path}")
+    if not Path(args.standard).exists():
+        fail(f"standard not found: {args.standard}")
+    standard_text = extract_standard(args.standard, args.standard_section)
+
+    safe_epic_id = re.sub(r"[^A-Za-z0-9._-]", "_", epic_id)
+    artifact_dir = ARTIFACT_ROOT / safe_epic_id
+    transcript_path = artifact_dir / "qa-transcript.json"
+    context_path = artifact_dir / "qa-context.md"
+    metadata_path = artifact_dir / "qa-run-metadata.json"
+    _refuse_collisions([transcript_path, context_path, metadata_path])
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+
+    context_path = build_qa_context(
+        artifact_dir, args.standard, args.standard_section, standard_text, args.work
+    )
+    task_text = QA_TASK_TEMPLATE.format(work_label=args.work_label)
+
+    runner = dev.discover_runner()
+    cmd = [
+        runner,
+        "--model", model,
+        "--task-text", task_text,
+        "--context", str(context_path),
+        "--tools", str(QA_TOOLS_JSON),
+        "--transcript", str(transcript_path),
+        "--max-iterations", str(args.max_iterations),
+    ]
+    if endpoint:
+        cmd += ["--endpoint", endpoint]
+
+    started = datetime.now(timezone.utc)
+    t0 = time.monotonic()
+    result = subprocess.run(cmd)
+    duration_ms = int((time.monotonic() - t0) * 1000)
+
+    metadata = {
+        "epic_id": epic_id,
+        "role": "qa",
+        "lane": "epic_qa",
+        "authority": "advisory",
+        "authority_note": (
+            "This verdict is advisory evidence only. Nothing in this repository consumes "
+            "it, and no completion judgment takes it as a term (E39.1's binding decision). "
+            "M39 judges; it does not act on its judgment."
+        ),
+        "model": model,
+        "model_provenance": provenance,
+        "runner": runner,
+        "endpoint": endpoint or "runner-default",
+        "exit_code": result.returncode,
+        "exit_code_note": (
+            "Reports whether the QA run completed, never whether the assessed work passed."
+        ),
+        "started_utc": started.isoformat(),
+        "duration_ms": duration_ms,
+        "transcript": str(transcript_path),
+        "context": str(context_path),
+        "standard": {"path": args.standard, "section": args.standard_section},
+        "work": list(args.work),
+        "tools": str(QA_TOOLS_JSON),
+        "tools_sha256": hashlib.sha256(tools_bytes).hexdigest(),
+        "tools_enabled": list(tools_data.get("enabled") or []),
+        "dispatch_path": "bin/run-qa-agent (built in Epic P11-M39-E39.3)",
+    }
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n")
+
+    sys.exit(result.returncode)
+
+
+if __name__ == "__main__":
+    main()
