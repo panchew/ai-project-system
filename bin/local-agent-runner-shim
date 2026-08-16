@@ -1,0 +1,52 @@
+#!/bin/sh
+# local-agent-runner-shim -- make local-agent-runner available reproducibly (P11-M39-E39.3, F4).
+#
+# Every one of the five preserved agentic runs recorded a `runner` path pointing at a
+# throwaway wrapper in a session scratchpad, and all five of those paths are now gone:
+#
+#   /tmp/claude-1000/.../103706a1-.../scratchpad/lar-wrapper.sh
+#   /tmp/claude-1000/.../dfee1a5a-.../scratchpad/local-agent-runner-wrapper.sh
+#   /tmp/claude-1000/.../7e0e95fe-.../scratchpad/local-agent-runner-wrapper.sh
+#   /tmp/claude-1000/.../a8130717-.../scratchpad/local-agent-runner-wrapper
+#   /tmp/claude-1000/.../fdbae6b5-.../scratchpad/lar-wrapper.sh
+#
+# So no dispatch has ever been reproducible: the metadata named a file, and the file did
+# not outlive the session. This shim is committed instead, which is the whole point --
+# a future reader can re-run the dispatch from the repository rather than reconstruct a
+# wrapper from a filename.
+#
+# A durable install was tried first and is BLOCKED on this host, measured 2026-08-16:
+# `pip3 install --user -e /home/panchew/soft-dev/local-agent-runner --dry-run` is refused
+# under PEP 668 (Debian/Ubuntu externally-managed environment, python3.14). Overriding it
+# with --break-system-packages was not done: installing into a system interpreter is a
+# host change well outside this epic's scope, and pipx/venv would reintroduce exactly the
+# non-reproducible out-of-tree artifact F4 objects to. The runner declares a console entry
+# point (`local-agent-runner = "local_agent_runner.cli:main"`) and ships a __main__.py, so
+# `python3 -m local_agent_runner` is the supported invocation and needs no install at all.
+#
+# Usage:
+#   LOCAL_AGENT_RUNNER_HOME=/path/to/local-agent-runner \
+#   LOCAL_AGENT_RUNNER=$PWD/bin/local-agent-runner-shim \
+#   ./bin/run-qa-agent --epic-id ... --standard ... --work ...
+#
+# LOCAL_AGENT_RUNNER_HOME is required and is deliberately not defaulted: guessing a
+# sibling checkout path would make the resolved runner silent and machine-dependent,
+# which is the class of defect this file exists to close. Record the checkout's commit
+# SHA in the run record -- the shim pins the invocation, not the runner's version.
+
+set -eu
+
+if [ -z "${LOCAL_AGENT_RUNNER_HOME:-}" ]; then
+    echo "[local-agent-runner-shim] LOCAL_AGENT_RUNNER_HOME is unset -- set it to the local-agent-runner checkout" >&2
+    exit 3
+fi
+
+if [ ! -d "${LOCAL_AGENT_RUNNER_HOME}/local_agent_runner" ]; then
+    echo "[local-agent-runner-shim] no local_agent_runner package under LOCAL_AGENT_RUNNER_HOME=${LOCAL_AGENT_RUNNER_HOME}" >&2
+    exit 3
+fi
+
+PYTHONPATH="${LOCAL_AGENT_RUNNER_HOME}${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH
+
+exec "${PYTHON:-python3}" -m local_agent_runner "$@"
