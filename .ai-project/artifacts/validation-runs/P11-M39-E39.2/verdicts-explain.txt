@@ -1,0 +1,145 @@
+===== E33.2-run-A (BINDING) =====
+verdict:  no-effects-observed
+reading:  did-not-complete
+rule:     no-effects
+source:   local-agent-runner-transcript:E33.2-run-A
+evidence:
+  [used] effect ledger: 0 entry/entries observed; 0 effect(s), 0 verification(s), 0 refusal(s)
+  [absent] files_changed: no before/after snapshot was taken. Preserved local-agent-runner transcripts predate the field entirely (spec F7); absence is recorded and is not read as 'nothing changed'
+  [ignored] exit_code: measured wrong in both directions (P10-GH-7): E33.2 Run A exited 0 having done zero work; E33.4 exited 2 having produced complete, green work
+      verbatim: 'None'
+  [ignored] status: also wrong in both directions — Run A reports 'completed' on zero tool calls; projected into termination for reporting only, never a rule term
+      verbatim: "'completed'"
+  [ignored] final_answer: wrong in both directions (spec F8): P7-M26-E26.3-PROVE's is the flat refusal "I'm sorry, but I can't assist with that request." on a run whose ground truth is completed. Its content is not even projected
+      verbatim: 'present=True'
+  [ignored] model-generated judgment: no model-generated judgment is a term in any rule — the QA-pass coupling decided at planning time (E39.1 spec). One may be attached as an advisory evidence item; it can never be the verdict or part of it
+  [noted] termination: C3 (M38/E38.4): why the run stopped. 'ceiling-reached' means it ran out of room; 'self-declared-done' means it stopped believing it was finished. Different facts for a coordinator, neither a term here
+      verbatim: 'self-declared-done'
+  [absent] environment: where the run — and so every verification in its ledger — executed. Recorded because the prior art's authoritative signal (the out-of-run QA validation_command) has a recorded environment-induced false failure (spec F9). No out-of-run verification is used by this judgment
+      verbatim: 'not-recorded'
+  [used] conclusion: effect evidence was observed and it shows no effect: a ledger of 0 entry/entries containing none
+
+===== E33.4 (BINDING) =====
+verdict:  effects-verified
+reading:  completed
+rule:     covering-verification
+source:   local-agent-runner-transcript:E33.4
+evidence:
+  [used] effect ledger: 10 entry/entries observed; 3 effect(s), 2 verification(s), 1 refusal(s)
+  [absent] files_changed: no before/after snapshot was taken. Preserved local-agent-runner transcripts predate the field entirely (spec F7); absence is recorded and is not read as 'nothing changed'
+  [ignored] exit_code: measured wrong in both directions (P10-GH-7): E33.2 Run A exited 0 having done zero work; E33.4 exited 2 having produced complete, green work
+      verbatim: 'None'
+  [ignored] status: also wrong in both directions — Run A reports 'completed' on zero tool calls; projected into termination for reporting only, never a rule term
+      verbatim: "'max_iterations_exceeded'"
+  [ignored] final_answer: wrong in both directions (spec F8): P7-M26-E26.3-PROVE's is the flat refusal "I'm sorry, but I can't assist with that request." on a run whose ground truth is completed. Its content is not even projected
+      verbatim: 'present=True'
+  [ignored] model-generated judgment: no model-generated judgment is a term in any rule — the QA-pass coupling decided at planning time (E39.1 spec). One may be attached as an advisory evidence item; it can never be the verdict or part of it
+  [noted] termination: C3 (M38/E38.4): why the run stopped. 'ceiling-reached' means it ran out of room; 'self-declared-done' means it stopped believing it was finished. Different facts for a coordinator, neither a term here
+      verbatim: 'ceiling-reached'
+  [absent] environment: where the run — and so every verification in its ledger — executed. Recorded because the prior art's authoritative signal (the out-of-run QA validation_command) has a recorded environment-induced false failure (spec F9). No out-of-run verification is used by this judgment
+      verbatim: 'not-recorded'
+  [noted] policy refusals: 1 call(s) refused by policy and executed nothing. Counted as neither effect nor failed verification — they often explain a missing verification
+      verbatim: 'run_command: command \'grep -n "financial_events" db/schema.rb\' is denied. Only commands matching these allow_commands patterns are permitted (deny_commands patterns win): bundle exec rspec*, bundle exec rails db:migrate*'
+  [used] last effect: the newest observed change to the working tree, at #5 edit_file
+      verbatim: "edit_file: replaced 1 occurrence in '/home/panchew/soft-dev/home_finance/spec/models/financial_event_spec.rb'."
+  [used] covering verification: 1 verification(s) ran after the last effect; the newest, at #6 run_command, is the one that decides — it is the most recent observation of the state the run left behind
+      verbatim: 'exit_code: 0'
+
+===== E33.2-run-B (HELD OUT) =====
+verdict:  effects-unverified
+reading:  undetermined
+rule:     no-covering-verification
+source:   local-agent-runner-transcript:E33.2-run-B
+evidence:
+  [used] effect ledger: 10 entry/entries observed; 3 effect(s), 1 verification(s), 3 refusal(s)
+  [absent] files_changed: no before/after snapshot was taken. Preserved local-agent-runner transcripts predate the field entirely (spec F7); absence is recorded and is not read as 'nothing changed'
+  [ignored] exit_code: measured wrong in both directions (P10-GH-7): E33.2 Run A exited 0 having done zero work; E33.4 exited 2 having produced complete, green work
+      verbatim: 'None'
+  [ignored] status: also wrong in both directions — Run A reports 'completed' on zero tool calls; projected into termination for reporting only, never a rule term
+      verbatim: "'max_iterations_exceeded'"
+  [ignored] final_answer: wrong in both directions (spec F8): P7-M26-E26.3-PROVE's is the flat refusal "I'm sorry, but I can't assist with that request." on a run whose ground truth is completed. Its content is not even projected
+      verbatim: 'present=True'
+  [ignored] model-generated judgment: no model-generated judgment is a term in any rule — the QA-pass coupling decided at planning time (E39.1 spec). One may be attached as an advisory evidence item; it can never be the verdict or part of it
+  [noted] termination: C3 (M38/E38.4): why the run stopped. 'ceiling-reached' means it ran out of room; 'self-declared-done' means it stopped believing it was finished. Different facts for a coordinator, neither a term here
+      verbatim: 'ceiling-reached'
+  [absent] environment: where the run — and so every verification in its ledger — executed. Recorded because the prior art's authoritative signal (the out-of-run QA validation_command) has a recorded environment-induced false failure (spec F9). No out-of-run verification is used by this judgment
+      verbatim: 'not-recorded'
+  [noted] policy refusals: 3 call(s) refused by policy and executed nothing. Counted as neither effect nor failed verification — they often explain a missing verification
+      verbatim: "run_command: command 'pip install -e .' is denied. Only commands matching these allow_commands patterns are permitted (deny_commands patterns win): pytest*, python -m pytest*, python3 -m pytest*"
+  [used] last effect: the newest observed change to the working tree, at #9 edit_file
+      verbatim: "edit_file: replaced 1 occurrence in '/home/panchew/soft-dev/local-agent-runner/tests/test_public_api.py'."
+  [absent] covering verification: no verification ran after the last effect. 1 verification(s) ran before it and are stale — they describe a tree that was edited afterwards, so they are evidence about a state that no longer existed when the run ended. Work was performed and left unverified, which is not the same as work not performed (spec F5)
+      verbatim: 'exit_code: 2'
+
+===== P7-M26-E26.3-PROVE (HELD OUT) =====
+verdict:  effects-unverified
+reading:  undetermined
+rule:     no-covering-verification
+source:   local-agent-runner-transcript:P7-M26-E26.3-PROVE
+evidence:
+  [used] effect ledger: 7 entry/entries observed; 4 effect(s), 0 verification(s), 3 refusal(s)
+  [absent] files_changed: no before/after snapshot was taken. Preserved local-agent-runner transcripts predate the field entirely (spec F7); absence is recorded and is not read as 'nothing changed'
+  [ignored] exit_code: measured wrong in both directions (P10-GH-7): E33.2 Run A exited 0 having done zero work; E33.4 exited 2 having produced complete, green work
+      verbatim: 'None'
+  [ignored] status: also wrong in both directions — Run A reports 'completed' on zero tool calls; projected into termination for reporting only, never a rule term
+      verbatim: "'completed'"
+  [ignored] final_answer: wrong in both directions (spec F8): P7-M26-E26.3-PROVE's is the flat refusal "I'm sorry, but I can't assist with that request." on a run whose ground truth is completed. Its content is not even projected
+      verbatim: 'present=True'
+  [ignored] model-generated judgment: no model-generated judgment is a term in any rule — the QA-pass coupling decided at planning time (E39.1 spec). One may be attached as an advisory evidence item; it can never be the verdict or part of it
+  [noted] termination: C3 (M38/E38.4): why the run stopped. 'ceiling-reached' means it ran out of room; 'self-declared-done' means it stopped believing it was finished. Different facts for a coordinator, neither a term here
+      verbatim: 'self-declared-done'
+  [absent] environment: where the run — and so every verification in its ledger — executed. Recorded because the prior art's authoritative signal (the out-of-run QA validation_command) has a recorded environment-induced false failure (spec F9). No out-of-run verification is used by this judgment
+      verbatim: 'not-recorded'
+  [noted] policy refusals: 3 call(s) refused by policy and executed nothing. Counted as neither effect nor failed verification — they often explain a missing verification
+      verbatim: "run_command: command 'python3 bin/ai-project-version' is denied. Only commands matching these allow_commands patterns are permitted (deny_commands patterns win): pytest*, python -m pytest*, python3 -m pytest*"
+  [used] last effect: the newest observed change to the working tree, at #6 write_file
+      verbatim: "write_file: wrote 177 characters to '/home/panchew/soft-dev/ai-project-system/bin/ai-project-version'."
+  [absent] covering verification: no verification ran after the last effect. no verification ran at all. Work was performed and left unverified, which is not the same as work not performed (spec F5)
+
+===== P9-M31-E31.1-PROVE (HELD OUT) =====
+verdict:  effects-unverified
+reading:  undetermined
+rule:     no-covering-verification
+source:   local-agent-runner-transcript:P9-M31-E31.1-PROVE
+evidence:
+  [used] effect ledger: 8 entry/entries observed; 3 effect(s), 0 verification(s), 3 refusal(s)
+  [absent] files_changed: no before/after snapshot was taken. Preserved local-agent-runner transcripts predate the field entirely (spec F7); absence is recorded and is not read as 'nothing changed'
+  [ignored] exit_code: measured wrong in both directions (P10-GH-7): E33.2 Run A exited 0 having done zero work; E33.4 exited 2 having produced complete, green work
+      verbatim: 'None'
+  [ignored] status: also wrong in both directions — Run A reports 'completed' on zero tool calls; projected into termination for reporting only, never a rule term
+      verbatim: "'completed'"
+  [ignored] final_answer: wrong in both directions (spec F8): P7-M26-E26.3-PROVE's is the flat refusal "I'm sorry, but I can't assist with that request." on a run whose ground truth is completed. Its content is not even projected
+      verbatim: 'present=True'
+  [ignored] model-generated judgment: no model-generated judgment is a term in any rule — the QA-pass coupling decided at planning time (E39.1 spec). One may be attached as an advisory evidence item; it can never be the verdict or part of it
+  [noted] termination: C3 (M38/E38.4): why the run stopped. 'ceiling-reached' means it ran out of room; 'self-declared-done' means it stopped believing it was finished. Different facts for a coordinator, neither a term here
+      verbatim: 'self-declared-done'
+  [absent] environment: where the run — and so every verification in its ledger — executed. Recorded because the prior art's authoritative signal (the out-of-run QA validation_command) has a recorded environment-induced false failure (spec F9). No out-of-run verification is used by this judgment
+      verbatim: 'not-recorded'
+  [noted] policy refusals: 3 call(s) refused by policy and executed nothing. Counted as neither effect nor failed verification — they often explain a missing verification
+      verbatim: "git: subcommand 'push' is denied. Only these allow_subcommands are permitted: add, branch, checkout, commit, diff, log, show, status"
+  [used] last effect: the newest observed change to the working tree, at #4 git
+      verbatim: 'exit_code: 0'
+  [absent] covering verification: no verification ran after the last effect. no verification ran at all. Work was performed and left unverified, which is not the same as work not performed (spec F5)
+
+===== P9-M31-E31.2-PROVE (HELD OUT) =====
+verdict:  effects-unverified
+reading:  undetermined
+rule:     no-covering-verification
+source:   local-agent-runner-transcript:P9-M31-E31.2-PROVE
+evidence:
+  [used] effect ledger: 10 entry/entries observed; 10 effect(s), 0 verification(s), 0 refusal(s)
+  [absent] files_changed: no before/after snapshot was taken. Preserved local-agent-runner transcripts predate the field entirely (spec F7); absence is recorded and is not read as 'nothing changed'
+  [ignored] exit_code: measured wrong in both directions (P10-GH-7): E33.2 Run A exited 0 having done zero work; E33.4 exited 2 having produced complete, green work
+      verbatim: 'None'
+  [ignored] status: also wrong in both directions — Run A reports 'completed' on zero tool calls; projected into termination for reporting only, never a rule term
+      verbatim: "'max_iterations_exceeded'"
+  [ignored] final_answer: wrong in both directions (spec F8): P7-M26-E26.3-PROVE's is the flat refusal "I'm sorry, but I can't assist with that request." on a run whose ground truth is completed. Its content is not even projected
+      verbatim: 'present=True'
+  [ignored] model-generated judgment: no model-generated judgment is a term in any rule — the QA-pass coupling decided at planning time (E39.1 spec). One may be attached as an advisory evidence item; it can never be the verdict or part of it
+  [noted] termination: C3 (M38/E38.4): why the run stopped. 'ceiling-reached' means it ran out of room; 'self-declared-done' means it stopped believing it was finished. Different facts for a coordinator, neither a term here
+      verbatim: 'ceiling-reached'
+  [absent] environment: where the run — and so every verification in its ledger — executed. Recorded because the prior art's authoritative signal (the out-of-run QA validation_command) has a recorded environment-induced false failure (spec F9). No out-of-run verification is used by this judgment
+      verbatim: 'not-recorded'
+  [used] last effect: the newest observed change to the working tree, at #9 write_file
+      verbatim: "write_file: wrote 55 characters to '/home/panchew/soft-dev/ai-project-system/docs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2-PROVE__output.md'."
+  [absent] covering verification: no verification ran after the last effect. no verification ran at all. Work was performed and left unverified, which is not the same as work not performed (spec F5)
