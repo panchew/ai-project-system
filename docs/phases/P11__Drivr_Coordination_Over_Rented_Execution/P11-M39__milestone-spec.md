@@ -59,7 +59,7 @@ measured evidence.**
 | exit code | **0** ❌ wrong | **2** ❌ wrong |
 | `status` | **`completed`** ❌ **wrong** | **`max_iterations_exceeded`** ❌ **wrong** |
 | `iterations` | **0** ✅ a tell | 10 — no signal |
-| `final_answer` | raw **unexecuted tool-call JSON** ✅ a tell | prose claiming success — ✅ correct *here* |
+| `final_answer` | raw unexecuted tool-call JSON — ❌ **not a tell**, see v1.0.2 | prose claiming success — correct *here* only |
 | repository state | no commit | commit + green suite ✅ |
 
 **Three consequences, and the second is the important one:**
@@ -96,6 +96,24 @@ measured evidence.**
    > treated it as *the* evidence. **The directory holds a `context.md`, a `run-record.md`, two
    > transcripts and a run-metadata sidecar.** Every inventory is a floor, including an evidence
    > directory.
+
+> **⚠ CORRECTED at v1.0.2 — `final_answer` is ALSO wrong in both directions, and the "✅ a tell" marking
+> was mine.** Falsified by E39.1's F8 from cases preserved in this repository and **verified
+> independently**: `P7-M26-E26.3-PROVE` returns the flat refusal *"I'm sorry, but I can't assist with
+> that request."* with `status: completed`, `iterations: 7` — **ground truth completed**; and
+> `P9-M31-E31.1-PROVE` reports blocked permissions with `status: completed`, `iterations: 8` on a run
+> that **converged**. **`final_answer` joins the exit code, `status`, and naive repo-state delta on the
+> ruled-out list.** Every single signal named in the table above is now disqualified as a standalone
+> input, which is the real shape of this problem.
+>
+> **And the evidence base is larger than v1.0.0 stated.** The corpus holds **seven preserved agentic
+> runs**, of which **six carry established ground truth**. v1.0.0's *"two is enough to falsify and not
+> enough to generalize"* understated what is available: beyond the two binding cases there are **four
+> held-out** — E33.2 Run B and the three `*-PROVE` runs. **That is a materially better overfitting
+> defence than I described**, and E39.2 uses it correctly: held-out cases run **only after** the
+> binding verdicts are recorded, **never tuned against**, every verdict reported including failures,
+> and a held-out failure is a finding that does not gate the epic. **Third instance of the
+> inventory-is-a-floor lesson landing on my own evidence enumeration.**
 
 > **E39.1 may build its judgment from anything it can defend** — transcript inspection, **window-scoped
 > and attributed** state delta, governance-state verification, an in-artifact effect ledger, or a
@@ -502,6 +520,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.0.2 | 2026-08-15 | **Two more corrections from E39.2's set, both to the Phase Chat's framing.** **(a) `final_answer` is ALSO wrong in both directions and the *"✅ a tell"* marking was mine.** E39.1's F8, verified independently: `P7-M26-E26.3-PROVE` returns the flat refusal *"I'm sorry, but I can't assist with that request."* at `status: completed`, `iterations: 7`, **ground truth completed**; `P9-M31-E31.1-PROVE` reports blocked permissions at `status: completed`, `iterations: 8` on a **converged** run. **So every signal in v1.0.0's table is now disqualified standalone** — exit code, `status`, `final_answer`, and naive repo-state delta — which is the true shape of the problem and was not visible when the table was written. **(b) The evidence base is larger than stated:** the corpus holds **seven preserved runs**, **six with ground truth**. v1.0.0's *"two is enough to falsify and not enough to generalize"* understated it — **four held-out cases exist** (E33.2 Run B plus three `*-PROVE` runs), which is a materially better overfitting defence than I described. E39.2 uses them correctly: run **only after** the binding verdicts are recorded, **never tuned against**, all verdicts reported including failures, and a held-out failure is a **finding that does not gate the epic** — with `P7-M26-E26.3-PROVE` identified as the most valuable, since a mechanism tuned to Run A's easy `transcript: []` / `iterations: 0` signature will plausibly fail a run with 7 real tool calls whose ground truth is completed. **Third instance of inventory-is-a-floor landing on my own enumeration.** Also noted: per-case input availability **differs** — Run B has no metadata sidecar — so absent inputs must be recorded as absent, never read as negative evidence. **No epic, ordering, constraint or scope boundary changes.** |
 | 1.0.1 | 2026-08-15 | **A direction in v1.0.0 was falsified by measurement, and the error was the Phase Chat's.** v1.0.0's §finding concluded *"the only signal correct in both is repository/artifact state delta."* **E39.1's F2 disproves it as written.** The table row *"repository state: no commit / commit + green suite"* is accurate as **ground truth about what each run did** and v1.0.0 presented it as **a computable input**, which it is not. Verified independently by the Phase Chat from `…/P10-M33-E33.2/transcript-A-qwen2.5-coder-14b__run-metadata.json` — **a sidecar the Phase Chat had not read**: Run A started **22:40:27.742Z**, ran **18,370 ms**, ended ≈**22:40:46Z**; `local-agent-runner`'s `4ec1e8f` is dated **22:45:44Z**, **4 min 58 s later**, and carries **Run B's** work. **A naive "did the target repo gain this epic's work?" returns *completed* for Run A — the wrong verdict on the very case constraint 1 binds.** Corrected: repository-state delta is admissible **only window-scoped to the run and attributed to it**; the naive form joins exit code and `status` alone on the ruled-out list. **Two lessons recorded, both mine:** this is `P11-GH-2`'s **scope axis inside my own spec** — ground truth described as an available signal; and I read *one* file in the evidence directory and treated it as *the* evidence, when it holds a `context.md`, a `run-record.md`, two transcripts and a metadata sidecar. **Every inventory is a floor, including an evidence directory.** Also accepted from E39.1's set: the **QA-pass coupling decided at planning time** — no model-generated judgment may be load-bearing on the verdict, so E39.1 does **not** build the QA dispatch path and E39.3 inherits that decision rather than discovering it. **No epic, ordering, constraint or scope boundary otherwise changes.** |
 
 ---
