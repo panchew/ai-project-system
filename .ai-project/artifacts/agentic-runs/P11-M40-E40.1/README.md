@@ -93,11 +93,34 @@ Measured from the journal's own timestamps — the three dispatch windows do not
 …39168925 -> …efcf592b: gap +0.005s
 ```
 
-`lane_waited_s` is `0.0` on all three, which is the honest reading and not a contradiction: each
-run had finished before the next was claimed, so no dispatch ever had to *wait*. **This
-therefore evidences that the lane serialized, and does not evidence that it blocks a competing
-holder.** That property is asserted separately in `drivr`'s suite by
-`tests/test_scheduling_axes.py`, which spawns a second **process** and confirms it is refused.
+`lane_waited_s` is `0.0` on all three, which is the honest reading and **not** proof of
+exclusion: each run had finished before the next was claimed, so no dispatch ever had to *wait*.
+A single scheduler taking work one job at a time would produce this same picture. **So this set
+evidences that the lane serialized, and does not evidence that it blocks a competitor.**
+
+### `contention/` — the case where it had to block
+
+Run separately, and it is the one that actually tests the invariant: **two scheduler processes,
+one lane, one queue**, both started before any work existed.
+
+| Job | Scheduler pid | `lane_waited_s` |
+|---|---|---|
+| `…-37fbbdcb` | **1346211** | `0.0` — won the lane |
+| `…-099beea0` | **1346210** | **`46.387`** — blocked on the lane while the other ran |
+
+```
+…37fbbdcb (pid 1346211) -> …099beea0 (pid 1346210): gap +0.027s   NO OVERLAP
+```
+
+Two **distinct** scheduler processes, each having claimed its own job by atomic rename, and the
+second waited 46 seconds rather than running a second reasoning job alongside the first. **That
+is the D1 invariant — one reasoning job at any instant — demonstrated with the real engine
+against the failure mode it exists for**, which is a human starting a second scheduler rather
+than a second thread. `fcntl.flock` is what makes it hold across processes; an in-process
+semaphore would not have.
+
+The same property is asserted in `drivr`'s suite by `tests/test_scheduling_axes.py`, which spawns
+a second process and confirms both the refusal (`wait=False`) and the wait (`wait=True`).
 
 ## Where each run happened (D4)
 
