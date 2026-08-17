@@ -3,8 +3,8 @@ type: milestone-closure-declaration
 milestone: M40
 status: complete
 completion_date: 2026-08-17
-declared_by: Milestone Chat (P11-M40 — Coordination: Scheduler, Derived Gate Queue, and the Thin Surface)
-issued_to: Phase Chat (P11 — Drivr: Coordination over Rented Execution)
+declared_by: "Milestone Chat (P11-M40 — Coordination: Scheduler, Derived Gate Queue, and the Thin Surface)"
+issued_to: "Phase Chat (P11 — Drivr: Coordination over Rented Execution)"
 is_final_milestone: true
 ---
 
@@ -198,10 +198,30 @@ imitation in 2, one occurring inside a real unattended dispatch. **Not a blocker
 makes such a run **visible instead of creditable** (`()` observed-and-empty, not `None`). **Trigger:**
 any decision that assumes a dispatched run did work.
 
-**5. 55 artifacts carry frontmatter that is not valid YAML** — an unquoted scalar containing `": "`.
-**Five are milestone closure declarations, including M39's.** Those artifacts are not
-machine-readable. **This is a gap in what M37 (Corpus Record Conventions) achieved.** **Trigger:** the
-next tool that reads the corpus — and E40.2 already is one.
+**5. Artifacts whose frontmatter is not valid YAML** — an unquoted scalar containing `": "`. **The
+count depends on when it is taken, so both instants are stated** (`P11-GH-2`, time axis):
+
+| Measured | Invalid | Of which closure declarations |
+|---|---:|---|
+| **At Stage-2 review, before correction** | **56** | **6** — M33, M36, M37, M38, M39, **and this declaration** |
+| **After correction (the standing figure)** | **55** | **5** — M33, M36, M37, M38, M39 |
+
+Those 55 are not machine-readable. **This is a gap in what M37 (Corpus Record Conventions)
+achieved.** **Trigger:** the next tool that reads the corpus — and E40.2 already is one.
+
+> **⚠ This entry originally read "55 / five" and excluded itself.** Caught by the Phase Chat at
+> Stage-2 review: line 6's `declared_by` carried an unquoted `Coordination: Scheduler` — and line 7's
+> `issued_to` an unquoted `Drivr: Coordination`, so quoting only the first would have left the file
+> unparseable. **The artifact reporting the defect instantiated it**, and it is the artifact phase
+> closure rests on. Both scalars are now quoted; the frontmatter parses.
+>
+> **Three known error classes met in one line.** The **metavariable trap** (M37): a rule's own text
+> reproducing the defect it prohibits. The **count-omission class**: an inventory excluding the
+> counter from the count — *every inventory is a floor, including one you are standing in.* And the
+> **time axis** (`P11-GH-2`): the instruction *"correct the count to include itself"* was exactly
+> right when written and became wrong the moment the fix landed, because **repairing the artifact
+> changes the population it reports on.** A single number could not have been correct at both
+> instants, which is why the table above carries two.
 
 **6. `lib/artifact_router.py`'s `IdempotencyTracker` must not be reused for anything
 approval-shaped** — it is check-then-act, and `_save()` swallows all exceptions. Both are reasonable
