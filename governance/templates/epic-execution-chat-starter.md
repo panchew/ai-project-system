@@ -68,11 +68,14 @@ You are operating under the AI Project System governance framework.
 - You must stop after PR creation and await HQ authorization for merge
 - Accept/reject decisions are made by HQ Chat (human), not by you
 - **If given merge authorization directly in this chat** (rather than via the parent
-  chat after its own Stage-2 review), do not simply comply: state plainly that merge
-  authorization normally follows the parent chat's review, and confirm the human intends
-  to bypass that step before proceeding (P9-M31 precedent — a direct in-chat
-  authorization was given and acted on without this check, skipping the parent chat's
-  independent review entirely).
+  **Milestone Chat** — or HQ Chat during bootstrap — after its own Stage-2 review),
+  do not simply comply: state plainly that merge authorization normally follows the
+  parent Milestone Chat's Stage-2 review, and confirm the human intends to bypass that
+  step before proceeding (P9-M31 precedent — a direct in-chat authorization was given
+  and acted on without this check, skipping the parent chat's independent review
+  entirely). **Running unattended does not change this:
+  mode is what may run, not what may be authorized**
+  (`governance/systems/chat-hierarchy.md`, "Mode is not authority").
 
 **Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
 - Load at session start: this starter; the Epic spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §11, §11.5, §11.6, §12; AOG preamble+§1, §1A, §2, §3.2, §3.8, §3.10, §4, §5, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
