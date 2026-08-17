@@ -1,0 +1,177 @@
+{
+  "epic": "P11-M40-E40.4",
+  "phase": "after",
+  "captured_utc": "2026-08-17T19:51:32Z",
+  "scope": "repository panchew/ai-project-system, pull request #173",
+  "github_layer": {
+    "_layer": "GitHub API \u2014 authoritative for protection, rulesets, checks",
+    "branch_protection_master": {
+      "__error__": "gh: Branch not protected (HTTP 404)",
+      "__exit__": 1
+    },
+    "branch_protection_phase_P11": {
+      "__error__": "gh: Branch not protected (HTTP 404)",
+      "__exit__": 1
+    },
+    "branch_protection_milestone_M40": {
+      "__error__": "gh: Branch not protected (HTTP 404)",
+      "__exit__": 1
+    },
+    "rulesets": [],
+    "repo_flags": {
+      "allow_auto_merge": false,
+      "default_branch": "master",
+      "delete_branch_on_merge": false,
+      "has_pull_requests": true,
+      "visibility": "public",
+      "web_commit_signoff_required": false
+    },
+    "actions_workflows": {
+      "total_count": 1,
+      "workflows": [
+        {
+          "id": 336451567,
+          "node_id": "W_kwDOQ6Fy8M4UDdfv",
+          "name": "Copilot",
+          "path": "dynamic/agents/copilot-pull-request-reviewer",
+          "state": "active",
+          "created_at": "2026-08-17T13:44:26.000-06:00",
+          "updated_at": "2026-08-17T13:44:26.000-06:00",
+          "url": "https://api.github.com/repos/panchew/ai-project-system/actions/workflows/336451567",
+          "html_url": "https://github.com/panchew/ai-project-system/actions/workflows/agents/copilot-pull-request-reviewer",
+          "badge_url": "https://github.com/panchew/ai-project-system/actions/workflows/agents/copilot-pull-request-reviewer/badge.svg"
+        }
+      ]
+    },
+    "webhooks": [],
+    "apps_with_write": {
+      "__error__": "gh: A JSON web token could not be decoded (HTTP 401)",
+      "__exit__": 1
+    },
+    "required_status_checks_on_head": {
+      "state": "pending",
+      "statuses": [],
+      "total_count": 0
+    },
+    "check_runs_on_head": {
+      "runs": [
+        {
+          "app": "github-actions",
+          "conclusion": "success",
+          "name": "copilot-pull-request-reviewer"
+        }
+      ],
+      "total_count": 1
+    }
+  },
+  "tree_layer": {
+    "_layer": "working tree at epic/P11-M40-E40.4 \u2014 proves nothing about GitHub",
+    "dot_github_present": "",
+    "codeowners_tracked": ""
+  },
+  "pr_state": {
+    "_layer": "GitHub API \u2014 pull request #173",
+    "pr": {
+      "additions": 87562,
+      "auto_merge": null,
+      "base_sha": "e5888cc183e1db9e60d0c76022c02ba8cc583034",
+      "changed_files": 187,
+      "commits": 195,
+      "deletions": 84,
+      "draft": false,
+      "head_sha": "2b751856358c9a435cb129ee52e72351e2384b14",
+      "mergeable_state": "clean",
+      "merged": false,
+      "number": 173,
+      "requested_reviewers": [],
+      "state": "open"
+    },
+    "reviews": [
+      {
+        "id": 4954041275,
+        "state": "COMMENTED",
+        "submitted_at": "2026-08-17T19:50:34Z",
+        "user": "copilot-pull-request-reviewer[bot]"
+      }
+    ],
+    "review_comments": [
+      {
+        "created_at": "2026-08-17T19:50:32Z",
+        "id": 3798341575,
+        "line": 40,
+        "path": "tests/test_fleet_registry.py",
+        "user": "Copilot"
+      },
+      {
+        "created_at": "2026-08-17T19:50:33Z",
+        "id": 3798341659,
+        "line": 1,
+        "path": "tests/test_fleet_registry.py",
+        "user": "Copilot"
+      },
+      {
+        "created_at": "2026-08-17T19:50:34Z",
+        "id": 3798341702,
+        "line": 220,
+        "path": "governance/systems/fleet-operator.md",
+        "user": "Copilot"
+      }
+    ],
+    "review_comments_resolved": [
+      {
+        "comments": {
+          "nodes": [
+            {
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              }
+            }
+          ]
+        },
+        "id": "PRRT_kwDOQ6Fy8M6Z4E9Y",
+        "isOutdated": false,
+        "isResolved": false
+      },
+      {
+        "comments": {
+          "nodes": [
+            {
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              }
+            }
+          ]
+        },
+        "id": "PRRT_kwDOQ6Fy8M6Z4E-a",
+        "isOutdated": false,
+        "isResolved": false
+      },
+      {
+        "comments": {
+          "nodes": [
+            {
+              "author": {
+                "login": "copilot-pull-request-reviewer"
+              }
+            }
+          ]
+        },
+        "id": "PRRT_kwDOQ6Fy8M6Z4E-7",
+        "isOutdated": false,
+        "isResolved": false
+      }
+    ],
+    "review_requests_graphql": [],
+    "timeline_review_events": "[]\n[]\n[{\"actor\":\"panchew\",\"created_at\":\"2026-08-17T19:44:17Z\",\"event\":\"review_requested\",\"requested\":\"Copilot\"},{\"actor\":\"panchew\",\"created_at\":\"2026-08-17T19:44:59Z\",\"event\":\"copilot_work_started\",\"requested\":null},{\"actor\":\"-\",\"created_at\":null,\"event\":\"reviewed\",\"requested\":null}]"
+  },
+  "local_git": {
+    "_layer": "git, local clone",
+    "phase_P11_head": "2b751856358c9a435cb129ee52e72351e2384b14",
+    "master_head": "e5888cc183e1db9e60d0c76022c02ba8cc583034",
+    "reviewed_files_blob_sha": {
+      "bin/ai-project-validate": "62b74b40ce971a09d59841165a3ed979b3d3f657",
+      "bin/run-qa-agent": "622e97326d775462d19172c8900dda7673d07561",
+      "bin/local-agent-runner-shim": "4f44a084f5114531bc6e296ba4c030e56e7404d7"
+    }
+  }
+}
