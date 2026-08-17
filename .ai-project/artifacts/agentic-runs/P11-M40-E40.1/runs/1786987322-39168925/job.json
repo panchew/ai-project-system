@@ -1,0 +1,10 @@
+{
+ "enqueued_at": 1786987322.3834698,
+ "expectation": "mutating",
+ "id": "1786987322-39168925",
+ "model": "ollama/qwen3-coder:30b",
+ "project": "drivr",
+ "ref": "HEAD",
+ "task": "Use the write tool to create a file named LANE-PROOF.txt in this directory containing exactly the single word: dispatched. Then use the bash tool to run: cat LANE-PROOF.txt",
+ "timeout_s": 600
+}
