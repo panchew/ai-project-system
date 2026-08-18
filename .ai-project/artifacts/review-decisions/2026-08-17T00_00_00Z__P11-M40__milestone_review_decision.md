@@ -8,6 +8,8 @@ reviewed_by: "Phase Chat (P11 — Drivr: Coordination over Rented Execution)"
 issued_to: "Milestone Chat (P11-M40 — Coordination: Scheduler, Derived Gate Queue, and the Thin Surface)"
 date: 2026-08-17
 decision: accept
+resolution: accepted
+resolved_date: 2026-08-17
 scope: "milestone ACCEPTED; one narrow correction required before consolidation"
 ---
 
@@ -172,3 +174,36 @@ returning as an amendment rather than a quiet fix.**
 closure: README, version bump, **PR #173 with a rewritten description**, the **CFO's §11.6.1 diff
 review**, merge, tag, and the Phase-Closure Declaration restating §7 and §8 with **llama.cpp recorded
 CLOSED, not parked.**
+
+
+---
+
+## Resolution — ACCEPTED, 2026-08-17
+
+**Correction verified against the branch.** The frontmatter **parses** (`yaml.safe_load` returns all
+seven keys), and the corpus re-measures to **55 / five** — the standing figure, now that this
+declaration is no longer one of them.
+
+**The rework exceeded what I asked for, in two ways.**
+
+1. **It states BOTH instants rather than picking one**, citing `P11-GH-2`'s time axis as the reason:
+   **56 / six at Stage-2 review before correction** (M33, M36, M37, M38, M39 **and this declaration**),
+   **55 / five after**. That resolves an ambiguity my correction left open — I asked for "56 / six" as
+   though the count were timeless, and **the count depends on when it is taken.** Recording both is
+   correct and my instruction was the weaker version.
+2. **It found a second malformation I did not name.** I wrote *"quote the `declared_by` scalar (and any
+   sibling containing `": "`)"* — naming one and gesturing at the rest. **Line 7's `issued_to` carried
+   an unquoted `Drivr: Coordination`, so quoting only `declared_by` would have left the file
+   unparseable.** The parenthetical saved the instruction; the epic-level care found the second
+   instance. **A correction that fixes only what the reviewer named is a correction that does not
+   parse.**
+
+The entry also names the error classes it sits at the intersection of — the **metavariable trap**
+(M37: a rule's own text reproducing the defect it prohibits) and the **count-omission class**, with the
+line worth keeping: ***every inventory is a floor, including one you are standing in.***
+
+**Milestone P11-M40 is ACCEPTED. No further rework. This Review Decision is closed.**
+
+**Consolidation authorized on explicit human merge authorization** — `milestone/M40 → phase/P11`.
+`is_final: true`, so on consolidation the Phase Chat begins **PSG §5C**, carrying the two Step-6
+obligations recorded in §4 above.
