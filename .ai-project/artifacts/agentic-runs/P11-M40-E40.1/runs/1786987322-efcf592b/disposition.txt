@@ -1,0 +1,5 @@
+disposition: not-done
+completion:  no-effects-observed
+expectation: inspecting
+read_only_completion: False
+reason: an ordered ledger was observed and it is empty: the run called nothing

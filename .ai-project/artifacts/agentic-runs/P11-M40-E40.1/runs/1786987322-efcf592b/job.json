@@ -1,0 +1,10 @@
+{
+ "enqueued_at": 1786987322.4350777,
+ "expectation": "inspecting",
+ "id": "1786987322-efcf592b",
+ "model": "ollama/qwen3-coder:30b",
+ "project": "drivr",
+ "ref": "HEAD",
+ "task": "Use the read tool to read the file README.md in this directory and report its first heading exactly as written. Do not modify any file.",
+ "timeout_s": 600
+}
