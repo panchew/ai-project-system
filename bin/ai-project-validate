@@ -1,0 +1,607 @@
+#!/usr/bin/env python3
+"""Validate a ``.ai-project.yml`` against ``governance/ai-project-yml-spec.md`` §4.
+
+Filed as **P10-GH-5**: §4's validation rules have been normative and unenforced since
+they were written. This is the first thing in the framework that enforces them.
+
+Scope and non-scope
+-------------------
+This tool **reports**. It never edits a config, never edits a project, and never
+"fixes" what it finds. Epic P11-M38-E38.3 built it under an explicit boundary: the
+fleet is invalid in several places, ``bin/ai-project-init`` produces §4-invalid output,
+and three fields in live configs have no schema entry at all. All of that is recorded
+and escalated; none of it is repaired here.
+
+Two normative distinctions this tool is careful about
+-----------------------------------------------------
+1. **Warnings and errors are different things in §4 and stay different here.** Rules
+   11, 16 and 22 say unknown keys ``MUST produce a validation warning (not an error)``;
+   rules 12, 17 and 23 say invalid values ``MUST produce a validation error``. A
+   validator that collapses the two has not enforced §4. Warnings never make a config
+   invalid.
+
+2. **The machine-readable output is the authority; the exit code is a convenience.**
+   Per gap ``G2`` (exit codes are untrustworthy in both directions), ``--json`` is the
+   contract. Exit status is derived from it, not the other way round.
+
+How keys are identified
+-----------------------
+Not by grepping. The document is parsed into a YAML **node tree** (``yaml.compose``),
+so a key is identified by its position in the document structure — a ``version:``
+inside ``governance:`` is a different node from a ``version:`` anywhere else, and a
+``framework_version`` mentioned inside a comment or a quoted string is not a key at
+all. This clears the "strict key-at-line-start, never a naive substring grep" bar by
+being structural rather than textual.
+
+The node tree is also what makes §4 rule 5 checkable. Rule 5 requires a **quoted**
+semver string, and quoting is a fact about the document that a parsed value has already
+thrown away: ``version: "7.1.0"`` and ``version: 7.1.0`` both load as the string
+``7.1.0``. ``yaml.compose`` preserves the scalar's ``style``, so the quoting can be
+checked directly instead of inferred.
+
+Unknown keys outside the three blocks §4 covers
+-----------------------------------------------
+**§4 is silent here and that silence is a real gap.** Its unknown-key rules (11, 16, 22)
+cover only ``overrides``, ``models`` and ``visual_artifacts``. There is no rule at all
+for unknown keys at the top level or inside ``governance:`` / ``project:`` — so a
+validator meeting ``created_at`` has no §4 instruction, and error, warn and ignore are
+all equally unsupported by the text.
+
+**This tool warns.** That is a validator decision, recorded as one, and it is
+deliberately **not** written into §4: filling a normative gap by fiat is a larger change
+than this Epic was authorized to make. The reasoning is that warning is the only
+treatment the document evidences anywhere — all three of its unknown-key rules choose
+it, both for the same stated purpose (forward compatibility, §3.3 and §3.5) — and that
+warning keeps the schema-drift class **visible** without declaring configs invalid on a
+rule the spec never wrote. The gap is escalated for a ruling; until that ruling lands,
+this behaviour is a documented default, not a settled contract.
+
+Usage
+-----
+    ai-project-validate PATH [PATH ...]     # a config file, or a directory holding one
+    ai-project-validate --fleet ~/soft-dev  # every immediate subdirectory that has one
+    ai-project-validate --json PATH         # machine-readable report (the authority)
+
+Exit codes (a convenience — see ``G2`` above):
+    0  no errors (warnings may be present)
+    1  at least one config had an error
+    2  usage or I/O problem; nothing was validated
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import re
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+from urllib.parse import urlparse
+
+import yaml
+
+CONFIG_NAME = ".ai-project.yml"
+
+# Spec this implementation targets. Bumped alongside governance/ai-project-yml-spec.md
+# whenever a rule changes; a mismatch is a signal to re-read §4, not an error condition.
+SPEC_VERSION = "2.8.0"
+
+SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
+# `v?` is deliberate — see RULE_26 below.
+FRAMEWORK_VERSION = re.compile(r"^v?\d+\.\d+\.\d+$")
+PROJECT_NAME = re.compile(r"^[a-z][a-z0-9-]*$")
+MODEL_ROUTE = re.compile(r"^(remote|local):[a-zA-Z0-9.:_-]+$")
+
+REQUIRED_FIELDS = (
+    "governance.source",
+    "governance.version",
+    "governance.ref",
+    "project.name",
+    "project.description",
+)
+
+KNOWN_TOP_LEVEL = {
+    "governance",
+    "project",
+    "overrides",
+    "models",
+    "visual_artifacts",
+    "framework_version",
+}
+KNOWN_GOVERNANCE = {"source", "version", "ref"}
+KNOWN_PROJECT = {"name", "description"}
+KNOWN_OVERRIDES = {"branch_strategy", "merge_strategy", "epic_prefix"}
+KNOWN_MODELS = {
+    "hq",
+    "phase",
+    "milestone",
+    "epic_dev",
+    "epic_qa",
+    "creation",
+    "epic_manual",
+}
+KNOWN_VISUAL = {"enabled", "comfyui_url", "types", "visual_required_for_specs"}
+
+ALLOWED_BRANCH_STRATEGY = {"trunk-based", "gitflow"}
+ALLOWED_MERGE_STRATEGY = {"merge", "squash", "rebase"}
+ALLOWED_VISUAL_TYPES = {"diagrams", "infographics", "video"}
+
+# §4 rules this implementation does not check, and why. Reported under `rules_not_checked`
+# so the coverage claim is auditable rather than asserted.
+RULES_NOT_CHECKED = {
+    9: "'The overrides block must be valid YAML' — §4 states it is covered by rule 2.",
+    13: "'At least one override value is NOT required' — a statement that the block is optional, not a check.",
+    14: "'The models block must be valid YAML' — §4 states it is covered by rule 2.",
+    18: "'The visual_artifacts block must be valid YAML' — §4 states it is covered by rule 2.",
+    24: "'An absent visual_artifacts block is valid' — an explicit no-error/no-warning case; asserted by not reporting.",
+}
+
+
+@dataclass
+class Finding:
+    """One §4 result. ``rule`` is the §4 rule number, or None where §4 is silent."""
+
+    severity: str  # "error" | "warning"
+    rule: int | None
+    field: str
+    message: str
+    line: int | None = None
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "severity": self.severity,
+            "rule": self.rule,
+            "field": self.field,
+            "message": self.message,
+            "line": self.line,
+        }
+
+
+@dataclass
+class Report:
+    path: str
+    findings: list[Finding] = field(default_factory=list)
+
+    @property
+    def errors(self) -> list[Finding]:
+        return [f for f in self.findings if f.severity == "error"]
+
+    @property
+    def warnings(self) -> list[Finding]:
+        return [f for f in self.findings if f.severity == "warning"]
+
+    @property
+    def valid(self) -> bool:
+        """§4 validity. Warnings are explicitly not disqualifying (rules 11, 16, 22)."""
+        return not self.errors
+
+    def err(self, rule: int | None, fld: str, msg: str, line: int | None = None) -> None:
+        self.findings.append(Finding("error", rule, fld, msg, line))
+
+    def warn(self, rule: int | None, fld: str, msg: str, line: int | None = None) -> None:
+        self.findings.append(Finding("warning", rule, fld, msg, line))
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "path": self.path,
+            "valid": self.valid,
+            "error_count": len(self.errors),
+            "warning_count": len(self.warnings),
+            "findings": [f.as_dict() for f in self.findings],
+        }
+
+
+class Node:
+    """A YAML node plus the two things a parsed value loses: quoting and position."""
+
+    def __init__(self, node: yaml.Node) -> None:
+        self.node = node
+        self.line = node.start_mark.line + 1
+
+    @property
+    def is_mapping(self) -> bool:
+        return isinstance(self.node, yaml.MappingNode)
+
+    @property
+    def is_sequence(self) -> bool:
+        return isinstance(self.node, yaml.SequenceNode)
+
+    @property
+    def quoted(self) -> bool:
+        """True when the scalar was written with quotes — §4 rule 5's actual subject."""
+        return isinstance(self.node, yaml.ScalarNode) and self.node.style in ('"', "'")
+
+    @property
+    def value(self) -> Any:
+        """The loaded Python value, resolved exactly as a normal ``yaml.safe_load``."""
+        return yaml.safe_load(yaml.serialize(self.node))
+
+    def keys(self) -> list[str]:
+        """Mapping keys, in document order. Non-scalar keys are stringified."""
+        if not self.is_mapping:
+            return []
+        return [str(yaml.safe_load(yaml.serialize(k))) for k, _ in self.node.value]
+
+    def get(self, key: str) -> Node | None:
+        if not self.is_mapping:
+            return None
+        for k, v in self.node.value:
+            if str(yaml.safe_load(yaml.serialize(k))) == key:
+                return Node(v)
+        return None
+
+    def items(self) -> list[tuple[str, Node]]:
+        if not self.is_mapping:
+            return []
+        return [
+            (str(yaml.safe_load(yaml.serialize(k))), Node(v)) for k, v in self.node.value
+        ]
+
+    def entries(self) -> list[Node]:
+        if not self.is_sequence:
+            return []
+        return [Node(n) for n in self.node.value]
+
+
+def _nonempty_string(node: Node | None) -> bool:
+    return node is not None and isinstance(node.value, str) and node.value.strip() != ""
+
+
+def validate_text(text: str, path: str = CONFIG_NAME) -> Report:
+    """Validate config source text against §4. The single entry point for the rules."""
+    report = Report(path=path)
+
+    # Rule 1 — the file is `.ai-project.yml` at the repository root. Only the name half
+    # is checkable from here; "at the root" is the caller's business.
+    if os.path.basename(path) != CONFIG_NAME:
+        report.err(1, "<file>", f"Config must be named {CONFIG_NAME!r}, got {os.path.basename(path)!r}.")
+
+    # Rule 2 — the file parses as YAML. Nothing downstream is checkable if it does not.
+    try:
+        composed = yaml.compose(text)
+    except yaml.YAMLError as exc:
+        report.err(2, "<file>", f"Not valid YAML: {exc}")
+        return report
+
+    if composed is None:
+        report.err(2, "<file>", "File is empty; §4 requires the five required fields.")
+        return report
+
+    root = Node(composed)
+    if not root.is_mapping:
+        report.err(2, "<file>", "Top level must be a YAML mapping.")
+        return report
+
+    governance = root.get("governance")
+    project = root.get("project")
+
+    # ---- Rule 3 — the five required fields -------------------------------------
+    #
+    # §4 rule 3 read "All four required fields" while listing five, from v1.0.0 until
+    # spec v2.8.0 corrected it (Epic P11-M38-E38.3). Five is right: §3.1 marks five
+    # REQUIRED and §3.2 documents five. `framework_version` is NOT among them — it is
+    # optional (rule 26), which is why blessing it left this count at five.
+    present: dict[str, Node | None] = {}
+    for dotted in REQUIRED_FIELDS:
+        block_name, key = dotted.split(".")
+        block = governance if block_name == "governance" else project
+        node = block.get(key) if block is not None and block.is_mapping else None
+        present[dotted] = node
+        if node is None:
+            report.err(3, dotted, f"Required field {dotted!r} is absent.")
+
+    # ---- Rule 4 — governance.source --------------------------------------------
+    source = present["governance.source"]
+    if source is not None:
+        val = source.value
+        if not isinstance(val, str) or not val.strip():
+            report.err(4, "governance.source", "Must be a non-empty string.", source.line)
+        else:
+            val = val.strip()
+            is_https = val.startswith("https://") and bool(urlparse(val).netloc)
+            is_relative = val.startswith("./") or val.startswith("../")
+            if not (is_https or is_relative):
+                report.err(
+                    4,
+                    "governance.source",
+                    f"{val!r} is neither an HTTPS URL nor a relative path starting with './' or '../'.",
+                    source.line,
+                )
+
+    # ---- Rule 5 — governance.version -------------------------------------------
+    version = present["governance.version"]
+    if version is not None:
+        val = version.value
+        if not version.quoted:
+            report.err(
+                5,
+                "governance.version",
+                "Must be a quoted string; unquoted values may load as a non-string YAML scalar.",
+                version.line,
+            )
+        if not isinstance(val, str) or not SEMVER.fullmatch(str(val).strip()):
+            report.err(
+                5,
+                "governance.version",
+                f"{val!r} is not a bare semver string matching \\d+\\.\\d+\\.\\d+.",
+                version.line,
+            )
+
+    # ---- Rule 6 — governance.ref ------------------------------------------------
+    ref = present["governance.ref"]
+    if ref is not None and not _nonempty_string(ref):
+        report.err(6, "governance.ref", f"Must be a non-empty string, got {ref.value!r}.", ref.line)
+
+    # ---- Rule 7 — project.name --------------------------------------------------
+    name = present["project.name"]
+    if name is not None:
+        val = name.value
+        if not isinstance(val, str) or not PROJECT_NAME.fullmatch(val):
+            report.err(
+                7,
+                "project.name",
+                f"{val!r} does not match ^[a-z][a-z0-9-]*$ (lowercase slug; no underscores, spaces or capitals).",
+                name.line,
+            )
+
+    # ---- Rule 8 — project.description -------------------------------------------
+    description = present["project.description"]
+    if description is not None and not _nonempty_string(description):
+        report.err(
+            8, "project.description", f"Must be a non-empty string, got {description.value!r}.", description.line
+        )
+
+    # ---- Rules 10, 11, 12 — the overrides block ---------------------------------
+    overrides = root.get("overrides")
+    if overrides is not None and overrides.is_mapping:
+        for key, node in overrides.items():
+            if key not in KNOWN_OVERRIDES:
+                # Rule 11 — warning, explicitly not an error.
+                report.warn(11, f"overrides.{key}", f"Unknown key {key!r} in the overrides block; ignored.", node.line)
+                continue
+            val = node.value
+            # Rules 10 + 12 — rule 10 states the constraint, rule 12 its severity.
+            if key == "branch_strategy" and val not in ALLOWED_BRANCH_STRATEGY:
+                report.err(12, "overrides.branch_strategy", f"{val!r} must be one of: trunk-based, gitflow.", node.line)
+            elif key == "merge_strategy" and val not in ALLOWED_MERGE_STRATEGY:
+                report.err(12, "overrides.merge_strategy", f"{val!r} must be one of: merge, squash, rebase.", node.line)
+            elif key == "epic_prefix":
+                if not isinstance(val, str) or val == "" or not val.endswith("/"):
+                    report.err(12, "overrides.epic_prefix", f"{val!r} must be non-empty and end with '/'.", node.line)
+
+    # ---- Rules 15, 16, 17 — the models block ------------------------------------
+    models = root.get("models")
+    if models is not None and models.is_mapping:
+        for key, node in models.items():
+            if key not in KNOWN_MODELS:
+                # Rule 16 — warning.
+                report.warn(16, f"models.{key}", f"Unknown key {key!r} in the models block; ignored.", node.line)
+                continue
+            val = node.value
+            # Rules 15 + 17.
+            if not isinstance(val, str) or not MODEL_ROUTE.fullmatch(val):
+                report.err(
+                    17,
+                    f"models.{key}",
+                    f"{val!r} does not match ^(remote|local):[a-zA-Z0-9.:_-]+$.",
+                    node.line,
+                )
+
+    # ---- Rules 19-23, 25 — the visual_artifacts block ---------------------------
+    # Rule 24: an absent block is valid and means enabled-at-defaults. Asserted by the
+    # fact that nothing below runs, and nothing is reported.
+    visual = root.get("visual_artifacts")
+    if visual is not None and visual.is_mapping:
+        for key, node in visual.items():
+            if key not in KNOWN_VISUAL:
+                # Rule 22 — warning.
+                report.warn(
+                    22, f"visual_artifacts.{key}", f"Unknown key {key!r} in the visual_artifacts block; ignored.", node.line
+                )
+                continue
+            val = node.value
+            if key == "enabled" and not isinstance(val, bool):
+                # Rules 19 + 23.
+                report.err(
+                    23, "visual_artifacts.enabled", f"Invalid visual_artifacts.enabled: {val!r}. Must be a boolean.", node.line
+                )
+            elif key == "visual_required_for_specs" and not isinstance(val, bool):
+                # Rules 25 + 23.
+                report.err(
+                    23,
+                    "visual_artifacts.visual_required_for_specs",
+                    f"Invalid visual_artifacts.visual_required_for_specs: {val!r}. Must be a boolean.",
+                    node.line,
+                )
+            elif key == "comfyui_url":
+                # Rules 21 + 23.
+                parsed = urlparse(val) if isinstance(val, str) else None
+                if parsed is None or parsed.scheme not in ("http", "https") or not parsed.netloc:
+                    report.err(
+                        23,
+                        "visual_artifacts.comfyui_url",
+                        f"Invalid visual_artifacts.comfyui_url: {val!r}. Must be a well-formed http(s) URL.",
+                        node.line,
+                    )
+            elif key == "types":
+                # Rules 20 + 23.
+                if not node.is_sequence:
+                    report.err(23, "visual_artifacts.types", f"Must be a list, got {val!r}.", node.line)
+                else:
+                    for entry in node.entries():
+                        if entry.value not in ALLOWED_VISUAL_TYPES:
+                            report.err(
+                                23,
+                                "visual_artifacts.types",
+                                f"Invalid visual_artifacts.types entry: {entry.value!r}. "
+                                "Must be one of: diagrams, infographics, video.",
+                                entry.line,
+                            )
+
+    # ---- Rule 26 — framework_version (optional) ---------------------------------
+    #
+    # Added to the spec at v2.8.0 (P10-GH-1, Epic P11-M38-E38.3). OPTIONAL, so it is
+    # absent from rule 3. The `v?` in the pattern is deliberate and load-bearing: the
+    # fleet's stamps are all v-prefixed tag names (`v7.0.0`, `v7.1.0`), and requiring a
+    # bare semver here would have invalidated every stamped config on the machine — a
+    # fleet-wide reconciliation this Epic was explicitly forbidden to perform. The
+    # schema records the convention that exists.
+    framework_version = root.get("framework_version")
+    if framework_version is not None:
+        val = framework_version.value
+        if not isinstance(val, str) or not FRAMEWORK_VERSION.fullmatch(val.strip()):
+            report.err(
+                26,
+                "framework_version",
+                f"{val!r} must be a non-empty string matching ^v?\\d+\\.\\d+\\.\\d+$.",
+                framework_version.line,
+            )
+
+    # ---- Unknown keys where §4 is SILENT ----------------------------------------
+    #
+    # Top level, `governance:` and `project:`. §4 rules 11/16/22 cover only the three
+    # optional blocks; there is no rule here at all. This tool warns — a documented
+    # validator decision, NOT a spec amendment, reported with `rule: null` so it is
+    # never mistaken for §4 enforcement. See the module docstring.
+    for key, node in root.items():
+        if key not in KNOWN_TOP_LEVEL:
+            report.warn(
+                None,
+                key,
+                f"Unknown top-level key {key!r}; §4 defines no rule for unknown keys here "
+                "(schema-drift class, P10-GH-1). Treated as a warning by validator decision.",
+                node.line,
+            )
+    for block_name, known in (("governance", KNOWN_GOVERNANCE), ("project", KNOWN_PROJECT)):
+        block = root.get(block_name)
+        if block is None or not block.is_mapping:
+            continue
+        for key, node in block.items():
+            if key not in known:
+                report.warn(
+                    None,
+                    f"{block_name}.{key}",
+                    f"Unknown key {block_name}.{key!r}; §4 defines no rule for unknown keys here "
+                    "(schema-drift class, P10-GH-1). Treated as a warning by validator decision.",
+                    node.line,
+                )
+
+    return report
+
+
+def validate_file(path: Path) -> Report:
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        report = Report(path=str(path))
+        report.err(1, "<file>", f"Cannot read config: {exc}")
+        return report
+    return validate_text(text, str(path))
+
+
+def resolve_targets(paths: list[str], fleet: str | None) -> tuple[list[Path], list[str]]:
+    """Turn CLI arguments into config paths. Returns (configs, notes-about-skips)."""
+    targets: list[Path] = []
+    notes: list[str] = []
+
+    for raw in paths:
+        p = Path(raw).expanduser()
+        if p.is_dir():
+            candidate = p / CONFIG_NAME
+            if candidate.is_file():
+                targets.append(candidate)
+            else:
+                notes.append(f"{p}: no {CONFIG_NAME} (not enrolled)")
+        elif p.is_file():
+            targets.append(p)
+        else:
+            notes.append(f"{p}: no such file or directory")
+
+    if fleet:
+        root = Path(fleet).expanduser()
+        if not root.is_dir():
+            notes.append(f"{root}: --fleet root is not a directory")
+        else:
+            for child in sorted(root.iterdir(), key=lambda c: c.name.lower()):
+                if not child.is_dir():
+                    continue
+                candidate = child / CONFIG_NAME
+                if candidate.is_file():
+                    targets.append(candidate)
+                else:
+                    notes.append(f"{child.name}: no {CONFIG_NAME} (not enrolled)")
+
+    return targets, notes
+
+
+def render_text(reports: list[Report], notes: list[str]) -> str:
+    lines: list[str] = []
+    for r in reports:
+        status = "VALID  " if r.valid else "INVALID"
+        summary = f"{len(r.errors)} error(s), {len(r.warnings)} warning(s)"
+        lines.append(f"{status}  {r.path}  —  {summary}")
+        for f in r.findings:
+            where = f"line {f.line}" if f.line else "—"
+            rule = f"rule {f.rule}" if f.rule is not None else "no §4 rule"
+            lines.append(f"    [{f.severity:<7}] {rule:<12} {f.field:<42} ({where})  {f.message}")
+    if notes:
+        lines.append("")
+        lines.append("Skipped:")
+        lines.extend(f"    {n}" for n in notes)
+    invalid = [r for r in reports if not r.valid]
+    lines.append("")
+    lines.append(
+        f"{len(reports)} config(s) checked — {len(reports) - len(invalid)} valid, {len(invalid)} invalid; "
+        f"{sum(len(r.warnings) for r in reports)} warning(s) total."
+    )
+    return "\n".join(lines)
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(
+        prog="ai-project-validate",
+        description="Validate .ai-project.yml against ai-project-yml-spec.md §4. Reports; never edits.",
+    )
+    parser.add_argument("paths", nargs="*", help="config file(s), or directories containing one")
+    parser.add_argument("--fleet", metavar="DIR", help="validate every immediate subdirectory of DIR that has a config")
+    parser.add_argument("--json", action="store_true", help="machine-readable report (the authoritative output)")
+    args = parser.parse_args(argv)
+
+    if not args.paths and not args.fleet:
+        parser.error("give at least one PATH, or --fleet DIR")
+
+    targets, notes = resolve_targets(args.paths, args.fleet)
+    if not targets:
+        payload = {"spec_version": SPEC_VERSION, "reports": [], "skipped": notes}
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print("No configs found to validate.")
+            for n in notes:
+                print(f"    {n}")
+        return 2
+
+    reports = [validate_file(t) for t in targets]
+
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    "spec_version": SPEC_VERSION,
+                    "rules_not_checked": {str(k): v for k, v in sorted(RULES_NOT_CHECKED.items())},
+                    "reports": [r.as_dict() for r in reports],
+                    "skipped": notes,
+                },
+                indent=2,
+            )
+        )
+    else:
+        print(render_text(reports, notes))
+
+    return 1 if any(not r.valid for r in reports) else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

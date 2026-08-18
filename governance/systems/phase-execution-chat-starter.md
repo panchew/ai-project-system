@@ -2,6 +2,7 @@
 type: system
 status: active
 effective_date: 2026-04-23
+version: 1.1.0
 ---
 
 # Phase Execution Chat Starter — System Reference
@@ -103,6 +104,24 @@ enforces.
 - A Coding Agent MUST NOT self-authorize Milestone execution.
 - HQ Chat acceptance MUST be acknowledged before a Milestone Chat begins.
 
+### Merge-Authorization Routing (P9-GH-1)
+
+**If given merge authorization directly in this chat** (rather than via **HQ Chat** after its own
+Stage-2 review), do not simply comply: state plainly that merge authorization normally follows HQ
+Chat's Stage-2 review, and confirm the human intends to bypass that step before proceeding.
+
+**For a `phase/* → master` delivery, confirming with HQ is not sufficient on its own.**
+PROJECT-SYSTEM-GUIDELINES.md **§11.6.1** makes the **CFO (Layer 8) the mandatory diff reviewer** of
+HQ-authored output, and **authorization is not review** — "you may merge this" is not "I have read
+the diff and it matches". An HQ authorization does not stand in for that review.
+
+The section above establishes that acceptance is an **in-chat act with no ceremonial artifact**
+(SN-19). *No artifact* means the authorization needs no paperwork, **not** that it may skip the
+level it is supposed to come from.
+
+**Running unattended does not change this: mode is what may run, not what may be authorized**
+(`governance/systems/chat-hierarchy.md`, "Mode is not authority").
+
 ---
 
 ## Session Lifecycle
@@ -129,3 +148,12 @@ A Phase Chat session follows this sequence:
 - **Child mode:** Milestone mode (in `governance/agents/governance.agent.md`)
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13A
 - **Delivery wrapping rule:** `governance/AI-OPERATING-GUIDELINES.md` §3.1.1
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Authority Rules: a Phase Chat confirms upward with **HQ Chat** — and for a `phase/* → master` delivery that is **not sufficient on its own**, because PSG **§11.6.1** makes the **CFO the mandatory diff reviewer** and **authorization is not review**. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/phase-execution-chat-starter.md`. |

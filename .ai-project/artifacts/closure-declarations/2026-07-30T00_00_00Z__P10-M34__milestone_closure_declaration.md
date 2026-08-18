@@ -128,6 +128,24 @@ is no central GH registry; items live inline in artifacts):
   All six fleet stamps are therefore convention-only. Schema-blessing it is a capability change.
 - **P10-GH-2** (Creation Chat Seed does not implement the E31.3 verification) and **P10-GH-3**
   (policy row P1 contradicts the live config) — from the 2026-07-28 HQ Ruling, untouched by M34.
+
+  > **Amendment 2026-08-04 (P11-M36-E36.5) — P10-GH-2's parenthetical gloss above is false, and the
+  > item is re-diagnosed.** The original text is left unedited, deliberately; this note corrects it.
+  > **P10-GH-3 is unaffected and untouched.**
+  >
+  > `governance/templates/seed.md` has carried the E31.3 **Prerequisite Verification** section since
+  > commit **`d7ee7cd` (2026-07-19)** — **nine days before** the ruling that filed the gap — and
+  > `governance/templates/genesis.md` carries it from the same commit. The 2026-07-31 Creation Chat
+  > session, opened from `seed.md`, **ran the check.**
+  >
+  > **The real defect was the re-instantiation *ritual*, not the Seed:**
+  > `governance/systems/creation-chat-guide.md` handed a re-opened session three artifacts, **none
+  > of which carried a model check**, because the only one that would (`genesis.md`) is not rendered
+  > in this project. **That defect is now CLOSED** — E36.3 (merged `d8f4871`) canonized a ritual
+  > that opens with the Seed and carries the E31.3 check as an explicit **Step 4**.
+  >
+  > **A future owner should read the ritual (`governance/systems/creation-chat-guide.md`), not
+  > `seed.md`.** Sources: **SN-26** (Required action 1); **HQ Ruling 2026-08-01, Decision 8**.
 - **llama.cpp + Qwen3.6-27B-Q8_0 trial** — parked pending Mac-class ~42 GB hardware or an
   authorized loadable-quant trial. `qwen3.6:27b` at Q4_K_M exists on the host and is **not** that
   stack.

@@ -1,0 +1,5 @@
+disposition: done
+completion:  effects-verified
+expectation: mutating
+read_only_completion: False
+reason: effects happened and the newest verification after the last of them passed

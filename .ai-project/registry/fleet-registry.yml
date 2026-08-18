@@ -1,0 +1,650 @@
+# ============================================================================
+# FLEET REGISTRY
+# ============================================================================
+#
+# The fleet is a data structure, not a memory.
+#
+# Before this file, the authoritative list of projects on this machine lived in prose
+# across a dozen phase artifacts, each correct at its date and none correct now. This
+# file replaces that. Built by Epic P11-M38-E38.3 (`P11`, `M38`), which also built the
+# validator whose output the `section_4` fields below record.
+#
+# ---------------------------------------------------------------------------
+# THIS REGISTRY RECORDS STATE. IT DOES NOT ACT ON STATE.
+# ---------------------------------------------------------------------------
+#
+# Nothing reads this file and decides what to work on next. Nothing observes the fleet
+# and moves a project between states — not on a timer, not on a git event, not on
+# inactivity. Deriving a work queue from fleet state is `M40`; judging completion is
+# `M39`; neither is built, and neither is made easier to build carelessly by anything
+# here. Transitions are a recorded human action (see `transitions:` below).
+#
+# Drivr reads this file (`SN-27` decision 5). Reading it and deciding is Drivr's
+# coordination work, and it is Drivr's, not this file's.
+#
+# ---------------------------------------------------------------------------
+# HOW TO READ AN ENTRY
+# ---------------------------------------------------------------------------
+#
+#   state          one of: active | benched | archived. Definitions below, verbatim.
+#   state_basis    recorded  — traceable to a decision already in the record.
+#                  proposed  — this Epic's reading of the evidence. NOT a decision.
+#                              The CFO owns the fleet's attention; a registry that
+#                              quietly guesses is worse than one with a stated unknown.
+#   enrolled       carries a `.ai-project.yml` at its root.
+#   section_4      valid | invalid | not_applicable — against ai-project-yml-spec.md §4
+#                  as measured by `bin/ai-project-validate` on the date below.
+#
+# WHERE THE RECORD IS SILENT, THIS REGISTRY PROPOSES THE WEAKER CLAIM. `benched`
+# asserts only an observation ("not currently receiving attention"). `archived` asserts
+# an intent ("not planned to ever be touched again") that only the CFO can hold. Absent
+# a recorded statement of that intent, `benched` is proposed even where `archived` looks
+# likely — see `fieldledger-assesment`, which is the case where that pinches hardest.
+#
+# CONSEQUENCE, STATED RATHER THAN HIDDEN: **zero projects are classified `archived`.**
+# The state exists and is currently unused. That is the true state of the record, not
+# an omission.
+
+registry_version: "1.0.0"
+created: 2026-08-11
+created_by: Epic P11-M38-E38.3 (ai-project-system, P11-M38)
+fleet_root: ~/soft-dev
+
+# ============================================================================
+# THE THREE STATES
+# ============================================================================
+#
+# The definitions are the CFO's and are reproduced verbatim. They are not this Epic's
+# to reword, narrow, or extend.
+#
+# ⚠ CITATION HISTORY: on this Epic's execution branch, the two governing documents
+# rendered these definitions differently while both claimed verbatim reproduction. The
+# registry used the Epic Spec's fuller table form and reported the discrepancy rather
+# than resolving it unilaterally. Before merge, the Milestone Chat corrected the Epic
+# Execution Chat Starter in milestone/M38 commit e9ab7d5 (2026-08-11): it now carries
+# the same exact CFO strings below and records why the earlier paraphrase was defective.
+# The discrepancy is therefore preserved here as point-in-time evidence and resolved
+# history, not as a present conflict between governing documents.
+
+states:
+  active:
+    definition: "Enrolled in the registry. Receives time and attention."
+  benched:
+    definition: "Not currently receiving attention. May return."
+  archived:
+    definition: "Not planned to ever be touched again — though it can be brought back to life."
+
+# ============================================================================
+# ENUMERATION METHOD — stated so the count is checkable
+# ============================================================================
+#
+# Measured 2026-08-11 on the host, at `~/soft-dev`.
+#
+#   find ~/soft-dev -maxdepth 1 -mindepth 1 -type d
+#     -> 17 directories
+#
+# Two of those 17 are NOT projects: `worktree-epic-E38.2` and `worktree-epic-E38.3` are
+# git worktrees of `ai-project-system` itself, confirmed by `git worktree list` and by
+# each holding a `.git` FILE containing
+# `gitdir: .../ai-project-system/.git/worktrees/...`. They carry a `.ai-project.yml`
+# only because they are checkouts of this repository, and a naive
+# `for d in */; do [ -f "$d/.ai-project.yml" ]` counts them as fleet members — which is
+# exactly the method defect this Epic exists to guard against. They are excluded here,
+# with the exclusion stated rather than silent.
+#
+#   17 directories − 2 worktrees          = 15 project directories
+#   15 projects, of which 13 carry a config = 13 enrolled / 2 unenrolled
+#
+# Three entries in `~/soft-dev` are loose `.md` files, not directories, and are excluded
+# by `-type d`: `interview-cheatsheet-telos-technical.md`,
+# `interview-prep-luflox-rails-ai.md`, `interview-prep-telos.md`.
+#
+# Counts are floors carrying their date. `panchew-io` was the third fleet list to prove
+# short; `drivr` made a fourth; the two worktrees make a fifth.
+
+enumeration:
+  measured: 2026-08-11
+  directories_found: 17
+  excluded_as_worktrees: [worktree-epic-E38.2, worktree-epic-E38.3]
+  project_directories: 15
+  enrolled: 13
+  unenrolled: 2
+  section_4_valid: 9
+  section_4_invalid: 4
+
+# ============================================================================
+# §4 VALIDATION — as measured, not as remembered
+# ============================================================================
+#
+# Command:  bin/ai-project-validate --fleet ~/soft-dev
+# Date:     2026-08-11
+# Repo:     ai-project-system @ epic/P11-M38-E38.3
+#
+# 4 of 13 enrolled configs are §4-INVALID, carrying 8 errors between them.
+#
+# RECONCILIATION with the two figures already in the record, neither of which is wrong:
+#
+#   "3 of 6 invalid at P10 close"  (P11-M38 milestone spec) — a DIFFERENT SCOPE: six
+#       projects, not thirteen. Not comparable, and not contradicted.
+#   "4 of 12 invalid"  (E38.3 spec Finding 3, 2026-08-08) — required-field PRESENCE
+#       only, before any format constraint was checked, over twelve enrolled projects.
+#
+#   This measurement: 4 of 13, over the same four projects, 2026-08-11, full §4.
+#
+# The spec predicted "your number will be higher than four." The number of invalid
+# PROJECTS did not move — it is the same four. The number of VIOLATIONS did: presence-
+# only found 5, full §4 found 8. The three additional violations are `home_finance`'s
+# `project.name` (rule 7 — `home_finance` contains an underscore, which
+# `^[a-z][a-z0-9-]*$` does not admit) and `social-stories-creator`'s
+# `governance.version: v7.0.0` (rule 5, twice — unquoted, and not bare semver).
+# No project became invalid that was not already invalid on presence alone.
+
+validation:
+  measured: 2026-08-11
+  command: bin/ai-project-validate --fleet ~/soft-dev
+  fleet_configs: 13
+  invalid_configs: 4
+  total_errors: 8
+  fleet_total_warnings: 12
+  raw_configs_checked: 15
+  raw_total_warnings: 14
+  excluded_worktree_configs: 2
+
+# ============================================================================
+# TRANSITIONS — a recorded human action. Nothing automatic.
+# ============================================================================
+#
+# Binding Constraint 5 (`P11-M38`), a returned CFO proposal and therefore not assumed:
+# fleet-state transitions are NOT executed by Drivr or by anything else. A transition is
+# a human decision, appended here by hand, recording who / when / from / to / why.
+#
+# NOTHING AUTOMATIC EXISTS. No timer, no git hook, no inactivity rule, no scheduler, no
+# derived queue reads or writes this list. If the CFO rules otherwise, that is an
+# amendment at the milestone level, not an epic's or a tool's discretion.
+#
+# Schema for an appended entry:
+#
+#   - project: <directory name>
+#     from: <state>            # or `unclassified` for a first classification
+#     to: <state>
+#     date: <YYYY-MM-DD>
+#     by: <who decided>        # a person, or a chat acting on a recorded instruction
+#     why: <the reason>
+#
+# The list is empty because this file's initial classifications are not transitions —
+# they are the registry's first state, and the `proposed` ones are not decisions at all.
+
+transitions: []
+
+# ============================================================================
+# PROJECTS — all 15, classified
+# ============================================================================
+
+projects:
+
+  - name: ai-project-system
+    path: ~/soft-dev/ai-project-system
+    state: active
+    state_basis: recorded
+    rationale: >-
+      The governance source, and P11's own working repository. Epic P11-M38-E38.3 —
+      this registry — was executed in it on 2026-08-11.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: ["cfo_review_gate (top-level, no §4 rule)"]
+    framework_version: null
+    framework_version_source: governance.version
+    framework_version_note: >-
+      DECIDED, not overlooked, and not filed as a defect. Under §8's self-referential
+      pattern this repository points `governance.source` at its own `./governance` and
+      pins `governance.version` to itself — "7.1.0" as of 2026-08-11, already the
+      current framework version. For the governance source the two fields record the
+      same fact BY CONSTRUCTION, not by coincidence, so a `framework_version` here
+      would be structurally redundant rather than missing. Its framework version is
+      knowable from this registry via `governance.version`, which is what
+      `framework_version_source` records. The exemption is written into
+      ai-project-yml-spec.md §3.6 so it is checkable rather than folkloric.
+    governance_pin: "./governance (self-referential) @ 7.1.0"
+    last_commit: 2026-08-11
+    installed_agent: native
+    installed_agent_note: >-
+      No installed copy, and none expected: this repository carries
+      `governance/agents/governance.agent.md` (14,711 B) natively as the source of the
+      file every other project installs.
+
+  - name: drivr
+    path: ~/soft-dev/drivr
+    state: active
+    state_basis: recorded
+    rationale: >-
+      P11's subject. Created by Epic E38.1 on 2026-08-10 and under active development
+      by E38.2 as of 2026-08-11.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: ["governance.submodule_path", "project.created_at"]
+    framework_version: v7.1.0
+    framework_version_source: framework_version
+    governance_pin: ".governance @ v7.1.0 (bb727a5)"
+    last_commit: 2026-08-11
+    installed_agent: canonical
+    notes: >-
+      The only project on the machine whose adoption stamp reads v7.1.0 (2026-08-11);
+      the six other stamps read v7.0.0 and six enrolled projects carry none. That
+      asymmetry is the true state of the fleet and is recorded, not smoothed.
+      §4-VALID as delivered — see `findings.init_produces_invalid_configs` below.
+
+  - name: local-agent-runner
+    path: ~/soft-dev/local-agent-runner
+    state: active
+    state_basis: recorded
+    rationale: >-
+      One of the four projects the Creation Chat named as the ecosystem on 2026-07-28
+      (governance / execution / the MCP seam / Drivr); this is execution. Epic E38.4
+      is scoped to assess it, behind E38.2's Stage A→B gate.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: []
+    framework_version: v7.0.0
+    framework_version_source: framework_version
+    governance_pin: ".governance @ v7.0.0 (8044451)"
+    last_commit: 2026-07-20
+    installed_agent: canonical
+
+  - name: ai-project-system-mcp
+    path: ~/soft-dev/ai-project-system-mcp
+    state: active
+    state_basis: recorded
+    rationale: >-
+      One of the four ecosystem projects named by the Creation Chat on 2026-07-28 —
+      "the seam, now load-bearing."
+    enrolled: true
+    section_4: invalid
+    section_4_errors: ["rule 3: project.description absent"]
+    section_4_warnings: ["governance.submodule_path", "project.created_at"]
+    framework_version: v7.0.0
+    framework_version_source: framework_version
+    governance_pin: "governance @ v7.0.0 (8044451)"
+    last_commit: 2026-08-01
+    installed_agent: canonical
+    notes: >-
+      NOT REPAIRED BY THIS EPIC. Its missing `project.description` traces to
+      `bin/ai-project-init`, which does not write the field — see
+      `findings.init_produces_invalid_configs`. Its installed agent reads 14,711 B
+      today, so P10-M34-E34.1 fixed the symptom without finding the cause; E38.1 found
+      the cause (FM 12).
+
+  - name: panchew-io
+    path: ~/soft-dev/panchew-io
+    state: active
+    state_basis: proposed
+    rationale: >-
+      PROPOSED on activity evidence, not on a recorded decision. Last commit
+      2026-08-07 on `milestone/M1`, and its governance submodule is pinned at v7.1.0 —
+      one of only two projects on the machine at that pin. Named in no phase artifact
+      at all until M38's planning found it, which is why the record is silent rather
+      than negative. CFO to confirm.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: []
+    framework_version: null
+    framework_version_source: governance.version
+    framework_version_note: >-
+      Carries no stamp; `governance.version: "7.1.0"` is the only version signal. Unlike
+      `ai-project-system` this is NOT a documented exemption — it is an adopting project
+      whose pinned and adopted versions merely happen to agree. Recorded as an
+      observation, not normalised, and not written to.
+    governance_pin: ".governance @ v7.1.0 (bb727a5)"
+    last_commit: 2026-08-07
+    installed_agent: canonical
+
+  - name: social-stories-creator
+    path: ~/soft-dev/social-stories-creator
+    state: active
+    state_basis: proposed
+    rationale: >-
+      PROPOSED on activity evidence alone. Last commit 2026-08-05, the most recent of
+      any project outside the four ecosystem repositories. Attention and governance
+      hygiene are different axes, and this project scores well on the first and worst
+      on the second. CFO to confirm.
+    enrolled: true
+    section_4: invalid
+    section_4_errors:
+      - "rule 3: governance.ref absent"
+      - "rule 3: project.description absent"
+      - "rule 5: governance.version unquoted"
+      - "rule 5: governance.version 'v7.0.0' is not bare semver"
+    section_4_warnings: ["governance.submodule_path", "project.created_at"]
+    framework_version: null
+    framework_version_source: governance.version
+    governance_pin: "governance @ v7.0.0 (8044451)"
+    last_commit: 2026-08-05
+    installed_agent: stub
+    installed_agent_note: >-
+      THE ONLY LIVE INSTANCE OF FM 12. Its installed
+      `.ai-project/agents/governance.agent.md` is the 230-byte placeholder, while the
+      canonical 14,711-byte file sits correctly inside its own governance submodule at
+      `governance/governance/agents/`. The submodule content is fine; the INSTALLED
+      copy is the stub. NOT REPAIRED BY THIS EPIC — recorded and escalated.
+    notes: >-
+      Fails on two independent axes — the only §4-invalid config carrying four errors,
+      AND the only stub agent. It is also the only project whose `governance.version`
+      is both unquoted and v-prefixed, which is what rule 5 exists to catch.
+
+  - name: home_finance
+    path: ~/soft-dev/home_finance
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED. Half of P10's proving pair and the site of a real agentic epic run
+      (P10-M33-E33.4), but P10 closed 2026-07-31 and it has no P11 role. Last commit
+      2026-07-20, still on `epic/E1.1`. CFO to confirm.
+    enrolled: true
+    section_4: invalid
+    section_4_errors:
+      - "rule 3: project.description absent"
+      - "rule 7: project.name 'home_finance' does not match ^[a-z][a-z0-9-]*$"
+    section_4_warnings: ["governance.submodule_path", "project.created_at"]
+    framework_version: v7.0.0
+    framework_version_source: framework_version
+    governance_pin: ".governance @ v7.0.0 (8044451)"
+    last_commit: 2026-07-20
+    installed_agent: canonical
+    notes: >-
+      The rule 7 violation is NEW at this measurement — presence-only checking could
+      not see it. The underscore in `home_finance` has been there since the project was
+      named, and the directory name matches the config, so "fixing" it is a rename with
+      consequences well beyond a config edit. NOT REPAIRED BY THIS EPIC; escalated.
+
+  - name: courtis
+    path: ~/soft-dev/courtis
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED. Rolled forward to v7.0.0 during P10-M34 as an adoption target rather
+      than as active development; last commit 2026-07-29, still parked on
+      `chore/framework-v7.0.0-bump`. CFO to confirm.
+    enrolled: true
+    section_4: invalid
+    section_4_errors: ["rule 3: project.description absent"]
+    section_4_warnings: ["governance.submodule_path", "project.created_at"]
+    framework_version: v7.0.0
+    framework_version_source: framework_version
+    governance_pin: ".governance @ v7.0.0 (8044451)"
+    last_commit: 2026-07-29
+    installed_agent: canonical
+    notes: "NOT REPAIRED BY THIS EPIC. Missing description traces to `bin/ai-project-init`."
+
+  - name: footboard
+    path: ~/soft-dev/footboard
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED. Rolled forward during P10-M34; last commit 2026-07-29, still on
+      `chore/framework-v7.0.0-bump`. No P11 role. CFO to confirm.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: []
+    framework_version: v7.0.0
+    framework_version_source: framework_version
+    governance_pin: ".governance @ v7.0.0 (8044451)"
+    last_commit: 2026-07-29
+    installed_agent: canonical
+    installed_agent_note: >-
+      Carries an additional STALE copy at `.github/agents/governance.agent.md`
+      (14,352 B) alongside the current 14,711 B at `.ai-project/agents/` — a leftover
+      from the pre-E25.3 install path. Recorded, not cleaned up.
+
+  - name: Getawayinsured2023
+    path: ~/soft-dev/Getawayinsured2023
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED. Rolled forward during P10-M34; last commit 2026-07-29, still on
+      `chore/framework-v7.0.0-bump`. CFO to confirm.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: []
+    framework_version: v7.0.0
+    framework_version_source: framework_version
+    governance_pin: ".governance @ v7.0.0 (8044451)"
+    last_commit: 2026-07-29
+    installed_agent: canonical
+    notes: >-
+      Its `models:` block routes `phase` and `milestone` to `remote:` targets
+      (`remote:qwen3.6:27b`), the finding P10-M35-E35.5 escalated — the phase spec's
+      "natural experiment" does not exist on the locality axis. §4-valid regardless:
+      rule 15's pattern constrains the FORM of a routing value, not its locality.
+      Directory name is capitalised; `project.name` is correctly the lowercase slug
+      `getawayinsured2023`, so rule 7 passes.
+
+  - name: voicebox
+    path: ~/soft-dev/voicebox
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED. Last commit 2026-07-24 on `epic/E1.1`; no P11 role. CFO to confirm.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: []
+    framework_version: null
+    framework_version_source: governance.version
+    governance_pin: ".governance @ v7.0.0 (8044451)"
+    last_commit: 2026-07-24
+    installed_agent: canonical
+
+  - name: personal-management-system
+    path: ~/soft-dev/personal-management-system
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED. Last commit 2026-07-24 on `main`; no P11 role. CFO to confirm.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: []
+    framework_version: null
+    framework_version_source: governance.version
+    governance_pin: none
+    governance_pin_note: >-
+      THE ONLY ENROLLED PROJECT WITH NO VENDORED GOVERNANCE AT ALL — no `.gitmodules`
+      entry, no `.governance/`, no `governance/`. Its `.ai-project.yml` declares
+      `source: https://github.com/panchew/ai-project-system` and `ref: v7.0.0`, but
+      nothing on disk resolves that pin, so its declared version cannot be confirmed
+      locally the way every other project's can. §4 does not require the source to be
+      fetched (rule 4 constrains the FORM of the value only), so the config is validly
+      §4-valid while the pin is unverifiable. Recorded; not repaired.
+    last_commit: 2026-07-24
+    installed_agent: canonical
+    installed_agent_note: >-
+      Present at `.ai-project/agents/` (14,711 B) despite the absent submodule — the
+      installed copy outlived whatever installed it.
+
+  - name: fieldledger-assesment
+    path: ~/soft-dev/fieldledger-assesment
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED, AND THIS IS THE CASE WHERE THE WEAKER-CLAIM RULE PINCHES HARDEST.
+      A completed take-home assessment, dropped from P10's scope by direct CFO
+      instruction as a screening project rather than a real adoption target. `archived`
+      is very likely the CFO's answer. It is NOT proposed here, for two reasons stated
+      rather than glossed: (1) dropping from a phase's scope is explicitly NOT a
+      registry state, so the drop cannot be mapped mechanically onto `archived`; and
+      (2) `archived` asserts an intent — "not planned to ever be touched again" — that
+      only the CFO can hold, and the record contains no such statement. CFO to rule;
+      this is the single entry most likely to move on that ruling.
+    enrolled: true
+    section_4: valid
+    section_4_errors: []
+    section_4_warnings: ["cfo_review_gate (top-level, no §4 rule)"]
+    framework_version: null
+    framework_version_source: governance.version
+    governance_pin: ".governance @ v5.1.0 (a59509f)"
+    last_commit: 2026-07-14
+    installed_agent: stale
+    installed_agent_note: >-
+      Present at `.governance/governance/agents/governance.agent.md` (14,352 B), i.e.
+      the pre-v7.0.0 canonical, consistent with a submodule pinned at v5.1.0. It has no
+      `.ai-project/agents/` copy at all.
+      ⚠ CORRECTS THE INHERITED RECORD: the E38.3 spec's Finding 6 (v1.2.0) recorded
+      this project's agent as ABSENT. It is not absent — it is present at the submodule
+      path and simply deeply stale. Finding 6's measurement looked only at
+      `.ai-project/agents/`, which is a measurement-layer error of exactly the kind
+      `P11-GH-2` names. See `findings.finding_6_miscounted` below.
+    notes: >-
+      The most stale project in the fleet by a wide margin: pinned at v5.1.0 while the
+      rest sit at v7.0.0 or v7.1.0. NOT ROLLED FORWARD BY THIS EPIC.
+
+  - name: ai-stack
+    path: ~/soft-dev/ai-stack
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED, with a tension worth stating rather than averaging away. As a PROJECT
+      it receives no development attention and is not under git at its root. As
+      INFRASTRUCTURE its `ollama/` component is load-bearing and in daily use — it is
+      the local inference runtime the whole fleet's `local:` model routes point at, and
+      its `comfyui/` component is the visual-artifacts endpoint. "Benched" describes
+      the development attention, not the runtime dependency. CFO to confirm, and to say
+      whether infrastructure belongs in a registry of projects at all.
+    enrolled: false
+    section_4: not_applicable
+    section_4_note: >-
+      No `.ai-project.yml` at its root. It is a container directory holding
+      `docker-compose.yml`, `comfyui/`, `llamacpp/` and `ollama/`.
+      ⚠ BUT NOT SIMPLY UNENROLLED: `ai-stack/comfyui/.ai-project.yml` exists — a NESTED
+      enrollment one level down, which the fleet-level enumeration (immediate
+      subdirectories only) does not and should not count. Recorded so the "2 unenrolled"
+      figure is not read as "2 projects governance has never touched."
+    framework_version: null
+    governance_pin: "none at root; comfyui/.governance carries a 14,352 B agent"
+    last_commit: null
+    last_commit_note: "No git repository at the root of this directory."
+    installed_agent: not_applicable
+    notes: >-
+      RESOLVED AS A SIDE EFFECT OF CLASSIFICATION, which is what the Epic's spine
+      required — not as a separate decision anyone had to remember to make.
+
+  - name: character-factory
+    path: ~/soft-dev/character-factory
+    state: benched
+    state_basis: proposed
+    rationale: >-
+      PROPOSED, and the weakest evidence base of any entry. Last commit 2026-06-30 on
+      `milestone/P3-M9`, unenrolled, carrying no governance agent anywhere, and named
+      in no P10 or P11 artifact. Six weeks idle is an observation; intent is not
+      recorded either way, so `benched` is proposed rather than `archived`. CFO to
+      confirm — this entry and `fieldledger-assesment` are the two most likely to move.
+    enrolled: false
+    section_4: not_applicable
+    section_4_note: "No `.ai-project.yml` anywhere in the tree."
+    framework_version: null
+    governance_pin: none
+    last_commit: 2026-06-30
+    installed_agent: absent
+    installed_agent_note: >-
+      The only project on the machine with no `governance.agent.md` anywhere in its
+      tree at any depth. Consistent with never having been enrolled.
+    notes: "RESOLVED AS A SIDE EFFECT OF CLASSIFICATION."
+
+# ============================================================================
+# FINDINGS RECORDED, NOT ACTED ON
+# ============================================================================
+#
+# This Epic built the thing that measures, and it measured things that are broken.
+# Every item below was left exactly as found. Repairing them is a different epic that
+# nobody has authorized.
+
+findings:
+
+  init_produces_invalid_configs:
+    summary: >-
+      `bin/ai-project-init` generates a `.ai-project.yml` that ai-project-yml-spec.md §4
+      calls INVALID. `create_ai_project_yml()` writes `project.name`,
+      `project.created_at`, `governance.source`, `governance.version` and
+      `governance.submodule_path`. It does NOT write `governance.ref` (required, rules 3
+      and 6) or `project.description` (required, rules 3 and 8). It also writes
+      `created_at` and `submodule_path`, neither of which appears anywhere in the schema.
+    second_defect: >-
+      There are TWO validators in this framework and they enforce different contracts.
+      `bin/ai-project-init`'s internal `validate_ai_project_yml_content()` requires
+      `created_at` — which the schema does not define — and does not require `ref` or
+      `description` — which the schema requires. The contract that is written down is
+      not the contract that is enforced.
+    blast_radius: >-
+      Three of the four §4-invalid configs (`ai-project-system-mcp`, `courtis`,
+      `home_finance`) are missing exactly `project.description`, and the fourth
+      (`social-stories-creator`) is missing `description` AND `ref`. All four are
+      init-created. The defect is not latent; it is the direct cause of the fleet's
+      §4 invalidity.
+    drivr_outcome: >-
+      RESOLVED THE GOOD WAY, and verified against drivr as it actually landed rather
+      than taken from its spec. E38.1's spec was amended to v1.1.0 on this finding and
+      required four post-init additions plus one correction and a §4 self-check; E38.1
+      delivered them. `bin/ai-project-validate` reports drivr §4-VALID (2 warnings,
+      0 errors) as of 2026-08-11, at drivr HEAD `31dad51`.
+    disposition: "NOT FIXED. Recorded and escalated to the Milestone Chat."
+
+  schema_drift_class:
+    summary: >-
+      `framework_version` was not alone. Four fields appeared in live configs with no
+      schema entry. This Epic blessed exactly one of them, by decision; the other three
+      are recommend-and-escalate, not act.
+    measured: 2026-08-11
+    scope: 13 enrolled projects
+    fields:
+      - field: framework_version
+        in_configs: 7 of 13
+        spec_occurrences_before: 0
+        disposition: "BLESSED — ai-project-yml-spec.md §3.6 + §4 rule 26, optional (P10-GH-1)."
+      - field: created_at
+        in_configs: 5 of 13
+        spec_occurrences: 0
+        written_by_init: true
+        disposition: "NOT BLESSED. Warned by the validator, escalated for a ruling."
+      - field: submodule_path
+        in_configs: 5 of 13
+        spec_occurrences: 0
+        written_by_init: true
+        disposition: "NOT BLESSED. Warned by the validator, escalated for a ruling."
+      - field: cfo_review_gate
+        in_configs: 2 of 13
+        spec_occurrences: "1 — a prose aside in §3.5, never a schema entry"
+        written_by_init: false
+        disposition: "NOT BLESSED. Warned by the validator, escalated for a ruling."
+    unknown_key_gap: >-
+      §4 has no rule for unknown keys at the top level or inside `governance:` and
+      `project:` — its unknown-key rules 11, 16 and 22 cover only `overrides`, `models`
+      and `visual_artifacts`. `bin/ai-project-validate` WARNS, as a documented validator
+      decision reported with no rule number, on the reasoning that warning is the only
+      treatment the document evidences anywhere. The gap itself is NOT closed here:
+      filling a normative silence by fiat is a larger change than this Epic was
+      authorized to make. Escalated.
+
+  finding_6_miscounted:
+    summary: >-
+      The E38.3 spec's Finding 6 (v1.2.0, 2026-08-11) recorded the installed
+      `governance.agent.md` as "canonical x10, stub x1, absent x2". Re-measured
+      exhaustively — every `governance.agent.md` at any depth in every project, rather
+      than the single `.ai-project/agents/` path — the picture differs.
+    corrections:
+      - "`fieldledger-assesment` is NOT absent. It carries a 14,352 B (pre-v7.0.0) copy at `.governance/governance/agents/`. It is STALE, not missing."
+      - "A fourth state exists: STALE. 14,352 B is an older canonical, not the 230 B stub and not absent."
+      - "`footboard` carries BOTH — 14,711 B at the two live paths and a stale 14,352 B leftover at `.github/agents/`. A per-project single value cannot represent it."
+      - "`social-stories-creator`'s stub is only its INSTALLED copy; the canonical 14,711 B file is present and correct inside its own submodule. The submodule was rolled forward; the install was not."
+      - "Only `character-factory` has no `governance.agent.md` anywhere at any depth."
+    cause: >-
+      A measurement layer, not a fleet change: Finding 6 looked at one install path and
+      the fleet uses more than one. This is `P11-GH-2`'s named failure — verification
+      performed at the wrong layer — arriving inside the Epic whose own subject is that
+      a count is only as good as the pattern behind it.
+    disposition: >-
+      RECORDED, NOT REPAIRED. No agent was re-installed, no submodule moved, no stale
+      copy deleted. The registry's `installed_agent` field carries the four states.

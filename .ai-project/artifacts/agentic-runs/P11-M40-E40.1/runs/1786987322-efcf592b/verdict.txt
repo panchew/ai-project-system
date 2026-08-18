@@ -1,0 +1,20 @@
+verdict:  no-effects-observed
+reading:  did-not-complete
+rule:     no-effects
+source:   drivr-execution-result:opencode
+evidence:
+  [used] effect ledger: 0 entry/entries observed; 0 effect(s), 0 verification(s), 0 refusal(s)
+  [used] files_changed: 0 path(s) differ between snapshots taken immediately before and after the invocation — window-scoped and run-attributed, which an unscoped repository-state delta is not (spec F2)
+      verbatim: '(none)'
+  [ignored] exit_code: measured wrong in both directions (P10-GH-7): E33.2 Run A exited 0 having done zero work; E33.4 exited 2 having produced complete, green work
+      verbatim: '0'
+  [ignored] status: also wrong in both directions — Run A reports 'completed' on zero tool calls; projected into termination for reporting only, never a rule term
+      verbatim: 'None'
+  [ignored] final_answer: wrong in both directions (spec F8): P7-M26-E26.3-PROVE's is the flat refusal "I'm sorry, but I can't assist with that request." on a run whose ground truth is completed. Its content is not even projected
+      verbatim: 'present=False'
+  [ignored] model-generated judgment: no model-generated judgment is a term in any rule — the QA-pass coupling decided at planning time (E39.1 spec). One may be attached as an advisory evidence item; it can never be the verdict or part of it
+  [noted] termination: C3 (M38/E38.4): why the run stopped. 'ceiling-reached' means it ran out of room; 'self-declared-done' means it stopped believing it was finished. Different facts for a coordinator, neither a term here
+      verbatim: 'not-reported'
+  [noted] environment: where the run — and so every verification in its ledger — executed. Recorded because the prior art's authoritative signal (the out-of-run QA validation_command) has a recorded environment-induced false failure (spec F9). No out-of-run verification is used by this judgment
+      verbatim: 'host'
+  [used] conclusion: effect evidence was observed and it shows no effect: a ledger of 0 entry/entries containing none, and a snapshot showing no changed paths

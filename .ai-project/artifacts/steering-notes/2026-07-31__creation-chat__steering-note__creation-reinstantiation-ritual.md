@@ -15,6 +15,13 @@ decisions:
 
 # Steering Note — Creation Chat to HQ Chat
 
+> **Amendment 2026-08-04 (P11-M36-E36.2) — `SN-1` in this note was renumbered to `SN-29`.**
+> Both references below to *"the SN-1 System HQ codification"* (Next Action items) mean the
+> Layer-8/CFO Steering Note
+> (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`),
+> renumbered per **HQ Ruling 2026-08-01, Decision 3**. **This note's own concern IDs are
+> unaffected.** The text is left as issued — it was correct at its date.
+
 ## Purpose
 
 This note closes the opening segment of the 2026-07-31 Creation Chat session — the session

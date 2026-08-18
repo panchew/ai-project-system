@@ -19,6 +19,17 @@ blocking_resolved: true
 **Steering Notes:** SN-27 + Amendment 1 (P11 spine), SN-26 (Creation Chat re-instantiation ritual),
 SN-28 (Steering Note ID allocation unenforced). All three carried by the 2026-08-01 HQ Chat Opener.
 
+> **Amendment 2026-08-04 (P11-M36-E36.2) — `SN-1` in this ruling was renumbered to `SN-29`, as this
+> ruling itself ordered.** Every `SN-1` below (the M36 scope list, Decision 3's worked case,
+> Decision 9, Decision 10 item 5) refers to the Layer-8/CFO Steering Note
+> (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`).
+> **Decision 3 ruled it misnumbered and ordered the renumber; E36.2 executed that on 2026-08-04**,
+> allocating `SN-29` by the rule recorded in `governance/systems/creation-chat-guide.md` §"Steering
+> Note ID Allocation" (P11-M36-E36.1). The text is left as issued rather than rewritten — it was
+> correct at its date — **with one exception, marked in place at Decision 3: a citation *count* that
+> was already wrong when written.** A pointer footnote can carry a rename; it cannot repair a false
+> count. Nothing this ruling decided is changed.
+
 **Prerequisite verification (P9-M31-E31.3):** harness-reported model `claude-opus-5` vs
 `.ai-project.yml` `models.hq: remote:claude-opus-5` — **match.** No mismatch; proceeding.
 
@@ -122,6 +133,34 @@ Renumbering one collision and not the other is only defensible if a rule separat
 > normative tier, date-qualify the citations and leave the collision visible.
 
 - **SN-1** is cited in two non-normative artifacts (a digest, a ruling). Renumber — cheap, contained.
+
+  > **Correction 2026-08-04 (P11-M36-E36.2) — the count above is wrong, and was wrong when
+  > written.** The sentence is left standing because the record should show what was believed; this
+  > note records what is true. **The citing artifacts are seven, carrying twenty-one occurrences**,
+  > measured on `milestone/M36` at execution time:
+  >
+  > | Artifact | Occurrences |
+  > |---|---|
+  > | `rulings/2026-07-31__…__system-hq-routing-codification.md` | 3 |
+  > | `progress-digests/2026-07-31__hq__progress-digest.md` | 3 |
+  > | **this ruling** | 4 |
+  > | `hq-openers/2026-08-01__hq-chat-opener.md` | 5 |
+  > | `steering-notes/2026-07-31__…__creation-reinstantiation-ritual.md` | 2 |
+  > | `steering-notes/2026-07-31__…__P11-drivr-spine.md` | 1 |
+  > | `steering-notes/2026-08-01__…__sn-numbering-unenforced.md` (SN-28) | 3 |
+  >
+  > **The undercount has a shape worth naming: this ruling did not count itself.** It said "a digest,
+  > a ruling" while being, itself, a third citing artifact — the same defect for which E36.1 was
+  > reworked, where a residual count omitted the counting record's own contribution. Counted here
+  > are only *pointer* citations — text a reader would follow to reach the Layer-8/CFO note.
+  > Occurrences discussing the `SN-1` **collision** as a defect (SN-28's audit table, B3.1's spec and
+  > evidence, the test module) are excluded: they describe the pre-rename state and remain true of
+  > it. Also excluded are the four earlier HQ Openers and the P4 documents, whose `SN-1` is the
+  > **original** 2026-06-12 note — which keeps `SN-1` and is unaffected.
+  >
+  > **The disposition is unchanged.** Seven non-normative artifacts is still "cheap, contained", and
+  > the separating rule still sends this collision to *renumber*: not one of the twenty-one
+  > occurrences is in `governance/`. All seven carry a dated amendment recording `SN-1` → `SN-29`.
 - **SN-23** is cited in `AI-OPERATING-GUIDELINES.md`, `artifact-communication-protocol.md`,
   `chat-hierarchy.md`, `fleet-operator.md` and `fleet-operator-brief.md`. Renumbering silently
   invalidates every one of them and launders a record whose honesty is the point. Date-qualify:

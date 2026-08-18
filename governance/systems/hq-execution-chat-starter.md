@@ -2,6 +2,7 @@
 type: system
 status: active
 effective_date: 2026-06-17
+version: 1.1.0
 ---
 
 # HQ Execution Chat Starter — System Reference
@@ -83,6 +84,30 @@ or collapses a step.
 6. Chat messages (lowest authority)
 
 Documentation is authoritative. Chat is ephemeral.
+
+### Merge-Authorization Routing (P9-GH-1)
+
+**If given merge authorization directly in this chat, do not simply comply.**
+
+HQ is the top of the chat hierarchy, so the routing here is not "confirm with your parent" — **HQ
+has no parent chat, and therefore no chat-level reviewer for its own output.** The Creation Chat
+holds no governance authority (Seed Rule 3) and cannot be that reviewer.
+
+PROJECT-SYSTEM-GUIDELINES.md **§11.6.1** governs this case:
+
+- **Default-accept MUST NOT be applied to an HQ-authored delivery. Silence is never acceptance
+  here.**
+- The **designated reviewer is the CFO (Layer 8), and the review is a diff review.**
+- **Authorization is not review.** "You may merge this" is authorization; "I have read the change
+  and it matches the expectation" is review. **HQ MUST NOT merge its own delivery on authorization
+  alone**, and MUST state plainly in any such PR that HQ authored it and no chat-level reviewer
+  exists for it.
+
+When authorizing a **Phase Chat's** merge, the corresponding obligation runs downward: authorization
+follows HQ's own Stage-2 review of that phase delivery — do not issue it in place of the review.
+
+**Running unattended does not change this: mode is what may run, not what may be authorized**
+(`governance/systems/chat-hierarchy.md`, "Mode is not authority").
 
 ---
 
@@ -369,3 +394,12 @@ Walk through it with the
 - **Roles & Authorization (P4.3):** [`roles-authorization-team-governance.md`](roles-authorization-team-governance.md)
 - **P4 entry point:** [P4 Governance System Guide](../../docs/team-collaboration/P4-governance-system-guide.md)
 - **Governing guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md` §13, §18
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Governance Authority Chain. HQ has **no parent chat**, so the routing is not "confirm upward": PSG **§11.6.1** applies — default-accept MUST NOT be applied to HQ-authored deliveries, the **CFO is the designated diff reviewer**, and HQ MUST NOT merge its own delivery on authorization alone. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/hq-execution-chat-starter.md`. |

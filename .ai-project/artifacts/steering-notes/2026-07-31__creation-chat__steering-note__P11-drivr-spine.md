@@ -31,6 +31,13 @@ references:
 
 # Steering Note — Creation Chat to HQ Chat
 
+> **Amendment 2026-08-04 (P11-M36-E36.2) — `SN-1` in this note was renumbered to `SN-29`.**
+> The reference below to *"Digest #3 — SN-1 System HQ codification"* means the Layer-8/CFO Steering
+> Note
+> (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`),
+> renumbered per **HQ Ruling 2026-08-01, Decision 3**. **This note's own concern IDs are
+> unaffected.** The text is left as issued — it was correct at its date.
+
 ## Purpose
 
 This note sets **P11's spine**. The 2026-07-31 Progress Digest closed P10 and stated that the
@@ -98,7 +105,7 @@ review back-test — is evidence about *local agentic execution* and survives an
 | **Archived** | Not planned to ever be touched again — though it can be brought back to life. |
 
 **The orchestrator schedules agentic runs to avoid overloading the system.** This is the concrete
-form of SN-23 Ratified Decision #7 (*scheduler only when contention bites*): P10 ran the local
+form of SN-23 (2026-07-20) Ratified Decision #7 (*scheduler only when contention bites*): P10 ran the local
 lane by hand and the contention is real and measured — one GPU, 16 GB VRAM shared with ComfyUI,
 one heavy consumer at a time, `qwen3-coder:30b` already partially offloading to RAM.
 

@@ -2,6 +2,7 @@
 type: system
 status: active
 effective_date: 2026-07-20
+version: 1.2.0
 ---
 
 # Chat Hierarchy — System Reference
@@ -114,7 +115,7 @@ Manual-Only, Permanently" below.
 *(Added P10-M35-E35.4, 2026-07-30.)*
 
 HQ ratified the execution matrix on 2026-07-30 (**HQ Ruling on SN-25, Decision 4**), restoring the
-E31.1 baseline recorded above at Phase and Milestone after SN-23 had narrowed P10's opening posture
+E31.1 baseline recorded above at Phase and Milestone after SN-23 (2026-07-20) had narrowed P10's opening posture
 to Manual/Paid from Creation through Milestone. The table is reproduced here exactly as ratified:
 
 | Level | Execution Mode | Inference locality |
@@ -162,10 +163,10 @@ ratification and is unmodified by it.** The matrix restores a *possibility*, not
 or Milestone agentic run can be dispatched today, and nothing in this repository runs differently
 because the matrix was recorded.
 
-**SN-23 Ratified Decision #2 is superseded on the Execution Mode axis only.** Decision 2's own text
+**SN-23 (2026-07-20) Ratified Decision #2 is superseded on the Execution Mode axis only.** Decision 2's own text
 is preserved verbatim in the P10 phase spec's Ratified Decisions and is **not reopened**. Its
 **Execution Mode axis is superseded** — Phase and Milestone may now run agentically or manually,
-restoring the P9-M31-E31.1 baseline that SN-23 had narrowed for P10's start. Its **locality axis
+restoring the P9-M31-E31.1 baseline that SN-23 (2026-07-20) had narrowed for P10's start. Its **locality axis
 stands**, with Milestone × local inference now under a directed evidence evaluation (P10-M35-E35.5)
 rather than settled either way: that cell is neither opened nor closed, and "under evaluation"
 records that the question is live and directed, not that it is unanswered by neglect. The
@@ -268,7 +269,8 @@ E31.2's surface, untouched here.
 **Values are versions; the decision behind them is a tier.** These five cells named
 `remote:claude-opus-4-8` until 2026-07-28, when that version stopped being offered in the
 harness surface in use and this guardrail — correctly — halted every manual chat at once
-(P10-M34 Escalation Notice). HQ refreshed all five to `remote:claude-opus-5`, the same
+(`.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`).
+HQ refreshed all five to `remote:claude-opus-5`, the same
 line's successor. What the policy actually decides is *paid frontier* (rows P1–P4); only
 this table and `model-routing-policy.md`'s mapping table name a version, and a version can
 be deprecated where a tier cannot. Expect this refresh to recur at every future
@@ -456,8 +458,15 @@ handback**:
 
 #### P9-GH-1 is not closed by this section
 
-**P9-GH-1 remains open, carried forward, and unowned.** Nothing in this section closes it,
-softens it, or partly addresses it.
+**Nothing in this section closes P9-GH-1, softens it, or partly addresses it.** That remains true
+and is the point of this subsection.
+
+> **Status update (2026-08-17, Epic P11-M40-E40.5).** `P9-GH-1` was **closed** by a separate,
+> later change — the guard was extended to **eight** starter surfaces (three `governance/templates/`
+> starters, four `governance/systems/` starter surfaces, and `governance/EPIC-EXECUTION-CHAT-STARTER.md`),
+> level-aware per level, backed by `tests/test_merge_authorization_routing_guard.py`. It was **not**
+> closed here. The sentence below described the state of the world when this section was written and
+> is retained for that reason: at the time, P9-GH-1 was open, carried forward, and unowned.
 
 The two are adjacent, and a future reader will conflate them unless the record refuses to.
 **P9-GH-1 is a merge-authorization hole** in the Milestone and Phase Execution Chat Starter
@@ -1106,3 +1115,13 @@ it without a second hop. The two statements must always agree; on any divergence
 - **Epic Template:** `governance/templates/epic-execution-chat-starter.md`
 - **Project System Guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md`
 - **AI Operating Guidelines:** `governance/AI-OPERATING-GUIDELINES.md`
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| 1.2.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). **Status update only, in the §"P9-GH-1 is not closed by this section" subsection:** that subsection asserted *"P9-GH-1 remains open, carried forward, and unowned"*, which E40.5 falsifies. The original sentence is **retained** as the record of what was true when written, and a dated note records the closure and states plainly that it did **not** happen in that section. **No normative rule in this document changed.** The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
+| 1.1.0 | 2026-08-06 | **Escalation-notice citation form applied** (E37.2, P11-M37, executing HQ Ruling 2026-08-05, Decision 3). The single citation of an escalation notice **by milestone key** — the *"`P<n>-M<n>` Escalation Notice"* short form, in the §Manual Chat Model Verification note explaining why the five paid-frontier cells changed version on 2026-07-28 — replaced with the notice's **full filename**, `.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`. **The milestone key could not identify it: two notices share `P10-M34`**, and this document already cites both correctly by full filename elsewhere, so the one remaining short form was the outlier. The rule itself is recorded once, in [`creation-chat-guide.md`](creation-chat-guide.md) §Artifact ID Citation Forms; this document **cites it rather than restating it**. **Authorized by the P11-M37 Milestone Chat's Review Decision of 2026-08-06** (E37.2 spec v1.1.0, §Conflict resolution), resolving a contradiction between that spec's in-scope-surfaces clause and its do-not-touch list. **Nothing else in this document changed** — no renumbering, and E37.1's `1.0.0` seeding row is unaltered. |
+| 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/chat-hierarchy.md`. **One earlier amendment is recorded here because it landed while this document could not record it:** E36.1 (P11-M36, `4427ea9`, merged `f1a5e75`, 2026-08-03), **+3 / −3** — two `SN-23` citations date-qualified to `SN-23 (2026-07-20)` in **normative text**, at the §Execution Mode ratification note and at the **Ratified-Decision-#2 supersession statement**. Recorded per M36's Milestone Closure Declaration §D5, which records **three** amendments across **two** unversioned documents — **not** per HQ Ruling 2026-08-04 Decision 5, whose count of *"two"* omits this document and is footnoted as an erratum by HQ Ruling 2026-08-05, Part 1. |

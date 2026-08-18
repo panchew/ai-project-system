@@ -1,7 +1,7 @@
 ---
 type: hq_ruling
 steering_note_ref: .ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md
-concern_id: SN-1 (Layer-8/CFO series)
+concern_id: SN-29 (renumbered from SN-1 on 2026-08-04 by P11-M36-E36.2; see the Amendment note below)
 issued_by: HQ Chat (ai-project-system)
 issued_to: Creation Chat (P11 scoping), the P11 Phase Chat that receives the placement
 phase: P10 (closed) → P11 (unscoped)
@@ -14,6 +14,17 @@ blocking_resolved: true
 
 **Steering Note:** Layer-8/CFO to HQ Chat, 2026-07-31, scribed by System HQ — *Routing and
 human-originated requests are unrecorded field practice* [MEDIUM]
+
+> **Amendment 2026-08-04 (P11-M36-E36.2) — the concern this ruling answers was renumbered
+> `SN-1` → `SN-29`.** The Layer-8/CFO note
+> (`.ai-project/artifacts/steering-notes/2026-07-31__layer-8-cfo__steering-note__system-hq-routing-model.md`)
+> was filed claiming `SN-1`, an ID already held by the 2026-06-12 Creation Chat note. **HQ Ruling
+> 2026-08-01, Decision 3** ruled it misnumbered and ordered the renumber; `SN-29` was allocated by
+> the rule now recorded in `governance/systems/creation-chat-guide.md` §"Steering Note ID
+> Allocation". **Every `SN-1` below — including this document's title and the Disposition — refers
+> to the Layer-8/CFO note and now reads `SN-29`.** The text is left as issued rather than rewritten:
+> the citations were correct at their date, and recording the rename here keeps it legible *as* a
+> rename. Nothing this ruling decided is changed.
 
 D1–D4 are **CFO decisions already made.** HQ does not re-decide them and this ruling does not
 restate them as though they were open. What HQ owes is triage, placement, and the constraints the

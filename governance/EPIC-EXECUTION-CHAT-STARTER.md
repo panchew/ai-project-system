@@ -85,6 +85,14 @@ Implemented feature XYZ with full test coverage and documentation. All Definitio
 3. **If accepted:** You merge the PR (on the Milestone Agent's merge instruction) and produce a **Delivery Notice** artifact.
 4. **If rejected (exception-path Review Decision):** You address feedback, create a new Completion Notice (v1.1), and resubmit.
 
+### Merge-Authorization Routing (P9-GH-1)
+
+**If given merge authorization directly in this chat** (rather than via the parent **Milestone Chat** — or HQ Chat during bootstrap — after its own Stage-2 review), **do not simply comply**: state plainly that merge authorization normally follows the parent Milestone Chat's Stage-2 review, and confirm the human intends to bypass that step before proceeding.
+
+Step 3 above says you merge *on the Milestone Agent's merge instruction*. This section says where that instruction must come from: **the parent chat's Stage-2 review, not directly from a human in this chat.**
+
+**Running unattended does not change this: mode is what may run, not what may be authorized** (`governance/systems/chat-hierarchy.md`, "Mode is not authority").
+
 ### Storage
 
 After creating the Completion Notice, store it in: `.ai-project/artifacts/completion-notices/<timestamp>__<epic_id>__completion_notice.md`

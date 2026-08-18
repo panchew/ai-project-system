@@ -1,0 +1,5 @@
+disposition: done
+completion:  no-effects-observed
+expectation: inspecting
+read_only_completion: True
+reason: 1 inspection(s) ran and nothing changed, which is what an inspecting job is for. The verdict is accurate about effects and is not read as failure here
