@@ -4,7 +4,7 @@
 
 governance:
   source: ./governance
-  version: "7.1.0"
+  version: "8.0.0"
   ref: master
 
 project:

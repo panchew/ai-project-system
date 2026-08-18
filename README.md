@@ -6,9 +6,11 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — v7.1.0
+## 🎉 All Phases Complete — v8.0.0
 
-**The AI Project System was built using its own governance.** All ten phases (P1–P10) are complete and consolidated to `master` at **v7.1.0** with 366 tests passing (0 skipped).
+**The AI Project System was built using its own governance.** All eleven phases (P1–P11) are complete and consolidated to `master` at **v8.0.0** with **549 tests passing (0 skipped)**.
+
+P11 also produced a **second repository — [Drivr](../drivr)**, the coordination daemon: enrolled under this framework, invoking a CLI engine it does not implement, with **452 tests** of its own.
 
 ### Phase P1 — System Foundation (Complete)
 ✅ **5 Milestones** (M1-M5), **12 Epics** — Closed 2026-02-23 — [#21](https://github.com/panchew/ai-project-system/pull/21)
@@ -629,13 +631,42 @@ This repository **dogfooded its own system** — the AI Project System was built
 ✅ **M9** — Configuration & Override System (4 Epics)
 ✅ **M10** — Adoption Validation & Documentation (4 Epics)
 
-### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9 + P10)
-✅ **111 Epics** delivered across **35 milestones** over **10 phases**
+### Phase P11 — Drivr: Coordination over Rented Execution (Complete)
+P10 proved the framework works in the wild and left the CFO as its operator — the lane hand-run, the
+gate list whatever the human remembered. P11 built the thing that holds the framework's hands, on one
+organizing decision: **an app is made AI-powered by calling a CLI tool that owns the inference.**
+Drivr rents both halves — it implements no inference, owns no model loop, grows no engine — and spends
+its whole budget on coordination over governance state.
+
+Two cleanup milestones came first, by CFO ruling, so the record was trustworthy before anything was
+built on it: **M36** closed a High-severity citation trap in which following a normative citation led a
+reader to conclude platform agnosticism had been superseded; **M37** gave every `governance/systems/`
+document a version and a changelog, and made every artifact ID resolve to exactly one thing. Then
+**M38** created Drivr, a three-state fleet registry over every project on the machine, and an execution
+adapter surface with a demonstrated second implementation. **M39** built a completion judgment that
+rests on neither the exit code nor the engine's own status — both measured wrong in both directions —
+and validated it against two preserved runs whose ground truth was known. **M40** put the lane under a
+scheduler that runs it unattended, derived the gate queue from governance state rather than storing it,
+and put the human's approval behind a signed one-time link that no chat reply can substitute for.
+
+**P11 highlights:** a coordination daemon that rents both halves · the fleet as a data structure rather
+than a memory · a completion signal validated against runs whose answers were already known · five
+unattended dispatches nobody started · an approval path with no `approve` verb anywhere in it.
+
+**What the phase learned about itself, and recorded rather than smoothed:** its own QA lane fabricated a
+`VERDICT: PASS` with zero tool calls on its first exercise — and the phase's own completion judgment
+caught it. Better fidelity produced a *worse* answer in two unrelated subsystems, from one cause: a
+consumer inferring state from **absence** in a system that records state by **presence**. And a limit
+recorded honestly in M39 was falsified by measurement in M40, because nobody had yet looked at the
+engine's own event stream.
+
+### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9 + P10 + P11)
+✅ **132 Epics** delivered across **40 milestones** over **11 phases**
 
 ### Governance
 - PROJECT-SYSTEM-GUIDELINES.md v2.4.0 (effective 2026-07-31)
 - AI-OPERATING-GUIDELINES.md v2.10.0 (effective 2026-07-18)
-- Framework version: v7.1.0
+- Framework version: v8.0.0
 
 ---
 
@@ -689,6 +720,7 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P7 Complete** — Agentic Execution & Default-On Visuals (3 milestones, 10 Epics)
 - ✅ **Phase P8 Complete** — Visual Artifacts Activation (1 milestone, 3 Epics)
 - ✅ **Phase P9 Complete** — Context Handling and Token Efficiency (3 milestones, 10 Epics)
+- ✅ **Phase P11 Complete** — Drivr: Coordination over Rented Execution (5 milestones, 21 Epics)
 - ✅ **Phase P10 Complete** — Fleet Adoption and Local-Inference Proving (3 milestones, 12 Epics)
 - ✅ **111 total Epics** delivered across 35 milestones, 10 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
@@ -700,7 +732,7 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Adoption proven on real projects** — six enrolled projects confirmably at `framework_version: v7.0.0`, with real Agentic/Local epics run end-to-end, not scaffolds
 - ✅ **Fleet-operator role canonized** — role, duties, and authority boundary written down (`governance/systems/fleet-operator.md`) before anything is built against them; a blocked autonomous instance can hand back to its immediate parent, normatively
 - ✅ **Execution matrix ratified** — Phase and Milestone may run agentically, with *mode is not authority* stated explicitly: Stage-2 acceptance and merge authorization still require the human's key
-- ✅ **Governance stable** — v7.1.0 (effective 2026-07-31)
+- ✅ **Governance stable** — v8.0.0 (effective 2026-08-17)
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
