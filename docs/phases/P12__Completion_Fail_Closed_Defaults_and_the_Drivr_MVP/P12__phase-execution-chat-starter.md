@@ -85,7 +85,7 @@ spec alone:**
 | **M41** The Model Line-Up and Its Evidence | The ruled line-up measured before it lands; `epic_dev`/`epic_qa` separately; incumbent baseline | **Opens first, closes late** — terminal epic gated on M42 |
 | **M42** Fail-Closed Execution Tier | Rows 1-3 and 5 of the finding; `P12-GH-2` | **Gates M47** — SN-31 Decision 2 |
 | **M43** The Acceptance Chain, Made Structural | Parent merges; accept-by-silence; rework flip; resume; `P12-GH-1` | Independent |
-| **M44** Rituals, Records, Normative Repairs | `P11-GH-3`; HQ ritual; handoff artifact; `governance-propagation.md`; i18n; SN-30 Recs 1-2; AOG renumber | **Must close before P12 closes**; HQ ritual gates M46 |
+| **M44** Rituals, Records, Normative Repairs | `P11-GH-3`; HQ ritual; handoff artifact; `governance-propagation.md`; i18n; SN-30 Recs 1-2; AOG renumber; **P12's own `P11-GH-1` instance** | **Must close before P12 closes**; HQ ritual gates M46 |
 | **M45** Trustworthy Completion Signal | `P10-GH-7`; M39's judgment; `undetermined` first-class | **Gates M46** |
 | **M46** The Drivr MVP Surface | SN-36's binding; SN-37's gate with its bar | Gated on M45 |
 | **M47** First Real Agentic Integration | One real epic, one real project, end to end | **Gated on M42** |
@@ -100,10 +100,18 @@ evidence be collected early; its terminal epic — the `.ai-project.yml` edit pl
 drift apart** — waits for M42, because a model change landing with a lane repair makes the next
 failure unattributable.
 
-**`P11-GH-1` is an active risk and you own the mitigation.** Mid-flight spec amendments do not reach
-working branches; it fired **four times in P11**, once in reverse. P12 runs three parallel tracks.
-**State in each Milestone Execution Chat Starter you write how an amendment reaches a branch already
-in flight.** Do not wait for it to fire.
+**`P11-GH-1` is an active risk, you own the mitigation, and it has already fired once in this phase.**
+Mid-flight spec amendments do not reach working branches. **It fired on HQ's own phase-opening branch
+before that branch merged** — SN-38 landed on `master` after the branch was cut, and **a Creation
+Chat reading `master` caught it**, not the level below. P12 runs three parallel tracks. **State in
+each Milestone Execution Chat Starter you write how an amendment reaches a branch already in
+flight.** Do not wait for it to fire again.
+
+**M44 records that instance** against `P11-GH-1`'s carry-forward note (SN-39's Next Action), with the
+facts listed in the phase spec. **Cite it by artifact and defect, never by ordinal** — the note
+records two instances and P11's closure record counts four; the tally does not reconcile, and writing
+"the Nth instance" reproduces the defect being filed. **Recording it does not reopen the fix:**
+`P11-GH-1` stays open and unscoped in P12 by ruling.
 
 ---
 
