@@ -20,6 +20,11 @@ decisions:
   - "Single-window is re-weighted from 'explicitly not a requirement' (P11) toward central. Not a contradiction of headless-first — a client of a headless daemon is still headless-first — and recorded as a deliberate change rather than drift."
   - "Board status vocabulary for active work is queued / in progress. queued is a property of the serialized inference lane, not of the epic."
   - "In-app diff review is a nice-to-have. §11.6.1 requires the review to happen, not to happen in any particular place; GitHub or an IDE satisfies it."
+  - "RESUME RESTORES, IT NEVER PROMOTES. Only an instance whose committed starter declares agentic may be resumed to agentic; an instance declared manual stays manual. Resume returns the MODE, not the BUDGET — it does not reset the rework attempt counter."
+  - "One last chance, bounded: the CFO's recorded act of resolving a blocker in the escalation chat IS the written extension, and it grants exactly ONE further attempt — not a reset to three. This is STRICTER than the rule as written today, which says the limit resets."
+  - "undetermined is a first-class board state, never folded into another. An interface that can say 'I don't know' is the one worth trusting when it says 'done'."
+  - "The qualification bar is RELATIVE and OBJECTIVE: run the suite against the incumbent model first; the candidate must be no worse on every objective check and strictly better on at least one, over an absolute floor of tool rounds > 0 and files changed > 0. No subjective quality score — judgment is precisely what cannot be trusted from the thing under test."
+  - "Escalate-further is an explicit human action, surfaced as a control: the CFO may decide that the level above should own a blocker he could not resolve. It advances the chain ONE level, consistent with one-level escalation (SN-25); it does not skip levels."
 references:
   - "https://claude.ai/code/artifact/688a152b-df5d-4882-b48f-26108200b92c — The Drivr Window. The visual binding is recorded in SN-36 below."
   - ".ai-project/artifacts/steering-notes/2026-08-18__creation-chat__steering-note__P12-spine-fail-open.md — SN-31…SN-35, master 7af49f7. This note completes its Next Action 7."
@@ -169,18 +174,76 @@ model-tier result, not a track verdict, and a hosted instance makes it re-testab
 
 ---
 
+## Amendment, same day — three carry-overs closed by CFO decision
+
+Recorded as an amendment rather than a rewrite: this note was committed at `1aae2ff` and HQ had not
+yet consumed it. The three items below were carried as open in that commit and are now decided. The
+decisions are in the front matter; the reasoning that produced them is here.
+
+### Resume — restores, never promotes
+
+**Only an instance whose committed starter declares `agentic` may be resumed to agentic.** An
+instance declared manual has nothing to resume to.
+
+The reason this constraint is the load-bearing half: a button that could promote manual → agentic
+would be **granting a mode the committed starter never declared** — mode-granting by click,
+bypassing the rule that the declaration lives in the starter and is read from it. Under the rule as
+decided, the flip to manual is a temporary override and resume restores the declared state, so the
+starter remains the source of truth. Drivr records both acts.
+
+**Resume returns the mode, not the budget.** This closes a hole the proposal would otherwise have
+opened: the flip fires on **exhausted rework**, so a resume that silently reset the attempt counter
+would make the 3-attempt limit unenforceable by the very control meant to recover from it —
+*"silent fourth attempts are a governance violation"* would become unreachable.
+
+**"One last chance", and it is stricter than the rule it invokes.** The CFO's recorded act of
+resolving a blocker in the escalation chat **is** the written extension the existing rule requires —
+a human looked and acted, which is the opposite of silent. But it grants **exactly one further
+attempt, not a reset to three.** The rule as written today says the limit *"resets"*, which is
+unbounded. **HQ should note this as a tightening of an existing rule, not merely a new one**, and
+reconcile the two rather than leaving both statements standing.
+
+### `undetermined` — a first-class board state
+
+Never folded into `in progress` (which would be the fail-open pattern drawn on a card — the board
+asserting advancement the system cannot support) and never into `blocked` (which over-claims;
+undetermined is not necessarily stuck).
+
+**The property that makes this right rather than merely safe:** M39 returns `undetermined` on four
+cases of six. Rendered visibly, the board shows the size of the problem in every project, every day —
+which is exactly the pressure P12 needs to stay honest. Hidden, the dashboard looks healthy while the
+signal beneath it is broken, and the feedback that drives the fix is removed.
+
+### The qualification bar — relative and objective
+
+**Shape, not number.** A bar over objective checks is falsifiable; a bar over "quality" is a
+judgment call, and judgment is precisely what cannot be trusted from the thing under test. Both
+recorded failures pass any subjective read: E33.2's 14b returned exit 0, and E39.3's dispatches
+returned confident `PASS` verdicts. They fail only on counts.
+
+**How the number gets set without waiting for data: make it relative.** Run the suite against the
+**incumbent** model first. The candidate must be *no worse than the incumbent on every objective
+check* and *strictly better on at least one*, over an absolute floor of tool rounds > 0 and files
+changed > 0. This is definable today, self-calibrates as models improve, and matches how this
+project already reasons about model behaviour — M39's most useful result was relative
+(*"loses to the degenerate baseline"*).
+
+---
+
 ## Carry-Over Open Items
 
-1. **Resume has never been specified.** Escalation is one-directional; the flip to manual is
-   one-way. The CFO wants *"the possibility to go back to agentic"* after intervening. That
-   transition asserts the blocker is resolved — a judgment with an owner — and is exactly the
-   transition an impatient system will attempt on its own. Unspecified anywhere in the corpus.
+1. **The escalation terminus has no defined disposition.** Escalate-further advances the chain one
+   level, and the chain terminates at the CFO by construction (SN-25). **When a blocker reaches the
+   top and he cannot resolve it there, nothing is above him** — and the corpus has no name for that
+   state. Park it, file it, rescope it, kill the work: all plausible, none written. Rare, and P12
+   does not depend on it; recorded so it is not discovered as a surprise by whichever chat meets it
+   first.
 
-2. **`undetermined` has no board state** (see SN-36).
+2. **The rework-limit statements must be reconciled, not merely stacked.** The existing rule says the
+   3-attempt limit *"resets"* on written extension; this note's decision grants **+1**. Two
+   statements about one mechanism is the drift condition this framework exists to prevent.
 
-3. **The qualification bar is unset** (see SN-37).
-
-4. **The ngrok endpoint is stable in address, intermittent in availability.** §16.4 already handles
+3. **The ngrok endpoint is stable in address, intermittent in availability.** §16.4 already handles
    this correctly and **fails closed** — where a visual would need generation and the endpoint is
    absent, the agent *"records the intent and defers it rather than fabricating a render."* Recorded
    because it is the one place in the corpus that already does what P12 exists to generalize, and is
