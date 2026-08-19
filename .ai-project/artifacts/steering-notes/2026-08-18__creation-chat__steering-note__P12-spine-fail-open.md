@@ -15,6 +15,9 @@ concerns:
   - id: SN-33
     severity: medium
     title: SN-30 (external assessment, issue #192) was issued 2026-08-11 and appears in no ruling, spec or declaration; P11 closed without it
+  - id: SN-34
+    severity: medium
+    title: governance-propagation.md's Constraints are factually false and its Non-Goals prohibit work now contemplated — an active normative document resting on an expired technical premise
 decisions:
   - "P12's spine, in the CFO's words: completing the CFO's vision of the workflow, using the governance and the MVP of the harness (Drivr). A completion phase, not a redesign."
   - "The three verified execution-tier defects are P12 scope, under a sequencing constraint rather than a date: they land BEFORE the first real agentic integration, not after."
@@ -24,6 +27,9 @@ decisions:
   - "Consolidating the eight starter-shaped surfaces is P12 scope."
   - "Keep unchanged: per-instance Execution Mode in the committed starter; 'Mode is not authority'; PSG §11.6.1 (the CFO is the mandatory diff reviewer)."
   - "The rework limit is 3 attempts maximum, movable only by a written reason. This confirms the built rule rather than amending it."
+  - "HOLD RELEASED 2026-08-18. The withheld input was governance auto-update; it is recorded in Carry-Over 9 at 'nice if possible' weight. P12 may be opened."
+  - "i18n policy: chat and output in the user's language; documentation remains in the original language; English is authoritative; translation on demand is a view, never the source."
+  - "Governance auto-update (nice if possible): opt-in, apply rather than notify, run by the harness at Phase Chat start ONLY, authorized by the CFO and HQ through Drivr's existing gate queue. Fail-open on the CHECK. Pin advances automatically; framework_version is written only after the roll-forward procedure completes. Artifacts under a rolled-back version are marked superseded, never dropped. bin/ai-project-init is fixed so repaired installs do not re-break."
 references:
   - "https://github.com/panchew/ai-project-system/issues/192 — external assessment, routed by SN-30, still unactioned."
   - ".ai-project/artifacts/progress-digests/2026-08-17__hq__progress-digest.md — the P12 scoping handoff this note answers."
@@ -145,6 +151,35 @@ reasoning. Either is acceptable; silence is not.
 
 ---
 
+### SN-34 — An active normative document rests on an expired premise [MEDIUM]
+
+`governance/systems/governance-propagation.md` (`status: active`, v1.0.0) states as **Constraints**:
+
+> *"HQ chats and related tools **do not** have live access to GitHub repositories."*
+> *"No automatic synchronization or polling is **possible**."*
+
+**Both are false as of 2026-08-18.** This repository is operated through `gh` daily; `B2.1`
+(P11-M37) gave the sandbox reachability to the host; and **Drivr is a scheduler**. On those
+constraints the document builds three prohibitions — *"Governance does not propagate automatically
+or implicitly"*, *"Manual Enforcement... not automation"*, and the Non-Goals *"No CLI or automation
+tooling. No automatic or live governance syncing."*
+
+**This is filed independently of whether the CFO's governance auto-update idea is ever built.** A
+normative document whose stated justification has expired is a defect on its own: any future
+proposal in this area will be measured against a rule whose reasoning no longer holds, and will
+either be wrongly refused or quietly ignored. Both outcomes are worse than an amendment.
+
+**It is also a known error class in this project.** The P11 phase record lists, among the HQ errors
+caught one level down, *"a technical note inherited from an opener and never checked against the
+running version."* This is that, at the normative tier, aged across at least four phases. It is the
+**time axis** of `P11-GH-2`.
+
+**Required action:** rule on `governance-propagation.md` — amend the Constraints to match reality
+and decide deliberately whether the prohibitions survive their justification. The ruling is required
+even if Carry-Over 9 is never scoped.
+
+---
+
 ## Decisions Already Made
 
 Ratified by the CFO in the Creation Chat, 2026-08-18. **These are not open for HQ to re-decide** —
@@ -249,32 +284,72 @@ they are inputs to P12's scoping.
 
 ---
 
+9. **Governance auto-update — "nice if possible", and fully specified at that weight.** The input
+   the hold was placed for. **It does not change the spine**, and the CFO assigned it explicitly
+   opportunistic priority. Recorded here in full so it is neither lost nor inflated:
+
+   | Question | The CFO's answer |
+   |---|---|
+   | What it does | **Applies**, not merely notifies |
+   | When | **Phase Chat start only** — deliberately *not* HQ start, because a new HQ chat may be opened mid-phase, mid-milestone or mid-epic |
+   | Who runs it | The harness (Drivr) |
+   | Who authorizes | The CFO **and** HQ, routed through **Drivr's existing derived gate queue and signed one-time-link approval** — the mechanism is already built and is to be pointed at this, not rebuilt |
+   | Which version moves | The **pin** (`governance.version` / `ref`) automatically; **`framework_version` only once the roll-forward procedure has actually completed**, so the field keeps meaning what `ai-project-yml-spec.md` §3.6 says it means |
+   | On failure to determine | **Fail-open, for the *check*.** Correct here and not an instance of SN-31: fail-open is a defect when the fallback *does something*, and safe when the fallback is *no change*. An undetected update leaves the project exactly where it was. |
+   | Rollback | Artifacts written under a rolled-back version are **marked superseded, never dropped** — using the `supersedes:` frontmatter mechanism the Progress Digests already use. The record of what happened is not revised by a version being un-pinned. |
+   | Already-broken installs | **Fixed** — and `bin/ai-project-init` is fixed with them, since it hard-codes the path that produced FM 12's placeholder agents and the three non-`.governance` projects. Repairing installs without repairing init re-breaks them on the next install. |
+
+   **The invariant this creates, stated because it is the reason for the schedule and not merely a
+   consequence of it: one phase, one governance version.** A phase runs start to finish under a
+   single ruleset. This sidesteps `P11-GH-1` at this tier by construction, and it makes rollback
+   scoping tractable — "artifacts written under version X" maps onto phase boundaries.
+
+   **Two sub-questions remain open and are the CFO's to close:** (a) what happens when an **apply**
+   fails *partway* — fail-open was answered for the check, and a half-applied governance is a state
+   neither version defines; (b) whether "mark superseded" should be narrowed further for artifacts
+   that are explicitly immutable (a Review Decision, once issued, cannot be revised — but it can be
+   annotated).
+
+   **Scope warning for HQ:** *"fix already-broken installs"* turns this from an updater into a
+   **reconciler**, which is materially larger than the rest of the item and larger than "nice if
+   possible" implies. It should be split rather than carried as one unit.
+
+10. **i18n policy — decided, and it costs almost nothing to state.** Chat and output in the user's
+    language; **documentation remains in the original language**; **English is authoritative**;
+    translation available on demand as a *view*, never as the source. This is one paragraph of
+    normative text, not a project. It also resolves the tension Carry-Over 6 raised: propagating
+    English normative text to a Spanish-speaking adopter is **correct** under this policy, because
+    the English is the authority and any translation is derived from it.
+
 ## Next Action
 
-### HOLD — P12 MUST NOT BE OPENED ON THIS NOTE ALONE
+### HOLD — PLACED AND RELEASED, both on 2026-08-18
 
-**The CFO has stated that there is a further input P12 cannot be entered without, and that he has
-not yet recalled it.** This note is therefore **complete as a record and incomplete as an
-authorization**. Everything in it stands — the spine, the decisions, the three concerns — and none
-of it is retracted by this hold.
+**The hold is released. All five items below are actionable.**
 
-**HQ may act on items 3, 4 and 5 below immediately.** Items 1 and 2 wait for the CFO to release the
-hold in writing.
+The record of it is kept rather than deleted, because the hold and its release are both governance
+events. When this note was first committed (`8071eeb`), the CFO had stated there was a further input
+P12 could not be entered without, which he had not yet recalled. Next Actions 1 and 2 were blocked
+pending written release; 3, 4 and 5 were not.
 
-This is recorded in the artifact rather than left in chat deliberately: SN-33 below documents a
-Steering Note that reached its target and was acted on by nobody. The inverse failure — a note
-acted on *further than its author intended* — is the same defect with the sign flipped, and a hold
-that lives only in a chat window is a hold that does not survive the chat.
+**The withheld input was governance auto-update.** It is recorded in **Carry-Over 9** below, at the
+weight the CFO assigned it — *"nice if possible"* — and it does **not** alter the spine. Its
+independently-filed defect is **SN-34**.
+
+The hold was written into the artifact rather than left in chat on purpose. SN-33 records a Steering
+Note that reached its target and was acted on by nobody; a note acted on *further than its author
+intended* is the same defect with the sign flipped. A hold that lives only in a chat window does not
+survive the chat.
 
 ---
 
 HQ Chat should:
 
-1. **[HELD]** **Open P12 on SN-31's spine** — completion of the workflow vision on governance plus the Drivr
+1. **Open P12 on SN-31's spine** — completion of the workflow vision on governance plus the Drivr
    MVP — and carry `P11-GH-3` into its opening, per the digest's own Next Action 5: the phase
    closure gate needs a pre-merge completion artifact, and P12's opening is its own first customer.
 
-2. **[HELD]** **Treat the four fail-open behaviours as the phase's organizing evidence**, with the sequencing
+2. **Treat the four fail-open behaviours as the phase's organizing evidence**, with the sequencing
    constraint in Decision 2 recorded as binding: the three execution-tier defects land before the
    first real agentic integration.
 
@@ -286,3 +361,12 @@ HQ Chat should:
 
 5. **Place the two build items** — the handoff artifact, and Drivr's recorded mode-flip from
    Decision 5 — into milestones with room.
+
+6. **Rule on `governance-propagation.md` (SN-34)** — amend its false Constraints and decide
+   deliberately whether its prohibitions survive the justification that has expired. Required
+   independently of Carry-Over 9's priority.
+
+7. **Note a known gap in the spine's own definition before scoping:** the CFO's **Drivr UX vision**
+   (Carry-Over 7) has not yet been described. Drivr is the MVP half of the spine. The CFO has
+   authorized opening the phase with this outstanding — it is a milestone-level input, not a
+   blocker — but P12 should not be scoped as though Drivr's surface were settled.
