@@ -4,7 +4,8 @@ steering_note_ref:
   - .ai-project/artifacts/steering-notes/2026-08-18__creation-chat__steering-note__P12-spine-fail-open.md
   - .ai-project/artifacts/steering-notes/2026-08-19__creation-chat__steering-note__drivr-ux-and-model-qualification.md
   - .ai-project/artifacts/steering-notes/2026-08-11__creation-chat__steering-note__external-assessment-routing.md
-concern_id: SN-31, SN-32, SN-33, SN-34, SN-35, SN-36, SN-37, SN-30
+  - .ai-project/artifacts/steering-notes/2026-08-19__creation-chat__steering-note__model-lineup.md
+concern_id: SN-31, SN-32, SN-33, SN-34, SN-35, SN-36, SN-37, SN-30, SN-38 (amendment)
 hq_opener_ref: .ai-project/artifacts/hq-openers/2026-08-19__hq-chat-opener.md
 issued_by: HQ Chat (ai-project-system)
 issued_to: Layer-8/CFO (mandatory diff reviewer, PSG §11.6.1); the P12 Phase Chat
@@ -19,6 +20,15 @@ blocking_resolved: true
 **Steering Notes:** SN-31…SN-35 (2026-08-18, master `7af49f7`), SN-36/SN-37 with same-day amendment
 (2026-08-19, master `8149bce`), and **SN-30** (2026-08-11), which is triaged here because SN-33
 correctly reports that it was never triaged anywhere.
+
+> **AMENDED 2026-08-19, same day, before merge — SN-38.** The CFO ruled the per-level model line-up
+> and directed that its evidence be collected **early in P12**, explicitly inserting the work after
+> the phase opened. **P12 is restructured to seven milestones and the six original milestones shift
+> +1:** `M41→M42`, `M42→M43`, `M43→M44`, `M44→M45`, `M45→M46`, `M46→M47`. **Decisions 1-13 below are
+> written in the NEW numbering** — they were re-stamped rather than left stale because this ruling
+> had not merged and no downstream artifact had consumed the old numbers. The mapping is recorded
+> here and in the phase spec's v1.1.0 changelog so the restatement is traceable. **Nothing decided in
+> 1-13 is changed by the renumber.** Six further decisions follow as **14-19**.
 
 **Prerequisite verification (P9-M31-E31.3):** harness-reported model `claude-opus-5` vs
 `.ai-project.yml` `models.hq: remote:claude-opus-5` — **match.** No mismatch; proceeding. HQ Chat is
@@ -39,19 +49,19 @@ the two questions addressed to HQ directly, and the items that are the CFO's to 
 
 | # | Milestone | Why it sits where it sits |
 |---|---|---|
-| **M41** | Fail-Closed Execution Tier | SN-31 Decision 2 makes it a **prerequisite of M46 by sequencing constraint**. It is also the only milestone with zero dependency on anything else in the phase. |
-| **M42** | The Acceptance Chain, Made Structural | Changes **who holds authority**. Independent of M41 and M43/M44; parallel-safe. |
-| **M43** | Rituals, Records, and the Normative Repairs | Adds the missing artifacts. **`P11-GH-3` lands here and P12's own closure is its first customer**, so it must complete before P12 closes. |
-| **M44** | Trustworthy Completion Signal | Row 4 plus `P10-GH-7`. **Gates M45** — SN-36's two central behaviours *are* this signal. |
-| **M45** | The Drivr MVP Surface | Built from SN-36's binding. Gated on M44 by construction, not by preference. |
-| **M46** | First Real Agentic Integration | The phase's proof. **Gated on M41.** The reason the other five exist. |
+| **M42** | Fail-Closed Execution Tier | SN-31 Decision 2 makes it a **prerequisite of M47 by sequencing constraint**. It is also the only milestone with zero dependency on anything else in the phase. |
+| **M43** | The Acceptance Chain, Made Structural | Changes **who holds authority**. Independent of M42 and M44/M45; parallel-safe. |
+| **M44** | Rituals, Records, and the Normative Repairs | Adds the missing artifacts. **`P11-GH-3` lands here and P12's own closure is its first customer**, so it must complete before P12 closes. |
+| **M45** | Trustworthy Completion Signal | Row 4 plus `P10-GH-7`. **Gates M46** — SN-36's two central behaviours *are* this signal. |
+| **M46** | The Drivr MVP Surface | Built from SN-36's binding. Gated on M45 by construction, not by preference. |
+| **M47** | First Real Agentic Integration | The phase's proof. **Gated on M42.** The reason the other five exist. |
 
-**Two binding orders, and neither is stylistic:** `M41 → M46`, and `M44 → M45`. M42 and M43 are
-independent of each other and of the M44/M45 pair.
+**Two binding orders, and neither is stylistic:** `M42 → M47`, and `M45 → M46`. M43 and M44 are
+independent of each other and of the M45/M46 pair.
 
 **Six is more than P11's five, and HQ states the reason rather than leaving it to be inferred.** Four
-of the six are small and bounded (M41, M42, M43 are corpus-and-`bin/` work with known contents); the
-two with genuine uncertainty are M44 and M46. **HQ did not self-scope the spine** — it is SN-31's,
+of the six are small and bounded (M42, M43, M44 are corpus-and-`bin/` work with known contents); the
+two with genuine uncertainty are M45 and M47. **HQ did not self-scope the spine** — it is SN-31's,
 and the decisions inside it are the CFO's. The decomposition is HQ's own call and is the thing HQ is
 for.
 
@@ -62,13 +72,13 @@ own starter how an amendment reaches a running branch.**
 
 ---
 
-## Decision 2 — The sequencing constraint is recorded as binding, and it binds M46 specifically
+## Decision 2 — The sequencing constraint is recorded as binding, and it binds M47 specifically
 
 SN-31 Decision 2: the three execution-tier defects land **before the first real agentic integration,
 not after** — a sequencing constraint, not a date.
 
-**HQ makes that operative rather than aspirational:** **no epic in M46 may be dispatched agentically
-until M41 is closed.** The constraint has a named gate instead of a hope. If M41 slips, M46 slips;
+**HQ makes that operative rather than aspirational:** **no epic in M47 may be dispatched agentically
+until M42 is closed.** The constraint has a named gate instead of a hope. If M42 slips, M47 slips;
 that is the intended behaviour and not a scheduling failure.
 
 **Why the constraint is safe to state this strongly:** exposure today is genuinely low *because*
@@ -96,12 +106,12 @@ branch that returned *"Branch protected."*
 tier so every onboarded project inherits it, and **it already has a live victim** —
 `social-stories-creator`, per P11's closure declaration.
 
-**Placed in M41.** P11 carried this as an unnumbered inherited line (*"the two `bin/ai-project-init`
+**Placed in M42.** P11 carried this as an unnumbered inherited line (*"the two `bin/ai-project-init`
 defects"*); it now has an ID, a stated mechanism, and an owner.
 
 **HQ states its own verification boundary**, per `P11-GH-2`: the paths, the stub, the validator and
 the test were **read** on `19c77ab`; the live victim is taken **from the record, not re-inspected**;
-and **no end-to-end init was run.** M41 runs it. If that inference is wrong the finding shrinks to
+and **no end-to-end init was run.** M42 runs it. If that inference is wrong the finding shrinks to
 the validator and the test, which are defects on their own terms.
 
 ---
@@ -110,7 +120,7 @@ the validator and the test, which are defects on their own terms.
 
 Filed at
 `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12__carry-forward-note__P12-GH-1-rework-limit-reaches-one-surface.md`,
-severity Medium, **placed in M42** — it is a governance-surface defect coupled to Decision 5's flip,
+severity Medium, **placed in M43** — it is a governance-surface defect coupled to Decision 5's flip,
 not an execution-tier one.
 
 **Filing it separately from the consolidation is deliberate and is SN-32's own instruction:** the
@@ -122,7 +132,7 @@ consolidation is the fix, and a fix that gets deferred must not take the defect'
    `governance/systems/hq-execution-chat-starter.md` has **two** occurrences of "rework" (L125, L364).
    **Neither states the limit**, so SN-32's substantive claim is untouched; its literal count is not.
 2. **HQ enumerates nine starter-shaped surfaces, not eight.** SN-32's set is not itemized, so the two
-   cannot be reconciled from the artifacts. **M42 must itemize the set it consolidates across**, so
+   cannot be reconciled from the artifacts. **M43 must itemize the set it consolidates across**, so
    the next re-measurement is comparable.
 
 **Neither correction changes what must be done**, and both are recorded rather than absorbed —
@@ -131,13 +141,13 @@ what a future reader re-cites.
 
 **The second half of the defect postdates SN-32 and is added:**
 `milestone-execution-chat-starter.md:334` says a written extension makes the limit *"reset"*;
-SN-36/37's amendment grants **exactly one further attempt**. **M42 reconciles them into one
+SN-36/37's amendment grants **exactly one further attempt**. **M43 reconciles them into one
 statement.** It does not leave both standing with a citation preferring the newer — that is the drift
 condition, not a resolution of it.
 
 ---
 
-## Decision 5 — SN-30 is triaged. Recs 1 and 2 are placed in M43; Recs 3, 4 and 5 are deferred with reasoning
+## Decision 5 — SN-30 is triaged. Recs 1 and 2 are placed in M44; Recs 3, 4 and 5 are deferred with reasoning
 
 **SN-33 is correct and HQ accepts the finding against itself.** SN-30 was filed 2026-08-11 with four
 required HQ actions; a corpus search on 2026-08-18 found `SN-30` in exactly one file — its own. P11
@@ -152,9 +162,9 @@ detector is that the Creation Chat looked. That is a person, not a mechanism.**
 
 | Item | Ruling |
 |---|---|
-| **Rec 1** — mechanical checks for the four observed defects | **Placed, M43.** Pre-qualified and mechanical; the pattern exists here twice (`test_starter_lint.py`, `test_steering_note_id_uniqueness.py`). |
-| **Rec 2** — promote **G1** and **G2** into the core documents | **Placed, M43.** They are general rules living in an epic spec, restated with re-explained provenance in E38.6. Every new epic must rediscover or re-cite them. Highest-value and most fragile is the combination that earns the pull-forward. |
-| **Rec 3** — an observability tier | **Deferred**, and the reason is this project's own scar tissue. A normative observability requirement written before Drivr emits telemetry would record a rule whose trigger nothing produces — **exactly `P10-GH-7`**, which is still open and still High. E38.6 already requires all four fields per-epic by its own spec; **that is the pilot.** Codify after it produces evidence, as default-accept went from practice to PSG §11.6. *Trigger: Drivr emitting telemetry in M45.* |
+| **Rec 1** — mechanical checks for the four observed defects | **Placed, M44.** Pre-qualified and mechanical; the pattern exists here twice (`test_starter_lint.py`, `test_steering_note_id_uniqueness.py`). |
+| **Rec 2** — promote **G1** and **G2** into the core documents | **Placed, M44.** They are general rules living in an epic spec, restated with re-explained provenance in E38.6. Every new epic must rediscover or re-cite them. Highest-value and most fragile is the combination that earns the pull-forward. |
+| **Rec 3** — an observability tier | **Deferred**, and the reason is this project's own scar tissue. A normative observability requirement written before Drivr emits telemetry would record a rule whose trigger nothing produces — **exactly `P10-GH-7`**, which is still open and still High. E38.6 already requires all four fields per-epic by its own spec; **that is the pilot.** Codify after it produces evidence, as default-accept went from practice to PSG §11.6. *Trigger: Drivr emitting telemetry in M46.* |
 | **Recs 4-5** — reduce exposition, then measure the reduction | **Deferred.** A phase-scale question, and a spine conversation rather than a milestone one. **HQ notes against itself that P12's own spec is 570 lines**, which is evidence for the recommendation, not against it. *Trigger: the next spine conversation.* |
 
 **Recs 3-5 are recorded as deferred *with* their triggers precisely so they are not re-inherited as
@@ -162,7 +172,7 @@ open questions of unknown status** — which is what happened to SN-30 as a whol
 
 ---
 
-## Decision 6 — The AOG section-numbering repair does **not** clear SN-28's hotfix boundary. It goes in M43
+## Decision 6 — The AOG section-numbering repair does **not** clear SN-28's hotfix boundary. It goes in M44
 
 SN-30 Carry-Over 2 flagged this for HQ to decide and correctly declined to assume it either way.
 
@@ -177,7 +187,7 @@ with **two sections both titled "Error Handling"** (L701, L861) — so a cross-r
 ambiguous before numbering is even considered. **Ten phases without detection**, and the current
 count is now eleven.
 
-**M43 owns it**, with the cross-reference sweep as part of the same epic and an AOG version bump.
+**M44 owns it**, with the cross-reference sweep as part of the same epic and an AOG version bump.
 
 ---
 
@@ -205,7 +215,7 @@ longer holds:
 | Non-Goal *"No automatic or live governance syncing"* | **Survives, re-scoped and made honest.** It does not describe an impossibility; it records that **no such mechanism is authorized today**. SN-31 Carry-Over 9 contemplates one; see Decision 8. Written this way, a future proposal is measured against an authorization question it can actually answer, rather than against a capability claim that is simply wrong. |
 
 **This ruling is required independently of whether governance auto-update is ever built**, exactly as
-SN-34 argued. **M43 executes it**, with a version bump and a changelog row.
+SN-34 argued. **M44 executes it**, with a version bump and a changelog row.
 
 **HQ records the error class against itself:** this is `P11-GH-2`'s **time axis** — a claim verified
 once and never re-checked, aged across at least four phases in the **normative** tier. The P11 record
@@ -238,7 +248,7 @@ possible customer is P13.
 **One piece of Half B *is* in P12 and must not be mistaken for the rest of it.** SN-31 Carry-Over 9
 states that already-broken installs are fixed *"and `bin/ai-project-init` is fixed with them, since it
 hard-codes the path that produced FM 12's placeholder agents."* **That is `P12-GH-2`, and it is in
-M41 on its own merits** — as a fail-open defect, not as a reconciler component. **Repairing installs
+M42 on its own merits** — as a fail-open defect, not as a reconciler component. **Repairing installs
 without repairing init re-breaks them on the next install**, which is the CFO's own reasoning and is
 why the init fix goes first regardless of whether the reconciler is ever built.
 
@@ -250,7 +260,7 @@ one phase, one governance version.** A phase runs start to finish under a single
 
 ---
 
-## Decision 9 — SN-35 is recorded at its corrected severity, and the ritual is placed in M43
+## Decision 9 — SN-35 is recorded at its corrected severity, and the ritual is placed in M44
 
 **The correction is accepted as filed.** The Creation Chat corrected SN-35 in SN-36/37 and again in
 the P12 opener, and HQ does not re-litigate it: the normative tier is silent (zero occurrences across
@@ -263,8 +273,8 @@ ritual (SN-26, canonized P11-M36-E36.3) is the model and the precedent.
 
 **But HQ raises its priority above what "low" would suggest, for a reason SN-36 supplies:**
 auto-opening a chat *"with the artifacts already applied"* **is this ritual executed by software.**
-M45's surface needs one **per level**. So a low-severity documentation gap is a **prerequisite of a
-milestone**, and M43 must complete the HQ ritual before M45 builds against it.
+M46's surface needs one **per level**. So a low-severity documentation gap is a **prerequisite of a
+milestone**, and M44 must complete the HQ ritual before M46 builds against it.
 
 **HQ notes the finding's own best evidence, which is this opener.** A reader competent in the corpus
 searched the normative tier, found nothing, and concluded the practice did not exist — while eight
@@ -283,7 +293,7 @@ constraints to observe governance rules.* Today every rule in this framework is 
 reading prose and choosing to comply. **A rule that cannot be clicked outranks a rule that is merely
 written** — and that is SN-31's fail-open finding approached from the other side.
 
-**M45's acceptance requires at least these three to have no representable control:**
+**M46's acceptance requires at least these three to have no representable control:**
 
 1. No agentic option at Creation or HQ — manual-only, permanently (SN-22).
 2. No Phase or Milestone dispatch control — **it does not exist**; the path is Epic-only (SN-31
@@ -299,14 +309,14 @@ the property that makes this right rather than merely safe:** M39 returns it on 
 rendered visibly the board shows the size of the problem every day — which is the pressure that keeps
 P12 honest. Hidden, the dashboard looks healthy while the signal beneath it is broken.
 
-**M44 gates M45, and the gate is structural.** *"The chat must be where the attention should be"* and
+**M45 gates M46, and the gate is structural.** *"The chat must be where the attention should be"* and
 *"a blocker makes it escalate and open a chat"* are **one requirement stated twice**: the window must
 know, without the human, whether work is finished and whether it is stuck. Building the surface first
 would produce a window confidently displaying a verdict the system cannot support.
 
 ---
 
-## Decision 11 — SN-37 is placed in M45 **with its bar**, and the bar is not deferred to first use
+## Decision 11 — SN-37 is placed in M46 **with its bar**, and the bar is not deferred to first use
 
 **The gate converts `model-routing-policy.md`'s Change discipline from a prose obligation an agent
 reads and chooses to honour into one that cannot be passed by intention alone.** It is Decision 10's
@@ -317,7 +327,7 @@ never set"* is already on the record as an open item, and a qualification suite 
 reproduces that failure with more machinery around it. E35.5's result was usable **because** it
 carried `PASS 4/5, 0 false alarms` in advance.
 
-**The shape is the CFO's decision and HQ restates it as binding on M45:** relative and objective —
+**The shape is the CFO's decision and HQ restates it as binding on M46:** relative and objective —
 run the suite against the **incumbent** first; the candidate must be **no worse on every objective
 check and strictly better on at least one**, over an absolute floor of **tool rounds > 0 and files
 changed > 0**. **No subjective quality score** — judgment is precisely what cannot be trusted from the
@@ -340,10 +350,10 @@ consistent with its charter.
 |---|---|
 | **`P11-GH-1`** — mid-flight amendments do not reach working branches | **Open, and named as an active risk in Decision 1.** Not scoped as work: P12 runs three parallel tracks and will produce more evidence than a fix designed now would be based on. *Trigger: any parent amending a spec a child is executing.* |
 | **`P11-GH-2`** — verification at the wrong layer | **Open.** Applied as a working obligation throughout this ruling (Decisions 3, 4, 7 each state their verification boundary). Whether it earns codification is Open Decision 4 and is **the CFO's**, not HQ's. |
-| **`P11-GH-3`** — phase closure has no pre-merge artifact | **Placed, M43.** *P12's opening is its own first customer*, and P12's own closure is the first that must use it. |
-| **`P10-GH-7`** — block detection untrustworthy both directions | **Placed, M44**, including the missing-Delivery-Notice branch the CFO arrived at independently. |
-| **`P12-GH-1`** — rework limit reaches one surface | **Filed here. Placed, M42.** |
-| **`P12-GH-2`** — init manufactures and then validates a placeholder | **Filed here. Placed, M41.** |
+| **`P11-GH-3`** — phase closure has no pre-merge artifact | **Placed, M44.** *P12's opening is its own first customer*, and P12's own closure is the first that must use it. |
+| **`P10-GH-7`** — block detection untrustworthy both directions | **Placed, M45**, including the missing-Delivery-Notice branch the CFO arrived at independently. |
+| **`P12-GH-1`** — rework limit reaches one surface | **Filed here. Placed, M43.** |
+| **`P12-GH-2`** — init manufactures and then validates a placeholder | **Filed here. Placed, M42.** |
 | **`P9-GH-3`, `P10-GH-1/3/4/6/8/10`, `P8-GH-2`** | **Restated as deferred with existing triggers, not reopened.** None is P12 scope on current evidence. |
 | **llama.cpp / non-Ollama local runtimes** | **CLOSED by CFO decision, not parked.** Its hardware trigger is void; **no phase re-inherits it.** |
 | **Push / WhatsApp** | Deferred, unchanged. |
@@ -384,8 +394,185 @@ lesson is that an item with no recorded disposition is an item that disappears.
 
 **Also recorded, not returned and not scoped:** the **first external adopter, working in Spanish**
 (SN-31 Carry-Over 6) — the first adoption outside the CFO's own fleet. The i18n **policy** is decided
-and lands in M43 as one paragraph. **No i18n project is proposed.** The fact is on the record before
+and lands in M44 as one paragraph. **No i18n project is proposed.** The fact is on the record before
 the phase is scoped, because a first outside user is evidence of a kind this project has never had.
+
+---
+
+## Amendment, 2026-08-19 — SN-38
+
+---
+
+## Decision 14 — P12 is restructured to seven milestones; the measurement gets its own, and is not absorbed
+
+**The CFO directs that the model evidence be collected first, as an early step of P12, and is
+explicit that inserting it after the phase opened is his call to make.** It is. HQ's part is
+placement, and SN-38 correctly declines to choose it.
+
+**Two candidate homes were considered and rejected, with reasons, because "it went somewhere" is not
+a placement:**
+
+- **Inside M42 (Fail-Closed Execution Tier).** Rejected. A model measurement has nothing to do with
+  that milestone's organizing principle, and absorbing it would make M42 *"the milestone things get
+  put in"* — **the exact pattern HQ named in the 2026-08-05 ruling and constrained itself against**,
+  and which the CFO then had to resolve structurally by inserting M37 into P11.
+- **A bugfix-shaped spike.** Rejected on the corpus, not on taste.
+  `governance/systems/bugfix-epic-workflow.md` states the carve-out is for *"production incidents,
+  security vulnerabilities, critical regressions"* and lists **"Issue requires investigation — root
+  cause unknown, fix scope unclear"** among the cases where it must **not** be used. A measurement is
+  investigation by definition. **The vehicle SN-38 floated does not fit, and stretching it would
+  damage a carve-out this project depends on staying narrow.**
+
+**So it is a milestone: M41 — The Model Line-Up and Its Evidence.** It is proportionate: measure the
+incumbent, measure two 27b candidates on two separate tasks, add `qwen3.6:27b` to `opencode.json` so
+it is routable at all, run E35.5's back-test against four verification targets, build the minimal
+successful-nothing instrument, then land the configuration. That is four or five epics, not a spike.
+
+**The renumber is paid now because it is free now.** P11's insertion of M37 shifted four milestones
+and left *"pre-2026-08-05 artifacts citing the old numbers"* permanently. P12 is hours old, its
+opening PR is unmerged, **no milestone spec exists, and every artifact citing M41-M46 is on the same
+unmerged branch.** Deferring the renumber would buy nothing and cost what it cost P11.
+
+---
+
+## Decision 15 — Row P4 is CLOSED by CFO ruling, recorded as a policy-row change; and a failing candidate returns to him rather than being vetoed by HQ
+
+**`milestone → Deepseek V4 Flash` is a policy-row change and HQ records it as one.** Milestone holds
+**Stage-2 accept authority**, which is the stated reason `model-routing-policy.md` row P4 reads paid
+frontier — *"the level whose errors propagate into merges"* — and a Flash tier is a tier change, not
+a vendor move. **It must not be filed as a same-tier refresh under the 2026-07-28 precedent**, which
+covered `claude-opus-4-8 → claude-opus-5` and explicitly left the TIER rows untouched.
+
+**The Change discipline is satisfied by CFO decision, and HQ says so plainly rather than
+manufacturing a citation.** That is the honest record: he has the authority, he exercised it, and
+the artifact should show which of the two routes was taken.
+
+**Row P4 is therefore CLOSED** — listed as *"Not decided… a further HQ call, on the CFO's timing"* in
+the 2026-08-17 digest, and carried into this ruling's own Decision 13 as returned to him. **The
+timing arrived four hours later.** The phase spec records it as discharged rather than deleting it.
+
+**One tension this creates, which HQ resolves rather than leaves for a milestone to discover.** The
+CFO has *ruled* the row and *also* ruled that the qualification gate binds it. If Deepseek V4 Flash
+fails E35.5's back-test, the gate and the ruling disagree.
+
+**Resolution: a failing row escalates to the CFO. HQ does not veto it and M41 does not land it
+anyway.** The gate is his own instrument, built at his direction to make exactly this measurable —
+SN-38 observes that his two rulings *compose*, the second supplying the evidence the first otherwise
+lacked. **An instrument whose adverse result is discarded is not an instrument.** But a gate does not
+overrule the person who commissioned it either. **The result goes in front of him and he decides;
+what may not happen is the row landing silently or being dropped silently.**
+
+---
+
+## Decision 16 — SN-37's wider scope is confirmed as ruled, and it changes what M46 builds
+
+**The CFO ruled the wider scope: the gate binds manual-chat verification targets as well as dispatch
+lanes.** The Creation Chat's narrower lanes-only proposal is **superseded**. HQ confirms rather than
+re-decides — SN-38's Next Action 3 asked for confirmation *before the gate is built*, and this is it.
+
+**The consequence for M46 is concrete and reduces its build, not increases it:**
+
+| Harness | Keys | Status | Owner |
+|---|---|---|---|
+| **Successful nothing** — tool rounds > 0, files changed > 0, claims resolving | `epic_dev`, `epic_qa` | **To be built** | Minimal instrument in **M41**; formalized in **M46** |
+| **Failed judgment** — planted defects, catches vs false alarms | `creation`, `phase`, `milestone`, `epic_manual` | **Already exists — E35.5's back-test**, digest-confirmed *"remains available"* | Used by **M41**; bound normatively in **M46** |
+
+**M46 therefore builds one harness and binds two.** The instinct to read a widened scope as more work
+is wrong here: the wider half is the half that was already built.
+
+**HQ records the reason the wider scope is better than the proposal it replaced**, because it is not
+obvious: `milestone → Deepseek V4 Flash` is the highest-risk row in SN-38, and **E35.5's back-test
+was built to measure milestone-level judgment.** Lanes-only scoping would have excluded the one
+instrument capable of measuring the one row that most needs it.
+
+**One distinction that must not be conflated, and belongs in M46's normative output:** the **model
+check** (P9-M31-E31.3) verifies that the *running* model matches the *declared* one; the
+**qualification gate** verifies that the declared model is *fit*. **Both fail closed, they answer
+different questions, and a pass on either is not a pass on the other.**
+
+---
+
+## Decision 17 — M41 has a split shape: measure early, land late
+
+**Two CFO constraints pull in opposite directions and both are binding:** collect the evidence early,
+and **land no swap until M42 closes** — because M42 repairs the code the lane runs through, and a
+model change landing with a lane repair **makes the next failure unattributable.** SN-38 names this
+as the phase's own `M42 → M47` reasoning applied one level down, and HQ agrees.
+
+**So M41 opens first and closes late.** Its measurement epics are the head of the phase; its
+**terminal epic is gated on M42's closure.** That epic carries the `.ai-project.yml` edit **and** the
+`model-routing-policy.md` mapping-table and row-P4 update **together** — SN-38's Next Action 2 says
+"together" and HQ makes it one epic so they cannot drift apart, which is the failure mode
+`P11-GH-1` describes.
+
+**Do not read M41's number as a claim that it closes first.** The phase spec states this at the
+Milestones section; the Phase Chat's starter states it again.
+
+**Measuring now is safe and HQ records why rather than assuming it.** A qualification run dispatches
+through the agentic lane, and M42 is repairing that lane — but **Docker is present on this host**, so
+`bin/ai-project-orchestrator:393-397`'s unsandboxed fallback will not fire. **The dependency is real
+and non-blocking**, which is a different thing from absent.
+
+---
+
+## Decision 18 — `epic_dev` and `epic_qa` are measured separately; `qwen3.8:27b` is verified present; the remote three are not
+
+**The two Epic rows are not one question, and the record splits them** — which has been invisible
+because one string fills both keys:
+
+| Row | Model | On record |
+|---|---|---|
+| `epic_dev` | `qwen3-coder:30b` | **The project's only mergeable-work evidence** — E33.2 Run B, E33.4 |
+| `epic_qa` | `qwen3-coder:30b` | **The project's only recorded fabrication** — E39.3: `VERDICT: PASS`, zero tool rounds, citing a key the file does not contain, read-only tools genuinely advertised |
+
+**HQ adopts SN-38's recommendation:** `epic_dev` holds pending evidence that displaces it;
+`epic_qa` is the row with a live problem, where the run is **confirmation rather than discovery**.
+**Both are measured; neither moves on assumption.**
+
+**The premise correction is load-bearing and HQ restates it so no epic re-derives it wrongly:
+`qwen3-coder:30b` has never been compared against any 27b.** E33.2 compared the **14b** against the
+30b. **E35.5's `PASS 4/5, one SPLIT, zero false alarms` over ten runs belongs to `qwen3.6:27b`**,
+chosen deliberately because Stage-2 review is general reasoning and the 30b is coder-tuned. **The only
+milestone-level judgment result this project owns belongs to a 27b.**
+
+**`qwen3.8:27b` is available on this host — verified by HQ, 2026-08-19**, against the Ollama tags
+endpoint: `qwen3.8:27b` 17.7 GB, alongside `qwen3.6:27b` 17.4 GB and the incumbent `qwen3-coder:30b`
+18.6 GB. **SN-38's Next Action 4 is discharged.** Capacity note, unchanged in kind: both 27b entries
+also exceed this box's 16 GB VRAM and will partially offload, though less than the 30b.
+
+**`qwen3.6:27b` is present in Ollama but declared nowhere in `opencode.json`**, so it is **not
+routable through the execution adapter** without a config addition. **That addition is M41 work and
+must not be discovered mid-run.**
+
+**Verification boundary, stated per `P11-GH-2`: HQ verified the LOCAL models only.** The availability
+of **fable-5, GPT-5.6 Sol and Deepseek V4 Flash** is **unverified** — three different vendors, none
+checkable from here. **M41 confirms each before it measures**, and the phase spec records this as a
+CFO-side dependency rather than an assumption.
+
+---
+
+## Decision 19 — Five verification targets arm simultaneously, and announcing that is a Definition-of-Done item
+
+**This change routes almost nothing; it arms a set of fail-closed checks.** Five of the seven keys —
+`creation`, `hq`, `phase`, `milestone`, `epic_manual` — are **manual-chat verification targets**
+(P9-M31-E31.3), each causing a chat at that level to **halt** when it opens on a disagreeing model.
+Only `epic_dev` and `epic_qa` are dispatch lanes.
+
+**So the moment M41's terminal epic merges, every level's next session halts unless it is opened on
+the new model.** That is correct, protective behaviour and a poor surprise. **SN-38's Next Action 5
+is adopted as a DoD item on that epic, not as a courtesy:** every level is notified before the edit
+lands.
+
+**`hq` is unchanged, which is the only reason this session did not halt** — worth stating, because it
+is the one row whose stability made the ruling possible.
+
+**One interaction HQ holds, once, and not as an objection.** Epic drops to a local 27b at the same
+time as **Milestone — the level that reviews Epic — drops from paid frontier to a Flash tier.** The
+reviewer and the reviewed move down together. P11's record concludes that the review chain *"caught
+every HQ error"*, each *"one level down, by a chat applying HQ's output rather than reading it"*, and
+that chain is currently the system's main defence. **The CFO's decision stands. The consequence is
+that M47 — the first real agentic integration — is watched closely rather than assumed**, and the
+phase spec records it there.
 
 ---
 
@@ -400,41 +587,43 @@ flowchart TB
     SN31["SN-31…SN-35<br/>spine + 4 fail-open instances<br/>8 decisions"]
     SN36["SN-36 / SN-37 + amendment<br/>Drivr surface + qualification gate<br/>12 decisions"]
     SN30["SN-30 (2026-08-11)<br/>external assessment<br/>NEVER TRIAGED"]
+    SN38["SN-38 — model line-up ruled<br/>evidence FIRST, CFO direction<br/>+ gate binds verification targets"]
   end
 
-  RULING["HQ Ruling 2026-08-19<br/>13 decisions"]
+  RULING["HQ Ruling 2026-08-19<br/>13 decisions + amendment 14-19"]
   SN31 --> RULING
   SN36 --> RULING
   SN30 --> RULING
+  SN38 --> RULING
 
   subgraph PHASE["P12 — six milestones"]
-    M41["M41 Fail-Closed<br/>Execution Tier"]
-    M42["M42 Acceptance Chain<br/>Made Structural"]
-    M43["M43 Rituals, Records,<br/>Normative Repairs"]
-    M44["M44 Trustworthy<br/>Completion Signal"]
-    M45["M45 Drivr<br/>MVP Surface"]
-    M46["M46 First Real<br/>Agentic Integration"]
+    M42["M42 Fail-Closed<br/>Execution Tier"]
+    M43["M43 Acceptance Chain<br/>Made Structural"]
+    M44["M44 Rituals, Records,<br/>Normative Repairs"]
+    M45["M45 Trustworthy<br/>Completion Signal"]
+    M46["M46 Drivr<br/>MVP Surface"]
+    M47["M47 First Real<br/>Agentic Integration"]
   end
 
-  RULING --> M41 & M42 & M43 & M44 & M45 & M46
-  M41 -->|"binding: SN-31 Decision 2"| M46
-  M44 -->|"binding: the surface IS the signal"| M45
-  M43 -.->|"HQ ritual needed<br/>per level"| M45
-  M43 -.->|"P11-GH-3 — P12's own<br/>closure is first customer"| PCLOSE(["P12 closure"])
+  RULING --> M42 & M43 & M44 & M45 & M46 & M47
+  M42 -->|"binding: SN-31 Decision 2"| M47
+  M45 -->|"binding: the surface IS the signal"| M46
+  M44 -.->|"HQ ritual needed<br/>per level"| M46
+  M44 -.->|"P11-GH-3 — P12's own<br/>closure is first customer"| PCLOSE(["P12 closure"])
 
   subgraph FILED["Filed by this ruling"]
     G1["P12-GH-1 · Medium<br/>rework limit: 1 of 9 surfaces<br/>+ 2 extension semantics"]
     G2["P12-GH-2 · High<br/>init manufactures then<br/>validates a placeholder"]
   end
-  RULING --> G1 --> M42
-  RULING --> G2 --> M41
+  RULING --> G1 --> M43
+  RULING --> G2 --> M42
 
   subgraph AMENDED["Normative, amended by ruling"]
     GP["governance-propagation.md<br/>Constraints STRUCK<br/>2 prohibitions survive on new reasons<br/>2 struck"]
     AOG["AI-OPERATING-GUIDELINES.md<br/>section renumber — NOT a hotfix"]
   end
-  RULING --> GP --> M43
-  RULING --> AOG --> M43
+  RULING --> GP --> M44
+  RULING --> AOG --> M44
 
   subgraph FROZEN["Deliberately unchanged"]
     F1["per-instance Execution Mode<br/>in the committed starter"]
@@ -449,9 +638,17 @@ flowchart TB
     R3["retention bar · model-watch cadence"]
     R4["P11-GH-2 sibling pattern<br/>(HQ is the indicted party)"]
     R5["artifact-type inventory<br/>(rulings has no template)"]
-    R6["row P4 · per-level mapping"]
+    R6["per-level MODE mapping<br/>(row P4 now CLOSED by SN-38)"]
   end
   RULING --> RETURNED
+
+  subgraph RULED38["Ruled by SN-38 — no longer open"]
+    P4C["row P4 CLOSED<br/>policy-row change by CFO decision"]
+    GATE["SN-37 gate scope: WIDER<br/>2 harnesses, 1 already exists"]
+  end
+  RULING --> RULED38
+  P4C --> M41
+  GATE --> M41 & M46
 
   subgraph SPLIT["Split, neither half in P12"]
     HA["Half A — the updater<br/>trigger: P13 opening"]
@@ -462,7 +659,7 @@ flowchart TB
 
   classDef hi fill:#7f1d1d,stroke:#fca5a5,color:#fff
   classDef frz fill:#1e3a5f,stroke:#93c5fd,color:#fff
-  class G2 hi
+  class G2,M41T hi
   class F1,F2,F3,F4 frz
 ```
 
@@ -470,8 +667,8 @@ flowchart TB
 
 ## Disposition
 
-**P12 is open.** The phase spec, the Phase Execution Chat Starter and two gap records are delivered
-with this ruling.
+**P12 is open, and restructured to seven milestones the same day.** The phase spec (v1.1.0), the
+Phase Execution Chat Starter and two gap records are delivered with this ruling.
 
 **PSG §11.6.1 statement, made explicitly because it is easy to skip on an HQ-authored delivery:**
 **this delivery has no chat-level reviewer.** HQ has no parent chat, and §11.6's default-accept is
@@ -482,14 +679,22 @@ authorization is not review.** HQ must not merge it on authorization alone.
 four instances scoped as organizing evidence with the sequencing constraint binding (2); SN-32 filed
 as a gap record separately from its fix (3); SN-30's four items actioned or deferred with reasoning
 (4); the build items placed (5); `governance-propagation.md` ruled on (6); Drivr's surface scoped
-from the binding with the signal as prerequisite (7); the rework-limit statements sent to M42 for
+from the binding with the signal as prerequisite (7); the rework-limit statements sent to M43 for
 reconciliation rather than stacking (8); SN-35's correction accepted and its severity carried at low
 (9).
 
-**What HQ does not owe and has not taken:** the seven items in Decision 13.
+**Discharged by the amendment (SN-38):** the measurement placed as **M41** rather than absorbed
+(Next Action 0); the `.ai-project.yml` edit placed with its gate (1); `milestone → Deepseek V4 Flash`
+recorded as a **policy-row change closing row P4**, Change discipline satisfied **by decision and
+said so** (2); SN-37's wider scoping **confirmed before the gate is built** (3); **`qwen3.8:27b`
+verified present on this host** and the incumbent's baseline required (4); the simultaneous arming of
+five verification targets made a **DoD item** on the edit's epic (5).
 
-**One open risk HQ names rather than resolves.** M46 is the only milestone whose success depends on a
+**What HQ does not owe and has not taken:** the seven items in Decision 13 — **now six**, since row
+P4 closed by CFO ruling four hours after HQ returned it to him.
+
+**One open risk HQ names rather than resolves.** M47 is the only milestone whose success depends on a
 real project having real work available at the right moment, and it is the milestone the phase exists
 to reach. **If it cannot run, P12 will have tightened the foundations and still not used them** —
-which is the outcome the spine was written against. HQ recommends the Phase Chat identify M46's
-candidate project early, while M41 is still in flight, rather than at the point of dispatch.
+which is the outcome the spine was written against. HQ recommends the Phase Chat identify M47's
+candidate project early, while M42 is still in flight, rather than at the point of dispatch.

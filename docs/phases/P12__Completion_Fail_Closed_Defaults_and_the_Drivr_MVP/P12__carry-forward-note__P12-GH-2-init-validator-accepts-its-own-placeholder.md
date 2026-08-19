@@ -5,7 +5,7 @@ milestone: null
 type: note
 status: active
 issuer_chat: HQ Chat (ai-project-system)
-issued_to: P12 Phase Chat → M41
+issued_to: P12 Phase Chat → M42
 last_updated: 2026-08-19
 severity: high
 ---
@@ -91,11 +91,11 @@ three assertions.
 
 **Verified by the record, not re-run here:** the live victim. P11's closure declaration states
 `social-stories-creator` still carries a 230-byte placeholder agent. **HQ did not re-inspect that
-repository.** M41 should, and should enumerate the fleet rather than the one known case.
+repository.** M42 should, and should enumerate the fleet rather than the one known case.
 
 **Inferred, not executed:** that a real (non-`--skip-submodule`) init today produces the stub. The
 inference follows from the two verified paths and is consistent with the recorded victim, but **no
-end-to-end init was run for this note.** M41 runs it. If the inference is wrong the finding shrinks to
+end-to-end init was run for this note.** M42 runs it. If the inference is wrong the finding shrinks to
 the validator and the test, which are defects on their own terms.
 
 ---
@@ -127,10 +127,10 @@ somewhere init never looks.**
 
 ## Placement
 
-**M41 — Fail-Closed Execution Tier.** It is a `bin/` defect of exactly the family M41 exists to close,
-and it shares M41's design question: *what does this script do when the thing it needs is not there?*
-The answer for all four of M41's items is the same — **stop, and say so** — and manufacturing a
+**M42 — Fail-Closed Execution Tier.** It is a `bin/` defect of exactly the family M42 exists to close,
+and it shares M42's design question: *what does this script do when the thing it needs is not there?*
+The answer for all four of M42's items is the same — **stop, and say so** — and manufacturing a
 substitute is the one answer that must not survive the milestone.
 
-**M41 must also invert the test**, not delete it: the suite should fail if a stub is installable at
+**M42 must also invert the test**, not delete it: the suite should fail if a stub is installable at
 all.

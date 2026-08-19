@@ -4,7 +4,7 @@ name: "Completion: Fail-Closed Defaults and the Drivr MVP"
 status: scoping
 start_date: 2026-08-19
 planned_end_date: 2026-09-19
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Phase P12: Completion — Fail-Closed Defaults and the Drivr MVP
@@ -14,6 +14,12 @@ version: 1.0.0
 Eleven phases have built a governance framework and, in P11, a coordinator for it. **What none of
 them did is use it.** The CFO's own words, recorded in SN-31: *"just doing some testing and measuring
 does not count as being using it already."* Agentic mode has never been integrated in any project.
+
+> **Restructured 2026-08-19, hours after opening, at CFO direction (SN-38).** A new **M41 — The
+> Model Line-Up and Its Evidence** is inserted first, and the six original milestones shift +1
+> (`M41→M42` … `M46→M47`). **Every P12 artifact predating v1.1.0 cites the old numbers and was
+> correct at its date.** Nothing in the spine changed; the CFO ruled the per-level model line-up and
+> directed that its evidence be collected early, which is a placement question, not a scope one.
 
 P12's spine, in the CFO's words:
 
@@ -93,9 +99,92 @@ described-vs-built gap or to a verified fail-open instance.
 **Where P12's work lands.** Split between this repository (the `bin/` execution tier, the normative
 corpus, the artifact templates) and **Drivr** at `~/soft-dev/drivr` (the surface, the recorded
 mode-flip, the qualification runner). The first real agentic integration lands in whichever project
-M46 selects, with its evidence recorded here.
+M47 selects, with its evidence recorded here.
 
-### P12.1: Fail-Closed Execution Tier (M41)
+### P12.1: The Model Line-Up and Its Evidence (M41)
+
+**Inserted 2026-08-19 at CFO direction, after the phase opened.** SN-38 records the CFO's ruling on
+the target per-level model line-up and his direction that **the evidence be collected first, as an
+early step of P12.** The reason he gives is friction removal: *"I don't want to go through friction
+when I need to setup the models."*
+
+**HQ restructured rather than absorbed.** The measurement was offered a home in M42 or as a
+bugfix-shaped spike; both were rejected. `governance/systems/bugfix-epic-workflow.md` excludes work
+that *"requires investigation — root cause unknown, fix scope unclear"*, which is precisely what a
+measurement is, and putting it in M42 would make the fail-closed milestone *"the milestone things get
+put in"* — the pattern HQ named in P11 and constrained itself against. **It is a milestone.**
+
+**The line-up, as ruled:**
+
+| Key | Current | Target | Kind of change |
+|---|---|---|---|
+| `creation` | `remote:claude-opus-5` | **fable-5** | Same-tier mapping edit |
+| `hq` | `remote:claude-opus-5` | **unchanged** | None |
+| `phase` | `remote:claude-opus-5` | **GPT-5.6 Sol** | Same-tier mapping edit |
+| `milestone` | `remote:claude-opus-5` | **Deepseek V4 Flash** | **Policy-row change — closes row P4** |
+| `epic_manual` | `remote:claude-opus-5` | **local:qwen3.8:27b** | Tier change |
+| `epic_dev` | `local:qwen3-coder:30b` | **held** | Gated on measurement |
+| `epic_qa` | `local:qwen3-coder:30b` | **held** | Gated on measurement |
+
+**This change routes almost nothing. It arms a set of fail-closed checks.** Five of the seven keys
+are **manual-chat verification targets** (P9-M31-E31.3): a chat at that level **halts** if it opens
+on a model disagreeing with the declared value. Only `epic_dev` and `epic_qa` are dispatch lanes.
+**The moment the edit lands, five verification targets arm simultaneously**, and a chat opened on the
+old model halts by design. That is correct behaviour and a poor surprise; **announcing it before the
+edit lands is a Definition-of-Done item, not a courtesy.**
+
+**Two harnesses, because the checks do not transfer** (CFO ruling, SN-38 — the gate binds manual-chat
+verification targets **as well as** dispatch lanes; the Creation Chat's narrower lanes-only proposal
+is superseded):
+
+| Kind | Keys | Qualified by | Status |
+|---|---|---|---|
+| Agentic dispatch lane | `epic_dev`, `epic_qa` | Detecting **successful nothing** — tool rounds > 0, files changed > 0, claims resolving against files that exist | **To be built** |
+| Manual verification target | `creation`, `phase`, `milestone`, `epic_manual` | Detecting **failed judgment** — planted defects, catches vs false alarms | **Already exists — E35.5's back-test** |
+
+**What M41 measures, and the premise correction that shapes it.** **No comparison between
+`qwen3-coder:30b` and any 27b has ever been run.** E33.2 compared `qwen2.5-coder:14b` against the
+30b; E35.5's `PASS 4/5, one SPLIT, zero false alarms` over ten runs belongs to **`qwen3.6:27b`**,
+chosen deliberately because Stage-2 review is general reasoning and the 30b is coder-tuned. **The only
+milestone-level judgment result this project owns belongs to a 27b, not to the model currently
+configured.**
+
+- **`epic_dev` and `epic_qa` measured separately**, not as "the Epic model". They hold the same string
+  today and the record treats them oppositely: `epic_dev` owns the project's **only mergeable-work
+  evidence** (E33.2 Run B, E33.4); `epic_qa` owns its **only recorded fabrication** (E39.3 — `VERDICT:
+  PASS`, zero tool rounds, citing a key the file does not contain, with read-only tools genuinely
+  advertised). One string has been hiding the distinction.
+- **The incumbent measured first**, to establish the relative bar's baseline — there is currently no
+  baseline for `qwen3-coder:30b` on the judgment task.
+- **`qwen3.6:27b` as a real candidate, not a footnote.** Caveat: it is present in Ollama but
+  **declared nowhere in `opencode.json`**, so it is not routable through the execution adapter without
+  a config addition. That addition is M41's work.
+- **`qwen3.8:27b` verified present on this host** — 17.7 GB, confirmed by HQ 2026-08-19 against the
+  Ollama tags endpoint, discharging SN-38's Next Action 4. Like both other 27b/30b entries it exceeds
+  this box's 16 GB VRAM and will partially offload.
+
+**M41 has a split shape, and it is forced by two CFO constraints that pull opposite ways:** collect
+the evidence **early**, and **land no swap until the fail-closed milestone closes** — because M42
+repairs the code the lane runs through, and a model change landing with a lane repair makes the next
+failure unattributable. **So M41 opens first and closes late:** its measurement epics run at the head
+of the phase, and its terminal epic — the `.ai-project.yml` edit plus the `model-routing-policy.md`
+mapping-table and row-P4 update, which travel together — **is gated on M42's closure.** Two
+milestones concurrently in flight is already this phase's design.
+
+**Safe to measure now:** a qualification run dispatches through the agentic lane, and Docker is
+present on this host, so `bin/ai-project-orchestrator`'s unsandboxed fallback will not fire. The
+dependency on M42 is real but not blocking, and is recorded rather than assumed away.
+
+**One interaction HQ holds while scoping, stated once and not as an objection.** Epic drops to a
+local 27b at the same time as Milestone — the level that *reviews* Epic — drops from paid frontier to
+a Flash tier. **The reviewer and the reviewed move down together**, and P11's own record concludes
+that the review chain *"caught every HQ error"*, each *"one level down, by a chat applying HQ's output
+rather than reading it."* That chain is currently the system's main defence. Not a reason to refuse;
+a reason for **M47 to be watched closely rather than assumed.**
+
+---
+
+### P12.2: Fail-Closed Execution Tier (M42)
 
 **The three execution-tier defects, SN-31 rows 1-3.** Under **Decision 2 of SN-31 — a sequencing
 constraint, not a date: they land before the first real agentic integration, not after.** Exposure
@@ -107,7 +196,7 @@ moment one project does.
   the run, and any host-execution path that survives must be an **explicitly declared, recorded**
   opt-in rather than a fallback. If it is recorded, the run record says so.
 - **Row 2 — `git add .`.** The commit must carry the epic's files. What "the epic's files" means is
-  the design question M41 owes an answer to, and the answer must handle the case where the agent
+  the design question M42 owes an answer to, and the answer must handle the case where the agent
   touched something it should not have — which `git add .` currently launders into the epic's commit.
 - **Row 3 — the merge ladder.** Approval failure must abort. The `--admin` rung must go or be gated
   behind a recorded human authorization. **The test at `bin/ai-project-git-merge:447-460` encodes
@@ -125,9 +214,9 @@ moment one project does.
 **Blast radius is a scoping obligation, not an assumption.** These scripts live in `bin/` at this
 repo's root and are therefore *not* inside the `governance/` submodule adopting projects consume —
 but `AI-OPERATING-GUIDELINES.md`, `chat-hierarchy.md` and three guides instruct adopters to use them.
-M41 determines and records who actually runs these paths today, including Drivr.
+M42 determines and records who actually runs these paths today, including Drivr.
 
-### P12.2: The Acceptance Chain, Made Structural (M42)
+### P12.3: The Acceptance Chain, Made Structural (M43)
 
 **Changing who does what, so the bypass class becomes unavailable rather than discouraged.**
 
@@ -159,9 +248,9 @@ M41 determines and records who actually runs these paths today, including Drivr.
   milestone: the rule reaches **one** of nine starter-shaped surfaces and zero templates, and there
   are now **two statements of what a written extension grants** — `milestone-execution-chat-starter.md:334`
   says the limit *"resets"*; the CFO's amendment grants **+1**. The amendment is **stricter** than the
-  rule it invokes, and M42 must reconcile rather than stack. See `P12-GH-1`.
+  rule it invokes, and M43 must reconcile rather than stack. See `P12-GH-1`.
 
-### P12.3: Rituals, Records, and the Normative Repairs (M43)
+### P12.4: Rituals, Records, and the Normative Repairs (M44)
 
 **Adding the missing artifacts and rituals that record continuity — the tier P11 proved is thinnest.**
 
@@ -183,7 +272,7 @@ M41 determines and records who actually runs these paths today, including Drivr.
   documents; there is no template and no artifact type. Ideally semi-automated against harness
   context tracking, which is Drivr's side of the boundary.
 - **`governance-propagation.md`, amended** (SN-34, ruled 2026-08-19). Its Constraints are verified
-  false and three prohibitions rest on them. See the ruling; M43 executes it.
+  false and three prohibitions rest on them. See the ruling; M44 executes it.
 - **The i18n policy paragraph** (SN-31 Carry-Over 10). Chat and output in the user's language;
   documentation remains in the original language; **English is authoritative**; translation on demand
   is a *view*, never the source. One paragraph of normative text. It resolves Carry-Over 6's tension:
@@ -194,9 +283,9 @@ M41 determines and records who actually runs these paths today, including Drivr.
   with **two sections both titled "Error Handling"** (L701, L861) — so a cross-reference by title is
   ambiguous before numbering is considered. Verified still live 2026-08-19. Ruled **not** a hotfix.
 
-### P12.4: Trustworthy Completion Signal (M44)
+### P12.5: Trustworthy Completion Signal (M45)
 
-**Row 4 of the finding, plus `P10-GH-7`.** The prerequisite for M45, and the reason M45 cannot be run
+**Row 4 of the finding, plus `P10-GH-7`.** The prerequisite for M46, and the reason M46 cannot be run
 in parallel with it.
 
 - **`P10-GH-7`** — block detection untrustworthy in both directions, severity High, open since M35 —
@@ -204,7 +293,7 @@ in parallel with it.
   independently and left unresolved.
 - **M39's judgment on the sole roster engine.** A live OpenCode run projects `effect_ledger=None`, so
   `EFFECTS_VERIFIED` is unreachable; `undetermined` on four of six cases; loses to the degenerate
-  baseline on strict scoring. **M40's F5 is the sharpest constraint and must be carried into M44's
+  baseline on strict scoring. **M40's F5 is the sharpest constraint and must be carried into M45's
   design: the ordered-ledger projection fixes only half the problem** — a perfect ledger on a
   read-only run still returns `NO_EFFECTS_OBSERVED` because `_decide` never reads `Role.INSPECTION`.
   Better classification and more evidence each yield a *worse* verdict.
@@ -213,12 +302,12 @@ in parallel with it.
   visibly, the board shows the size of the problem every day — which is the pressure that keeps P12
   honest. Hidden, the dashboard looks healthy while the signal beneath it is broken.
 
-**M44's bar must be relative and stated before the work, not after it** — E35.5's result was usable
+**M45's bar must be relative and stated before the work, not after it** — E35.5's result was usable
 precisely because it carried `PASS 4/5, 0 false alarms` in advance.
 
-### P12.5: The Drivr MVP Surface (M45)
+### P12.6: The Drivr MVP Surface (M46)
 
-**Scoped from SN-36's visual binding, not from assumption.** Gated on M44.
+**Scoped from SN-36's visual binding, not from assumption.** Gated on M45.
 
 **Visual binding**
 - **Link:** https://claude.ai/code/artifact/688a152b-df5d-4882-b48f-26108200b92c
@@ -262,7 +351,7 @@ precisely because it carried `PASS 4/5, 0 false alarms` in advance.
   They fail only on counts. Drivr is the runner — run the suite, gate the swap, record the result;
   no inference of its own.
 
-### P12.6: First Real Agentic Integration (M46)
+### P12.7: First Real Agentic Integration (M47)
 
 **The phase's proof, and the reason the other five milestones exist.**
 
@@ -271,12 +360,12 @@ completion-judged, gated, escalated if it blocks, handed back to its parent, mer
 Not a measurement run and not a demo: **work that would have been done anyway, done this way
 instead.**
 
-- **Project selection is M46's first decision and must be recorded with its reasoning.** The proving
+- **Project selection is M47's first decision and must be recorded with its reasoning.** The proving
   pair (`home_finance`, `local-agent-runner`) and Drivr itself are the candidates on current
   evidence; HQ does not pre-empt the choice.
-- **M41 is a hard prerequisite** — this is the sequencing constraint, discharged.
+- **M42 is a hard prerequisite** — this is the sequencing constraint, discharged.
 - **The run record is the deliverable**, including what the framework got wrong. A clean run that
-  surfaced nothing is a weaker result than a run that surfaced a real defect, and M46 should be
+  surfaced nothing is a weaker result than a run that surfaced a real defect, and M47 should be
   scoped to say so in advance.
 
 ---
@@ -307,12 +396,26 @@ instead.**
 
 ## Milestones
 
-**M41 → M42 / M43 → M44 → M45 → M46 is a binding order in its dependencies, and the binding is not
-stylistic.** M41 gates M46 by CFO decision. M44 gates M45 because the surface's two central
-behaviours are the completion signal. M42 and M43 are independent of each other and of M44/M45, and
-may run in parallel with them at the Phase Chat's discretion.
+**Three binding constraints, none of them stylistic:** **M42 gates M47** by CFO decision;
+**M45 gates M46** because the surface's two central behaviours *are* the completion signal; and
+**M41's terminal epic is gated on M42's closure** — measure early, land late. M43 and M44 are
+independent of each other and of the M45/M46 pair.
 
-### M41: Fail-Closed Execution Tier
+**M41 starts first and finishes late.** Its measurement epics are the head of the phase; its
+`.ai-project.yml` edit waits for M42. Do not read its milestone number as a claim that it closes
+first.
+
+### M41: The Model Line-Up and Its Evidence
+
+The CFO's ruled line-up, measured before it lands. `epic_dev` and `epic_qa` measured **separately**;
+the incumbent measured **first** to set the relative bar's baseline; `qwen3.6:27b` added to
+`opencode.json` so it is routable; `qwen3.8:27b` (present, verified) competing against it. E35.5's
+existing back-test qualifies the four verification targets; a minimal successful-nothing instrument
+qualifies the two lanes. **Terminal epic — the `.ai-project.yml` edit with the
+`model-routing-policy.md` mapping-table and row-P4 update — is gated on M42's closure, and announces
+the change to every level before it lands.**
+
+### M42: Fail-Closed Execution Tier
 
 Rows 1-3 and 5 of the finding. Sandbox absence aborts or is a recorded explicit opt-in; staging is
 scoped to the epic; approval failure aborts and the `--admin` rung goes or is gated behind recorded
@@ -321,32 +424,32 @@ its path defects are fixed together. **Both self-protecting tests inverted** (`a
 `:447-460`, `test_init_agent_path.py`) so the suite asserts the guard. Blast radius determined and
 recorded, including the fleet sweep for existing placeholder agents.
 
-### M42: The Acceptance Chain, Made Structural
+### M43: The Acceptance Chain, Made Structural
 
 Parent performs the merge; accept-by-silence keeps its cheapness and loses silence as sole carrier;
 the rework-exhaustion flip to manual as an opt-out default performed and recorded by Drivr; resume
 restores mode but not budget; the rework limit consolidated across all starter-shaped surfaces and
 its two extension statements reconciled to one (`P12-GH-1`).
 
-### M43: Rituals, Records, and the Normative Repairs
+### M44: Rituals, Records, and the Normative Repairs
 
 `P11-GH-3`'s Phase Completion Declaration at §5C Step 2 with a template; the HQ re-instantiation
 ritual recorded; the context-exhaustion handoff artifact; `governance-propagation.md` amended per
 ruling; the i18n paragraph; SN-30 Recs 1-2; the AOG section-numbering repair.
 
-### M44: Trustworthy Completion Signal
+### M45: Trustworthy Completion Signal
 
 `P10-GH-7` including its missing-Delivery-Notice branch; M39's judgment made able to reach a verdict
 on the roster engine or its limit measured and stated, carrying M40's F5 constraint; `undetermined`
 first-class. Bar stated before the work.
 
-### M45: The Drivr MVP Surface
+### M46: The Drivr MVP Surface
 
 SN-36's binding built, with governance rules made unrepresentable in the interface; the board
 vocabulary including `undetermined`; approval as formed-in-chat / carried-by-link; escalate-further
 as a one-level control; SN-37's qualification gate with its bar set in the same work.
 
-### M46: First Real Agentic Integration
+### M47: First Real Agentic Integration
 
 One real epic, one real project, end to end through Drivr. Project selection recorded with reasoning.
 Run record is the deliverable, including what the framework got wrong.
@@ -357,44 +460,54 @@ Run record is the deliverable, including what the framework got wrong.
 
 ### P12 is Complete When:
 
-1. ✅ **No path in `bin/` proceeds on absent gating evidence.** Sandbox absence aborts or is a
+1. ✅ **`epic_dev` and `epic_qa` are measured separately, against the incumbent**, and the record
+   states which model each row should hold and why — ending the period in which one string filled
+   both keys and hid a mergeable-work result and a fabrication behind the same value.
+2. ✅ **Every row of the line-up that moves has passed its harness before it lands** — the four
+   verification targets on E35.5's planted-defect back-test, the two lanes on the successful-nothing
+   checks. `hq` moves freely because it does not move.
+3. ✅ **The line-up is in `.ai-project.yml`, `model-routing-policy.md`'s mapping table and row P4 agree
+   with it, and every level was warned before the five verification targets armed.**
+4. ✅ **No path in `bin/` proceeds on absent gating evidence.** Sandbox absence aborts or is a
    recorded explicit opt-in; staging is epic-scoped; approval failure aborts; the `--admin` rung is
    gone or gated behind recorded human authorization; **`ai-project-init` never manufactures a
    governance agent**, and finds the real one.
-2. ✅ **The suite asserts the guard rather than the defect** — the inverted tests at
+5. ✅ **The suite asserts the guard rather than the defect** — the inverted tests at
    `bin/ai-project-git-merge:447-460` and `tests/test_init_agent_path.py` fail if the admin override
    is reachable unrecorded, or if a placeholder agent is installable at all.
-3. ✅ **A child never holds merge authorization.** The parent performs the merge; the E40.5 guard is
+6. ✅ **A child never holds merge authorization.** The parent performs the merge; the E40.5 guard is
    a backstop, and `merge-authorization.md` is the parent's record.
-4. ✅ **Acceptance is distinguishable from absence** — a clean delivery still costs no artifact, and
+7. ✅ **Acceptance is distinguishable from absence** — a clean delivery still costs no artifact, and
    *reviewed and clean* is no longer indistinguishable from *nobody looked*.
-5. ✅ **Exhausted rework flips the parent to manual by default**, Drivr records the flip, and the
+8. ✅ **Exhausted rework flips the parent to manual by default**, Drivr records the flip, and the
    committed starter remains the source of truth.
-6. ✅ **Resume restores the declared mode and does not reset the attempt counter**, and no control
+9. ✅ **Resume restores the declared mode and does not reset the attempt counter**, and no control
    exists that promotes a manual-declared instance to agentic.
-7. ✅ **One statement governs the rework limit**, reachable from every starter-shaped surface and
-   every template, with a single answer to what a written extension grants.
-8. ✅ **Phase closure has a pre-merge completion artifact** — a Phase Completion Declaration at §5C
-   Step 2 with a template, marked `COMPLETE (awaiting consolidation)`, which is what the reviewing
-   level receives; Step 9's declaration is unmoved.
-9. ✅ **An HQ re-instantiation ritual exists in one normative place**, naming the committed artifacts
-   a re-opened HQ session receives and where openers live.
-10. ✅ **A context-exhaustion handoff artifact has a type and a template.**
-11. ✅ **`governance-propagation.md` states only true constraints**, and each surviving prohibition
+10. ✅ **One statement governs the rework limit**, reachable from every starter-shaped surface and
+    every template, with a single answer to what a written extension grants.
+11. ✅ **Phase closure has a pre-merge completion artifact** — a Phase Completion Declaration at §5C
+    Step 2 with a template, marked `COMPLETE (awaiting consolidation)`, which is what the reviewing
+    level receives; Step 9's declaration is unmoved.
+12. ✅ **An HQ re-instantiation ritual exists in one normative place**, naming the committed artifacts
+    a re-opened HQ session receives and where openers live.
+13. ✅ **A context-exhaustion handoff artifact has a type and a template.**
+14. ✅ **`governance-propagation.md` states only true constraints**, and each surviving prohibition
     stands on a stated reason rather than an expired one.
-12. ✅ **The AOG's sections are uniquely numbered and uniquely titled**, and no cross-reference is
+15. ✅ **The AOG's sections are uniquely numbered and uniquely titled**, and no cross-reference is
     ambiguous by title.
-13. ✅ **The completion signal is trustworthy on the roster engine, or its limit is measured and
+16. ✅ **The completion signal is trustworthy on the roster engine, or its limit is measured and
     stated**, with `P10-GH-7` closed or re-rated on evidence; `undetermined` is first-class and
     rendered.
-14. ✅ **Drivr's MVP surface exists and makes at least three governance rules unrepresentable** — no
+17. ✅ **Drivr's MVP surface exists and makes at least three governance rules unrepresentable** — no
     agentic at Creation/HQ, no Phase/Milestone dispatch, no mode control implying merge authority.
-15. ✅ **A model may not be swapped without passing a qualification suite whose bar was set before it
+18. ✅ **A model may not be swapped without passing a qualification suite whose bar was set before it
     ran**, and the suite detects *successful nothing* on both recorded historical failures.
-16. ✅ **One real epic in one real project has been carried end to end agentically by Drivr**, with
+19. ✅ **One real epic in one real project has been carried end to end agentically by Drivr**, with
     its run record — including the framework's own failures during it — committed.
-17. ✅ **The parked and deferred items are recorded with their triggers**, and llama.cpp is recorded
+20. ✅ **The parked and deferred items are recorded with their triggers**, and llama.cpp is recorded
     **closed**, not parked.
+
+---
 
 ---
 
@@ -402,6 +515,20 @@ Run record is the deliverable, including what the framework got wrong.
 
 The CFO (Layer 8) will accept P12 complete when:
 
+- [ ] `epic_dev` and `epic_qa` carry separate recorded measurements, each against the incumbent
+      `qwen3-coder:30b` baseline, with the chosen value for each row and its reasoning committed
+- [ ] `qwen3.6:27b` is declared in `opencode.json` and routable through the execution adapter;
+      `qwen3.8:27b`'s presence is re-confirmed at run time, not inherited from this spec
+- [ ] The four verification-target rows have E35.5 back-test results recorded (catches, false
+      alarms, runs); the two lanes have successful-nothing results (tool rounds, files changed,
+      claims resolving) — and any row that fails its harness is **escalated to the CFO, not
+      silently dropped or silently landed**
+- [ ] `.ai-project.yml` carries the ruled line-up; `model-routing-policy.md`'s mapping table **and**
+      row P4 are updated in the same change, with row P4 recorded as **closed by CFO ruling** and
+      the Change discipline satisfied **by decision, stated as such** — not filed as a same-tier
+      refresh
+- [ ] The `.ai-project.yml` edit merged **after** M42 closed, and every level was notified before it
+      landed
 - [ ] `bin/ai-project-orchestrator`'s Docker-absent path no longer reaches `shell=True` host execution
       as a silent fallback, and any surviving host path is declared and recorded per run
 - [ ] The epic commit contains the epic's files, and the handling of out-of-scope modifications is
@@ -460,17 +587,22 @@ The CFO (Layer 8) will accept P12 complete when:
 - **PSG §11.6.1** — the CFO as mandatory diff reviewer for HQ-authored deliveries; authorization is
   not review
 - **`governance/systems/chat-hierarchy.md`** — the ratified execution matrix, *mode is not authority*,
-  and the committed-starter invariant M42's flip must not break
-- **SN-25** — one-level escalation; the terminus of M45's escalate-further control
+  and the committed-starter invariant M43's flip must not break
+- **SN-25** — one-level escalation; the terminus of M46's escalate-further control
 - **Drivr at `~/soft-dev/drivr`** — scheduler, derived gate queue, headless surface, signed
   one-time-link approval, no inference of its own
-- **M39's completion judgment and M40's F5** — the starting point and the constraint for M44
+- **M39's completion judgment and M40's F5** — the starting point and the constraint for M45
 - **`P11-GH-1`** — mid-flight spec amendments do not reach working branches. **Fired four times in
   P11.** P12 runs six milestones with parallelism; the Phase Chat should expect it.
 
 ### External / CFO-side
-- **Project selection for M46** — HQ does not pre-empt it
-- **A reachable engine** for M44 and M46. An engine now resolves in the sandbox (M40, reversing M38)
+- **The ruled model line-up (SN-38)** — five keys move, two are held pending M41's measurement.
+  **`hq` is unchanged, which is why this HQ session did not halt.**
+- **Availability of the four remote targets** — fable-5, GPT-5.6 Sol, Deepseek V4 Flash. HQ has
+  verified **only** the local models on this host. **Availability of the remote three is unverified
+  and is the CFO's**; M41 must confirm before it measures, not after.
+- **Project selection for M47** — HQ does not pre-empt it
+- **A reachable engine** for M45 and M47. An engine now resolves in the sandbox (M40, reversing M38)
   on the **reverse** endpoint shape from B2.1; this remains the phase's most fragile assumption
 - **The hosted ComfyUI behind a fixed `ngrok` URL** — in spec as written; availability is explicitly
   the CFO's responsibility. §16.4 already **fails closed** here, recording intent and deferring
@@ -483,8 +615,8 @@ The CFO (Layer 8) will accept P12 complete when:
 
 ## Timeline
 
-Planned 2026-08-19 → 2026-09-19, one month, six milestones. **The estimate is HQ's and is soft.** P11
-planned four weeks, restructured to five milestones mid-flight, and closed in seventeen days. M46 is
+Planned 2026-08-19 → 2026-09-19, one month, **seven** milestones after the 2026-08-19 restructure. **The estimate is HQ's and is soft.** P11
+planned four weeks, restructured to five milestones mid-flight, and closed in seventeen days. M47 is
 the item with genuine schedule risk, because it is the only one whose success depends on a real
 project having real work available.
 
@@ -504,6 +636,7 @@ project having real work available.
 | **SN-36** | 2026-08-19 | Drivr's MVP surface, bound as a §7 visual |
 | **SN-37** | 2026-08-19 | The model-qualification gate |
 | **SN-30** | 2026-08-11 | The external assessment at issue #192, routed — triaged in P12's opening ruling |
+| **SN-38** | 2026-08-19 | The ruled model line-up; SN-37's gate scoped to verification targets too; row P4 closed |
 
 ### Governing Rulings
 - `.ai-project/artifacts/rulings/2026-08-19__ai-project-system-hq__ruling__p12-opening-and-sn-30-37-triage.md`
@@ -546,11 +679,25 @@ ones, restated so a working chat need not chase them:
     *mode is not authority*; PSG §11.6.1.
 18. **i18n:** user's language for chat and output; documentation in the original language; English
     authoritative; translation is a view.
+19. **The model line-up is ruled** (SN-38): `creation`→fable-5, `phase`→GPT-5.6 Sol,
+    `milestone`→Deepseek V4 Flash, `epic_manual`→`local:qwen3.8:27b`, `hq` unchanged.
+20. **`milestone`→Deepseek V4 Flash is a POLICY-ROW change, not a mapping refresh**, and it **closes
+    row P4**. Change discipline satisfied **by CFO decision**, which must be stated plainly rather
+    than disguised as a same-tier refresh.
+21. **SN-37's gate binds manual-chat verification targets as well as dispatch lanes** — CFO ruling;
+    the Creation Chat's lanes-only proposal is **superseded**. **Two harnesses**, because the checks
+    do not transfer.
+22. **The evidence is collected first**, as an early step of P12, inserted after the phase opened —
+    the CFO's call to make, and made.
+23. **`epic_dev` and `epic_qa` are measured separately**, and the incumbent is measured to set the
+    relative bar's baseline.
+24. **No model swap lands until M42 closes.** A model change and a lane repair landing together makes
+    the next failure unattributable.
 
 ### HQ Triage Decisions (2026-08-19 ruling)
 
-Recorded in the ruling; summarized here. Six milestones with M41 gating M46 and M44 gating M45;
-`P12-GH-1` and `P12-GH-2` filed; SN-30 Recs 1-2 placed in M43 and Recs 3-5 deferred with reasoning; the AOG
+Recorded in the ruling; summarized here. Six milestones with M42 gating M47 and M45 gating M46;
+`P12-GH-1` and `P12-GH-2` filed; SN-30 Recs 1-2 placed in M44 and Recs 3-5 deferred with reasoning; the AOG
 renumbering ruled **not** a hotfix; `governance-propagation.md` amended; governance auto-update
 **split**, with only the updater half admissible and the reconciler half returned.
 
@@ -562,14 +709,19 @@ Not decided here, and named so their status is explicit rather than unknown:
 2. **Governance auto-update's two sub-questions** — what happens when an **apply** fails partway, and
    whether "mark superseded" narrows for explicitly immutable artifacts.
 3. **Digest Open Decision 3** — the `local-agent-runner` retention **bar**, and model-watch cadence.
-   SN-37's gate is the natural instrument for both; the numbers remain his.
+   SN-37's gate is the natural instrument for both; the numbers remain his. **Partially discharged by
+   SN-38:** the gate's scope and its relative bar are now ruled, so what remains is the retention
+   bar's threshold and the cadence at which re-tests fire.
 4. **Digest Open Decision 4** — whether the `P11-GH-2` sibling pattern earns its own record. **Left
    to the CFO deliberately: HQ is the party it indicts.**
 5. **Digest Open Decision 5** — the artifact-type inventory. `rulings` has **no template** despite
    being the most consequential class HQ produces, and `field-evidence` was minted by HQ without one.
    **Both implicate HQ**, which is why HQ places neither unasked.
-6. **`model-routing-policy.md` row P4** — unchanged, his timing.
-7. **The per-level model and mode mapping** — a plan awaiting measurement.
+6. **`model-routing-policy.md` row P4** — **CLOSED 2026-08-19 by CFO ruling** (SN-38), open on his
+   timing since P10. Recorded here as discharged rather than deleted, so the item's history survives.
+7. **The per-level model mapping** — **RULED** (SN-38); it was a plan and is now a decision, gated on
+   M41's measurement. **The per-level *mode* mapping remains a plan** awaiting measurement, and is
+   still his.
 
 ---
 
@@ -577,4 +729,5 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
-| 1.0.0 | 2026-08-19 | Initial phase spec. Opens P12 on SN-31's spine per the 2026-08-19 HQ ruling; six milestones M41-M46; the four fail-open instances re-verified on `19c77ab` as the phase's organizing evidence. |
+| 1.1.0 | 2026-08-19 | **Restructured to seven milestones at CFO direction (SN-38), hours after opening.** A new **M41 — The Model Line-Up and Its Evidence** is inserted first; **the six original milestones shift +1**, mapping `M41→M42`, `M42→M43`, `M43→M44`, `M44→M45`, `M45→M46`, `M46→M47`. **Every P12 artifact predating this row cites the old numbers and was correct at its date**; the opening ruling carries the same mapping in its Amendment. The two original binding orders are preserved under the new numbers (`M42→M47`, `M45→M46`) and a third is added: M41's terminal epic is gated on M42's closure. Also records the ruled line-up, row P4's closure by CFO ruling, and SN-37's widened gate scope. |
+| 1.0.0 | 2026-08-19 | Initial phase spec. Opens P12 on SN-31's spine per the 2026-08-19 HQ ruling; six milestones M42-M47; the four fail-open instances re-verified on `19c77ab` as the phase's organizing evidence. |
