@@ -14,7 +14,8 @@ decisions:
   - "Milestone -> Deepseek V4 Flash is a POLICY-ROW CHANGE by CFO decision, not a mapping refresh, and it CLOSES model-routing-policy.md row P4 — open and awaiting the CFO's timing since P10. It must be recorded as a ruling, never filed as a same-tier refresh."
   - "Creation -> fable-5 and Phase -> GPT-5.6 Sol are SAME-TIER vendor moves: mapping-table edits under the 2026-07-28 precedent, TIER rows untouched, no new evidence required."
   - "epic_manual -> local:qwen3.8:27b. Every Epic chat, manual and agentic, now runs local — consistent with the standing goal that local execution is control at the finest grain."
-  - "SN-37's qualification gate guards AGENTIC DISPATCH LANES, not manual-chat verification targets. Its checks (tool rounds > 0, files changed > 0, claims resolving) are meaningless for a chat a human drives. PROPOSED scoping, awaiting the CFO's confirmation."
+  - "RULED by the CFO: SN-37's gate binds MANUAL-CHAT VERIFICATION TARGETS AS WELL AS dispatch lanes. The Creation Chat's narrower lanes-only proposal is superseded. Two harnesses follow, because the checks do not transfer: lanes are qualified by detecting SUCCESSFUL NOTHING; verification targets by detecting FAILED JUDGMENT — planted defects, catches vs false alarms — which is E35.5's back-test and already exists."
+  - "Consequence, accepted: four of the five line-up rows now require a qualification run before they land (creation, phase, milestone, epic_manual). Only hq moves freely, because it does not move. The wider scoping is what makes milestone -> Deepseek V4 Flash measurable — E35.5's back-test was built for milestone-level judgment, so the CFO's two rulings compose."
   - "CFO DIRECTION: collect the model evidence FIRST, as an early step of P12, explicitly inserted after the phase opened — his call to make. Placement is HQ's; the measurement is not optional."
   - "The qualification must measure epic_dev and epic_qa SEPARATELY, and must measure the INCUMBENT (qwen3-coder:30b) to establish the relative bar's baseline."
   - "Premise correction, on the record: qwen3-coder:30b has NEVER been compared against any 27b. E33.2 compared 14b vs 30b. E35.5's PASS 4/5 with zero false alarms belongs to qwen3.6:27b, chosen deliberately as a general reasoning model for judgment work. The only milestone-level judgment result this project owns belongs to a 27b."
@@ -193,16 +194,43 @@ touching files — which is orthogonal to reasoning quality.
 That is why SN-37's first check is *detect successful nothing*, and why a hype-driven swap without
 the gate collects the one kind of evidence that does not answer the question.
 
-### Scoping SN-37 so it does not block what it was not built for
+### SN-37's scope — RULED: the gate binds verification targets too
 
-**`[PROPOSED — confirm]`** The gate's checks — tool rounds greater than zero, files changed greater
-than zero, claims resolving against files that exist — are only meaningful for a lane that executes
-unattended. A manual chat is driven by the CFO; there is no unattended run to measure.
+The Creation Chat proposed the narrower scoping — gate binds dispatch lanes only, on the grounds
+that its checks (tool rounds > 0, files changed > 0, claims resolving) are meaningless for a chat a
+human drives. **The CFO ruled the wider scope: the gate binds manual-chat verification targets as
+well.** Recorded as decided; the proposal is superseded.
 
-**Proposed: SN-37's gate binds agentic dispatch lanes (`epic_dev`, `epic_qa`) and does not bind
-manual-chat verification targets.** This unblocks five of the seven keys immediately and leaves
-exactly the two rows the gate exists for. Awaiting the CFO's confirmation; recorded as proposed, not
-decided.
+**The ruling requires two harnesses, because the checks genuinely do not transfer.**
+
+| Kind | Keys | What qualifies it | Status |
+|---|---|---|---|
+| **Agentic dispatch lane** | `epic_dev`, `epic_qa` | Detect *successful nothing* — tool rounds > 0, files changed > 0, claims resolving against files that exist | To be built |
+| **Manual verification target** | `creation`, `hq`, `phase`, `milestone`, `epic_manual` | Detect *failed judgment* — planted defects, catches versus false alarms, on the review work the level actually performs | **Already exists — E35.5's back-test** |
+
+A manual chat has no unattended run, so "did it call tools" measures nothing there. **"Did it catch
+the planted defect" is the right question, and the instrument is built**: E35.5's back-test scored
+`qwen3.6:27b` at 4 catches of 5, one SPLIT, zero false alarms across ten runs, and the 2026-08-17
+Progress Digest confirms the harness *"remains available."*
+
+**The ruling's strongest consequence, and the reason it is better than the proposal it replaced.**
+`milestone → Deepseek V4 Flash` is the highest-risk row in this note: Milestone holds **Stage-2
+accept authority**, which is the stated reason `model-routing-policy.md` row P4 reads paid frontier,
+and the move is toward a Flash tier on public capability claims. **E35.5's back-test was built to
+measure milestone-level judgment.** The wider scoping therefore supplies exactly the evidence the
+row P4 decision otherwise lacked — which the narrower scoping would have excluded. **The CFO's two
+rulings compose: the second makes the first measurable.**
+
+**The honest cost, recorded rather than glossed.** Four of the five line-up rows now require a
+qualification run before they land — `creation`, `phase`, `milestone`, `epic_manual`. Only `hq`
+moves freely, because it does not move. This is more up-front work than lanes-only scoping, and it
+converts friction discovered at setup into friction scheduled in advance. That is the trade the CFO
+chose, stated so nobody reopens it as an oversight.
+
+**One distinction for HQ, so the two mechanisms are not conflated.** The **model check**
+(P9-M31-E31.3) verifies that the *running* model matches the *declared* one. The **qualification
+gate** (SN-37) verifies that the declared model is *fit*. Both fail closed; they answer different
+questions, and a pass on either is not a pass on the other.
 
 ---
 
