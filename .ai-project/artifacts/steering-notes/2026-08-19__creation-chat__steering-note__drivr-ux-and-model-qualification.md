@@ -230,6 +230,38 @@ project already reasons about model behaviour — M39's most useful result was r
 
 ---
 
+## Correction to SN-35 — filed, not silently edited
+
+**SN-35 (2026-08-18, master `7af49f7`) overstates its defect.** It is corrected here rather than
+rewritten there, because that note is committed and is HQ's opener input; the record should show the
+claim and its correction, both dated.
+
+**Holds:** `hq-chat.md`, `hq-execution-chat-starter.md` and `templates/hq-chat-opener.md` contain
+**zero** occurrences of re-instantiation or re-opening. The normative tier is silent.
+
+**Does not hold:** *"no defined way to be re-opened."* `.ai-project/artifacts/hq-openers/` holds
+**eight prior instances** (2026-06-12 → 2026-08-01) with a stable `artifact_type: hq_opener`, a
+stable filename convention, a stable front-matter schema, and `supersedes:` chaining each to the
+last. The P12 opener is the ninth and follows it:
+`.ai-project/artifacts/hq-openers/2026-08-19__hq-chat-opener.md`.
+
+**The defect is narrower and cheaper:** the practice exists and is **undocumented**. Required action
+becomes *record the ritual already being followed* — not design one. Severity accordingly reads
+**low**, not medium.
+
+**The finding survives, and this correction is its best evidence.** A reader competent in the corpus
+searched the normative tier, found nothing, and concluded the practice did not exist — while eight
+instances sat in the artifact record. An undocumented convention is one re-instantiation away from
+being lost; it just demonstrated exactly that.
+
+**Error class: `P11-GH-2`'s layer axis** — verified in the documentation tier, asserted about
+practice. Made by the Creation Chat; caught by the CFO, who expected the file to be where it already
+was. **Third instance of this class surfaced in a single session** (the others: E29.3's precision
+finding read as a track verdict rather than a model-tier result, and `governance-propagation.md`'s
+expired Constraints, SN-34). That frequency is itself worth HQ's attention.
+
+---
+
 ## Carry-Over Open Items
 
 1. **The escalation terminus has no defined disposition.** Escalate-further advances the chain one
