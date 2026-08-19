@@ -244,6 +244,24 @@ the test, **which are defects on their own terms** and are fixed regardless.
 (P11's closure declaration, ~230 bytes) and **was not re-inspected by HQ.** Each project found is
 **repaired or recorded** — recorded, with a reason, is an acceptable disposition; **silence is not.**
 
+> **⚠ FINDING G4 — the live victim is CONFIRMED by direct inspection, and a first-pass sweep of the
+> fleet finds exactly one.**
+>
+> HQ's `P12-GH-2` note states the victim was *"verified by the record, not re-run here."* The Phase
+> Chat re-inspected on 2026-08-19: **`~/soft-dev/social-stories-creator/.ai-project/agents/governance.agent.md`
+> is 230 bytes.** **The inference is confirmed at the artifact level.** Across twelve enrolled fleet
+> directories, **every other project's agent is 14,711 bytes** — the real one.
+>
+> **This narrows the sweep; it does not discharge it.** Two boundaries, stated per `P11-GH-2`:
+> the check was **file size only**, not content, so a *different* wrong agent would not show; and it
+> covered `~/soft-dev/*` on this host, which is not a claim about anywhere else. **E42.5 still owes
+> the enumeration** — with content, not size — and still owes the repair-or-record disposition.
+>
+> **A second observation for E42.5, offered as a lead rather than a finding:** the one victim is one
+> of the projects **without** a `.governance` directory, which is exactly the population M38
+> identified as init's own creations. **The two defects in `bin/ai-project-init` may be visible as
+> one correlation in the fleet**, which would be corroboration worth capturing.
+
 ### Obligation 3 — Determine and record the blast radius
 
 These scripts live in `bin/` at this repo's root and are therefore **not** inside the `governance/`
@@ -649,4 +667,5 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.0.1 | 2026-08-19 | **Finding G4 added to Obligation 2, before any Epic Chat opened** — no `P11-GH-1` exposure. The Phase Chat re-inspected the `P12-GH-2` live victim directly rather than inheriting it from the record: `social-stories-creator`'s agent is **230 bytes, confirmed**, and a first-pass size sweep of twelve enrolled fleet directories finds **every other project at 14,711 bytes**. Verification boundary stated: **size only, not content**, and `~/soft-dev/*` on this host only — so E42.5's enumeration is narrowed, not discharged. Adds the observation that the one victim sits in the non-`.governance` population M38 identified as init's own creations, offered to E42.5 as a lead. **No scope, ordering, epic or acceptance criterion changes.** |
 | 1.0.0 | 2026-08-19 | Initial M42 spec, from the P12 Phase Execution Chat Starter and the 2026-08-19 HQ Ruling. All four defects re-verified by reading on `master` at `9ee810e`; all stated line references hold. **Three planning-time findings recorded:** the orchestrator already defines `LOCAL_UNAVAILABLE_EXIT = 5` at `:36`, documents it as *"refuse loudly rather than retry or silently fall back"*, and applies it at `:539-565` — so E42.1 applies the file's own convention rather than inventing one (G1); `test_promote_branch_fallback_merge`'s mock has **approval returning 0**, so inverting it covers the ladder but **not** the `:269` approval bypass, which has no test at all — E42.3 owes a **new** test as well as an inverted one (G2); and the blast radius is **six** guides, three normative/spec documents, an adoption record, `README.md`, **seven other `bin/` scripts** and **seven test files**, plus Drivr outside the repo — against the scoping's *"three guides"*, and the measurement is a name sweep for which E42.5 owes the call graph (G3). Five epics; E42.1→E42.2 sequenced on one file; E42.4→E42.5. |
