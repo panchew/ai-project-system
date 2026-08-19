@@ -4,7 +4,7 @@ name: "Completion: Fail-Closed Defaults and the Drivr MVP"
 status: scoping
 start_date: 2026-08-19
 planned_end_date: 2026-09-19
-version: 1.1.0
+version: 1.1.1
 ---
 
 # Phase P12: Completion — Fail-Closed Defaults and the Drivr MVP
@@ -279,6 +279,27 @@ M42 determines and records who actually runs these paths today, including Drivr.
   propagating English normative text to a Spanish-speaking adopter is **correct** under this policy.
 - **SN-30 Rec 1 and Rec 2** (see the ruling): mechanical checks for the four observed defects, and
   promoting **G1 and G2** out of an epic spec into the core documents.
+- **Record P12's own `P11-GH-1` instance** against its carry-forward note
+  (`docs/phases/P11__.../P11__carry-forward-note__P11-GH-1-mid-flight-amendments-do-not-reach-working-branches.md`),
+  per SN-39's Next Action. **The facts, so no epic re-derives them:** `governance/hq-p12-opening` was
+  cut from `master` at `19c77ab`; SN-38 landed at `3eda074` and was amended at `afe5d79`, both
+  **after** the cut; the phase spec on that branch carried **zero** occurrences of `SN-38`,
+  `Deepseek` or `epic_qa`; **the Creation Chat found it** (SN-39), not the level below and not any
+  mechanism; it was resolved by merging `master` into the branch (`0a19563`) and reconciling before
+  `#215` merged (`8f5fb7c`).
+  - **Cite it by artifact and defect, never by ordinal.** The carry-forward note records *two*
+    instances; P11's closure record counts *four*. **The tally does not reconcile and the project has
+    already ruled that it must not be used** (P11-M38 correction). An epic that writes "the fifth
+    instance" reproduces the defect it is filing.
+  - **This records evidence. It does not reopen the fix.** Ruling Decision 12 stands: `P11-GH-1` is
+    **not scoped as work** in P12, because the phase's three parallel tracks will produce more
+    evidence than a remedy designed now would rest on. Amending a prior phase's carry-forward note
+    from a later phase is established practice (P10-GH-2, P11-M36-E36.5).
+  - **What makes this instance worth the entry rather than a tally mark:** it fired **inside the
+    phase that owns the gap**, on **HQ's own branch**, and was caught by a chat **outside the parent
+    chain** — a Creation Chat reading `master` — rather than by the one-level-down review that caught
+    every P11 instance. That is a different detection path from every case on file, and it is the
+    part a future remedy has to account for.
 - **The AOG section-numbering repair.** Order is `1, 1A, 2-9, 13, 14, 10, 11, 12, 13, 14, 16, 15`,
   with **two sections both titled "Error Handling"** (L701, L861) — so a cross-reference by title is
   ambiguous before numbering is considered. Verified still live 2026-08-19. Ruled **not** a hotfix.
@@ -435,7 +456,8 @@ its two extension statements reconciled to one (`P12-GH-1`).
 
 `P11-GH-3`'s Phase Completion Declaration at §5C Step 2 with a template; the HQ re-instantiation
 ritual recorded; the context-exhaustion handoff artifact; `governance-propagation.md` amended per
-ruling; the i18n paragraph; SN-30 Recs 1-2; the AOG section-numbering repair.
+ruling; the i18n paragraph; SN-30 Recs 1-2; the AOG section-numbering repair; **P12's own
+`P11-GH-1` instance recorded against its carry-forward note** (SN-39).
 
 ### M45: Trustworthy Completion Signal
 
@@ -561,6 +583,9 @@ The CFO (Layer 8) will accept P12 complete when:
 - [ ] `AI-OPERATING-GUIDELINES.md` sections are `1..n` with no duplicate number and no duplicate
       title; all internal cross-references updated; the version bumped
 - [ ] SN-30 Rec 1's checks exist under `tests/`; G1 and G2 live in a core document, not an epic spec
+- [ ] `P11-GH-1`'s carry-forward note carries P12's own instance with its dated commits, its
+      out-of-chain detection path, and **no ordinal** — and the note still records the gap as open and
+      unscoped
 - [ ] `P10-GH-7` is closed or re-rated with recorded evidence, including the missing-Delivery-Notice
       branch
 - [ ] The completion judgment reaches a verdict on the roster engine, or a recorded measurement
@@ -729,5 +754,6 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.1 | 2026-08-19 | Folds SN-39's Next Action into **M44**: record P12's own `P11-GH-1` instance against that gap record's carry-forward note, with its facts, its out-of-chain detection path, and an explicit instruction to cite by artifact and defect rather than by ordinal. **Records evidence; does not reopen the fix** — Decision 12 stands. |
 | 1.1.0 | 2026-08-19 | **Restructured to seven milestones at CFO direction (SN-38), hours after opening.** A new **M41 — The Model Line-Up and Its Evidence** is inserted first; **the six original milestones shift +1**, mapping `M41→M42`, `M42→M43`, `M43→M44`, `M44→M45`, `M45→M46`, `M46→M47`. **Every P12 artifact predating this row cites the old numbers and was correct at its date**; the opening ruling carries the same mapping in its Amendment. The two original binding orders are preserved under the new numbers (`M42→M47`, `M45→M46`) and a third is added: M41's terminal epic is gated on M42's closure. Also records the ruled line-up, row P4's closure by CFO ruling, and SN-37's widened gate scope. |
 | 1.0.0 | 2026-08-19 | Initial phase spec. Opens P12 on SN-31's spine per the 2026-08-19 HQ ruling; six milestones M42-M47; the four fail-open instances re-verified on `19c77ab` as the phase's organizing evidence. |
