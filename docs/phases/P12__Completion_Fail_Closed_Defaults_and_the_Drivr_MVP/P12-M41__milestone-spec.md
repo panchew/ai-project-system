@@ -128,8 +128,17 @@ becomes `local:qwen3.8:27b`, so the constant must become a per-key mapping — a
 string change. And **`bin/ai-project-orchestrator` is a file M42 edits** (defects 1 and 2 both live
 in it).
 
-**This mechanically corroborates HQ's decision to make the landing one epic**, and it adds a second,
-concrete reason for the M42 gate beyond attributability: **a merge conflict in `bin/`.**
+**This mechanically corroborates HQ's decision to make the landing one epic**, and it adds a second
+reason for the M42 gate beyond attributability: **a merge conflict in `bin/`.**
+
+> **Annotation — HQ, 2026-08-19: F3 overstates its own collision surface.** Of the five moving keys,
+> **only `phase` and `milestone` appear in `DEFAULT_MODELS`.** `creation` and `epic_manual` are not
+> in it at all — `bin/ai-project-orchestrator:23-29` holds `hq`, `phase`, `milestone`, `epic_dev`,
+> `epic_qa`. **E41.5's collision with M42 in `bin/` is two keys, not five.**
+>
+> **The atomicity argument is unaffected** — it stands on the three divergence guards, and every key
+> those guards compare across files is still in E41.5's set. **The merge-conflict argument is
+> smaller than F3 implied**, and is recorded at its true size rather than left to be discovered.
 
 *Verified by reading `tests/test_model_config.py` (285 lines, all guards), `bin/ai-project-orchestrator:23-29`, `governance/systems/chat-hierarchy.md:261-267`, and `model-routing-policy.md:76-80`, repo, 2026-08-19.*
 
@@ -174,7 +183,39 @@ re-decidable here. But it is materially larger than *"a poor surprise"*: it is t
 value ever placed on a manual-chat verification target, and it removes a working surface rather than
 changing which model answers on it.
 
-**It is a prerequisite of the terminal epic and is escalated, not absorbed** — see Prerequisites.
+**It was escalated, not absorbed — and it has been RULED.**
+
+> **RESOLVED — HQ Ruling, 2026-08-19**
+> `.ai-project/artifacts/rulings/2026-08-19__ai-project-system-hq__ruling__m41-m42-acceptance-and-f6-escalation.md`
+>
+> **HQ sharpened the escalation before answering it, and the sharpening is the important half:** the
+> consequence is not *"manual Epic chats have no surface"* in the abstract — **it is P12's own
+> remaining work.** M43, M44, M45, M46 and M47 all run manual Epic chats. **A terminal epic that
+> disables the execution of the four milestones after it is not a scheduling detail.**
+>
+> **The row is NOT re-decided. `epic_manual` still goes to `local:qwen3.8:27b`. Only the timing
+> changed.**
+>
+> - **E41.5 lands four keys** — `creation`, `phase`, `milestone`, plus `epic_dev`/`epic_qa` only if
+>   E41.3's evidence moved them. **`epic_manual` is excluded from E41.5.**
+> - **`epic_manual` becomes a gated carry-forward with a named, testable trigger:** a surface exists
+>   that **runs `qwen3.8:27b`** *and* **self-reports a model identity the E31.3 check can read.**
+>   **Both halves are required** — a surface that runs the model but reports nothing fails the check
+>   just as surely as one reporting `claude-opus-5`. **Owner: the CFO** (a tooling question about his
+>   own environment, not a governance question).
+> - **It does not expire at P12's close.** Riding it to closure would halt **P13's** manual Epic
+>   chats instead — the same defect, one phase later. **Decoupling buys time; it does not remove the
+>   dependency.**
+> - **`E41.4 still back-tests `qwen3.8:27b`.`** The measurement obligation is untouched — collect the
+>   evidence now, land the row later. That is the CFO's collect-early direction and this ruling does
+>   not disturb it.
+>
+> **HQ reversed its own Decision 17 here and said so, having verified the trade rather than asserting
+> it:** `epic_manual` has **no `DEFAULT_MODELS` entry**, so its later landing touches three files —
+> `.ai-project.yml`, `chat-hierarchy.md`, `tests/test_model_config.py` — **no `bin/`, no M42
+> conflict**, and the divergence guards stay green throughout **because there is nothing for
+> `epic_manual` to diverge from.** The property that actually mattered — *never leaving two files
+> disagreeing* — survives intact.
 
 ---
 
@@ -444,40 +485,64 @@ produced here.
 > **Gate 2 — every moving row has passed its harness, or has been escalated to the CFO and
 > returned with his decision.** A row that failed and was not put in front of him may not land.
 
-**Deliverables — five files, one atomic change** (F3):
+**Deliverables — FOUR keys across five files, one atomic change** (F3, as annotated):
 
-1. **`.ai-project.yml`** — the `models:` block: `creation`, `phase`, `milestone`, `epic_manual`, plus
-   `epic_dev`/`epic_qa` only if E41.3's evidence moved them. `hq` unchanged.
+1. **`.ai-project.yml`** — the `models:` block: **`creation`, `phase`, `milestone`**, plus
+   `epic_dev`/`epic_qa` only if E41.3's evidence moved them. **`hq` unchanged. `epic_manual`
+   EXCLUDED** — decoupled to a gated carry-forward by the **2026-08-19 HQ Ruling on F6**
+   (`…__ruling__m41-m42-acceptance-and-f6-escalation.md`). **Landing it here would halt every manual
+   Epic chat in M43-M47.** The row itself is unchanged and still goes to `local:qwen3.8:27b`.
 2. **`model-routing-policy.md`** — the mapping table **and row P4**, in the same change. **Row P4
    recorded as CLOSED by CFO ruling, as a policy-row change, with the Change discipline satisfied by
    decision and said so plainly.** **Not** filed as a same-tier refresh under the 2026-07-28
    precedent, which explicitly left the TIER rows untouched.
 3. **`bin/ai-project-orchestrator`** — `DEFAULT_MODELS` (`:23-29`).
 4. **`governance/systems/chat-hierarchy.md`** — "The mapping" table, and the surrounding prose that
-   currently explains all five values as one paid-frontier tier. That explanation stops being true
-   the moment `epic_manual` goes local; rewrite it rather than leaving a stale rationale beside a
-   changed value.
-5. **`tests/test_model_config.py`** — `EXPECTED_MANUAL_ONLY_VALUE` refactored from a shared scalar to
-   a **per-key** expectation (the two keys now diverge), and `EXPECTED_EPIC_DEV` if `epic_dev` moved.
-   **The guards are not weakened to accommodate the change** — they are updated to assert the new
-   values with the same strictness.
+   currently explains all five values as one paid-frontier tier. **`epic_manual`'s row and its Basis
+   text stay exactly as they are in this change** (F6 ruling, consequential edit 2); the rewrite
+   covers **only the keys that move**. The stale-rationale problem still applies to those: the
+   one-paid-frontier-tier explanation stops being true the moment `phase` and `milestone` leave it.
+   **Rewrite it rather than leaving a stale rationale beside a changed value.**
+5. **`tests/test_model_config.py`** — `EXPECTED_MANUAL_ONLY_VALUE` **still** refactored from a shared
+   scalar to a **per-key** expectation, and `EXPECTED_EPIC_DEV` if `epic_dev` moved. **The refactor is
+   the same; the cause is now the opposite.** It was needed because both manual-only keys moved to
+   *different* values; it is needed now because **`creation` moves and `epic_manual` does not.**
+   Either way the shared scalar cannot hold both. **The guards are not weakened to accommodate the
+   change** — they are updated to assert the new values with the same strictness.
 
 **Definition of Done includes notification, and it is not a courtesy** (Decision 19):
 
-> **Every level is notified before the edit lands.** Five verification targets arm **simultaneously**.
-> A chat opened at any of those levels on the old model **halts by design** afterwards. That is
-> correct, protective behaviour and a poor surprise. `hq` is unchanged, which is the only reason the
-> HQ session that ruled this did not halt.
+> **Every level is notified before the edit lands.** A chat opened at an armed level on the old model
+> **halts by design** afterwards. That is correct, protective behaviour and a poor surprise.
+>
+> **⚠ Which levels arm changed with the F6 ruling, and the count is now THREE, not five.** HQ's
+> Decision 19 was written when E41.5 carried five keys. **After decoupling, `epic_manual` keeps its
+> current value and does not arm at E41.5**, and `hq` never moved:
+>
+> | Key | At E41.5 | Arms? |
+> |---|---|---|
+> | `creation` | → fable-5 | **YES** |
+> | `phase` | → GPT-5.6 Sol | **YES** |
+> | `milestone` | → Deepseek V4 Flash | **YES** |
+> | `hq` | unchanged | no — the only reason the HQ session that ruled this did not halt |
+> | `epic_manual` | **excluded** (carry-forward) | **no — and this is the whole point of the ruling:** it is why M43-M47's manual Epic chats keep running |
+>
+> **The notification obligation is unchanged in force and narrower in target: Creation, Phase and
+> Milestone.** **A fourth level arms later**, when `epic_manual`'s carry-forward fires — **and it
+> carries the same notification obligation then.** Recorded so the obligation travels with the row
+> rather than being discharged by an announcement that did not cover it.
 
-**Also recorded in this epic, not left to be discovered:** F6 — after this lands, a manual Epic chat
-has no surface in this harness. See Prerequisites; **this epic may not land until that prerequisite
-is answered.**
+**F6 is no longer a prerequisite of this epic.** It was escalated and **ruled on 2026-08-19**:
+`epic_manual` is decoupled to a gated carry-forward, and **this epic proceeds without it.** Both of
+this epic's gates are unchanged. See the F6 finding above for the ruling's terms, and Prerequisites
+for the carry-forward's trigger and owner.
 
 **Acceptance criteria**
 
 - [ ] M42 is closed, and the epic's record cites the closing commit
 - [ ] Every moving row cites its harness result, or the CFO's decision on a failing row
-- [ ] All five files change together in one PR; the suite is green (**549 baseline**, no skips
+- [ ] All five files change together in one PR, carrying **four keys** — `epic_manual` excluded and
+      the exclusion pointing at the F6 ruling; the suite is green (**549 baseline**, no skips
       introduced to route around the change)
 - [ ] Row P4 is recorded as closed by CFO ruling, as a policy-row change, Change discipline satisfied
       by decision and stated as such
@@ -504,12 +569,21 @@ is answered.**
 - **Availability of the three remote targets** — fable-5, GPT-5.6 Sol, Deepseek V4 Flash. **HQ
   verified local models only.** E41.1 confirms before measuring; an unreachable target is an
   escalation.
-- **⚠ ESCALATED — the manual-Epic-chat surface (F6).** `epic_manual: local:qwen3.8:27b` makes every
-  manual Epic chat in this harness halt on the model check, which is *"refuse, unconditionally."*
-  **The row is ruled and is not re-decidable here.** What is unanswered is **which surface a manual
-  Epic chat is held on afterwards, and whether it self-reports a model identity the check can read.**
-  **This is a prerequisite of E41.5 and blocks nothing before it.** Raised to HQ with M41's planning
-  delivery.
+- **✔ RULED, and no longer a prerequisite — the manual-Epic-chat surface (F6).** Escalated with
+  M41's planning delivery; **resolved by the 2026-08-19 HQ Ruling** on the CFO's decision.
+  **`epic_manual` is decoupled from E41.5 and becomes a gated carry-forward.** **It is therefore a
+  prerequisite of nothing in this milestone** — E41.5 proceeds on four keys, and **E41.4 still
+  back-tests `qwen3.8:27b`.**
+
+  **Carry-forward — `epic_manual → local:qwen3.8:27b`**
+  - **Trigger:** a surface exists that **runs `qwen3.8:27b`** *and* **self-reports a model identity
+    the E31.3 check can read.** Both halves; either alone fails the check.
+  - **Owner:** the **CFO** — a tooling question about his own environment.
+  - **Expiry:** **none. It does not expire at P12's close.** Riding it to closure would halt P13's
+    manual Epic chats instead. **Decoupling buys time; it does not remove the dependency**, and
+    whichever milestone or phase closes last must carry it forward rather than discharge it.
+  - **When it fires:** three files — `.ai-project.yml`, `chat-hierarchy.md`,
+    `tests/test_model_config.py`. **No `bin/`, no M42 conflict**, guards green throughout.
 
 ---
 
@@ -517,7 +591,9 @@ is answered.**
 
 - [ ] All five epics delivered, accepted, and merged to `milestone/M41`
 - [ ] Every moving row carries a **recorded measurement against its incumbent**, on the harness
-      matching that key's kind
+      matching that key's kind. **This includes `epic_manual`** — the F6 ruling removes it from the
+      *landing* obligation, **not** from the *measurement* obligation; **E41.4 back-tests
+      `qwen3.8:27b` regardless of when the row lands**
 - [ ] `epic_dev` and `epic_qa` have **separate** recorded results and **separate** stated conclusions
 - [ ] The successful-nothing instrument flags **both** E33.2's and E39.3's historical failures when
       replayed
@@ -525,7 +601,10 @@ is answered.**
       committed as a reference artifact
 - [ ] Any row that failed its harness was **escalated to the CFO** — not landed, not dropped — and
       his decision is recorded
-- [ ] E41.5 merged **only after** M42 closed, with **all five files** changed together
+- [ ] E41.5 merged **only after** M42 closed, with **all five files** changed together, carrying
+      **four keys** — `epic_manual` excluded per the F6 ruling and the exclusion recorded in the epic
+- [ ] **`epic_manual`'s carry-forward is recorded with its trigger, its owner and its non-expiry**,
+      and is handed to the phase rather than discharged
 - [ ] **Every level was notified before E41.5 landed**
 - [ ] Row P4 recorded as **closed by CFO ruling**, as a **policy-row change**
 - [ ] Suite green at **549** baseline plus whatever this milestone adds, no regressions, no skips
@@ -586,7 +665,10 @@ flowchart TB
   E1 ==> E2
   E1 ==> E4
 
-  E5["E41.5 — TERMINAL: land the line-up<br/>FIVE files, one atomic change (F3)<br/>3 divergence guards enforce it<br/>row P4 CLOSED — policy-row change<br/>DoD: notify EVERY level first"]
+  E5["E41.5 — TERMINAL: land the line-up<br/>FOUR keys across five files, atomic<br/>3 divergence guards enforce it<br/>bin/ collision = 2 keys, not 5 (HQ annotation)<br/>row P4 CLOSED — policy-row change<br/>DoD: notify the armed levels first"]
+
+  CF["epic_manual — CARRY-FORWARD (F6 RULED)<br/>row NOT re-decided, only its timing<br/>trigger: a surface that RUNS qwen3.8:27b<br/>AND self-reports a readable identity<br/>owner: CFO · NO EXPIRY, not at P12 close<br/><br/>E41.4 STILL back-tests it — measure now, land later"]
+  E5 -.-> CF
 
   E3 --> E5
   E4 --> E5
@@ -604,8 +686,9 @@ flowchart TB
   E4 -.-> FAIL
   FAIL -.-> G2
 
-  ARM["ON MERGE: five verification targets<br/>ARM SIMULTANEOUSLY<br/>hq unchanged = the only row that<br/>kept HQ's own session alive<br/><br/>F6: epic_manual goes local ->  manual<br/>Epic chats halt in this harness<br/>PREREQUISITE, escalated"]
+  ARM["ON MERGE: THREE verification targets arm<br/>creation · phase · milestone<br/>hq unchanged = kept HQ's own session alive<br/>epic_manual EXCLUDED = keeps M43..M47 running<br/><br/>notify Creation, Phase, Milestone before landing"]
   E5 ==> ARM
+  CF -.->|"arms a FOURTH level<br/>when it fires — same<br/>notification obligation"| ARM
 
   CIRC["POSTURE: every epic manual / paid frontier<br/>on TODAY's declared models<br/>measuring on the candidates would be circular"]
   CIRC -.binds all.-> E1
@@ -626,8 +709,10 @@ flowchart TB
   harnesses are chosen by key kind, not by model: lanes by *successful nothing* (built here,
   formalized in M46), verification targets by *failed judgment* (E35.5's packets and frozen rubric
   exist; only a transport to the remote three is missing). Two incumbents, not one —
-  `claude-opus-5` has never been back-tested. E41.5 carries five files past two gates, and on merge
-  arms five fail-closed checks at once. Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid,
+  `claude-opus-5` has never been back-tested. **E41.5 carries four keys across five files past two
+  gates** — `epic_manual` decoupled to a CFO-owned carry-forward by the F6 ruling, because landing it
+  would have halted the manual Epic chats of M43-M47 — **and on merge arms three fail-closed checks,
+  not five.** Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid,
   no ComfyUI.
 
 ---
@@ -638,6 +723,33 @@ flowchart TB
   measurement precisely to avoid that pattern, and the same discipline applies one level down: M41
   measures the ruled line-up and lands it. It does not build the qualification **gate** (M46), does
   not repair the lane (M42), and does not decide the per-level **mode** mapping (the CFO's).
+
+- **⚠ `P11-GH-1` — the first live exercise of this mitigation, and it did NOT test the part that
+  matters. Recorded honestly because a false pass here would be the phase's own organizing defect.**
+
+  The 2026-08-19 F6 ruling amended this spec **after `milestone/M41` was cut**, and HQ directed that
+  it be delivered through the channel written into these Notes. It was. **What actually happened, step
+  by step:**
+
+  | Step | Result |
+  |---|---|
+  | 1. Amend the spec on its own branch with a changelog row | **Done** — v1.1.0 |
+  | 2. **Notify every running child chat in-session, naming the section** | **NOT EXERCISED — there was no addressee.** No M41 Milestone Chat has been opened |
+  | 3. Require the child to re-read and to state that it did | **Converted** — the Starter now names the ruling as required reading |
+  | 4. Escalate if blocking | n/a — not blocking |
+  | 5. Backstop: `git log` the spec against the epic's branch point | Stands, untested |
+
+  **Step 2 is the step these Notes identified as *"the one that fires"*, and it is precisely the step
+  that could not run.** The amendment arrived before any child existed, so it was not propagation at
+  all — **it was editing.** *An absence is only evidence when the thing that would have created it
+  actually ran.* **This mitigation remains untested.**
+
+  **The refinement this produces is worth more than the test would have been:** `P11-GH-1`'s risk
+  window **opens when a child chat exists**, not when a branch is cut. An amendment before that
+  moment cannot fire the defect and cannot exercise the fix. **So "did the amendment reach the
+  branch?" is the wrong question and always passes; "did the running chat learn the spec moved
+  under it?" is the real one** — and it is unanswerable until there is a running chat. Reported to HQ
+  against `P11-GH-1`'s record rather than logged as a success.
 
 - **On `P11-GH-1`, which is an active risk and has already fired in this phase.** Mid-flight spec
   amendments do not reach working branches. **Any amendment to this spec after an Epic Chat has
@@ -665,4 +777,5 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.0 | 2026-08-19 | **Amended for the HQ Ruling on F6** (`…__ruling__m41-m42-acceptance-and-f6-escalation.md`), which accepted M41/M42 planning and resolved the F6 escalation. **`epic_manual` is DECOUPLED from E41.5** and becomes a gated carry-forward — trigger: a surface that **runs `qwen3.8:27b` and self-reports an identity the E31.3 check can read**; owner: the **CFO**; **no expiry, explicitly not at P12's close.** **The row is not re-decided — only its timing.** HQ sharpened the escalation on the way in: the consequence is not manual Epic chats in the abstract but **P12's own M43-M47**, all of which run them. E41.5 now lands **four keys across the same five files**; deliverable 4 leaves `epic_manual`'s `chat-hierarchy.md` row untouched; deliverable 5's `EXPECTED_MANUAL_ONLY_VALUE` refactor **stands for the opposite reason** — `creation` moves and `epic_manual` does not, so the shared scalar still cannot hold both. **Measurement obligation untouched: E41.4 still back-tests `qwen3.8:27b`.** Also records HQ's non-blocking annotation that **F3 overstated its collision surface** — only `phase` and `milestone` of the moving keys are in `DEFAULT_MODELS`, so E41.5's `bin/` collision with M42 is **two keys, not five**; the atomicity argument is unaffected because it rests on the three divergence guards. **No epic added or removed; both of E41.5's gates unchanged.** Delivered through this spec's own `P11-GH-1` channel — see Notes. |
 | 1.0.0 | 2026-08-19 | Initial M41 spec, from the P12 Phase Execution Chat Starter and the 2026-08-19 HQ Ruling (Decisions 14-19). **Six planning-time findings recorded**, all measured on `master` at `9ee810e`: `opencode.json` is host-level and **both** 27b models are absent from it (F1); E35.5 is packets and a frozen rubric, **not a runnable harness**, with no transport to the three remote targets (F2); the terminal epic touches **five** files under **three** divergence guards, one of them in `bin/` and therefore in M42's path (F3); the four verification targets have a **second incumbent**, `claude-opus-5`, never measured (F4); three target values are **product names, not routable identifiers** (F5); and `epic_manual → local:` leaves manual Epic chats with **no surface in this harness** (F6, escalated as a prerequisite of E41.5). Five epics; E41.1 a hard gate; E41.5 terminal behind two gates. |

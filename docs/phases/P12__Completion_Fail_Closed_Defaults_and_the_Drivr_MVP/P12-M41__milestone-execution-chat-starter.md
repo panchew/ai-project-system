@@ -4,7 +4,7 @@
 **Phase:** P12 — Completion: Fail-Closed Defaults and the Drivr MVP
 **Project:** ai-project-system
 **Repository:** https://github.com/panchew/ai-project-system
-**Milestone Spec:** `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41__milestone-spec.md`
+**Milestone Spec:** `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41__milestone-spec.md` **(v1.1.0 — amended after this branch was cut; see below)**
 **Phase Spec:** `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12__phase-spec.md`
 **Branch:** `milestone/M41` (from `phase/P12`, from `master` at `9ee810e`)
 **Execution Mode:** manual
@@ -130,6 +130,31 @@ branch was cut, and **a Creation Chat reading `master` caught it**, not the leve
 
 ---
 
+## ⚠ REQUIRED READING — this spec was amended after its branch was cut
+
+**Read before your first output**, and **state in your first delivery that you did** — this is step 3
+of the amendment channel above, and it is the obligation that converts a spec edit into propagation.
+
+**`.ai-project/artifacts/rulings/2026-08-19__ai-project-system-hq__ruling__m41-m42-acceptance-and-f6-escalation.md`**
+
+It accepted M41's planning and **resolved the F6 escalation by decoupling `epic_manual` from E41.5**.
+The sections of the milestone spec it changed, which you must read at v1.1.0 rather than from any
+earlier copy:
+
+- **Finding F6** — now carries the ruling's terms in full
+- **E41.5's deliverables 1, 4 and 5**, and its acceptance criteria — **four keys, not five**
+- **Finding F3's annotation** — the `bin/` collision is **two keys, not five**
+- **The notification DoD item** — **three verification targets arm, not five**
+- **Prerequisites** — F6 is a **carry-forward**, not a prerequisite; trigger, owner and non-expiry
+  are stated there
+- **Definition of Done** — `epic_manual` leaves the *landing* obligation and **stays in the
+  *measurement* obligation; E41.4 still back-tests `qwen3.8:27b`**
+
+**The row itself is not re-decided.** `epic_manual` still goes to `local:qwen3.8:27b`; only its
+timing changed.
+
+---
+
 ## Milestone Context
 
 **Milestone:** P12-M41 — The Model Line-Up and Its Evidence
@@ -144,7 +169,7 @@ branch was cut, and **a Creation Chat reading `master` caught it**, not the leve
 - **E41.2** — The successful-nothing instrument, and the lane incumbent's baseline
 - **E41.3** — Lane candidates measured against the baseline
 - **E41.4** — Verification-target back-test: the `claude-opus-5` baseline and four candidates
-- **E41.5** — Terminal: land the line-up *(gated on M42 closure)*
+- **E41.5** — Terminal: land **four keys** *(gated on M42 closure; `epic_manual` decoupled)*
 
 **Ordering, and it is binding:** E41.1 gates all four others. E41.2 precedes E41.3 (a baseline before
 its candidates). E41.4 may run in parallel with E41.2/E41.3 once E41.1 has landed. **E41.5 is
@@ -206,7 +231,10 @@ verification boundaries; do not re-derive them, and do not treat them as optiona
    *GPT-5.6 Sol*, *Deepseek V4 Flash* must be resolved to exact `<locality>:<id>` strings **before**
    they are measured.
 6. **F6 — `epic_manual → local:` leaves manual Epic chats with no surface in this harness.**
-   Escalated as a prerequisite of E41.5. **The row is ruled; the surface question is open.**
+   Escalated, and **RULED on 2026-08-19: `epic_manual` is decoupled from E41.5** into a CFO-owned
+   carry-forward with a named trigger and **no expiry**. **E41.5 lands four keys. E41.4 still
+   back-tests `qwen3.8:27b`** — the measurement obligation is untouched. **The row is not
+   re-decided.**
 
 ---
 
