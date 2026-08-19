@@ -18,6 +18,9 @@ concerns:
   - id: SN-34
     severity: medium
     title: governance-propagation.md's Constraints are factually false and its Non-Goals prohibit work now contemplated — an active normative document resting on an expired technical premise
+  - id: SN-35
+    severity: medium
+    title: There is no HQ re-instantiation ritual — HQ can be opened once at inception and has no defined way to be re-opened, though it is re-opened routinely
 decisions:
   - "P12's spine, in the CFO's words: completing the CFO's vision of the workflow, using the governance and the MVP of the harness (Drivr). A completion phase, not a redesign."
   - "The three verified execution-tier defects are P12 scope, under a sequencing constraint rather than a date: they land BEFORE the first real agentic integration, not after."
@@ -177,6 +180,40 @@ running version."* This is that, at the normative tier, aged across at least fou
 **Required action:** rule on `governance-propagation.md` — amend the Constraints to match reality
 and decide deliberately whether the prohibitions survive their justification. The ruling is required
 even if Carry-Over 9 is never scoped.
+
+---
+
+### SN-35 — HQ can be born but not re-opened [MEDIUM]
+
+**Found by the CFO, 2026-08-18, by needing the thing and not finding it.** He asked for an HQ Chat
+Opener to carry this note to HQ, and observed that he expected not to have had to ask.
+
+Measured the same day: `governance/systems/hq-chat.md`,
+`governance/systems/hq-execution-chat-starter.md` and `governance/templates/hq-chat-opener.md`
+contain **zero** occurrences of re-instantiation, re-opening, or any equivalent. The only documented
+route to an HQ Chat is `start-a-project.md` Step 3 — the **inception** path, in which the opener is
+*"produced by the Creation Chat's full-path convergence... filled out per `seed.md` Rule 4"*, paired
+with a committed `genesis.md`.
+
+**`ai-project-system` has neither a `genesis.md` nor a Project Brief, both by ruling** (SN-26,
+canonized P11-M36-E36.3). So the one documented path to opening HQ is unavailable to this project,
+while HQ chats are re-opened here routinely — the CFO opens fresh ones mid-phase by design, which is
+the stated reason governance auto-update runs at Phase start and not HQ start (Carry-Over 9).
+
+**This is SN-26's defect, un-generalized.** The Creation Chat had exactly this hole: a continuity
+problem served only by a bootstrap artifact. It was found, ruled on, and closed with a
+Re-instantiation Ritual naming the committed artifacts a re-opened session receives. **Nobody asked
+whether HQ had the same hole.** It does.
+
+**The evidence is the opener itself.** The one produced to carry this note had to be adapted from an
+inception template, filling founding-state fields with current state and adding a "read these two
+committed artifacts" section modelled on the Creation Chat's ritual Step 3. That adaptation is
+stated inside the opener rather than hidden, but an adaptation invented per-occasion is precisely
+what a ritual exists to prevent.
+
+**Required action:** define an HQ re-instantiation ritual, in one normative place, naming the
+committed artifacts a re-opened HQ session receives and where an instance of the opener lives. The
+Creation Chat's ritual is the model and the precedent for its shape; this is not novel design work.
 
 ---
 
