@@ -487,15 +487,76 @@ produced here.
 
 **Deliverables — FOUR keys across five files, one atomic change** (F3, as annotated):
 
-1. **`.ai-project.yml`** — the `models:` block: **`creation`, `phase`, `milestone`**, plus
-   `epic_dev`/`epic_qa` only if E41.3's evidence moved them. **`hq` unchanged. `epic_manual`
-   EXCLUDED** — decoupled to a gated carry-forward by the **2026-08-19 HQ Ruling on F6**
-   (`…__ruling__m41-m42-acceptance-and-f6-escalation.md`). **Landing it here would halt every manual
-   Epic chat in M43-M47.** The row itself is unchanged and still goes to `local:qwen3.8:27b`.
-2. **`model-routing-policy.md`** — the mapping table **and row P4**, in the same change. **Row P4
-   recorded as CLOSED by CFO ruling, as a policy-row change, with the Change discipline satisfied by
-   decision and said so plainly.** **Not** filed as a same-tier refresh under the 2026-07-28
-   precedent, which explicitly left the TIER rows untouched.
+1. **`.ai-project.yml`** — the `models:` block. **Of the five manual verification targets, at most
+   ONE lands here: `creation`, and only if E41.1 confirms BOTH halves of the manual-surface rule.**
+   `epic_dev`/`epic_qa` land only if E41.3's evidence moved them — **they are dispatch lanes, out of
+   the rule's scope, and governed by E41.3's evidence alone.** `hq` unchanged.
+
+   > **THE MANUAL-SURFACE RULE — HQ Ruling 2026-08-20 (R6), binding on this epic**
+   > `.ai-project/artifacts/rulings/2026-08-20__ai-project-system-hq__ruling__r6-manual-verification-surface-rule.md`
+   >
+   > **No `.ai-project.yml` manual verification target may land a new value until a surface for it is
+   > confirmed to (a) run that model AND (b) emit a self-report the E31.3 check can read.** Both
+   > halves. **Scope: `creation`, `hq`, `phase`, `milestone`, `epic_manual`. Explicitly NOT
+   > `epic_dev`/`epic_qa`.**
+   >
+   > | Key | Disposition at E41.5 |
+   > |---|---|
+   > | `creation` → fable-5 | **Lands IF E41.1 confirms.** `claude-fable-5` in this harness's roster is **suggestive, not confirmation** |
+   > | `phase` → GPT-5.6 Sol | **Carry-forward** — no surface identified |
+   > | `milestone` → Deepseek V4 Flash | **Carry-forward** — no surface identified |
+   > | `epic_manual` → `local:qwen3.8:27b` | **Carry-forward** — F6's, now **subsumed** under this rule, not superseded |
+   >
+   > **One trigger covering three rows**, instead of three triggers discovered one at a time. Owner:
+   > the **CFO**. **No expiry, explicitly not at P12's close.** **The row values are not
+   > re-decided** — only the landing is gated, and it is gated on **a fact about surfaces, not a
+   > judgment about models.**
+2. **`model-routing-policy.md`** — **and how it records a decided row whose value cannot land is a
+   design decision this milestone owns** (HQ Ruling 2026-08-20, Decision 4 item 3). **Decided here,
+   with the reasoning, so E41.5 executes rather than re-derives it.**
+
+   **The problem.** The CFO **closed row P4** on 2026-08-19 — `milestone → Deepseek V4 Flash`, a
+   **policy-row change**, Change discipline satisfied **by decision**. That closure stands. But under
+   the manual-surface rule the **value cannot be configured**, perhaps for a long time. So the policy
+   must record **a decision that is made** and **a configuration that has not changed** — two
+   different facts about one row.
+
+   **The binding constraint, which is not this milestone's to trade away:** the three divergence
+   guards in `tests/test_model_config.py` **stay green and are NOT weakened.**
+
+   **THE DECISION — record the closure beside the row; do not move the row or the mapping table.**
+
+   a. **`## Mapping to \`.ai-project.yml\`` — `milestone` stays at `remote:claude-opus-5`.** This is
+      forced, not chosen: `test_policy_mapping_agrees_with_yml_block` compares that table against
+      `.ai-project.yml` for all five `MODEL_KEYS`. **Moving it ahead of the config fails the suite.**
+   b. **Row P4's `default` cell stays `Paid frontier`.** This is the *chosen* half and it is the one
+      worth reasoning about. That cell is **outside** the guard's parse — the guard reads only
+      between the `## Mapping to …` heading and the next `##`, so nothing mechanical would stop the
+      tier being rewritten now. **That is exactly why it must not be.** A tier asserted in the policy
+      while a different tier is configured is a divergence **no test can catch** — `P11-GH-2`'s
+      shape, guard-invisible. **A divergence nothing will find is worse than one that fails a
+      build.**
+   c. **The closure is recorded as a second dated note under `## Policy rows`**, following **this
+      file's own existing convention** — `### Note on row P4 — Milestone × local inference, evaluated
+      2026-07-31, row unchanged` already does precisely this: records an adjudication beside a row it
+      did not move. The new note states, plainly: **row P4 is CLOSED by CFO ruling 2026-08-19**; the
+      decided value is **Deepseek V4 Flash**; it is a **policy-row change, NOT a same-tier refresh**
+      under the 2026-07-28 precedent, which explicitly left the TIER rows untouched; the **Change
+      discipline is satisfied by CFO decision rather than by cited evidence, and the artifact says so
+      rather than manufacturing a citation**; and the value's landing is gated on the manual-surface
+      rule with no expiry.
+   d. **Row P4's `revisit trigger` cell is rewritten** so it no longer reads as an open evidential
+      question. It currently offers *"an evaluation clearing G-P4-a/b/c"* — **that route is spent;
+      the row was closed by decision, not by evidence.** It points at the new note and names the
+      landing gate.
+   e. **When `milestone` eventually lands, the row, the note and the mapping table move together**
+      in that same change — which is the property the guards exist to protect.
+
+   **Why not simply move everything now and let the guards fail:** because the guards are the only
+   mechanism in this repository that stops two files disagreeing about a model, and **a decision
+   recorded in a way that makes them disagree has recorded it wrongly.** **Why not stay silent until
+   the value lands:** because an unrecorded closure is how row P4 sat *"Not decided… on the CFO's
+   timing"* through two phases, and **silence is what SN-33 indicts.**
 3. **`bin/ai-project-orchestrator`** — `DEFAULT_MODELS` (`:23-29`).
 4. **`governance/systems/chat-hierarchy.md`** — "The mapping" table, and the surrounding prose that
    currently explains all five values as one paid-frontier tier. **`epic_manual`'s row and its Basis
@@ -515,22 +576,26 @@ produced here.
 > **Every level is notified before the edit lands.** A chat opened at an armed level on the old model
 > **halts by design** afterwards. That is correct, protective behaviour and a poor surprise.
 >
-> **⚠ Which levels arm changed with the F6 ruling, and the count is now THREE, not five.** HQ's
-> Decision 19 was written when E41.5 carried five keys. **After decoupling, `epic_manual` keeps its
-> current value and does not arm at E41.5**, and `hq` never moved:
+> **⚠ The arming count has now shrunk TWICE, and this clause is written from the rows that actually
+> land.** HQ's Decision 19 said **five**; the F6 ruling made it **three**; the R6 ruling makes it
+> **at most ONE.** M41 caught the clause once already, and HQ's R6 ruling directs it be rewritten
+> from the landing rows rather than the ruled ones.
 >
 > | Key | At E41.5 | Arms? |
 > |---|---|---|
-> | `creation` | → fable-5 | **YES** |
-> | `phase` | → GPT-5.6 Sol | **YES** |
-> | `milestone` | → Deepseek V4 Flash | **YES** |
-> | `hq` | unchanged | no — the only reason the HQ session that ruled this did not halt |
-> | `epic_manual` | **excluded** (carry-forward) | **no — and this is the whole point of the ruling:** it is why M43-M47's manual Epic chats keep running |
+> | `creation` | → fable-5 **only if E41.1 confirms both halves** | **CONDITIONAL — the only candidate** |
+> | `hq` | unchanged | no — never moved |
+> | `phase` | **carry-forward** | no |
+> | `milestone` | **carry-forward** | no |
+> | `epic_manual` | **carry-forward** | no |
 >
-> **The notification obligation is unchanged in force and narrower in target: Creation, Phase and
-> Milestone.** **A fourth level arms later**, when `epic_manual`'s carry-forward fires — **and it
-> carries the same notification obligation then.** Recorded so the obligation travels with the row
-> rather than being discharged by an announcement that did not cover it.
+> **So the notification obligation may reduce to a single level, and may reduce to none** — if E41.1
+> cannot confirm a surface for fable-5, **E41.5 lands no verification target at all** and the
+> notification is owed to nobody. **Write the notice from what landed, not from what was ruled.**
+>
+> **The obligation does not disappear; it travels.** Each carried-forward row **arms when its own
+> trigger fires**, and **carries this same notification obligation with it then.** Recorded so a
+> future landing cannot claim an announcement made today.
 
 **F6 is no longer a prerequisite of this epic.** It was escalated and **ruled on 2026-08-19**:
 `epic_manual` is decoupled to a gated carry-forward, and **this epic proceeds without it.** Both of
@@ -575,15 +640,29 @@ for the carry-forward's trigger and owner.
   prerequisite of nothing in this milestone** — E41.5 proceeds on four keys, and **E41.4 still
   back-tests `qwen3.8:27b`.**
 
-  **Carry-forward — `epic_manual → local:qwen3.8:27b`**
-  - **Trigger:** a surface exists that **runs `qwen3.8:27b`** *and* **self-reports a model identity
-    the E31.3 check can read.** Both halves; either alone fails the check.
+  **⚠ SUPERSEDED IN SCOPE by the R6 ruling, 2026-08-20 — this is now ONE carry-forward covering
+  THREE rows, under one rule.** F6's `epic_manual` carry-forward is **subsumed, not superseded**: its
+  trigger was correct and is now stated once for every row it governs.
+
+  **Carry-forward — `phase → GPT-5.6 Sol`, `milestone → Deepseek V4 Flash`, `epic_manual → local:qwen3.8:27b`**
+  - **Trigger (one rule, all three rows):** a surface exists that **runs that row's model** *and*
+    **emits a self-report the E31.3 check can read.** Both halves; either alone fails the check.
+    **`creation` is subject to the same rule but is not carried forward** — E41.1 confirms it, and it
+    lands at E41.5 if confirmed.
   - **Owner:** the **CFO** — a tooling question about his own environment.
   - **Expiry:** **none. It does not expire at P12's close.** Riding it to closure would halt P13's
     manual Epic chats instead. **Decoupling buys time; it does not remove the dependency**, and
     whichever milestone or phase closes last must carry it forward rather than discharge it.
-  - **When it fires:** three files — `.ai-project.yml`, `chat-hierarchy.md`,
-    `tests/test_model_config.py`. **No `bin/`, no M42 conflict**, guards green throughout.
+  - **When a row fires:** `.ai-project.yml`, `chat-hierarchy.md`, `tests/test_model_config.py` —
+    and for `milestone`, **also `model-routing-policy.md`'s mapping table, row P4 and its closure
+    note, moving together** (E41.5 deliverable 2). `phase` and `milestone` are in `DEFAULT_MODELS`,
+    so those two also touch `bin/ai-project-orchestrator`; `epic_manual` does not.
+  - **⚠ The consequence HQ named rather than discovered, carried here so no epic rediscovers it:**
+    **if no surface materializes for `phase` and `milestone`, the ruled line-up substantially never
+    lands, and the record will say it was ruled.** That is the CFO's, and it is larger than F6's was.
+    **It does not stall P12** — no row needs to land for M43-M47, and **every measurement obligation
+    is untouched.** **M41 may close having produced its evidence and landed one key, or none.** That
+    is a legitimate outcome of this milestone, not a failure of it.
 
 ---
 
@@ -601,10 +680,15 @@ for the carry-forward's trigger and owner.
       committed as a reference artifact
 - [ ] Any row that failed its harness was **escalated to the CFO** — not landed, not dropped — and
       his decision is recorded
-- [ ] E41.5 merged **only after** M42 closed, with **all five files** changed together, carrying
-      **four keys** — `epic_manual` excluded per the F6 ruling and the exclusion recorded in the epic
-- [ ] **`epic_manual`'s carry-forward is recorded with its trigger, its owner and its non-expiry**,
-      and is handed to the phase rather than discharged
+- [ ] E41.5 merged **only after** M42 closed, carrying **only rows that cleared the manual-surface
+      rule** — at most `creation` among the verification targets, plus any lane E41.3's evidence
+      moved; every excluded row's exclusion recorded in the epic with a pointer to the R6 ruling
+- [ ] **Row P4's closure is recorded per E41.5 deliverable 2** — beside the row, not by moving it —
+      and **the three divergence guards are green and unweakened**
+- [ ] **The carry-forward is recorded ONCE, covering all three rows under one trigger**, with its
+      owner and its non-expiry, and is handed to the phase rather than discharged
+- [ ] **The notification notice is written from the rows that actually landed** — and if none landed
+      among the verification targets, that is stated rather than an announcement being made anyway
 - [ ] **Every level was notified before E41.5 landed**
 - [ ] Row P4 recorded as **closed by CFO ruling**, as a **policy-row change**
 - [ ] Suite green at **549** baseline plus whatever this milestone adds, no regressions, no skips
@@ -616,7 +700,9 @@ for the carry-forward's trigger and owner.
 ## Acceptance Criteria (Milestone)
 
 - [ ] A reader can determine, for each of the seven keys, **what it holds, why, and what evidence
-      moved it or held it** — from committed artifacts alone
+      moved it or held it** — from committed artifacts alone. **For a row that was ruled but did not
+      land, the record distinguishes "the decision was made" from "the value is configured"** rather
+      than collapsing them
 - [ ] The period in which one string filled `epic_dev` and `epic_qa` — hiding a mergeable-work result
       and a fabrication behind the same value — is **ended and recorded as ended**
 - [ ] No measurement in this milestone was taken on a model this milestone was choosing between
@@ -665,9 +751,9 @@ flowchart TB
   E1 ==> E2
   E1 ==> E4
 
-  E5["E41.5 — TERMINAL: land the line-up<br/>FOUR keys across five files, atomic<br/>3 divergence guards enforce it<br/>bin/ collision = 2 keys, not 5 (HQ annotation)<br/>row P4 CLOSED — policy-row change<br/>DoD: notify the armed levels first"]
+  E5["E41.5 — TERMINAL: land what CLEARED<br/>at most ONE verification target: creation,<br/>and only if E41.1 confirms BOTH halves<br/>+ lanes if E41.3's evidence moved them<br/>(lanes are OUT of the rule's scope)<br/>3 divergence guards enforce it<br/><br/>row P4: closure recorded BESIDE the row —<br/>mapping table forced by the guard; the tier cell<br/>held by CHOICE, since a divergence outside the<br/>guard is one no test can catch"]
 
-  CF["epic_manual — CARRY-FORWARD (F6 RULED)<br/>row NOT re-decided, only its timing<br/>trigger: a surface that RUNS qwen3.8:27b<br/>AND self-reports a readable identity<br/>owner: CFO · NO EXPIRY, not at P12 close<br/><br/>E41.4 STILL back-tests it — measure now, land later"]
+  CF["CARRY-FORWARD — ONE RULE, THREE ROWS (R6 RULED)<br/>phase · milestone · epic_manual<br/>F6's epic_manual SUBSUMED, not superseded<br/>trigger: a surface that RUNS the model AND<br/>EMITS a self-report the E31.3 check can read<br/>owner: CFO · NO EXPIRY, not at P12 close<br/><br/>rows NOT re-decided — only the landing is gated,<br/>on a fact about SURFACES, not a judgment about models<br/><br/>E41.4 STILL back-tests every candidate"]
   E5 -.-> CF
 
   E3 --> E5
@@ -686,9 +772,11 @@ flowchart TB
   E4 -.-> FAIL
   FAIL -.-> G2
 
-  ARM["ON MERGE: THREE verification targets arm<br/>creation · phase · milestone<br/>hq unchanged = kept HQ's own session alive<br/>epic_manual EXCLUDED = keeps M43..M47 running<br/><br/>notify Creation, Phase, Milestone before landing"]
+  ARM["ON MERGE: AT MOST ONE target arms<br/>count shrank TWICE — 5, then 3, now <=1<br/>possibly ZERO, if fable-5 has no surface<br/><br/>write the notice from what LANDED,<br/>not from what was RULED<br/>each carried row arms later, carrying<br/>this same obligation with it"]
   E5 ==> ARM
-  CF -.->|"arms a FOURTH level<br/>when it fires — same<br/>notification obligation"| ARM
+  CF -.->|"each row arms when ITS<br/>trigger fires — same<br/>notification obligation"| ARM
+  RISK["⚠ IF NO SURFACE APPEARS for phase + milestone:<br/>the ruled line-up SUBSTANTIALLY NEVER LANDS<br/>and the record says it was ruled.<br/>CFO's. Does NOT stall P12 — no row is needed<br/>for M43..M47 — but M41 may close having<br/>landed ONE key, or NONE. Legitimate outcome."]
+  CF ==> RISK
 
   CIRC["POSTURE: every epic manual / paid frontier<br/>on TODAY's declared models<br/>measuring on the candidates would be circular"]
   CIRC -.binds all.-> E1
@@ -709,10 +797,10 @@ flowchart TB
   harnesses are chosen by key kind, not by model: lanes by *successful nothing* (built here,
   formalized in M46), verification targets by *failed judgment* (E35.5's packets and frozen rubric
   exist; only a transport to the remote three is missing). Two incumbents, not one —
-  `claude-opus-5` has never been back-tested. **E41.5 carries four keys across five files past two
-  gates** — `epic_manual` decoupled to a CFO-owned carry-forward by the F6 ruling, because landing it
-  would have halted the manual Epic chats of M43-M47 — **and on merge arms three fail-closed checks,
-  not five.** Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid,
+  `claude-opus-5` has never been back-tested. **E41.5 now carries only what cleared the manual-surface
+  rule — at most `creation` — past two gates** — `phase`, `milestone` and `epic_manual` are **one CFO-owned carry-forward under one trigger** after
+  R6 upheld that F6's mechanism was never specific to a single row — **and on merge it arms at most
+  one fail-closed check, possibly none.** Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid,
   no ComfyUI.
 
 ---
@@ -820,6 +908,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.0 | 2026-08-20 | **Amended for the HQ Ruling on R6** (`…__ruling__r6-manual-verification-surface-rule.md`), which **upheld R6 as a correction to HQ's own F6 ruling** — F6 identified the right mechanism and scoped it to one row, and fixed the least severe of three. **One rule now replaces per-row adjudication:** no manual verification target lands a new value until a surface is confirmed to **run that model AND emit a self-report the E31.3 check can read.** Scope is the five verification targets, **explicitly not `epic_dev`/`epic_qa`**, which land on E41.3's evidence alone. **E41.5 deliverable 1 rewritten:** at most **`creation`** lands among the verification targets, and only if E41.1 confirms both halves; **`phase`, `milestone` and `epic_manual` are one carry-forward under one trigger**, F6's subsumed rather than superseded, CFO-owned, no expiry. **E41.5 deliverable 2 is this milestone's own design decision** (Decision 4 item 3): the closure of row P4 is recorded **beside the row** — a second dated note under `## Policy rows`, following the file's existing `Note on row P4` convention — while the mapping table and the row's `default` cell **stay put**. The mapping table is forced by `test_policy_mapping_agrees_with_yml_block`; **the `default` cell is a deliberate choice, because it sits OUTSIDE the guard's parse and a divergence no test can catch is worse than one that fails a build.** **DoD notification rewritten from the landing rows: the arming count has shrunk twice — five, then three, now at most ONE, possibly none.** Records the consequence HQ named: if no surface appears for `phase` and `milestone`, **the ruled line-up substantially never lands**, M41 may close having landed one key or none, **and that is a legitimate outcome rather than a failure.** **Not changed: the line-up values, both E41.5 gates, every measurement obligation, the epic set, M42.** Delivered through this spec's `P11-GH-1` channel — **second live test, and this one has an addressee.** |
 | 1.1.1 | 2026-08-20 | **Records a second `P11-GH-1` instance in P12, per HQ's directive**, cited by artifact and defect and **not by ordinal**. It runs in the **opposite direction** from the instance the phase spec records: that one is a parent amending a spec a child executes; **this one is a child branch drifting behind its parent while its own artifacts cite content the branch does not have** — M41's spec v1.1.0 cites the F6 ruling (`ff24a48`, on `master` at `f504be2`) in three places, and the file is **absent from `milestone/M41`**. **Downward amendment is mechanised as of today; upward staleness is unowned**, and this spec's mitigation does not reach it. Also **holds this spec's own account of today's downward exercise against HQ's**: the channel **carried** the edits but **detected** nothing — HQ noticed and directed its use — and step 2 had no addressee. **A carrier is not a detector.** `milestone/M42` carries a cross-reference rather than a duplicate. **No scope, epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.0 | 2026-08-19 | **Amended for the HQ Ruling on F6** (`…__ruling__m41-m42-acceptance-and-f6-escalation.md`), which accepted M41/M42 planning and resolved the F6 escalation. **`epic_manual` is DECOUPLED from E41.5** and becomes a gated carry-forward — trigger: a surface that **runs `qwen3.8:27b` and self-reports an identity the E31.3 check can read**; owner: the **CFO**; **no expiry, explicitly not at P12's close.** **The row is not re-decided — only its timing.** HQ sharpened the escalation on the way in: the consequence is not manual Epic chats in the abstract but **P12's own M43-M47**, all of which run them. E41.5 now lands **four keys across the same five files**; deliverable 4 leaves `epic_manual`'s `chat-hierarchy.md` row untouched; deliverable 5's `EXPECTED_MANUAL_ONLY_VALUE` refactor **stands for the opposite reason** — `creation` moves and `epic_manual` does not, so the shared scalar still cannot hold both. **Measurement obligation untouched: E41.4 still back-tests `qwen3.8:27b`.** Also records HQ's non-blocking annotation that **F3 overstated its collision surface** — only `phase` and `milestone` of the moving keys are in `DEFAULT_MODELS`, so E41.5's `bin/` collision with M42 is **two keys, not five**; the atomicity argument is unaffected because it rests on the three divergence guards. **No epic added or removed; both of E41.5's gates unchanged.** Delivered through this spec's own `P11-GH-1` channel — see Notes. |
 | 1.0.0 | 2026-08-19 | Initial M41 spec, from the P12 Phase Execution Chat Starter and the 2026-08-19 HQ Ruling (Decisions 14-19). **Six planning-time findings recorded**, all measured on `master` at `9ee810e`: `opencode.json` is host-level and **both** 27b models are absent from it (F1); E35.5 is packets and a frozen rubric, **not a runnable harness**, with no transport to the three remote targets (F2); the terminal epic touches **five** files under **three** divergence guards, one of them in `bin/` and therefore in M42's path (F3); the four verification targets have a **second incumbent**, `claude-opus-5`, never measured (F4); three target values are **product names, not routable identifiers** (F5); and `epic_manual → local:` leaves manual Epic chats with **no surface in this harness** (F6, escalated as a prerequisite of E41.5). Five epics; E41.1 a hard gate; E41.5 terminal behind two gates. |
