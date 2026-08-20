@@ -534,6 +534,39 @@ flowchart TB
   nothing but reading the context caught it. **Every epic here passes over normative documents with
   patterns. Assume the patterns lie in both directions.**
 
+- **⚠ THREE PHASE-SPEC ANNOTATIONS ARE OUTSTANDING AND CURRENTLY UNOWNED. Recorded here because the
+  session holding them ended, which is SN-33 happening live — and E44.1 is the remedy.**
+
+  On 2026-08-20 HQ accepted M43 and M44 planning and **adopted three corrections to the phase spec**,
+  deferring the edit rather than spending a review cycle on annotations alone:
+
+  | Correction | Source |
+  |---|---|
+  | **W3's sharpening** — `chat-hierarchy.md:201-205` already rules that agentic silence does not accept, so half of Decision 3's problem was closed before P12 opened and the phase spec does not say so | M43 spec, W3 |
+  | **W4's understatement** — SN-31 Decision 4 records *"one template edit"*; `merge-authorization.md` is child-addressed in subject, fields and post-conditions | M43 spec, W4 |
+  | **X2's count** — the phase spec says *"'Handoff' appears as prose in ten documents"*; measured, **nineteen** | M44 spec, X2 |
+
+  **HQ's stated trigger was "the next HQ artifact that needs a PR anyway, or when M43 or M44
+  delivers", explicitly flagged as needing a trigger because *"a deferred correction with no trigger
+  is how SN-30 sat for six days."* That HQ session then ended before the trigger fired**, and the
+  Phase Chat's reply — which proposed a firmer terminus — **could not be delivered.**
+
+  **The corrections themselves are safe:** each is recorded in the milestone spec that found it, with
+  its verification line, and HQ confirmed those are the operative documents for their milestones.
+  **What is at risk is the obligation to fold them into the phase spec**, which now has no owner.
+
+  **Two consequences, both belonging to this milestone:**
+
+  1. **E44.1 has a live, dated specimen.** The HQ re-instantiation ritual exists so a re-opened HQ
+     session receives what the previous one held. **It just failed in real time, with content in
+     flight, inside the phase that is building the remedy.** The ritual E44.1 records must name **what
+     a departing HQ session leaves behind**, not only what an arriving one picks up — the nine
+     existing openers describe arrival, and this instance is about departure.
+  2. **P12's closure must not miss it.** The Phase Completion Declaration (E44.1, `P11-GH-3`) **is the
+     one artifact guaranteed to be written while the phase is still open**, which makes it the natural
+     backstop for any deferred phase-spec correction. **Recorded as the recommended terminus**; the
+     phase spec is HQ's artifact and the disposition remains HQ's.
+
 - **On `P11-GH-1`.** Amendments reach a running child by: amending this file on `milestone/M44` with a
   changelog row; **notifying the chat in-session, naming the section**; requiring it to re-read and to
   state that it did; escalating if blocking; and **`git log` on this spec against each epic's branch
@@ -547,4 +580,5 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.0.1 | 2026-08-20 | **Records three outstanding phase-spec annotations that lost their owner mid-flight.** HQ adopted W3's sharpening, W4's understatement and X2's count on accepting M43/M44, deferred the edit with a stated trigger — flagging that *"a deferred correction with no trigger is how SN-30 sat for six days"* — and **that HQ session ended before the trigger fired**, with the Phase Chat's reply undeliverable. The corrections are safe in the milestone specs that found them; **the obligation to fold them into the phase spec is now unowned.** Recorded here because it belongs to this milestone twice: **E44.1 gains a live dated specimen** — the HQ re-instantiation ritual failed in real time, in the phase building it, and the failure was on **departure** while the nine existing openers describe **arrival** — and **P12's closure gains a recommended terminus**, the Phase Completion Declaration being the one artifact guaranteed to be written while the phase is still open. **No scope, epic, ordering or acceptance-criterion change; the phase spec is HQ's and the disposition remains HQ's.** |
 | 1.0.0 | 2026-08-20 | Initial M44 spec, from the P12 phase spec v1.1.2, the 2026-08-19 opening ruling (Decisions 5, 6, 7, 9, 12), the 2026-08-20 R6 ruling (Decision 3), SN-30/33/34/35 and SN-31 Carry-Overs 2 and 10. **Six epics, each with a stated organizing question**, and **`P12-GH-3` deliberately excluded and shown as excluded.** **Five planning-time findings:** the AOG repair must be **fence-aware** — only **20 of 29** `##` matches are real sections, nine are inside ```markdown example blocks, and a naive renumber or cross-reference sweep would rewrite the templates the document quotes; **the finding exists because the Phase Chat produced a false positive** (a "second duplicate title" that was fenced example content) and caught it by reading context (X1). *"Handoff"* appears in **nineteen** governance documents against the record's **ten**, with the pattern stated (X2). The HQ ritual is **recording** — nine instances exist — while the handoff artifact is **design**, zero templates exist; the two halves of E44.1 are different kinds of task (X3). **G1/G2 are confirmed to live only in epic-tier artifacts** (X4). **E44.2's deadline is real and unenforced** — E41.5 is gated on M42, M44 is independent of both, and no edge connects them, so E44.2 runs first for a reason external to this milestone (X5). |
