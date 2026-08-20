@@ -4,7 +4,7 @@ name: "Completion: Fail-Closed Defaults and the Drivr MVP"
 status: scoping
 start_date: 2026-08-19
 planned_end_date: 2026-09-19
-version: 1.1.1
+version: 1.1.2
 ---
 
 # Phase P12: Completion — Fail-Closed Defaults and the Drivr MVP
@@ -279,6 +279,18 @@ M42 determines and records who actually runs these paths today, including Drivr.
   propagating English normative text to a Spanish-speaking adopter is **correct** under this policy.
 - **SN-30 Rec 1 and Rec 2** (see the ruling): mechanical checks for the four observed defects, and
   promoting **G1 and G2** out of an epic spec into the core documents.
+- **A convention for recording a DECIDED-but-UNCONFIGURED state.** *"Decided"* and *"configured"*
+  have never been separate in this corpus: until the R6 ruling, a decision was recorded **by making
+  the edit** — the same act. **R6 separated them, possibly for a long time** — three rows decided and
+  unconfigured on a trigger with no expiry. **E41.5 is the first artifact that must hold both apart,
+  and no convention was designed for it.**
+  - **The failure mode is precise:** a reader assumes the file matches the ruling. That is the
+    divergence the guards exist to catch, **arriving in the prose, where no guard reaches** — and it
+    is `P12-GH-3`'s shape (a resolving reference to rotted content) at the configuration layer.
+  - **Binding sequencing: the convention must exist before E41.5 lands.** E41.5 is gated on M42's
+    closure and M44 is independent of both, so the ordering is achievable — but it is not automatic.
+    **If E41.5 reaches the point of needing it and M44 has not delivered, that is an escalation, not
+    an improvisation.** M41 must not invent a convention M44 would then have to change.
 - **Record P12's own `P11-GH-1` instance** against its carry-forward note
   (`docs/phases/P11__.../P11__carry-forward-note__P11-GH-1-mid-flight-amendments-do-not-reach-working-branches.md`),
   per SN-39's Next Action. **The facts, so no epic re-derives them:** `governance/hq-p12-opening` was
@@ -457,7 +469,8 @@ its two extension statements reconciled to one (`P12-GH-1`).
 `P11-GH-3`'s Phase Completion Declaration at §5C Step 2 with a template; the HQ re-instantiation
 ritual recorded; the context-exhaustion handoff artifact; `governance-propagation.md` amended per
 ruling; the i18n paragraph; SN-30 Recs 1-2; the AOG section-numbering repair; **P12's own
-`P11-GH-1` instance recorded against its carry-forward note** (SN-39).
+`P11-GH-1` instance recorded against its carry-forward note** (SN-39); **a convention for the
+decided-but-unconfigured state R6 created**, which must exist before E41.5 lands.
 
 ### M45: Trustworthy Completion Signal
 
@@ -582,6 +595,9 @@ The CFO (Layer 8) will accept P12 complete when:
       Non-Goal that survives carries its own reason
 - [ ] `AI-OPERATING-GUIDELINES.md` sections are `1..n` with no duplicate number and no duplicate
       title; all internal cross-references updated; the version bumped
+- [ ] A convention exists for recording a **decided-but-unconfigured** state, it is in place **before
+      E41.5 lands**, and a reader of `.ai-project.yml` or `model-routing-policy.md` can tell which
+      rows are decided-and-configured from which are decided-and-pending
 - [ ] SN-30 Rec 1's checks exist under `tests/`; G1 and G2 live in a core document, not an epic spec
 - [ ] `P11-GH-1`'s carry-forward note carries P12's own instance with its dated commits, its
       out-of-chain detection path, and **no ordinal** — and the note still records the gap as open and
@@ -754,6 +770,7 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.2 | 2026-08-20 | Answers the P12 Phase Chat's M44 scope question. **PLACED in M44:** a convention for the decided-but-unconfigured state the R6 ruling created, with binding sequencing — it must exist before E41.5 lands, and a collision is an escalation rather than an improvisation. **DECLINED and filed instead:** derived-claim rot, as **`P12-GH-3`** — phase-scale, no bounded deliverable, and placing it would be the *"milestone things get put in"* pattern HQ has twice refused. |
 | 1.1.1 | 2026-08-19 | Folds SN-39's Next Action into **M44**: record P12's own `P11-GH-1` instance against that gap record's carry-forward note, with its facts, its out-of-chain detection path, and an explicit instruction to cite by artifact and defect rather than by ordinal. **Records evidence; does not reopen the fix** — Decision 12 stands. |
 | 1.1.0 | 2026-08-19 | **Restructured to seven milestones at CFO direction (SN-38), hours after opening.** A new **M41 — The Model Line-Up and Its Evidence** is inserted first; **the six original milestones shift +1**, mapping `M41→M42`, `M42→M43`, `M43→M44`, `M44→M45`, `M45→M46`, `M46→M47`. **Every P12 artifact predating this row cites the old numbers and was correct at its date**; the opening ruling carries the same mapping in its Amendment. The two original binding orders are preserved under the new numbers (`M42→M47`, `M45→M46`) and a third is added: M41's terminal epic is gated on M42's closure. Also records the ruled line-up, row P4's closure by CFO ruling, and SN-37's widened gate scope. |
 | 1.0.0 | 2026-08-19 | Initial phase spec. Opens P12 on SN-31's spine per the 2026-08-19 HQ ruling; six milestones M42-M47; the four fail-open instances re-verified on `19c77ab` as the phase's organizing evidence. |
