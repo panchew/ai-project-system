@@ -140,6 +140,30 @@ reason for the M42 gate beyond attributability: **a merge conflict in `bin/`.**
 > those guards compare across files is still in E41.5's set. **The merge-conflict argument is
 > smaller than F3 implied**, and is recorded at its true size rather than left to be discovered.
 
+> **⚠ SECOND CORRECTION — 2026-08-20, after R6. F3 ROTTED, and the annotation above rotted with it.**
+> **Found by the E41.5 Epic set (V1/V2), re-derived by the Phase Chat against the suite.** F3 was
+> **true when written** — five keys were landing, `phase` and `milestone` are in `DEFAULT_MODELS`, and
+> the policy-mapping guards did bind them. **R6 removed both from the landing set and neither the
+> annotation nor two subsequent amendments re-derived the file list.** That is this milestone's own
+> named error class — *a count inherited and not re-run* — committed by the Phase Chat, twice.
+>
+> **Corrected, against `bin/ai-project-orchestrator:23-29` and `tests/test_model_config.py`:**
+>
+> | Claim as carried | Corrected |
+> |---|---|
+> | `bin/` collision with M42 is **two keys** | **ZERO, unless a lane moves.** `DEFAULT_MODELS` holds `hq`, `phase`, `milestone`, `epic_dev`, `epic_qa` — **`creation` is not in it**, and `phase`/`milestone` no longer land. A `creation`-only landing touches **no `bin/` file at all** |
+> | *"the three divergence guards enforce it"* | **Not for `creation`.** `test_policy_mapping_agrees_with_yml_block` (`:205`) and `test_policy_mapping_agrees_with_default_models` (`:222`) are parametrized over **`MODEL_KEYS`** and **never see `creation`**. The guards that bind it are `test_config_manual_only_key_matches_expected_value` (`:247`) and `test_chat_hierarchy_manual_mapping_agrees_with_yml_block` (`:271`), both over **`MANUAL_ONLY_KEYS`** — **a different pair** |
+> | The `EXPECTED_MANUAL_ONLY_VALUE` refactor is a consequence | **It is FORCED, and the suite is the forcing function.** One scalar (`:72`) asserted for **both** manual-only keys (`:248`). **`creation` moving while `epic_manual` stays turns the suite red.** Not deferrable bookkeeping |
+>
+> **⚠ AND THE THING THIS FINDING MUST NOT BECOME.** *No lane key → no `bin/` edit → no conflict →
+> Gate 1 has no purpose* is a **valid chain to a forbidden conclusion**. **Gate 1's reason is
+> ATTRIBUTABILITY** — a model change landing with a lane repair makes the next failure
+> unattributable — **it is the CFO's and HQ's, and it was never conditional on a file list.** The
+> merge-conflict overlap was always a *second, incidental* reason. **Reasoning toward waiving a gate
+> because the diff turned out small is the failure mode, not an exemption**, and an epic executing
+> this weeks from now, alone, with a small diff, is exactly the condition under which that argument
+> gets made. **It is answered here in advance rather than left available.**
+
 *Verified by reading `tests/test_model_config.py` (285 lines, all guards), `bin/ai-project-orchestrator:23-29`, `governance/systems/chat-hierarchy.md:261-267`, and `model-routing-policy.md:76-80`, repo, 2026-08-19.*
 
 ### F4 — There are **two** incumbents, and the second has never been measured either
@@ -692,7 +716,9 @@ for the carry-forward's trigger and owner.
       rule** — at most `creation` among the verification targets, plus any lane E41.3's evidence
       moved; every excluded row's exclusion recorded in the epic with a pointer to the R6 ruling
 - [ ] **Row P4's closure is recorded per E41.5 deliverable 2** — beside the row, not by moving it —
-      and **the three divergence guards are green and unweakened**
+      and **every guard that binds a key this epic actually changes is green and unweakened.** **Cite
+      the guards that bind what landed, not the count** — for a `creation`-only landing those are the
+      two over `MANUAL_ONLY_KEYS`, not the two over `MODEL_KEYS`, which never see it
 - [ ] **The carry-forward is recorded ONCE, covering all three rows under one trigger**, with its
       owner and its non-expiry, and is handed to the phase rather than discharged
 - [ ] **The notification notice is written from the rows that actually landed** — and if none landed
@@ -716,8 +742,10 @@ for the carry-forward's trigger and owner.
 - [ ] No measurement in this milestone was taken on a model this milestone was choosing between
       (the circularity constraint held)
 - [ ] Every claim states the layer, time and scope it was verified at (`P11-GH-2`)
-- [ ] The three divergence guards in `tests/test_model_config.py` pass against the landed
-      configuration, having been updated rather than weakened
+- [ ] Every guard in `tests/test_model_config.py` that binds a landed key passes against the landed
+      configuration, **having been updated rather than weakened** — and the epic **names which guards
+      those were**, rather than repeating a count. **A guard relaxed to accommodate a change is the
+      defect this milestone exists to prevent, one layer down**
 
 ---
 
@@ -916,6 +944,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.0 | 2026-08-20 | **Corrects F3 and its HQ annotation, both of which ROTTED when R6 changed the landing set. Found by the E41.5 Epic set (V1/V2), re-derived by the Phase Chat against the suite.** F3 was **true when written**; `phase` and `milestone` were landing and are in `DEFAULT_MODELS`. **R6 removed both, and neither the annotation nor two subsequent amendments re-derived the file list — the Phase Chat carried an inherited claim through two of its own edits**, which is this milestone's own named error class. Corrected: the `bin/` collision with M42 is **ZERO unless a lane moves**, not two, because **`creation` is not in `DEFAULT_MODELS`**; *"the three divergence guards enforce it"* is **false for `creation`**, which the two `MODEL_KEYS`-parametrized policy-mapping guards **never see** — the pair that binds it is over `MANUAL_ONLY_KEYS`; and the `EXPECTED_MANUAL_ONLY_VALUE` refactor is **forced by a red suite**, not deferrable. Acceptance criteria now require the epic to **name the guards that bind what landed rather than repeat a count**. **Also records, in advance, the inference this finding must not license:** *no lane key → no `bin/` edit → no conflict → Gate 1 is purposeless* is a valid chain to a forbidden conclusion — **Gate 1's reason is attributability, it is the CFO's and HQ's, and it was never conditional on a file list.** **No scope, epic, ordering or gate change.** |
 | 1.2.1 | 2026-08-20 | **Corrects a defect in this spec's own E41.2 acceptance criterion, found by the E41.2 Epic set one level down (S1).** The criterion named only the two negative replay cases — E33.2 Run A and E39.3 — so **`return FAIL` satisfied it in full**, and an instrument that always fails would then have failed the incumbent and every candidate alike, concluding M41 on a bar no model could clear for either lane. **A detector with no negative control is not a detector.** The criterion now requires discrimination in **both** directions, naming the positive controls already committed here — **E33.2 Run B** and **E33.4**. The E41.2 epic had already satisfied the stronger form on its own initiative and did not alter this criterion; correcting it here is the Phase Chat's own artifact repair, so that the milestone is judged at closure against the bar that means something. **No scope, epic, ordering or gate change.** |
 | 1.2.0 | 2026-08-20 | **Amended for the HQ Ruling on R6** (`…__ruling__r6-manual-verification-surface-rule.md`), which **upheld R6 as a correction to HQ's own F6 ruling** — F6 identified the right mechanism and scoped it to one row, and fixed the least severe of three. **One rule now replaces per-row adjudication:** no manual verification target lands a new value until a surface is confirmed to **run that model AND emit a self-report the E31.3 check can read.** Scope is the five verification targets, **explicitly not `epic_dev`/`epic_qa`**, which land on E41.3's evidence alone. **E41.5 deliverable 1 rewritten:** at most **`creation`** lands among the verification targets, and only if E41.1 confirms both halves; **`phase`, `milestone` and `epic_manual` are one carry-forward under one trigger**, F6's subsumed rather than superseded, CFO-owned, no expiry. **E41.5 deliverable 2 is this milestone's own design decision** (Decision 4 item 3): the closure of row P4 is recorded **beside the row** — a second dated note under `## Policy rows`, following the file's existing `Note on row P4` convention — while the mapping table and the row's `default` cell **stay put**. The mapping table is forced by `test_policy_mapping_agrees_with_yml_block`; **the `default` cell is a deliberate choice, because it sits OUTSIDE the guard's parse and a divergence no test can catch is worse than one that fails a build.** **DoD notification rewritten from the landing rows: the arming count has shrunk twice — five, then three, now at most ONE, possibly none.** Records the consequence HQ named: if no surface appears for `phase` and `milestone`, **the ruled line-up substantially never lands**, M41 may close having landed one key or none, **and that is a legitimate outcome rather than a failure.** **Not changed: the line-up values, both E41.5 gates, every measurement obligation, the epic set, M42.** Delivered through this spec's `P11-GH-1` channel — **second live test, and this one has an addressee.** |
 | 1.1.1 | 2026-08-20 | **Records a second `P11-GH-1` instance in P12, per HQ's directive**, cited by artifact and defect and **not by ordinal**. It runs in the **opposite direction** from the instance the phase spec records: that one is a parent amending a spec a child executes; **this one is a child branch drifting behind its parent while its own artifacts cite content the branch does not have** — M41's spec v1.1.0 cites the F6 ruling (`ff24a48`, on `master` at `f504be2`) in three places, and the file is **absent from `milestone/M41`**. **Downward amendment is mechanised as of today; upward staleness is unowned**, and this spec's mitigation does not reach it. Also **holds this spec's own account of today's downward exercise against HQ's**: the channel **carried** the edits but **detected** nothing — HQ noticed and directed its use — and step 2 had no addressee. **A carrier is not a detector.** `milestone/M42` carries a cross-reference rather than a duplicate. **No scope, epic, ordering, gate or acceptance-criterion change.** |
