@@ -751,6 +751,49 @@ flowchart TB
   under it?" is the real one** — and it is unanswerable until there is a running chat. Reported to HQ
   against `P11-GH-1`'s record rather than logged as a success.
 
+- **⚠ `P11-GH-1` — a SECOND instance in P12, and it runs in the OPPOSITE DIRECTION from the first.
+  Recorded here because it happened to this branch; it applies equally to `milestone/M42`, which
+  carries a cross-reference rather than a duplicate.**
+
+  **Cited by artifact and defect, never by ordinal** — the carry-forward note records two instances,
+  P11's closure record counts four, the tally does not reconcile, and the project has ruled it
+  unusable. **Writing "the Nth instance" reproduces the defect being filed.**
+
+  **The facts, verified 2026-08-20:**
+
+  | | |
+  |---|---|
+  | Branches cut | `milestone/M41` and `milestone/M42` from `phase/P12` at **`9ee810e`** |
+  | What landed after the cut | the **F6 ruling** — `…__ruling__m41-m42-acceptance-and-f6-escalation.md`, commit **`ff24a48`**, merged to `master` at **`f504be2`** |
+  | The drift | `phase/P12` is behind `master` by **exactly that one file, 194 lines**, and nothing else |
+  | The dangling reference | **M41's spec v1.1.0 cites that ruling by filename in three places and its Starter in one — and on `milestone/M41` the file does not exist** (`git cat-file -e`: absent). An Epic Chat following the citation lands on nothing |
+  | Detection | **HQ, by reading both branches.** Not by any mechanism |
+  | Remedy | `master` → `phase/P12`, then `phase/P12` → each milestone branch. Precedent in the note: `dd9b310`, `82c69ab` |
+
+  **Why this one earns an entry rather than a tally mark — and it is not the same defect twice.**
+
+  The instance the phase spec records is **downward**: a parent amends a spec a child is executing,
+  and the child never learns. **This one is upward**: a child branch drifts *behind* its parent while
+  the parent gains content the child's own artifacts **cite**. **The failure is not a stale
+  instruction — it is a live citation resolving to nothing.**
+
+  **The mitigation written into these Notes does not cover it, and neither does anything else.**
+  That channel carries an amendment *down* to a running chat. **Nothing watches whether a branch has
+  fallen behind the parent it cites.** So: **downward amendment — mechanised as of today. Upward
+  staleness — still unowned.** Both halves belong in the record, and the second half is the one with
+  no owner.
+
+- **Correction to the record of today's downward exercise, held rather than quietly upgraded.** HQ
+  reports the mitigation *"FIRED CORRECTLY today"* and calls it *"the first time in twelve phases
+  this gap was closed by a mechanism rather than by someone noticing."* **The stronger half of that
+  does not survive checking, and this spec keeps its own account.** The channel **carried** the
+  ruling's edits into v1.1.0 — that part is true. It **detected** nothing: **HQ noticed the amendment
+  and directed that the channel be used.** A person still noticed; the mechanism moved the payload
+  afterwards. And **step 2 — notify the running child chat, the step these Notes call *"the one that
+  fires"* — had no addressee**, because no M41 Milestone Chat has been opened. **A carrier is not a
+  detector, and an untested step is not a passed one.** Recorded as a disagreement with HQ's framing
+  rather than absorbed into it.
+
 - **On `P11-GH-1`, which is an active risk and has already fired in this phase.** Mid-flight spec
   amendments do not reach working branches. **Any amendment to this spec after an Epic Chat has
   started reaches that chat by: (1) amending this file on `milestone/M41` with a changelog entry;
@@ -777,5 +820,6 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.1 | 2026-08-20 | **Records a second `P11-GH-1` instance in P12, per HQ's directive**, cited by artifact and defect and **not by ordinal**. It runs in the **opposite direction** from the instance the phase spec records: that one is a parent amending a spec a child executes; **this one is a child branch drifting behind its parent while its own artifacts cite content the branch does not have** — M41's spec v1.1.0 cites the F6 ruling (`ff24a48`, on `master` at `f504be2`) in three places, and the file is **absent from `milestone/M41`**. **Downward amendment is mechanised as of today; upward staleness is unowned**, and this spec's mitigation does not reach it. Also **holds this spec's own account of today's downward exercise against HQ's**: the channel **carried** the edits but **detected** nothing — HQ noticed and directed its use — and step 2 had no addressee. **A carrier is not a detector.** `milestone/M42` carries a cross-reference rather than a duplicate. **No scope, epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.0 | 2026-08-19 | **Amended for the HQ Ruling on F6** (`…__ruling__m41-m42-acceptance-and-f6-escalation.md`), which accepted M41/M42 planning and resolved the F6 escalation. **`epic_manual` is DECOUPLED from E41.5** and becomes a gated carry-forward — trigger: a surface that **runs `qwen3.8:27b` and self-reports an identity the E31.3 check can read**; owner: the **CFO**; **no expiry, explicitly not at P12's close.** **The row is not re-decided — only its timing.** HQ sharpened the escalation on the way in: the consequence is not manual Epic chats in the abstract but **P12's own M43-M47**, all of which run them. E41.5 now lands **four keys across the same five files**; deliverable 4 leaves `epic_manual`'s `chat-hierarchy.md` row untouched; deliverable 5's `EXPECTED_MANUAL_ONLY_VALUE` refactor **stands for the opposite reason** — `creation` moves and `epic_manual` does not, so the shared scalar still cannot hold both. **Measurement obligation untouched: E41.4 still back-tests `qwen3.8:27b`.** Also records HQ's non-blocking annotation that **F3 overstated its collision surface** — only `phase` and `milestone` of the moving keys are in `DEFAULT_MODELS`, so E41.5's `bin/` collision with M42 is **two keys, not five**; the atomicity argument is unaffected because it rests on the three divergence guards. **No epic added or removed; both of E41.5's gates unchanged.** Delivered through this spec's own `P11-GH-1` channel — see Notes. |
 | 1.0.0 | 2026-08-19 | Initial M41 spec, from the P12 Phase Execution Chat Starter and the 2026-08-19 HQ Ruling (Decisions 14-19). **Six planning-time findings recorded**, all measured on `master` at `9ee810e`: `opencode.json` is host-level and **both** 27b models are absent from it (F1); E35.5 is packets and a frozen rubric, **not a runnable harness**, with no transport to the three remote targets (F2); the terminal epic touches **five** files under **three** divergence guards, one of them in `bin/` and therefore in M42's path (F3); the four verification targets have a **second incumbent**, `claude-opus-5`, never measured (F4); three target values are **product names, not routable identifiers** (F5); and `epic_manual → local:` leaves manual Epic chats with **no surface in this harness** (F6, escalated as a prerequisite of E41.5). Five epics; E41.1 a hard gate; E41.5 terminal behind two gates. |
