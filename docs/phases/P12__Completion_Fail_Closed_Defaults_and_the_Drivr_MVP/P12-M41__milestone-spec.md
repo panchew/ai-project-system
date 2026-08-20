@@ -270,9 +270,38 @@ These are the CFO's and HQ's. This milestone executes them; it does not re-open 
    comes from the back-test. `qwen3.8:27b` competing for `epic_manual` is qualified by the
    *back-test*, notwithstanding that it is local.
 6. **The bar is RELATIVE and OBJECTIVE**: no worse than the incumbent on every objective check and
-   strictly better on at least one, over an **absolute floor of tool rounds > 0 and files changed
-   > 0**. **No subjective quality score** — judgment is precisely what cannot be trusted from the
-   thing under test.
+   strictly better on at least one, over an absolute floor. **No subjective quality score** — judgment
+   is precisely what cannot be trusted from the thing under test.
+
+   > **⚠ THE FLOOR IS PER-LANE — CFO decision 2026-08-20, HQ Ruling on S5**
+   > `.ai-project/artifacts/rulings/2026-08-20__ai-project-system-hq__ruling__s5-per-lane-qualification-floor.md`
+   >
+   > | Lane | Floor |
+   > |---|---|
+   > | **`epic_dev`** | `tool rounds > 0` **AND** `files changed > 0` — **unchanged** |
+   > | **`epic_qa`** | `tool rounds > 0` **AND** `claims resolve against files that exist`; **`files changed` recorded but NOT scored** |
+   >
+   > **Raised by the M41 Milestone Chat (S5), verified at two levels above it, and ruled by the CFO
+   > as the owner of Binding Constraint 6.** `bin/run-qa-agent:336-344` **refuses to dispatch** under a
+   > tool set containing `write_file`, `edit_file`, `git` or `run_command`, and the comment states the
+   > guarantee is meant to outlive the epic that built it. **So `files changed > 0` on `epic_qa` was
+   > never a strict bar — it was a constant false**, and a check returning the same answer for every
+   > candidate has **zero discriminating power.**
+   >
+   > **This does not lower the bar.** `files changed` was the **dev lane's proxy for "it actually
+   > acted."** On a lane forbidden to write, acting **is** reading and grounding — which the other two
+   > checks measure. **It stops applying the dev lane's proxy to a lane that cannot express it.**
+   >
+   > **It loses nothing against the record:** E39.3 fails `rounds > 0` **and** `claims resolve`,
+   > independently; E33.2's 14b still fails both dev-lane checks. **Every recorded historical failure
+   > still fails.**
+   >
+   > **Criterion 2 is untouched and must stay untouched.** The adapter's refusal is the guarantee, not
+   > collateral damage. **Any future proposal that reaches this floor by enabling a mutating tool on
+   > the QA lane is refused in advance.**
+   >
+   > **`epic_qa`'s verdict is UNBLOCKED.** The hold recorded during the escalation is lifted; E41.2 and
+   > E41.3 apply the ruled floor and **state which version they applied.**
 7. **`epic_dev` and `epic_qa` are measured SEPARATELY**, and the incumbent is measured to set the
    baseline.
 8. **NO MODEL SWAP LANDS UNTIL M42 CLOSES.** M42 repairs the code the lane runs through; a model
@@ -944,6 +973,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.4.0 | 2026-08-20 | **Amended for the HQ Ruling on S5** (`…__ruling__s5-per-lane-qualification-floor.md`, merged to `master` at `e9834c6`). **The qualification floor is now PER-LANE by CFO decision:** `epic_dev` keeps `tool rounds > 0` AND `files changed > 0`; **`epic_qa` takes `tool rounds > 0` AND `claims resolve against files that exist`, with `files changed` recorded but not scored.** Raised by the M41 Milestone Chat as S5, verified independently by the Phase Chat and by HQ, and **ruled by the CFO as the owner of Binding Constraint 6** — three levels each declined to adopt the per-lane form as an application detail, which is the line the phase spec draws around his decisions. The reasoning of record: **`files changed > 0` on `epic_qa` was a constant false, not a strict bar**, because `bin/run-qa-agent:336-344` refuses to dispatch under a mutating tool set; a check with the same answer for every candidate has zero discriminating power; and `files changed` was the **dev lane's proxy for "it actually acted"**, whose read-only equivalent is reading and grounding. **Every recorded historical failure still fails**, and **Criterion 2 is untouched — reaching this floor by enabling a mutating tool on the QA lane is refused in advance.** **`epic_qa`'s withheld verdict is UNBLOCKED**; E41.2 and E41.3 apply the ruled floor and state which version they applied. **No scope, epic, ordering or gate change.** |
 | 1.3.0 | 2026-08-20 | **Corrects F3 and its HQ annotation, both of which ROTTED when R6 changed the landing set. Found by the E41.5 Epic set (V1/V2), re-derived by the Phase Chat against the suite.** F3 was **true when written**; `phase` and `milestone` were landing and are in `DEFAULT_MODELS`. **R6 removed both, and neither the annotation nor two subsequent amendments re-derived the file list — the Phase Chat carried an inherited claim through two of its own edits**, which is this milestone's own named error class. Corrected: the `bin/` collision with M42 is **ZERO unless a lane moves**, not two, because **`creation` is not in `DEFAULT_MODELS`**; *"the three divergence guards enforce it"* is **false for `creation`**, which the two `MODEL_KEYS`-parametrized policy-mapping guards **never see** — the pair that binds it is over `MANUAL_ONLY_KEYS`; and the `EXPECTED_MANUAL_ONLY_VALUE` refactor is **forced by a red suite**, not deferrable. Acceptance criteria now require the epic to **name the guards that bind what landed rather than repeat a count**. **Also records, in advance, the inference this finding must not license:** *no lane key → no `bin/` edit → no conflict → Gate 1 is purposeless* is a valid chain to a forbidden conclusion — **Gate 1's reason is attributability, it is the CFO's and HQ's, and it was never conditional on a file list.** **No scope, epic, ordering or gate change.** |
 | 1.2.1 | 2026-08-20 | **Corrects a defect in this spec's own E41.2 acceptance criterion, found by the E41.2 Epic set one level down (S1).** The criterion named only the two negative replay cases — E33.2 Run A and E39.3 — so **`return FAIL` satisfied it in full**, and an instrument that always fails would then have failed the incumbent and every candidate alike, concluding M41 on a bar no model could clear for either lane. **A detector with no negative control is not a detector.** The criterion now requires discrimination in **both** directions, naming the positive controls already committed here — **E33.2 Run B** and **E33.4**. The E41.2 epic had already satisfied the stronger form on its own initiative and did not alter this criterion; correcting it here is the Phase Chat's own artifact repair, so that the milestone is judged at closure against the bar that means something. **No scope, epic, ordering or gate change.** |
 | 1.2.0 | 2026-08-20 | **Amended for the HQ Ruling on R6** (`…__ruling__r6-manual-verification-surface-rule.md`), which **upheld R6 as a correction to HQ's own F6 ruling** — F6 identified the right mechanism and scoped it to one row, and fixed the least severe of three. **One rule now replaces per-row adjudication:** no manual verification target lands a new value until a surface is confirmed to **run that model AND emit a self-report the E31.3 check can read.** Scope is the five verification targets, **explicitly not `epic_dev`/`epic_qa`**, which land on E41.3's evidence alone. **E41.5 deliverable 1 rewritten:** at most **`creation`** lands among the verification targets, and only if E41.1 confirms both halves; **`phase`, `milestone` and `epic_manual` are one carry-forward under one trigger**, F6's subsumed rather than superseded, CFO-owned, no expiry. **E41.5 deliverable 2 is this milestone's own design decision** (Decision 4 item 3): the closure of row P4 is recorded **beside the row** — a second dated note under `## Policy rows`, following the file's existing `Note on row P4` convention — while the mapping table and the row's `default` cell **stay put**. The mapping table is forced by `test_policy_mapping_agrees_with_yml_block`; **the `default` cell is a deliberate choice, because it sits OUTSIDE the guard's parse and a divergence no test can catch is worse than one that fails a build.** **DoD notification rewritten from the landing rows: the arming count has shrunk twice — five, then three, now at most ONE, possibly none.** Records the consequence HQ named: if no surface appears for `phase` and `milestone`, **the ruled line-up substantially never lands**, M41 may close having landed one key or none, **and that is a legitimate outcome rather than a failure.** **Not changed: the line-up values, both E41.5 gates, every measurement obligation, the epic set, M42.** Delivered through this spec's `P11-GH-1` channel — **second live test, and this one has an addressee.** |
