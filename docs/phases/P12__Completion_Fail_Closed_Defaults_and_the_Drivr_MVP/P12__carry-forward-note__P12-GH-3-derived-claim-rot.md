@@ -22,15 +22,51 @@ to file it instead. **HQ agrees on both counts** and is filing it here.
 
 ## The defect
 
-**A claim derived from a premise is not re-derived when the premise moves.** Every instance in P12 so
-far was **correct when written**:
+**A claim derived from a premise is not re-derived when the premise moves.** Every instance was
+**correct when written**. None is a mistake. **The composite is wrong anyway**, because each was
+computed against a premise a later act changed, and nothing recomputed.
 
-- **F3** was true when the M41 Milestone Chat wrote it.
-- **HQ's annotation to F3** — that the `bin/` collision was two keys, not five — was correct when made.
-- **The Phase Chat's two amendments** were each correct when made.
+**Four instances, one milestone, four different substrates:**
 
-None of them is a mistake. **The composite is wrong anyway**, because each was computed against a
-premise that a later act changed, and nothing recomputed.
+| Instance | Whose | Substrate | Premise that moved |
+|---|---|---|---|
+| **F3's file list** | M41 Milestone Chat | An epic-set finding | HQ's annotation narrowed the collision to two keys |
+| **A branch behind its parent** | the branch | Git | `master` advanced |
+| **Decision 11's negative-only bar** | **HQ** | A ruling's acceptance clause | The detector's definition was never re-derived |
+| **E41.1 v1.0.2's *"citation does not yet resolve"*** | M41 Milestone Chat | A spec's own Note | **#221 merged** |
+
+**The fourth is the cleanest specimen the project has.** E41.1 recorded, accurately, that the R6
+citation did not resolve on its branch. #221 merged; the premise moved; the claim did not. The chat
+found it in its own artifact while pulling the sync, fixed it at v1.0.3, and **kept the account rather
+than the outcome** — writing into the spec that nothing detected the staleness, that it was told, and
+that the repair was manual.
+
+---
+
+## The mechanism — and this formulation is the M41 Milestone Chat's, quoted because it is better than HQ's
+
+HQ and the Phase Chat both initially read the S1 → V2 → Decision 11 sequence as **three levels
+catching each other**, which is flattering and wrong. **The M41 chat's reading is that it is one
+defect written three times, each level inheriting the framing rather than the reasoning:**
+
+> *"Flag the known failures" is the obvious way to specify a detector, and it is wrong in the same way
+> each time — **a detector is defined by discrimination, not by detection.** Nobody re-derived it
+> because **it did not look derived; it looked like a requirement.**"*
+
+**That last clause is the mechanism, and it unifies all four instances.** In each case a
+**conclusion** was written in a form that does not read as a conclusion, so nothing ever triggered
+re-derivation:
+
+- *"Three divergence guards enforce it"* — **reads as a fact.**
+- *"The citation does not resolve"* — **reads as a fact.**
+- *"Flag both recorded historical failures"* — **reads as a requirement.**
+
+All three were conclusions from premises that later moved.
+
+**The statement of the defect, adopted verbatim from the M41 Milestone Chat:**
+
+> **The corpus has no convention that marks a claim as derived, so nothing signals when its premise
+> moves.**
 
 ---
 
@@ -78,10 +114,17 @@ and can be looked for; here, everything is present and merely wrong.**
 **HQ declines to scope this in M44, adopting the Phase Chat's reasoning, which is HQ's own reasoning
 returned to it:**
 
-1. **It is phase-scale and wants a spine conversation**, not a milestone. It has **no bounded
-   deliverable yet** — "re-derive derived claims" is a discipline, not a task, and the remedy is
-   probably mechanical (something that knows a citation's target changed since the citing sentence was
-   written), which is a design problem nobody has framed.
+1. **A bounded deliverable now EXISTS — and it is the stronger reason to decline, not a reason to
+   place it.** The sharpening supplies one: *a convention that marks a claim as derived, so a reader
+   or a check can tell what it depends on.* **The M41 chat's own objection to it is decisive, and HQ
+   adopts it: a convention with no mechanism to detect an unmarked claim is `P12-GH-1` reproduced** —
+   a rule that lives in one place, is authoritative there, and whose omission no test detects. **That
+   is the defect M43 exists to fix. Shipping a second instance of it inside M44 would be the phase
+   contradicting itself.** Making it *enforceable* is not small.
+   - **And it collides with a deferral already on the record.** SN-30 Recs 4 and 5 — reduce
+     exposition, then measure the reduction — are deferred pending a spine conversation. **A notation
+     convention adds exposition to every claim in the corpus.** That trade belongs in the conversation
+     already waiting for it.
 2. **Placing it would be HQ doing the thing HQ has twice declined to do.** M44 is the milestone HQ has
    repeatedly warned must not become *"the milestone things get put in."* A phase-scale finding with
    no deliverable is precisely the shape that pattern takes.
@@ -94,7 +137,25 @@ returned to it:**
 not at all**; a remedy for any one of them that does not account for the other two will look complete
 and will not be.
 
-**Owner: none.** Deliberately. The next spine conversation inherits it.
+**Owner: none.** Deliberately. The next spine conversation inherits it — the same one SN-30 Recs 4-5
+are waiting for, which is not a coincidence.
+
+---
+
+## This note was briefly an instance of its own finding
+
+**Recorded because it is the best available evidence, and because deleting the trace would be the
+defect again.**
+
+As first written, this note said the finding had **"no bounded deliverable yet."** That was true when
+written. The M41 Milestone Chat's sharpening then **supplied one** — and had HQ not been told, the
+note would have gone on asserting the absence of a thing that now exists, **in the very artifact
+filing the defect of claims outliving their premises.**
+
+**It rotted within the hour, in the note about rotting, and nothing detected it.** HQ was told. The
+repair was manual. **That is the fourth instance's mechanism reproduced by the fifth**, and it is why
+the trigger below is written to fire on any staleness mechanism rather than on this note's own
+subject matter.
 
 ---
 
