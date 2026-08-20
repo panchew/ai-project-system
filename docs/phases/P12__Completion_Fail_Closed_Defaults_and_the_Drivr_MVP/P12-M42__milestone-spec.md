@@ -645,6 +645,21 @@ flowchart TB
   *stop, and say so*.** Every variation that survives — a louder log, a substitute, a retry at higher
   privilege, a broader stage — is the same disposition wearing a different fix.
 
+- **`P11-GH-1` — a second P12 instance is on record, and this branch is one of its two subjects.**
+  **Recorded once, in `P12-M41__milestone-spec.md`'s Notes (v1.1.1), and cross-referenced here rather
+  than duplicated** — two statements of one fact is the drift condition this framework exists to
+  prevent. **Cite it by artifact and defect, never by ordinal.**
+
+  In short: `milestone/M42` was cut from `phase/P12` at `9ee810e`; the F6 ruling landed on `master`
+  afterwards (`ff24a48`, merged `f504be2`); **`phase/P12` is behind `master` by exactly that one
+  file**, and both milestone branches inherit the gap. **M42's own artifacts do not cite that ruling,
+  so this branch has no dangling reference** — M41's does, which is why the full record lives there.
+
+  **The direction is what makes it worth recording:** the instance the phase spec carries is a parent
+  amending a spec a child executes — **downward**. This one is a child branch drifting **behind** its
+  parent. **The channel below covers the first and not the second.** Downward amendment: mechanised.
+  **Upward staleness: unowned.**
+
 - **On `P11-GH-1`.** Any amendment to this spec after an Epic Chat has started reaches that chat by:
   amending this file on `milestone/M42` with a changelog row; **notifying the running chat in-session,
   naming the section**; requiring it to re-read that section and to state in its next delivery that
@@ -667,5 +682,6 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.0.2 | 2026-08-20 | **Cross-references the second `P11-GH-1` instance in P12**, recorded in full in `P12-M41__milestone-spec.md` v1.1.1 and **not duplicated here**. This branch is one of its two subjects — cut from `phase/P12` at `9ee810e`, with the F6 ruling landing on `master` afterwards — but **M42's artifacts cite no absent file**, so the dangling reference is M41's alone. Records the direction that makes it a distinct instance: **downward amendment is mechanised; upward branch staleness is unowned.** **No scope, epic, ordering, gate or acceptance-criterion change.** |
 | 1.0.1 | 2026-08-19 | **Finding G4 added to Obligation 2, before any Epic Chat opened** — no `P11-GH-1` exposure. The Phase Chat re-inspected the `P12-GH-2` live victim directly rather than inheriting it from the record: `social-stories-creator`'s agent is **230 bytes, confirmed**, and a first-pass size sweep of twelve enrolled fleet directories finds **every other project at 14,711 bytes**. Verification boundary stated: **size only, not content**, and `~/soft-dev/*` on this host only — so E42.5's enumeration is narrowed, not discharged. Adds the observation that the one victim sits in the non-`.governance` population M38 identified as init's own creations, offered to E42.5 as a lead. **No scope, ordering, epic or acceptance criterion changes.** |
 | 1.0.0 | 2026-08-19 | Initial M42 spec, from the P12 Phase Execution Chat Starter and the 2026-08-19 HQ Ruling. All four defects re-verified by reading on `master` at `9ee810e`; all stated line references hold. **Three planning-time findings recorded:** the orchestrator already defines `LOCAL_UNAVAILABLE_EXIT = 5` at `:36`, documents it as *"refuse loudly rather than retry or silently fall back"*, and applies it at `:539-565` — so E42.1 applies the file's own convention rather than inventing one (G1); `test_promote_branch_fallback_merge`'s mock has **approval returning 0**, so inverting it covers the ladder but **not** the `:269` approval bypass, which has no test at all — E42.3 owes a **new** test as well as an inverted one (G2); and the blast radius is **six** guides, three normative/spec documents, an adoption record, `README.md`, **seven other `bin/` scripts** and **seven test files**, plus Drivr outside the repo — against the scoping's *"three guides"*, and the measurement is a name sweep for which E42.5 owes the call graph (G3). Five epics; E42.1→E42.2 sequenced on one file; E42.4→E42.5. |
