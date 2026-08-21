@@ -593,9 +593,46 @@ flowchart TB
   amending this file on `milestone/M43` with a changelog row; **notifying the running chat in-session,
   naming the section**; requiring it to re-read and to state in its next delivery that it did; and
   escalating to the Phase Chat if blocking. **Before accepting any delivery, `git log` this spec
-  against the epic's branch point.** Two live tests in M41 showed the channel **carries** but has
+  against the epic's branch point — and sync EVERY P12 ref, epic branches included.** Two live tests in M41 showed the channel **carries** but has
   never **detected** — and M41's chat added the sharper point: **it has never been tested against an
   amendment that requires a child to stop.** Assume this milestone may supply that test.
+
+- **⚠ AN AMENDMENT'S DEPENDENTS INCLUDE THE BRANCH A CHAT WILL OPEN ON — a fourth shape of
+  `P12-GH-3`, and it caught all three of us.** After #229 merged — the ruling suspending
+  accept-by-silence for M41 — **`origin/epic/P12-M41-E41.1` still sat at the pre-merge commit.** An
+  Epic Chat opening there would have read a corpus in which **silence still accepts**, under the one
+  rule written to stop exactly that.
+
+  **The recorded shapes were all documents:** a citation resolving to nothing, a branch behind its
+  parent, a stamped sha that moved, a premise whose dependents were not swept. **This one's dependent
+  is an EXECUTING CONTEXT.** A rule can be true in the corpus and absent from the place it applies.
+
+  > **When a rule changes what a chat may do, the branch that chat will open on is one of its
+  > dependents.**
+
+  **Nobody looked — not HQ, not the Milestone Chat, not the Phase Chat.** **The Phase Chat's own sync
+  procedure is the specific gap:** six syncs this phase, every one `master → phase/P12 → the four
+  milestone branches`, **and epic branches were never in the set** — they did not exist when it was
+  written and it was never revisited when one appeared. **Sync EVERY P12 ref, epic branches
+  included.**
+
+- **Syncing a branch that another session has checked out — merge DETACHED and push by SHA.**
+  `git checkout --detach origin/<branch>`, merge, `git push origin HEAD:<branch>`. **Never
+  `checkout -B <branch>`**, which fails when another worktree holds that branch and invites a force
+  or a rewrite as the "fix". **No force, no rewrite, no contention for a branch name a live session
+  is standing on.** Earned rather than theorised: HQ's `checkout -B milestone/M41` failed against the
+  Milestone Chat's worktree today and it used this pattern instead.
+
+- **The worktree convention deserves to be normative, and the reason is not "be disciplined".** It has
+  now **failed once** — a Milestone Chat's set landing on another session's branch — and **held once
+  against somebody else's error**, on the same day.
+
+  > **It is not a discipline that protects the careful. It is an interlock that protects whoever is
+  > downstream of the next mistake.**
+
+  **This phase's fail-closed thesis restated in terms of who bears the cost rather than what
+  triggers**, and the argument for a rule rather than advice: **the person who benefits is not the
+  person who complies.** *(Framing from the M41 Milestone Chat, 2026-08-21.)*
 
 - **Authoring order, from M41's experience:** **write the Starter after the spec is committed.**
   Stamping a spec's sha into a starter and then amending the spec produced a dangling citation in
@@ -611,6 +648,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.2 | 2026-08-21 | **Three method notes for the starter-template work, and a correction to the Phase Chat's own sync procedure.** **(a) A fourth shape of `P12-GH-3` whose dependent is an EXECUTING CONTEXT, not a document:** after #229 merged, `origin/epic/P12-M41-E41.1` still sat at the pre-merge commit, so **an Epic Chat opening there would have read a corpus in which silence still accepts** — under the one rule written to stop that. *When a rule changes what a chat may do, the branch that chat will open on is one of its dependents.* **Nobody looked**, and the Phase Chat's six syncs covered `master → phase → the four milestone branches` and **never epic branches**; the `P11-GH-1` procedure now says to sync every P12 ref. **(b) Syncing a branch another session has checked out: merge DETACHED and push by SHA**, never `checkout -B`, which fails against a live worktree and invites a force as the fix — earned when HQ's `checkout -B milestone/M41` failed today. **(c) The worktree convention's real argument**, from the M41 chat: *not a discipline that protects the careful, but an interlock that protects whoever is downstream of the next mistake* — **the person who benefits is not the person who complies**, which is why it should be normative rather than advisory. **No epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.1 | 2026-08-21 | **Strengthens E43.2's design property from well-formedness to AUDITABILITY UNDER DUPLICATION**, on the M41 Milestone Chat's refinement. **A positive signal is *detectably* duplicable; an absence is not even that** — two silences are indistinguishable from one, so duplication leaves no trace, while two positive signals are two artifacts: visible, attributable, diffable. **The target is a mechanism that still misbehaves under a duplicated role but misbehaves LEGIBLY.** This upgrades the M46 scope boundary rather than restating it: E43.2 cannot prevent duplication, **but it can guarantee duplication leaves evidence — so it is what makes M46's absence survivable**, converting an unrecoverable fault into one recoverable at the next read. **M41's instance proves it by absence** — nearly unrecoverable because its only evidence was a first-person commit message and one transcript. **Names a worked example to start from:** HQ's 2026-08-21 M41-only stopgap (silence accepts nothing; explicit committed acceptance carrying the session UUID; one line per delivery; auto-lapsing), **evidence that cheapness and auditability are compatible.** **No epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.0 | 2026-08-21 | **Adds a fourth state to E43.2 from a live instance, and it breaks W3's presumption rather than failing it.** M41 ran with **two authentic Milestone Chat sessions** — checkable in the graph: 2 of 22 commits on M41's epic artifacts sit in a 5h27m gap in the incumbent's activity, and one calls another session's sentence *"my own rotted claim."* Stage-1 duplication merged cleanly; **Stage 2 is where the role holds accept-by-silence**, so **a delivery can be accepted by one instance while another never hears of it, and a non-participating instance's silence is indistinguishable from deliberate acceptance.** `chat-hierarchy.md:201-205` rests default-accept on *"the human's key is present at the session"* — **with two sessions, "the session" does not denote.** **Scope kept out of M46:** the currency half is M46's; **E43.2's half is that whatever replaces silence must be a signal an identified party EMITTED, never an absence attributed to a role** — well-formed under duplication, which an absence is not. Records that the instance was found by **a witness, not a mechanism.** **No epic added or removed; no ordering, gate or acceptance-criterion change.** |
 | 1.0.0 | 2026-08-20 | Initial M43 spec, from the P12 Phase Execution Chat Starter, SN-31 Decisions 3/4/5, SN-36/37's resume and extension semantics, and `P12-GH-1`. **Five planning-time findings**, all measured on `phase/P12` at `d98f95d`: the `cfo_review_gate` opt-out precedent is an **unblessed key** that `bin/ai-project-validate` warns on today, so E43.4 must bless the key it adds or ship the system's first fail-closed default unvalidated (W1); `P12-GH-1` reproduces without correction, and **E40.5's guard reaches seven of nine surfaces against a record saying eight and an enumeration saying nine** — three irreconcilable counts forcing itemization (W2); **`chat-hierarchy.md:201-205` already rules that agentic silence accepts nothing**, narrowing E43.2 to the manual case and its stated **attendance presumption** (W3); `merge-authorization.md` is child-addressed in its subject, fields and post-conditions, making E43.1 a **re-authoring** rather than SN-31's *"one template edit"* (W4); and **resume appears in no normative document** while **Drivr has no surface for either half of the flip**, making E43.4 greenfield across two repositories (W5). Four epics in two independent pairs: E43.1→E43.2, E43.3→E43.4. |
