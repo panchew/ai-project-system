@@ -406,6 +406,31 @@ precisely because it carried `PASS 4/5, 0 false alarms` in advance.
   > content in a way it is not for a question. **A role registry is a prerequisite for the auto-open
   > and go-to-blocker behaviours, not a convenience** — and it is Drivr's to own, since Drivr opens
   > the chats.
+  >
+  > **EXTENDED 2026-08-20, same day, from a second live failure — and this half is not the same
+  > requirement.** A registry answers *which* session holds a role. **It does not answer how many
+  > do.** On 2026-08-20 **two authentic HQ sessions ran concurrently**, both able to commit to
+  > `master`. Root cause, from the CFO: **a VS Code layout change** — moving the chat from the editor
+  > area to the side panel — **forked the session**, and neither fork could observe the other. **Not a
+  > governance failure and not an identity failure**; both sessions were genuinely HQ.
+  >
+  > **The consequence is contradictory normative artifacts rather than merely lost ones**, which is
+  > the sharper outcome. PR #226 declared S5 unresolved **three hours fifty-six minutes after** the
+  > CFO's per-lane floor merged, and rewrote a merged gap record at `54+/130−`. **It was caught by the
+  > P12 Phase Chat noticing that two rulings disagreed — by a reader, not by a mechanism** — and
+  > closed unmerged.
+  >
+  > **Why a staleness detector would not have caught it, stated because it constrains the remedy:**
+  > the offending branch's merge-base was `11906de`, **the current head**, and both merged artifacts
+  > were **in its own working tree**. The session reasoned from its conversation history instead of
+  > from the repository while holding the answer on disk. **Concurrency made the collision visible; it
+  > did not cause it.** A remedy that detects only *"another session moved `master`"* is insufficient.
+  >
+  > **So the property Drivr owns is exclusivity, not only identification** — the CFO's own framing on
+  > reading this incident: *"it will not allow concurrent chats touching the files all over."* **A
+  > scheduler that owns which session holds a role, and serializes writes, makes this class
+  > unreachable rather than detectable** — SN-36's *"a rule that cannot be clicked outranks a rule
+  > that is merely written"*, arriving at the process layer instead of the UI layer.
 - **UI constraints observe governance rules.** No agentic option at Creation or HQ (manual-only,
   permanently, SN-22). No Phase or Milestone dispatch control — **it does not exist**, Epic only
   (SN-31 Carry-Over 1). No mode control implying merge authority (*"Mode is not authority"*).
@@ -823,6 +848,7 @@ Not decided here, and named so their status is explicit rather than unknown:
 | Version | Date | Change |
 |---|---|---|
 | 1.1.4 | 2026-08-20 | Files **`P12-GH-4`** — the live inter-chat channel is in daily governance use and has **zero** occurrences in `governance/`. **Split:** the narrow half (one normative paragraph applying SN-36's ratified chat-reply principle to the channel) is **placed in M44**; the channel's wider design is **filed unowned**, triggered by M46's role registry or by any proposal to let something other than a committed artifact carry an acceptance. |
+| 1.1.4 | 2026-08-20 | **Extends the M46 role-identification input with its currency half**, from a second live failure the same day: **two authentic HQ sessions ran concurrently**, root-caused by the CFO to a **VS Code layout change** that forked the session. A registry answers *which* session holds a role and **not how many do**; the outcome is **contradictory** normative artifacts (PR #226, closed unmerged) rather than lost ones, caught by a reader rather than a mechanism. Records that a staleness detector would **not** have caught it — the offending branch's merge-base was the current head and both merged artifacts were in its working tree. **The property is exclusivity, not only identification**, per the CFO's reading that Drivr *"will not allow concurrent chats touching the files all over."* Extends an existing input rather than filing a fifth gap record. No epic, ordering or acceptance-criterion change. |
 | 1.1.3 | 2026-08-20 | **Discharges the three annotations HQ adopted on accepting M43/M44 and then deferred** — W3's sharpening, W4's understatement, X2's count — recorded in place rather than by rewrite. **The deferral's trigger was a session's continued existence, and it failed within four hours**; M44 spec v1.0.1 recorded the obligation as unowned, which is how it survived. Also adopts M44's two recommendations into M44's scope: **the HQ ritual must cover DEPARTURE**, on a live dated specimen, and **the Phase Completion Declaration is the backstop terminus** for deferred phase-spec corrections. Records the role-identification gap as an **M46 input**. No epic, ordering or acceptance-criterion change. |
 | 1.1.2 | 2026-08-20 | Answers the P12 Phase Chat's M44 scope question. **PLACED in M44:** a convention for the decided-but-unconfigured state the R6 ruling created, with binding sequencing — it must exist before E41.5 lands, and a collision is an escalation rather than an improvisation. **DECLINED and filed instead:** derived-claim rot, as **`P12-GH-3`** — phase-scale, no bounded deliverable, and placing it would be the *"milestone things get put in"* pattern HQ has twice refused. |
 | 1.1.1 | 2026-08-19 | Folds SN-39's Next Action into **M44**: record P12's own `P11-GH-1` instance against that gap record's carry-forward note, with its facts, its out-of-chain detection path, and an explicit instruction to cite by artifact and defect rather than by ordinal. **Records evidence; does not reopen the fix** — Decision 12 stands. |
