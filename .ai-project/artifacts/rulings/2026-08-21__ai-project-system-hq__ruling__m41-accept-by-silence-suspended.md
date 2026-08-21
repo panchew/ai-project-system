@@ -89,6 +89,38 @@ colliding on the same worktree name for the same milestone.**
 
 ---
 
+## Decision 5 — What the suspension buys, and what it does not. Stated so it is not over-read
+
+**Raised by the M41 Milestone Chat on adopting it, and it is a correction to how Decision 1 could be
+read.** Recorded before merge rather than after.
+
+**The suspension does not prevent duplicate acceptance. It converts an UNDETECTABLE duplication into
+a DETECTABLE one** — and that, not prevention, is the whole of its value.
+
+| Under §11.6 default-accept | Under the suspension |
+|---|---|
+| Two silences are **indistinguishable from one silence** | Two explicit acceptances are **two commits** |
+| The duplication leaves **no trace** | Visible, diffable, **attributable** |
+
+**The residual, named so it is not discovered later:** if one session accepts a delivery explicitly
+and the other never sees it — **these rosters have already expired on each other once** — the second
+may accept it again. **That is now a fault caught at the next read of the branch, rather than an
+unrecoverable one.**
+
+**So the suspension makes M41's acceptance record auditable. It does not make it single-authored.**
+Only the CFO naming the session does that, **which is exactly why this lapses on his word.**
+
+**And it sharpens Decision 2's argument rather than weakening it.** Default-accept produces no
+artifact, so the evidence that would settle a duplicate acceptance is the evidence the mechanism is
+designed not to create. **The suspension's real function is to start creating that evidence** —
+which is precisely why it must be in place *before* the first delivery and not after.
+
+**Adopted form, from the M41 chat, and HQ endorses it as the shape of compliance:** an acceptance
+names the delivery **and the accepting session's UUID**, so that **the acceptance carries an author
+rather than a role.** A role is what is duplicated; an author is not.
+
+---
+
 ## Decision 4 — HQ does not resolve which session holds M41, and says why explicitly
 
 **That is the CFO's, and it stays his.** HQ rules the acceptance semantics; it does not pick a
@@ -107,6 +139,8 @@ one.
 ## Disposition
 
 **In force for M41 on merge. Lapses on the CFO's resolution without further ruling.**
+
+**Adopted by the M41 Milestone Chat effective on notification, ahead of this merge**, with its worktree recreated first (`wt-m41-b` at its own scratchpad, shared checkout untouched). **A stopgap that waits for its own PR is not a stopgap** — but the record is still the record, which is why it is ruled here and not only messaged.
 
 **Escalation stage 1** — the Stage-1 duplication cost duplicated authorship, which merged cleanly.
 **Stage 2 is where M41 holds accept-by-silence and requests merges**, and that is a different order of
