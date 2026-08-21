@@ -4,7 +4,7 @@ name: "Completion: Fail-Closed Defaults and the Drivr MVP"
 status: scoping
 start_date: 2026-08-19
 planned_end_date: 2026-09-19
-version: 1.1.4
+version: 1.1.7
 ---
 
 # Phase P12: Completion — Fail-Closed Defaults and the Drivr MVP
@@ -425,6 +425,79 @@ precisely because it carried `PASS 4/5, 0 false alarms` in advance.
   > were **in its own working tree**. The session reasoned from its conversation history instead of
   > from the repository while holding the answer on disk. **Concurrency made the collision visible; it
   > did not cause it.** A remedy that detects only *"another session moved `master`"* is insufficient.
+  >
+  > **EXTENDED 2026-08-21 from a third live fork, and this one inverts the diagnosis.** A second
+  > **M41 Milestone Chat** authored four commits on `milestone/M41` that the corresponding chat did
+  > not write. **The work was correct** — re-measured by the Phase Chat, not accepted on report — and
+  > it **caught a defect the incumbent missed**, sweeping a Dependencies→Blockers line still resting
+  > on a falsified premise.
+  >
+  > **The HQ fork was caught because it CONTRADICTED.** #226 declared S5 unresolved after the ruling
+  > merged; the contradiction was the signal, visible to a reader as a conflict of meaning.
+  > **This fork AGREES** — same voice, same discipline, converging on the same amendments, better on
+  > one point. **There was no signal.** It surfaced only because the incumbent went to do work already
+  > done, and only because it read the log before editing: **a habit, not a mechanism.**
+  >
+  > **The property to design against, stated by the Phase Chat:** *a fork that contradicts is
+  > detectable at merge; **a fork that agrees is invisible, and it silently doubles the write surface
+  > for a role.*** It stays invisible until two agreeing forks write **different but both-plausible**
+  > things into one artifact — **at which point there is still no conflict, no signal, and nothing in
+  > the record saying which is authoritative.**
+  >
+  > **And the record cannot answer it retrospectively.** Measured 2026-08-21: `git log --all
+  > --format='%an <%ae>' | sort -u` returns **exactly one author** across the entire repository —
+  > `Francisco Guzmán <jf.guzman76@gmail.com>` — because the harness signs as the human. **The corpus
+  > has no way to tell whether two artifacts in one role came from one chat or two.** That is a
+  > property of the harness, not a gap in the corpus, and it means **the currency problem cannot be
+  > solved by reading the record.** Exclusivity is therefore not merely the better remedy; **it may be
+  > the only one that works.**
+  >
+  > **Two consequences that narrow the remedy space, and the second rules a class out.**
+  >
+  > **(a) Correctness is not safety.** From the M41 Milestone Chat: ***a fork does not have to be
+  > wrong to be a problem, and being right is not evidence that it was safe.*** This milestone got
+  > lucky twice — the twin's amendments were correct **and** it caught a real defect. **A remedy
+  > evaluated against whether forks have produced bad output will conclude there is no problem.**
+  >
+  > **(b) A tie-break computed from the shared state is self-legitimizing and cannot settle a role.**
+  > The M41 chat proposed *"the session whose commit most recently touched an M41 epic artifact holds
+  > the role"* — a rule designating its twin, which is the only reason it carries weight from a tied
+  > party. **It is unusable as a settlement for a structural reason, not a drafting one: the role
+  > becomes acquirable by the very act it governs.** Whoever writes last becomes the holder, so **a
+  > mistaken write retroactively legitimizes itself.** Any tie-break derived from artifacts both forks
+  > mutate has this property. **Exclusivity must be enforced by something outside the state the forks
+  > write** — which is Drivr's side of the boundary, not the corpus's.
+  >
+  > **(c) A second hazard in that rule's published form, and it is the sharpest of the three.** A ref
+  > placed after `--` is read as a pathspec, so git falls back to **implicit `HEAD`**. The rule
+  > therefore **does not fail — it becomes reader-dependent.**
+  >
+  > *Measured three ways, and each measurement corrected the last:* first reported as *"silently
+  > returns nothing"*; corrected to *"empty from `master`, correct from `milestone/M41`"*; **and HQ's
+  > own run returns `9940820` from `master` and `b27b4ed` from `milestone/M41` — neither of them
+  > empty, and both valid-looking.** Whether a reader gets nothing or a plausible wrong commit depends
+  > on the pathspec they use.
+  >
+  > **That last form is the catastrophic one and it is why this generalizes past one command.** A rule
+  > that always fails gets noticed. A rule that returns *empty* at least has a chance of reading as
+  > *no holder*. **A rule that returns a different valid-looking answer to each reader shows nobody
+  > anything wrong** — and a tie-break's entire value is that both forks compute it identically.
+  > **A malformed tie-break does not produce a tie; it produces two forks each confident they are
+  > right, for different reasons, with no error anywhere.**
+  >
+  > **The general statement, from the M41 Milestone Chat:** *any form resting on implicit `HEAD` is
+  > branch-dependent, in a project whose sessions share a checkout that moves under them.* **This
+  > repository's shared checkout was observed on three different branches in one day, twice with two
+  > HQ sessions in it.**
+  >
+  > **(d) This is SN-36/37's ratified principle arriving in a fourth place, not a new idea.**
+  > *`undetermined` is a first-class state, never folded into another — an interface that can say
+  > "I don't know" is the one worth trusting when it says "done."* The other three: E41.2's **S3** (an
+  > unloadable replay case must fail loudly, never yield a shorter list); E41.1's **R6a** (config
+  > present, self-report absent); and this tie-break, where **empty had no defined meaning and
+  > "no holder" is exactly the reading that fires the stall override.** **Each is a check whose silent
+  > failure reads as a meaningful value, and the repair adopted in all three is identical: empty means
+  > UNDETERMINED and escalates.** Recorded as one citable pattern so it is not re-argued a fifth time.
   >
   > **So the property Drivr owns is exclusivity, not only identification** — the CFO's own framing on
   > reading this incident: *"it will not allow concurrent chats touching the files all over."* **A
@@ -847,6 +920,9 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.7 | 2026-08-21 | **Corrects (c) before merge, twice over.** The tie-break's published form was reported as *silently returns nothing*, then as *empty from `master`, correct from `milestone/M41`*; **HQ's own run returns a different valid-looking commit from each branch and empty from neither.** The mechanism is implicit `HEAD`, so the rule is **reader-dependent rather than broken** — and *a rule returning a different valid-looking answer to each reader shows nobody anything wrong*, which is worse than always-failing or empty. Generalizes: **any form resting on implicit `HEAD` is branch-dependent in a project whose sessions share a moving checkout.** Adds **(d)**: this is SN-36/37's ratified `undetermined` principle in a **fourth** place beside E41.2's S3 and E41.1's R6a — each a check whose silent failure reads as a meaningful value, all three repaired identically as *empty means undetermined and escalates*. |
+| 1.1.6 | 2026-08-21 | Adds two consequences that **narrow the remedy space** for the M46 currency input. **Correctness is not safety** — *a fork does not have to be wrong to be a problem*; a remedy judged on whether forks produced bad output will conclude there is no problem. And **a tie-break computed from the shared state is self-legitimizing**: the role becomes acquirable by the act it governs, so a mistaken write retroactively legitimizes itself — **ruling out any tie-break derived from artifacts both forks mutate**, and placing exclusivity outside the state the forks write. Records the silent-failure hazard in such a rule's published form, where *empty* reads as *no holder* and both forks conclude they should act. |
+| 1.1.5 | 2026-08-21 | **Extends the M46 currency input a third time, from a fork that AGREED.** A second M41 Milestone Chat authored four correct commits the incumbent did not write — and **caught a defect the incumbent missed.** The HQ fork was detectable because it contradicted; **an agreeing fork produces no signal and silently doubles a role's write surface**, staying invisible until two agreeing forks write different-but-both-plausible content into one artifact. Also records that **git attribution cannot answer it retrospectively** — one author across the entire repository, since the harness signs as the human — so **exclusivity may be the only remedy that works**, not merely the better one. Extends the existing input; no new gap record, no epic, ordering or acceptance-criterion change. |
 | 1.1.4 | 2026-08-20 | Files **`P12-GH-4`** — the live inter-chat channel is in daily governance use and has **zero** occurrences in `governance/`. **Split:** the narrow half (one normative paragraph applying SN-36's ratified chat-reply principle to the channel) is **placed in M44**; the channel's wider design is **filed unowned**, triggered by M46's role registry or by any proposal to let something other than a committed artifact carry an acceptance. |
 | 1.1.4 | 2026-08-20 | **Extends the M46 role-identification input with its currency half**, from a second live failure the same day: **two authentic HQ sessions ran concurrently**, root-caused by the CFO to a **VS Code layout change** that forked the session. A registry answers *which* session holds a role and **not how many do**; the outcome is **contradictory** normative artifacts (PR #226, closed unmerged) rather than lost ones, caught by a reader rather than a mechanism. Records that a staleness detector would **not** have caught it — the offending branch's merge-base was the current head and both merged artifacts were in its working tree. **The property is exclusivity, not only identification**, per the CFO's reading that Drivr *"will not allow concurrent chats touching the files all over."* Extends an existing input rather than filing a fifth gap record. No epic, ordering or acceptance-criterion change. |
 | 1.1.3 | 2026-08-20 | **Discharges the three annotations HQ adopted on accepting M43/M44 and then deferred** — W3's sharpening, W4's understatement, X2's count — recorded in place rather than by rewrite. **The deferral's trigger was a session's continued existence, and it failed within four hours**; M44 spec v1.0.1 recorded the obligation as unowned, which is how it survived. Also adopts M44's two recommendations into M44's scope: **the HQ ritual must cover DEPARTURE**, on a live dated specimen, and **the Phase Completion Declaration is the backstop terminus** for deferred phase-spec corrections. Records the role-identification gap as an **M46 input**. No epic, ordering or acceptance-criterion change. |
