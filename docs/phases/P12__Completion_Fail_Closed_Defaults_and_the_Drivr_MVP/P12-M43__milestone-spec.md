@@ -297,6 +297,39 @@ exactly how it fails while remaining literally true.
 
 **The question:** what cheap positive signal distinguishes *reviewed and clean* from *nobody looked*?
 
+> **⚠ A FOURTH STATE, ADDED 2026-08-21 FROM A LIVE INSTANCE — AND IT BREAKS THE PRESUMPTION RATHER
+> THAN FAILING IT.**
+>
+> W3's three states assume **one addressee**. **M41 had two authentic Milestone Chat sessions** — the
+> boundary is checkable in the commit graph: of **22 commits** touching M41's epic artifacts, **two**
+> (`b735182`, `def8ff1`, both 10:35) sit inside a **5h27m gap** in the incumbent's own activity, and
+> `b735182`'s subject calls *"my own rotted claim"* a sentence **the other session wrote.**
+>
+> **Stage-1 duplication cost only duplicated authorship and merged cleanly. Stage 2 is where the
+> Milestone Chat holds accept-by-silence.** So:
+>
+> **A delivery can be accepted by one instance of a role while another instance never hears of it —
+> and a non-participating instance's silence is indistinguishable from its deliberate acceptance.**
+>
+> **That is not a fourth way the presumption fails. It is the presumption being ill-formed.**
+> `chat-hierarchy.md:201-205` rests default-accept on *"the human's key is present at the session by
+> construction."* **With two sessions holding one role, "the session" does not denote.** E43.2 cannot
+> answer *what replaces silence* without saying **whose** silence.
+>
+> **Scope note, so this does not become a second milestone's problem solved twice:** the **currency**
+> half — preventing or detecting two instances of one role — is **M46's**, via `P12-GH-4`'s wider half
+> and the CFO's exclusivity framing. **E43.2's half is narrower and does not wait on it:** whatever
+> replaces silence must be a signal **some identified party emitted**, not an absence attributed to a
+> role. **A positive signal is well-formed under duplication; an absence is not.** Design to that and
+> E43.2 is correct whether or not M46 ever lands.
+>
+> **How the instance was found, because it constrains what a remedy can rely on:** not by any check.
+> **A commit message written in the first person about someone else's sentence, plus one participant
+> retaining a transcript long enough to say "I did not write that."** A witness, not a mechanism —
+> and had either roster turned over first, the record would read as one continuous author.
+>
+> *Verified by the Phase Chat against `origin/milestone/M41` at `0954707`, 2026-08-21.*
+
 **The constraint that is not open:** **a clean delivery must still cost no artifact.** Decision 3
 preserves the cheapness deliberately — it is what stops a parent producing an artifact on every happy
 path and keeps every artifact in the corpus a real decision. **Any answer that adds a happy-path
@@ -553,4 +586,5 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.0 | 2026-08-21 | **Adds a fourth state to E43.2 from a live instance, and it breaks W3's presumption rather than failing it.** M41 ran with **two authentic Milestone Chat sessions** — checkable in the graph: 2 of 22 commits on M41's epic artifacts sit in a 5h27m gap in the incumbent's activity, and one calls another session's sentence *"my own rotted claim."* Stage-1 duplication merged cleanly; **Stage 2 is where the role holds accept-by-silence**, so **a delivery can be accepted by one instance while another never hears of it, and a non-participating instance's silence is indistinguishable from deliberate acceptance.** `chat-hierarchy.md:201-205` rests default-accept on *"the human's key is present at the session"* — **with two sessions, "the session" does not denote.** **Scope kept out of M46:** the currency half is M46's; **E43.2's half is that whatever replaces silence must be a signal an identified party EMITTED, never an absence attributed to a role** — well-formed under duplication, which an absence is not. Records that the instance was found by **a witness, not a mechanism.** **No epic added or removed; no ordering, gate or acceptance-criterion change.** |
 | 1.0.0 | 2026-08-20 | Initial M43 spec, from the P12 Phase Execution Chat Starter, SN-31 Decisions 3/4/5, SN-36/37's resume and extension semantics, and `P12-GH-1`. **Five planning-time findings**, all measured on `phase/P12` at `d98f95d`: the `cfo_review_gate` opt-out precedent is an **unblessed key** that `bin/ai-project-validate` warns on today, so E43.4 must bless the key it adds or ship the system's first fail-closed default unvalidated (W1); `P12-GH-1` reproduces without correction, and **E40.5's guard reaches seven of nine surfaces against a record saying eight and an enumeration saying nine** — three irreconcilable counts forcing itemization (W2); **`chat-hierarchy.md:201-205` already rules that agentic silence accepts nothing**, narrowing E43.2 to the manual case and its stated **attendance presumption** (W3); `merge-authorization.md` is child-addressed in its subject, fields and post-conditions, making E43.1 a **re-authoring** rather than SN-31's *"one template edit"* (W4); and **resume appears in no normative document** while **Drivr has no surface for either half of the flip**, making E43.4 greenfield across two repositories (W5). Four epics in two independent pairs: E43.1→E43.2, E43.3→E43.4. |
