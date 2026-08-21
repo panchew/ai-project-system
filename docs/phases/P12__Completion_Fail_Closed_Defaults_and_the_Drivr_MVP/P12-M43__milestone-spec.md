@@ -323,6 +323,31 @@ exactly how it fails while remaining literally true.
 > role. **A positive signal is well-formed under duplication; an absence is not.** Design to that and
 > E43.2 is correct whether or not M46 ever lands.
 >
+> **AND THE PROPERTY THAT DOES THE WORK IS ONE DEGREE STRONGER — AUDITABILITY, NOT ONLY
+> WELL-FORMEDNESS** (M41 Milestone Chat, 2026-08-21). **A positive signal is *detectably* duplicable;
+> an absence is not even that.** Two silences are indistinguishable from one silence — **the
+> duplication leaves no trace at all.** Two positive signals are **two artifacts**: visible,
+> attributable, diffable.
+>
+> **So design E43.2 for a mechanism that still misbehaves under a duplicated role, but misbehaves
+> LEGIBLY.**
+>
+> **This upgrades the scope boundary rather than restating it.** E43.2 **cannot prevent** duplication
+> — that is M46's currency half. **But it can guarantee duplication leaves evidence.** So E43.2 is not
+> merely *correct whether or not M46 lands*: **it is what makes M46's absence survivable**, converting
+> an unrecoverable fault into one recoverable at the next read.
+>
+> **The instance proves it by absence.** M41's duplication was nearly unrecoverable **because its only
+> evidence was a first-person commit message and one session's transcript.** An
+> artifact-per-acceptance would have made it **a one-command question.**
+>
+> **A worked example already exists and E43.2 should start from it, not a blank page:** HQ's
+> 2026-08-21 stopgap suspends §11.6 **for M41 only** — *silence accepts nothing; acceptance is
+> explicit, committed, and carries the accepting session's UUID.* **One line per delivery, no Review
+> Decision reinstated, auto-lapsing when the CFO records the holder.** A positive, attributable,
+> per-acceptance signal at minimum ceremony — **evidence that the cheapness constraint and the
+> auditability property are compatible**, which was E43.2's open question.
+>
 > **How the instance was found, because it constrains what a remedy can rely on:** not by any check.
 > **A commit message written in the first person about someone else's sentence, plus one participant
 > retaining a transcript long enough to say "I did not write that."** A witness, not a mechanism —
@@ -586,5 +611,6 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.1 | 2026-08-21 | **Strengthens E43.2's design property from well-formedness to AUDITABILITY UNDER DUPLICATION**, on the M41 Milestone Chat's refinement. **A positive signal is *detectably* duplicable; an absence is not even that** — two silences are indistinguishable from one, so duplication leaves no trace, while two positive signals are two artifacts: visible, attributable, diffable. **The target is a mechanism that still misbehaves under a duplicated role but misbehaves LEGIBLY.** This upgrades the M46 scope boundary rather than restating it: E43.2 cannot prevent duplication, **but it can guarantee duplication leaves evidence — so it is what makes M46's absence survivable**, converting an unrecoverable fault into one recoverable at the next read. **M41's instance proves it by absence** — nearly unrecoverable because its only evidence was a first-person commit message and one transcript. **Names a worked example to start from:** HQ's 2026-08-21 M41-only stopgap (silence accepts nothing; explicit committed acceptance carrying the session UUID; one line per delivery; auto-lapsing), **evidence that cheapness and auditability are compatible.** **No epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.0 | 2026-08-21 | **Adds a fourth state to E43.2 from a live instance, and it breaks W3's presumption rather than failing it.** M41 ran with **two authentic Milestone Chat sessions** — checkable in the graph: 2 of 22 commits on M41's epic artifacts sit in a 5h27m gap in the incumbent's activity, and one calls another session's sentence *"my own rotted claim."* Stage-1 duplication merged cleanly; **Stage 2 is where the role holds accept-by-silence**, so **a delivery can be accepted by one instance while another never hears of it, and a non-participating instance's silence is indistinguishable from deliberate acceptance.** `chat-hierarchy.md:201-205` rests default-accept on *"the human's key is present at the session"* — **with two sessions, "the session" does not denote.** **Scope kept out of M46:** the currency half is M46's; **E43.2's half is that whatever replaces silence must be a signal an identified party EMITTED, never an absence attributed to a role** — well-formed under duplication, which an absence is not. Records that the instance was found by **a witness, not a mechanism.** **No epic added or removed; no ordering, gate or acceptance-criterion change.** |
 | 1.0.0 | 2026-08-20 | Initial M43 spec, from the P12 Phase Execution Chat Starter, SN-31 Decisions 3/4/5, SN-36/37's resume and extension semantics, and `P12-GH-1`. **Five planning-time findings**, all measured on `phase/P12` at `d98f95d`: the `cfo_review_gate` opt-out precedent is an **unblessed key** that `bin/ai-project-validate` warns on today, so E43.4 must bless the key it adds or ship the system's first fail-closed default unvalidated (W1); `P12-GH-1` reproduces without correction, and **E40.5's guard reaches seven of nine surfaces against a record saying eight and an enumeration saying nine** — three irreconcilable counts forcing itemization (W2); **`chat-hierarchy.md:201-205` already rules that agentic silence accepts nothing**, narrowing E43.2 to the manual case and its stated **attendance presumption** (W3); `merge-authorization.md` is child-addressed in its subject, fields and post-conditions, making E43.1 a **re-authoring** rather than SN-31's *"one template edit"* (W4); and **resume appears in no normative document** while **Drivr has no surface for either half of the flip**, making E43.4 greenfield across two repositories (W5). Four epics in two independent pairs: E43.1→E43.2, E43.3→E43.4. |
