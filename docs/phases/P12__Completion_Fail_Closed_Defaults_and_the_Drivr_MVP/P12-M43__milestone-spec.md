@@ -214,6 +214,13 @@ from intent.**
   > a commit; on one at `master` it returned **exit 0 and nothing.** Same command string, two readers,
   > **no error either way.**
   >
+  > **And empty is the LUCKY outcome.** Re-run by a third party with a slightly different pathspec,
+  > the same defect returned **two different valid-looking commits** — `9940820` from one tree,
+  > `b27b4ed` from another. **Nothing was empty and nothing looked wrong.** So the failure has three
+  > faces — a plausible wrong answer, an empty result, and a correct one — **and which one a reader
+  > gets depends on where they stand, not on what they asked.** You cannot catch this by
+  > sanity-checking the output; **only by pinning the ref.**
+  >
   > **This is worse than a check that always fails**, because a check that always fails gets noticed.
   > **And this project's sessions share a working directory that moves under them** — which is how a
   > Milestone Chat once committed onto another session's branch.
