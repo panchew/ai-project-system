@@ -258,6 +258,28 @@ artifacts, one question, **and two different kinds of task** (X3).
    instances** (X3); `hq-chat.md` and the opener template **cite it rather than restating it**. The
    Creation Chat's ritual (SN-26, P11-M36-E36.3) is the model. **Any discrepancy between the nine and
    the written ritual is reported, not silently normalized.**
+
+   > **⚠ TWO SPECIMENS OF DEPARTURE, AND THE SECOND BREAKS THE OBVIOUS DESIGN.** Offered by HQ
+   > 2026-08-21 as an input, not placed; taken here because E44.1 already owns departure.
+   >
+   > | | What happened |
+   > |---|---|
+   > | **Specimen 1** — 2026-08-20 | A deferral whose trigger was, in effect, **a session's continued existence**. It failed within four hours. **The session knew what it was holding.** |
+   > | **Specimen 2** — 2026-08-20 | A VS Code layout change **forked the session**. Two authentic HQ sessions ran concurrently, neither able to observe the other. **The session did not know it had departed, and its successor could not tell that it had.** |
+   >
+   > **A departure ritual that assumes the departing session knows it is leaving covers the first and
+   > not the second.** Specimen 2's session was never going to write a handover, because from inside
+   > it nothing ended.
+   >
+   > **The design consequence, stated so the epic does not have to rediscover it:** the ritual cannot
+   > be **only** an act the departing session performs. **Something must be reconstructible by the
+   > arriving session from committed state alone** — because the case that actually occurred is the
+   > one where nobody was there to perform the act.
+   >
+   > **Root cause is environmental and is recorded because no corpus discipline would have surfaced
+   > it:** the fork came from moving a chat between the editor area and the side panel. **Not a
+   > governance failure.** It is why *"the departing session knows it is departing"* is an unsafe
+   > premise rather than a reasonable one.
 3. **A context-exhaustion handoff artifact type and template**, with **the Drivr-side boundary
    stated** — harness context tracking is Drivr's, and the artifact must not assume it.
 4. **The itemized list of the documents that mention handoff** (X2 — **nineteen** by this spec's
@@ -681,6 +703,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.1 | 2026-08-21 | **Adds a second departure specimen to E44.1's HQ-ritual deliverable**, offered by HQ as an input and taken here because E44.1 already owns departure. **It breaks the obvious design:** specimen 1 (a deferral resting on a session's continued existence) is a session that **knew what it was holding**; specimen 2 is a session **forked by a VS Code layout change**, which **did not know it had departed** and whose successor could not tell that it had. **A ritual that assumes the departing session knows it is leaving covers the first and not the second** — so the ritual cannot be only an act the departing session performs, and **something must be reconstructible by the arriving session from committed state alone.** Records the root cause as environmental — a chat moved between the editor area and the side panel — **explicitly not a governance failure**, and the reason *"the departing session knows it is departing"* is an unsafe premise. **No epic added or removed; no ordering, gate or acceptance-criterion change.** |
 | 1.1.0 | 2026-08-20 | **New scope, placed by HQ at phase spec v1.1.4 after this spec was accepted** — `P12-GH-4`'s narrow half, one normative paragraph on inter-chat governance messaging. **Placed into E44.3 rather than E44.5, which is this milestone's decision and not HQ's.** E44.3's organizing question is widened from *what does a manual chat do when its harness reports no model* to **what does a chat do when it cannot establish an identity it depends on**, with two subjects: the **self** case (model identity, R6 Decision 3) and the **counterparty** case (sender role). **They are one rule at two layers**, one carrying a recorded-declaration exception and one carrying none, **and that contrast is only visible if they are written together.** The epic is bounded against the channel's design, which stays filed unowned. **The Phase Chat declined to object to the placement** — see Notes for the test applied. **Also records a `P11-GH-1` instance with no detection problem**, the first on file: HQ knew it was placing scope into an accepted milestone and did not use the channel at the time. **The remedy therefore cannot be a detector alone** — every prior instance would have been caught by one; this one would not. **No epic added or removed; no ordering, gate or acceptance-criterion change elsewhere.** |
 | 1.0.2 | 2026-08-20 | **Corrects a false claim this spec made at v1.0.1: *"the session holding them ended."* HQ did not end** — it was live under a peer name the Phase Chat could not map to a governance role. **The error is recorded as its own class rather than edited away:** what was observed was a name failing to resolve; what was asserted was a session ceasing to exist. **That is `P11-GH-2` — a claim about one layer from a measurement in another — committed by the chat citing that gap record at every review this phase.** **The finding survives and HQ confirms it stands:** the roster shows **addresses, not roles**, and **an address change is indistinguishable from a session ending**, which is why the wrong diagnosis still produced the right action — refusing to route governance content to an unidentified peer. **All three annotations are discharged** (phase spec v1.1.3, PR #225), and HQ records that this entry is the only reason they survived. **Both recommendations adopted into M44's scope:** the HQ ritual must cover **departure**, not only arrival — the nine committed openers all describe arrival — and the **Phase Completion Declaration is the backstop terminus** for deferred phase-spec corrections. **Adds a third consequence:** the routing gap is an M46 input HQ has now placed — a **role registry** is a prerequisite for auto-open and go-to-blocker, not a convenience, and is Drivr's. **No scope, epic, ordering or acceptance-criterion change.** |
 | 1.0.1 | 2026-08-20 | **Records three outstanding phase-spec annotations that lost their owner mid-flight.** HQ adopted W3's sharpening, W4's understatement and X2's count on accepting M43/M44, deferred the edit with a stated trigger — flagging that *"a deferred correction with no trigger is how SN-30 sat for six days"* — and **that HQ session ended before the trigger fired**, with the Phase Chat's reply undeliverable. The corrections are safe in the milestone specs that found them; **the obligation to fold them into the phase spec is now unowned.** Recorded here because it belongs to this milestone twice: **E44.1 gains a live dated specimen** — the HQ re-instantiation ritual failed in real time, in the phase building it, and the failure was on **departure** while the nine existing openers describe **arrival** — and **P12's closure gains a recommended terminus**, the Phase Completion Declaration being the one artifact guaranteed to be written while the phase is still open. **No scope, epic, ordering or acceptance-criterion change; the phase spec is HQ's and the disposition remains HQ's.** |
