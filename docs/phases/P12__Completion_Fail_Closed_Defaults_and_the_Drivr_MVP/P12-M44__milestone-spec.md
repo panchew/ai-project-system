@@ -187,7 +187,24 @@ one that is missing, because a missing record is visible.**
   (the HQ ritual, nine instances), **the deliverable is a description that matches, not a design that
   supersedes.** A discrepancy between the nine and the written ritual is a finding, not a bug to fix
   silently.
-- **State the layer, time and scope of every claim** (`P11-GH-2`).
+- **State the layer, time and scope of every claim** (`P11-GH-2`) — **and the REF you measured against.**
+
+  > **⚠ A check can be correct and still return different answers to different readers.** Measured
+  > 2026-08-21: `git log -1 … -- '<path>' <ref>` places the ref *after* the `--`, so git treats it as a
+  > pathspec and falls back to **implicit HEAD**. On a tree checked out at `milestone/M41` it returned
+  > a commit; on one at `master` it returned **exit 0 and nothing.** Same command string, two readers,
+  > **no error either way.**
+  >
+  > **This is worse than a check that always fails**, because a check that always fails gets noticed.
+  > **And this project's sessions share a working directory that moves under them** — which is how a
+  > Milestone Chat once committed onto another session's branch.
+  >
+  > **So: pin the ref explicitly (`origin/<branch>`), put it BEFORE the `--`, never rely on implicit
+  > HEAD, and record which ref a measurement was taken against.** A number without a ref is not a
+  > measurement.
+  >
+  > **It was found by two chats each re-running the other's claim** — and each of us first
+  > generalized from the single branch we happened to be standing on, in opposite directions.
 
 ---
 
