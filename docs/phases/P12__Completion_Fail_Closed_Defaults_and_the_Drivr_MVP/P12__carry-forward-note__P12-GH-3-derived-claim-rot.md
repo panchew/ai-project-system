@@ -68,6 +68,22 @@ All three were conclusions from premises that later moved.
 > **The corpus has no convention that marks a claim as derived, so nothing signals when its premise
 > moves.**
 
+**EXTENDED 2026-08-21, and this framing is more useful than the one above.** Also the M41 Milestone
+Chat's, carried by the Phase Chat rather than left in a message:
+
+> **A correction is itself a derived-claim event, and nothing in the corpus treats it as one.**
+
+**Three instances, three substrates, one mechanism** — F3's file list (the Phase Chat's), E41.1's
+`Dependencies→Blockers` line (the M41 chat's), and the sweep that named it (its twin's). **Each party
+corrected the thing in front of it, and none asked what else rested on the premise it had just
+falsified.**
+
+**This sharpens what a remedy must cover.** Not merely *detect a premise moving* — that frames the
+premise as changing on its own. **Every correction IS a premise moving, performed deliberately, by
+someone who knows they are doing it.** The moment of highest risk is the moment of highest attention,
+which is why the defect survives careful work. **A remedy that watches for drift and does not treat
+corrections as first-class drift events will miss the instances this project actually produces.**
+
 ---
 
 ## Why it is the worst of the three, and the reason is structural
