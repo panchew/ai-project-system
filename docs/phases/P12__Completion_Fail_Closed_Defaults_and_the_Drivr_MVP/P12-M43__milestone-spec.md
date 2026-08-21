@@ -353,6 +353,20 @@ exactly how it fails while remaining literally true.
 > retaining a transcript long enough to say "I did not write that."** A witness, not a mechanism —
 > and had either roster turned over first, the record would read as one continuous author.
 >
+> **⚠ THIS INSTANCE IS CITED BY COMMIT, NOT BY SESSION, AND THAT IS DELIBERATE.** The evidence is
+> `b735182` and `def8ff1` at **2026-08-20T10:35**, the **5h27m gap** they sit in, and a commit subject
+> written in the **first person about another session's sentence**. **Those are stable. Session
+> identity is precisely what this phase has proven is not.**
+>
+> **A later record naming who holds M41 settles AUTHORITY. It does not settle HISTORY, and it does not
+> retire this instance.** Two sessions did write this milestone's artifacts; naming a holder afterwards
+> does not make both sets of commits one author's. **If a future reader finds a record saying M41 has
+> one holder, that is not in conflict with this paragraph — it answers a different question.**
+>
+> **Stated because the failure mode is specific:** a rule whose instance has evaporated is a rule that
+> gets dropped in a later cleanup. **E43.2's fourth state must not depend on anyone's account of who
+> was who — only on commits that are still in the graph.**
+>
 > *Verified by the Phase Chat against `origin/milestone/M41` at `0954707`, 2026-08-21.*
 
 **The constraint that is not open:** **a clean delivery must still cost no artifact.** Decision 3
