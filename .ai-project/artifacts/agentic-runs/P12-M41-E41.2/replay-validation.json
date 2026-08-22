@@ -7,7 +7,7 @@
       "lane": "epic_dev",
       "verdict": "FAIL",
       "floor_version": "per-lane-ruled-2026-08-20",
-      "instrument_version": "1.0.1",
+      "instrument_version": "1.0.3",
       "counts": {
         "tool_rounds": 0,
         "files_changed": {
@@ -15,6 +15,7 @@
           "provenance": "transcript-derived",
           "lower_bound": true,
           "paths": [],
+          "excluded_paths": [],
           "workspace": null
         },
         "claims": {
@@ -80,7 +81,7 @@
       "lane": "epic_qa",
       "verdict": "FAIL",
       "floor_version": "per-lane-ruled-2026-08-20",
-      "instrument_version": "1.0.1",
+      "instrument_version": "1.0.3",
       "counts": {
         "tool_rounds": 0,
         "files_changed": {
@@ -88,6 +89,7 @@
           "provenance": "transcript-derived",
           "lower_bound": true,
           "paths": [],
+          "excluded_paths": [],
           "workspace": null
         },
         "claims": {
@@ -534,7 +536,7 @@
       "lane": "epic_qa",
       "verdict": "FAIL",
       "floor_version": "per-lane-ruled-2026-08-20",
-      "instrument_version": "1.0.1",
+      "instrument_version": "1.0.3",
       "counts": {
         "tool_rounds": 0,
         "files_changed": {
@@ -542,6 +544,7 @@
           "provenance": "transcript-derived",
           "lower_bound": true,
           "paths": [],
+          "excluded_paths": [],
           "workspace": null
         },
         "claims": {
@@ -976,7 +979,7 @@
       "lane": "epic_dev",
       "verdict": "PASS",
       "floor_version": "per-lane-ruled-2026-08-20",
-      "instrument_version": "1.0.1",
+      "instrument_version": "1.0.3",
       "counts": {
         "tool_rounds": 10,
         "files_changed": {
@@ -987,6 +990,7 @@
             "local_agent_runner/__init__.py",
             "tests/test_public_api.py"
           ],
+          "excluded_paths": [],
           "workspace": null
         },
         "claims": {
@@ -1119,7 +1123,7 @@
       "lane": "epic_dev",
       "verdict": "PASS",
       "floor_version": "per-lane-ruled-2026-08-20",
-      "instrument_version": "1.0.1",
+      "instrument_version": "1.0.3",
       "counts": {
         "tool_rounds": 10,
         "files_changed": {
@@ -1131,6 +1135,7 @@
             "spec/factories/financial_events.rb",
             "spec/models/financial_event_spec.rb"
           ],
+          "excluded_paths": [],
           "workspace": null
         },
         "claims": {

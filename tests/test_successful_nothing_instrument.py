@@ -13,6 +13,7 @@ against a fixture someone wrote to agree with the code.
 
 import importlib.util
 import json
+import subprocess
 from importlib.machinery import SourceFileLoader
 from pathlib import Path
 
@@ -248,3 +249,80 @@ def test_a_files_content_mentioning_denial_is_not_a_refusal(sni):
     assert not any(c["denied_or_errored"] for c in reads)
     tools_py = [c for c in reads if c["args"].get("path", "").endswith("tools.py")]
     assert len(tools_py) == 1 and tools_py[0]["denied_or_errored"] is False
+
+
+def test_worktree_count_excludes_the_runs_own_exhaust(sni, tmp_path):
+    """REGRESSION — found by running a real dispatch, 2026-08-22.
+
+    ``bin/run-dev-agent`` writes the run's transcript, context and metadata into
+    ``.ai-project/artifacts/agentic-runs/<epic_id>/`` INSIDE the workspace. Git reports
+    that directory as changed, so a run that produced nothing at all measured **one file
+    changed**, and any run with at least one tool round would have cleared the
+    ``epic_dev`` floor's C-B term without doing any work.
+
+    Same family as the ``__pycache__`` contaminant found on the degenerate baseline: the
+    harness's own exhaust counted as the model's output. The exclusion is explicit at the
+    call site and every excluded path is echoed into the record, so nothing is dropped
+    silently.
+    """
+    ws = tmp_path / "e412-dev-workspace"
+    # Mirror the real fixture: .ai-project/agents/ and .ai-project/queue/ are COMMITTED,
+    # which is what makes git report the new path as `.ai-project/artifacts/` rather than
+    # collapsing it all the way up to `.ai-project/`. The exclusion prefix is chosen to
+    # match what git actually prints for this fixture, not what it might print for
+    # another one.
+    (ws / ".ai-project" / "agents").mkdir(parents=True)
+    (ws / ".ai-project" / "queue").mkdir(parents=True)
+    (ws / ".ai-project" / "agents" / "tools.json").write_text("{}")
+    (ws / ".ai-project" / "queue" / "04_epic.json").write_text("{}")
+    (ws / "keep.txt").write_text("committed\n")
+    for args in (["init", "-q"], ["add", "-A"]):
+        subprocess.run(["git", *args], cwd=ws, check=True)
+    subprocess.run(
+        ["git", "-c", "user.email=t@e", "-c", "user.name=t", "commit", "-q", "-m", "base"],
+        cwd=ws, check=True,
+    )
+    run_dir = ws / ".ai-project" / "artifacts" / "agentic-runs" / "TASK-DEV-1"
+    run_dir.mkdir(parents=True)
+    (run_dir / "transcript.json").write_text("{}")
+
+    kept, dropped = sni.worktree_changed_paths(ws)
+    assert kept == [".ai-project/artifacts/"] and dropped == []
+
+    kept, dropped = sni.worktree_changed_paths(ws, exclude=(".ai-project/artifacts",))
+    assert kept == [] and dropped == [".ai-project/artifacts/"]
+
+
+def test_a_bare_slash_is_not_a_cited_repository_path(sni, tmp_path):
+    """REGRESSION — the instrument was wrong in the DANGEROUS direction, and the first
+    live epic_qa run found it.
+
+    The run reported, correctly and from a file it had actually read, that
+    `healthcheck.path` "does not start with `/`". C-C2's first filter accepted any
+    backticked token containing a '/' with no whitespace, so it extracted the bare `/`
+    as a cited repository path, failed to resolve it, and returned FAIL on a grounded,
+    read-only, one-round run.
+
+    That is the mirror of `return FAIL` and the same shape as M40's F5 one level up:
+    a run that did the work correctly scored worse for saying so.
+    """
+    transcript = tmp_path / "t.json"
+    transcript.write_text(json.dumps({
+        "status": "completed",
+        "final_answer": "8. NOT MET -- `healthcheck.path` does not start with `/`.",
+        "transcript": [{"tool_call": {"name": "read_file", "args": {"path": "servicecard.yml"}},
+                        "tool_result": "name: x\n"}],
+        "iterations": 1, "tokens": 10, "model": "m", "duration_ms": 1,
+    }))
+    record = _evaluate(sni, transcript, "epic_qa")
+    assert record["counts"]["claims"]["asserted"] == 0, record["all_claims"]
+    assert record["verdict"] == "PASS"
+
+
+def test_real_repository_paths_are_still_extracted(sni):
+    """The fix must not blind C-C2. E33.4 cites four real paths in backticks and all
+    four still resolve — a narrower filter that extracted nothing would 'fix' the false
+    alarm by removing the check."""
+    record = _evaluate(sni, RUN_E334, "epic_dev")
+    c_c2 = [c for c in record["all_claims"] if c["class"] == "C-C2"]
+    assert len(c_c2) == 4 and all(c["resolved"] for c in c_c2)

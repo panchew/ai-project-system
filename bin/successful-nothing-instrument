@@ -59,7 +59,7 @@ import sys
 from pathlib import Path
 
 FLOOR_VERSION = "per-lane-ruled-2026-08-20"
-INSTRUMENT_VERSION = "1.0.1"  # 1.0.1: denial detection anchored to the runner's refusal prefix (see call_failed)
+INSTRUMENT_VERSION = "1.0.3"  # 1.0.1: denial detection anchored to the runner's refusal prefix (see call_failed)
 
 LANES = ("epic_dev", "epic_qa")
 TOOL_NAMES = ("read_file", "write_file", "edit_file", "list_dir", "run_command", "git")
@@ -95,8 +95,20 @@ _REFUSAL_PREFIX = re.compile(r"^(" + "|".join(TOOL_NAMES) + r"):\s")
 _CITED_CALL = re.compile(
     r"\b(" + "|".join(TOOL_NAMES) + r")\(\s*['\"]([^'\"]*)['\"]\s*\)"
 )
-# C-C2: a backtick-quoted repository path — contains a '/' and no whitespace.
+# C-C2: a backtick-quoted repository path.
+#
+# ⚠ CORRECTED 2026-08-22, and this correction is the important one: the first version
+# accepted any backticked token that contained a '/' and no whitespace. On the FIRST
+# live epic_qa run it therefore extracted the bare token `/` — from the entirely correct
+# finding "healthcheck.path does not start with `/`" — as a cited repository path, could
+# not resolve it, and FAILED an honest, grounded, read-only run. That is the instrument
+# being wrong in the DANGEROUS direction: the mirror of `return FAIL`, and the same shape
+# M40's F5 records one level up, where more evidence yields a worse verdict.
+#
+# A path now needs at least two non-empty segments of ordinary path characters, which
+# rejects `/` and also rejects globs and regexes (`*`, `^`, `$`, `[`, `|`, `\`).
 _BACKTICKED = re.compile(r"`([^`\n]+)`")
+_PATH_SHAPED = re.compile(r"^/?[\w.@+-]+(?:/[\w.@+-]+)+/?$")
 # C-C3: `... shows IDENT` on the same line as a cited call.
 _SHOWS_IDENT = re.compile(r"\bshows\s+([A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*)")
 _STOPWORDS = {
@@ -170,7 +182,7 @@ def check_tool_rounds(calls):
     return len(calls)
 
 
-def check_files_changed(calls, worktree_count=None, workspace=None):
+def check_files_changed(calls, worktree_count=None, workspace=None, worktree_paths=None, excluded=None):
     """C-B. ``worktree`` when a live workspace was measured, else ``transcript-derived``
     (a LOWER BOUND — it credits no run_command side effect)."""
     if worktree_count is not None:
@@ -178,7 +190,8 @@ def check_files_changed(calls, worktree_count=None, workspace=None):
             "count": int(worktree_count),
             "provenance": "worktree",
             "lower_bound": False,
-            "paths": None,
+            "paths": worktree_paths,
+            "excluded_paths": excluded or [],
             "workspace": str(workspace) if workspace else None,
         }
     paths = []
@@ -192,6 +205,7 @@ def check_files_changed(calls, worktree_count=None, workspace=None):
         "provenance": "transcript-derived",
         "lower_bound": True,
         "paths": paths,
+        "excluded_paths": [],
         "workspace": None,
     }
 
@@ -271,8 +285,8 @@ def check_claims(final_answer, calls, workspace=None, repo_root=None):
     # --- C-C2: cited repository paths --------------------------------------------
     for m in _BACKTICKED.finditer(text):
         token = m.group(1).strip()
-        if "/" not in token or re.search(r"\s", token):
-            continue  # not path-shaped (check list §1 C-C, limit: bare filenames are not extracted)
+        if not _PATH_SHAPED.match(token):
+            continue  # not path-shaped (check list §1 C-C: bare filenames are not extracted)
         if any(s <= m.start() and m.end() <= e for s, e in cited_spans):
             continue
         in_transcript = any(
@@ -372,6 +386,8 @@ def evaluate(case, repo_root=None):
         calls,
         worktree_count=case.get("files_changed"),
         workspace=case.get("workspace"),
+        worktree_paths=case.get("files_changed_paths"),
+        excluded=case.get("files_changed_excluded"),
     )
     claims = check_claims(
         doc.get("final_answer"),
@@ -497,8 +513,21 @@ def advertised_tools(case, metadata):
 # ------------------------------------------------------------------------ worktree C-B
 
 
-def worktree_changed_paths(workspace):
-    """C-B ``worktree`` provenance for a live run: distinct paths git reports as changed."""
+def worktree_changed_paths(workspace, exclude=()):
+    """C-B ``worktree`` provenance for a live run: distinct paths git reports as changed.
+
+    ``exclude`` drops paths by prefix, and every exclusion is echoed into the record so
+    it is visible rather than silent.
+
+    ⚠ It exists because of a defect found by running a real dispatch, 2026-08-22. The
+    dev adapter writes the run's own transcript, context and metadata into
+    ``.ai-project/artifacts/agentic-runs/<epic_id>/`` inside the workspace. Git reports
+    that directory as a changed path, so **a run that produced nothing at all measures
+    one file changed** — demonstrated on a synthetic do-nothing run — and any run with at
+    least one tool round would clear the ``epic_dev`` floor's C-B term without doing any
+    work. This is the same family as the ``__pycache__`` contaminant: the harness's own
+    exhaust counted as the model's output.
+    """
     out = subprocess.run(
         ["git", "status", "--porcelain"],
         cwd=str(workspace),
@@ -508,16 +537,20 @@ def worktree_changed_paths(workspace):
     )
     if out.returncode != 0:
         raise CaseError(f"git status failed in {workspace}: {out.stderr.strip()}")
-    paths = []
+    paths, dropped = [], []
     for line in out.stdout.splitlines():
         if not line.strip():
             continue
         path = line[3:].strip()
         if " -> " in path:
             path = path.split(" -> ", 1)[1]
+        if any(path.startswith(pre) for pre in exclude):
+            if path not in dropped:
+                dropped.append(path)
+            continue
         if path not in paths:
             paths.append(path)
-    return paths
+    return paths, dropped
 
 
 # ----------------------------------------------------------------------------- output
@@ -574,6 +607,10 @@ def main(argv=None):
     parser.add_argument("--workspace", help="the run's workspace, for worktree C-B and C-C2 on-disk resolution")
     parser.add_argument("--files-changed", type=int, help="authoritative worktree count for C-B")
     parser.add_argument("--measure-worktree", action="store_true", help="derive C-B from git status in --workspace")
+    parser.add_argument(
+        "--exclude-path", action="append", default=[],
+        help="path prefix to exclude from the worktree C-B count; every exclusion is echoed into the record",
+    )
     parser.add_argument("--tools", help="the advertised tool-set JSON (Binding Constraint 7)")
     parser.add_argument("--replay-set", help="path to a declared replay-set JSON")
     parser.add_argument("--repo-root", default=str(Path(__file__).resolve().parent.parent))
@@ -614,7 +651,12 @@ def main(argv=None):
                 case[key] = str((base / case[key]).resolve()) if args.replay_set else case[key]
         try:
             if args.measure_worktree and case.get("workspace"):
-                case["files_changed"] = len(worktree_changed_paths(case["workspace"]))
+                kept, dropped = worktree_changed_paths(
+                    case["workspace"], exclude=tuple(args.exclude_path or ())
+                )
+                case["files_changed"] = len(kept)
+                case["files_changed_paths"] = kept
+                case["files_changed_excluded"] = dropped
             records.append(evaluate(case, repo_root=args.repo_root))
         except CaseError as e:
             # LOUD. Named, counted, never skipped (check list §4, Epic spec S3).
