@@ -27,6 +27,7 @@ choice rather than obligation: it costs one line, and it is what made the M41 fo
 
 | Epic | Delivery | Decision | Accepting session | Date |
 |---|---|---|---|---|
+| **E41.2** | PR **#231**, `epic/P12-M41-E41.2` @ `ce4f1c8` | **ACCEPTED** — two escalations routed upward, no rework consumed | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-22 |
 | **E41.1** | PR **#230**, `epic/P12-M41-E41.1` @ **`e2e26e4`** (accepted at `bdbbd36`; annotations actioned) | **ACCEPTED** — with two annotations, neither a rework attempt | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-21 |
 
 ---
@@ -185,3 +186,51 @@ corrections to the record, not to the work.
    `opencode/` and `opencode-go/`, so `remote:deepseek-v4-flash` records **which model, not which
    route.** **This record's §9.5 is the only artifact carrying the route** — E41.5 must cite it
    rather than restate it.
+
+
+---
+
+## E41.2 — the review behind the decision
+
+**Re-measured, not taken on report (G2).**
+
+| Claim | Re-measured by this chat | Result |
+|---|---|---|
+| PR mergeable, no drift | `gh pr view 231`; `rev-list` vs `origin/master` | **MERGEABLE, 0 behind, head `ce4f1c8`** |
+| Artifacts committed | `git cat-file -e` on the epic branch | **3 of 3 tracked** |
+| Epic did not edit its own spec | `git log $M..$E -- …E41.2__spec__*` | **empty — clean** |
+| **The bar predates the runs** | `git log --reverse` on the branch | **D3 `c9c2fb4` at 12:26; first live run `57554c3` at 12:53** — **27 minutes, as history** |
+| **The tasks predate the runs** | same | **D4 inputs `4ce9efa` at 12:39 — 14 minutes** |
+| Replay, both directions | record §, lines 96–100 | **3 flagged / 2 passed with counts** |
+| Floor version stated | record §2 | **`per-lane-ruled-2026-08-20`, stamped by the instrument** |
+| Directional checks exist | record §, D4 inputs | **`tests_passed/20` (dev), `catches` 0–5 (qa)** |
+| Suite | `PYTHONPATH=. pytest -q` on the epic branch | **570 passed / 0 failed**, +21, all in one new file |
+
+**Acceptance criteria — met, including the two this chat widened.**
+
+- **S1's both-directions requirement is satisfied by measurement, not assertion**: E33.2 Run A, E39.3 and RUN2 **flagged**; **E33.2 Run B (10 rounds / 2 files) and E33.4 (10 rounds / 3 files / 4-of-4) passed.** An instrument that returned `FAIL` unconditionally would have failed here.
+- **T3's directional check is present and was committed with the tasks, before any run** — the requirement this chat placed on E41.2 at v1.0.2, discharged in the order that makes it meaningful.
+- **S5's ruled per-lane floor was applied and its version stated**, so a reader can tell which bar judged which run. **The `epic_qa` verdict was reached, not withheld** — correct, since S5 is ruled.
+
+### The result that is worth more than the replay
+
+**DEV RUN 2 is a live successful-nothing on the incumbent, captured 2026-08-22** — exit 0, `completed`, **4.2 s, 55 tokens, 0 tool rounds, 0/20 directional**, stub byte-identical, **with six tools genuinely advertised.** The model emitted its call in `<function=…>` syntax and the parser took the message as a final answer.
+
+> **E33.2 Run A's mechanism, on a different model, found live.** The instrument flagged **an instance it was not built against** — which is a stronger validation than any replay, because the replay set could in principle have been fitted to its own cases and this could not.
+
+**And the second instrument self-correction is its mirror:** the checker read a bare `/` inside a correct finding and **failed an honest read-only run.** **Only a live run could have found that** — a false positive in a detector built to catch false negatives.
+
+### Rework accounting
+
+**No attempt consumed. Attempt 1 of 3 stands.** Both instrument corrections were **self-corrections before review ruled**, which is E41.1's precedent and the CFO's ruling of 2026-08-21: the limit governs **rejections after review.**
+
+### Two escalations routed upward — neither decided here, both blocking E41.3's candidate runs
+
+**(a) The `epic_dev` baseline is BIMODAL on identical inputs — `{PASS 9/20, FAIL 0/20}`.**
+*"No worse than the incumbent on every objective check"* **has no single number to attach to**, and the epic records that four aggregation rules give four answers. **It measured and stopped rather than choosing one after seeing the data** — which is bar-committed-first applied to itself.
+**Above this chat: the bar's shape is Binding Constraint 6, the CFO's, ratified in SN-36/37.** Escalated to the Phase Chat.
+
+**(b) The baselines are HOST baselines, not sandbox baselines.** Docker was present but `bin/ai-project-orchestrator` never ran, so `:392-397` could not fire — **and the fallback executes on the host exactly as these runs did, so the baselines are equivalent to the fail-open path rather than protected from it.**
+**Above this chat: it touches the M42 gate's attributability rationale**, which is phase-level and CFO-ruled. Escalated to the Phase Chat.
+
+**What this chat binds meanwhile, without deciding either:** **E41.3 must dispatch identically to E41.2 or the comparison is void**, and **if M42 changes the lane, these baselines are re-measured rather than reinterpreted.**
