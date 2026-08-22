@@ -4,7 +4,10 @@
 **Phase:** P12 — Completion: Fail-Closed Defaults and the Drivr MVP
 **Project:** ai-project-system
 **Repository:** https://github.com/panchew/ai-project-system
-**Milestone Spec:** `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M43__milestone-spec.md` (v1.0.0, commit `8b40fef`)
+**Milestone Spec:** `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M43__milestone-spec.md` — **on `milestone/M43`. Read its Changelog for the current version; this Starter deliberately does NOT stamp one.**
+
+> **⚠ Why no version stamp here.** This Starter originally cited `v1.0.0` and a commit sha. **The spec has been amended several times since, and the stamp went stale immediately** — the Phase Chat recorded *stamp-then-amend* in this milestone's own Notes as a lesson from M41 and then committed it here anyway. **The fix is not a fresher stamp; it is not stamping a moving target.** The spec is the file on this branch, and its Changelog is the only statement of its version that cannot go stale.
+> **Corollary for your own Epic Starters: cite the spec by path and branch, not by version and sha.**
 **Phase Spec:** `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12__phase-spec.md`
 **Branch:** `milestone/M43` (from `phase/P12` at `d98f95d`)
 **Execution Mode:** manual
