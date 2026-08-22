@@ -27,7 +27,7 @@ choice rather than obligation: it costs one line, and it is what made the M41 fo
 
 | Epic | Delivery | Decision | Accepting session | Date |
 |---|---|---|---|---|
-| **E41.2** | PR **#231**, `epic/P12-M41-E41.2` @ `ce4f1c8` | **ACCEPTED** — two escalations routed upward, no rework consumed | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-22 |
+| **E41.2** | PR **#231**, `epic/P12-M41-E41.2` @ **`cc0d102`** (accepted at `ce4f1c8`; delta verified below) | **ACCEPTED** — two escalations routed upward, no rework consumed | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-22 |
 | **E41.1** | PR **#230**, `epic/P12-M41-E41.1` @ **`e2e26e4`** (accepted at `bdbbd36`; annotations actioned) | **ACCEPTED** — with two annotations, neither a rework attempt | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-21 |
 
 ---
@@ -234,3 +234,43 @@ corrections to the record, not to the work.
 **Above this chat: it touches the M42 gate's attributability rationale**, which is phase-level and CFO-ruled. Escalated to the Phase Chat.
 
 **What this chat binds meanwhile, without deciding either:** **E41.3 must dispatch identically to E41.2 or the comparison is void**, and **if M42 changes the lane, these baselines are re-measured rather than reinterpreted.**
+
+
+### E41.2 — the head moved after acceptance, and the reason is a finding
+
+**Accepted at `ce4f1c8`. The epic then pushed `cc0d102` and told this chat before it was asked.**
+
+**Re-verified here:** the diff touches **only the Delivery Notice** (+39 / −4); **no record, no
+instrument, no test, no measurement, no count.** Suite **570 passed / 0 failed** at the new head.
+**Acceptance re-anchored to `cc0d102`; the review below stands unchanged.**
+
+**What it corrected:** the Delivery Notice as first committed said a clean delivery is accepted by
+silence under PSG §11.6. **False for M41** — accept-by-silence is suspended (`ad6e3f1`).
+
+#### ⚠ The mechanism is new, and it is this chat's authoring practice that produced it
+
+**The epic did not miss an amendment that failed to reach it. The ruling was on its branch the whole
+time** — verified here: **`ad6e3f1` IS an ancestor of its branch point `575b0fd`**, and the ruling
+file was tracked throughout.
+
+> **It read the STARTER, which restates the rule, instead of the BRANCH, which carries it.**
+> `P12-M41-E41.2__epic-execution-chat-starter.md:44` still says a clean delivery is *"accepted by
+> silence — no artifact on the happy path."* Issued 2026-08-20; the ruling landed 2026-08-21.
+
+**`P11-GH-1`'s backstop does not cover this.** *"`git log <spec-path>` against the branch point"*
+checks whether **the spec** moved. **It does not check the rules a starter RESTATES**, and a starter
+that restates a rule is **a copy of that rule with no link back to it.**
+
+**And the restatement was not optional.** **`P12-GH-1` is why it exists**: the templates carry the
+rework rule zero times, so every starter this chat wrote restates it — along with the amendment
+procedure, the Hard Constraint, and, in E41.2's case, the acceptance model. **The mitigation for one
+defect is the mechanism of another.**
+
+**Seventh instance of *a premise has dependents and the correction does not find them*, and a new
+shape: the dependent is a RESTATEMENT in a chat's operating instructions, and the premise is a rule
+in the corpus.** The previous six were claims about facts. **This one is a copy of a rule that went
+stale while the rule itself was correct and present.**
+
+**Carried, not fixed here** — the fix is template-level and belongs with M43's starter work, which
+already owns `P12-GH-1`. **What this chat binds now:** the remaining M41 starters (E41.3, E41.4,
+E41.5) are re-read against the corpus **before** their epics open, not after.
