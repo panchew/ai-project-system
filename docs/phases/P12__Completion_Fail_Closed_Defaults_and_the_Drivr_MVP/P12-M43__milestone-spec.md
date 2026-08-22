@@ -607,9 +607,39 @@ flowchart TB
   amending this file on `milestone/M43` with a changelog row; **notifying the running chat in-session,
   naming the section**; requiring it to re-read and to state in its next delivery that it did; and
   escalating to the Phase Chat if blocking. **Before accepting any delivery, `git log` this spec
-  against the epic's branch point — and sync EVERY P12 ref, epic branches included.** Two live tests in M41 showed the channel **carries** but has
+  against the epic's branch point, **AND against every artifact this Starter restates a rule from**
+  — and sync EVERY P12 ref, epic branches included.** Two live tests in M41 showed the channel **carries** but has
   never **detected** — and M41's chat added the sharper point: **it has never been tested against an
   amendment that requires a child to stop.** Assume this milestone may supply that test.
+
+- **⚠ THE BACKSTOP ABOVE WAS FALSIFIED ON 2026-08-22, AND THE FAILURE IS THE INVERSE OF EVERY PRIOR
+  `P11-GH-1` INSTANCE.** Dated evidence, verified by the Phase Chat, about a procedure the Phase Chat
+  wrote.
+
+  **The E41.2 Epic Chat's Delivery Notice asserted accept-by-silence — which is SUSPENDED for M41**
+  (`ad6e3f1`). **And `ad6e3f1` is an ancestor of that epic's branch point** (`575b0fd`), verified with
+  `git merge-base --is-ancestor`. **The ruling was tracked on the branch the entire time.**
+
+  > **Every prior instance was a DELIVERY failure — the amendment never reached the branch. This one
+  > is the opposite: the amendment arrived, was present in the working tree, and was still not
+  > applied.** The channel worked perfectly and the outcome was identical.
+
+  **A remedy scoped to delivery would not have caught this** — which pairs with HQ's knowing
+  amendment, where a remedy scoped to *detection* would not have caught it either. **Two live
+  instances now sit outside the two obvious remedy shapes.**
+
+  **The specific hole is in the backstop's scope, and it is mine.** It said *"`git log` **this spec**
+  against the epic's branch point."* **One artifact.** But **a Starter restates rules whose sources
+  live elsewhere** — the rework limit, the model check, accept-by-silence. **A Starter that restates a
+  rule creates a dependency on that rule's source, and the backstop never looked there.** The Epic
+  Chat ran the backstop correctly against the spec; the spec was not where the change was.
+
+  **Corrected above:** the backstop now covers **every artifact the Starter restates a rule from**, not
+  only the governing spec. **The search space is not one document** — the third time this milestone has
+  had to widen a search space, after the fence-aware inventory and the cross-artifact correction sweep.
+
+  *Self-reported by the E41.2 Epic Chat before Stage-2 and corrected at `cc0d102`, which is why it is
+  dated evidence rather than an incident.*
 
 - **⚠ AN AMENDMENT'S DEPENDENTS INCLUDE THE BRANCH A CHAT WILL OPEN ON — a fourth shape of
   `P12-GH-3`, and it caught all three of us.** After #229 merged — the ruling suspending
@@ -662,6 +692,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.3 | 2026-08-22 | **Widens the `P11-GH-1` backstop after it was falsified in the field, and the failure inverts every prior instance.** The E41.2 Epic Chat's Delivery Notice asserted accept-by-silence, **suspended for M41 by `ad6e3f1` — which is an ancestor of that epic's branch point (`575b0fd`), verified.** **The amendment had arrived and was tracked on the branch; it was simply not applied.** Every prior `P11-GH-1` instance was a *delivery* failure; **this one is the inverse, and a delivery-scoped remedy would not have caught it** — pairing with HQ's knowing amendment, which a *detection*-scoped remedy would not have caught. **Two live instances now sit outside both obvious remedy shapes.** **The hole was in the backstop's scope, which is the Phase Chat's own text:** it said *"`git log` this spec against the epic's branch point"* — **one artifact** — while **a Starter restates rules whose sources live elsewhere.** A Starter that restates a rule creates a dependency on that rule's source. **The backstop now covers every artifact the Starter restates a rule from.** Third widening of a search space in this milestone. **No epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.2 | 2026-08-21 | **Three method notes for the starter-template work, and a correction to the Phase Chat's own sync procedure.** **(a) A fourth shape of `P12-GH-3` whose dependent is an EXECUTING CONTEXT, not a document:** after #229 merged, `origin/epic/P12-M41-E41.1` still sat at the pre-merge commit, so **an Epic Chat opening there would have read a corpus in which silence still accepts** — under the one rule written to stop that. *When a rule changes what a chat may do, the branch that chat will open on is one of its dependents.* **Nobody looked**, and the Phase Chat's six syncs covered `master → phase → the four milestone branches` and **never epic branches**; the `P11-GH-1` procedure now says to sync every P12 ref. **(b) Syncing a branch another session has checked out: merge DETACHED and push by SHA**, never `checkout -B`, which fails against a live worktree and invites a force as the fix — earned when HQ's `checkout -B milestone/M41` failed today. **(c) The worktree convention's real argument**, from the M41 chat: *not a discipline that protects the careful, but an interlock that protects whoever is downstream of the next mistake* — **the person who benefits is not the person who complies**, which is why it should be normative rather than advisory. **No epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.1 | 2026-08-21 | **Strengthens E43.2's design property from well-formedness to AUDITABILITY UNDER DUPLICATION**, on the M41 Milestone Chat's refinement. **A positive signal is *detectably* duplicable; an absence is not even that** — two silences are indistinguishable from one, so duplication leaves no trace, while two positive signals are two artifacts: visible, attributable, diffable. **The target is a mechanism that still misbehaves under a duplicated role but misbehaves LEGIBLY.** This upgrades the M46 scope boundary rather than restating it: E43.2 cannot prevent duplication, **but it can guarantee duplication leaves evidence — so it is what makes M46's absence survivable**, converting an unrecoverable fault into one recoverable at the next read. **M41's instance proves it by absence** — nearly unrecoverable because its only evidence was a first-person commit message and one transcript. **Names a worked example to start from:** HQ's 2026-08-21 M41-only stopgap (silence accepts nothing; explicit committed acceptance carrying the session UUID; one line per delivery; auto-lapsing), **evidence that cheapness and auditability are compatible.** **No epic, ordering, gate or acceptance-criterion change.** |
 | 1.1.0 | 2026-08-21 | **Adds a fourth state to E43.2 from a live instance, and it breaks W3's presumption rather than failing it.** M41 ran with **two authentic Milestone Chat sessions** — checkable in the graph: 2 of 22 commits on M41's epic artifacts sit in a 5h27m gap in the incumbent's activity, and one calls another session's sentence *"my own rotted claim."* Stage-1 duplication merged cleanly; **Stage 2 is where the role holds accept-by-silence**, so **a delivery can be accepted by one instance while another never hears of it, and a non-participating instance's silence is indistinguishable from deliberate acceptance.** `chat-hierarchy.md:201-205` rests default-accept on *"the human's key is present at the session"* — **with two sessions, "the session" does not denote.** **Scope kept out of M46:** the currency half is M46's; **E43.2's half is that whatever replaces silence must be a signal an identified party EMITTED, never an absence attributed to a role** — well-formed under duplication, which an absence is not. Records that the instance was found by **a witness, not a mechanism.** **No epic added or removed; no ordering, gate or acceptance-criterion change.** |
