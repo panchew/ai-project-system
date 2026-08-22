@@ -59,7 +59,7 @@ import sys
 from pathlib import Path
 
 FLOOR_VERSION = "per-lane-ruled-2026-08-20"
-INSTRUMENT_VERSION = "1.0.0"
+INSTRUMENT_VERSION = "1.0.1"  # 1.0.1: denial detection anchored to the runner's refusal prefix (see call_failed)
 
 LANES = ("epic_dev", "epic_qa")
 TOOL_NAMES = ("read_file", "write_file", "edit_file", "list_dir", "run_command", "git")
@@ -68,9 +68,28 @@ MUTATING_TOOLS = ("write_file", "edit_file")
 # A tool result that means the call did not do what it was asked to do. Narrow on
 # purpose: E33.2 Run B's three denied `pip install -e .` calls are real executed rounds
 # (they count for C-A) but must not be credited as evidence for a claim.
-_FAILED_RESULT = re.compile(
-    r"is denied|^error:|Traceback \(most recent call last\)", re.IGNORECASE | re.MULTILINE
+#
+# ⚠ CORRECTED 2026-08-22, and the correction is the point. The first version matched
+# `is denied` ANYWHERE in the result, with re.MULTILINE. It therefore flagged
+# `read_file('local_agent_runner/tools.py')` as denied — because that file is the
+# runner's *permissions module* and its CONTENT contains the denial templates. A
+# pattern was trusted without being falsified, which is the exact trap this epic's
+# starter names. The runner emits every refusal as `<tool>: ...` at the START of the
+# result (local_agent_runner/tools.py:58-119), so the match is anchored there and
+# restricted to the first line.
+_REFUSAL_PHRASES = (
+    "is denied",
+    "does not exist",
+    "is not a regular file",
+    "is not a directory",
+    "is a directory",
+    "not found",
+    "timed out",
+    "invalid line range",
+    "could not parse",
+    "no subcommand provided",
 )
+_REFUSAL_PREFIX = re.compile(r"^(" + "|".join(TOOL_NAMES) + r"):\s")
 
 # C-C1: a cited tool call, e.g. read_file('.ai-project.yml')
 _CITED_CALL = re.compile(
@@ -133,7 +152,13 @@ def executed_calls(transcript_doc):
 
 
 def call_failed(call):
-    return bool(_FAILED_RESULT.search(str(call["result"])))
+    """True when the tool layer REFUSED or errored the call. A command that ran and
+    exited non-zero is not a refusal: it ran, and a claim that it ran is supported."""
+    first_line = str(call["result"]).split("\n", 1)[0]
+    if not _REFUSAL_PREFIX.match(first_line):
+        return False
+    lowered = first_line.lower()
+    return any(phrase in lowered for phrase in _REFUSAL_PHRASES)
 
 
 # ------------------------------------------------------------------- the three checks
