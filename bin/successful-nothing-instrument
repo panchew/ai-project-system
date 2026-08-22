@@ -1,0 +1,616 @@
+#!/usr/bin/env python3
+"""successful-nothing-instrument — the minimal detector for a run that exits cleanly,
+reads competently, and did not do the work (Epic P12-M41-E41.2, deliverable D1).
+
+**This is a measuring device used by M41, not a gate.** No CI wiring, no enforcement,
+no blocking hook — ``M46`` formalizes the gate. It emits three counters and a verdict
+derived from those counters and nothing else, and it never emits a verdict without its
+counts: a verdict without its counts is not usable evidence.
+
+The checks, the floor, and every stated limit are committed in
+``docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.2__check-list-and-floor.md``
+**before any run this instrument judges**. That file is the authority; this module is
+its implementation, and the two are kept in step deliberately rather than by comment.
+
+Three counters (check-list §1):
+
+* **C-A tool rounds** — protocol tool calls the runner ACTUALLY EXECUTED. Not calls the
+  model appeared to intend. E33.2 Run A emitted three well-formed calls as prose inside
+  a ```json fence; the runner parsed no protocol call and the correct count is **zero**.
+  A scraper over the final answer would report 3 for the run that did nothing.
+* **C-B files changed** — distinct paths mutated, measured against the tree for a live
+  run (``worktree``) or derived from executed, non-denied ``write_file``/``edit_file``
+  calls for a replayed one (``transcript-derived``). The derived count credits nothing a
+  ``run_command`` side effect changed, so it is a **lower bound** and is labelled one:
+  a PASS on it is sound, a FAIL on it is named rather than reported flat.
+* **C-C claims resolving** — three narrow syntactic classes over the final answer only,
+  each with its limits stated in the check list. This is the counter that catches a run
+  which DOES call tools and STILL cites something that is not there.
+
+Never scored: exit code, status, tokens, duration. This project's only controlled
+comparison (E33.2) has the **clean exit on the run that did nothing** and the failing
+exit on the run that shipped mergeable work, so exit status is context and never signal.
+
+Floor — the RULED per-lane form (CFO 2026-08-20), stamped into every verdict:
+
+* ``epic_dev``  — rounds > 0 AND files changed > 0
+* ``epic_qa``   — rounds > 0 AND claims resolve; files changed RECORDED, NOT SCORED
+
+Usage::
+
+    bin/successful-nothing-instrument --transcript T.json --lane epic_dev [--metadata M.json]
+        [--label NAME] [--workspace DIR] [--files-changed N] [--tools tools.json] [--json]
+
+    bin/successful-nothing-instrument --replay-set set.json [--json]
+
+Exit codes: 0 = ran to completion (the VERDICT is in the output, never in the exit code —
+this tool refuses to reproduce the variable it exists to distrust); 3 = the instrument
+could not be invoked correctly. A replay set with an unloadable case still exits 0 and
+reports that case as ERROR, loudly and by name.
+"""
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+FLOOR_VERSION = "per-lane-ruled-2026-08-20"
+INSTRUMENT_VERSION = "1.0.0"
+
+LANES = ("epic_dev", "epic_qa")
+TOOL_NAMES = ("read_file", "write_file", "edit_file", "list_dir", "run_command", "git")
+MUTATING_TOOLS = ("write_file", "edit_file")
+
+# A tool result that means the call did not do what it was asked to do. Narrow on
+# purpose: E33.2 Run B's three denied `pip install -e .` calls are real executed rounds
+# (they count for C-A) but must not be credited as evidence for a claim.
+_FAILED_RESULT = re.compile(
+    r"is denied|^error:|Traceback \(most recent call last\)", re.IGNORECASE | re.MULTILINE
+)
+
+# C-C1: a cited tool call, e.g. read_file('.ai-project.yml')
+_CITED_CALL = re.compile(
+    r"\b(" + "|".join(TOOL_NAMES) + r")\(\s*['\"]([^'\"]*)['\"]\s*\)"
+)
+# C-C2: a backtick-quoted repository path — contains a '/' and no whitespace.
+_BACKTICKED = re.compile(r"`([^`\n]+)`")
+# C-C3: `... shows IDENT` on the same line as a cited call.
+_SHOWS_IDENT = re.compile(r"\bshows\s+([A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z_][A-Za-z0-9_]*)*)")
+_STOPWORDS = {
+    "the", "a", "an", "all", "each", "every", "some", "any",
+    "unknown", "invalid", "it", "that", "this", "there",
+}
+
+
+def fail(msg):
+    print(f"[successful-nothing-instrument] {msg}", file=sys.stderr)
+    sys.exit(3)
+
+
+# --------------------------------------------------------------------------- loading
+
+
+def load_json(path, what):
+    p = Path(path)
+    if not p.exists():
+        raise CaseError(f"{what} not found: {path}")
+    try:
+        return json.loads(p.read_text())
+    except (OSError, ValueError) as e:
+        raise CaseError(f"{what} unreadable ({path}): {e}")
+
+
+class CaseError(Exception):
+    """A case that cannot be loaded or evaluated. Reported LOUDLY as ERROR, never skipped."""
+
+
+def executed_calls(transcript_doc):
+    """The runner's executed-call list. One entry per call the runner actually ran."""
+    entries = transcript_doc.get("transcript")
+    if entries is None:
+        raise CaseError("transcript document has no 'transcript' array")
+    if not isinstance(entries, list):
+        raise CaseError("transcript document's 'transcript' is not an array")
+    calls = []
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        tc = entry.get("tool_call")
+        if not isinstance(tc, dict):
+            continue
+        calls.append(
+            {
+                "name": tc.get("name"),
+                "args": tc.get("args") or {},
+                "result": entry.get("tool_result") or "",
+            }
+        )
+    return calls
+
+
+def call_failed(call):
+    return bool(_FAILED_RESULT.search(str(call["result"])))
+
+
+# ------------------------------------------------------------------- the three checks
+
+
+def check_tool_rounds(calls):
+    """C-A. Executed protocol calls, including ones the tool layer denied — a denied call
+    is still a round the runner spent. E33.2 Run B is 10 rounds, 3 of them denied."""
+    return len(calls)
+
+
+def check_files_changed(calls, worktree_count=None, workspace=None):
+    """C-B. ``worktree`` when a live workspace was measured, else ``transcript-derived``
+    (a LOWER BOUND — it credits no run_command side effect)."""
+    if worktree_count is not None:
+        return {
+            "count": int(worktree_count),
+            "provenance": "worktree",
+            "lower_bound": False,
+            "paths": None,
+            "workspace": str(workspace) if workspace else None,
+        }
+    paths = []
+    for call in calls:
+        if call["name"] in MUTATING_TOOLS and not call_failed(call):
+            path = call["args"].get("path")
+            if path and path not in paths:
+                paths.append(path)
+    return {
+        "count": len(paths),
+        "provenance": "transcript-derived",
+        "lower_bound": True,
+        "paths": paths,
+        "workspace": None,
+    }
+
+
+def _norm(value):
+    return " ".join(str(value).split())
+
+
+def _call_matches(call, name, arg):
+    if call["name"] != name:
+        return False
+    args = call["args"]
+    for key in ("path", "command"):
+        if key in args and _norm(args[key]) == _norm(arg):
+            return True
+    return False
+
+
+def _walk_keys(doc, dotted):
+    cur = doc
+    for part in dotted.split("."):
+        if not isinstance(cur, dict) or part not in cur:
+            return False
+        cur = cur[part]
+    return True
+
+
+def _parse_structured(path):
+    p = Path(path)
+    if not p.exists():
+        return None
+    text = p.read_text()
+    if p.suffix in (".yml", ".yaml"):
+        try:
+            import yaml  # noqa: PLC0415 — optional, only needed for C-C3
+        except ImportError:
+            return None
+        try:
+            return yaml.safe_load(text)
+        except Exception:
+            return None
+    if p.suffix == ".json":
+        try:
+            return json.loads(text)
+        except ValueError:
+            return None
+    return None
+
+
+def check_claims(final_answer, calls, workspace=None, repo_root=None):
+    """C-C. Three narrow classes over the FINAL ANSWER ONLY. See check list §1 C-C for
+    the five stated limits — this check detects unsupported citation, and does not
+    certify a run as truthful."""
+    text = final_answer or ""
+    claims = []
+    cited_spans = []
+
+    # --- C-C1: cited tool evidence -----------------------------------------------
+    for m in _CITED_CALL.finditer(text):
+        name, arg = m.group(1), m.group(2)
+        cited_spans.append(m.span())
+        resolved = any(_call_matches(c, name, arg) and not call_failed(c) for c in calls)
+        claims.append(
+            {
+                "class": "C-C1",
+                "claim": m.group(0),
+                "resolved": resolved,
+                "reason": (
+                    "executed, non-denied call with this argument is present in the transcript"
+                    if resolved
+                    else "no executed, non-denied call to %r with argument %r in the transcript"
+                    % (name, arg)
+                ),
+            }
+        )
+
+    # --- C-C2: cited repository paths --------------------------------------------
+    for m in _BACKTICKED.finditer(text):
+        token = m.group(1).strip()
+        if "/" not in token or re.search(r"\s", token):
+            continue  # not path-shaped (check list §1 C-C, limit: bare filenames are not extracted)
+        if any(s <= m.start() and m.end() <= e for s, e in cited_spans):
+            continue
+        in_transcript = any(
+            _norm(c["args"].get("path", "")) == _norm(token) and not call_failed(c) for c in calls
+        )
+        on_disk = False
+        checked_disk = False
+        if workspace:
+            checked_disk = True
+            on_disk = (Path(workspace) / token).exists()
+        resolved = in_transcript or on_disk
+        claims.append(
+            {
+                "class": "C-C2",
+                "claim": token,
+                "resolved": resolved,
+                "reason": (
+                    "touched by an executed, non-denied tool call"
+                    if in_transcript
+                    else "exists in the run workspace"
+                    if on_disk
+                    else "not touched by any executed call"
+                    + ("; not present in the run workspace" if checked_disk else "; workspace not available to check")
+                ),
+            }
+        )
+
+    # --- C-C3: cited keys in a cited file ----------------------------------------
+    for line in text.splitlines():
+        call_match = _CITED_CALL.search(line)
+        if not call_match:
+            continue
+        shows = _SHOWS_IDENT.search(line, call_match.end())
+        if not shows:
+            continue
+        ident = shows.group(1)
+        if ident.split(".")[0].lower() in _STOPWORDS:
+            continue
+        target = call_match.group(2)
+        candidates = []
+        if workspace:
+            candidates.append(Path(workspace) / target)
+        if repo_root:
+            candidates.append(Path(repo_root) / target)
+        candidates.append(Path(target))
+        doc = None
+        source = None
+        for cand in candidates:
+            doc = _parse_structured(cand)
+            if doc is not None:
+                source = str(cand)
+                break
+        if doc is None:
+            # A claim that cannot be checked is NOT a claim that failed (check list §1
+            # C-C, limit 3). It is not extracted at all.
+            continue
+        resolved = _walk_keys(doc, ident)
+        claims.append(
+            {
+                "class": "C-C3",
+                "claim": f"{call_match.group(0)} shows {ident}",
+                "resolved": resolved,
+                "reason": (
+                    f"{ident!r} is present in {source}"
+                    if resolved
+                    else f"{ident!r} is NOT present in {source}"
+                ),
+            }
+        )
+
+    resolved_n = sum(1 for c in claims if c["resolved"])
+    return {
+        "asserted": len(claims),
+        "resolved": resolved_n,
+        "unresolved": len(claims) - resolved_n,
+        "rate": (resolved_n / len(claims)) if claims else None,
+        "vacuous": len(claims) == 0,
+        "claims": claims,
+    }
+
+
+# ------------------------------------------------------------------------- the verdict
+
+
+def evaluate(case, repo_root=None):
+    """Evaluate one case. Raises CaseError for anything that cannot be loaded — the
+    caller reports that LOUDLY as ERROR and never as a shorter list."""
+    lane = case.get("lane")
+    if lane not in LANES:
+        raise CaseError(f"lane must be one of {LANES}, got {lane!r}")
+
+    doc = load_json(case["transcript"], "transcript")
+    calls = executed_calls(doc)
+
+    rounds = check_tool_rounds(calls)
+    files = check_files_changed(
+        calls,
+        worktree_count=case.get("files_changed"),
+        workspace=case.get("workspace"),
+    )
+    claims = check_claims(
+        doc.get("final_answer"),
+        calls,
+        workspace=case.get("workspace"),
+        repo_root=repo_root,
+    )
+
+    terms = [{"check": "C-A tool rounds", "value": rounds, "passes": rounds > 0, "scored": True}]
+    if lane == "epic_dev":
+        terms.append(
+            {
+                "check": "C-B files changed",
+                "value": files["count"],
+                "passes": files["count"] > 0,
+                "scored": True,
+            }
+        )
+        terms.append(
+            {
+                "check": "C-C claims resolve",
+                "value": f"{claims['resolved']}/{claims['asserted']}",
+                "passes": claims["unresolved"] == 0,
+                "scored": False,
+                "note": "recorded on epic_dev; the dev floor's terms are C-A and C-B",
+            }
+        )
+    else:
+        terms.append(
+            {
+                "check": "C-C claims resolve",
+                "value": f"{claims['resolved']}/{claims['asserted']}",
+                "passes": claims["unresolved"] == 0,
+                "scored": True,
+            }
+        )
+        terms.append(
+            {
+                "check": "C-B files changed",
+                "value": files["count"],
+                "passes": None,
+                "scored": False,
+                "note": "RECORDED, NOT SCORED on epic_qa — run-qa-agent:336-344 refuses a mutating tool set, so this was a constant false, not a strict bar",
+            }
+        )
+
+    scored = [t for t in terms if t["scored"]]
+    verdict = "PASS" if all(t["passes"] for t in scored) else "FAIL"
+
+    metadata = {}
+    if case.get("metadata"):
+        try:
+            metadata = load_json(case["metadata"], "run metadata")
+        except CaseError as e:
+            metadata = {"_metadata_error": str(e)}
+
+    advertised = advertised_tools(case, metadata)
+
+    return {
+        "label": case.get("label") or Path(case["transcript"]).parent.name,
+        "lane": lane,
+        "verdict": verdict,
+        "floor_version": FLOOR_VERSION,
+        "instrument_version": INSTRUMENT_VERSION,
+        "counts": {
+            "tool_rounds": rounds,
+            "files_changed": files,
+            "claims": {k: v for k, v in claims.items() if k != "claims"},
+        },
+        "floor_terms": terms,
+        "unresolved_claims": [c for c in claims["claims"] if not c["resolved"]],
+        "all_claims": claims["claims"],
+        "advertised_tools": advertised,
+        "recorded_never_scored": {
+            "exit_code": metadata.get("exit_code", doc.get("exit_code")),
+            "status": doc.get("status"),
+            "tokens": doc.get("tokens"),
+            "duration_ms": doc.get("duration_ms"),
+            "model": doc.get("model") or metadata.get("model"),
+            "endpoint": metadata.get("endpoint"),
+            "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work.",
+        },
+        "transcript": str(case["transcript"]),
+        "metadata_path": str(case["metadata"]) if case.get("metadata") else None,
+        "executed_calls": [
+            {"name": c["name"], "args": c["args"], "denied_or_errored": call_failed(c)}
+            for c in calls
+        ],
+    }
+
+
+def advertised_tools(case, metadata):
+    """Binding Constraint 7: an absence is only evidence when the thing that would have
+    created it actually ran. Recorded with EVERY run."""
+    tools_path = case.get("tools") or metadata.get("tools")
+    record = {
+        "tool_set_path": tools_path,
+        "enabled": metadata.get("tools_enabled"),
+        "sha256_at_run_time": metadata.get("tools_sha256"),
+        "provenance": None,
+    }
+    if metadata.get("tools_enabled"):
+        record["provenance"] = "run metadata, captured at run time — authoritative"
+        return record
+    if tools_path and Path(tools_path).exists():
+        data = _parse_structured(tools_path)
+        if isinstance(data, dict):
+            record["enabled"] = data.get("enabled")
+            record["sha256_now"] = hashlib.sha256(Path(tools_path).read_bytes()).hexdigest()
+            record["provenance"] = (
+                "read from the tool-set file NOW; the run metadata names the path but did not "
+                "capture its content, so this is the file's current content and not provably "
+                "the run's"
+            )
+            return record
+    record["provenance"] = (
+        "NOT RECOVERABLE from the artifacts — the run metadata captured no tool set, "
+        "and no tool-set path was supplied"
+    )
+    return record
+
+
+# ------------------------------------------------------------------------ worktree C-B
+
+
+def worktree_changed_paths(workspace):
+    """C-B ``worktree`` provenance for a live run: distinct paths git reports as changed."""
+    out = subprocess.run(
+        ["git", "status", "--porcelain"],
+        cwd=str(workspace),
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if out.returncode != 0:
+        raise CaseError(f"git status failed in {workspace}: {out.stderr.strip()}")
+    paths = []
+    for line in out.stdout.splitlines():
+        if not line.strip():
+            continue
+        path = line[3:].strip()
+        if " -> " in path:
+            path = path.split(" -> ", 1)[1]
+        if path not in paths:
+            paths.append(path)
+    return paths
+
+
+# ----------------------------------------------------------------------------- output
+
+
+def render(records, declared_total):
+    lines = []
+    lines.append(f"instrument {INSTRUMENT_VERSION} · floor {FLOOR_VERSION}")
+    lines.append("")
+    lines.append(f"declared cases: {declared_total}    reported: {len(records)}")
+    if len(records) != declared_total:
+        lines.append("!! REPORTED LIST IS SHORTER THAN THE DECLARED SET — this is the defect (S3)")
+    lines.append("")
+    header = f"{'case':<26} {'lane':<9} {'verdict':<7} {'rounds':>6} {'files':>6} {'claims':>10}  provenance"
+    lines.append(header)
+    lines.append("-" * len(header))
+    for r in records:
+        if r["verdict"] == "ERROR":
+            lines.append(
+                f"{r['label']:<26} {r.get('lane','?'):<9} {'ERROR':<7} {'-':>6} {'-':>6} {'-':>10}  {r['error']}"
+            )
+            continue
+        c = r["counts"]
+        cl = c["claims"]
+        claims_cell = f"{cl['resolved']}/{cl['asserted']}" + ("*" if cl["vacuous"] else "")
+        lines.append(
+            f"{r['label']:<26} {r['lane']:<9} {r['verdict']:<7} "
+            f"{c['tool_rounds']:>6} {c['files_changed']['count']:>6} {claims_cell:>10}  "
+            f"{c['files_changed']['provenance']}"
+        )
+    lines.append("")
+    lines.append("* = no claims asserted; C-C passes vacuously and the vacuity is recorded, not hidden")
+    for r in records:
+        if r["verdict"] == "ERROR":
+            continue
+        if r["unresolved_claims"]:
+            lines.append("")
+            lines.append(f"{r['label']} — unresolved claims ({len(r['unresolved_claims'])}):")
+            for c in r["unresolved_claims"]:
+                lines.append(f"    [{c['class']}] {c['claim']}")
+                lines.append(f"        -> {c['reason']}")
+    return "\n".join(lines)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="Minimal successful-nothing instrument (P12-M41-E41.2 D1). "
+        "Emits counts and a verdict; the verdict is never in the exit code."
+    )
+    parser.add_argument("--transcript", help="path to a run transcript JSON")
+    parser.add_argument("--metadata", help="path to the run's metadata JSON, if it has one")
+    parser.add_argument("--lane", choices=LANES, help="which lane's floor to apply")
+    parser.add_argument("--label", help="name for this case in the output")
+    parser.add_argument("--workspace", help="the run's workspace, for worktree C-B and C-C2 on-disk resolution")
+    parser.add_argument("--files-changed", type=int, help="authoritative worktree count for C-B")
+    parser.add_argument("--measure-worktree", action="store_true", help="derive C-B from git status in --workspace")
+    parser.add_argument("--tools", help="the advertised tool-set JSON (Binding Constraint 7)")
+    parser.add_argument("--replay-set", help="path to a declared replay-set JSON")
+    parser.add_argument("--repo-root", default=str(Path(__file__).resolve().parent.parent))
+    parser.add_argument("--json", action="store_true", help="emit the full JSON record")
+    args = parser.parse_args(argv)
+
+    if args.replay_set:
+        try:
+            declared = json.loads(Path(args.replay_set).read_text())
+        except (OSError, ValueError) as e:
+            fail(f"cannot read replay set {args.replay_set}: {e}")
+        cases = declared.get("cases") or []
+        # Case paths in a declared set are repo-root-relative: the set is a governance
+        # artifact and must read the same from any working directory.
+        base = Path(args.repo_root).resolve()
+    elif args.transcript and args.lane:
+        cases = [
+            {
+                "label": args.label,
+                "lane": args.lane,
+                "transcript": args.transcript,
+                "metadata": args.metadata,
+                "workspace": args.workspace,
+                "tools": args.tools,
+                "files_changed": args.files_changed,
+            }
+        ]
+        base = Path.cwd()
+    else:
+        fail("give either --replay-set, or --transcript with --lane")
+        return 3
+
+    records = []
+    for case in cases:
+        case = dict(case)
+        for key in ("transcript", "metadata", "workspace", "tools"):
+            if case.get(key) and not os.path.isabs(case[key]):
+                case[key] = str((base / case[key]).resolve()) if args.replay_set else case[key]
+        try:
+            if args.measure_worktree and case.get("workspace"):
+                case["files_changed"] = len(worktree_changed_paths(case["workspace"]))
+            records.append(evaluate(case, repo_root=args.repo_root))
+        except CaseError as e:
+            # LOUD. Named, counted, never skipped (check list §4, Epic spec S3).
+            records.append(
+                {
+                    "label": case.get("label") or str(case.get("transcript")),
+                    "lane": case.get("lane"),
+                    "verdict": "ERROR",
+                    "error": str(e),
+                    "floor_version": FLOOR_VERSION,
+                    "instrument_version": INSTRUMENT_VERSION,
+                    "unresolved_claims": [],
+                }
+            )
+
+    if args.json:
+        print(json.dumps({"declared": len(cases), "reported": len(records), "records": records}, indent=2))
+    else:
+        print(render(records, len(cases)))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
