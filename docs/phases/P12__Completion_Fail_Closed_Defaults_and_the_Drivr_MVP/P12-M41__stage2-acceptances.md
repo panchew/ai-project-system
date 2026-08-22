@@ -27,7 +27,7 @@ choice rather than obligation: it costs one line, and it is what made the M41 fo
 
 | Epic | Delivery | Decision | Accepting session | Date |
 |---|---|---|---|---|
-| **E41.1** | PR **#230**, `epic/P12-M41-E41.1` @ `bdbbd36` | **ACCEPTED** — with two annotations, neither a rework attempt | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-21 |
+| **E41.1** | PR **#230**, `epic/P12-M41-E41.1` @ **`e2e26e4`** (accepted at `bdbbd36`; annotations actioned) | **ACCEPTED** — with two annotations, neither a rework attempt | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-21 |
 
 ---
 
@@ -78,6 +78,36 @@ The delivery **message** states that *"phase/milestone are no longer blocked on 
 manual verification chat opens on**; what is confirmed is that **`opencode run` dispatches the model
 and it self-reports.** Those may or may not be the same thing — **it is the transport-versus-surface
 distinction (E41.4's U2) arriving on the rows it was predicted for.**
+
+> ### ⚠ CORRECTION TO THIS ANNOTATION — 2026-08-21, and the Epic Chat found it, not this chat
+>
+> **Annotation 2 as first written said the record *"does not say that, and is right not to."* That
+> was FALSE, and the epic corrected me.**
+>
+> §2.3.2 bounded the claim, and this chat checked §2.3.2. **But `bdbbd36`'s §9.3 — the corrected
+> table, the one E41.5 actually reads — carried the unbounded sentence verbatim** at line 650:
+> *"All five manual verification targets now confirm on both halves of the HQ manual-surface rule."*
+> **Verified by this chat against `bdbbd36` after the epic raised it.**
+>
+> **So the overclaim was in the artifact, not only in the summary**, on the exact surface E41.5
+> consumes — and the failure mode was concrete: E41.5 lands on §9.3, reads *all five confirm*, and
+> widens its landing set before HQ has ruled.
+>
+> **The epic applied this log's own Annotation 1 logic back at it:** *the binding surface must not
+> carry a claim that has been narrowed elsewhere.* It then changed the artifact **after acceptance
+> and against this chat's explicit "nothing for you to fix"**, and **flagged it rather than burying
+> it in the diff**, offering to revert.
+>
+> **RATIFIED, not reverted.** `e2e26e4`, record **v1.3.1**: +40 / −4, the four removed lines being
+> the sentence qualified in place, no measurement, table, or D-result touched — re-measured by this
+> chat, not taken on report. §2.3 additionally carries **seven** in-place `SUPERSEDED → §9.3`
+> markers, one per superseded cell, because *"a banner is skippable by anyone scanning straight to
+> the table, which is exactly the reading pattern that made this worth fixing."*
+>
+> **And the pattern fired in this chat's own review.** *A premise has dependents, and the correction
+> does not find them* — this log checked the instance in front of it (§2.3.2) and not the premise's
+> other dependent (§9.3). **Fifth instance in this milestone, first inside a Stage-2 review.** The
+> level below caught the level above, which is the direction the record claims this chain works in.
 
 **So: the measurement is ACCEPTED. The consequence is ESCALATED.** Whether these confirmations
 satisfy R6's carry-forward trigger — and therefore whether E41.5's landing set widens beyond
