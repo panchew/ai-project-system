@@ -114,6 +114,55 @@ satisfy R6's carry-forward trigger — and therefore whether E41.5's landing set
 `creation` — is **HQ's ruling**, not this epic's and not this chat's. **E41.5's deliverable 1 is
 unchanged until HQ says otherwise.**
 
+### Post-acceptance rounds 2 and 3 — ratified, and why round 3 was more than accurate
+
+**`e2e26e4` (round 2)** is recorded in the correction block above: the epic fixed the stale-optimistic
+sentence at §9.3 against this chat's explicit *"nothing for you to fix"*, and was right.
+
+**`e95cf07` (round 3) — RATIFIED, and the reasoning matters more than the accuracy.** Re-measured
+here: +25 / −8, the removed lines being stale claims **replaced by marked versions preserving the
+original text struck through**; no measurement, table, or D-result touched; suite 549/0.
+
+It marked two further superseded sections — §2.2's Part A remote table (`NO` for `phase` and
+`milestone`) and §2.3.3's R6b table (`CANDIDATE — blocked on a working credential`). **Both
+stale-PESSIMISTIC, and §2.3.3 is the R6b analysis HQ was actively reading while ruling on R6's
+trigger.**
+
+> **An artifact understating its own confirmed evidence, in front of the body about to rule on that
+> evidence, is worse than the optimistic case.** A stale-optimistic claim widens a landing set; a
+> stale-pessimistic one **suppresses evidence at the moment of decision.**
+
+**And the fix anticipated how it could be misused.** The epic bound the chat-surface question **into
+the same block** as the correction, so **correcting an understatement could not become a back door to
+widening the landing set.** That is the property that made it ratifiable rather than merely correct,
+and it is recorded here at HQ's request.
+
+**Boundary set with the ratification:** the artifact is consistent as of `e95cf07`; further unbidden
+post-acceptance edits come to this chat first, because **an artifact that keeps changing gives the
+CFO no stable object to diff-review** while #230 is in front of him. Time-critical exceptions are
+handled as round 3 was — act, then flag immediately.
+
+### R6's trigger — where it actually rests, after two corrections in both directions
+
+| Ground | Status |
+|---|---|
+| **Runs the model** | **MET, comprehensively.** All five targets answer. |
+| **Emits a readable self-report** | **MET AT THE MECHANISM LEVEL.** OpenCode injects from **router-side identifiers** (`${i.providerID}/${i.api.id}`), verified in the binary independently by the epic, by this chat, and by HQ. **Not a model describing itself.** HQ's contrary ground was **withdrawn.** |
+| **A surface a manual chat OPENS ON** | **UNMET — and not measurable.** *"Whether a human would choose to drive a governance chat through OpenCode"* is a judgment about what the CFO is willing to operate in. **HQ has put that question to him directly.** |
+
+**No TUI measurement is commissioned, and deliberately so** — it would produce a fact that does not
+answer the question.
+
+> **⚠ Sequencing, stated because it will matter later.** HQ's verification boundary is that it
+> confirmed the template exists and is router-interpolated, **not that an interactive session invokes
+> that same code path** — *"very likely shared, but very likely is not measured."* **That gap is not
+> a prerequisite of the CFO's decision. It IS a prerequisite of the landing.** If he says yes,
+> **E41.5 must not land `phase` or `milestone` until the interactive path is confirmed to inject** —
+> otherwise the rows arm a check against a surface nobody has shown emits the identity it will be
+> checked against. **One grep, and it belongs before the edit, not after.**
+
+**E41.5's deliverable 1 remains unchanged. Landing set remains `creation`.**
+
 ### Rework accounting
 
 **No rework attempt is consumed.** Attempt 1 of 3 stands, per the CFO's ruling of 2026-08-21: the
