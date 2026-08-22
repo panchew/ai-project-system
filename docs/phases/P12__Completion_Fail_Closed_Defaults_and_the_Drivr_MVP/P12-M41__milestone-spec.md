@@ -434,7 +434,7 @@ measure the incumbent.**
 
 **Safe to run now, and the reason is recorded rather than assumed:** a qualification run dispatches
 through the agentic lane and **M42 is repairing that lane**, but **Docker is present on this host**
-(`Docker version 29.6.1`, verified 2026-08-19), so `bin/ai-project-orchestrator:392-397`'s
+(verified present 2026-08-19 at `29.6.1`; **re-measured 2026-08-22 at `29.7.2` by the E41.2 Epic Chat** — the version moved, the claim did not), so `bin/ai-project-orchestrator:392-397`'s
 unsandboxed fallback will not fire. **The dependency is real and non-blocking** — which is a
 different thing from absent. **If Docker becomes unavailable mid-milestone, stop and escalate**;
 do not let the run take the fallback path M42 exists to close.
