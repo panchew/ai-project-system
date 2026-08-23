@@ -4,7 +4,7 @@ name: "Completion: Fail-Closed Defaults and the Drivr MVP"
 status: scoping
 start_date: 2026-08-19
 planned_end_date: 2026-09-19
-version: 1.1.7
+version: 1.2.0
 ---
 
 # Phase P12: Completion — Fail-Closed Defaults and the Drivr MVP
@@ -760,8 +760,16 @@ The CFO (Layer 8) will accept P12 complete when:
 - [ ] `undetermined` renders as its own board state and is never mapped to `in progress` or `blocked`
 - [ ] Drivr's window matches SN-36's binding in its four regions, and three named governance rules
       have no representable control
+- [ ] The qualification runner **distinguishes "measured and failed" from "could not measure", and
+      records which** — a runner that cannot tell an empty credential store from an unreachable target
+      reports a clean-looking negative and fails at the thing it was commissioned for
 - [ ] The qualification suite's bar is committed **before** its first run, is relative to the
       incumbent, and flags both E33.2 and E39.3 as failures when replayed
+- [ ] **The M47 proof run is checked by `bin/successful-nothing-instrument`**, and its run record
+      carries **tool rounds, files changed and claims-resolution** rather than an exit status.
+      *"A real epic ran agentically end to end" is not the claim; the claim is "…and we can show it
+      did work."* Three recorded runs satisfy the first and fail the second — E33.2 Run A, E39.3,
+      and E41.2's DEV RUN 2
 - [ ] A real epic ran agentically end to end through Drivr in a named project, with the project
       choice, the run record, and the framework's own failures during it committed
 - [ ] The full suite is green at delivery (**549 baseline on `master`**, no regressions, no skips
@@ -920,6 +928,7 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.0 | 2026-08-23 | **Two acceptance criteria added from the P12 Phase Chat's scope judgments, both accepted by HQ as properties the deliverable must already have rather than items beside it.** **M46:** the qualification runner must distinguish *measured and failed* from *could not measure* — SN-37's gate exists to detect *successful nothing*, and Drivr's `XDG_DATA_HOME` inheritance is that defect inside the gate's own infrastructure. **M47:** the proof run must be checked by `bin/successful-nothing-instrument`, because M47 dispatches through a parse M42 does not repair, so **the phase's proof could otherwise be an instance of the phase's organizing defect and its gate would pass it.** No epic, ordering or scope change. |
 | 1.1.7 | 2026-08-21 | **Corrects (c) before merge, twice over.** The tie-break's published form was reported as *silently returns nothing*, then as *empty from `master`, correct from `milestone/M41`*; **HQ's own run returns a different valid-looking commit from each branch and empty from neither.** The mechanism is implicit `HEAD`, so the rule is **reader-dependent rather than broken** — and *a rule returning a different valid-looking answer to each reader shows nobody anything wrong*, which is worse than always-failing or empty. Generalizes: **any form resting on implicit `HEAD` is branch-dependent in a project whose sessions share a moving checkout.** Adds **(d)**: this is SN-36/37's ratified `undetermined` principle in a **fourth** place beside E41.2's S3 and E41.1's R6a — each a check whose silent failure reads as a meaningful value, all three repaired identically as *empty means undetermined and escalates*. |
 | 1.1.6 | 2026-08-21 | Adds two consequences that **narrow the remedy space** for the M46 currency input. **Correctness is not safety** — *a fork does not have to be wrong to be a problem*; a remedy judged on whether forks produced bad output will conclude there is no problem. And **a tie-break computed from the shared state is self-legitimizing**: the role becomes acquirable by the act it governs, so a mistaken write retroactively legitimizes itself — **ruling out any tie-break derived from artifacts both forks mutate**, and placing exclusivity outside the state the forks write. Records the silent-failure hazard in such a rule's published form, where *empty* reads as *no holder* and both forks conclude they should act. |
 | 1.1.5 | 2026-08-21 | **Extends the M46 currency input a third time, from a fork that AGREED.** A second M41 Milestone Chat authored four correct commits the incumbent did not write — and **caught a defect the incumbent missed.** The HQ fork was detectable because it contradicted; **an agreeing fork produces no signal and silently doubles a role's write surface**, staying invisible until two agreeing forks write different-but-both-plausible content into one artifact. Also records that **git attribution cannot answer it retrospectively** — one author across the entire repository, since the harness signs as the human — so **exclusivity may be the only remedy that works**, not merely the better one. Extends the existing input; no new gap record, no epic, ordering or acceptance-criterion change. |
