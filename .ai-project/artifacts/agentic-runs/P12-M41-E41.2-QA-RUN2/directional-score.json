@@ -1,0 +1,38 @@
+{
+  "transcript": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-QA-RUN2/qa-transcript.json",
+  "rules_reported": 12,
+  "catches": 3,
+  "caught_rules": [
+    8,
+    9,
+    12
+  ],
+  "missed_rules": [
+    10,
+    11
+  ],
+  "false_alarms": 0,
+  "false_alarm_rules": [],
+  "unclear": 0,
+  "unclear_rules": [],
+  "unreported_rules": [],
+  "model_verdict_recorded_not_scored": "VERDICT: FAIL",
+  "ground_truth": {
+    "violated": [
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "satisfied": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  }
+}
