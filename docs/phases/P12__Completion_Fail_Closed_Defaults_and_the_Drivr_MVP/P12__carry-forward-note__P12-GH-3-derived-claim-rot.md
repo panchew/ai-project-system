@@ -86,6 +86,70 @@ corrections as first-class drift events will miss the instances this project act
 
 ---
 
+## EXTENDED 2026-08-23 — a fourth family member, and a constraint on any remedy
+
+**Three additions, all from the level below, all verified by HQ before recording.**
+
+### (a) The restatement variant — the amendment ARRIVED and was read anyway
+
+**The E41.2 Epic Chat's Delivery Notice asserted accept-by-silence**, suspended by `ad6e3f1` —
+**which is an ancestor of its branch point `575b0fd`, and the ruling file was tracked on its branch
+throughout.** Verified by HQ.
+
+**Nothing was stale. Nothing moved.** It read a surface that **restates** the rule instead of the
+corpus that **holds** it.
+
+> **The backstop checks whether the SPEC moved. It does not check the rules a STARTER RESTATES, and
+> a restatement is a copy with no link back to its source.** *(P12 Phase Chat)*
+
+**And the constraint that makes this bind on M43's own remedy rather than merely evidence it:**
+
+> **The restatement is not optional. `P12-GH-1` is why it exists** — the templates carry the rework
+> rule zero times, so every starter restates it. ***The mitigation for one defect is the mechanism of
+> another.*** *(P12-M41 Milestone Chat)*
+
+**So E43.3's consolidation is constrained, not merely justified: every restatement it cannot remove
+becomes a new dependency of exactly this kind** — and a consolidation that removes most of them
+leaves the survivors *looking deliberate*, which is harder to audit than a uniform mess.
+
+### (b) False absence — a zero that was never evidence
+
+**HQ committed this defect while filing this note.** A literal grep for `accepted by silence` in the
+E41.2 starter returned **0**; the rule is at line 44 as `accepted **by silence**`, split by markdown
+emphasis **and** by a line wrap. **Three mechanisms defeat one sentence.** A second instance the same
+week: `**Execution Mode:** manual` scores **0** against `Execution Mode: manual`, and a contract sweep
+nearly reported a gap on it.
+
+> ***A false positive announces itself; a false absence looks like a clean result.*** *(P12-M41
+> Milestone Chat)*
+
+**This is the corpus's own Hard Constraint firing** — *falsify a pattern before trusting a zero
+result* — **against the party quoting it.** Markdown emphasis mid-phrase is a fifth variant beside
+`\b` against `__`, `--include='*.py'` skipping `bin/`, and reflow-fragile literal guards. **It is the
+nastiest of them, because the rendered text reads perfectly: a human reviewing the file sees the
+rule; only the grep does not.**
+
+### (c) The constraint on any remedy, and it outranks the instances
+
+> **"In three consecutive rounds the finder was never the author. Whatever this project builds to
+> catch premise-dependents, it should assume the author cannot run it on themselves."** *(P12-M41-E41.1
+> Epic Chat)*
+
+**Instance count is now eight across four levels, and every one was caught downstream. None by a
+check.** Three are HQ's own: a branch-staleness claim re-used without re-measuring, Decision 11's
+negative-only bar, and Decision 17's premise that a qualification run dispatches through the agentic
+lane — **falsified by E41.2's runs, which never invoked the orchestrator.**
+
+**A plainer form of the same constraint, from HQ against itself:** *the author is also the reader
+least likely to re-read.* **A ninth instance was HQ misreading a gate in a spec HQ wrote** — asserting
+`M44 → M45` where the spec says M43 and M44 are independent. **The premise never moved. It was read
+wrong.**
+
+**This is a design requirement on M44/M46, not an observation about diligence:** a premise-dependent
+detector that the author runs on their own work is answering the wrong question.
+
+---
+
 ## Why it is the worst of the three, and the reason is structural
 
 The corpus now has three members of one family. **Two are named; this is the third and it was
