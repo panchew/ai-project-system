@@ -28,10 +28,22 @@ compare it to `.ai-project.yml`'s `models.creation` value — see
 `governance/systems/chat-hierarchy.md` "Manual Chat Model Verification" for the mapping,
 the self-report method's known limits, and the absent-block/absent-key permissive-default
 behavior (no `models:` block yet, or no `creation` key — expected on a fresh project —
-means proceed while stating plainly that no expectation is configured). **If both are
-present and disagree, STOP — do not proceed to "What to Do Right Now" below.** State the
-mismatch plainly and wait for human resolution. This is a documented instruction the agent
-must follow, not a technical impossibility-to-proceed.
+means proceed while stating plainly that no expectation is configured).
+
+**If both are present and disagree, behaviour is governed by `model_verification` in
+`.ai-project.yml` (SN-40, CFO Decision 3, 2026-08-27):**
+
+- **`advisory` — the default, and the value when the key is absent:** **state the mismatch
+  plainly in your first substantive response — self-reported model vs configured value —
+  and PROCEED.** Do not stop. **Stating it is not optional**: an unstated skip would be as
+  dishonest as a false refusal claim.
+- **`blocking`:** **STOP** — do not proceed to "What to Do Right Now" below. State the
+  mismatch plainly and wait for human resolution.
+
+**Either way this is a documented instruction the agent must follow, not a technical
+impossibility-to-proceed.** The default is advisory **until the CFO declares it is OK to
+enforce the switching gates** — because an unconditional refusal makes a *mistaken* lineup
+change stop the next chat from opening at all, which is friction he hit in practice.
 
 ---
 

@@ -20,12 +20,16 @@ MAX_RETRIES = 3
 # fallback used when the yml is absent or fails to parse (load_yml_config()), so it
 # must never drift from the policy silently (P9-M31-E31.2, Hard Constraint 3);
 # tests/test_model_config.py guards all five keys against exactly that drift.
+# Baseline lineup 2026-08-27 (SN-41, CFO allowance decision — not measurement-grounded).
+# Kept in agreement with `.ai-project.yml` by tests/test_model_config.py's divergence
+# guard, which is deliberately RETAINED (SN-40): the guard is worth keeping, pinned
+# per-key expectations are not.
 DEFAULT_MODELS = {
     "hq": "remote:claude-opus-5",
-    "phase": "remote:claude-opus-5",
-    "milestone": "remote:claude-opus-5",
-    "epic_dev": "local:qwen3-coder:30b",
-    "epic_qa": "local:qwen3-coder:30b"
+    "phase": "remote:gpt-5.6-sol",
+    "milestone": "remote:deepseek-v4-pro",
+    "epic_dev": "remote:deepseek-v4-flash",
+    "epic_qa": "remote:deepseek-v4-flash"
 }
 
 # Shared exit-code convention across this project's tooling: 5 means "a local
