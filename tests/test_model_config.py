@@ -54,12 +54,15 @@ POLICY_PATH = (
 )
 CHAT_HIERARCHY_PATH = REPO_ROOT / "governance" / "systems" / "chat-hierarchy.md"
 
-# Moved from ``local:qwen2.5-coder:14b`` by Epic P10-M34-E34.3, applying the runtime
-# choice P10-M33 settled by running it: keep the Ollama runtime, raise the model tier.
-# E33.2 Run A dispatched the 14b against a real epic and returned exit 0 having changed
-# zero files; Run B did mergeable work on the same runtime at 30b, and E33.4 completed a
-# second real epic on it. Policy rows P6/P7 carry the citations.
-EXPECTED_EPIC_DEV = "local:qwen3-coder:30b"
+# RELAXED 2026-08-27 (SN-40, CFO Decision 3). The pinned per-key expected values that
+# used to live here -- EXPECTED_EPIC_DEV and EXPECTED_MANUAL_ONLY_VALUE -- were one of
+# FOUR surfaces a lineup change had to be edited in lockstep, which made switching a
+# model a coordinated multi-file edit plus a suite run. The CFO hit that friction in the
+# wild. THE DIVERGENCE GUARD IS KEPT AND IS THE POINT: `.ai-project.yml` must agree with
+# `model-routing-policy.md`. What is dropped is this file's opinion about WHICH values
+# are correct -- that is a configuration decision, not a test's to hold.
+# History is not retracted: local:qwen3-coder:30b's E33.2/E33.4 evidence stands and the
+# policy rows still carry the citations; local inference is PARKED, not dropped (SN-43).
 
 # The five `models:` keys, per the policy's "Mapping to .ai-project.yml" table
 # (model-routing-policy.md) — the guard target this file enforces.
@@ -69,7 +72,6 @@ MODEL_KEYS = ("hq", "phase", "milestone", "epic_dev", "epic_qa")
 # deliberately outside MODEL_KEYS, DEFAULT_MODELS, and model-routing-policy.md's own
 # mapping table (see this file's module docstring).
 MANUAL_ONLY_KEYS = ("creation", "epic_manual")
-EXPECTED_MANUAL_ONLY_VALUE = "remote:claude-opus-5"
 
 FALSIFIED_NAMES = ("gpt-4o", "claude-3-5-sonnet", "qwen2.5-coder:7b", "llama3:8b")
 
@@ -134,10 +136,6 @@ def _chat_hierarchy_manual_mapping():
 
 
 # --- epic_dev (original E26.2 coverage, preserved verbatim) ----------------------
-
-
-def test_config_epic_dev_is_expected_local_model():
-    assert _config_models()["epic_dev"] == EXPECTED_EPIC_DEV
 
 
 def test_default_models_epic_dev_agrees_with_config():
@@ -244,8 +242,15 @@ def test_config_has_both_manual_only_keys():
 
 
 @pytest.mark.parametrize("key", MANUAL_ONLY_KEYS)
-def test_config_manual_only_key_matches_expected_value(key):
-    assert _config_models()[key] == EXPECTED_MANUAL_ONLY_VALUE
+def test_config_manual_only_key_is_well_formed(key):
+    """The manual-only keys must be present and well-formed. Their VALUE is a
+    configuration decision (SN-40/SN-41) and is deliberately not pinned here -- pinning
+    it made a lineup change a test edit, which is the ratchet the CFO hit."""
+    value = _config_models()[key]
+    assert isinstance(value, str) and value.strip(), f"models.{key} is empty"
+    assert value.split(":", 1)[0] in ("remote", "local"), (
+        f"models.{key} must start with 'remote:' or 'local:', got {value!r}"
+    )
 
 
 @pytest.mark.parametrize("key", MANUAL_ONLY_KEYS)

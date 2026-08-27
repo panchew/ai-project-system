@@ -74,10 +74,20 @@ exist on the locality axis (phase spec corrected at v1.3.1).
 | key | value | policy row |
 |---|---|---|
 | `hq` | `remote:claude-opus-5` | P2 (paid frontier; value = measured workhorse at hq — report §2.3) |
-| `phase` | `remote:claude-opus-5` | P3 (value = measured workhorse at phase — report §2.3) |
-| `milestone` | `remote:claude-opus-5` | P4 (value = measured workhorse at milestone — report §2.3) |
-| `epic_dev` | `local:qwen3-coder:30b` | P6 |
-| `epic_qa` | `local:qwen3-coder:30b` | P7 |
+| `phase` | `remote:gpt-5.6-sol` | P3 — **value set by CFO allowance decision (SN-41), not by measurement** |
+| `milestone` | `remote:deepseek-v4-pro` | P4 — **value set by CFO allowance decision (SN-41), not by measurement** |
+| `epic_dev` | `remote:deepseek-v4-flash` | P6 — **value set by CFO allowance decision (SN-41), not by measurement** |
+| `epic_qa` | `remote:deepseek-v4-flash` | P7 — **value set by CFO allowance decision (SN-41), not by measurement** |
+
+> **Baseline lineup, 2026-08-27 (SN-41).** Four of these five values changed by **CFO
+> allowance decision**, and the Change discipline is satisfied **by decision rather than by
+> cited evidence — said so rather than manufacturing a citation**, the same honest form used
+> for row P4's closure. **No measurement supports them.** The paragraphs below describe how
+> the *previous* values were derived and are retained as history; **they do not describe
+> these.** `epic_dev`/`epic_qa` leave `local:qwen3-coder:30b` because **local inference is
+> PARKED, re-enterable (SN-43)** — that value's E33.2/E33.4 evidence is not retracted, only
+> off the baseline. **`epic_manual` is `remote:deepseek-v4-flash`** (CFO, 2026-08-27, "all
+> three"); it is a manual verification target and carries no policy row.
 
 **Why the Opus line for the remote keys:** `claude-opus-4-8` carried 49.6% of
 all measured spend and the plurality of spend at each of hq, phase, and
