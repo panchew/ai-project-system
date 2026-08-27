@@ -262,9 +262,9 @@ E31.2's surface, untouched here.
 |---|---|---|---|
 | `creation` | `remote:claude-opus-5` | Creation | New key (this Epic). Policy row P1 (`model-routing-policy.md`): paid frontier, manual. |
 | `hq` | `remote:claude-opus-5` | HQ | Existing key (P9-M30-E30.2). Policy row P2. |
-| `phase` | `remote:claude-opus-5` | Phase | Existing key. Policy row P3. |
-| `milestone` | `remote:claude-opus-5` | Milestone | Existing key. Policy row P4. |
-| `epic_manual` | `remote:claude-opus-5` | Epic (manual) | New key (this Epic), distinct from the `epic_dev`/`epic_qa` agentic-dispatch lanes those keys serve. Policy row P5's general "epic × execution: paid frontier" default — P6/P7's local-offload values apply only when the agentic Dev/QA dispatch lanes are actually in use, which a manual Epic chat, by definition, is not. |
+| `phase` | `remote:gpt-5.6-sol` | Phase | Existing key. Policy row P3. |
+| `milestone` | `remote:deepseek-v4-pro` | Milestone | Existing key. Policy row P4. |
+| `epic_manual` | `remote:deepseek-v4-flash` | Epic (manual) | New key (this Epic), distinct from the `epic_dev`/`epic_qa` agentic-dispatch lanes those keys serve. Policy row P5's general "epic × execution: paid frontier" default — P6/P7's local-offload values apply only when the agentic Dev/QA dispatch lanes are actually in use, which a manual Epic chat, by definition, is not. |
 
 **Values are versions; the decision behind them is a tier.** These five cells named
 `remote:claude-opus-4-8` until 2026-07-28, when that version stopped being offered in the
@@ -321,7 +321,37 @@ different from silence — an unstated skip would be as dishonest as a false ref
 "Cannot verify, therefore refuse" was the other legitimate option considered; this
 document's answer is the permissive default, stated explicitly, not silently assumed.
 
-#### Mismatch: refuse, unconditionally
+#### Mismatch: ADVISORY by default, blocking by opt-in
+
+> **AMENDED 2026-08-27 (SN-40, CFO Decision 3).** This section previously read *"Mismatch:
+> refuse, unconditionally."* **The reasoning behind that refusal stands and is preserved
+> below** — it was written after a Creation Chat ran `claude-opus-5` against a configured
+> `remote:claude-opus-4-8` and opened anyway. **What it did not anticipate is a CFO
+> deliberately moving the lineup**, for whom an unconditional refusal makes a *mistaken*
+> switch stop the next chat from opening at all. That is a ratchet, and the CFO hit it in
+> the wild on `panchew-io`.
+>
+> **The default is now `advisory`.** Governed by `model_verification` in `.ai-project.yml`:
+>
+> | Value | Behaviour |
+> |---|---|
+> | **`advisory`** (default) | The chat **states the mismatch plainly in its first substantive response** — self-reported model vs configured value — **and proceeds.** |
+> | `blocking` | The unconditional refusal below, restored verbatim. |
+>
+> **The honesty requirement is unchanged and is not weakened by this amendment:** an
+> unstated skip would be as dishonest as a false refusal claim. **Advisory means *say it and
+> continue*, never *say nothing*.**
+>
+> **Absent key → `advisory`.** A missing `model_verification` is not an error; the
+> permissive default already governs an absent `models:` block and this is consistent with
+> it.
+>
+> **This lapses on the CFO's declaration**, not on a phase boundary: it defaults off *until
+> he declares it is OK to enforce the switching gates.* Until that declaration **no gate
+> blocks a lineup change, including SN-37's model-qualification gate** — **suspended for
+> lineup changes, not reversed.**
+
+#### The blocking behaviour, retained verbatim for `model_verification: blocking`
 
 If the harness-reported model and the configured expected value for this level are both
 present and disagree, the chat **MUST stop** before doing any further planning, review, or

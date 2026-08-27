@@ -47,14 +47,40 @@ cfo_review_gate: enabled
 # See docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/
 # P10-M33-E33.2__runtime-decision.md and .ai-project/artifacts/agentic-runs/
 # P10-M33-E33.2/run-record.md + P10-M33-E33.4/run-record.md.
+# BASELINE LINEUP, 2026-08-27 (SN-41, CFO decision; HQ ruling
+# 2026-08-27__...__ruling__sn40-46-baseline-lineup-and-the-switching-ratchet.md).
+# PROVENANCE, STATED HONESTLY: unlike the E30.2 defaults above, THIS LINEUP IS A CFO
+# ALLOWANCE DECISION, NOT A MEASUREMENT-GROUNDED MAPPING. No token-burn dataset, no
+# back-test and no qualification run supports these five values. The comments above
+# describe how the PREVIOUS values were derived; they do not describe these.
+#   Claude allowance is spent at Creation and HQ only, Opus 5 (not Fable 5).
+#   SN-38's scheduled models.creation -> fable-5 edit is CANCELLED; it never landed.
+#   Local inference is PARKED, re-enterable (SN-43) — epic_dev/epic_qa leave
+#   local:qwen3-coder:30b, which is not deleted, only off the baseline. Its E33.2/E33.4
+#   evidence stands. Re-entry condition: agentic runs working properly (SN-42).
+# ROUTE AMBIGUITY, RECORDED: both Deepseek values resolve via TWO routes —
+# `opencode/deepseek-v4-*` and `opencode-go/deepseek-v4-*` (verified 2026-08-27 against
+# the catalogue with XDG_DATA_HOME corrected). `remote:<name>` records WHICH MODEL, NOT
+# WHICH ROUTE. Selecting the route is the dispatcher's, not this block's.
 models:
   hq: remote:claude-opus-5
-  phase: remote:claude-opus-5
-  milestone: remote:claude-opus-5
-  epic_dev: local:qwen3-coder:30b
-  epic_qa: local:qwen3-coder:30b
+  phase: remote:gpt-5.6-sol
+  milestone: remote:deepseek-v4-pro
+  epic_dev: remote:deepseek-v4-flash
+  epic_qa: remote:deepseek-v4-flash
   creation: remote:claude-opus-5
-  epic_manual: remote:claude-opus-5
+  epic_manual: remote:deepseek-v4-flash
+
+# Manual-chat model verification behaviour (SN-40, CFO Decision 3, 2026-08-27).
+# advisory (default): a chat whose harness-reported model disagrees with its level's
+#   configured value STATES THE MISMATCH PLAINLY in its first substantive response and
+#   PROCEEDS. The honesty requirement is unchanged — an unstated skip is as dishonest as
+#   a false refusal claim.
+# blocking: restores the unconditional refusal (the pre-2026-08-27 behaviour).
+# Defaults to advisory until the CFO declares it is OK to enforce the switching gates.
+# Until that declaration NO GATE blocks a lineup change, including SN-37's
+# model-qualification gate — SUSPENDED for lineup changes, not reversed.
+model_verification: advisory
 
 # Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
 # This repo is ENABLED (enabled: true) as of Epic E29.2 (P8-M29): the live local
