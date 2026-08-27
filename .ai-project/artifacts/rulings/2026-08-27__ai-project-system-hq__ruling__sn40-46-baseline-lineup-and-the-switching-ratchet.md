@@ -256,7 +256,15 @@ nothing.**
 **`blocking_resolved: false`** — the CFO's enforcement declaration is outstanding by construction, and
 SN-42's shape is with the Phase Chat.
 
-**Suite 548 passed / 1 skipped** (ComfyUI endpoint down; `AI_PROJECT_SKIP_LIVE_ENDPOINT_TESTS=1`).
-**549 → 548 by one deliberate test removal.** Validator `VALID, 0 errors`.
+**Suite 548 passed / 0 skipped**, measured 2026-08-27 **against a live ComfyUI endpoint** (`http 200`
+at `localhost:8188`, restored by the CFO). **549 → 548 by one deliberate test removal**, named in
+Decision 2. **No skips introduced.** Validator `VALID, 0 errors`.
+
+> **Recorded because the figure was briefly wrong in a way nothing would have flagged.** While this
+> ruling was being written the endpoint was down, and the suite read **548 passed / 1 FAILED** — an
+> environmental result, not a regression. **Every `549/0` in this phase's artifacts silently assumed a
+> running ComfyUI**, HQ's own repeatedly. **A suite figure should carry the environment it was
+> measured in, or it is not a measurement** — offered as a candidate obligation for P12's closure
+> declaration, which will quote one.
 
 **PSG §11.6.1:** HQ-authored, no chat-level reviewer. **The CFO is the mandatory diff reviewer.**
