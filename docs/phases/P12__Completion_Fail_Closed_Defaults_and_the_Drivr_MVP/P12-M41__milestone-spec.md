@@ -565,7 +565,53 @@ produced here.
 
 ---
 
-### E41.5 — Terminal: land the line-up *(gated on M42 closure)*
+### E41.5 — Terminal: land the line-up — **LARGELY DISCHARGED 2026-08-27; NARROWED, NOT SUPERSEDED**
+
+> **⚠ #236 LANDED THE LINE-UP, OUTSIDE THIS MILESTONE'S MACHINERY.** By the route SN-40..46
+> Decision 6 mandated — *Steering Note → HQ ruling → one PR, outside P12's milestone machinery* —
+> because these are **governance configuration, not phase work.**
+>
+> **Verified on `master` `3222f50`:** the `models:` block carries the CFO's baseline; the policy
+> mapping table carries all five guarded keys **with honest attribution** — *"value set by CFO
+> allowance decision (SN-41), not by measurement"*; and the ratchet turned out to be **six surfaces,
+> not four**, the two extra found by divergence guards **failing loudly**, which is those guards
+> doing exactly their job.
+>
+> **Two of this epic's own findings are moot, and both were mine:**
+> - **V3** — the shared-scalar refactor `EXPECTED_MANUAL_ONLY_VALUE` forced. **That constant is
+>   gone**; the test is now `test_config_manual_only_key_is_well_formed`. **The refactor happened by a
+>   different route and the finding was right about the constraint, wrong about who would hit it.**
+> - **The notification DoD clause**, which rested on *five verification targets arming
+>   simultaneously.* **`model_verification: advisory` is now the default — none of them arms.** The
+>   clause I narrowed twice, from five to three to at-most-one, is now **zero**.
+>
+> **WHY NARROWED RATHER THAN SUPERSEDED — this milestone's decision, and it turns on one residue.**
+>
+> **Row P4 and the mapping table now disagree in their reasoning.** Row P4 still reads **"Paid
+> frontier"**, justified by *largest spend share* and *Stage-2 accept authority*, and by
+> *"evaluated against local inference 2026-07-31 and not moved."* **Its mapping row now says the value
+> is set by an allowance decision rather than by measurement.** **Neither statement is wrong; together
+> they no longer describe one thing.**
+>
+> **That is exactly the decided-versus-configured separation M44's E44.2 owns, arriving in the policy
+> file** — and it is the residue of this epic's deliverable 2, which was always *"record the closure
+> beside the row rather than by moving it."* **#236 moved the mapping and correctly left the tier row
+> alone. Nobody has yet recorded that the row's justification no longer describes how its value is
+> chosen.**
+>
+> **So E41.5's remaining subject is small and real:** reconcile row P4's stated reasoning with how
+> its value is now set, **and record the discharge** — what #236 landed, what this milestone had
+> planned, and where the two differ. **A milestone whose terminal epic was overtaken should say so in
+> its own record rather than leave a reader to infer it from an absence.**
+>
+> **Both gates are moot and I am not pretending otherwise.** Gate 1 (M42 closed) guarded
+> attributability for a landing that has happened. Gate 2 (every moving row passed its harness) is
+> **suspended by CFO decision** — no gate blocks a line-up change until he declares enforcement, which
+> also suspends HQ's fidelity condition. **Recording them as moot is honest; leaving them stated as
+> live would be theatre.**
+
+**The original scope follows, preserved unmodified for the record.**
+
 
 **TWO GATES. Both must be satisfied before this epic's PR may merge.**
 
@@ -1009,6 +1055,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.6.0 | 2026-08-27 | **The line-up landed without the evidence, by CFO decision, outside this milestone's machinery** (#235/#236, `master` `3222f50`). **E41.5 NARROWED, not superseded** — the Phase Chat's call. **What #236 discharged:** the `.ai-project.yml` edit, the policy mapping table with honest *"set by allowance decision, not by measurement"* attribution, and a **six-surface** ratchet — two more than SN-40 named, both found by divergence guards **failing loudly**. **Two of this epic's findings are moot, both mine:** V3's forced shared-scalar refactor (the constant is gone, reached by another route) and the notification clause, whose arming count I narrowed from five to three to at-most-one and which `model_verification: advisory` now makes **zero**. **The residue that keeps it alive:** **row P4 still reads "Paid frontier" on measurement reasoning while its mapping row says the value is set by an allowance decision** — the decided-versus-configured separation M44's E44.2 owns, arriving in the policy file, and the unfinished half of this epic's deliverable 2. **Both gates recorded as moot** — Gate 1 guarded a landing that happened; Gate 2 is suspended by CFO decision until he declares enforcement. **E41.4 is unaffected and is now MORE load-bearing:** every configured engine is remote, so its transport-versus-surface distinction is the whole remaining question. **No epic added or removed.** |
 | 1.5.0 | 2026-08-23 | **Two CFO rulings, and the two milestone-scope dispositions they left to this level.** **(1) All three epic keys are `local:qwen3-coder:30b`** — `epic_dev` and `epic_qa` already hold it, so neither moves, and **E41.3 has no subject matter.** **Disposition: SUPERSEDED and RETAINED in the epic list, not dropped** — the Phase Chat's call. Dropping it would erase a decision and orphan four findings that cite it; **row P4's closure set the precedent of recording beside rather than removing**, and `P12-GH-3`'s lesson is that what vanishes loses its reasoning first. **(2) `epic_manual` is exempted from the back-test** and lands on **R6's surface confirmation alone**, moving to `local:qwen3-coder:30b`. **A CFO amendment to this milestone's DoD, recorded with his reasoning** — *being able to execute a level with its chosen model outranks proving the model is good* — **because a DoD that shrinks without a recorded reason reads as drift.** Consequence: **`qwen3.8:27b` leaves the measured set** and E41.4 drops from four candidates to three. **No ordering change; E41.5's gates unchanged; E41.2's instrument and E41.4's back-test both survive.** |
 | 1.4.0 | 2026-08-20 | **Amended for the HQ Ruling on S5** (`…__ruling__s5-per-lane-qualification-floor.md`, merged to `master` at `e9834c6`). **The qualification floor is now PER-LANE by CFO decision:** `epic_dev` keeps `tool rounds > 0` AND `files changed > 0`; **`epic_qa` takes `tool rounds > 0` AND `claims resolve against files that exist`, with `files changed` recorded but not scored.** Raised by the M41 Milestone Chat as S5, verified independently by the Phase Chat and by HQ, and **ruled by the CFO as the owner of Binding Constraint 6** — three levels each declined to adopt the per-lane form as an application detail, which is the line the phase spec draws around his decisions. The reasoning of record: **`files changed > 0` on `epic_qa` was a constant false, not a strict bar**, because `bin/run-qa-agent:336-344` refuses to dispatch under a mutating tool set; a check with the same answer for every candidate has zero discriminating power; and `files changed` was the **dev lane's proxy for "it actually acted"**, whose read-only equivalent is reading and grounding. **Every recorded historical failure still fails**, and **Criterion 2 is untouched — reaching this floor by enabling a mutating tool on the QA lane is refused in advance.** **`epic_qa`'s withheld verdict is UNBLOCKED**; E41.2 and E41.3 apply the ruled floor and state which version they applied. **No scope, epic, ordering or gate change.** |
 | 1.3.0 | 2026-08-20 | **Corrects F3 and its HQ annotation, both of which ROTTED when R6 changed the landing set. Found by the E41.5 Epic set (V1/V2), re-derived by the Phase Chat against the suite.** F3 was **true when written**; `phase` and `milestone` were landing and are in `DEFAULT_MODELS`. **R6 removed both, and neither the annotation nor two subsequent amendments re-derived the file list — the Phase Chat carried an inherited claim through two of its own edits**, which is this milestone's own named error class. Corrected: the `bin/` collision with M42 is **ZERO unless a lane moves**, not two, because **`creation` is not in `DEFAULT_MODELS`**; *"the three divergence guards enforce it"* is **false for `creation`**, which the two `MODEL_KEYS`-parametrized policy-mapping guards **never see** — the pair that binds it is over `MANUAL_ONLY_KEYS`; and the `EXPECTED_MANUAL_ONLY_VALUE` refactor is **forced by a red suite**, not deferrable. Acceptance criteria now require the epic to **name the guards that bind what landed rather than repeat a count**. **Also records, in advance, the inference this finding must not license:** *no lane key → no `bin/` edit → no conflict → Gate 1 is purposeless* is a valid chain to a forbidden conclusion — **Gate 1's reason is attributability, it is the CFO's and HQ's, and it was never conditional on a file list.** **No scope, epic, ordering or gate change.** |
