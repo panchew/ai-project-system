@@ -4,7 +4,7 @@ name: "Completion: Fail-Closed Defaults and the Drivr MVP"
 status: scoping
 start_date: 2026-08-19
 planned_end_date: 2026-09-19
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Phase P12: Completion — Fail-Closed Defaults and the Drivr MVP
@@ -536,6 +536,19 @@ precisely because it carried `PASS 4/5, 0 false alarms` in advance.
 
 ### P12.7: First Real Agentic Integration (M47)
 
+> **SN-42 lands here by preference, not by default (CFO, 2026-08-27).** Remote agentic dispatch —
+> making an Epic actually run on `deepseek-v4-flash` — is placed in P12 by HQ ruling, and **the CFO's
+> stated preference is to EXTEND M47 rather than create an eighth milestone**: *"Better if avoid an
+> additional milestone, but let's do it if justified."*
+>
+> **So the Phase Chat's default is extension, and a new milestone is an escalation it must justify —
+> not a free choice and not a forbidden one.** The bar is the work's actual size, not tidiness.
+>
+> **Why it is here at all:** with local inference parked, all three Epic keys are remote, and **every
+> dispatch path in this repository was built for `local:` values served by Ollama.** M47 cannot run
+> until remote dispatch exists. **It is a prerequisite M47 silently assumed was solved, not a new
+> objective.**
+
 **The phase's proof, and the reason the other five milestones exist.**
 
 One real epic, in one real project, carried end to end agentically by Drivr — dispatched, executed,
@@ -774,6 +787,12 @@ The CFO (Layer 8) will accept P12 complete when:
       choice, the run record, and the framework's own failures during it committed
 - [ ] The full suite is green at delivery (**549 baseline on `master`**, no regressions, no skips
       introduced to route around changes) for changes touching this repo
+- [ ] **`model_verification` is flipped from `advisory` to `blocking` as part of P12's closure**
+      (CFO decision, 2026-08-27) — deferred to the phase boundary **specifically so no chat halts
+      mid-execution**, since Phase and Milestone chats run on Claude while the baseline configures
+      `gpt-5.6-sol` / `deepseek-v4-pro`. **P12 may not close without disposing of this**: flip it, or
+      record why not. **SN-37's model-qualification gate resumes binding lineup changes at the same
+      moment**, as does HQ's suspended fidelity condition
 - [ ] The phase closure declaration restates the parked/deferred items with their triggers and
       records llama.cpp as **closed**
 
@@ -928,6 +947,7 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.0 | 2026-08-27 | **Two CFO decisions recorded with their consequences, not merely their content.** **(a) `model_verification` flips to `blocking` AT P12's CLOSURE**, as an acceptance criterion the phase cannot close without disposing of — deferred to the boundary **specifically so no chat halts mid-execution**, since Phase and Milestone chats run on Claude while the baseline configures GPT and Deepseek. SN-37's gate and HQ's suspended fidelity condition resume at the same moment. **The trigger is an EVENT, not a session's survival** — the failure mode this phase recorded twice. **(b) SN-42's shape: EXTEND M47 by CFO preference**, with a new milestone available as a justified escalation rather than a free choice. No epic added, no ordering change. |
 | 1.2.0 | 2026-08-23 | **Two acceptance criteria added from the P12 Phase Chat's scope judgments, both accepted by HQ as properties the deliverable must already have rather than items beside it.** **M46:** the qualification runner must distinguish *measured and failed* from *could not measure* — SN-37's gate exists to detect *successful nothing*, and Drivr's `XDG_DATA_HOME` inheritance is that defect inside the gate's own infrastructure. **M47:** the proof run must be checked by `bin/successful-nothing-instrument`, because M47 dispatches through a parse M42 does not repair, so **the phase's proof could otherwise be an instance of the phase's organizing defect and its gate would pass it.** No epic, ordering or scope change. |
 | 1.1.7 | 2026-08-21 | **Corrects (c) before merge, twice over.** The tie-break's published form was reported as *silently returns nothing*, then as *empty from `master`, correct from `milestone/M41`*; **HQ's own run returns a different valid-looking commit from each branch and empty from neither.** The mechanism is implicit `HEAD`, so the rule is **reader-dependent rather than broken** — and *a rule returning a different valid-looking answer to each reader shows nobody anything wrong*, which is worse than always-failing or empty. Generalizes: **any form resting on implicit `HEAD` is branch-dependent in a project whose sessions share a moving checkout.** Adds **(d)**: this is SN-36/37's ratified `undetermined` principle in a **fourth** place beside E41.2's S3 and E41.1's R6a — each a check whose silent failure reads as a meaningful value, all three repaired identically as *empty means undetermined and escalates*. |
 | 1.1.6 | 2026-08-21 | Adds two consequences that **narrow the remedy space** for the M46 currency input. **Correctness is not safety** — *a fork does not have to be wrong to be a problem*; a remedy judged on whether forks produced bad output will conclude there is no problem. And **a tie-break computed from the shared state is self-legitimizing**: the role becomes acquirable by the act it governs, so a mistaken write retroactively legitimizes itself — **ruling out any tie-break derived from artifacts both forks mutate**, and placing exclusivity outside the state the forks write. Records the silent-failure hazard in such a rule's published form, where *empty* reads as *no holder* and both forks conclude they should act. |
