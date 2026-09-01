@@ -27,6 +27,7 @@ choice rather than obligation: it costs one line, and it is what made the M41 fo
 
 | Epic | Delivery | Decision | Accepting session | Date |
 |---|---|---|---|---|
+| **E41.4** | PR **#239**, `epic/P12-M41-E41.4` @ `5db8b92` | **ACCEPTED** — both rows hold on a neutral result, escalated to the CFO | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-09-01 |
 | **E41.2** | PR **#231**, `epic/P12-M41-E41.2` @ **`cc0d102`** (accepted at `ce4f1c8`; delta verified below) | **ACCEPTED** — two escalations routed upward, no rework consumed | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-22 |
 | **E41.1** | PR **#230**, `epic/P12-M41-E41.1` @ **`e2e26e4`** (accepted at `bdbbd36`; annotations actioned) | **ACCEPTED** — with two annotations, neither a rework attempt | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-21 |
 
@@ -274,3 +275,48 @@ stale while the rule itself was correct and present.**
 **Carried, not fixed here** — the fix is template-level and belongs with M43's starter work, which
 already owns `P12-GH-1`. **What this chat binds now:** the remaining M41 starters (E41.3, E41.4,
 E41.5) are re-read against the corpus **before** their epics open, not after.
+
+
+---
+
+## E41.4 — the review behind the decision
+
+**Re-measured, not taken on report (G2).** This epic had the most ways to go wrong and none of them fired.
+
+| Claim | Re-measured by this chat | Result |
+|---|---|---|
+| PR state | `gh pr view 239` | **OPEN, MERGEABLE**, head `5db8b92`, **0 behind master** |
+| **The instrument is frozen** | `git diff --name-only` over `packets/`, `rubric.md`, `judgment.md`, `runs/` | **ZERO changed** — packets, rubric, judgment and E35.5's ten runs all untouched |
+| **Scores committed BEFORE the mapping** | `git log --reverse` per file | **`scores.md` at `8fbc30a`, `mapping.tsv` at `91b3431`** — separate commits, labelled *commit 1 of 2* / *2 of 2* |
+| Run count | `git ls-tree` | **30 raw + 30 blinded** |
+| **The measured set** | `mapping.tsv`, counted | **10 × `claude-opus-5`, 10 × `gpt-5.6-sol`, 10 × `opencode/deepseek-v4-pro`.** **Zero fable-5. Zero `v4-flash`.** |
+| U8 credential visibility | a raw record | **`XDG_DATA_HOME: UNSET`**, real store path recorded, per dispatch |
+| U7 fidelity | `fidelity/` | **both rows probed** — `gpt-5.6-sol` and `deepseek-v4-pro` |
+| Truncation | record | **all 30 `finish=stop`, none truncated** |
+| Suite | `PYTHONPATH=. pytest -q` on the epic branch | **569 passed / 0 failed** |
+
+### The control that mattered most, and it is checkable rather than asserted
+
+**U1 said the scorer was one of its own subjects** — `claude-opus-5` is the incumbent *and* the model every chat in this milestone runs on. **The control was commit order**, and the history shows it: **scores first, mapping second, two commits.** A reviewer can verify the blind without trusting anyone's account of it. **That is the difference between "the scorer had no reason to favour itself" and "the scorer could not have."**
+
+### The corrected measured set held
+
+**This chat's pre-flight caught two errors of its own in v1.3.0** — `fable-5` was cancelled and `milestone` took **`deepseek-v4-pro`, not `flash`** — and corrected them at v1.4.0 **before the epic opened.** **The delivery measured exactly the corrected set.** Had it opened on v1.3.1 it would have measured a model nothing routes to and skipped one that two rows depend on.
+
+### The result: a neutral one, and it is a delivered result
+
+**All three models clear E35.5's absolute bar. All three are identical on every objective check.**
+
+**The relative bar requires *no worse on every check* AND *strictly better on at least one*.** Identical satisfies the first and **cannot satisfy the second.** So:
+
+> **Neither `gpt-5.6-sol` nor `deepseek-v4-pro` clears the relative bar. `phase` and `milestone` HOLD, and the result goes to the CFO** — per this milestone's own rule that *no candidate clears a row → the row holds, the result goes to the CFO.* **Escalated as a result, not as a failure.**
+
+**And the epic bounded its own finding rather than overselling it:** *"on curated material does not prove reasoning holds under ambiguity"*, and the set *"provides no relative evidence."* **A neutral result stated as neutral is worth more than a marginal one stated as a win.**
+
+### Rework accounting
+
+**No attempt consumed. Attempt 1 of 3 stands.**
+
+### What this leaves M41
+
+**E41.4 was the last measurement work.** The line-up already landed outside the milestone; **this delivery is the evidence M41 existed to gather, arriving after the thing it was gathered for.** That is worth stating plainly in the Closure Declaration rather than leaving a reader to notice the ordering.
