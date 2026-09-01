@@ -1,0 +1,5 @@
+# E41.4 — held-out material (U1). NOT committed until after scores are committed.
+# raw/      : transport JSON with model identity — held out; never scored from.
+# mapping.tsv : opaque run ID <-> model mapping — published only AFTER scores commit.
+raw/
+mapping.tsv
