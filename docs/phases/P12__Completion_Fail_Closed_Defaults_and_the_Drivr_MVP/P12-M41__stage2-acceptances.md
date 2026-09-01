@@ -27,6 +27,7 @@ choice rather than obligation: it costs one line, and it is what made the M41 fo
 
 | Epic | Delivery | Decision | Accepting session | Date |
 |---|---|---|---|---|
+| **E41.5** | PR **#240**, `epic/P12-M41-E41.5` @ head | **ACCEPTED** — additive only; the last epic | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-09-01 |
 | **E41.4** | PR **#239**, `epic/P12-M41-E41.4` @ `5db8b92` | **ACCEPTED** — both rows hold on a neutral result, escalated to the CFO | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-09-01 |
 | **E41.2** | PR **#231**, `epic/P12-M41-E41.2` @ **`cc0d102`** (accepted at `ce4f1c8`; delta verified below) | **ACCEPTED** — two escalations routed upward, no rework consumed | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-22 |
 | **E41.1** | PR **#230**, `epic/P12-M41-E41.1` @ **`e2e26e4`** (accepted at `bdbbd36`; annotations actioned) | **ACCEPTED** — with two annotations, neither a rework attempt | `1b70b020-4734-45ac-a514-8e4e0ba7d40c` | 2026-08-21 |
@@ -320,3 +321,45 @@ E41.5) are re-read against the corpus **before** their epics open, not after.
 ### What this leaves M41
 
 **E41.4 was the last measurement work.** The line-up already landed outside the milestone; **this delivery is the evidence M41 existed to gather, arriving after the thing it was gathered for.** That is worth stating plainly in the Closure Declaration rather than leaving a reader to notice the ordering.
+
+
+---
+
+## E41.5 — the review behind the decision
+
+**Re-measured, not taken on report (G2).** **The whole risk of this epic was that it would edit something it had been told not to.** It did not.
+
+| Claim | Re-measured | Result |
+|---|---|---|
+| Files touched | `git diff --name-only` | **exactly 3** — the Delivery Notice, `model-routing-policy.md`, and its own record |
+| **Do-not-touch list** | per-path diff | **`.ai-project.yml`, `bin/ai-project-orchestrator`, `chat-hierarchy.md`, `tests/test_model_config.py` — ALL UNTOUCHED** |
+| **Beside the row, not by moving it** | diff stat | **49 insertions, ZERO deletions.** Row P4's `default` and `why` cells and the mapping table are byte-unchanged |
+| Convention followed | the note's heading | a **second dated `Note on row P4`**, exactly as row P4's own precedent |
+| E41.4 cited, not restated | the note | **cited by artifact path** — one copy stays correct |
+| Suite | `PYTHONPATH=. pytest -q` on the branch | **569 passed / 0 failed** |
+| Gates | the discharge record | **recorded moot**, 13 times over — not left stated as live |
+
+### It found something better than what it was sent to reconcile
+
+**The epic was asked to reconcile row P4's justification with how its value is set. It found that the row was CLOSED ON ONE ENGINE AND CONFIGURED WITH ANOTHER**, and held three facts apart that had never been visible together:
+
+| | Date | Fact |
+|---|---|---|
+| **DECISION MADE** | 2026-08-19 | HQ Ruling Decision 15 — row P4 **closed** by CFO decision, a policy-row change, **decided value `Deepseek V4 Flash`** |
+| **VALUE CONFIGURED** | 2026-08-27 | #236 — the mapping reads **`deepseek-v4-pro`**, attributed honestly as *"set by CFO allowance decision (SN-41), not by measurement"* — **a different engine, by a second and separate decision** |
+| **MEASURED** | 2026-09-01 | E41.4 — **neutral**; all three identical on every check, relative bar cleared by neither |
+
+> **`decision made` ≠ `value configured` ≠ `measured`, and for row P4 all three now differ.** The
+> milestone flagged the first distinction at E41.5 v1.0.0 as *"the first artifact in this corpus that
+> has to hold decision and configuration apart."* **The epic found a third term and the fact that the
+> first two point at different models.**
+
+**This chat's own pre-flight had caught the `flash`/`pro` divergence as a scoping error in E41.4's candidate list. It did not notice that the same divergence meant row P4's closure and its configured value do not refer to the same engine.** **Same fact, one level deeper, found by the level below.**
+
+### Rework accounting
+
+**No attempt consumed. Attempt 1 of 3 stands.**
+
+### M41 has no epics left
+
+**E41.1, E41.2, E41.4 and E41.5 delivered and accepted; E41.3 superseded and retained.** What remains is the **Milestone Closure Declaration**, and its honest sentence is already established by the record: **the line-up landed before the evidence M41 existed to gather, and the evidence, when it arrived, was neutral.**
