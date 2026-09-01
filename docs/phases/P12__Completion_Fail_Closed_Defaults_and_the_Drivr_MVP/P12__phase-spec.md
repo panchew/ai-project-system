@@ -4,7 +4,7 @@ name: "Completion: Fail-Closed Defaults and the Drivr MVP"
 status: scoping
 start_date: 2026-08-19
 planned_end_date: 2026-09-19
-version: 1.3.1
+version: 1.3.2
 ---
 
 # Phase P12: Completion — Fail-Closed Defaults and the Drivr MVP
@@ -407,6 +407,38 @@ precisely because it carried `PASS 4/5, 0 false alarms` in advance.
   > and go-to-blocker behaviours, not a convenience** — and it is Drivr's to own, since Drivr opens
   > the chats.
   >
+  >
+  > **AMENDED 2026-08-27 — the harness moved and half this input's reasoning went with it.**
+  > `ListAgents` **now reports the calling session its own address** (*"This session is
+  > `ai-project-system-<hex>` — the name other sessions use to message it"*). **It did not on
+  > 2026-08-20.**
+  >
+  > **What DIES:** the claim, which lived in HQ's and the Phase Chat's messages and **never reached an
+  > artifact**, that role identification is *unreachable from inside the fleet by construction and
+  > requires an outside correlator.* **A session can now state its own address.** That was most of what
+  > made third-party probing necessary.
+  >
+  > **What SURVIVES, and is the real requirement:** **names carry no role.** A fleet still cannot
+  > determine *who is HQ* or *who holds M41* from the roster alone, so **the registry requirement is
+  > unchanged** — it is just no longer justified by an impossibility. **M46 must build against
+  > "names carry no role", not against "sessions cannot identify themselves."**
+  >
+  > **How it was caught, which is the part that generalizes:** the M41 Milestone Chat **drafted a
+  > reply asserting the dead claim verbatim, ran the command anyway before sending, and caught it one
+  > turn short of shipping.** *The dependent was a sentence in flight; the premise was the harness the
+  > sentence was being written in.* **This is `P12-GH-3`'s most uncomfortable instance — not a
+  > document, not a branch, not an executing context, but a claim about the environment making the
+  > claim** — and the only thing that caught it was **re-measuring at the moment of use** rather than
+  > trusting a finding that was correct when recorded.
+  >
+  > **HQ's own conduct is the counter-example and is recorded as such: HQ observed the self-address
+  > line hours earlier, said so in passing, and amended nothing.** Noticing a falsifying observation
+  > and not acting on it is worse than not noticing, and it is why the correction arrived from below
+  > rather than from the level that saw it first.
+  >
+  > **Nothing had to be unwound**, and the reason is the discipline rather than luck: **the dead claim
+  > was never filed.** It circulated in messages for a week and stopped at the artifact boundary.
+
   > **EXTENDED 2026-08-20, same day, from a second live failure — and this half is not the same
   > requirement.** A registry answers *which* session holds a role. **It does not answer how many
   > do.** On 2026-08-20 **two authentic HQ sessions ran concurrently**, both able to commit to
@@ -958,6 +990,7 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.2 | 2026-08-27 | **Amends the M46 role-identification input: the harness moved.** `ListAgents` now reports a session its own address; it did not on 2026-08-20. **The *requires-an-outside-correlator* claim dies** — it lived in messages and **never reached an artifact**, so nothing had to be unwound. **The registry requirement survives, re-justified**: names carry no role, which is what M46 must build against. Caught by the M41 chat running the command instead of asserting from memory, one turn short of shipping — `P12-GH-3` with a claim-in-flight about the environment as its dependent. **HQ had seen the self-address line hours earlier and amended nothing**, which is recorded here as the counter-example. |
 | 1.3.1 | 2026-08-27 | **Ordering defect in v1.3.0's own criterion, found by the P12 Phase Chat and corrected.** The flip was placed *as part of* closure; **the Phase Chat runs the closure and is one of the chats the flip halts**, so a mid-sequence flip stops the executor half-finished and the phase cannot close itself. **Now the LAST act, performed by HQ** — the only level besides Creation that survives it. Deferring to the boundary was right; placing it *inside* the boundary was not. **No decision changed; only who acts and when.** |
 | 1.3.0 | 2026-08-27 | **Two CFO decisions recorded with their consequences, not merely their content.** **(a) `model_verification` flips to `blocking` AT P12's CLOSURE**, as an acceptance criterion the phase cannot close without disposing of — deferred to the boundary **specifically so no chat halts mid-execution**, since Phase and Milestone chats run on Claude while the baseline configures GPT and Deepseek. SN-37's gate and HQ's suspended fidelity condition resume at the same moment. **The trigger is an EVENT, not a session's survival** — the failure mode this phase recorded twice. **(b) SN-42's shape: EXTEND M47 by CFO preference**, with a new milestone available as a justified escalation rather than a free choice. No epic added, no ordering change. |
 | 1.2.0 | 2026-08-23 | **Two acceptance criteria added from the P12 Phase Chat's scope judgments, both accepted by HQ as properties the deliverable must already have rather than items beside it.** **M46:** the qualification runner must distinguish *measured and failed* from *could not measure* — SN-37's gate exists to detect *successful nothing*, and Drivr's `XDG_DATA_HOME` inheritance is that defect inside the gate's own infrastructure. **M47:** the proof run must be checked by `bin/successful-nothing-instrument`, because M47 dispatches through a parse M42 does not repair, so **the phase's proof could otherwise be an instance of the phase's organizing defect and its gate would pass it.** No epic, ordering or scope change. |
