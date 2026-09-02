@@ -128,3 +128,67 @@ gate is open.
 
 **The next milestone (`milestone/M47` — First Real Agentic Integration, the phase's proof) is released
 by this closure**, as is **E41.5** (M41's terminal epic, gated on M42 since 2026-08-19).
+
+---
+
+## Stage-2 Review — Phase Chat Decision: **ACCEPTED**
+
+**Reviewer:** P12 Phase Execution Chat · **Date:** 2026-09-02 · **Reviewed at:** `milestone/M42` @ `80df887`
+
+Accepted under PSG §11.6. Per **G2**, the executor's report is not the evidence — the following were
+re-measured by this chat at the layer, time and scope stated here (**P11-GH-2**), against
+`origin/milestone/M42`, not against the working tree:
+
+| Claim | Re-measured | Result |
+|---|---|---|
+| Suite 582 passed / 0 failed | isolated worktree, `PYTHONPATH=. pytest -q` | **582 passed** — exact |
+| D1 host `shell=True` fallback removed | `bin/ai-project-orchestrator` | **removed** |
+| D2 unscoped `git add .` removed | `bin/ai-project-orchestrator` | **removed** |
+| D3 `--admin` rung removed | `bin/ai-project-git-merge` | **removed** |
+| D4 placeholder-agent stub removed | `bin/ai-project-init` | **removed** |
+| `test_promote_branch_approval_failure_aborts` exists | `bin/ai-project-git-merge` | **present** |
+| `social-stories-creator` repaired | fleet checkout | **14711 bytes** — content, not the 230-byte stub |
+| Carry-forward C: Drivr executes none of the three | `~/soft-dev/drivr/drivr` | **0 references, 0 call sites** |
+
+**A note on two of those rows.** A bare count of `shell=True` in the orchestrator returns 1, and of
+`--admin` in git-merge returns 6 — both non-zero against a declaration that says "removed." Both
+resolve on inspection: the orchestrator's single hit is a comment recording what *used to* live there,
+and all six git-merge hits are comments plus the inverted test's own guard, including the assertion
+that collects `--admin` attempts precisely to prove none occur. The declaration is accurate; the
+counts were the naive kind this phase has repeatedly been burned by. Recorded because the
+near-miss is the reusable part: **a grep count is not a finding until its context is read.**
+
+### Disposition of the three carry-forwards
+
+**A — stale `DEFAULT_GOVERNANCE_VERSION="v2.0.0"` → a default `ai-project-init` fails closed.**
+Confirmed at `bin/ai-project-init:22`. **Accepted at phase level**, not remanded. This is fail-closed
+behaving correctly and is therefore not an M42 defect; but it means a default enroll is non-functional
+until the ref moves, which is a phase-scoped bump-or-declare decision that outlives this milestone.
+
+**B — CWD-drift nesting.** Fixed within the milestone, informational. **Closed here**; no further action.
+
+**C — Drivr executes none of the three scripts.** Verified above: zero references, zero call sites.
+This **corrects the M42 milestone spec's own stated risk** — the spec framed D1/D2 as defects on a
+path "Drivr is about to invoke nightly," and that framing is **not realized**. The orchestrator's
+live-capable executor is `bin/ai-project-daemon` (currently stopped), and `ai-project-git-merge` has
+no execution caller at all. **Carried to the phase record as a correction**, since a milestone spec
+that misstates its own urgency is exactly the derived-claim rot **P12-GH-3** describes: the fixes were
+correct and worth making, but they were justified partly on a reachability claim that did not hold.
+The work stands; the reasoning is amended. Nothing here reduces the value of failing closed on a path
+before it goes live — it just means M42 was prophylactic rather than remedial, and the record should
+say so.
+
+### What this closure releases
+
+- **M47** — First Real Agentic Integration, the phase's proof. Its precondition (*the execution tier no
+  longer fails open*) is discharged.
+- **E41.5** — M41's terminal epic, gated on M42 since 2026-08-19.
+
+### Still open above this milestone (not M42's to carry)
+
+`model_verification` flips **advisory → blocking** at P12 closure. On that flip this Phase Chat's own
+routing (`models.phase` = `remote:gpt-5.6-sol`, self-reporting `claude-opus-5`) and every Epic chat's
+would halt. Flagged four times now; it needs disposal before the flip, and it is a phase-level debt.
+
+**Consolidation** (`milestone/M42` → `phase/P12`) requires CFO diff review and merge authorization
+per **§11.6.1** — acceptance is not authorization, and this chat does not merge on its own decision.
