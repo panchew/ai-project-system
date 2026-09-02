@@ -1,0 +1,5 @@
+# E41.4 — the R00 probe (local qwen2.5-coder:7b mechanics check) is NOT a scored run
+# and is deliberately excluded from the repo. Scored run records R01..R30 are committed.
+# Note: run records were blinded until the scores were committed (U1); the blinding
+# order is visible in the git history (scores commit precedes the mapping commit).
+R00*

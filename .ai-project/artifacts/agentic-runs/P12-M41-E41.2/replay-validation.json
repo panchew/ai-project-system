@@ -1,0 +1,1305 @@
+{
+  "declared": 5,
+  "reported": 5,
+  "records": [
+    {
+      "label": "E33.2 Run A",
+      "lane": "epic_dev",
+      "verdict": "FAIL",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 0,
+        "files_changed": {
+          "count": 0,
+          "provenance": "transcript-derived",
+          "lower_bound": true,
+          "paths": [],
+          "excluded_paths": [],
+          "workspace": null
+        },
+        "claims": {
+          "asserted": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "rate": null,
+          "vacuous": true
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 0,
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 0,
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "0/0",
+          "passes": true,
+          "scored": false,
+          "note": "recorded on epic_dev; the dev floor's terms are C-A and C-B"
+        }
+      ],
+      "unresolved_claims": [],
+      "all_claims": [],
+      "advertised_tools": {
+        "tool_set_path": ".ai-project/agents/tools.json",
+        "enabled": [
+          "read_file",
+          "write_file",
+          "edit_file",
+          "list_dir",
+          "run_command",
+          "git"
+        ],
+        "sha256_at_run_time": null,
+        "provenance": "read from the tool-set file NOW; the run metadata names the path but did not capture its content, so this is the file's current content and not provably the run's",
+        "sha256_now": "88eca8e7dfd564df583c401e39e4ac061d9b1cd1bc59c64b0478d48c3e3f9937"
+      },
+      "recorded_never_scored": {
+        "exit_code": 0,
+        "status": "completed",
+        "tokens": 223,
+        "duration_ms": 18288,
+        "model": "qwen2.5-coder:14b",
+        "endpoint": "runner-default",
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P10-M33-E33.2/transcript-A-qwen2.5-coder-14b.json",
+      "metadata_path": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P10-M33-E33.2/transcript-A-qwen2.5-coder-14b__run-metadata.json",
+      "executed_calls": []
+    },
+    {
+      "label": "E39.3",
+      "lane": "epic_qa",
+      "verdict": "FAIL",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 0,
+        "files_changed": {
+          "count": 0,
+          "provenance": "transcript-derived",
+          "lower_bound": true,
+          "paths": [],
+          "excluded_paths": [],
+          "workspace": null
+        },
+        "claims": {
+          "asserted": 36,
+          "resolved": 8,
+          "unresolved": 28,
+          "rate": 0.2222222222222222,
+          "vacuous": false
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 0,
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "8/36",
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 0,
+          "passes": null,
+          "scored": false,
+          "note": "RECORDED, NOT SCORED on epic_qa \u2014 run-qa-agent:336-344 refuses a mutating tool set, so this was a constant false, not a strict bar"
+        }
+      ],
+      "unresolved_claims": [
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows overrides.branch_strategy",
+          "resolved": false,
+          "reason": "'overrides.branch_strategy' is NOT present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows framework_version",
+          "resolved": false,
+          "reason": "'framework_version' is NOT present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        }
+      ],
+      "all_claims": [
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows governance.source",
+          "resolved": true,
+          "reason": "'governance.source' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows governance.version",
+          "resolved": true,
+          "reason": "'governance.version' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows governance.ref",
+          "resolved": true,
+          "reason": "'governance.ref' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows project.name",
+          "resolved": true,
+          "reason": "'project.name' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows project.description",
+          "resolved": true,
+          "reason": "'project.description' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows overrides.branch_strategy",
+          "resolved": false,
+          "reason": "'overrides.branch_strategy' is NOT present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows visual_artifacts.enabled",
+          "resolved": true,
+          "reason": "'visual_artifacts.enabled' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows visual_artifacts.comfyui_url",
+          "resolved": true,
+          "reason": "'visual_artifacts.comfyui_url' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows visual_artifacts.visual_required_for_specs",
+          "resolved": true,
+          "reason": "'visual_artifacts.visual_required_for_specs' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows framework_version",
+          "resolved": false,
+          "reason": "'framework_version' is NOT present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        }
+      ],
+      "advertised_tools": {
+        "tool_set_path": ".ai-project/agents/qa-tools.json",
+        "enabled": [
+          "read_file",
+          "list_dir"
+        ],
+        "sha256_at_run_time": "83ff08e7b3492fd38aee92bbe13fe2118535d1d9fa8f120372b362c64cfb69e7",
+        "provenance": "run metadata, captured at run time \u2014 authoritative"
+      },
+      "recorded_never_scored": {
+        "exit_code": 0,
+        "status": "completed",
+        "tokens": 716,
+        "duration_ms": 51287,
+        "model": "qwen3-coder:30b",
+        "endpoint": "runner-default",
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P11-M39-E39.3/qa-transcript.json",
+      "metadata_path": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P11-M39-E39.3/qa-run-metadata.json",
+      "executed_calls": []
+    },
+    {
+      "label": "E39.3 RUN2",
+      "lane": "epic_qa",
+      "verdict": "FAIL",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 0,
+        "files_changed": {
+          "count": 0,
+          "provenance": "transcript-derived",
+          "lower_bound": true,
+          "paths": [],
+          "excluded_paths": [],
+          "workspace": null
+        },
+        "claims": {
+          "asserted": 35,
+          "resolved": 8,
+          "unresolved": 27,
+          "rate": 0.22857142857142856,
+          "vacuous": false
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 0,
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "8/35",
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 0,
+          "passes": null,
+          "scored": false,
+          "note": "RECORDED, NOT SCORED on epic_qa \u2014 run-qa-agent:336-344 refuses a mutating tool set, so this was a constant false, not a strict bar"
+        }
+      ],
+      "unresolved_claims": [
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows framework_version",
+          "resolved": false,
+          "reason": "'framework_version' is NOT present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        }
+      ],
+      "all_claims": [
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C1",
+          "claim": "read_file('.ai-project.yml')",
+          "resolved": false,
+          "reason": "no executed, non-denied call to 'read_file' with argument '.ai-project.yml' in the transcript"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows governance.source",
+          "resolved": true,
+          "reason": "'governance.source' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows governance.version",
+          "resolved": true,
+          "reason": "'governance.version' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows governance.ref",
+          "resolved": true,
+          "reason": "'governance.ref' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows project.name",
+          "resolved": true,
+          "reason": "'project.name' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows project.description",
+          "resolved": true,
+          "reason": "'project.description' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows visual_artifacts.enabled",
+          "resolved": true,
+          "reason": "'visual_artifacts.enabled' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows visual_artifacts.comfyui_url",
+          "resolved": true,
+          "reason": "'visual_artifacts.comfyui_url' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows visual_artifacts.visual_required_for_specs",
+          "resolved": true,
+          "reason": "'visual_artifacts.visual_required_for_specs' is present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        },
+        {
+          "class": "C-C3",
+          "claim": "read_file('.ai-project.yml') shows framework_version",
+          "resolved": false,
+          "reason": "'framework_version' is NOT present in /home/panchew/soft-dev/ai-project-system/.ai-project.yml"
+        }
+      ],
+      "advertised_tools": {
+        "tool_set_path": ".ai-project/agents/qa-tools.json",
+        "enabled": [
+          "read_file",
+          "list_dir"
+        ],
+        "sha256_at_run_time": "83ff08e7b3492fd38aee92bbe13fe2118535d1d9fa8f120372b362c64cfb69e7",
+        "provenance": "run metadata, captured at run time \u2014 authoritative"
+      },
+      "recorded_never_scored": {
+        "exit_code": 0,
+        "status": "completed",
+        "tokens": 678,
+        "duration_ms": 12714,
+        "model": "qwen3-coder:30b",
+        "endpoint": "runner-default",
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P11-M39-E39.3-RUN2/qa-transcript.json",
+      "metadata_path": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P11-M39-E39.3-RUN2/qa-run-metadata.json",
+      "executed_calls": []
+    },
+    {
+      "label": "E33.2 Run B",
+      "lane": "epic_dev",
+      "verdict": "PASS",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 10,
+        "files_changed": {
+          "count": 2,
+          "provenance": "transcript-derived",
+          "lower_bound": true,
+          "paths": [
+            "local_agent_runner/__init__.py",
+            "tests/test_public_api.py"
+          ],
+          "excluded_paths": [],
+          "workspace": null
+        },
+        "claims": {
+          "asserted": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "rate": null,
+          "vacuous": true
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 10,
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 2,
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "0/0",
+          "passes": true,
+          "scored": false,
+          "note": "recorded on epic_dev; the dev floor's terms are C-A and C-B"
+        }
+      ],
+      "unresolved_claims": [],
+      "all_claims": [],
+      "advertised_tools": {
+        "tool_set_path": null,
+        "enabled": null,
+        "sha256_at_run_time": null,
+        "provenance": "NOT RECOVERABLE from the artifacts \u2014 the run metadata captured no tool set, and no tool-set path was supplied"
+      },
+      "recorded_never_scored": {
+        "exit_code": null,
+        "status": "max_iterations_exceeded",
+        "tokens": 829,
+        "duration_ms": 88565,
+        "model": "qwen3-coder:30b",
+        "endpoint": null,
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P10-M33-E33.2/transcript-B-qwen3-coder-30b.json",
+      "metadata_path": null,
+      "executed_calls": [
+        {
+          "name": "read_file",
+          "args": {
+            "path": "local_agent_runner/__init__.py"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "local_agent_runner/loop.py"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "local_agent_runner/tools.py"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "write_file",
+          "args": {
+            "path": "local_agent_runner/__init__.py",
+            "content": "\"\"\"local_agent_runner \u2014 standalone tool-calling loop engine for local Ollama models.\n\nRun the test suite (fully offline, no Ollama server or GPU required):\n\n    pip install -e \".[dev]\"\n    pytest\n\"\"\"\n\nfrom local_agent_runner.ollama_client import (\n    ChatMessage,\n    ChatResponse,\n    OllamaClient,\n    OllamaClientError,\n    OllamaConnectionError,\n    OllamaModelMissingError,\n)\nfrom local_agent_runner.loop import (\n    Result,\n    run,\n    STATUS_COMPLETED,\n    STATUS_MAX_ITERATIONS_EXCEEDED,\n)\nfrom local_agent_runner.tools import ToolPermissions\n\n__all__ = [\n    \"ChatMessage\",\n    \"ChatResponse\",\n    \"OllamaClient\",\n    \"OllamaClientError\",\n    \"OllamaConnectionError\",\n    \"OllamaModelMissingError\",\n    \"Result\",\n    \"run\",\n    \"ToolPermissions\",\n    \"STATUS_COMPLETED\",\n    \"STATUS_MAX_ITERATIONS_EXCEEDED\",\n]"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "write_file",
+          "args": {
+            "path": "tests/test_public_api.py",
+            "content": "\"\"\"Tests for the public API surface.\"\"\"\n\nimport inspect\n\nfrom local_agent_runner import (\n    Result,\n    STATUS_COMPLETED,\n    STATUS_MAX_ITERATIONS_EXCEEDED,\n    ToolPermissions,\n    run,\n)\n\n\ndef test_imports() -> None:\n    \"\"\"Test that all expected symbols can be imported directly from the package.\"\"\"\n    assert callable(run)\n    assert inspect.isclass(Result)\n    assert STATUS_COMPLETED == \"completed\""
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "pytest -q"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "pip install -e ."
+          },
+          "denied_or_errored": true
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "python -m pip install -e ."
+          },
+          "denied_or_errored": true
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "pip install -e ."
+          },
+          "denied_or_errored": true
+        },
+        {
+          "name": "edit_file",
+          "args": {
+            "path": "tests/test_public_api.py",
+            "old": "\"\"\"Tests for the public API surface.\"\"\"\n\nimport inspect\n\nfrom local_agent_runner import (\n    Result,\n    STATUS_COMPLETED,\n    STATUS_MAX_ITERATIONS_EXCEEDED,\n    ToolPermissions,\n    run,\n)\n\n\ndef test_imports() -> None:\n    \"\"\"Test that all expected symbols can be imported directly from the package.\"\"\"\n    assert callable(run)\n    assert inspect.isclass(Result)\n    assert STATUS_COMPLETED == \"completed\"",
+            "new": "\"\"\"Tests for the public API surface.\"\"\"\n\nimport inspect\nimport sys\nfrom pathlib import Path\n\n# Add the project root to Python path to allow imports\nsys.path.insert(0, str(Path(__file__).parent.parent))\n\nfrom local_agent_runner import (\n    Result,\n    STATUS_COMPLETED,\n    STATUS_MAX_ITERATIONS_EXCEEDED,\n    ToolPermissions,\n    run,\n)\n\n\ndef test_imports() -> None:\n    \"\"\"Test that all expected symbols can be imported directly from the package.\"\"\"\n    assert callable(run)\n    assert inspect.isclass(Result)\n    assert STATUS_COMPLETED == \"completed\""
+          },
+          "denied_or_errored": false
+        }
+      ]
+    },
+    {
+      "label": "E33.4",
+      "lane": "epic_dev",
+      "verdict": "PASS",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 10,
+        "files_changed": {
+          "count": 3,
+          "provenance": "transcript-derived",
+          "lower_bound": true,
+          "paths": [
+            "db/migrate/20260720120000_change_financial_events_currency_default_to_mxn.rb",
+            "spec/factories/financial_events.rb",
+            "spec/models/financial_event_spec.rb"
+          ],
+          "excluded_paths": [],
+          "workspace": null
+        },
+        "claims": {
+          "asserted": 4,
+          "resolved": 4,
+          "unresolved": 0,
+          "rate": 1.0,
+          "vacuous": false
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 10,
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 3,
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "4/4",
+          "passes": true,
+          "scored": false,
+          "note": "recorded on epic_dev; the dev floor's terms are C-A and C-B"
+        }
+      ],
+      "unresolved_claims": [],
+      "all_claims": [
+        {
+          "class": "C-C2",
+          "claim": "db/migrate/20260720120000_change_financial_events_currency_default_to_mxn.rb",
+          "resolved": true,
+          "reason": "touched by an executed, non-denied tool call"
+        },
+        {
+          "class": "C-C2",
+          "claim": "db/schema.rb",
+          "resolved": true,
+          "reason": "touched by an executed, non-denied tool call"
+        },
+        {
+          "class": "C-C2",
+          "claim": "spec/factories/financial_events.rb",
+          "resolved": true,
+          "reason": "touched by an executed, non-denied tool call"
+        },
+        {
+          "class": "C-C2",
+          "claim": "spec/models/financial_event_spec.rb",
+          "resolved": true,
+          "reason": "touched by an executed, non-denied tool call"
+        }
+      ],
+      "advertised_tools": {
+        "tool_set_path": ".ai-project/agents/tools.json",
+        "enabled": [
+          "read_file",
+          "write_file",
+          "edit_file",
+          "list_dir",
+          "run_command",
+          "git"
+        ],
+        "sha256_at_run_time": null,
+        "provenance": "read from the tool-set file NOW; the run metadata names the path but did not capture its content, so this is the file's current content and not provably the run's",
+        "sha256_now": "88eca8e7dfd564df583c401e39e4ac061d9b1cd1bc59c64b0478d48c3e3f9937"
+      },
+      "recorded_never_scored": {
+        "exit_code": 2,
+        "status": "max_iterations_exceeded",
+        "tokens": 3875,
+        "duration_ms": 139771,
+        "model": "qwen3-coder:30b",
+        "endpoint": "runner-default",
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P10-M33-E33.4/transcript-qwen3-coder-30b.json",
+      "metadata_path": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/agentic-runs/P10-M33-E33.4/run-metadata.json",
+      "executed_calls": [
+        {
+          "name": "write_file",
+          "args": {
+            "path": "db/migrate/20260720120000_change_financial_events_currency_default_to_mxn.rb",
+            "content": "class ChangeFinancialEventsCurrencyDefaultToMxn < ActiveRecord::Migration[8.1]\n  def change\n    change_column_default :financial_events, :currency, from: \"USD\", to: \"MXN\"\n  end\nend"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "bundle exec rails db:migrate"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "spec/factories/financial_events.rb"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "edit_file",
+          "args": {
+            "path": "spec/factories/financial_events.rb",
+            "old": "    currency { 'USD' }",
+            "new": "    currency { 'MXN' }"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "spec/models/financial_event_spec.rb"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "edit_file",
+          "args": {
+            "path": "spec/models/financial_event_spec.rb",
+            "old": "RSpec.describe FinancialEvent, type: :model do\n  describe 'associations' do\n    it { should belong_to(:user) }\n    it { should belong_to(:source_money_account).class_name('MoneyAccount').optional }\n    it { should belong_to(:destination_money_account).class_name('MoneyAccount').optional }\n    # Budget, Commitment, and Debt associations will be tested when those models are implemented\n  end\n\n  describe 'validations' do\n    it { should validate_presence_of(:event_type) }\n    it { should validate_presence_of(:amount) }\n    it { should validate_presence_of(:currency) }\n    it { should validate_presence_of(:effective_date) }\n    it { should validate_numericality_of(:amount).is_greater_than(0) }\n  end\n\n  describe 'enums' do\n    it 'defines event_type enum' do\n      expect(FinancialEvent.event_types).to eq({\n        'income' => 'income',\n        'expense' => 'expense',\n        'transfer' => 'transfer',\n        'debt_acquisition' => 'debt_acquisition',\n        'debt_payment' => 'debt_payment'\n      })\n    end\n  end\n\n  describe 'event type validations' do\n    let(:user) { create(:user) }\n    let(:source_account) { create(:money_account, user: user) }\n    let(:destination_account) { create(:money_account, user: user) }\n\n    context 'income event' do\n      it 'requires destination_money_account' do\n        event = build(:financial_event, :income, user: user, destination_money_account: nil)\n        expect(event).not_to be_valid\n        expect(event.errors[:destination_money_account]).to include('must be present for income events')\n      end\n\n      it 'requires source_money_account to be blank' do\n        event = build(:financial_event, :income, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: destination_account)\n        expect(event).not_to be_valid\n        expect(event.errors[:source_money_account]).to include('must be blank for income events')\n      end\n\n      it 'is valid with only destination_money_account' do\n        event = build(:financial_event, :income, user: user, destination_money_account: destination_account)\n        expect(event).to be_valid\n      end\n    end\n\n    context 'expense event' do\n      it 'requires source_money_account' do\n        event = build(:financial_event, :expense, user: user, source_money_account: nil)\n        expect(event).not_to be_valid\n        expect(event.errors[:source_money_account]).to include('must be present for expense events')\n      end\n\n      it 'requires destination_money_account to be blank' do\n        event = build(:financial_event, :expense, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: destination_account)\n        expect(event).not_to be_valid\n        expect(event.errors[:destination_money_account]).to include('must be blank for expense events')\n      end\n\n      it 'is valid with only source_money_account' do\n        event = build(:financial_event, :expense, user: user, source_money_account: source_account)\n        expect(event).to be_valid\n      end\n    end\n\n    context 'transfer event' do\n      it 'requires both source and destination accounts' do\n        event = build(:financial_event, :transfer, user: user,\n                     source_money_account: nil,\n                     destination_money_account: nil)\n        expect(event).not_to be_valid\n        expect(event.errors[:source_money_account]).to include('must be present for transfer events')\n        expect(event.errors[:destination_money_account]).to include('must be present for transfer events')\n      end\n\n      it 'requires different source and destination accounts' do\n        event = build(:financial_event, :transfer, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: source_account)\n        expect(event).not_to be_valid\n        expect(event.errors[:base]).to include('source and destination accounts must be different for transfers')\n      end\n\n      it 'is valid with different source and destination accounts' do\n        event = build(:financial_event, :transfer, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: destination_account)\n        expect(event).to be_valid\n      end\n    end\n  end\n\n  describe 'scopes' do\n    let(:user) { create(:user) }\n    let(:account) { create(:money_account, user: user) }\n    let!(:income1) { create(:financial_event, :income, user: user, destination_money_account: account, effective_date: Date.current) }\n    let!(:expense1) { create(:financial_event, :expense, user: user, source_money_account: account, effective_date: 1.day.ago) }\n    let!(:expense2) { create(:financial_event, :expense, user: user, source_money_account: account, effective_date: 10.days.ago) }\n\n    describe '.for_date_range' do\n      it 'returns events within date range' do\n        events = FinancialEvent.for_date_range(5.days.ago.to_date, Date.current)\n        expect(events).to include(income1, expense1)\n        expect(events).not_to include(expense2)\n      end\n    end\n\n    describe '.for_account' do\n      it 'returns events for an account as source or destination' do\n        events = FinancialEvent.for_account(account)\n        expect(events).to include(income1, expense1, expense2)\n      end\n    end\n\n    describe '.income_events' do\n      it 'returns only income events' do\n        expect(FinancialEvent.income_events).to eq([ income1 ])\n      end\n    end\n\n    describe '.expense_events' do\n      it 'returns only expense events' do\n        expect(FinancialEvent.expense_events).to contain_exactly(expense1, expense2)\n      end\n    end\n  end\n\n  describe 'immutability' do\n    let(:event) { create(:financial_event, :income, user: create(:user)) }\n\n    it 'prevents updates' do\n      expect { event.update!(amount: 999.99) }.to raise_error(ActiveRecord::ReadOnlyRecord, 'Financial events are immutable')\n    end\n\n    it 'prevents deletion' do\n      expect { event.destroy! }.to raise_error(ActiveRecord::ReadOnlyRecord, 'Financial events cannot be deleted')\n    end\n\n    it 'allows creation' do\n      new_event = build(:financial_event, :expense, user: create(:user))\n      expect(new_event.save).to be true\n    end\n  end\n\n  describe 'factory' do\n    it 'creates a valid income event' do\n      event = build(:financial_event, :income)\n      expect(event).to be_valid\n    end\n\n    it 'creates a valid expense event' do\n      event = build(:financial_event, :expense)\n      expect(event).to be_valid\n    end\n\n    it 'creates a valid transfer event' do\n      user = create(:user)\n      source = create(:money_account, user: user)\n      destination = create(:money_account, user: user)\n      event = build(:financial_event, :transfer, user: user, \n                   source_money_account: source,\n                   destination_money_account: destination)\n      expect(event).to be_valid\n    end\n  end\nend",
+            "new": "RSpec.describe FinancialEvent, type: :model do\n  describe 'associations' do\n    it { should belong_to(:user) }\n    it { should belong_to(:source_money_account).class_name('MoneyAccount').optional }\n    it { should belong_to(:destination_money_account).class_name('MoneyAccount').optional }\n    # Budget, Commitment, and Debt associations will be tested when those models are implemented\n  end\n\n  describe 'validations' do\n    it { should validate_presence_of(:event_type) }\n    it { should validate_presence_of(:amount) }\n    it { should validate_presence_of(:currency) }\n    it { should validate_presence_of(:effective_date) }\n    it { should validate_numericality_of(:amount).is_greater_than(0) }\n  end\n\n  describe 'enums' do\n    it 'defines event_type enum' do\n      expect(FinancialEvent.event_types).to eq({\n        'income' => 'income',\n        'expense' => 'expense',\n        'transfer' => 'transfer',\n        'debt_acquisition' => 'debt_acquisition',\n        'debt_payment' => 'debt_payment'\n      })\n    end\n  end\n\n  describe 'event type validations' do\n    let(:user) { create(:user) }\n    let(:source_account) { create(:money_account, user: user) }\n    let(:destination_account) { create(:money_account, user: user) }\n\n    context 'income event' do\n      it 'requires destination_money_account' do\n        event = build(:financial_event, :income, user: user, destination_money_account: nil)\n        expect(event).not_to be_valid\n        expect(event.errors[:destination_money_account]).to include('must be present for income events')\n      end\n\n      it 'requires source_money_account to be blank' do\n        event = build(:financial_event, :income, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: destination_account)\n        expect(event).not_to be_valid\n        expect(event.errors[:source_money_account]).to include('must be blank for income events')\n      end\n\n      it 'is valid with only destination_money_account' do\n        event = build(:financial_event, :income, user: user, destination_money_account: destination_account)\n        expect(event).to be_valid\n      end\n    end\n\n    context 'expense event' do\n      it 'requires source_money_account' do\n        event = build(:financial_event, :expense, user: user, source_money_account: nil)\n        expect(event).not_to be_valid\n        expect(event.errors[:source_money_account]).to include('must be present for expense events')\n      end\n\n      it 'requires destination_money_account to be blank' do\n        event = build(:financial_event, :expense, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: destination_account)\n        expect(event).not_to be_valid\n        expect(event.errors[:destination_money_account]).to include('must be blank for expense events')\n      end\n\n      it 'is valid with only source_money_account' do\n        event = build(:financial_event, :expense, user: user, source_money_account: source_account)\n        expect(event).to be_valid\n      end\n    end\n\n    context 'transfer event' do\n      it 'requires both source and destination accounts' do\n        event = build(:financial_event, :transfer, user: user,\n                     source_money_account: nil,\n                     destination_money_account: nil)\n        expect(event).not_to be_valid\n        expect(event.errors[:source_money_account]).to include('must be present for transfer events')\n        expect(event.errors[:destination_money_account]).to include('must be present for transfer events')\n      end\n\n      it 'requires different source and destination accounts' do\n        event = build(:financial_event, :transfer, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: source_account)\n        expect(event).not_to be_valid\n        expect(event.errors[:base]).to include('source and destination accounts must be different for transfers')\n      end\n\n      it 'is valid with different source and destination accounts' do\n        event = build(:financial_event, :transfer, user: user,\n                     source_money_account: source_account,\n                     destination_money_account: destination_account)\n        expect(event).to be_valid\n      end\n    end\n  end\n\n  describe 'scopes' do\n    let(:user) { create(:user) }\n    let(:account) { create(:money_account, user: user) }\n    let!(:income1) { create(:financial_event, :income, user: user, destination_money_account: account, effective_date: Date.current) }\n    let!(:expense1) { create(:financial_event, :expense, user: user, source_money_account: account, effective_date: 1.day.ago) }\n    let!(:expense2) { create(:financial_event, :expense, user: user, source_money_account: account, effective_date: 10.days.ago) }\n\n    describe '.for_date_range' do\n      it 'returns events within date range' do\n        events = FinancialEvent.for_date_range(5.days.ago.to_date, Date.current)\n        expect(events).to include(income1, expense1)\n        expect(events).not_to include(expense2)\n      end\n    end\n\n    describe '.for_account' do\n      it 'returns events for an account as source or destination' do\n        events = FinancialEvent.for_account(account)\n        expect(events).to include(income1, expense1, expense2)\n      end\n    end\n\n    describe '.income_events' do\n      it 'returns only income events' do\n        expect(FinancialEvent.income_events).to eq([ income1 ])\n      end\n    end\n\n    describe '.expense_events' do\n      it 'returns only expense events' do\n        expect(FinancialEvent.expense_events).to contain_exactly(expense1, expense2)\n      end\n    end\n  end\n\n  describe 'immutability' do\n    let(:event) { create(:financial_event, :income, user: create(:user)) }\n\n    it 'prevents updates' do\n      expect { event.update!(amount: 999.99) }.to raise_error(ActiveRecord::ReadOnlyRecord, 'Financial events are immutable')\n    end\n\n    it 'prevents deletion' do\n      expect { event.destroy! }.to raise_error(ActiveRecord::ReadOnlyRecord, 'Financial events cannot be deleted')\n    end\n\n    it 'allows creation' do\n      new_event = build(:financial_event, :expense, user: create(:user))\n      expect(new_event.save).to be true\n    end\n  end\n\n  describe 'currency default' do\n    it 'defaults to MXN' do\n      expect(FinancialEvent.new.currency).to eq('MXN')\n    end\n  end\n\n  describe 'factory' do\n    it 'creates a valid income event' do\n      event = build(:financial_event, :income)\n      expect(event).to be_valid\n    end\n\n    it 'creates a valid expense event' do\n      event = build(:financial_event, :expense)\n      expect(event).to be_valid\n    end\n\n    it 'creates a valid transfer event' do\n      user = create(:user)\n      source = create(:money_account, user: user)\n      destination = create(:money_account, user: user)\n      event = build(:financial_event, :transfer, user: user, \n                   source_money_account: source,\n                   destination_money_account: destination)\n      expect(event).to be_valid\n    end\n  end\nend"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "bundle exec rspec"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "db/schema.rb",
+            "start_line": 1,
+            "end_line": 50
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "grep -n \"financial_events\" db/schema.rb"
+          },
+          "denied_or_errored": true
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "db/schema.rb",
+            "start_line": 50,
+            "end_line": 100
+          },
+          "denied_or_errored": false
+        }
+      ]
+    }
+  ]
+}
