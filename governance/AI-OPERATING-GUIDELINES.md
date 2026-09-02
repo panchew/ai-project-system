@@ -1,7 +1,7 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.10.2  
+**Version:** 2.11.0  
 **Effective Date:** 2026-09-02  
 **Status:** Current  
 
@@ -499,7 +499,7 @@ Phase Execution Chat is a **finite autonomous execution and delivery agent scope
 
 **Stage 1 — Execution:** Reviews the Phase spec, produces Milestone specs and Milestone Execution Chat Starters, creates a phase branch, commits all planning artifacts, and opens a PR to HQ Chat for review.
 
-**Stage 2 — Delivery:** After HQ Chat accepts the PR, oversees Milestone execution — receives Milestone Completion Notices, accepts clean Milestone deliveries by silence (a Milestone Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6), and when all Milestones are accepted, delivers the Phase by executing the canonical phase-closure sequence (PROJECT-SYSTEM-GUIDELINES.md §5C) — the consolidation merge plus the mandatory README-update, version-bump, and git-tag steps.
+**Stage 2 — Delivery:** After HQ Chat accepts the PR, oversees Milestone execution — receives Milestone Completion Notices, accepts clean Milestone deliveries by an in-chat acknowledgment that names the party that reviewed and accepted (a Milestone Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing), and when all Milestones are accepted, delivers the Phase by executing the canonical phase-closure sequence (PROJECT-SYSTEM-GUIDELINES.md §5C) — the consolidation merge plus the mandatory README-update, version-bump, and git-tag steps.
 
 Phase Execution Chat does NOT:
 - Implement project code or modify infrastructure
@@ -518,7 +518,7 @@ Milestone Execution Chat is a **finite autonomous execution and delivery agent s
 
 **Stage 1 — Execution:** Reviews the Milestone spec, produces Epic specs and Epic Execution Chat Starters, creates a milestone branch, commits all planning artifacts, and opens a PR to the parent chat for review.
 
-**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), accepts clean Epic deliveries by silence (an Epic Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6), and performs the merge of each accepted Epic's branch as the parent; when all Epics are accepted, the **Phase Execution Chat** delivers the Milestone by merging the milestone branch (§11.6 — the parent performs the merge of a child's branch).
+**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), accepts clean Epic deliveries by an in-chat acknowledgment that names the party that reviewed and accepted (an Epic Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing), and performs the merge of each accepted Epic's branch as the parent; when all Epics are accepted, the **Phase Execution Chat** delivers the Milestone by merging the milestone branch (§11.6 — the parent performs the merge of a child's branch).
 
 Milestone Execution Chat does NOT:
 - Implement project code or modify infrastructure
@@ -741,7 +741,7 @@ Human review (plain language) → AI-generated Epic Review Seal → HQ decision
 **HQ Chat review behavior:**
 - Ask humans for plain-language findings only; do not require markdown editing.
 - Generate or request AI-generated Epic Review Seals from human input, then confirm accuracy with the human before deciding.
-- Accept clean deliveries by silence per default-accept (§12 "Acceptance Outcomes"; PROJECT-SYSTEM-GUIDELINES.md §11.6); record exception-path decisions (reject / accept-with-follow-ups) in the Review Decision; do not introduce execution or acceptance loops.
+- Accept clean deliveries by an acknowledgment that names the party that reviewed and accepted per default-accept (§12 "Acceptance Outcomes"; PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing); record exception-path decisions (reject / accept-with-follow-ups) in the Review Decision; do not introduce execution or acceptance loops.
 
 **Coding Agent support during review:**
 - When asked, generate Epic Review Seal drafts from human-provided natural language without altering intent.
@@ -830,13 +830,13 @@ HQ Chat makes explicit acceptance decisions using one of three outcomes:
 2. **Accept with follow-up Epic(s):** Epic is accepted, but new Epics must be created to address findings.
 3. **Reject:** Epic does not meet requirements; new Epic(s) must be created.
 
-Under default-accept (below), outcome 1 on a clean delivery is recorded **by silence** — the merge plus the in-chat acknowledgment — and issues no Review Decision; outcomes 2 and 3 are the **exception path** and are documented in a **Review Decision**, which becomes immutable once issued.
+Under default-accept (below), outcome 1 on a clean delivery is recorded by an **in-chat acknowledgment that names the party that reviewed and accepted** — the merge plus the in-chat acknowledgment is the acceptance record, and silence accepts nothing — and issues no Review Decision; outcomes 2 and 3 are the **exception path** and are documented in a **Review Decision**, which becomes immutable once issued.
 
 ### Default-Accept (SN-13) — Normative
 
 The acceptance model at every **parent-chat → child gate** (Phase Chat accepts a clean Milestone; Milestone Chat accepts a clean Epic; HQ Chat accepts a clean Phase):
 
-- **Happy path (default-accept):** a **clean** delivery — one meeting its Definition of Done, acceptance criteria, and spec — is accepted **by silence**. No Review Decision artifact is produced; the **merge plus the in-chat acknowledgment is the acceptance record**.
+- **Happy path (default-accept):** a **clean** delivery — one meeting its Definition of Done, acceptance criteria, and spec — is accepted by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity). No Review Decision artifact is produced; the **merge plus the in-chat acknowledgment is the acceptance record**. **Silence accepts nothing** — an absent acknowledgment is nobody's acceptance, never a role's. A clean delivery still produces **no new artifact** — the signal rides the acknowledgment that already exists.
 - **Exception path:** a **Review Decision** (and, at Epic level, the **Epic Review Seal**) is issued **only when a delivery is not clean** — to reject it or to accept it with follow-up Epic(s).
 - **Preserved:** **Layer-8 human review** remains available and authoritative wherever the framework mandates it; human-confirmation requirements (e.g., a human-authorized merge on an Epic PR) stand. Default-accept scopes the *acceptance artifact*, not the *human's review* — two gates, not one.
 
@@ -1039,6 +1039,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.11.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** §12 "Default-Accept (SN-13) — Normative" and its outcome-1 line now state that a clean delivery is accepted by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity) — **silence accepts nothing** — with the acceptance record unchanged (merge + in-chat acknowledgment, no new artifact). Amended the always-restate Stage-2 lines in §3.6/§3.7 and the §10 HQ review-behavior bullet from "accept by silence" to the attributable-acknowledgment model, each citing the normative definition at PSG §11.6. No authority, mode, or §11.6.1 rule changed. |
 | 2.10.2 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Corrected every statement that instructed a child to merge its own branch, in agreement with the one normative statement now in PROJECT-SYSTEM-GUIDELINES.md §11.6: §1A step 7 (the parent performs the merge after authorization — a child never holds merge authorization) and §3.7 Stage 2 (the Milestone Chat performs the merge of each accepted Epic's branch as the parent; the Phase Execution Chat delivers the Milestone by merging the milestone branch). The parent's-merge rule is defined in PSG §11.6; this document cites it, not restates it. No authority, mode, or §11.6.1 rule changed. |
 | 2.10.1 | 2026-08-03 | **SN-23 citations date-qualified (SN-28; HQ Ruling 2026-08-01, Decision 4).** Two different Steering Notes hold `id: SN-23` — 2026-07-18 (reference-first handoff / platform agnosticism) and 2026-07-20 (the P10 adoption spine) — and this document and `governance/systems/chat-hierarchy.md` each cited *"SN-23 Decision 2"* meaning **unrelated** decisions, with the latter declaring its one superseded. A reader following this document's citation by number reached the supersession notice and could conclude **platform agnosticism was superseded. It was not.** All three SN-23 citations here (§3.1.1 intro, §3.1.1 "Fallback — repo-less delivery", and the v2.10.0 changelog entry) now carry the date form `SN-23 (2026-07-18)`. **Citation disambiguation only — no normative requirement added, removed, or changed, and neither note is renumbered** (Decision 4: both keep `id: SN-23` permanently). The allocation and separating rules are recorded in `governance/systems/creation-chat-guide.md`, "Steering Note ID Allocation". E36.1 (P11-M36). |
 | 2.10.0 | 2026-07-18 | **Reference-first artifact handoff (SN-23 (2026-07-18)).** Rewrote §3.1.1 from "Epic Execution Chat Starter Format" into the generalized normative artifact-handoff rule: a committed, git-tracked artifact is passed **by reference, never by paste or full-body display** (IDE attach + one-line intent, or the canonical reference line defined in-section); producer no-echo half (never display a body you wrote to file) + consumer selective-read half (read once, selectively; frontmatter + Summary + DoD/QA suffices under PSG §11.6). The four-backtick fenced full-body form is **retained, demoted to the documented repo-less fallback** (SN-23 (2026-07-18) Decision 2 — platform agnosticism preserved; paste is not deleted). All other mandating surfaces (three `governance/templates/` starters, `governance/systems/epic-execution-chat-starter.md`, `governance/systems/artifact-communication-protocol.md` §Manual Mode, `governance/EPIC-EXECUTION-CHAT-STARTER.md`, `governance/agents/governance.agent.md`) now cite §3.1.1 instead of restating the paste mandate. Evidence: `.ai-project/artifacts/reference/token-measurement/echo-cost-note.md` (E30.1 mechanism, honest bound stated). Per SN-23 (2026-07-18), CFO-ratified; E30.4 (P9-M30). |

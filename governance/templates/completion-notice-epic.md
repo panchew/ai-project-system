@@ -66,7 +66,9 @@ This Epic is complete and submitted for <Milestone|Phase|HQ> Chat review and acc
 
 **Next Action:** Under default-accept (PROJECT-SYSTEM-GUIDELINES.md §11.6 /
 AI-OPERATING-GUIDELINES.md §12), a clean delivery — Definition of Done, acceptance
-criteria, and spec all met — is **accepted by silence**: parent acceptance authorizes
+criteria, and spec all met — is **accepted by an acknowledgment that names the party
+that reviewed and accepted** (role + session identity; silence accepts nothing): parent
+acceptance authorizes
 the merge, and no Review Decision is issued. A **Review Decision** is issued only on the
 **exception path**, when Parent Chat reviews this artifact and finds it is not clean:
 - **Review Decision (Reject)** → requires rework

@@ -34,7 +34,7 @@
 | Template | File | When to Use |
 |----------|------|-------------|
 | **Completion Notice (Epic)** | [completion-notice-epic.md](completion-notice-epic.md) | Epic Agent signals work is finished and ready for Milestone review |
-| **Review Decision** | [review-decision.md](review-decision.md) | Exception path only — reviewing chat issues Accept-with-follow-ups or Reject on a Completion Notice that isn't clean; a clean delivery is accepted by silence (PROJECT-SYSTEM-GUIDELINES.md §11.6) |
+| **Review Decision** | [review-decision.md](review-decision.md) | Exception path only — reviewing chat issues Accept-with-follow-ups or Reject on a Completion Notice that isn't clean; a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted (PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing) |
 | **Delivery Notice** | [delivery-notice.md](delivery-notice.md) | Epic Agent records the delivery after acceptance |
 | **Merge Authorization** | [merge-authorization.md](merge-authorization.md) | The parent's record of the merge it performed of an accepted Epic's branch (PSG §11.6 — a child never holds merge authorization) |
 | **Epic Closure Notice** | [epic-closure-notice.md](epic-closure-notice.md) | Coding Agent confirms a merge completed, to the Milestone Chat |
