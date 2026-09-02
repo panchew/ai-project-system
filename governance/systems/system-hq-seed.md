@@ -4,7 +4,7 @@ artifact_type: system_hq_seed
 artifact_version: 1.0
 status: active
 effective_date: 2026-07-20
-version: 1.0.0
+version: 1.1.0
 issued_by: AI Project System — governance framework
 purpose: Re-instantiate System HQ — the cross-project system participant — in a fresh session
 ---
@@ -204,6 +204,10 @@ scope-shaped gets `status: escalated`, not execution.
   (`.ai-project/artifacts/steering-notes/2026-07-16__creation-chat__steering-note__system-hq-adoption.md`)
 - **Project System Guidelines:** `governance/PROJECT-SYSTEM-GUIDELINES.md`
 - **AI Operating Guidelines:** `governance/AI-OPERATING-GUIDELINES.md`
+- **Rework limit (normative — cited, not restated):** the rework limit — a maximum of 3
+  attempts; a written extension grants exactly one further attempt, not a reset to
+  three — is normative in `PROJECT-SYSTEM-GUIDELINES.md` §11.6 "The Rework Limit"
+  (P12-GH-1). This seed reaches it by citation; it does not run a rework loop itself.
 
 ---
 
@@ -211,4 +215,5 @@ scope-shaped gets `status: escalated`, not execution.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-09-02 | **Rework limit reached by citation (E43.3, P12-M43; closes `P12-GH-1`).** Reference section adds the rework limit (normative in `PROJECT-SYSTEM-GUIDELINES.md` §11.6 "The Rework Limit" — a maximum of 3 attempts; a written extension grants exactly one further attempt, not a reset to three) and states this seed reaches it by citation, noting System HQ runs no rework loop itself. No authority boundary change. Backed by `tests/test_rework_limit_single_statement.py`. |
 | 1.0.0 | 2026-07-20 | Initial release. Establishes System HQ's re-instantiation seed (SN-21 Required Action 4): a self-contained, repeatable daily-spawn prompt carrying System HQ's cross-project identity, the Authority Boundary reproduced verbatim from `system-hq.md`, seven Rules of Engagement, on-demand discovery via the read-only MCP bridge, and the `status: escalated` path. Placed as a system-tier document rather than a per-project template (P9-M32-E32.2). |

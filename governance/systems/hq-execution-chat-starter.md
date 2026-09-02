@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-09-02
-version: 1.3.0
+version: 1.4.0
 ---
 
 # HQ Execution Chat Starter — System Reference
@@ -127,7 +127,7 @@ Three artifacts carry the core review cycle:
 | Artifact | Produced by | Direction | Meaning |
 |----------|-------------|-----------|---------|
 | **Completion Notice** | Epic Agent | Epic → Milestone | "Work is finished and ready for your review" |
-| **Review Decision** | Reviewing chat (Milestone/Phase/HQ) | parent → child | Exception path only (PSG §11.6): "Reject" (rework) or "Accept with follow-ups"; a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted — silence accepts nothing |
+| **Review Decision** | Reviewing chat (Milestone/Phase/HQ) | parent → child | Exception path only (PSG §11.6): "Reject" (rework) or "Accept with follow-ups"; a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted — silence accepts nothing. The rework a reject starts is bounded by the **rework limit** (normative in PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" — a maximum of 3 attempts; a written extension grants exactly one further attempt, not a reset to three; reached here by citation). |
 | **Delivery Notice** | Epic Agent | Epic → Milestone | "PR merged; here is the merge record. Chat closed." |
 
 Several supporting artifacts have canonical templates in `governance/templates/`:
@@ -409,6 +409,7 @@ Walk through it with the
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.4.0 | 2026-09-02 | **Rework limit reached by citation (E43.3, P12-M43; closes `P12-GH-1`).** The Review Decision row's "Reject (rework)" meaning now names the **rework limit** and points to the one normative statement (PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" — a maximum of 3 attempts; a written extension grants exactly one further attempt, not a reset to three). This surface cites the statement; it does not restate it. Same strictness — no guard weakened. Backed by `tests/test_rework_limit_single_statement.py`. |
 | 1.3.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** Every "accept by silence" statement reconciled to the amended PSG §11.6: HQ Chat accepts a clean Phase delivery by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity); **silence accepts nothing**. Amended: the Review-and-accept responsibility, the supporting-artifacts table's Review Decision row, the artifact-flow note, the Review Decision worked example, and the Oversee step of the session lifecycle. HQ-authored deliveries remain governed by §11.6.1 (CFO diff review; not touched). Same strictness — no guard weakened. Backed by `tests/test_acceptance_distinguishable_from_absence.py`. |
 | 1.2.0 | 2026-09-02 | **Merge-authorization guard relabelled as a backstop (E43.1, P12-M43).** The guard's pushback strings survive, relabelled: at the Phase→Milestone and Milestone→Epic gates the parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge authorization — the guard is now a labelled backstop, not the primary guard (unavailable is not impossible; a backstop that fires is evidence); HQ itself has no parent and therefore never merges on authorization alone. Guard clauses (refusal, mode-is-not-authority, §11.6.1) are unchanged — same strictness. Also corrected the supporting-artifact list's Merge Authorization description to the parent's record of the merge it performed. Backed by `tests/test_merge_authorization_parent_performs.py`; the existing `tests/test_merge_authorization_routing_guard.py` still passes. |
 | 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Governance Authority Chain. HQ has **no parent chat**, so the routing is not "confirm upward": PSG **§11.6.1** applies — default-accept MUST NOT be applied to HQ-authored deliveries, the **CFO is the designated diff reviewer**, and HQ MUST NOT merge its own delivery on authorization alone. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
