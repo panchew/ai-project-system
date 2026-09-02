@@ -260,41 +260,36 @@ def promote_branch(active_branch, target_branch, epic_id, dry_run=False):
             print(pr_res.stderr, file=sys.stderr)
             return False
             
-    # 3. Approve PR (Self-approval is attempt-only, might warn if branch permissions block self-approvals)
+    # 3. Approve PR. Approval failure ABORTS (E42.3): the merge ladder is
+    # unreachable from a branch whose approval was refused.
     print(f"[*] Attempting to approve Pull Request...")
     approve_res = subprocess.run(["gh", "pr", "review", "--approve", pr_url], cwd=PROJECT_ROOT, capture_output=True, text=True)
     if approve_res.returncode == 0:
         print("[✓] Pull Request approved successfully.")
     else:
-        print(f"[!] Warning: Pull Request approval skipped or not possible. Proceeding to merge...", file=sys.stderr)
+        print("[!] Pull Request approval failed. Aborting promotion; not proceeding to merge.", file=sys.stderr)
+        print(f"[!] {approve_res.stderr.strip()}", file=sys.stderr)
+        return False
         
     # 4. Merge PR
-    # We try in sequence: standard merge, admin merge, or auto merge
+    # The standard merge is the single, honest attempt (E42.3). The --admin rung
+    # (privilege escalation) and the --auto rung (tempo re-arm) are disposed of in
+    # the E42.3 record: a branch protection that says no is answered by stopping and
+    # reporting, not by trying harder.
     print(f"[*] Attempting to merge Pull Request: {pr_url}...")
     
-    merge_methods = [
-        # Standard merge
-        ["gh", "pr", "merge", "--merge", "--delete-branch", pr_url],
-        # Admin merge override if standard fails
-        ["gh", "pr", "merge", "--merge", "--admin", pr_url],
-        # Auto-merge if status checks are pending
-        ["gh", "pr", "merge", "--auto", "--merge", pr_url]
-    ]
-    
-    merged = False
-    for i, cmd in enumerate(merge_methods):
-        method_name = "standard" if i == 0 else ("admin-override" if i == 1 else "auto-merge")
-        print(f"[*] Trying merge method: {method_name}...")
-        merge_res = subprocess.run(cmd, cwd=PROJECT_ROOT, capture_output=True, text=True)
-        if merge_res.returncode == 0:
-            print(f"[✓] Pull Request merged successfully using {method_name}!")
-            merged = True
-            break
-        else:
-            print(f"[!] Method '{method_name}' failed: {merge_res.stderr.strip()}", file=sys.stderr)
+    merge_cmd = ["gh", "pr", "merge", "--merge", "--delete-branch", pr_url]
+    print("[*] Trying merge method: standard...")
+    merge_res = subprocess.run(merge_cmd, cwd=PROJECT_ROOT, capture_output=True, text=True)
+    if merge_res.returncode == 0:
+        print("[✓] Pull Request merged successfully using standard merge!")
+        merged = True
+    else:
+        print(f"[!] Method 'standard' failed: {merge_res.stderr.strip()}", file=sys.stderr)
+        merged = False
             
     if not merged:
-        print("[!] All merge methods exhausted. PR remains unmerged.", file=sys.stderr)
+        print("[!] Merge failed. PR remains unmerged.", file=sys.stderr)
         return False
         
     # 5. Post-merge branch cleanup: local cleanup
@@ -445,19 +440,40 @@ def run_tests():
 
         @patch('subprocess.run')
         def test_promote_branch_fallback_merge(self, mock_run):
+            # INVERTED (E42.3): the suite fails if the --admin override is reachable
+            # unrecorded. Approval succeeds, the standard merge is refused by branch
+            # protection, and promote_branch must NOT escalate to --admin — it reports
+            # failure. The mock no longer offers an --admin rung that returns 0.
             mock_run.side_effect = [
                 MagicMock(returncode=0), # git push
                 MagicMock(returncode=0, stdout="https://github.com/org/repo/pull/123"), # gh pr create
                 MagicMock(returncode=0), # gh pr review --approve
                 MagicMock(returncode=1, stderr="Branch protected"), # gh pr merge --merge (standard fails)
-                MagicMock(returncode=0), # gh pr merge --merge --admin (admin succeeds)
-                MagicMock(returncode=0), # git checkout milestone/M13
-                MagicMock(returncode=0), # git pull
-                MagicMock(returncode=0), # git branch -D epic/E13.3
             ]
             
             res = promote_branch("epic/E13.3", "milestone/M13", "E13.3", dry_run=False)
-            self.assertTrue(res)
+            self.assertFalse(res)
+            # Guard: the --admin override is unreachable unrecorded — no subprocess
+            # call may carry it.
+            admin_attempts = [c for c in mock_run.call_args_list if "--admin" in c.args[0]]
+            self.assertEqual(admin_attempts, [])
+
+        @patch('subprocess.run')
+        def test_promote_branch_approval_failure_aborts(self, mock_run):
+            # NEW (E42.3, G2): approval failure aborts promote_branch. The :269
+            # warn-and-continue path had no test at all; this asserts the promotion
+            # stops and the merge ladder is never reached — no "gh pr merge" call.
+            mock_run.side_effect = [
+                MagicMock(returncode=0), # git push
+                MagicMock(returncode=0, stdout="https://github.com/org/repo/pull/123"), # gh pr create
+                MagicMock(returncode=1, stderr="Branch protection does not allow self-approval"), # gh pr review --approve FAILS
+            ]
+            
+            res = promote_branch("epic/E13.3", "milestone/M13", "E13.3", dry_run=False)
+            self.assertFalse(res)
+            # Guard: merge_methods is never reached — no "gh pr merge" call happens.
+            merge_attempts = [c for c in mock_run.call_args_list if c.args[0][:3] == ["gh", "pr", "merge"]]
+            self.assertEqual(merge_attempts, [])
 
     suite = unittest.TestLoader().loadTestsFromTestCase(TestGitMergeScript)
     runner = unittest.TextTestRunner(verbosity=2)
