@@ -380,23 +380,25 @@ def test_unknown_keys_outside_the_three_blocks_warn_with_no_rule_number():
     """§4's unknown-key rules (11, 16, 22) cover only `overrides`, `models` and
     `visual_artifacts`. Top level, `governance:` and `project:` have no rule at all.
     The validator warns by its own documented decision, and reports `rule: None` so
-    the treatment is never mistaken for §4 enforcement."""
+    the treatment is never mistaken for §4 enforcement. (`cfo_review_gate` used to be
+    a member of this class; E43.4 blessed it — see test_blessing_rework_exhaustion_flip.)"""
     report = check(
         MINIMAL_VALID.replace("  ref: v7.1.0", "  ref: v7.1.0\n  submodule_path: .governance/")
         .replace("  name: my-project", "  name: my-project\n  created_at: 2026-08-11T00:00:00Z")
-        + "\ncfo_review_gate: enabled\n"
     )
     assert report.valid
-    assert len(report.warnings) == 3
+    assert len(report.warnings) == 2
     assert all(f.rule is None for f in report.warnings)
-    assert fields_of(report.warnings) == ["cfo_review_gate", "governance.submodule_path", "project.created_at"]
+    assert fields_of(report.warnings) == ["governance.submodule_path", "project.created_at"]
 
 
-def test_the_three_unblessed_drift_fields_are_not_silently_accepted():
-    """`created_at`, `submodule_path` and `cfo_review_gate` were NOT schema-blessed by
-    this Epic (recommend-and-escalate, not act). They must remain visible as warnings
-    rather than being normalised away."""
-    for key in ("created_at", "submodule_path", "cfo_review_gate"):
+def test_the_unblessed_drift_fields_are_not_silently_accepted():
+    """`created_at` and `submodule_path` were NOT schema-blessed and remain so
+    (recommend-and-escalate, not act). They must stay visible as warnings rather than
+    being normalised away. `cfo_review_gate` was the third member of this class until
+    E43.4 (P12-M43) blessed it and the new `rework_exhaustion_flip` key — see
+    test_blessing_rework_exhaustion_flip."""
+    for key in ("created_at", "submodule_path"):
         assert key not in validator.KNOWN_TOP_LEVEL
         assert key not in validator.KNOWN_GOVERNANCE
         assert key not in validator.KNOWN_PROJECT
@@ -512,7 +514,9 @@ def test_cli_json_output_is_the_authority(tmp_path, capsys):
 
 
 def test_cli_exit_zero_when_only_warnings(tmp_path, capsys):
-    (tmp_path / ".ai-project.yml").write_text(MINIMAL_VALID + "\ncfo_review_gate: enabled\n", encoding="utf-8")
+    (tmp_path / ".ai-project.yml").write_text(
+        MINIMAL_VALID + "\nproject_created_at: 2026-08-11\n", encoding="utf-8"
+    )
     code = validator.main([str(tmp_path / ".ai-project.yml")])
     out = capsys.readouterr().out
     assert code == 0

@@ -1,7 +1,7 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 2.6.0  
+**Version:** 2.7.0  
 **Effective Date:** 2026-09-02  
 **Status:** Current  
 
@@ -618,9 +618,38 @@ The acknowledgment names the party that reviewed and accepted (role + session id
 
 The rework limit is the **single mechanism that bounds rework loops**, and it is stated once, here. At every parent-chat → child gate, a parent chat may reject a child's delivery a **maximum of 3 attempts**. If a third Completion Notice is still not acceptable, the parent does **not** issue a fourth rejection-and-retry; the child produces an **Escalation Notice** and the parent escalates to its own parent (at the Milestone→Epic gate, the Phase Chat). **Silent fourth attempts are a governance violation.**
 
-**A written extension grants exactly ONE further attempt — not a reset to three.** A written extension is an explicit grant recorded as an artifact or a recorded decision (for example, the CFO's recorded act of resolving a blocker in the escalation chat, SN-36/37). It adds one attempt to the budget; it does not restore the budget. **Rework is exhausted** when the 3-attempt maximum plus any written `+1` has been spent without an acceptable delivery — the state the rework-exhaustion flip (E43.4, P12-M43) triggers on.
+**A written extension grants exactly ONE further attempt — not a reset to three.** A written
+extension is an explicit grant recorded as an artifact or a recorded decision (for example, the
+CFO's recorded act of resolving a blocker in the escalation chat, SN-36/37). It adds one attempt to
+the budget; it does not restore the budget. **Rework is exhausted** when the 3-attempt maximum plus
+any written `+1` has been spent without an acceptable delivery — the state the rework-exhaustion
+flip (E43.4, P12-M43) triggers on.
 
 > **History:** previously the rule lived only in `governance/systems/milestone-execution-chat-starter.md` (with a contradictory extension semantics — "resets") and in **no** normative document. E43.3 (P12-M43) consolidated the two statements into this one normative statement and routed every starter-shaped surface to it by carry or cite. Closes **`P12-GH-1`**.
+
+### The Rework-Exhaustion Flip
+
+**Exhausted rework flips the receiving parent to manual.** When a parent chat's rework limit is
+exhausted — the 3-attempt maximum plus any written `+1`, spent without an acceptable delivery (the
+definition above) — the **receiving parent flips to manual Execution Mode**. This is the system's
+**first fail-closed default**, and the counterweight to the phase's organising finding: agentic
+Execution Mode is defined by *no human being present*, and a rework loop is exactly where a human
+needs to be. The flip puts a human in the loop for the escalation rather than leaving an unattended
+parent to keep reworking.
+
+**Opt-out, on by default.** The flip is governed by the `rework_exhaustion_flip` key in
+`.ai-project.yml` (`governance/ai-project-yml-spec.md` §3.8): **`enabled` by default**, `disabled`
+only deliberately. A project that disables it has explicitly declined the fail-closed default;
+the flip itself is never made mandatory (SN-31 Decision 5).
+
+**Drivr performs the flip and records it.** The flip is performed and recorded by **Drivr** — not
+by mutating the receiving parent's committed Execution Chat Starter. The committed starter remains
+the source of truth for the instance's declared Execution Mode (`chat-hierarchy.md`, "Declaration
+mechanism"); a runtime flip that rewrote the committed file would break that invariant. The flip is
+**discoverable from the record** Drivr writes, never from a rewritten committed file — the
+difference between a fail-closed default and a race condition (E43.4, P12-M43). The way back —
+**resume** — restores the declared mode and never promotes manual → agentic, and returns the mode,
+never the budget (`chat-hierarchy.md`, "Resume").
 
 ### 11.6.1 HQ-Authored Deliveries — No Parent, Therefore No Default-Accept
 
@@ -988,6 +1017,7 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.7.0 | 2026-09-02 | **The rework-exhaustion flip, stated normatively (E43.4, P12-M43).** Added §11.6 "The Rework-Exhaustion Flip", the one normative statement of the system's **first fail-closed default**: **exhausted rework** (the 3-attempt maximum plus any written `+1`, spent without an acceptable delivery — the definition in "The Rework Limit" above) **flips the receiving parent to manual Execution Mode**. **Opt-out, on by default** — governed by the new `rework_exhaustion_flip` key in `.ai-project.yml` (`ai-project-yml-spec.md` §3.8), `enabled` by default, `disabled` only deliberately. **Drivr performs the flip and records it** — the committed Execution Chat Starter is not mutated, so the committed-starter invariant survives and the flip is discoverable from the record; **resume** restores the declared mode, never promotes manual → agentic, and returns the mode, not the budget (both stated at `chat-hierarchy.md`). The trigger definition and the `+1` semantics are unchanged (E43.3). No gate, authority, or §11.6.1 rule changed. |
 | 2.6.0 | 2026-09-02 | **The rework limit, as one normative statement (E43.3, P12-M43; closes `P12-GH-1`).** Added §11.6 "The Rework Limit": at every parent-chat → child gate a parent may reject a child's delivery a **maximum of three (3) attempts**; on a third still-unacceptable Completion Notice the parent issues no fourth rejection-and-retry, the child produces an **Escalation Notice**, and the parent escalates. **A written extension grants exactly ONE further attempt, not a reset to three** (SN-36/37, CFO-decided, stricter than the earlier "resets" wording — the surviving semantics). Defines **rework exhaustion** (3 attempts + any written +1, without an acceptable delivery) as the state E43.4's flip triggers on. The rule was previously in exactly one starter surface (`systems/milestone-execution-chat-starter.md`), absent from every template and the normative tier, and carried two contradictory extension semantics; it is now stated once here, and every starter-shaped surface reaches it by carry or cite. |
 | 2.5.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** The acceptance record now carries a **positive, attributable signal**: the happy-path acknowledgment **names the party that reviewed and accepted** (role + session identity) — an emission by an identified party, never an absence attributed to a role — so *reviewed and clean* is distinguishable from *nobody looked* **from the record alone**, and a duplicated role leaves two signals rather than two indistinguishable silences. **Silence accepts nothing.** Default-accept is tweaked, not retired: a clean delivery still produces **no new artifact** — the signal rides the acknowledgment that already exists, recorded with the parent's merge (E43.1). Added §11.6 subsections "What the Signal Does Not Claim" (review-happened ≠ review-correct; E39.3's overclaim refused) and "Where the Acknowledgment Is Recorded". Amended the always-restate surfaces that said "accepted by silence": §1A gate-scoping, §5C Step 6, §11.5 flow + Key Rule 4, §12, §13A, §13B, and §11.6 "What Default-Accept Governs" + gate (B). §11.6.1 (HQ-authored deliveries) is deliberately unchanged. |
 | 2.4.1 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Added the one normative statement to §11.6 "The Model": at the Phase→Milestone and Milestone→Epic gates the **parent** performs the merge of a child's branch, so **a child never holds merge authorization** and a Merge Authorization is the parent's own record of an act it performed, not an instruction to a child. The bypass class `P9-GH-1`/`P10-GH-9` record is structurally unavailable, not merely discouraged. Amended the happy-path acceptance record to *"the parent's merge plus the in-chat acknowledgment"*. Corrected every statement that instructed a child to merge its own branch: §1A step 7, §11.5 Key Rules 5 and 10, §13B (the Phase Execution Chat now performs the merge of the milestone branch; the Milestone Chat performs epic-branch merges as the parent). §11.6.1 (HQ-authored deliveries, CFO diff review) is deliberately unchanged. |
