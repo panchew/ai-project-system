@@ -1,0 +1,83 @@
+{
+  "declared": 1,
+  "reported": 1,
+  "records": [
+    {
+      "label": "QA RUN 2",
+      "lane": "epic_qa",
+      "verdict": "PASS",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 1,
+        "files_changed": {
+          "count": 0,
+          "provenance": "transcript-derived",
+          "lower_bound": true,
+          "paths": [],
+          "excluded_paths": [],
+          "workspace": null
+        },
+        "claims": {
+          "asserted": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "rate": null,
+          "vacuous": true
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 1,
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "0/0",
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 0,
+          "passes": null,
+          "scored": false,
+          "note": "RECORDED, NOT SCORED on epic_qa \u2014 run-qa-agent:336-344 refuses a mutating tool set, so this was a constant false, not a strict bar"
+        }
+      ],
+      "unresolved_claims": [],
+      "all_claims": [],
+      "advertised_tools": {
+        "tool_set_path": ".ai-project/agents/qa-tools.json",
+        "enabled": [
+          "read_file",
+          "list_dir"
+        ],
+        "sha256_at_run_time": "83ff08e7b3492fd38aee92bbe13fe2118535d1d9fa8f120372b362c64cfb69e7",
+        "provenance": "run metadata, captured at run time \u2014 authoritative"
+      },
+      "recorded_never_scored": {
+        "exit_code": 0,
+        "status": "completed",
+        "tokens": 355,
+        "duration_ms": 7297,
+        "model": "qwen3-coder:30b",
+        "endpoint": "runner-default",
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-QA-RUN2/qa-transcript.json",
+      "metadata_path": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-QA-RUN2/qa-run-metadata.json",
+      "executed_calls": [
+        {
+          "name": "read_file",
+          "args": {
+            "path": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/measurement-tasks/P12-M41/qa-task/work/servicecard.yml"
+          },
+          "denied_or_errored": false
+        }
+      ]
+    }
+  ]
+}

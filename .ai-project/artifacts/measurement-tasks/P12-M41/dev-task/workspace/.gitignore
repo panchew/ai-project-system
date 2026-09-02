@@ -1,0 +1,9 @@
+# Without this, running the tests alone creates __pycache__/ directories and
+# `git status --porcelain` reports THREE changed paths for a workspace where no work
+# was done at all. C-B's worktree provenance would then hand a successful-nothing run a
+# passing `files changed > 0` -- the exact false negative this epic exists to detect,
+# reproduced inside its own measurement harness. Found by running the harness against
+# the degenerate baseline, 2026-08-22.
+__pycache__/
+*.pyc
+.pytest_cache/

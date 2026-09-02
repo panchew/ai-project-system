@@ -1,0 +1,1 @@
+Report your working directory exactly as it appears in your environment, verbatim, with no alteration, no reconstruction, and no comment. Output only the path.

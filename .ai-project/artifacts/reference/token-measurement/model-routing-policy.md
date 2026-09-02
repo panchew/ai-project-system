@@ -69,6 +69,55 @@ Not evidence in either direction: `Getawayinsured2023` routes `milestone:` to **
 `qwen3.6:27b`. The "natural experiment" this policy's readers were once told existed does not
 exist on the locality axis (phase spec corrected at v1.3.1).
 
+### Note on row P4 — reconciled with the SN-41 baseline lineup and E41.4's back-test, 2026-09-01 (P12-M41-E41.5)
+
+**Recorded beside the row, per the file's own convention above — nothing in row P4's `default` or
+`why` cells is edited by this note.**
+
+Three separate facts about this one cell are now visible together for the first time, and holding
+them apart is the point of this note (`decision made` ≠ `value configured` ≠ `measured`):
+
+1. **DECISION MADE, 2026-08-19.** HQ Ruling, Decision 15
+   (`.ai-project/artifacts/rulings/2026-08-19__ai-project-system-hq__ruling__p12-opening-and-sn-30-37-triage.md`):
+   row P4 **CLOSED** by CFO decision, a **policy-row change** (Change discipline satisfied by
+   decision, not by new cited evidence) — decided value `milestone → Deepseek V4 Flash`.
+2. **VALUE CONFIGURED, 2026-08-27.** HQ Ruling on SN-40..46
+   (`.ai-project/artifacts/rulings/2026-08-27__ai-project-system-hq__ruling__sn40-46-baseline-lineup-and-the-switching-ratchet.md`),
+   landed via PR #236 (`master` `3222f50`, outside P12's milestone machinery per SN-40..46 Decision
+   6): the mapping row below now reads `milestone → remote:deepseek-v4-pro` — **`pro`, not
+   `flash`** — attributed honestly as *"value set by CFO allowance decision (SN-41), not by
+   measurement."* **This is a different engine than the one row P4 was closed on**, landed by a
+   second, later, and separate CFO decision, not by the G-P4 evidential path above.
+3. **MEASURED, 2026-09-01.** E41.4 (PR #239, merged to `milestone/M41` at `9f50e39`;
+   `.ai-project/artifacts/reference/local-review-backtest/e41-4-runs/d4-bars-and-recommendations.md`)
+   back-tested the **now-configured** `deepseek-v4-pro` against the unchanged `claude-opus-5`
+   incumbent on E35.5's frozen instrument: **absolute bar PASS for both** (10/10 CATCH, 0 false
+   alarms each); **relative bar cleared by neither** — identical on every check. Escalated to the
+   CFO as a **neutral** result
+   (`.ai-project/artifacts/escalation-notices/2026-09-01T00_00_00Z__P12-M41-E41.4__escalation_notice.md`),
+   not landed and not dropped.
+
+**The reconciliation, stated plainly.** Row P4's `why` cell above still justifies **"Paid
+frontier"** by spend share, Stage-2 accept authority, and *"evaluated against local inference
+2026-07-31 and not moved"* — a sentence that names only the **first** evaluation and predates the
+second. Read together with the mapping row's honest attribution, the two no longer describe one
+process: **the configured value was set by allowance, not by measurement, and the one measurement
+this project holds of that configured engine (E41.4) neither supports nor contradicts the
+decision** — it found `deepseek-v4-pro` indistinguishable from the incumbent on the frozen
+instrument, which is silence, not endorsement, and it says nothing at all about `Deepseek V4
+Flash`, the engine the 2026-08-19 closure actually named. **Neither statement above is false; they
+now require this note to be read as one.**
+
+**What this note does not do.** It does not move row P4's `default` cell, rewrite its `why` cell,
+or touch the mapping table's `milestone` cell (which stays at what #236 landed) — all three stay
+put for the same reason the 2026-07-31 note above left them: `test_policy_mapping_agrees_with_yml_block`
+forces the mapping table to agree with `.ai-project.yml`, and the tier cells sit **outside** that
+guard's parse, where a divergence no test can catch is worse than one that fails a build. It does
+not re-close or re-open row P4 — that decision stands as HQ recorded it. **Actually rewriting the
+row's language to describe an allowance-decided value is M44's E44.2 to execute** (M41 spec
+v1.6.0, changelog 2.0.0); this note is the record that the gap exists and is bounded, filed by
+P12-M41-E41.5 per its spec v2.0.0 deliverable D-A.
+
 ## Mapping to `.ai-project.yml` `models:` (the M31 guardrail target)
 
 | key | value | policy row |
