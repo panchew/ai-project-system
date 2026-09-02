@@ -40,6 +40,34 @@ DEFAULT_MODELS = {
 # gpu-coexistence.md) for the adjacent GPU-contention case. P9-M31-E31.2.
 LOCAL_UNAVAILABLE_EXIT = 5
 
+# E42.1 — what "Docker is available" is taken to mean, and how it is detected.
+# Two distinct failures, each handled as its own fail-closed case:
+#   1. The `docker` BINARY is absent: subprocess.run raises FileNotFoundError.
+#   2. The daemon is installed but NOT RUNNING (or unreachable): the binary runs,
+#      so no FileNotFoundError — but `docker run` exits non-zero with a stderr
+#      naming the connection failure. This is a DIFFERENT fault from a missing
+#      binary and must not be retried as an ordinary task failure or silently
+#      take any other path. The marker set below is deliberately narrow so an
+#      ordinary in-container command failure (arbitrary stderr, any exit code) is
+#      never misread as a daemon outage.
+DAEMON_NOT_RUNNING_MARKERS = (
+    "Cannot connect to the Docker daemon",
+    "Is the docker daemon running",
+)
+
+
+class SandboxUnavailable(Exception):
+    """E42.1 sentinel: the Docker sandbox cannot run (binary absent, or daemon
+    installed-but-not-running), so the model's command must NOT run unsandboxed
+    on the host. Raised by run_in_sandbox; caught by handle_epic_execution, which
+    applies the file's own local-unavailable shape (state reason -> escalation
+    report -> archive trigger file -> exit LOCAL_UNAVAILABLE_EXIT)."""
+
+    def __init__(self, reason):
+        self.reason = reason
+        super().__init__(reason)
+
+
 # Sandbox → host reachability (Bugfix B2.1). A container's `localhost` is its own
 # loopback, not the host's, so an endpoint that is correct on the host is severed
 # inside the sandbox. `host-gateway` is Docker's own name for "the host from in
@@ -392,13 +420,31 @@ def run_in_sandbox(image, command, active_model):
     try:
         try:
             result = subprocess.run(docker_cmd, capture_output=True, text=True)
-            return result.returncode, result.stdout, result.stderr
         except FileNotFoundError:
-            # Fallback to local execution if Docker is not available in current environment
-            print("[!] Docker is not installed or available. Executing locally with model environment...")
-            env = os.environ.copy()
-            env["AI_PROJECT_ACTIVE_MODEL"] = active_model
-            result = subprocess.run(command, shell=True, env=env, capture_output=True, text=True)
+            # E42.1 — Docker BINARY absent. The sandbox is the only thing between
+            # a dispatched model and the operator's machine; its absence must fail
+            # closed (LOCAL_UNAVAILABLE_EXIT, G1's convention), never run the
+            # model's command unsandboxed on the host. The host-execution path
+            # that used to live here (subprocess.run(command, shell=True)) is
+            # REMOVED — the epic's recorded decision. The sentinel is caught by
+            # handle_epic_execution, which states the reason, generates an
+            # escalation report, archives the trigger file and exits 5.
+            raise SandboxUnavailable(
+                "Docker binary is not installed or available "
+                "(FileNotFoundError invoking 'docker run')"
+            )
+        else:
+            # E42.1 — Docker is installed but the DAEMON is not running (or
+            # unreachable). A different failure from a missing binary: it must
+            # not be retried as an ordinary task failure, and it must not take
+            # any other path. Fails closed with its own stated reason.
+            if result.returncode != 0 and any(
+                marker in (result.stderr or "") for marker in DAEMON_NOT_RUNNING_MARKERS
+            ):
+                raise SandboxUnavailable(
+                    "Docker is installed but the daemon is not running or unreachable "
+                    f"(docker run exit {result.returncode}; stderr: {result.stderr.strip()})"
+                )
             return result.returncode, result.stdout, result.stderr
     finally:
         if container_name in ACTIVE_CONTAINERS:
@@ -448,7 +494,9 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
         # Run dev_command (only if attempt > 1 OR if explicitly flagged to run initially)
         if (attempt > 1) or run_dev_initially:
             print(f"[*] Running developer command inside sandbox (active model: {dev_model}): {dev_cmd}")
-            dev_code, dev_out, dev_err = run_in_sandbox(sandbox_image, dev_cmd, active_model=dev_model)
+            dev_code, dev_out, dev_err = _run_sandbox_or_escalate(
+                sandbox_image, dev_cmd, dev_model, epic_id, dev_model, qa_model, trigger_file_name
+            )
             print(f"[*] Developer command finished with exit code: {dev_code}")
             if dev_code != 0:
                 print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
@@ -458,7 +506,9 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
 
         # Run validation_command inside sandbox under epic_qa model configuration
         print(f"[*] Running validation command inside sandbox (active model: {qa_model}): {validation_cmd}")
-        val_code, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd, active_model=qa_model)
+        val_code, stdout, stderr = _run_sandbox_or_escalate(
+            sandbox_image, validation_cmd, qa_model, epic_id, dev_model, qa_model, trigger_file_name
+        )
         
         if val_code == 0:
             print(f"[✓] Epic {epic_id} validation passed successfully on attempt {attempt}!")
@@ -510,7 +560,9 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
             
         # Run dev_command inside sandbox under epic_dev model configuration
         print(f"[*] Running developer command on failure inside sandbox (active model: {dev_model}): {dev_cmd}")
-        dev_code, dev_out, dev_err = run_in_sandbox(sandbox_image, dev_cmd, active_model=dev_model)
+        dev_code, dev_out, dev_err = _run_sandbox_or_escalate(
+            sandbox_image, dev_cmd, dev_model, epic_id, dev_model, qa_model, trigger_file_name
+        )
         print(f"[*] Developer command on failure finished with exit code: {dev_code}")
         if dev_code != 0:
             print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
@@ -569,7 +621,46 @@ def _escalate_if_local_unavailable(dev_code, epic_id, dev_out, dev_err, dev_mode
     sys.exit(LOCAL_UNAVAILABLE_EXIT)
 
 
-def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model, status="blocked"):
+def _run_sandbox_or_escalate(image, command, active_model, epic_id, dev_model, qa_model, trigger_file_name):
+    """E42.1: run the sandbox, and translate a SandboxUnavailable sentinel into
+    the file's own fail-closed disposition instead of letting the model's command
+    reach the host unsandboxed. _escalate_if_sandbox_unavailable never returns
+    (it sys.exit's), so this either returns run_in_sandbox's tuple or aborts."""
+    try:
+        return run_in_sandbox(image, command, active_model)
+    except SandboxUnavailable as exc:
+        _escalate_if_sandbox_unavailable(
+            epic_id, exc.reason, dev_model, qa_model, trigger_file_name
+        )
+
+
+def _escalate_if_sandbox_unavailable(epic_id, reason, dev_model, qa_model, trigger_file_name):
+    """E42.1 -- fail closed when the sandbox cannot run. Applies the file's own
+    local-unavailable shape (G1; the same escalation-plus-archive record as
+    _escalate_if_local_unavailable): state the reason, generate an escalation
+    report, archive the trigger file so the run is not silently retried, and exit
+    LOCAL_UNAVAILABLE_EXIT. The Docker-absent path must never run the model's
+    command unsandboxed on the host."""
+    print(
+        f"[X] Sandbox unavailable for Epic {epic_id}: {reason} -- refusing to run "
+        f"the model's command unsandboxed on the host (fail closed).",
+        file=sys.stderr,
+    )
+    generate_escalation_report(
+        epic_id, "", "", dev_model, qa_model, status="sandbox-unavailable", reason=reason
+    )
+    trigger_file = QUEUE_DIR / trigger_file_name
+    if trigger_file.exists():
+        archived_file = QUEUE_DIR / f"{trigger_file_name}.failed"
+        try:
+            trigger_file.rename(archived_file)
+            print(f"[✓] Archived trigger file to {archived_file} to prevent duplicate runs.")
+        except Exception as e:
+            print(f"[!] Failed to archive trigger file: {e}", file=sys.stderr)
+    sys.exit(LOCAL_UNAVAILABLE_EXIT)
+
+
+def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model, status="blocked", reason=None):
     admin_dir = PROJECT_ROOT / "docs" / "admin"
     admin_dir.mkdir(parents=True, exist_ok=True)
 
@@ -588,6 +679,22 @@ def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model, sta
             "Confirm the Ollama endpoint is reachable and the resolved model tag is "
             "pulled, then re-queue the Epic trigger. This is a local-infrastructure gap, "
             "not a structural code defect or an Epic Spec issue."
+        )
+    elif status == "sandbox-unavailable":
+        heading = f"# Escalation Report: Epic {epic_id} — Sandbox Unavailable"
+        intro = (
+            "The Docker sandbox could not run, so the model's command was refused "
+            "unsandboxed on the host (fail closed, E42.1). This is **not** a task "
+            "failure and the retry ceiling was not exhausted -- the loop refused "
+            "immediately rather than run without isolation."
+        )
+        if reason:
+            intro += f"\n\n**Reason:** `{reason}`"
+        intervention = (
+            "Confirm Docker is available -- the binary present and the daemon "
+            "running -- then re-queue the Epic trigger. This is a "
+            "local-infrastructure gap, not a structural code defect or an Epic "
+            "Spec issue."
         )
     else:
         heading = f"# Escalation Report: Epic {epic_id} Blocked"
