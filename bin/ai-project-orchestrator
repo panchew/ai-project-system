@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import sys
 import json
 import subprocess
@@ -450,6 +451,177 @@ def run_in_sandbox(image, command, active_model):
         if container_name in ACTIVE_CONTAINERS:
             ACTIVE_CONTAINERS.remove(container_name)
 
+def _safe_epic_dir_name(epic_id):
+    """Mirror bin/run-dev-agent's sanitization so the epic's run transcript
+    (.ai-project/artifacts/agentic-runs/<epic_id>/transcript.json) resolves."""
+    return re.sub(r"[^A-Za-z0-9._-]", "_", str(epic_id))
+
+
+def _epic_transcript_path(epic_id):
+    return (
+        PROJECT_ROOT
+        / ".ai-project" / "artifacts" / "agentic-runs"
+        / _safe_epic_dir_name(epic_id) / "transcript.json"
+    )
+
+
+# E42.2 — the orchestrator's own runtime machinery. These paths are handled by their
+# own code paths (the trigger is removed after staging, feedback.json is unlinked on
+# success, locks/logs are runtime state) and are never part of the epic's deliverables
+# nor evidence of an agent out-of-scope touch. Excluded from the out-of-scope record.
+_MACHINERY_PREFIXES = (
+    ".ai-project/queue/",
+    ".ai-project/locks/",
+    ".ai-project/logs/",
+    ".ai-project/feedback.json",
+)
+
+# Tool calls that record a file the agent's run actually changed. Reads are not
+# touches; run_command has no path. Mirrors the tool names the transcripts record.
+_TRANSCRIPT_WRITE_TOOLS = frozenset({
+    "write_file", "edit_file", "create_file", "append_file",
+    "delete_file", "copy_file", "rename_file",
+})
+
+
+def _transcript_touched_paths(epic_id):
+    """D1 Part A (candidate 3) — the paths the epic's own run recorded as touched:
+    the write/edit/create tool-call paths in the run's transcript, resolved to
+    project-relative. This is the agent's own recorded footprint — the evidence the
+    milestone says gates the commit. An absent transcript yields the empty set: an
+    epic whose run left no footprint cannot claim a scoped commit (fail closed)."""
+    touched = set()
+    tp = _epic_transcript_path(epic_id)
+    if not tp.exists():
+        return touched
+    try:
+        data = json.loads(tp.read_text())
+    except (OSError, ValueError):
+        return touched
+    for entry in data.get("transcript", []):
+        tc = entry.get("tool_call") or entry.get("call") or {}
+        name = tc.get("name", "")
+        if name not in _TRANSCRIPT_WRITE_TOOLS:
+            continue
+        args = tc.get("args") or tc.get("arguments") or {}
+        p = args.get("path") or args.get("file_path")
+        if not isinstance(p, str) or not p.strip():
+            continue
+        raw = p.strip()
+        candidate = Path(raw)
+        if candidate.is_absolute():
+            try:
+                candidate = candidate.relative_to(PROJECT_ROOT)
+            except ValueError:
+                # An absolute path outside PROJECT_ROOT (e.g. a harness scratchpad)
+                # cannot be mapped to a project path — it did not land in this tree.
+                continue
+        touched.add(candidate.as_posix())
+    return touched
+
+
+def _worktree_diff_paths():
+    """Every path the working tree differs from HEAD — modified, added, deleted or
+    untracked — enumerated by git, never globbed. Robust to non-porcelain stdout so a
+    harness that feeds unrelated text cannot fabricate dirty paths."""
+    res = subprocess.run(
+        ["git", "status", "--porcelain", "--untracked-files=all"],
+        cwd=PROJECT_ROOT, capture_output=True, text=True,
+    )
+    paths = set()
+    status_chars = "MADRCU?! "
+    for line in res.stdout.splitlines():
+        if len(line) < 4:
+            continue
+        if line[0] not in status_chars or line[1] not in status_chars:
+            continue
+        if line[2] != " ":
+            continue
+        entry = line[3:].strip()
+        if " -> " in entry:
+            entry = entry.split(" -> ")[-1]
+        if entry:
+            paths.add(entry)
+    return paths
+
+
+def _write_out_of_scope_record(epic_id, out_of_scope):
+    """D3 — the out-of-scope remainder is written to a record under the epic's own
+    artifact root so a reader can afterwards distinguish an out-of-scope run from one
+    where nothing out of scope happened. The paths are recorded, never staged."""
+    safe = _safe_epic_dir_name(epic_id)
+    rec_dir = (
+        PROJECT_ROOT / ".ai-project" / "artifacts" / "agentic-runs" / safe
+    )
+    rec_dir.mkdir(parents=True, exist_ok=True)
+    rec_path = rec_dir / "out-of-scope.json"
+    payload = {
+        "epic_id": epic_id,
+        "out_of_scope_paths": sorted(out_of_scope),
+        "disposition": "recorded; NOT staged or committed with the epic",
+    }
+    rec_path.write_text(json.dumps(payload, indent=2))
+    rel = rec_path.relative_to(PROJECT_ROOT).as_posix()
+    print(
+        f"[!] Out-of-scope paths recorded in {rel}, not committed with the epic: "
+        f"{', '.join(sorted(out_of_scope))}",
+        file=sys.stderr,
+    )
+    return rel
+
+
+def _stage_and_commit_epic(epic_id, dev_model, qa_model):
+    """E42.2 — replaces the `git add .` at the staging/commit site. Stages exactly the
+    epic's files (per the committed D1 definition) and represents the out-of-scope
+    remainder in a record instead of absorbing it. Returns one of:
+      "nothing"    — no epic files attributable, no out-of-scope work: nothing to do
+      "committed"  — in-scope staged and committed (record written iff out-of-scope)
+      "escalate"   — no epic footprint at all yet the tree is dirty: fail closed."""
+    raw_diff = _worktree_diff_paths()
+    diff = {p for p in raw_diff if not p.startswith(_MACHINERY_PREFIXES)}
+
+    artifact_dir = (
+        PROJECT_ROOT / ".ai-project" / "artifacts" / "agentic-runs"
+        / _safe_epic_dir_name(epic_id)
+    )
+    artifact_prefix = artifact_dir.relative_to(PROJECT_ROOT).as_posix() + "/"
+
+    in_scope = set(_transcript_touched_paths(epic_id) & diff)
+    # The epic's own run record (transcript, context, metadata, out-of-scope record)
+    # is an epic artifact, committed with the epic.
+    in_scope |= {p for p in diff if p.startswith(artifact_prefix)}
+    out_of_scope = diff - in_scope
+
+    if not in_scope and out_of_scope:
+        # No footprint attributable to the epic, yet the tree is dirty: cannot claim a
+        # scoped commit, so fail closed (record written, trigger archived, exit 1).
+        _write_out_of_scope_record(epic_id, out_of_scope)
+        return "escalate"
+
+    staged = set(in_scope)
+    if out_of_scope:
+        staged.add(_write_out_of_scope_record(epic_id, out_of_scope))
+    if not staged:
+        return "nothing"
+
+    subprocess.run(["git", "add", "--"] + sorted(staged), cwd=PROJECT_ROOT)
+    message = (
+        f"feat: programmatically implement Epic {epic_id} deliverables\n\n"
+        f"Resolved via Developer: {dev_model} and QA: {qa_model}\n\n"
+        f"Staged files: {', '.join(sorted(staged))}"
+    )
+    if out_of_scope:
+        record_rel = ".ai-project/artifacts/agentic-runs/{}/out-of-scope.json".format(
+            _safe_epic_dir_name(epic_id)
+        )
+        message += (
+            f"\n\nOut-of-scope paths recorded in {record_rel} and NOT committed: "
+            f"{', '.join(sorted(out_of_scope))}"
+        )
+    subprocess.run(["git", "commit", "-m", message], cwd=PROJECT_ROOT)
+    return "committed"
+
+
 def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.json"):
     epic_id = trigger.get("epic_id", "unknown")
     spec_path = trigger.get("epic_spec_path", "")
@@ -521,10 +693,27 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
                 except Exception as e:
                     print(f"[!] Failed to clean up feedback.json: {e}", file=sys.stderr)
             
-            # Automate staging and commit
+            # Automate staging and commit — E42.2: scoped to the epic's files, with
+            # the out-of-scope remainder recorded, never absorbed (the design decision
+            # and definition are committed in P12-M42-E42.2's record artifact).
             print("[*] Staging and committing changes...")
-            subprocess.run(["git", "add", "."], cwd=PROJECT_ROOT)
-            subprocess.run(["git", "commit", "-m", f"feat: programmatically implement Epic {epic_id} deliverables\n\nResolved via Developer: {dev_model} and QA: {qa_model}"], cwd=PROJECT_ROOT)
+            stage_result = _stage_and_commit_epic(epic_id, dev_model, qa_model)
+            if stage_result == "escalate":
+                print(
+                    f"[X] Epic {epic_id} produced no attributable files yet the working "
+                    f"tree is dirty — refusing to commit unclaimed changes. Out-of-scope "
+                    f"record written; archiving trigger.",
+                    file=sys.stderr,
+                )
+                trigger_file = QUEUE_DIR / trigger_file_name
+                if trigger_file.exists():
+                    archived_file = QUEUE_DIR / f"{trigger_file_name}.failed"
+                    try:
+                        trigger_file.rename(archived_file)
+                        print(f"[✓] Archived trigger file to {archived_file} to prevent duplicate runs.")
+                    except Exception as e:
+                        print(f"[!] Failed to archive trigger file: {e}", file=sys.stderr)
+                sys.exit(1)
             
             # Remove trigger file from queue
             trigger_file = QUEUE_DIR / trigger_file_name
