@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-09-02
-version: 1.2.0
+version: 1.3.0
 ---
 
 # HQ Execution Chat Starter — System Reference
@@ -49,7 +49,8 @@ An **HQ Chat** is a long-lived planning, governance, and coordination surface. I
 2. **Produce Phase specs and Phase Execution Chat Starters** — launch each Phase with a
    binding planning contract
 3. **Review and accept deliverables returned by Phase Chats** — accept clean deliveries
-   by silence (merge + in-chat acknowledgment); issue an explicit reject or
+   by an in-chat acknowledgment that names the party that reviewed and accepted (merge + in-chat
+   acknowledgment; silence accepts nothing — PSG §11.6); issue an explicit reject or
    accept-with-follow-ups decision only on the exception path (PSG §11.6)
 4. **Create and dispatch Bugfix Epics** — handle unplanned production issues on the
    expedited path (see [Handling Production Issues](#handling-production-issues-bugfix-epics))
@@ -126,7 +127,7 @@ Three artifacts carry the core review cycle:
 | Artifact | Produced by | Direction | Meaning |
 |----------|-------------|-----------|---------|
 | **Completion Notice** | Epic Agent | Epic → Milestone | "Work is finished and ready for your review" |
-| **Review Decision** | Reviewing chat (Milestone/Phase/HQ) | parent → child | Exception path only (PSG §11.6): "Reject" (rework) or "Accept with follow-ups"; a clean delivery is accepted by silence |
+| **Review Decision** | Reviewing chat (Milestone/Phase/HQ) | parent → child | Exception path only (PSG §11.6): "Reject" (rework) or "Accept with follow-ups"; a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted — silence accepts nothing |
 | **Delivery Notice** | Epic Agent | Epic → Milestone | "PR merged; here is the merge record. Chat closed." |
 
 Several supporting artifacts have canonical templates in `governance/templates/`:
@@ -153,7 +154,8 @@ parent).
 Downward: each layer launches the layer below with a Chat Starter, and acknowledges
 acceptance in-chat (SN-19 — no Delivery Authorization artifact; the standing merge
 instruction carries the same authority). Upward: each layer reports completion with a
-Completion Notice; a clean delivery is accepted by silence, and a Review Decision comes back
+Completion Notice; a clean delivery is accepted by an acknowledgment that names the party that
+reviewed and accepted (silence accepts nothing — PSG §11.6 / AOG §12), and a Review Decision comes back
 only on the exception path (PSG §11.6 / AOG §12); after merge it produces a Delivery Notice.
 
 **Reference:** [`artifact-communication-protocol.md`](artifact-communication-protocol.md)
@@ -187,7 +189,8 @@ All Definition of Done items satisfied. Tests pass; no regression.
 ### Example — Review Decision (Milestone → Epic, exception path)
 
 A Review Decision is issued **only when a delivery is not clean** — to reject it or to
-accept it with follow-up Epic(s) (PSG §11.6). A clean delivery is accepted by silence:
+accept it with follow-up Epic(s) (PSG §11.6). A clean delivery is accepted by an
+acknowledgment that names the party that reviewed and accepted (silence accepts nothing):
 the merge plus the in-chat acknowledgment is the acceptance record, and no artifact is
 produced.
 
@@ -379,7 +382,7 @@ Walk through it with the
 1. **Open** — establish project context (name, repo, governance versions, current Phase)
 2. **Plan** — produce Phase specs and Phase Execution Chat Starters
 3. **Authorize** — acknowledge acceptance in-chat and apply the standing merge instruction for accepted Phase plans (SN-19 — no artifact)
-4. **Oversee** — receive Completion Notices, accept clean deliveries by silence (a
+4. **Oversee** — receive Completion Notices, accept clean deliveries by an acknowledgment naming the party that reviewed and accepted (silence accepts nothing; a
    Review Decision is the exception path only — PSG §11.6), supervise the artifact flow;
    create Bugfix Epics as needed
 5. **Gate** — authorize production deployments (CFO)
@@ -406,6 +409,7 @@ Walk through it with the
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.3.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** Every "accept by silence" statement reconciled to the amended PSG §11.6: HQ Chat accepts a clean Phase delivery by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity); **silence accepts nothing**. Amended: the Review-and-accept responsibility, the supporting-artifacts table's Review Decision row, the artifact-flow note, the Review Decision worked example, and the Oversee step of the session lifecycle. HQ-authored deliveries remain governed by §11.6.1 (CFO diff review; not touched). Same strictness — no guard weakened. Backed by `tests/test_acceptance_distinguishable_from_absence.py`. |
 | 1.2.0 | 2026-09-02 | **Merge-authorization guard relabelled as a backstop (E43.1, P12-M43).** The guard's pushback strings survive, relabelled: at the Phase→Milestone and Milestone→Epic gates the parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge authorization — the guard is now a labelled backstop, not the primary guard (unavailable is not impossible; a backstop that fires is evidence); HQ itself has no parent and therefore never merges on authorization alone. Guard clauses (refusal, mode-is-not-authority, §11.6.1) are unchanged — same strictness. Also corrected the supporting-artifact list's Merge Authorization description to the parent's record of the merge it performed. Backed by `tests/test_merge_authorization_parent_performs.py`; the existing `tests/test_merge_authorization_routing_guard.py` still passes. |
 | 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Governance Authority Chain. HQ has **no parent chat**, so the routing is not "confirm upward": PSG **§11.6.1** applies — default-accept MUST NOT be applied to HQ-authored deliveries, the **CFO is the designated diff reviewer**, and HQ MUST NOT merge its own delivery on authorization alone. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
 | 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/hq-execution-chat-starter.md`. |

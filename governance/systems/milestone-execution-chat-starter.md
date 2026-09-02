@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-09-02
-version: 1.2.0
+version: 1.3.0
 ---
 
 # Milestone Execution Chat Starter — System Reference
@@ -40,7 +40,7 @@ The following is the exhaustive list of Milestone Chat responsibilities:
 2. **Produce Epic specs** — create an Epic spec file for every Epic stub within the Milestone; these are deliverables committed by the Coding Agent
 3. **Produce Epic Execution Chat Starters** — create a filled-in Epic Execution Chat Starter for each Epic within the Milestone
 4. **Return deliverables to the parent chat** — all produced artifacts are returned to the Phase Chat (or HQ Chat) for review and acceptance
-5. **Acknowledge Epic acceptance in-chat** — when the parent chat accepts an Epic's deliverables (by silence on the happy path, per SN-19), the Milestone Chat acknowledges the acceptance in-chat and applies the standing merge instruction authorizing the Coding Agent to proceed with that Epic
+5. **Acknowledge Epic acceptance in-chat** — when the parent chat accepts an Epic's deliverables (on the happy path, per SN-19, by an acknowledgment that names the party that reviewed and accepted — silence accepts nothing, PSG §11.6), the Milestone Chat acknowledges the acceptance in-chat and applies the standing merge instruction authorizing the Coding Agent to proceed with that Epic
 
 A Milestone Chat MUST complete all responsibilities before declaring the session closed.
 
@@ -90,7 +90,8 @@ Documentation is authoritative. Chat is ephemeral. Any conflict between a chat s
 
 Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Epic Delivery Authorization artifact
 or ceremonial block**. When the parent chat (Phase Chat or HQ Chat) accepts an Epic's
-deliverables (by silence on the happy path), the Milestone Chat acknowledges the acceptance
+deliverables (by an acknowledgment that names the party that reviewed and accepted — role +
+session identity; **silence accepts nothing**, PSG §11.6), the Milestone Chat acknowledges the acceptance
 **in-chat**. This acknowledgment is the signal to the Coding Agent that the Epic's planning
 artifacts are accepted and Epic execution may begin.
 
@@ -143,8 +144,10 @@ A Completion Notice is a structured artifact that signals an Epic has finished a
 
 1. **Receive** Completion Notices from Epic Agents as they finish work
 2. **Review** each Completion Notice for spec compliance, QA status, and PR readiness
-3. **Decide** — accept a clean delivery by silence (the merge plus the in-chat
-   acknowledgment is the acceptance record; no artifact); issue a **Review Decision**
+3. **Decide** — accept a clean delivery by an in-chat acknowledgment that names the party that
+   reviewed and accepted (the merge plus the in-chat
+   acknowledgment is the acceptance record; no artifact; silence accepts nothing — PSG §11.6);
+   issue a **Review Decision**
    artifact only on the exception path (PSG §11.6 / AOG §12)
 4. **Aggregate** all Epic Completion Notices into a **Milestone Completion Notice** when all Epics are done
 
@@ -160,7 +163,8 @@ Milestone Chat receives it
 You review Completion Notice
   ↓
 Clean? (DoD, acceptance criteria, spec all met)
-  ├─ Yes: accept by silence (no artifact — PSG §11.6);
+  ├─ Yes: accept by acknowledgment naming the party that reviewed
+  │       (no artifact — PSG §11.6; silence accepts nothing);
   │       Epic proceeds to merge, produces Delivery Notice
   └─ No:  issue Review Decision (exception path)
           ├─ Accept with follow-up Epic(s): Epic proceeds to merge
@@ -169,7 +173,7 @@ Clean? (DoD, acceptance criteria, spec all met)
 
 ### Review Criteria (clean vs. not clean)
 
-**Clean (accept by silence) if:**
+**Clean (accept by acknowledgment naming the party that reviewed) if:**
 - ✓ Spec compliance confirmed (implementation matches Epic spec)
 - ✓ Tests passing (all tests pass, coverage meets DoD requirements)
 - ✓ Code review ready (linting, style, documentation complete)
@@ -186,9 +190,10 @@ Clean? (DoD, acceptance criteria, spec all met)
 ### Issuing a Review Decision (exception path only)
 
 A Review Decision is issued **only when a delivery is not clean** — to reject it or to
-accept it with follow-up Epic(s) (PSG §11.6 / AOG §12). A clean delivery is accepted by
-silence: the merge plus the in-chat acknowledgment is the acceptance record, and no
-artifact is produced. When you do issue one, use this template:
+accept it with follow-up Epic(s) (PSG §11.6 / AOG §12). A clean delivery is accepted by an
+acknowledgment naming the party that reviewed and accepted (silence accepts nothing):
+the merge plus the in-chat acknowledgment is the acceptance record, and no artifact is
+produced. When you do issue one, use this template:
 
 **Template:** `governance/templates/review-decision.md`
 
@@ -218,7 +223,7 @@ If Reject: Explain required changes.
 
 ### Aggregating into Milestone Completion Notice
 
-When **all Epics** in the Milestone are complete (accepted — by silence for clean deliveries, or via an exception-path Review Decision; PSG §11.6), you produce a **Milestone Completion Notice** to report the entire Milestone's completion to the parent Phase Chat.
+When **all Epics** in the Milestone are complete (accepted — by an acknowledgment naming the party that reviewed and accepted for clean deliveries, silence accepting nothing, or via an exception-path Review Decision; PSG §11.6), you produce a **Milestone Completion Notice** to report the entire Milestone's completion to the parent Phase Chat.
 
 **Same artifact type, but scoped to Milestone level:**
 ```markdown
@@ -258,19 +263,19 @@ Milestone M# is complete. All 3 Epics delivered and merged.
 ...
 ```
 
-Then the parent Phase Chat reviews it — accepting a clean Milestone delivery by silence, and issuing a Milestone-level Review Decision only on the exception path (PSG §11.6).
+Then the parent Phase Chat reviews it — accepting a clean Milestone delivery by an acknowledgment that names the party that reviewed and accepted (silence accepts nothing — PSG §11.6), and issuing a Milestone-level Review Decision only on the exception path (PSG §11.6).
 
 ---
 
 ## Acceptance Outcomes — Worked Examples (P4.1)
 
-A clean delivery is accepted **by silence** — no Review Decision is produced; the merge
-plus the in-chat acknowledgment is the acceptance record (PSG §11.6 / AOG §12). A Review
+A clean delivery is accepted **by an acknowledgment that names the party that reviewed and accepted** — no Review Decision is produced; the merge
+plus the in-chat acknowledgment is the acceptance record (PSG §11.6 / AOG §12; **silence accepts nothing**). A Review
 Decision is the binding **exception-path** artifact, issued only when a delivery is not
 clean. It is committed to the repository — a decision made only in chat is not
 authoritative. Use the template `governance/templates/review-decision.md`.
 
-### Example — Clean delivery (accepted by silence; no artifact)
+### Example — Clean delivery (accepted by acknowledgment naming the party that reviewed; no artifact)
 
 Epic P4-M17-E17.1 submits a Completion Notice. Review confirms spec compliance,
 independently verified: 17 new tests, full suite green, no regression, root cause
@@ -326,7 +331,7 @@ When you issue a **Reject**, the Epic enters the rework cycle:
 1. The Epic Agent reads your feedback and addresses every item.
 2. It produces a **new Completion Notice** (increment the version: v1.1, v1.2, …) and
    resubmits.
-3. You review again — a now-clean resubmission is accepted by silence (PSG §11.6); if it
+3. You review again — a now-clean resubmission is accepted by an acknowledgment naming the party that reviewed and accepted (PSG §11.6; silence accepts nothing); if it
    still falls short, issue a fresh Review Decision.
 
 **Maximum 3 attempts.** If a third Completion Notice is still not acceptable, do **not**
@@ -377,7 +382,7 @@ A Milestone Chat session follows this sequence:
 4. **Return** — deliver all artifacts to parent chat for review
 5. **Authorize** — for each accepted Epic, acknowledge acceptance in-chat and apply the standing merge instruction (SN-19 — no artifact)
 6. **Execute** — receive Completion Notices from Epic Agents as they finish work
-7. **Review** — review each Completion Notice; accept clean deliveries by silence,
+7. **Review** — review each Completion Notice; accept clean deliveries by an acknowledgment naming the party that reviewed and accepted (silence accepts nothing),
    issuing a Review Decision only on the exception path (PSG §11.6)
 8. **Aggregate** — when all Epics complete, produce Milestone Completion Notice
 9. **Close** — declare the session closed after parent Phase Chat accepts Milestone Completion Notice
@@ -413,6 +418,7 @@ A Milestone Chat session follows this sequence:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.3.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** Every "accept by silence" statement reconciled to the amended PSG §11.6: the Milestone Chat accepts a clean delivery by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity); **silence accepts nothing**. Amended: responsibilities, the SN-19 acknowledgment section, the Decide step, the workflow decision tree, the clean-criteria heading, the aggregation note, the parent-review line, the Acceptance Outcomes worked example, the rework cycle, and the session sequence. Same strictness — no guard weakened. Backed by `tests/test_acceptance_distinguishable_from_absence.py`. |
 | 1.2.0 | 2026-09-02 | **Merge-authorization guard relabelled as a backstop (E43.1, P12-M43).** The guard's pushback strings survive, relabelled: the parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge authorization — the guard is now a labelled backstop, not the primary guard (unavailable is not impossible; a backstop that fires is evidence). Guard clauses (refusal, mode-is-not-authority, level-aware routing) are unchanged — same strictness. Backed by `tests/test_merge_authorization_parent_performs.py`; the existing `tests/test_merge_authorization_routing_guard.py` still passes. |
 | 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Authority Rules: a Milestone Chat handed merge authorization directly must not simply comply, but confirm upward with the parent **Phase Chat**, for the milestone PR and any epic PR alike. Records the **2026-08-10 / PR #191** instance, and states that the adjacent SN-19 passage (*no ceremonial artifact*) means the authorization needs no paperwork, **not** that it may skip the level it comes from. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
 | 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/milestone-execution-chat-starter.md`. |

@@ -21,11 +21,13 @@ Stage 1 — Planning
 
 Stage 2 — Oversight
   Does:        Receives Completion Notices from direct children
-               Accepts clean deliveries by silence; issues a Review Decision
-                 only on the exception path (PSG §11.6 / AOG §12)
+               Accepts clean deliveries by an acknowledgment naming the party
+                 that reviewed and accepted (silence accepts nothing); issues a
+                 Review Decision only on the exception path (PSG §11.6 / AOG §12)
                Opens own PR to parent branch
-               Merges own PR on parent acceptance (silence, or an
-                 exception-path Review Decision Accept)
+               Parent performs the merge of the child's branch on parent
+                 acceptance (by acknowledgment, or an exception-path Review
+                 Decision Accept — E43.1, PSG §11.6)
                Sends Delivery Notice
   Closes when: Own PR is merged and Delivery Notice is sent
 ```
@@ -64,7 +66,7 @@ Stage 2 — Oversight
 |  Stage 1: Produces Milestone Starters                       |
 |  Stage 2: Aggregates Milestone completions                  |
 |           Opens PR (phase/* → master)                       |
-|           Merges on HQ Accept                               |
+|           Merged by HQ on HQ Accept (E43.1)                 |
 +------+--------------------------------------+---------------+
        |  ✅ Milestone Execution Chat Starter |
        v                                      |  ✅ Review Decision (exception path)
@@ -73,7 +75,7 @@ Stage 2 — Oversight
 |  Stage 1: Produces Epic Starters                            |
 |  Stage 2: Aggregates Epic completions                       |
 |           Opens PR (milestone/* → phase/*)                  |
-|           Merges on Phase Accept                            |
+|           Merged by Phase on Phase Accept (E43.1)           |
 +------+--------------------------------------+---------------+
        |  ✅ Epic Execution Chat Starter      |
        v                                      |  ✅ Review Decision (exception path)
@@ -81,7 +83,7 @@ Stage 2 — Oversight
 |  Epic Chat                                                  |
 |  Stage 2 only · Execution · Code                            |
 |  Opens PR (epic/* → milestone/*)                            |
-|  Merges on Milestone Accept                                 |
+|  Merged by Milestone on Milestone Accept (E43.1)            |
 +-------------------------------------------------------------+
 ```
 
@@ -90,9 +92,10 @@ Stage 2 — Oversight
 ## Upward Flow (child → parent)
 
 Every chat signals completion by sending a Completion Notice to its parent.
-The parent reviews; a clean delivery is accepted by silence, and a Review Decision
+The parent reviews; a clean delivery is accepted by an acknowledgment naming the
+party that reviewed and accepted (silence accepts nothing), and a Review Decision
 comes back only on the exception path (PSG §11.6 / AOG §12).
-After acceptance and PR merge, the child sends a Delivery Notice.
+After acceptance and PR merge (performed by the parent — E43.1), the child sends a Delivery Notice.
 
 ```
 Epic Chat        ---> ✅ Completion Notice ---> Milestone Chat
@@ -109,8 +112,10 @@ Phase Chat       ---> ✅ Delivery Notice   ---> HQ Chat
 ## Downward Flow (parent → child)
 
 A parent opens a child chat by sending it an Execution Chat Starter.
-After reviewing a Completion Notice, the parent accepts a clean delivery by silence;
+After reviewing a Completion Notice, the parent accepts a clean delivery by an
+acknowledgment naming the party that reviewed and accepted (silence accepts nothing);
 a Review Decision is sent back only on the exception path (PSG §11.6).
+The parent performs the merge of the child's branch on acceptance (E43.1, PSG §11.6).
 
 ```
 HQ Chat         ---> ✅ Phase Execution Chat Starter      ---> Phase Chat (opens it)

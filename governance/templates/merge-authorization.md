@@ -10,14 +10,14 @@ A **Merge Authorization** is the **parent's own record of an act it performed it
 the merge of a child's branch. It is **not** an instruction issued to a child: the child
 never holds merge authorization (PROJECT-SYSTEM-GUIDELINES.md §11.6 — *the parent
 performs the merge of a child's branch*). The parent that accepted a delivery performs
-the merge of that child's branch — by silence for a clean delivery, or following an
+the merge of that child's branch — by an acknowledgment naming the party that reviewed and accepted for a clean delivery, or following an
 accepting Review Decision on the exception path (PROJECT-SYSTEM-GUIDELINES.md §11.6 /
 AI-OPERATING-GUIDELINES.md §12) — and this artifact is the durable record of that act.
 
 Used by: **Phase Chat / Milestone Chat / HQ Chat** — the parent that performed the
 merge (recorder) → itself. The child never receives it.
 Related artifacts: [Review Decision](review-decision.md) (precedes this only on the
-exception path — a clean delivery is accepted by silence),
+exception path — a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted),
 [Epic Closure Notice](epic-closure-notice.md) (the child's confirmation that the
 merge performed by the parent completed), [Delivery Notice](delivery-notice.md) (the
 child's own delivery record, produced at execution completion).
@@ -58,8 +58,9 @@ status: merged
 # Merge Authorization: <P#-M#-E#.#> — <Epic Name>
 
 ## Basis
-<State that the Definition of Done is met and the delivery is accepted — by silence for
-a clean delivery (PSG §11.6 / AOG §12), or, on the exception path, reference the
+<State that the Definition of Done is met and the delivery is accepted — by an
+acknowledgment naming the party that reviewed and accepted for
+a clean delivery (PSG §11.6 / AOG §12; silence accepts nothing), or, on the exception path, reference the
 accepting Review Decision (timestamp / path) that the parent's merge follows.>
 
 ## Merge Record
@@ -118,8 +119,8 @@ Delivery Notice, and stopped.
 
 ## Notes
 
-- A Merge Authorization is only valid after **parent acceptance** of the delivery — by
-  silence for a clean delivery, or an accepting **Review Decision** on the exception path
+- A Merge Authorization is only valid after **parent acceptance** of the delivery — by an
+  acknowledgment naming the party that reviewed and accepted for a clean delivery, or an accepting **Review Decision** on the exception path
   (PSG §11.6 / AOG §12). It does not replace the review — it records the act that acts
   on its outcome.
 - Only the parent that performed the merge may record a Merge Authorization. A child

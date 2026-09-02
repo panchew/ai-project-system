@@ -39,7 +39,7 @@ All Epics MUST follow the single canonical happy path for closure:
 
 **No step may be skipped, inferred, or collapsed.**
 
-**Gate scoping (§11.6 Default-Accept):** Steps 3–6 are the **Layer-8 human-review gate** and are preserved — default-accept does not remove them. The **acceptance-artifact** question within them is governed by §11.6: for a **clean** Epic (meets Definition of Done, acceptance criteria, and spec), the review acknowledgment, HQ decision, and delivery authorization are **in-chat acts** — no Review Decision artifact is produced, and the **Epic Review Seal is issued only on the exception path** (reject / accept-with-follow-ups). Explicit authorization before merge (Step 6) still applies; it is an in-chat act, not an artifact.
+**Gate scoping (§11.6 Default-Accept):** Steps 3–6 are the **Layer-8 human-review gate** and are preserved — default-accept does not remove them. The **acceptance-artifact** question within them is governed by §11.6: for a **clean** Epic (meets Definition of Done, acceptance criteria, and spec), the review acknowledgment, HQ decision, and delivery authorization are **in-chat acts** — no Review Decision artifact is produced, the **Epic Review Seal is issued only on the exception path** (reject / accept-with-follow-ups), and the review acknowledgment **names the party that reviewed and accepted** (role + session identity) — silence accepts nothing (§11.6). Explicit authorization before merge (Step 6) still applies; it is an in-chat act, not an artifact.
 
 ---
 
@@ -327,7 +327,7 @@ Phase closure follows a structured process parallel to Epic closure (§1A) and M
 - The PR carries the README and version updates from Steps 3–4 — delivery travels through the governed promotion path, not as direct commits to `master`
 
 **Step 6: Delivery Reviewed**
-- Closure is recorded under the operating acceptance model, **SN-13 default-accept**: a clean delivery (all completion criteria met) is accepted by silence; a **Review Decision** artifact is the exception path only
+- Closure is recorded under the operating acceptance model, **SN-13 default-accept**: a clean delivery (all completion criteria met) is accepted by an acknowledgment that names the party that reviewed and accepted — silence accepts nothing; a **Review Decision** artifact is the exception path only
 - *(Stated by reference only — the acceptance model's normative text is §11.6 "Default-Accept (SN-13)", not this section)*
 
 **Step 7: Merge Completes**
@@ -558,7 +558,8 @@ AI Structures review into Epic Review Seal — exception path only (human approv
 HQ Chat Makes Decision: Accept | Accept-with-Followups | Reject
   ↓
 Acceptance Recorded per §11.6 Default-Accept:
-  clean → accepted by silence (merge + in-chat acknowledgment; no artifact)
+  clean → accepted by acknowledgment naming the party that reviewed
+          (merge + in-chat acknowledgment; no artifact; silence accepts nothing)
   not clean → Review Decision records the exception
 ```
 
@@ -567,7 +568,7 @@ Acceptance Recorded per §11.6 Default-Accept:
 1. **Coding Agents MUST stop after reporting execution completion.** They do NOT infer acceptance.
 2. **Coding Agents MUST produce a Delivery Notice before review.** No Epic may proceed to review or closure without a Delivery Notice.
 3. **Humans OWN review.** Human judgment is a first-class input, not a rubber stamp.
-4. **HQ Chat OWNS acceptance decisions.** A clean delivery is accepted by silence per §11.6 — the merge plus the in-chat acknowledgment is the acceptance record; a Review Decision, when issued on the exception path, is immutable.
+4. **HQ Chat OWNS acceptance decisions.** A clean delivery is accepted by an acknowledgment that names the party that reviewed and accepted per §11.6 — the merge plus the in-chat acknowledgment is the acceptance record, and silence accepts nothing; a Review Decision, when issued on the exception path, is immutable.
 5. **HQ Chat MUST issue explicit delivery authorization before PR/merge.** Coding Agents must await this authorization and refuse to merge without it — the parent performs the merge (§11.6). The authorization is an in-chat act; it produces no artifact on the happy path.
 6. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
 7. **Exception-path decisions are recorded in the Review Decision** (and Epic Review Seal): human findings, the reject / accept-with-follow-ups decision, and any follow-up actions. A clean delivery produces no Review Decision — see §11.6.
@@ -583,7 +584,7 @@ The **normative acceptance model** at every **parent-chat → child gate**: Phas
 
 ### The Model
 
-- **Happy path (default-accept):** a parent chat accepts a **clean** child delivery — one meeting its Definition of Done, acceptance criteria, and spec — **by silence**. No Review Decision artifact is produced; the **parent's merge plus the in-chat acknowledgment is the acceptance record**.
+- **Happy path (default-accept):** a parent chat accepts a **clean** child delivery — one meeting its Definition of Done, acceptance criteria, and spec. No Review Decision artifact is produced; the **parent's merge plus an in-chat acknowledgment that names the party that reviewed and accepted is the acceptance record**. The acknowledgment is a **positive signal an identified party emitted** — it carries the **role and session identity** of the party that reviewed the delivery and accepted it, so *reviewed and clean* is distinguishable from *nobody looked* **from the record alone**, and a duplicated role leaves two signals rather than two indistinguishable silences. **Silence accepts nothing**: an absent acknowledgment is nobody's acceptance, never a role's. A clean delivery still produces **no new artifact** — the signal rides the acknowledgment that already exists (E43.2, P12-M43).
 - **Exception path:** a **Review Decision** (and, at Epic level, the **Epic Review Seal**) is issued **only when a delivery is not clean** — to reject it or to accept it with follow-up Epic(s). A Review Decision, once issued, is immutable.
 - **The parent performs the merge.** At the Phase→Milestone and Milestone→Epic gates, the merge of a child's branch is performed by the **parent** that accepted the delivery — a child never holds merge authorization. A Merge Authorization is the **parent's own record of an act it performed**, never an instruction issued to a child (E43.1, P12-M43). The bypass class `P9-GH-1` / `P10-GH-9` record is structurally unavailable, not merely discouraged.
 
@@ -591,17 +592,25 @@ The **normative acceptance model** at every **parent-chat → child gate**: Phas
 
 Exactly two questions:
 
-1. Whether the parent chat must produce an **explicit acceptance** of a clean child delivery — no; silence accepts.
-2. Whether an **acceptance artifact** is mandatory on the happy path — no; the Review Decision is the exception path only.
+1. Whether the parent chat must produce an **acceptance artifact** for a clean child delivery — no. The acknowledgment — an in-chat act that names the party that reviewed and accepted — is the acceptance, and it is not an artifact.
+2. Whether a **Review Decision** is mandatory on the happy path — no; the Review Decision is the exception path only.
 
 ### What Is Preserved — Two Gates, Not One
 
 Default-accept does **not** remove the human from the loop. Two distinct gates exist and MUST NOT be collapsed:
 
 - **(A) Layer-8 human review — preserved.** The human's independent review (§11.5 "Human Review"; "Humans OWN review") remains available and authoritative wherever the framework mandates it, and human-confirmation requirements (e.g., a human-authorized merge on an Epic PR) stand. Human judgment is a first-class input, not a rubber stamp.
-- **(B) Parent-chat → child acceptance artifact — default-accept.** Silence accepts a clean delivery; a Review Decision is issued only on the exception path.
+- **(B) Parent-chat → child acceptance artifact — default-accept.** No acceptance artifact is produced for a clean delivery; the acknowledgment, naming the party that reviewed and accepted, carries the acceptance. **Silence accepts nothing** — acceptance is an emission by an identified party; a Review Decision is issued only on the exception path.
 
-Default-accept removes the *mandatory Review Decision artifact on the happy path*, not the *human's review*.
+Default-accept removes the *mandatory Review Decision artifact on the happy path*, not the *human's review*, and not the *identity of the reviewer* — the acknowledgment names who reviewed.
+
+### What the Signal Does Not Claim
+
+The acknowledgment distinguishes **review-happened** from **nobody-looked**. It does **not** make the review **good**: an acceptance by a named party is evidence that the party reviewed the delivery; it is not a verdict on the quality of that review. *"A review happened"* is not *"the review was correct"* — the boundary is stated, not implied, so the acceptance model cannot be read to install the confidence-without-grounding E39.3 recorded (E43.2, P12-M43).
+
+### Where the Acknowledgment Is Recorded
+
+The acknowledgment names the party that reviewed and accepted (role + session identity) and is recorded **with the parent's merge** of the child's branch — the parent records its own act (E43.1). The committed record alone therefore carries the attribution: a reader can tell, from the record, that a review happened — not merely that a merge did. No separate object is produced on the happy path.
 
 > **History:** SN-13 (P5) established this model; it has governed every delivery since P5. The Review Decision and Epic Review Seal artifacts themselves are unchanged — default-accept changes *when* they are issued, not *what* they are. Codified by E25.2 (P6-M25); closes **`P6-GH-10`** — *"formally codify SN-13 default-accept into AOG, PSG and the Execution Chat Starter templates"*, filed in P5's closure declaration and forward-allocated to P6. **The resolution rests on the `(P6-M25)` / E25.2 anchor, not on this sentence's two P5 anchors**, which point at the unrelated `P5-GH-10`. Cited in full form per `governance/systems/creation-chat-guide.md` §Artifact ID Citation Forms.
 
@@ -641,7 +650,7 @@ The Delivery Notice:
 
 Delivery Notices are append-only and MUST NOT modify the original Epic spec.
 
-On the **exception path**, the acceptance decision and human review findings are recorded separately in the **Review Decision** (and **Epic Review Seal**), not in the Delivery Notice; a clean delivery is accepted by silence and produces no Review Decision — see §11.5 and §11.6.
+On the **exception path**, the acceptance decision and human review findings are recorded separately in the **Review Decision** (and **Epic Review Seal**), not in the Delivery Notice; a clean delivery is accepted by an acknowledgment that names the party that reviewed and accepted and produces no Review Decision — see §11.5 and §11.6.
 
 See `governance/templates/delivery-notice.md` for the canonical template.
 
@@ -658,7 +667,7 @@ The Phase Execution Chat Starter is a binding execution contract that defines:
 - Phase Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Phase Execution Chat (autonomous execution and delivery agent scoped to a single Phase) is launched by HQ Chat using this artifact. In Stage 1 it produces Milestone specs and Milestone Execution Chat Starters, commits them to a phase branch, and opens a PR. In Stage 2 it oversees Milestone delivery — accepting clean Milestone deliveries by silence and issuing a Review Decision only on the exception path (§11.6) — and merges the phase branch when all Milestones are accepted.
+A Phase Execution Chat (autonomous execution and delivery agent scoped to a single Phase) is launched by HQ Chat using this artifact. In Stage 1 it produces Milestone specs and Milestone Execution Chat Starters, commits them to a phase branch, and opens a PR. In Stage 2 it oversees Milestone delivery — accepting clean Milestone deliveries by an acknowledgment that names the party that reviewed and accepted (§11.6 — silence accepts nothing) and issuing a Review Decision only on the exception path (§11.6) — and merges the phase branch when all Milestones are accepted.
 
 **Phase Execution Chat role:** Execution and delivery agent for this Phase. It commits and PRs its deliverables and oversees delivery through to merge — it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.6 for full role definition.
 
@@ -681,7 +690,7 @@ The Milestone Execution Chat Starter is a binding execution contract that define
 - Milestone Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Milestone Execution Chat (autonomous execution and delivery agent scoped to a single Milestone) is launched by Phase Execution Chat (or HQ Chat during bootstrap) using this artifact. In Stage 1 it produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR. In Stage 2 it oversees Epic delivery — accepting clean Epic deliveries by silence and issuing a Review Decision only on the exception path (§11.6), and performing the merge of each accepted Epic's branch as the parent — and the **Phase Execution Chat performs the merge of the milestone branch** when all Epics are accepted (§11.6 — the parent performs the merge of a child's branch).
+A Milestone Execution Chat (autonomous execution and delivery agent scoped to a single Milestone) is launched by Phase Execution Chat (or HQ Chat during bootstrap) using this artifact. In Stage 1 it produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR. In Stage 2 it oversees Epic delivery — accepting clean Epic deliveries by an acknowledgment that names the party that reviewed and accepted (§11.6 — silence accepts nothing) and issuing a Review Decision only on the exception path (§11.6), and performing the merge of each accepted Epic's branch as the parent — and the **Phase Execution Chat performs the merge of the milestone branch** when all Epics are accepted (§11.6 — the parent performs the merge of a child's branch).
 
 **Milestone Execution Chat role:** Execution and delivery agent for this Milestone. It commits and PRs its deliverables and oversees delivery through to merge — it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
 
@@ -971,6 +980,7 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.5.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** The acceptance record now carries a **positive, attributable signal**: the happy-path acknowledgment **names the party that reviewed and accepted** (role + session identity) — an emission by an identified party, never an absence attributed to a role — so *reviewed and clean* is distinguishable from *nobody looked* **from the record alone**, and a duplicated role leaves two signals rather than two indistinguishable silences. **Silence accepts nothing.** Default-accept is tweaked, not retired: a clean delivery still produces **no new artifact** — the signal rides the acknowledgment that already exists, recorded with the parent's merge (E43.1). Added §11.6 subsections "What the Signal Does Not Claim" (review-happened ≠ review-correct; E39.3's overclaim refused) and "Where the Acknowledgment Is Recorded". Amended the always-restate surfaces that said "accepted by silence": §1A gate-scoping, §5C Step 6, §11.5 flow + Key Rule 4, §12, §13A, §13B, and §11.6 "What Default-Accept Governs" + gate (B). §11.6.1 (HQ-authored deliveries) is deliberately unchanged. |
 | 2.4.1 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Added the one normative statement to §11.6 "The Model": at the Phase→Milestone and Milestone→Epic gates the **parent** performs the merge of a child's branch, so **a child never holds merge authorization** and a Merge Authorization is the parent's own record of an act it performed, not an instruction to a child. The bypass class `P9-GH-1`/`P10-GH-9` record is structurally unavailable, not merely discouraged. Amended the happy-path acceptance record to *"the parent's merge plus the in-chat acknowledgment"*. Corrected every statement that instructed a child to merge its own branch: §1A step 7, §11.5 Key Rules 5 and 10, §13B (the Phase Execution Chat now performs the merge of the milestone branch; the Milestone Chat performs epic-branch merges as the parent). §11.6.1 (HQ-authored deliveries, CFO diff review) is deliberately unchanged. |
 | 2.4.0 | 2026-07-31 | Added **§11.6.1 "HQ-Authored Deliveries — No Parent, Therefore No Default-Accept."** §11.6 defines default-accept at the parent-chat → child gate and names three (Phase↔Milestone, Milestone↔Epic, HQ↔Phase); **HQ's own output had no row, because HQ has no parent chat.** Default-accept is safe *because a parent reviews* — silence stands in for a review that happened one level up. Above HQ no such level exists: the Creation Chat holds no governance authority (Seed Rule 3) and cannot be the reviewer. So default-accept MUST NOT apply to HQ-authored deliveries (rulings, digests, errata, direct governance edits), silence is never acceptance there, **Layer-8/the CFO is the designated reviewer, and the review is a diff review** — authorization ("you may merge") is explicitly distinguished from review ("I read it and it matches"). §11.6's gate (A) becomes mandatory for this one class; gate (B) does not apply. HQ MUST NOT merge its own delivery on authorization alone and MUST state in the PR that no chat-level reviewer exists for it. Explicitly does **not** close P9-GH-1 or P10-GH-9, which record the same authority class from the child side (bypassed parent) rather than the top (absent parent). No existing rule changed; §11.6's model for the three parent→child gates is untouched. Established by CFO direction 2026-07-31 after PRs #165/#166 merged with no independent reviewer. |
 | 2.3.0 | 2026-07-02 | Added §11.6 "Default-Accept (SN-13)": the normative acceptance model at every parent-chat → child gate — **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) is accepted **by silence**, no Review Decision artifact, the merge + in-chat acknowledgment is the acceptance record; **exception path** = a Review Decision (and Epic-level Epic Review Seal) is issued only when a delivery is not clean. Two-gate framing made explicit: **Layer-8 human review preserved** (§11.5 "Human Review" and "Humans OWN review" stand); only the acceptance-artifact question changes. Reconciled the always-review surfaces: §11.5 flow last step + Key Rules (duplicate rule numbering also fixed — rules now 1–10), §12 exception-path sentence, §13A/§13B "issues … Review Decisions" clauses, §1A gate-scoping note (human-review steps preserved verbatim); wired §5C Step 6's by-reference pointer to §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
