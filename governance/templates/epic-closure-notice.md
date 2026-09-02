@@ -8,7 +8,7 @@ last_updated: 2026-06-17
 
 An **Epic Closure Notice** is the artifact a Coding Agent issues to its Milestone Chat to
 confirm that an authorized Epic branch merge has completed. It closes the loop opened by
-the [Merge Authorization](merge-authorization.md): the parent said "merge," and this
+the [Merge Authorization](merge-authorization.md): the parent performed the merge, and this
 notice reports "merged." It is closely related to the [Delivery Notice](delivery-notice.md)
 — the Delivery Notice records the merge for the Epic's own audit trail, while the Epic
 Closure Notice is the upward confirmation that lets the Milestone Chat mark the Epic done.
@@ -36,7 +36,7 @@ status: complete
 | `type` | yes | Always `epic-closure-notice` |
 | `epic` | yes | The Epic being closed |
 | `milestone` | yes | Parent milestone (e.g., `M17`) |
-| `issued_by` | yes | The Coding Agent that merged the branch |
+| `issued_by` | yes | The Coding Agent confirming the completed merge (performed by the parent) |
 | `issued_to` | yes | The Milestone Chat receiving confirmation |
 | `date` | yes | ISO date the merge completed |
 | `status` | yes | `complete` |
@@ -56,7 +56,7 @@ status: complete
 - Epic branch: deleted | retained
 
 ## Authorization Reference
-<Reference the Merge Authorization (issuer + date) that permitted this merge.>
+<Reference the Merge Authorization (issuer + date) that recorded this merge.>
 
 ## Final State
 <Confirm the Definition of Done is satisfied, the Delivery Notice is produced, and the

@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 2.4.0  
-**Effective Date:** 2026-07-31  
+**Version:** 2.4.1  
+**Effective Date:** 2026-09-02  
 **Status:** Current  
 
 ---
@@ -34,7 +34,7 @@ All Epics MUST follow the single canonical happy path for closure:
 4. **Epic Review Seal**: AI (Coding Agent or HQ Chat) structures findings into an Epic Review Seal for human confirmation.
 5. **HQ Decision**: HQ Chat issues an explicit delivery authorization (accept, accept-with-follow-ups, or reject).
 6. **HQ Delivery Authorization**: Only after explicit HQ authorization may a PR be created and merged.
-7. **PR and Merge**: Coding Agent opens a PR to the correct branch and merges only after HQ authorization. No Epic may close with uncommitted changes or without merge.
+7. **PR and Merge**: Coding Agent opens a PR to the correct branch; the parent performs the merge after authorization (§11.6 — a child never holds merge authorization). No Epic may close with uncommitted changes or without merge.
 8. **Stop**: Execution stops immediately after merge. No further actions are taken.
 
 **No step may be skipped, inferred, or collapsed.**
@@ -568,12 +568,12 @@ Acceptance Recorded per §11.6 Default-Accept:
 2. **Coding Agents MUST produce a Delivery Notice before review.** No Epic may proceed to review or closure without a Delivery Notice.
 3. **Humans OWN review.** Human judgment is a first-class input, not a rubber stamp.
 4. **HQ Chat OWNS acceptance decisions.** A clean delivery is accepted by silence per §11.6 — the merge plus the in-chat acknowledgment is the acceptance record; a Review Decision, when issued on the exception path, is immutable.
-5. **HQ Chat MUST issue explicit delivery authorization before PR/merge.** Coding Agents must await this authorization and refuse to proceed without it. The authorization is an in-chat act; it produces no artifact on the happy path.
+5. **HQ Chat MUST issue explicit delivery authorization before PR/merge.** Coding Agents must await this authorization and refuse to merge without it — the parent performs the merge (§11.6). The authorization is an in-chat act; it produces no artifact on the happy path.
 6. **Follow-up work requires new Epics.** If human review identifies issues, new Epic(s) must be created; iteration without a new contract is prohibited.
 7. **Exception-path decisions are recorded in the Review Decision** (and Epic Review Seal): human findings, the reject / accept-with-follow-ups decision, and any follow-up actions. A clean delivery produces no Review Decision — see §11.6.
 8. **Structured review artifacts are AI-generated.** Humans provide plain-language findings; Coding Agents or HQ Chat produce the Epic Review Seal from that input. Humans may approve or correct AI-structured text but are not required to author or edit markdown.
 9. **No Epic may close with uncommitted changes.** The working tree must be clean before merge and closure.
-10. **Execution stops immediately after merge.** No further actions are taken by the Coding Agent.
+10. **Execution stops immediately after the merge.** No further actions are taken by the Coding Agent; the merge itself is performed by the parent (§11.6).
 
 ---
 
@@ -583,8 +583,9 @@ The **normative acceptance model** at every **parent-chat → child gate**: Phas
 
 ### The Model
 
-- **Happy path (default-accept):** a parent chat accepts a **clean** child delivery — one meeting its Definition of Done, acceptance criteria, and spec — **by silence**. No Review Decision artifact is produced; the **merge plus the in-chat acknowledgment is the acceptance record**.
+- **Happy path (default-accept):** a parent chat accepts a **clean** child delivery — one meeting its Definition of Done, acceptance criteria, and spec — **by silence**. No Review Decision artifact is produced; the **parent's merge plus the in-chat acknowledgment is the acceptance record**.
 - **Exception path:** a **Review Decision** (and, at Epic level, the **Epic Review Seal**) is issued **only when a delivery is not clean** — to reject it or to accept it with follow-up Epic(s). A Review Decision, once issued, is immutable.
+- **The parent performs the merge.** At the Phase→Milestone and Milestone→Epic gates, the merge of a child's branch is performed by the **parent** that accepted the delivery — a child never holds merge authorization. A Merge Authorization is the **parent's own record of an act it performed**, never an instruction issued to a child (E43.1, P12-M43). The bypass class `P9-GH-1` / `P10-GH-9` record is structurally unavailable, not merely discouraged.
 
 ### What Default-Accept Governs
 
@@ -680,7 +681,7 @@ The Milestone Execution Chat Starter is a binding execution contract that define
 - Milestone Execution Chat responsibilities and constraints
 - Session lifecycle and completion criteria
 
-A Milestone Execution Chat (autonomous execution and delivery agent scoped to a single Milestone) is launched by Phase Execution Chat (or HQ Chat during bootstrap) using this artifact. In Stage 1 it produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR. In Stage 2 it oversees Epic delivery — accepting clean Epic deliveries by silence and issuing a Review Decision only on the exception path (§11.6) — and merges the milestone branch when all Epics are accepted.
+A Milestone Execution Chat (autonomous execution and delivery agent scoped to a single Milestone) is launched by Phase Execution Chat (or HQ Chat during bootstrap) using this artifact. In Stage 1 it produces Epic specs and Epic Execution Chat Starters, commits them to a milestone branch, and opens a PR. In Stage 2 it oversees Epic delivery — accepting clean Epic deliveries by silence and issuing a Review Decision only on the exception path (§11.6), and performing the merge of each accepted Epic's branch as the parent — and the **Phase Execution Chat performs the merge of the milestone branch** when all Epics are accepted (§11.6 — the parent performs the merge of a child's branch).
 
 **Milestone Execution Chat role:** Execution and delivery agent for this Milestone. It commits and PRs its deliverables and oversees delivery through to merge — it does not merely converse. See AI-OPERATING-GUIDELINES.md §3.7 for full role definition.
 
@@ -970,6 +971,7 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.4.1 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Added the one normative statement to §11.6 "The Model": at the Phase→Milestone and Milestone→Epic gates the **parent** performs the merge of a child's branch, so **a child never holds merge authorization** and a Merge Authorization is the parent's own record of an act it performed, not an instruction to a child. The bypass class `P9-GH-1`/`P10-GH-9` record is structurally unavailable, not merely discouraged. Amended the happy-path acceptance record to *"the parent's merge plus the in-chat acknowledgment"*. Corrected every statement that instructed a child to merge its own branch: §1A step 7, §11.5 Key Rules 5 and 10, §13B (the Phase Execution Chat now performs the merge of the milestone branch; the Milestone Chat performs epic-branch merges as the parent). §11.6.1 (HQ-authored deliveries, CFO diff review) is deliberately unchanged. |
 | 2.4.0 | 2026-07-31 | Added **§11.6.1 "HQ-Authored Deliveries — No Parent, Therefore No Default-Accept."** §11.6 defines default-accept at the parent-chat → child gate and names three (Phase↔Milestone, Milestone↔Epic, HQ↔Phase); **HQ's own output had no row, because HQ has no parent chat.** Default-accept is safe *because a parent reviews* — silence stands in for a review that happened one level up. Above HQ no such level exists: the Creation Chat holds no governance authority (Seed Rule 3) and cannot be the reviewer. So default-accept MUST NOT apply to HQ-authored deliveries (rulings, digests, errata, direct governance edits), silence is never acceptance there, **Layer-8/the CFO is the designated reviewer, and the review is a diff review** — authorization ("you may merge") is explicitly distinguished from review ("I read it and it matches"). §11.6's gate (A) becomes mandatory for this one class; gate (B) does not apply. HQ MUST NOT merge its own delivery on authorization alone and MUST state in the PR that no chat-level reviewer exists for it. Explicitly does **not** close P9-GH-1 or P10-GH-9, which record the same authority class from the child side (bypassed parent) rather than the top (absent parent). No existing rule changed; §11.6's model for the three parent→child gates is untouched. Established by CFO direction 2026-07-31 after PRs #165/#166 merged with no independent reviewer. |
 | 2.3.0 | 2026-07-02 | Added §11.6 "Default-Accept (SN-13)": the normative acceptance model at every parent-chat → child gate — **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) is accepted **by silence**, no Review Decision artifact, the merge + in-chat acknowledgment is the acceptance record; **exception path** = a Review Decision (and Epic-level Epic Review Seal) is issued only when a delivery is not clean. Two-gate framing made explicit: **Layer-8 human review preserved** (§11.5 "Human Review" and "Humans OWN review" stand); only the acceptance-artifact question changes. Reconciled the always-review surfaces: §11.5 flow last step + Key Rules (duplicate rule numbering also fixed — rules now 1–10), §12 exception-path sentence, §13A/§13B "issues … Review Decisions" clauses, §1A gate-scoping note (human-review steps preserved verbatim); wired §5C Step 6's by-reference pointer to §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
 | 2.2.0 | 2026-07-02 | Added §5C "Phase Closure": canonical, mandatory phase-closure sequence mirroring §1A/§5B — an ordered 9-step process with **README update, version bump, and git tag as mandatory automatic steps** (no out-of-band Steering Note required to close a phase); "phase complete vs. fully closed (delivered)" distinction; consolidation target `phase/P<id>` → `master`; phase-closure declaration as the recorded output, formalized as `governance/templates/phase-closure-declaration.md`. Reconciled the §5B consolidation-rules line that called phase closure "future work" to point at §5C. Closure acceptance stated by reference to SN-13 default-accept only (normative codification is E25.2). Applies P6 forward. Fixes P6-GH-12; E25.1 (P6-M25). |
