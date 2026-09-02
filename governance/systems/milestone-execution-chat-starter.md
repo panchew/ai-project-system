@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-09-02
-version: 1.3.0
+version: 1.4.0
 ---
 
 # Milestone Execution Chat Starter — System Reference
@@ -338,8 +338,11 @@ When you issue a **Reject**, the Epic enters the rework cycle:
 issue a fourth rejection-and-retry. Instead the Epic Agent produces an **Escalation
 Notice** and you escalate to the Phase Chat (see [Escalation Path](#escalation-path)).
 
-The 3-attempt limit resets only if you explicitly grant an extension in writing (as an
-artifact or a recorded decision). Silent fourth attempts are a governance violation.
+**A written extension grants exactly ONE further attempt, not a reset to three**
+(PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" — the normative statement). A
+written extension is an explicit grant recorded as an artifact or a recorded decision;
+it adds one attempt to the budget, it does not restore the budget. Silent fourth
+attempts are a governance violation.
 
 ```
 Reject → Epic reworks → new Completion Notice (vN) → re-review
@@ -418,6 +421,7 @@ A Milestone Chat session follows this sequence:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.4.0 | 2026-09-02 | **Rework limit reconciled to the one normative statement (E43.3, P12-M43; closes `P12-GH-1`).** The Rework Cycle's extension semantics changed from *"the 3-attempt limit resets only if you explicitly grant an extension"* to **"a written extension grants exactly ONE further attempt, not a reset to three"** — the `+1` is the surviving semantics (SN-36/37, CFO-decided, stricter). The statement now cites PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" as the normative home; the limit and its extension live once, there. Same strictness — no guard weakened; the acceptance-acknowledgment markers (E43.2) are untouched. Backed by `tests/test_rework_limit_single_statement.py`. |
 | 1.3.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** Every "accept by silence" statement reconciled to the amended PSG §11.6: the Milestone Chat accepts a clean delivery by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity); **silence accepts nothing**. Amended: responsibilities, the SN-19 acknowledgment section, the Decide step, the workflow decision tree, the clean-criteria heading, the aggregation note, the parent-review line, the Acceptance Outcomes worked example, the rework cycle, and the session sequence. Same strictness — no guard weakened. Backed by `tests/test_acceptance_distinguishable_from_absence.py`. |
 | 1.2.0 | 2026-09-02 | **Merge-authorization guard relabelled as a backstop (E43.1, P12-M43).** The guard's pushback strings survive, relabelled: the parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge authorization — the guard is now a labelled backstop, not the primary guard (unavailable is not impossible; a backstop that fires is evidence). Guard clauses (refusal, mode-is-not-authority, level-aware routing) are unchanged — same strictness. Backed by `tests/test_merge_authorization_parent_performs.py`; the existing `tests/test_merge_authorization_routing_guard.py` still passes. |
 | 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Authority Rules: a Milestone Chat handed merge authorization directly must not simply comply, but confirm upward with the parent **Phase Chat**, for the milestone PR and any epic PR alike. Records the **2026-08-10 / PR #191** instance, and states that the adjacent SN-19 passage (*no ceremonial artifact*) means the authorization needs no paperwork, **not** that it may skip the level it comes from. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
