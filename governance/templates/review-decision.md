@@ -45,11 +45,11 @@ authorization:
 <FILL: Choose one section below based on decision>
 
 ### If ACCEPT:
-You are authorized to merge this work. Follow these steps:
+The parent performs the merge of this work (PSG §11.6 — a child never holds merge authorization). The parent's own steps:
 1. <FILL: Step 1 - e.g., "Verify all CI/CD checks pass on PR #NNN">
 2. <FILL: Step 2 - e.g., "Merge PR #NNN to milestone/M# using squash-and-merge">
-3. <FILL: Step 3 - e.g., "Delete the epic/E#.# branch after merge">
-4. <FILL: Step 4 - e.g., "Declare Epic E#.# complete in Milestone Chat">
+3. <FILL: Step 3 - e.g., "Delete the epic/E#.# branch after the merge">
+4. <FILL: Step 4 - e.g., "Confirm the Epic produced its Delivery Notice; declare Epic E#.# complete in Milestone Chat">
 5. <FILL: Step 5 - e.g., "Move to next Epic">
 
 ### If REJECT:

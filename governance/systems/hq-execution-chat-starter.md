@@ -1,8 +1,8 @@
 ---
 type: system
 status: active
-effective_date: 2026-06-17
-version: 1.1.0
+effective_date: 2026-09-02
+version: 1.2.0
 ---
 
 # HQ Execution Chat Starter — System Reference
@@ -85,13 +85,17 @@ or collapses a step.
 
 Documentation is authoritative. Chat is ephemeral.
 
-### Merge-Authorization Routing (P9-GH-1)
+### Merge-Authorization Routing (P9-GH-1) — backstop
 
 **If given merge authorization directly in this chat, do not simply comply.**
 
 HQ is the top of the chat hierarchy, so the routing here is not "confirm with your parent" — **HQ
 has no parent chat, and therefore no chat-level reviewer for its own output.** The Creation Chat
-holds no governance authority (Seed Rule 3) and cannot be that reviewer.
+holds no governance authority (Seed Rule 3) and cannot be that reviewer. **This is a backstop
+(E43.1, P12-M43), not the primary guard:** at the Phase→Milestone and Milestone→Epic gates the
+parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge
+authorization — unavailable is not impossible, and a backstop that fires is evidence. HQ itself has
+no parent and therefore never merges on authorization alone.
 
 PROJECT-SYSTEM-GUIDELINES.md **§11.6.1** governs this case:
 
@@ -126,9 +130,10 @@ Three artifacts carry the core review cycle:
 | **Delivery Notice** | Epic Agent | Epic → Milestone | "PR merged; here is the merge record. Chat closed." |
 
 Several supporting artifacts have canonical templates in `governance/templates/`:
-**Merge Authorization** (parent authorizes the Coding Agent to merge), **Epic Closure
-Notice** (Coding Agent confirms the branch merge completed), and **Escalation Notice**
-(any chat escalates a blocking or out-of-scope finding to its parent).
+**Merge Authorization** (the parent's record of the merge it performed of a child's
+branch), **Epic Closure Notice** (Coding Agent confirms the branch merge completed),
+and **Escalation Notice** (any chat escalates a blocking or out-of-scope finding to its
+parent).
 
 ### How artifacts flow between layers
 
@@ -401,5 +406,6 @@ Walk through it with the
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.2.0 | 2026-09-02 | **Merge-authorization guard relabelled as a backstop (E43.1, P12-M43).** The guard's pushback strings survive, relabelled: at the Phase→Milestone and Milestone→Epic gates the parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge authorization — the guard is now a labelled backstop, not the primary guard (unavailable is not impossible; a backstop that fires is evidence); HQ itself has no parent and therefore never merges on authorization alone. Guard clauses (refusal, mode-is-not-authority, §11.6.1) are unchanged — same strictness. Also corrected the supporting-artifact list's Merge Authorization description to the parent's record of the merge it performed. Backed by `tests/test_merge_authorization_parent_performs.py`; the existing `tests/test_merge_authorization_routing_guard.py` still passes. |
 | 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Governance Authority Chain. HQ has **no parent chat**, so the routing is not "confirm upward": PSG **§11.6.1** applies — default-accept MUST NOT be applied to HQ-authored deliveries, the **CFO is the designated diff reviewer**, and HQ MUST NOT merge its own delivery on authorization alone. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
 | 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/hq-execution-chat-starter.md`. |

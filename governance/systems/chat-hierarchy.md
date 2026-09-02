@@ -1,8 +1,8 @@
 ---
 type: system
 status: active
-effective_date: 2026-07-20
-version: 1.2.0
+effective_date: 2026-09-02
+version: 1.3.0
 ---
 
 # Chat Hierarchy — System Reference
@@ -844,7 +844,7 @@ Issuer: Milestone Chat (<P#>-<M#> — <Milestone Name>)
 Date: <YYYY-MM-DD>
 Epic Reference: <P#>-<M#>-<E#.#> — <Epic Name>
 Authorized Action: Proceed with Epic execution
-Merge Instruction: Merge epic/<E#.#> to milestone/<M#> upon Epic completion and parent acceptance
+Merge Instruction: the parent Milestone mode merges epic/<E#.#> to milestone/<M#> upon Epic completion and parent acceptance (PSG §11.6 — the parent performs the merge of a child's branch)
 ```
 
 ---
@@ -900,7 +900,7 @@ Each level has well-defined decision authority:
 | Which Milestones exist within Phase | Phase mode | Phase mode (proposes), HQ mode (approves) | Phase Execution Chat Starter |
 | Which Epics exist within Milestone | Milestone mode | Milestone mode (proposes), Phase mode (approves) | Milestone Execution Chat Starter |
 | Epic acceptance | Milestone mode | Milestone mode (proposes), Phase mode (accepts) | Epic Delivery Authorization |
-| Code merge | Epic mode | Epic mode (proposes), HQ mode (approves) | Pull Request + explicit authorization |
+| Code merge | The parent (Milestone mode) performs the merge | Epic mode (proposes), parent accepts (PSG §11.6) | Pull Request + the parent's merge on acceptance |
 
 ---
 
@@ -1152,6 +1152,7 @@ it without a second hop. The two statements must always agree; on any divergence
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.3.0 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Corrected the two child-merge instructions to agree with the one normative statement now in PROJECT-SYSTEM-GUIDELINES.md §11.6: the **Epic Delivery Authorization**'s Merge Instruction now names the parent Milestone mode as the performer of the epic-branch merge (the child never holds merge authorization), and the **Hierarchy Decision Authority** table's Code merge row now assigns the merge to the parent rather than to Epic mode. The Milestone Delivery Authorization's Merge Instruction (recipient Milestone mode merges epic branches) is unchanged — it is now consistent, the Milestone being the parent at the Milestone→Epic gate. No authority, mode, or §11.6.1 rule changed. |
 | 1.2.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). **Status update only, in the §"P9-GH-1 is not closed by this section" subsection:** that subsection asserted *"P9-GH-1 remains open, carried forward, and unowned"*, which E40.5 falsifies. The original sentence is **retained** as the record of what was true when written, and a dated note records the closure and states plainly that it did **not** happen in that section. **No normative rule in this document changed.** The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
 | 1.1.0 | 2026-08-06 | **Escalation-notice citation form applied** (E37.2, P11-M37, executing HQ Ruling 2026-08-05, Decision 3). The single citation of an escalation notice **by milestone key** — the *"`P<n>-M<n>` Escalation Notice"* short form, in the §Manual Chat Model Verification note explaining why the five paid-frontier cells changed version on 2026-07-28 — replaced with the notice's **full filename**, `.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`. **The milestone key could not identify it: two notices share `P10-M34`**, and this document already cites both correctly by full filename elsewhere, so the one remaining short form was the outlier. The rule itself is recorded once, in [`creation-chat-guide.md`](creation-chat-guide.md) §Artifact ID Citation Forms; this document **cites it rather than restating it**. **Authorized by the P11-M37 Milestone Chat's Review Decision of 2026-08-06** (E37.2 spec v1.1.0, §Conflict resolution), resolving a contradiction between that spec's in-scope-surfaces clause and its do-not-touch list. **Nothing else in this document changed** — no renumbering, and E37.1's `1.0.0` seeding row is unaltered. |
 | 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/chat-hierarchy.md`. **One earlier amendment is recorded here because it landed while this document could not record it:** E36.1 (P11-M36, `4427ea9`, merged `f1a5e75`, 2026-08-03), **+3 / −3** — two `SN-23` citations date-qualified to `SN-23 (2026-07-20)` in **normative text**, at the §Execution Mode ratification note and at the **Ratified-Decision-#2 supersession statement**. Recorded per M36's Milestone Closure Declaration §D5, which records **three** amendments across **two** unversioned documents — **not** per HQ Ruling 2026-08-04 Decision 5, whose count of *"two"* omits this document and is footnoted as an erratum by HQ Ruling 2026-08-05, Part 1. |

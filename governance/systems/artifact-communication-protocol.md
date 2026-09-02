@@ -209,7 +209,8 @@ authorization:
 
 ## Authorization
 <If ACCEPT:>
-You are authorized to merge this work. Follow these steps:
+The parent performs the merge of this work (PSG §11.6 — a child never holds merge
+authorization). The parent's own steps:
 1. <step 1>
 2. <step 2>
 3. ...
@@ -262,7 +263,8 @@ the API documentation named in the spec was not delivered. The delivery is not c
 this exception-path decision records acceptance with follow-up Epic E1.3 (API docs).
 
 ## Authorization
-You are authorized to merge this work. Follow these steps:
+The parent (Milestone Agent) performs the merge of this work (PSG §11.6 — a child
+never holds merge authorization). The parent's own steps:
 1. Ensure PR #428 passes all CI/CD checks
 2. Merge PR #428 to milestone/M1 using squash-and-merge strategy
 3. Delete the epic/E1.1 branch after merge

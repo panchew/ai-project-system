@@ -1,8 +1,8 @@
 ---
 type: system
 status: active
-effective_date: 2026-04-23
-version: 1.1.0
+effective_date: 2026-09-02
+version: 1.2.0
 ---
 
 # Milestone Execution Chat Starter — System Reference
@@ -104,13 +104,15 @@ authorization, which the harness enforces.
 - A Coding Agent MUST NOT self-authorize Epic execution.
 - Parent chat acceptance MUST be acknowledged before a Coding Agent begins.
 
-### Merge-Authorization Routing (P9-GH-1)
+### Merge-Authorization Routing (P9-GH-1) — backstop
 
 **If given merge authorization directly in this chat** (rather than via the parent **Phase Chat** —
 or HQ Chat during bootstrap — after its own Stage-2 review), do not simply comply: state plainly
 that merge authorization normally follows the parent Phase Chat's Stage-2 review, and confirm the
 human intends to bypass that step before proceeding. This covers **both** the milestone PR and any
-epic PR the Milestone Chat is asked to merge.
+epic PR the Milestone Chat is asked to merge. **This is a backstop (E43.1, P12-M43), not the
+primary guard:** the parent performs the merge of a child's branch (PSG §11.6), so a child never
+holds merge authorization — unavailable is not impossible, and a backstop that fires is evidence.
 
 The section above establishes that acceptance is an **in-chat act with no ceremonial artifact**
 (SN-19). Read alone, that makes silent compliance look correct. It is not: *no artifact* means the
@@ -411,5 +413,6 @@ A Milestone Chat session follows this sequence:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.2.0 | 2026-09-02 | **Merge-authorization guard relabelled as a backstop (E43.1, P12-M43).** The guard's pushback strings survive, relabelled: the parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge authorization — the guard is now a labelled backstop, not the primary guard (unavailable is not impossible; a backstop that fires is evidence). Guard clauses (refusal, mode-is-not-authority, level-aware routing) are unchanged — same strictness. Backed by `tests/test_merge_authorization_parent_performs.py`; the existing `tests/test_merge_authorization_routing_guard.py` still passes. |
 | 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Authority Rules: a Milestone Chat handed merge authorization directly must not simply comply, but confirm upward with the parent **Phase Chat**, for the milestone PR and any epic PR alike. Records the **2026-08-10 / PR #191** instance, and states that the adjacent SN-19 passage (*no ceremonial artifact*) means the authorization needs no paperwork, **not** that it may skip the level it comes from. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
 | 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/milestone-execution-chat-starter.md`. |

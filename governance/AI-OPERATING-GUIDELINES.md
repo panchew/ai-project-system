@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.10.1  
-**Effective Date:** 2026-08-03  
+**Version:** 2.10.2  
+**Effective Date:** 2026-09-02  
 **Status:** Current  
 
 ---
@@ -33,7 +33,7 @@ All AI agents (Coding Agents and HQ Chats) MUST enforce the single canonical hap
 4. **Epic Review Seal**: AI (Coding Agent or HQ Chat) structures findings into an Epic Review Seal for human confirmation.
 5. **HQ Decision**: HQ Chat issues an explicit delivery authorization (accept, accept-with-follow-ups, or reject).
 6. **In-chat Acceptance**: Only after explicit parent chat acceptance, acknowledged in-chat (SN-19 — no Delivery Authorization artifact), may a PR be created and merged.
-7. **PR and Merge**: Coding Agent opens a PR to the correct branch and merges only after HQ authorization. No Epic may close with uncommitted changes or without merge.
+7. **PR and Merge**: Coding Agent opens a PR to the correct branch; the parent performs the merge after authorization (PROJECT-SYSTEM-GUIDELINES.md §11.6 — a child never holds merge authorization). No Epic may close with uncommitted changes or without merge.
 8. **Stop**: Execution stops immediately after merge. No further actions are taken.
 
 **No step may be skipped, inferred, or collapsed.**
@@ -518,7 +518,7 @@ Milestone Execution Chat is a **finite autonomous execution and delivery agent s
 
 **Stage 1 — Execution:** Reviews the Milestone spec, produces Epic specs and Epic Execution Chat Starters, creates a milestone branch, commits all planning artifacts, and opens a PR to the parent chat for review.
 
-**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), accepts clean Epic deliveries by silence (an Epic Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6), and when all Epics are accepted, delivers the Milestone by merging the milestone branch.
+**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), accepts clean Epic deliveries by silence (an Epic Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6), and performs the merge of each accepted Epic's branch as the parent; when all Epics are accepted, the **Phase Execution Chat** delivers the Milestone by merging the milestone branch (§11.6 — the parent performs the merge of a child's branch).
 
 Milestone Execution Chat does NOT:
 - Implement project code or modify infrastructure
@@ -1039,6 +1039,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.10.2 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Corrected every statement that instructed a child to merge its own branch, in agreement with the one normative statement now in PROJECT-SYSTEM-GUIDELINES.md §11.6: §1A step 7 (the parent performs the merge after authorization — a child never holds merge authorization) and §3.7 Stage 2 (the Milestone Chat performs the merge of each accepted Epic's branch as the parent; the Phase Execution Chat delivers the Milestone by merging the milestone branch). The parent's-merge rule is defined in PSG §11.6; this document cites it, not restates it. No authority, mode, or §11.6.1 rule changed. |
 | 2.10.1 | 2026-08-03 | **SN-23 citations date-qualified (SN-28; HQ Ruling 2026-08-01, Decision 4).** Two different Steering Notes hold `id: SN-23` — 2026-07-18 (reference-first handoff / platform agnosticism) and 2026-07-20 (the P10 adoption spine) — and this document and `governance/systems/chat-hierarchy.md` each cited *"SN-23 Decision 2"* meaning **unrelated** decisions, with the latter declaring its one superseded. A reader following this document's citation by number reached the supersession notice and could conclude **platform agnosticism was superseded. It was not.** All three SN-23 citations here (§3.1.1 intro, §3.1.1 "Fallback — repo-less delivery", and the v2.10.0 changelog entry) now carry the date form `SN-23 (2026-07-18)`. **Citation disambiguation only — no normative requirement added, removed, or changed, and neither note is renumbered** (Decision 4: both keep `id: SN-23` permanently). The allocation and separating rules are recorded in `governance/systems/creation-chat-guide.md`, "Steering Note ID Allocation". E36.1 (P11-M36). |
 | 2.10.0 | 2026-07-18 | **Reference-first artifact handoff (SN-23 (2026-07-18)).** Rewrote §3.1.1 from "Epic Execution Chat Starter Format" into the generalized normative artifact-handoff rule: a committed, git-tracked artifact is passed **by reference, never by paste or full-body display** (IDE attach + one-line intent, or the canonical reference line defined in-section); producer no-echo half (never display a body you wrote to file) + consumer selective-read half (read once, selectively; frontmatter + Summary + DoD/QA suffices under PSG §11.6). The four-backtick fenced full-body form is **retained, demoted to the documented repo-less fallback** (SN-23 (2026-07-18) Decision 2 — platform agnosticism preserved; paste is not deleted). All other mandating surfaces (three `governance/templates/` starters, `governance/systems/epic-execution-chat-starter.md`, `governance/systems/artifact-communication-protocol.md` §Manual Mode, `governance/EPIC-EXECUTION-CHAT-STARTER.md`, `governance/agents/governance.agent.md`) now cite §3.1.1 instead of restating the paste mandate. Evidence: `.ai-project/artifacts/reference/token-measurement/echo-cost-note.md` (E30.1 mechanism, honest bound stated). Per SN-23 (2026-07-18), CFO-ratified; E30.4 (P9-M30). |
 | 2.9.0 | 2026-07-13 | **Retired the Delivery Authorization ceremonial block (SN-19).** Reworded §1A step 6, the line-716 "Delivery Notice... prerequisite" bullet, and the line-756 HQ-enforcement bullet from "issue explicit Epic Delivery Authorization" to in-chat acceptance acknowledgment — the ceremonial artifact is removed, the underlying human merge-authorization gate is preserved unchanged (harness-enforced). Companion edits retired the same ceremony from `governance/templates/{milestone,phase}-execution-chat-starter.md` and all touch points in the three `governance/systems/` mirrors (Milestone, Phase, HQ); the CFO Deployment Authorization (a separate, untouched ceremony) is unaffected. Per SN-19/P7-GH-17; E28.4 (P7-M28). |

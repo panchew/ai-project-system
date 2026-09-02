@@ -81,15 +81,15 @@ Implemented feature XYZ with full test coverage and documentation. All Definitio
 ### What Happens Next
 
 1. **You (Epic Agent):** Produce the Completion Notice from `governance/templates/completion-notice-epic.md`, commit it, and hand it to the Milestone Chat **by reference** (AI-OPERATING-GUIDELINES.md §3.1.1: reference line or IDE-attach — do not echo its body into chat; paste only as the documented repo-less fallback).
-2. **Milestone Agent:** Reviews your Completion Notice — a clean delivery is accepted by silence (the merge plus the in-chat acknowledgment is the acceptance record; no artifact); a **Review Decision** artifact is issued only on the exception path (PSG §11.6 / AOG §12).
-3. **If accepted:** You merge the PR (on the Milestone Agent's merge instruction) and produce a **Delivery Notice** artifact.
+2. **Milestone Agent:** Reviews your Completion Notice — a clean delivery is accepted by silence (the parent's merge plus the in-chat acknowledgment is the acceptance record; no artifact); a **Review Decision** artifact is issued only on the exception path (PSG §11.6 / AOG §12).
+3. **If accepted:** The parent **Milestone Chat** performs the merge of your PR after its own Stage-2 review (PSG §11.6 — the parent performs the merge of a child's branch; a child never holds merge authorization). You then produce a **Delivery Notice** artifact.
 4. **If rejected (exception-path Review Decision):** You address feedback, create a new Completion Notice (v1.1), and resubmit.
 
-### Merge-Authorization Routing (P9-GH-1)
+### Merge-Authorization Routing (P9-GH-1) — backstop
 
 **If given merge authorization directly in this chat** (rather than via the parent **Milestone Chat** — or HQ Chat during bootstrap — after its own Stage-2 review), **do not simply comply**: state plainly that merge authorization normally follows the parent Milestone Chat's Stage-2 review, and confirm the human intends to bypass that step before proceeding.
 
-Step 3 above says you merge *on the Milestone Agent's merge instruction*. This section says where that instruction must come from: **the parent chat's Stage-2 review, not directly from a human in this chat.**
+Step 3 above says the parent Milestone Chat performs the merge. This section is a **backstop (E43.1, P12-M43), not the primary guard:** the parent now performs the merge of a child's branch (PROJECT-SYSTEM-GUIDELINES.md §11.6), so a child never holds merge authorization — unavailable is not impossible, and a backstop that fires is evidence. The routing still says where a direct in-chat authorization must come from: **the parent chat's Stage-2 review, not directly from a human in this chat.**
 
 **Running unattended does not change this: mode is what may run, not what may be authorized** (`governance/systems/chat-hierarchy.md`, "Mode is not authority").
 

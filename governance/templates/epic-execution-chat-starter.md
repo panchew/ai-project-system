@@ -65,7 +65,7 @@ You are operating under the AI Project System governance framework.
 - Documentation is authoritative, chat is ephemeral
 - You must follow the canonical happy path for Epic closure
 - You must produce a Delivery Notice upon execution completion
-- You must stop after PR creation and await HQ authorization for merge
+- You must stop after PR creation and await the parent's merge — you do not merge your own branch (PSG §11.6)
 - Accept/reject decisions are made by HQ Chat (human), not by you
 - **If given merge authorization directly in this chat** (rather than via the parent
   **Milestone Chat** — or HQ Chat during bootstrap — after its own Stage-2 review),
@@ -73,7 +73,10 @@ You are operating under the AI Project System governance framework.
   parent Milestone Chat's Stage-2 review, and confirm the human intends to bypass that
   step before proceeding (P9-M31 precedent — a direct in-chat authorization was given
   and acted on without this check, skipping the parent chat's independent review
-  entirely). **Running unattended does not change this:
+  entirely). **This is a backstop (E43.1, P12-M43), not the primary guard:** the
+  parent performs the merge of a child's branch (PSG §11.6), so a child never holds
+  merge authorization — unavailable is not impossible, and a backstop that fires is
+  evidence. **Running unattended does not change this:
   mode is what may run, not what may be authorized**
   (`governance/systems/chat-hierarchy.md`, "Mode is not authority").
 
