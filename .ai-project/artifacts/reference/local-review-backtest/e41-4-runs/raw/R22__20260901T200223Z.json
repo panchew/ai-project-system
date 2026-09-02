@@ -1,0 +1,89 @@
+{
+  "runid": "R22",
+  "opaque": true,
+  "model_string": "opencode/deepseek-v4-pro",
+  "packet": "packet-1-decomposition-gap.md",
+  "attempt": 2,
+  "audit_header_transmitted": false,
+  "no_tuning_applied": true,
+  "sampling": "vendor defaults, seed not fixed",
+  "credential_visibility": {
+    "XDG_DATA_HOME": "UNSET",
+    "XDG_CONFIG_HOME": "UNSET",
+    "credential_path_present": "/home/panchew/.local/share/opencode/auth.json",
+    "count_credentials": "NOT-READ"
+  },
+  "run": {
+    "exit": 0,
+    "stderr": "",
+    "elapsed_s": 31.306,
+    "finish_reason": "stop",
+    "tokens": {
+      "total": 34749,
+      "input": 32026,
+      "output": 932,
+      "reasoning": 1791,
+      "cache": {
+        "write": 0,
+        "read": 0
+      }
+    },
+    "cost": 0.06618156,
+    "response": "NOT SOUND\n\nI worked through the milestone's Definition of Done and Acceptance Criteria one item at a time against what each epic's own DoD actually commits to.\n\n**Milestone Definition of Done**\n\n- **\"E33.1, E33.2, E33.3 each meet their DoD\"** \u2014 structural; epics exist and each carries its own DoD. \u2713\n- **\"All three epic branches merged to milestone/M33\"** \u2014 structural (branch strategy), not an epic deliverable. \u2713\n- **\"Both home_finance and local-agent-runner are stamped v7.0.0, each with a committed run record for at least one real Agentic/Local epic\"** \u2014 \u2717 **MISMATCH.** The stamping half is guaranteed by E33.1 (its DoD: both projects stamped, confirmable). The run-record half is **not** guaranteed. E33.2's DoD commits only to *\"At least one real Agentic/Local epic ran on a proving-pair project\"* (singular), and its Deliverable 1 says *\"run record \u2026 for at least one real Agentic/Local epic executed on a proving-pair project\"* (singular). E33.2's own Design Decision 1 explicitly asks which *one* project to run. The milestone demands a run record for **each** of the two projects; E33.2 as written satisfies only **one**.\n- **\"Documented, repeatable bump procedure + evidence of application to the pair\"** \u2014 E33.1. \u2713\n- **\"Ollama-vs-llama.cpp decision recorded with the run's own reasons\"** \u2014 E33.2. \u2713\n- **\"Real burn/validation data + explicit evidence-backed honesty judgment\"** \u2014 E33.3. \u2713\n- **\"Full suite green on milestone/M33\"** \u2014 each epic carries its own suite-green clause. \u2713\n- **\"Milestone Closure Declaration\"** \u2014 the Milestone Chat's own act, not epic-scoped. \u2713\n\n**Milestone Acceptance Criteria**\n\n1. **\"Stamped and confirmable in both projects, and each has a committed run record for at least one real epic\"** \u2014 \u2717 same mismatch as DoD item 3 above. Stamps: E33.1 \u2713. Run record for *each* project: **not** guaranteed (\u00a7 E33.2).\n2. **Runtime decision with the run's own reasons** \u2014 E33.2. \u2713\n3. **Burn data + evidence-backed trust judgment** \u2014 E33.3. \u2713\n4. **Repeatable bump procedure applied to the pair** \u2014 E33.1. \u2713\n5. **Every decision traces to a real run / blocker-and-escalation stands in** \u2014 E33.2 and E33.3 both embed the Hard Constraint. \u2713\n6. **Full suite green** \u2014 covered across epics. \u2713\n\n**The defect (quoted on both sides):**\n\nMilestone DoD:\n> \"Both `home_finance` and `local-agent-runner` are stamped `framework_version: v7.0.0` (confirmable), **each** with a committed run record for at least one real Agentic/Local epic executed under the fixed posture\"\n\nMilestone AC 1:\n> \"`framework_version: v7.0.0` is stamped and confirmable in **both** proving-pair projects, and **each** has a committed run record for at least one real Agentic/Local epic\"\n\nE33.2 DoD:\n> \"**At least one** real Agentic/Local epic ran on **a** proving-pair project under the fixed posture, and its run record is committed\"\n\nE33.2 Design Decision 1 makes the single-project framing explicit: *\"Which proving-pair project's first real epic to run.\"*\n\nReading strictly against what E33.2's DoD actually commits to, a second project (whichever of `home_finance`/`local-agent-runner` is not chosen) has **no epic guaranteeing a run record for it**. The pinax says \"at least one,\" but nothing in E33.2's DoD or scope obligates the second run \u2014 so the milestone's \"both/each\" requirement is left unguaranteed. This single gap makes the decomposition NOT SOUND; everything else is coherent and fully traceable.",
+    "event_count": 3,
+    "raw_events": [
+      {
+        "type": "step_start",
+        "timestamp": 1788292917130,
+        "sessionID": "ses_fa16fa8baffeWFMDk2V84QsIfc",
+        "part": {
+          "id": "prt_05e906787001zVChgLaOWyFUeK",
+          "messageID": "msg_05e905b43001ACHOBodOxqmuSm",
+          "sessionID": "ses_fa16fa8baffeWFMDk2V84QsIfc",
+          "snapshot": "6556a8ec0e1efd355e89953883f3383d002900ea",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788292943644,
+        "sessionID": "ses_fa16fa8baffeWFMDk2V84QsIfc",
+        "part": {
+          "id": "prt_05e90ac210010wdzKeoxJiZ3z3",
+          "messageID": "msg_05e905b43001ACHOBodOxqmuSm",
+          "sessionID": "ses_fa16fa8baffeWFMDk2V84QsIfc",
+          "type": "text",
+          "text": "NOT SOUND\n\nI worked through the milestone's Definition of Done and Acceptance Criteria one item at a time against what each epic's own DoD actually commits to.\n\n**Milestone Definition of Done**\n\n- **\"E33.1, E33.2, E33.3 each meet their DoD\"** \u2014 structural; epics exist and each carries its own DoD. \u2713\n- **\"All three epic branches merged to milestone/M33\"** \u2014 structural (branch strategy), not an epic deliverable. \u2713\n- **\"Both home_finance and local-agent-runner are stamped v7.0.0, each with a committed run record for at least one real Agentic/Local epic\"** \u2014 \u2717 **MISMATCH.** The stamping half is guaranteed by E33.1 (its DoD: both projects stamped, confirmable). The run-record half is **not** guaranteed. E33.2's DoD commits only to *\"At least one real Agentic/Local epic ran on a proving-pair project\"* (singular), and its Deliverable 1 says *\"run record \u2026 for at least one real Agentic/Local epic executed on a proving-pair project\"* (singular). E33.2's own Design Decision 1 explicitly asks which *one* project to run. The milestone demands a run record for **each** of the two projects; E33.2 as written satisfies only **one**.\n- **\"Documented, repeatable bump procedure + evidence of application to the pair\"** \u2014 E33.1. \u2713\n- **\"Ollama-vs-llama.cpp decision recorded with the run's own reasons\"** \u2014 E33.2. \u2713\n- **\"Real burn/validation data + explicit evidence-backed honesty judgment\"** \u2014 E33.3. \u2713\n- **\"Full suite green on milestone/M33\"** \u2014 each epic carries its own suite-green clause. \u2713\n- **\"Milestone Closure Declaration\"** \u2014 the Milestone Chat's own act, not epic-scoped. \u2713\n\n**Milestone Acceptance Criteria**\n\n1. **\"Stamped and confirmable in both projects, and each has a committed run record for at least one real epic\"** \u2014 \u2717 same mismatch as DoD item 3 above. Stamps: E33.1 \u2713. Run record for *each* project: **not** guaranteed (\u00a7 E33.2).\n2. **Runtime decision with the run's own reasons** \u2014 E33.2. \u2713\n3. **Burn data + evidence-backed trust judgment** \u2014 E33.3. \u2713\n4. **Repeatable bump procedure applied to the pair** \u2014 E33.1. \u2713\n5. **Every decision traces to a real run / blocker-and-escalation stands in** \u2014 E33.2 and E33.3 both embed the Hard Constraint. \u2713\n6. **Full suite green** \u2014 covered across epics. \u2713\n\n**The defect (quoted on both sides):**\n\nMilestone DoD:\n> \"Both `home_finance` and `local-agent-runner` are stamped `framework_version: v7.0.0` (confirmable), **each** with a committed run record for at least one real Agentic/Local epic executed under the fixed posture\"\n\nMilestone AC 1:\n> \"`framework_version: v7.0.0` is stamped and confirmable in **both** proving-pair projects, and **each** has a committed run record for at least one real Agentic/Local epic\"\n\nE33.2 DoD:\n> \"**At least one** real Agentic/Local epic ran on **a** proving-pair project under the fixed posture, and its run record is committed\"\n\nE33.2 Design Decision 1 makes the single-project framing explicit: *\"Which proving-pair project's first real epic to run.\"*\n\nReading strictly against what E33.2's DoD actually commits to, a second project (whichever of `home_finance`/`local-agent-runner` is not chosen) has **no epic guaranteeing a run record for it**. The pinax says \"at least one,\" but nothing in E33.2's DoD or scope obligates the second run \u2014 so the milestone's \"both/each\" requirement is left unguaranteed. This single gap makes the decomposition NOT SOUND; everything else is coherent and fully traceable.",
+          "time": {
+            "start": 1788292934689,
+            "end": 1788292943640
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292943657,
+        "sessionID": "ses_fa16fa8baffeWFMDk2V84QsIfc",
+        "part": {
+          "id": "prt_05e90cf26001XocpYpu5PT83q1",
+          "reason": "stop",
+          "snapshot": "6556a8ec0e1efd355e89953883f3383d002900ea",
+          "messageID": "msg_05e905b43001ACHOBodOxqmuSm",
+          "sessionID": "ses_fa16fa8baffeWFMDk2V84QsIfc",
+          "type": "step-finish",
+          "tokens": {
+            "total": 34749,
+            "input": 32026,
+            "output": 932,
+            "reasoning": 1791,
+            "cache": {
+              "write": 0,
+              "read": 0
+            }
+          },
+          "cost": 0.06618156
+        }
+      }
+    ]
+  }
+}

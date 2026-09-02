@@ -1,0 +1,95 @@
+{
+  "runid": "R11",
+  "opaque": true,
+  "model_string": "openai/gpt-5.6-sol",
+  "packet": "packet-1-decomposition-gap.md",
+  "attempt": 1,
+  "audit_header_transmitted": false,
+  "no_tuning_applied": true,
+  "sampling": "vendor defaults, seed not fixed",
+  "credential_visibility": {
+    "XDG_DATA_HOME": "UNSET",
+    "XDG_CONFIG_HOME": "UNSET",
+    "credential_path_present": "/home/panchew/.local/share/opencode/auth.json",
+    "count_credentials": "NOT-READ"
+  },
+  "run": {
+    "exit": 0,
+    "stderr": "",
+    "elapsed_s": 79.786,
+    "finish_reason": "stop",
+    "tokens": {
+      "total": 31898,
+      "input": 26241,
+      "output": 1567,
+      "reasoning": 506,
+      "cache": {
+        "write": 0,
+        "read": 3584
+      }
+    },
+    "cost": 0,
+    "response": "NOT SOUND\n\nThe decomposition has two substantive coverage gaps: E33.2 guarantees a real run on only one member of the proving pair, while the milestone requires one on each; and E33.3 permits a conclusion that the numbers cannot be trusted, while Milestone Acceptance Criterion 3 requires an affirmative finding that they can be trusted. Several milestone-level integration and closure requirements are also not guaranteed by any epic DoD.\n\n**Milestone Definition Of Done**\n\n1. **\u201cE33.1, E33.2, and E33.3 each meet their Definition of Done above\u201d**\n   - Guaranteed collectively by E33.1, E33.2, and E33.3, assuming each epic is completed according to its own DoD.\n\n2. **\u201cAll three epic branches merged to `milestone/M33`\u201d**\n   - **Not guaranteed by any epic DoD.**\n   - Milestone requirement:\n     > \u201cAll three epic branches merged to `milestone/M33`\u201d\n   - Each epic guarantees only:\n     > \u201cPR opened to `milestone/M33`\u201d\n   - Opening a PR does not guarantee that it is reviewed, accepted, or merged. This may be a Milestone Chat responsibility, but strictly against the epic DoDs it remains uncovered.\n\n3. **\u201cBoth `home_finance` and `local-agent-runner` are stamped \u2026 each with a committed run record for at least one real Agentic/Local epic\u201d**\n   - The stamping portion is guaranteed by E33.1.\n   - The run-record portion is **not guaranteed for both projects**.\n   - Milestone requirement:\n     > \u201cBoth `home_finance` and `local-agent-runner` are stamped `framework_version: v7.0.0` (confirmable), each with a committed run record for at least one real Agentic/Local epic\u201d\n   - E33.2 guarantees only:\n     > \u201cAt least one real Agentic/Local epic ran on a proving-pair project\u201d\n   - Its design decision likewise asks:\n     > \u201cWhich proving-pair project's first real epic to run\u201d\n   - Thus E33.2 may run one epic on `home_finance` or one on `local-agent-runner` and still satisfy its own DoD. It does not require a run on each.\n   - This directly fails the milestone\u2019s central proving-pair requirement.\n\n4. **\u201cA documented, repeatable enrolled-project v7.0.0 bump procedure exists and shows evidence of application to the pair\u201d**\n   - Guaranteed by E33.1.\n   - E33.1 requires the repeatable procedure, application to both repositories, and confirmation evidence for both.\n\n5. **\u201cThe Ollama-vs-llama.cpp+Qwen3.6 runtime decision is recorded with the run\u2019s own reasons\u201d**\n   - Guaranteed by E33.2.\n   - Its DoD explicitly requires reasons across quality, throughput, loadability, and review burden, traceable to the real run.\n\n6. **\u201cReal burn/validation data from the run exists \u2026 with an explicit, evidence-backed honesty judgment\u201d**\n   - Guaranteed by E33.3 as written.\n   - E33.3 requires captured data, a sizing decision, proportionate validation or repair, and an explicit judgment on whether the numbers can or cannot be trusted.\n   - This milestone DoD item asks for an honesty judgment, not necessarily an affirmative trust result, so E33.3 covers its literal wording.\n\n7. **\u201cFull suite green on `milestone/M33` \u2026\u201d**\n   - **Not strictly guaranteed by any epic DoD at the required integration point.**\n   - Milestone requirement:\n     > \u201cFull suite green on `milestone/M33` for changes touching this repo\u201d\n   - The epic DoDs require:\n     > \u201cFull framework-repo suite green for changes touching this repo\u201d\n   - Those checks occur on individual epic branches. None requires running the full suite on the consolidated `milestone/M33` after all three merges. Individually green branches do not logically guarantee a green integrated branch.\n\n8. **\u201cMilestone Closure Declaration produced\u201d**\n   - **Not guaranteed by any epic DoD.**\n   - The epic DoDs require Epic Delivery Notices, not a Milestone Closure Declaration.\n   - This may properly belong to the Milestone Chat after epic delivery, but it is not guaranteed by the three epic DoDs under the review\u2019s strict test.\n\n**Milestone Acceptance Criteria**\n\n1. **Both projects stamped, and each has a real Agentic/Local epic run record**\n   - Stamping is guaranteed by E33.1.\n   - **The per-project run requirement is not guaranteed by E33.2.**\n   - Milestone criterion:\n     > \u201ceach has a committed run record for at least one real Agentic/Local epic\u201d\n   - E33.2 DoD:\n     > \u201cAt least one real Agentic/Local epic ran on a proving-pair project\u201d\n   - \u201cAt least one \u2026 on a project\u201d is materially weaker than \u201cat least one on each project.\u201d\n\n2. **Runtime decision recorded from the run\u2019s own reasons**\n   - Guaranteed by E33.2.\n   - Its DoD and Acceptance Criteria require traceability to real-run observations across all four required dimensions.\n\n3. **Real data plus a judgment that the numbers can be trusted**\n   - **Not guaranteed by E33.3.**\n   - Milestone criterion:\n     > \u201ca stated, evidence-backed judgment that `measure-token-burn`\u2019s numbers for that run can be trusted\u201d\n   - E33.3 allows:\n     > \u201cthe run\u2019s numbers can / cannot be trusted, because \u2026\u201d\n   - E33.3 can therefore satisfy its own DoD by reaching a well-supported negative conclusion. That would fail the milestone\u2019s affirmative acceptance criterion.\n   - The milestone\u2019s Goal 4 similarly calls for:\n     > \u201ca stated, evidence-backed judgment that `measure-token-burn`\u2019s numbers for that run can be trusted\u201d\n   - To cover this requirement, E33.3 must require either an affirmative trust result or proportionate remediation followed by revalidation until the required run numbers are trustworthy.\n\n4. **Repeatable bump procedure applied to the pair**\n   - Guaranteed by E33.1.\n\n5. **Every runtime and measurement decision traces to a real run; blocker-and-escalation where a run cannot complete**\n   - Largely guaranteed by E33.2 and E33.3.\n   - E33.2 requires the runtime decision to derive from the real run and requires blocker-and-escalation rather than an abstract substitute.\n   - E33.3 requires the measurement judgment to derive specifically from E33.2\u2019s real run data.\n   - However, this exception does not repair Criterion 1: a blocker for one project may be sanctioned evidence, but it is not a committed completed-run record for that project.\n\n6. **Full suite green at milestone delivery**\n   - **Not guaranteed at milestone integration time.**\n   - Each epic requires its own suite result, but none requires the final suite run on the consolidated `milestone/M33` branch.\n\nThe decisive scope mismatch is E33.2\u2019s singular run. The milestone repeatedly requires both members of the proving pair to carry real epics, but E33.2 deliberately scopes only one project\u2019s epic. Even apart from the process-level merge, closure, and final-suite gaps, that mismatch and E33.3\u2019s permitted negative trust outcome make the decomposition **NOT SOUND**.",
+    "event_count": 3,
+    "raw_events": [
+      {
+        "type": "step_start",
+        "timestamp": 1788292501571,
+        "sessionID": "ses_fa176018cffeUNBSS1l9J5LzCt",
+        "part": {
+          "id": "prt_05e8a1040001o2l7IZ3lPiSsao",
+          "messageID": "msg_05e8a01f30018KhijvasyPKKe1",
+          "sessionID": "ses_fa176018cffeUNBSS1l9J5LzCt",
+          "snapshot": "3934dd9a79060c36cfd79c2ba00f8d862821c714",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788292576039,
+        "sessionID": "ses_fa176018cffeUNBSS1l9J5LzCt",
+        "part": {
+          "id": "prt_05e8a5873001fJCwLkT651Fbze",
+          "messageID": "msg_05e8a01f30018KhijvasyPKKe1",
+          "sessionID": "ses_fa176018cffeUNBSS1l9J5LzCt",
+          "type": "text",
+          "text": "NOT SOUND\n\nThe decomposition has two substantive coverage gaps: E33.2 guarantees a real run on only one member of the proving pair, while the milestone requires one on each; and E33.3 permits a conclusion that the numbers cannot be trusted, while Milestone Acceptance Criterion 3 requires an affirmative finding that they can be trusted. Several milestone-level integration and closure requirements are also not guaranteed by any epic DoD.\n\n**Milestone Definition Of Done**\n\n1. **\u201cE33.1, E33.2, and E33.3 each meet their Definition of Done above\u201d**\n   - Guaranteed collectively by E33.1, E33.2, and E33.3, assuming each epic is completed according to its own DoD.\n\n2. **\u201cAll three epic branches merged to `milestone/M33`\u201d**\n   - **Not guaranteed by any epic DoD.**\n   - Milestone requirement:\n     > \u201cAll three epic branches merged to `milestone/M33`\u201d\n   - Each epic guarantees only:\n     > \u201cPR opened to `milestone/M33`\u201d\n   - Opening a PR does not guarantee that it is reviewed, accepted, or merged. This may be a Milestone Chat responsibility, but strictly against the epic DoDs it remains uncovered.\n\n3. **\u201cBoth `home_finance` and `local-agent-runner` are stamped \u2026 each with a committed run record for at least one real Agentic/Local epic\u201d**\n   - The stamping portion is guaranteed by E33.1.\n   - The run-record portion is **not guaranteed for both projects**.\n   - Milestone requirement:\n     > \u201cBoth `home_finance` and `local-agent-runner` are stamped `framework_version: v7.0.0` (confirmable), each with a committed run record for at least one real Agentic/Local epic\u201d\n   - E33.2 guarantees only:\n     > \u201cAt least one real Agentic/Local epic ran on a proving-pair project\u201d\n   - Its design decision likewise asks:\n     > \u201cWhich proving-pair project's first real epic to run\u201d\n   - Thus E33.2 may run one epic on `home_finance` or one on `local-agent-runner` and still satisfy its own DoD. It does not require a run on each.\n   - This directly fails the milestone\u2019s central proving-pair requirement.\n\n4. **\u201cA documented, repeatable enrolled-project v7.0.0 bump procedure exists and shows evidence of application to the pair\u201d**\n   - Guaranteed by E33.1.\n   - E33.1 requires the repeatable procedure, application to both repositories, and confirmation evidence for both.\n\n5. **\u201cThe Ollama-vs-llama.cpp+Qwen3.6 runtime decision is recorded with the run\u2019s own reasons\u201d**\n   - Guaranteed by E33.2.\n   - Its DoD explicitly requires reasons across quality, throughput, loadability, and review burden, traceable to the real run.\n\n6. **\u201cReal burn/validation data from the run exists \u2026 with an explicit, evidence-backed honesty judgment\u201d**\n   - Guaranteed by E33.3 as written.\n   - E33.3 requires captured data, a sizing decision, proportionate validation or repair, and an explicit judgment on whether the numbers can or cannot be trusted.\n   - This milestone DoD item asks for an honesty judgment, not necessarily an affirmative trust result, so E33.3 covers its literal wording.\n\n7. **\u201cFull suite green on `milestone/M33` \u2026\u201d**\n   - **Not strictly guaranteed by any epic DoD at the required integration point.**\n   - Milestone requirement:\n     > \u201cFull suite green on `milestone/M33` for changes touching this repo\u201d\n   - The epic DoDs require:\n     > \u201cFull framework-repo suite green for changes touching this repo\u201d\n   - Those checks occur on individual epic branches. None requires running the full suite on the consolidated `milestone/M33` after all three merges. Individually green branches do not logically guarantee a green integrated branch.\n\n8. **\u201cMilestone Closure Declaration produced\u201d**\n   - **Not guaranteed by any epic DoD.**\n   - The epic DoDs require Epic Delivery Notices, not a Milestone Closure Declaration.\n   - This may properly belong to the Milestone Chat after epic delivery, but it is not guaranteed by the three epic DoDs under the review\u2019s strict test.\n\n**Milestone Acceptance Criteria**\n\n1. **Both projects stamped, and each has a real Agentic/Local epic run record**\n   - Stamping is guaranteed by E33.1.\n   - **The per-project run requirement is not guaranteed by E33.2.**\n   - Milestone criterion:\n     > \u201ceach has a committed run record for at least one real Agentic/Local epic\u201d\n   - E33.2 DoD:\n     > \u201cAt least one real Agentic/Local epic ran on a proving-pair project\u201d\n   - \u201cAt least one \u2026 on a project\u201d is materially weaker than \u201cat least one on each project.\u201d\n\n2. **Runtime decision recorded from the run\u2019s own reasons**\n   - Guaranteed by E33.2.\n   - Its DoD and Acceptance Criteria require traceability to real-run observations across all four required dimensions.\n\n3. **Real data plus a judgment that the numbers can be trusted**\n   - **Not guaranteed by E33.3.**\n   - Milestone criterion:\n     > \u201ca stated, evidence-backed judgment that `measure-token-burn`\u2019s numbers for that run can be trusted\u201d\n   - E33.3 allows:\n     > \u201cthe run\u2019s numbers can / cannot be trusted, because \u2026\u201d\n   - E33.3 can therefore satisfy its own DoD by reaching a well-supported negative conclusion. That would fail the milestone\u2019s affirmative acceptance criterion.\n   - The milestone\u2019s Goal 4 similarly calls for:\n     > \u201ca stated, evidence-backed judgment that `measure-token-burn`\u2019s numbers for that run can be trusted\u201d\n   - To cover this requirement, E33.3 must require either an affirmative trust result or proportionate remediation followed by revalidation until the required run numbers are trustworthy.\n\n4. **Repeatable bump procedure applied to the pair**\n   - Guaranteed by E33.1.\n\n5. **Every runtime and measurement decision traces to a real run; blocker-and-escalation where a run cannot complete**\n   - Largely guaranteed by E33.2 and E33.3.\n   - E33.2 requires the runtime decision to derive from the real run and requires blocker-and-escalation rather than an abstract substitute.\n   - E33.3 requires the measurement judgment to derive specifically from E33.2\u2019s real run data.\n   - However, this exception does not repair Criterion 1: a blocker for one project may be sanctioned evidence, but it is not a committed completed-run record for that project.\n\n6. **Full suite green at milestone delivery**\n   - **Not guaranteed at milestone integration time.**\n   - Each epic requires its own suite result, but none requires the final suite run on the consolidated `milestone/M33` branch.\n\nThe decisive scope mismatch is E33.2\u2019s singular run. The milestone repeatedly requires both members of the proving pair to carry real epics, but E33.2 deliberately scopes only one project\u2019s epic. Even apart from the process-level merge, closure, and final-suite gaps, that mismatch and E33.3\u2019s permitted negative trust outcome make the decomposition **NOT SOUND**.",
+          "time": {
+            "start": 1788292520051,
+            "end": 1788292576036
+          },
+          "metadata": {
+            "openai": {
+              "itemId": "msg_0f332ebb1d15c4b6016a972da7f6e487d0b7bcb78c60a0f46c",
+              "phase": "final_answer"
+            }
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292576174,
+        "sessionID": "ses_fa176018cffeUNBSS1l9J5LzCt",
+        "part": {
+          "id": "prt_05e8b33ab001UZddARpLvi6JNa",
+          "reason": "stop",
+          "snapshot": "3934dd9a79060c36cfd79c2ba00f8d862821c714",
+          "messageID": "msg_05e8a01f30018KhijvasyPKKe1",
+          "sessionID": "ses_fa176018cffeUNBSS1l9J5LzCt",
+          "type": "step-finish",
+          "tokens": {
+            "total": 31898,
+            "input": 26241,
+            "output": 1567,
+            "reasoning": 506,
+            "cache": {
+              "write": 0,
+              "read": 3584
+            }
+          },
+          "cost": 0
+        }
+      }
+    ]
+  }
+}
