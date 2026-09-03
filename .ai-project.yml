@@ -1,6 +1,6 @@
 # .ai-project.yml
 # AI Project System — Project Configuration Contract
-# Spec: governance/ai-project-yml-spec.md v2.7.0
+# Spec: governance/ai-project-yml-spec.md v2.9.0
 
 governance:
   source: ./governance
@@ -17,6 +17,16 @@ project:
 # disabled: merges proceed automatically (agentic auto-merge), no gate.
 # See governance/systems/creation-chat-guide.md (CFO PR Review Gate).
 cfo_review_gate: enabled
+
+# Rework-exhaustion flip — the system's first fail-closed default.
+# enabled (default): when the receiving parent's rework limit is exhausted (the 3-attempt
+#   maximum plus any written +1, without an acceptable delivery — PROJECT-SYSTEM-GUIDELINES.md
+#   §11.6 "The Rework Limit"), the parent flips to manual Execution Mode. Drivr performs the
+#   flip and records it, so the committed starter stays the source of truth
+#   (governance/systems/chat-hierarchy.md "The rework-exhaustion flip").
+# disabled: the flip does not fire; exhausted rework leaves Execution Mode unchanged.
+# See governance/systems/chat-hierarchy.md "The rework-exhaustion flip".
+rework_exhaustion_flip: enabled
 
 # Hybrid model mapping for unattended 24/7 autonomous cluster execution.
 # Evidence-grounded mapping (Epic E30.2, P9-M30) — derived from the measured

@@ -1,8 +1,8 @@
 ---
 type: system
 status: active
-effective_date: 2026-05-29
-version: 1.1.0
+effective_date: 2026-09-02
+version: 1.2.0
 ---
 
 # Roles, Authorization & Team Governance (P4.3)
@@ -99,7 +99,7 @@ Contributors ← Code Implementation
 
 **Decision Artifacts:**
 - Issues **Phase Completion Notice** (planning complete, ready for CFO review)
-- Issues **Phase Review Decision** (exception path only — reject or accept-with-follow-ups; a clean Phase delivery is accepted by silence, PSG §11.6)
+- Issues **Phase Review Decision** (exception path only — reject or accept-with-follow-ups; a clean Phase delivery is accepted by an acknowledgment naming the party that reviewed and accepted, PSG §11.6 — silence accepts nothing)
 - Issues **Bugfix Epic Approval** (authorization to begin bugfix work)
 
 **Operational Rules:**
@@ -141,7 +141,7 @@ Contributors ← Code Implementation
 - ✓ Create Epic stubs from Milestone spec
 - ✓ Produce Epic specs and Epic Execution Chat Starters
 - ✓ Review Epic Completion Notices
-- ✓ Accept clean Epic deliveries by silence; issue a Review Decision only on the exception path (PSG §11.6)
+- ✓ Accept clean Epic deliveries by an acknowledgment naming the party that reviewed and accepted; issue a Review Decision only on the exception path (PSG §11.6; silence accepts nothing)
 - ✓ Aggregate Epic deliverables into Milestone Completion Notice
 
 **Authority Boundaries:**
@@ -173,7 +173,7 @@ Contributors ← Code Implementation
 - ✓ Can implement Epic according to spec
 - ✓ Can fail and retry (up to 3 times)
 - ✗ Cannot modify Epic spec without escalation
-- ✗ Cannot merge PR without parent acceptance — silence-accept of a clean delivery per PSG §11.6, or an exception-path Review Decision (Accept); a rejected delivery MUST NOT merge
+- ✗ Cannot merge PR without parent acceptance — an acknowledgment naming the party that reviewed and accepted for a clean delivery per PSG §11.6 (silence accepts nothing), or an exception-path Review Decision (Accept); a rejected delivery MUST NOT merge
 - ✗ Cannot deploy to production
 
 **Decision Artifacts:**
@@ -262,7 +262,7 @@ Contributors ← Code Implementation
 
 | Target Branch | Who Can Merge | Authority |
 |---------------|--------------|-----------|
-| epic/E#.# | Epic Agent (on parent acceptance) | Milestone Agent — silence-accept of a clean delivery, or exception-path Review Decision (PSG §11.6) |
+| epic/E#.# | Epic Agent (on parent acceptance) | Milestone Agent — acceptance by an acknowledgment naming the party that reviewed and accepted for a clean delivery (silence accepts nothing), or exception-path Review Decision (PSG §11.6) |
 | milestone/M# | Milestone Agent (on Phase approval) | Phase Lead/HQ approved |
 | phase/P# | Phase Agent (on CFO approval) | CFO approves Phase delivery |
 | develop | Release Agent (on deployment cycle) | Release process |
@@ -383,7 +383,7 @@ The system is designed for **async-first** work:
 3. **Milestone Agent** reviews Phase artifacts, creates Milestone spec (async)
 4. **Epic Agent** executes Epic in sandbox (async, 24/7)
 5. **Reviewer** reviews PR when available (async)
-6. **Milestone Agent** accepts a clean delivery by silence, or issues an exception-path Review Decision (async; PSG §11.6)
+6. **Milestone Agent** accepts a clean delivery by an acknowledgment naming the party that reviewed and accepted, or issues an exception-path Review Decision (async; PSG §11.6)
 
 No required real-time meetings. Team can be fully distributed.
 
@@ -542,5 +542,6 @@ The system supports **gradually increasing autonomy** as the team matures:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.2.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** Every "by silence / silence-accept" statement reconciled to the amended PSG §11.6: acceptance of a clean delivery is by an **acknowledgment naming the party that reviewed and accepted**; **silence accepts nothing**. Amended: the Phase Review Decision artifact line, the Milestone Agent responsibility, the Epic Agent authority boundary, the merge-authority table's epic row, and the async flow step. No role, authority, or gate changed. Backed by `tests/test_acceptance_distinguishable_from_absence.py`. |
 | 1.0.0 | 2026-05-29 | Initial release. Defines 7 roles, decision authorities, authorization matrix, team communication norms, and production deployment gate requiring CFO approval. |
 | 1.1.0 | 2026-07-03 | Reconciled to default-accept (SN-13, PSG §11.6 / AOG §12): role duties and authorization rules reframed — a clean delivery is accepted by silence; a Review Decision is the exception path. Merge gate "Cannot merge PR without Review Decision (Accept)" reconciled to "without parent acceptance". Artifact and merge tables annotated. (P6-M25-E25.4) |

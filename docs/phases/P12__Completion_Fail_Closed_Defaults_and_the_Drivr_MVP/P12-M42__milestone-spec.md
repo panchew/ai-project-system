@@ -2,7 +2,7 @@
 milestone: M42
 name: "Fail-Closed Execution Tier"
 phase: P12
-status: planned
+status: completed
 start_date: 2026-08-19
 epics:
   - E42.1
@@ -56,6 +56,37 @@ problem available: the suite does not merely fail to catch them — it records t
 ---
 
 ## The four defects — verified file:line
+
+> ## ⚠ LINE NUMBERS HAVE DRIFTED. RE-PINNED 2026-09-01, AND CITE BY ANCHOR FROM NOW ON.
+>
+> **`bin/ai-project-orchestrator` shifted +4 lines when #236 edited `DEFAULT_MODELS`.** Every number
+> this spec cites for that file is **stale by four**. `bin/ai-project-git-merge` and
+> `bin/ai-project-init` are **unchanged**.
+>
+> **Re-pinned on `phase/P12` at `3925aea`, by searching for the code rather than by trusting the
+> number:**
+>
+> | Defect | Anchor — search for this | Cited | **Actual** |
+> |---|---|---|---|
+> | **D1** sandbox fail-open | `except FileNotFoundError:` | `:392` | **`:396`** |
+> | **D1** host execution | `subprocess.run(command, shell=True` | `:397` | **`:401`** |
+> | **D2** unscoped staging | `["git", "add", "."]` | `:472` | **`:476`** |
+> | **G1** the convention it violates | `LOCAL_UNAVAILABLE_EXIT = 5` | `:36` | **`:41`** |
+> | **G1** the worked shape | `sys.exit(LOCAL_UNAVAILABLE_EXIT)` | `:565` | **`:569`** |
+> | **D3** approval warning | `Proceeding to merge` | `:269` | `:269` **unchanged** |
+> | **D3** the `--admin` rung | `"--admin"` | `:275-281` | **`:279`** within that block |
+> | **D3** the test to invert | `def test_promote_branch_fallback_merge` | `:447-460` | `:447` **unchanged** |
+> | **D4** off-by-one source path | `local src_file=` | `:328` | `:328` **unchanged** |
+> | **D4** the stub | `This agent is under development` | `:336-346` | **`:340`** within that block |
+> | **D4** the validator | `HQ agent file is not readable` | `:348-353` | **`:349`** within that block |
+>
+> **THE RULE THIS ESTABLISHES, and it is the same lesson as the Starter version stamps:** **a line
+> number is a moving target and citing one alone is stamping it.** **Search for the anchor; use the
+> number only to say where it was, at a stated ref, on a stated date.** **An epic that opens `:392`
+> today finds `try:` — which does not look wrong, and that is the danger.**
+>
+> **This is `P12-GH-3` with the most mechanical dependent yet:** the premise moved by four lines
+> because an unrelated PR added four lines above it, and **nothing about the spec looked stale.**
 
 **Re-verified by the Phase Chat by reading, on `master` at `9ee810e`, 2026-08-19** (G2 — *the
 reviewer re-measures*). All four line references in the phase spec hold.
@@ -682,6 +713,8 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.0 | 2026-09-02 | **CLOSURE ACCEPTED by the Phase Chat, and `status` flipped to `completed`** — recorded here because M42's spec still read `planned` after the closure was accepted and PR #248 merged to `phase/P12`, and **that stale field is load-bearing**: E41.5's Gate 1 was recorded *moot* on 2026-09-01 precisely because a `git show` of this frontmatter returned `status: planned`. A record that contradicts the merged reality is the phase's own finding pointed inward. **Closure verified by re-measurement, not report (G2)**: suite **582 passed** on `origin/milestone/M42` and again on the merged `phase/P12`; all four defects (D1 host `shell=True`, D2 unscoped `git add .`, D3 the `--admin` rung, D4 the placeholder stub) confirmed gone. **One correction to this spec's own reasoning:** its risk framing — D1/D2 as defects on a path *"Drivr is about to invoke nightly"* — **is not realized.** Drivr references none of the three scripts (0 references, 0 call sites); the live-capable executor is `bin/ai-project-daemon`, currently stopped, and `ai-project-git-merge` has no execution caller at all. The fixes stand and were worth making, but **M42 was prophylactic, not remedial**, and justifying them partly on an unverified reachability claim is exactly the derived-claim rot `P12-GH-3` names. Carry-forwards disposed: **A** (stale `DEFAULT_GOVERNANCE_VERSION="v2.0.0"` makes a *default* `ai-project-init` fail closed) accepted at phase level as fail-closed working correctly, not an M42 defect; **B** (CWD-drift nesting) closed; **C** carried up as the correction above. |
+| 1.1.0 | 2026-09-01 | **Line numbers re-pinned before M42 execution starts, and the citation form changed.** `bin/ai-project-orchestrator` **shifted +4 lines** when #236 edited `DEFAULT_MODELS`, so every number this spec cited for that file was stale: **D1 `:392`→`:396` and `:397`→`:401`, D2 `:472`→`:476`, G1 `:36`→`:41` and `:565`→`:569`.** `bin/ai-project-git-merge` and `bin/ai-project-init` are **unchanged**. Re-pinned on `phase/P12` at `3925aea` **by searching for the code rather than trusting the number.** **Establishes the rule that a line number is a moving target and citing one alone is stamping it** — search for the anchor, and use the number only to say where it was, at a stated ref and date. **The same lesson as the Starter version stamps, in a more mechanical substrate:** the premise moved because an unrelated PR added four lines above it, and **nothing about the spec looked stale.** **An epic opening `:392` today finds `try:`, which does not look wrong.** **No scope, epic, ordering, gate or acceptance-criterion change.** |
 | 1.0.2 | 2026-08-20 | **Cross-references the second `P11-GH-1` instance in P12**, recorded in full in `P12-M41__milestone-spec.md` v1.1.1 and **not duplicated here**. This branch is one of its two subjects — cut from `phase/P12` at `9ee810e`, with the F6 ruling landing on `master` afterwards — but **M42's artifacts cite no absent file**, so the dangling reference is M41's alone. Records the direction that makes it a distinct instance: **downward amendment is mechanised; upward branch staleness is unowned.** **No scope, epic, ordering, gate or acceptance-criterion change.** |
 | 1.0.1 | 2026-08-19 | **Finding G4 added to Obligation 2, before any Epic Chat opened** — no `P11-GH-1` exposure. The Phase Chat re-inspected the `P12-GH-2` live victim directly rather than inheriting it from the record: `social-stories-creator`'s agent is **230 bytes, confirmed**, and a first-pass size sweep of twelve enrolled fleet directories finds **every other project at 14,711 bytes**. Verification boundary stated: **size only, not content**, and `~/soft-dev/*` on this host only — so E42.5's enumeration is narrowed, not discharged. Adds the observation that the one victim sits in the non-`.governance` population M38 identified as init's own creations, offered to E42.5 as a lead. **No scope, ordering, epic or acceptance criterion changes.** |
 | 1.0.0 | 2026-08-19 | Initial M42 spec, from the P12 Phase Execution Chat Starter and the 2026-08-19 HQ Ruling. All four defects re-verified by reading on `master` at `9ee810e`; all stated line references hold. **Three planning-time findings recorded:** the orchestrator already defines `LOCAL_UNAVAILABLE_EXIT = 5` at `:36`, documents it as *"refuse loudly rather than retry or silently fall back"*, and applies it at `:539-565` — so E42.1 applies the file's own convention rather than inventing one (G1); `test_promote_branch_fallback_merge`'s mock has **approval returning 0**, so inverting it covers the ladder but **not** the `:269` approval bypass, which has no test at all — E42.3 owes a **new** test as well as an inverted one (G2); and the blast radius is **six** guides, three normative/spec documents, an adoption record, `README.md`, **seven other `bin/` scripts** and **seven test files**, plus Drivr outside the repo — against the scoping's *"three guides"*, and the measurement is a name sweep for which E42.5 owes the call graph (G3). Five epics; E42.1→E42.2 sequenced on one file; E42.4→E42.5. |
