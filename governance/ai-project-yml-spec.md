@@ -492,7 +492,7 @@ visual_artifacts:
     - video                              # ComfyUI video (optional)
   visual_required_for_specs: true        # enforcement setting; defaulted true
   # Structural diagrams (Mermaid/PlantUML, agent-authored text) call no ComfyUI endpoint
-  # and need no `types` entry — see AOG §16.3.
+  # and need no `types` entry — see AOG §17.3.
 ```
 
 ---

@@ -60,7 +60,7 @@ status: merged
 ## Basis
 <State that the Definition of Done is met and the delivery is accepted — by an
 acknowledgment naming the party that reviewed and accepted for
-a clean delivery (PSG §11.6 / AOG §12; silence accepts nothing), or, on the exception path, reference the
+a clean delivery (PSG §11.6 / AOG §14; silence accepts nothing), or, on the exception path, reference the
 accepting Review Decision (timestamp / path) that the parent's merge follows.>
 
 ## Merge Record

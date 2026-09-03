@@ -23,7 +23,7 @@ Stage 2 — Oversight
   Does:        Receives Completion Notices from direct children
                Accepts clean deliveries by an acknowledgment naming the party
                  that reviewed and accepted (silence accepts nothing); issues a
-                 Review Decision only on the exception path (PSG §11.6 / AOG §12)
+                 Review Decision only on the exception path (PSG §11.6 / AOG §14)
                Opens own PR to parent branch
                Parent performs the merge of the child's branch on parent
                  acceptance (by acknowledgment, or an exception-path Review
