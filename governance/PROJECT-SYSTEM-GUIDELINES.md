@@ -1,8 +1,8 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 2.7.0  
-**Effective Date:** 2026-09-02  
+**Version:** 2.8.0  
+**Effective Date:** 2026-09-03  
 **Status:** Current  
 
 ---
@@ -310,7 +310,8 @@ Phase closure follows a structured process parallel to Epic closure (§1A) and M
 
 **Step 2: Phase Declared Complete**
 - Phase completion criteria (from the phase spec) are evaluated and each verified satisfied
-- "Phase P<id> complete" declared with a verification checklist and phase summary
+- "Phase P<id> complete" declared by committing a **Phase Completion Declaration** — `docs/phases/P<id>__<Phase_Name>/P<id>__phase-completion-declaration.md`, using `governance/templates/phase-completion-declaration.md`, marked `COMPLETE (awaiting consolidation)`, carrying the verification checklist, milestone table and phase summary
+- The declaration is written **while the phase is still open**, so it is distinct from Step 9's Phase-Closure Declaration, which is recorded on `master` after consolidation (Step 9 and `governance/templates/phase-closure-declaration.md` are unchanged — the Phase Completion Declaration is **additional**, not a relocation)
 
 **Step 3: README Update (Mandatory, Automatic)**
 - Top-level `README.md` is updated **on the phase branch** to the delivered state: status banners, test counts, version references, capability summary
@@ -328,6 +329,7 @@ Phase closure follows a structured process parallel to Epic closure (§1A) and M
 
 **Step 6: Delivery Reviewed**
 - Closure is recorded under the operating acceptance model, **SN-13 default-accept**: a clean delivery (all completion criteria met) is accepted by an acknowledgment that names the party that reviewed and accepted — silence accepts nothing; a **Review Decision** artifact is the exception path only
+- The **Phase Completion Declaration** (Step 2) is the artifact this review verifies — its verification checklist and milestone table are checked against the phase spec and the milestone records
 - *(Stated by reference only — the acceptance model's normative text is §11.6 "Default-Accept (SN-13)", not this section)*
 
 **Step 7: Merge Completes**
@@ -1017,6 +1019,7 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.8.0 | 2026-09-03 | **The Phase Completion Declaration, named at §5C Step 2 (E44.1, P12-M44; lands `P11-GH-3`).** §5C Step 2 now names the artifact that records *"Phase P<id> complete"*: a **Phase Completion Declaration** committed to `docs/phases/P<id>__<Phase_Name>/P<id>__phase-completion-declaration.md` using `governance/templates/phase-completion-declaration.md`, marked `COMPLETE (awaiting consolidation)`, carrying the verification checklist, milestone table and phase summary that previously had no home (in P11 they landed in a PR comment). Written **while the phase is still open**, it is the one artifact guaranteed to be written before the phase's parent gate and is the backstop terminus for deferred phase-spec corrections. §5C Step 6 now names it as the artifact the delivery review verifies. **Step 9 is untouched** — the Phase-Closure Declaration and `governance/templates/phase-closure-declaration.md` are unchanged; the new declaration is **additional, not a relocation**, and records completion (Step 2) rather than delivery (Step 9). |
 | 2.7.0 | 2026-09-02 | **The rework-exhaustion flip, stated normatively (E43.4, P12-M43).** Added §11.6 "The Rework-Exhaustion Flip", the one normative statement of the system's **first fail-closed default**: **exhausted rework** (the 3-attempt maximum plus any written `+1`, spent without an acceptable delivery — the definition in "The Rework Limit" above) **flips the receiving parent to manual Execution Mode**. **Opt-out, on by default** — governed by the new `rework_exhaustion_flip` key in `.ai-project.yml` (`ai-project-yml-spec.md` §3.8), `enabled` by default, `disabled` only deliberately. **Drivr performs the flip and records it** — the committed Execution Chat Starter is not mutated, so the committed-starter invariant survives and the flip is discoverable from the record; **resume** restores the declared mode, never promotes manual → agentic, and returns the mode, not the budget (both stated at `chat-hierarchy.md`). The trigger definition and the `+1` semantics are unchanged (E43.3). No gate, authority, or §11.6.1 rule changed. |
 | 2.6.0 | 2026-09-02 | **The rework limit, as one normative statement (E43.3, P12-M43; closes `P12-GH-1`).** Added §11.6 "The Rework Limit": at every parent-chat → child gate a parent may reject a child's delivery a **maximum of three (3) attempts**; on a third still-unacceptable Completion Notice the parent issues no fourth rejection-and-retry, the child produces an **Escalation Notice**, and the parent escalates. **A written extension grants exactly ONE further attempt, not a reset to three** (SN-36/37, CFO-decided, stricter than the earlier "resets" wording — the surviving semantics). Defines **rework exhaustion** (3 attempts + any written +1, without an acceptable delivery) as the state E43.4's flip triggers on. The rule was previously in exactly one starter surface (`systems/milestone-execution-chat-starter.md`), absent from every template and the normative tier, and carried two contradictory extension semantics; it is now stated once here, and every starter-shaped surface reaches it by carry or cite. |
 | 2.5.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** The acceptance record now carries a **positive, attributable signal**: the happy-path acknowledgment **names the party that reviewed and accepted** (role + session identity) — an emission by an identified party, never an absence attributed to a role — so *reviewed and clean* is distinguishable from *nobody looked* **from the record alone**, and a duplicated role leaves two signals rather than two indistinguishable silences. **Silence accepts nothing.** Default-accept is tweaked, not retired: a clean delivery still produces **no new artifact** — the signal rides the acknowledgment that already exists, recorded with the parent's merge (E43.1). Added §11.6 subsections "What the Signal Does Not Claim" (review-happened ≠ review-correct; E39.3's overclaim refused) and "Where the Acknowledgment Is Recorded". Amended the always-restate surfaces that said "accepted by silence": §1A gate-scoping, §5C Step 6, §11.5 flow + Key Rule 4, §12, §13A, §13B, and §11.6 "What Default-Accept Governs" + gate (B). §11.6.1 (HQ-authored deliveries) is deliberately unchanged. |
