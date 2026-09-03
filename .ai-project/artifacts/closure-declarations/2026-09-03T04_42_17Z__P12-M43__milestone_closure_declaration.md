@@ -155,4 +155,75 @@ consolidation.**
 
 ---
 
-## Stage-2 Review — Phase Chat Decision: *(pending — this section is the Phase Chat's to author)*
+## Stage-2 Review — Phase Chat Decision: **ACCEPTED**
+
+**Reviewed and accepted by:** the **P12 Phase Execution Chat** (this session, `4710216f`), acting as
+M43's parent. **Reviewed at:** `origin/milestone/M43` @ `4c1c17a`, on 2026-09-03.
+
+*This acknowledgment is named and attributable because **E43.2 now requires it**. M43's own
+consolidation is the first acceptance in this framework's history that could not have been performed
+by silence — the rule landed four commits ago and binds the acceptance of the milestone that landed
+it. Recorded here rather than sent as a message: the channel is routing, the artifact is the record.*
+
+### Re-measured, not inherited (G2)
+
+| Claim | Re-measured | Result |
+|---|---|---|
+| Suite **740 passed / 0 failed** | isolated worktree at `origin/milestone/M43` | **740 passed** — exact |
+| Validator: no warning for the two gate keys, exactly one for `model_verification` | `bin/ai-project-validate .ai-project.yml` | **0 errors, 1 warning** — `model_verification` (line 93), both gate keys clean |
+| `rework_exhaustion_flip` / `cfo_review_gate` blessed | `.ai-project.yml` `:29`/`:19`; `ai-project-yml-spec.md` `:47`/`:44`, §3.7 `:564` | **confirmed** |
+| E43.1 landed normatively | `PROJECT-SYSTEM-GUIDELINES.md:589` (and the workflow at `:37`) | *"the merge of a child's branch is performed by the parent"* — **present** |
+| E43.2 landed normatively | `PROJECT-SYSTEM-GUIDELINES.md:562` | *"merge + in-chat acknowledgment; no artifact; silence accepts nothing"* — **present** |
+| E43.3 single statement | `PROJECT-SYSTEM-GUIDELINES.md:617-619` | *"stated once, here"* — **present** |
+| E43.4 flip | `PROJECT-SYSTEM-GUIDELINES.md:632` | *"Exhausted rework flips the receiving parent to manual"* — **present** |
+| `P12-GH-1` closed (was: 0 templates) | `governance/templates/` | **7 of 25 templates** now reach the limit, including all three starter templates. Substantively closed |
+| Drivr half **469 passed** | `~/soft-dev/drivr`, `PYTHONPATH=. pytest -q` | **469 passed** — exact, **but see Carry-forward D for the ref** |
+
+### Carry-forwards — the three declared are accepted as written; a fourth is added
+
+**A, B and C are accepted as recorded.** A (`model_verification` is an unblessed top-level key) is
+**corroborated from a second, independent direction**: the Phase Chat has separately measured that
+`model_verification` has **no enforcement mechanism at all** — zero occurrences in `bin/`, `tests/`
+or `lib/` under that name or seven synonyms, and the only model check that exists
+(`run-dev-agent`'s `check_local_availability`) explicitly exempts `remote:`-prefixed values, which is
+what `phase` and `milestone` are. **So the key is neither blessed by the schema nor read by any
+code.** E43.4 found the schema half; the Phase Chat found the enforcement half; they are the same
+defect. This matters at P12's closure, where the key is scheduled to flip `advisory → blocking`:
+**flipping it would change a word that nothing reads.** Held in the Phase Chat's thread by CFO
+instruction until M47 completes, then disposed with E41.5's ungated routing rows as one item.
+
+**D — NEW, found at this review: the Drivr half of E43.4 is verified but NOT MERGED.**
+The 469-passing suite was measured on **`epic/P12-M43-E43.4`** (`af3904d`), which is **one commit
+ahead of Drivr's `main` (`f60164c`) and not merged into it.** The entire deliverable —
+`drivr/modes/__init__.py`, `drivr/modes/record.py` (317 lines, the flip/resume implementation) and
+its 244-line test file — **exists only on that branch**; `main` contains none of it. Drivr is a
+**local-only repository with no remote**, so there is no PR and the merge is a local act.
+
+*The declaration is not inaccurate — it states the Drivr number and scopes it as "not covered by this
+repo's suite."* **What it omits is the ref**, and here the ref is the load-bearing part: DoD items 5
+and 7 read as *the flip exists and Drivr performs it*, and in Drivr's mainline **it does not yet.**
+This is `P11-GH-2` — *state the layer, time, scope **and ref*** — which **M43 itself strengthened into
+its own milestone spec during planning**, applied to M43's own closure. A number without a ref is not
+a measurement.
+
+**Consequence:** M43's in-repo half is complete and binding on consolidation. **P12 may not claim the
+fail-closed flip is operative until Drivr's `epic/P12-M43-E43.4` merges to `main`** — a mechanical
+step on written, passing code, not missing work. Carried to the phase record.
+
+### One consistency note, recorded and not blocking
+
+E43.1 versioned its normative addition as a **patch** (PSG `2.4.1`), while E43.2, E43.3 and E43.4
+versioned the same class of change — adding a normative statement to §11.6 — as **minor** (`2.5.0`,
+`2.6.0`, `2.7.0`). All four are the same kind of act. The content is fully recorded either way, so
+this changes nothing substantive; it is noted because versioning is itself a governance surface and
+P12's subject is records that say what happened.
+
+### Disposition
+
+**ACCEPTED.** All eleven DoD items verified; the five milestone acceptance criteria hold. No rework
+attempt consumed; each epic stands at attempt 1 of 3.
+
+**Consolidation is the Phase Chat's to perform** (E43.1's first milestone-level application), and it
+**awaits explicit CFO merge authorization** — acceptance is not authorization. On authorization the
+Phase Chat merges `milestone/M43 → phase/P12`, flips this milestone spec's `status` to `completed` in
+the same act (the M42 lesson: a stale `planned` is load-bearing), and reports the SHA.
