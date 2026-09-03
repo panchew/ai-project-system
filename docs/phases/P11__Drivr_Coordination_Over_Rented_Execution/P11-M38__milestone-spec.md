@@ -991,7 +991,7 @@ deliberately loose because two of its six epics carry genuine unknowns:
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -1044,7 +1044,7 @@ flowchart TB
   through an adapter. **The unsolved question** — no engine is reachable inside this repo's sandbox, and
   B2.1 fixed the endpoint rather than the engine — is E38.2's to answer. **What is deliberately not
   built:** M39's completion judgment and M40's coordination; the adapter may report what the engine
-  reported and must not judge it. Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid, no
+  reported and must not judge it. Proposed-track Structural diagram (AOG §17.3/§17.6), Mermaid, no
   ComfyUI.
 
 ---
@@ -1080,7 +1080,7 @@ flowchart TB
   against me. B2.1 works; it fixed the blocker that fired first and not the one behind it.
 - **`panchew-io` is the third time a fleet list has proven to be a floor** — after P10's three unlisted
   projects and M37's `GH-` count moving three times. **State inventories as floors, always.**
-- **Default-accept (PSG §11.6 / AOG §12) governs delivery**; a Review Decision is the exception path.
+- **Default-accept (PSG §11.6 / AOG §14) governs delivery**; a Review Decision is the exception path.
   Per SN-19 acceptance and merge instruction are **in-chat acts — no ceremonial artifact.** The harness
   enforces explicit human merge authorization regardless.
 - **PSG §11.6.1 constrains what silence accepts** — children's clean deliveries, never HQ's own output.

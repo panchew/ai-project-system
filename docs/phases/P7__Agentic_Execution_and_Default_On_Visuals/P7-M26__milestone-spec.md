@@ -401,5 +401,5 @@ accepts M26's deliverables.
   M26's scope**; the milestone fixes the contract (CONTRACT §7 adapter; real model; no mocks in
   the live path; live run accepted on exit code + transcript; hand-back arranged), not the
   wording.
-- Default-accept (PSG §11.6 / AOG §12) governs M26's own delivery: clean Epic/Milestone
+- Default-accept (PSG §11.6 / AOG §14) governs M26's own delivery: clean Epic/Milestone
   deliveries are auto-accepted by silence; Review Decisions are the exception path only.

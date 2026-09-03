@@ -443,7 +443,7 @@ E34.2's per-project extent is the variable pole)
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -459,7 +459,7 @@ flowchart LR
 - **Description:** M34 rolls M33's proven levers across the fleet — the mcp superseded-agent fix
   (E34.1), the dormant-project roll-forward sized per observed state (E34.2), and the `models:`
   routing edit that operationalizes E33.2's settled runtime choice (E34.3), landing before any
-  agentic roll-forward run. Proposed-track Structural diagram (AOG §16.3/§16.6).
+  agentic roll-forward run. Proposed-track Structural diagram (AOG §17.3/§17.6).
 
 ---
 
@@ -510,7 +510,7 @@ flowchart LR
 
 ---
 
-*Default-accept (PSG §11.6 / AOG §12) governs this milestone's delivery: clean Epic/Milestone
+*Default-accept (PSG §11.6 / AOG §14) governs this milestone's delivery: clean Epic/Milestone
 deliveries are accepted by silence; a Review Decision is the exception path only. Per SN-19,
 acceptance and the merge instruction are in-chat acts — no ceremonial artifact. The harness
 enforces explicit human authorization on every merge regardless.*

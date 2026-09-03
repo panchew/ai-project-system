@@ -117,7 +117,7 @@ an incidental edit):**
 1. `governance/guides/visual-artifacts.md` — rewrite §4 (Output formats: the
    `.ai-project/visuals/...` path and the "commit the generated file together with the
    artifact" instruction) and the §1 source-repo note to the by-link model
-2. `governance/AI-OPERATING-GUIDELINES.md` §16.5 ("What to commit, and where") — rewrite the
+2. `governance/AI-OPERATING-GUIDELINES.md` §17.5 ("What to commit, and where") — rewrite the
    "Generated artifacts are written under … and committed" bullet to by-link
 3. `bin/ai-project-visual` output guidance — clarify `--output` writes a **local working
    file** to be hosted and linked, not committed (resolve Open Design Question B below)
@@ -160,7 +160,7 @@ helper a minimal one-shot `prompt → local file` tool (its current verified des
 
 **M24 — Comprehension Behavior & Clips** (depends on M23's binding convention)
 
-- **E24.1 — Proposed-vs-implemented comprehension behavior (P6-VC-3):** AOG §16 guidance
+- **E24.1 — Proposed-vs-implemented comprehension behavior (P6-VC-3):** AOG §17 guidance
   establishing the two-track expectation (proposed before build, implemented after) as the
   routine default at every level — "nothing is too much"; Structural-first generous coverage;
   per-level examples of proposed vs. implemented, bound via the M23 convention.

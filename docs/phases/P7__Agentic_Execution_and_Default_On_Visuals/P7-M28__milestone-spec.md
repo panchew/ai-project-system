@@ -141,7 +141,7 @@ By the end of this milestone:
 This milestone explicitly does **not**:
 
 - **Touch M26 or M27's surfaces** — the orchestrator, `bin/run-dev-agent`, the runner adapter,
-  or the visual-artifacts framework (AOG §16, yml-spec §3.5, `gpu-coexistence.md`).
+  or the visual-artifacts framework (AOG §17, yml-spec §3.5, `gpu-coexistence.md`).
 - **Re-debate any of the four carry-forwards' existence or intent** — only their reconciled
   wording is open.
 - **Resolve Open Design Question B by fiat here** — the recommended default (codify both
@@ -165,7 +165,7 @@ This milestone explicitly does **not**:
 - **E28.3** — `bin/ai-project-init` (lines 328-329, 408), a new test, and any doc that names
   the installed filename.
 - **E28.4** — `governance/templates/{milestone,phase}-execution-chat-starter.md`,
-  `governance/systems/{milestone,phase,hq}-execution-chat-starter.md`, and AOG §1A step 6 +
+  `governance/systems/{milestone,phase,hq}-execution-chat-starter.md`, and AOG §1.1 step 6 +
   lines 716 (shared with E28.2) + 756.
 
 ## Out of Scope
@@ -329,7 +329,7 @@ carries the Delivery-Notice terminology collision), and line 756.
    deleted section; the responsibilities-list steps, Communication Protocol table rows, and
    (for `hq-execution-chat-starter.md`) the diagram/instruction/mention all need addressing
    individually, since they are not one contained block.
-3. Reword AOG §1A step 6 and line 756 to in-chat authorization language; **coordinate line 716
+3. Reword AOG §1.1 step 6 and line 756 to in-chat authorization language; **coordinate line 716
    with E28.2** (sequence the two epics or use a worktree, since both touch the same line for
    different reasons — Delivery-Notice terminology vs. Delivery-Authorization retirement).
 4. Preserve the in-chat merge authorization unchanged everywhere the block is retired.
@@ -339,7 +339,7 @@ carries the Delivery-Notice terminology collision), and line 756.
 - [ ] No Delivery Authorization ceremonial block/section remains in either template
 - [ ] All touch points in the three `governance/systems/` mirrors are addressed (not just a
       block deletion where no single block exists)
-- [ ] AOG §1A step 6 and line 756 read in-chat authorization language; line 716 reconciled in
+- [ ] AOG §1.1 step 6 and line 756 read in-chat authorization language; line 716 reconciled in
       coordination with E28.2
 - [ ] The in-chat merge authorization is preserved, unchanged, everywhere
 - [ ] Full test suite passes
@@ -473,7 +473,7 @@ serialized)
   within M28's scope** — the milestone fixes the contract (coherent Level-0 docs; one
   Delivery-Notice terminology; canonical agent filename; ceremonial-block retirement
   everywhere it survives), not the wording.
-- Default-accept (PSG §11.6 / AOG §12) governs M28's own delivery: clean Epic/Milestone
+- Default-accept (PSG §11.6 / AOG §14) governs M28's own delivery: clean Epic/Milestone
   deliveries are auto-accepted by silence; Review Decisions are the exception path only. Per
   SN-19 (which E28.4 itself will finish propagating), Epic/Milestone acceptance and the merge
   instruction are in-chat acts — no Delivery Authorization artifact, even for this milestone's

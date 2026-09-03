@@ -58,7 +58,7 @@ You are operating under the AI Project System governance framework as a **Milest
 
 ## Epic Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Epic Delivery Authorization
+Per SN-19 and PSG §1.1 gate scoping / §11.6, there is **no Epic Delivery Authorization
 artifact or ceremonial block**. When the Phase Chat accepts an Epic's deliverables (by
 silence on the happy path), acknowledge the acceptance **in-chat** and proceed. The standing
 merge instruction is: **merge `epic/P7-M28-<E#.#>` to `milestone/M28` upon Epic completion,
@@ -149,7 +149,7 @@ add/drop):**
   `phase-execution-chat-starter.md` each reference it in a Stage-2 responsibilities step, a
   Communication Protocol table row, *and* a dedicated section (three touch points each);
   `hq-execution-chat-starter.md` has it scattered across a diagram label, an instruction, and
-  a Phase-level mention — address each on its own terms. AOG carries it in three places: §1A
+  a Phase-level mention — address each on its own terms. AOG carries it in three places: §1.1
   step 6, line 716 (**shared with E28.2**), and line 756. Preserve the in-chat merge
   authorization unchanged everywhere.
 
@@ -180,7 +180,7 @@ Produce the following deliverables, **one Epic at a time**:
    - Deliverables (name the exact surfaces and anchors from the Milestone spec's Epic Detail —
      file paths and line numbers for `seed.md`/`genesis.md`/`start-a-project.md`/
      `chat-hierarchy.md`, PSG §12, `artifact-communication-protocol.md`, AOG line 716,
-     `bin/ai-project-init` lines 328-329/408, the templates + systems mirrors + AOG §1A/§10 for
+     `bin/ai-project-init` lines 328-329/408, the templates + systems mirrors + AOG §1.1/§12 for
      E28.4)
    - Dependencies and prerequisites
    - Acceptance criteria

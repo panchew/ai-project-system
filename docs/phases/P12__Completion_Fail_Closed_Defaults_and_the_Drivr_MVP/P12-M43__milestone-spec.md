@@ -533,7 +533,7 @@ of the **acknowledgment** rather than a new object.
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -587,7 +587,7 @@ flowchart TB
   E43.2 to the manual case and its **attendance presumption** (W3); `merge-authorization.md` is
   child-addressed structurally, making E43.1 a re-authoring rather than an edit (W4); and resume is
   **unwritten normatively** while Drivr has **no surface for either half** of the flip, making E43.4
-  greenfield across two repositories (W5). Proposed-track Structural diagram (AOG §16.3/§16.6),
+  greenfield across two repositories (W5). Proposed-track Structural diagram (AOG §17.3/§17.6),
   Mermaid, no ComfyUI.
 
 ---

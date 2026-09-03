@@ -936,7 +936,7 @@ evidence be collected early. It **closes late**, because its terminal epic waits
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -1007,7 +1007,7 @@ flowchart TB
   `claude-opus-5` has never been back-tested. **E41.5 now carries only what cleared the manual-surface
   rule — at most `creation` — past two gates** — `phase`, `milestone` and `epic_manual` are **one CFO-owned carry-forward under one trigger** after
   R6 upheld that F6's mechanism was never specific to a single row — **and on merge it arms at most
-  one fail-closed check, possibly none.** Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid,
+  one fail-closed check, possibly none.** Proposed-track Structural diagram (AOG §17.3/§17.6), Mermaid,
   no ComfyUI.
 
 ---

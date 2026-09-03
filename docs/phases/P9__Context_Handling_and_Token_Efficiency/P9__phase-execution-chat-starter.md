@@ -30,7 +30,7 @@ You are operating under the AI Project System governance framework as a **Phase 
   planning artifacts, and open a long-lived `phase/P9 → master` PR for HQ review on the first
   milestone. Not merged until the phase completes.
 - Stage 2: receive each Milestone Completion Notice; under the **SN-13 default-accept model**
-  (PSG §11.6 / AOG §12), accept a clean delivery by silence — issue a Review Decision only on
+  (PSG §11.6 / AOG §14), accept a clean delivery by silence — issue a Review Decision only on
   the exception path. Milestone merges land on `phase/P9`; when all milestones are closed,
   merge `phase/P9 → master` on HQ Accept via the **PSG §5C** canonical closure sequence,
   ending with the Phase Closure Declaration (Step 9). There is no separate phase-delivery

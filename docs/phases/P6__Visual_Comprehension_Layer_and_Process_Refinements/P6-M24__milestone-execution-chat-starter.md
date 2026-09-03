@@ -65,7 +65,7 @@ You are operating under the AI Project System governance framework as a **Milest
 
 **Phase context (from the P6 phase spec, SN-16, and the merged M23):**
 - **M23 is merged on `phase/P6`** (consolidation merge `24a36f6`). It delivered: by-link storage
-  (AOG §16.5, guide §4 — generated binaries are **referenced by link, never committed**) and the
+  (AOG §17.5, guide §4 — generated binaries are **referenced by link, never committed**) and the
   **§7 binding convention** in `governance/guides/visual-artifacts.md` — a five-element block
   (**Link + What / Level / State / Description**) with per-level homes (Creation → `seed.md`
   Rule 4; HQ → `genesis.md` HQ Context Packet; Phase/Milestone/Epic → a *Visual Bindings*
@@ -87,8 +87,8 @@ Epic's set at a time, in dependency order (E24.1 then E24.2); await acceptance b
 
 **Epic boundaries (the milestone spec fixes these; you may refine within M24's scope, not add/drop):**
 
-- **E24.1 — Proposed-vs-implemented comprehension behavior.** Establish in **AOG §16** (a new
-  subsection, e.g. §16.6) the expectation that every level produces **both** a *proposed* visual
+- **E24.1 — Proposed-vs-implemented comprehension behavior.** Establish in **AOG §17** (a new
+  subsection, e.g. §17.6) the expectation that every level produces **both** a *proposed* visual
   (before build) and an *implemented* visual (after) as the routine default when enabled —
   **"nothing is too much"**, **Structural-first** (most coverage is free Mermaid/PlantUML text).
   Add per-level *proposed/implemented* worked examples in the guide, each recorded as a §7
@@ -103,7 +103,7 @@ Epic's set at a time, in dependency order (E24.1 then E24.2); await acceptance b
   `bin/ai-project-visual --type video --workflow ...`) — **no new plumbing**. Document the
   **publish path** (YouTube/TikTok/IG/FB) as the **same hosted asset reused**, not a separate
   production (no pipeline, no hosting). State the **no-cross-cutting-reel** boundary. **Depends on
-  E24.1** and shares AOG §16 + the guide with it — execute E24.1 first; worktree (GH-2) on overlap.
+  E24.1** and shares AOG §17 + the guide with it — execute E24.1 first; worktree (GH-2) on overlap.
 
 **Resolved for this milestone — Open Design Question A:** **reference, not vendor.** The workflow
 JSONs + models are the generative request contract and stay **CFO-side**; the verified bundle at
@@ -139,7 +139,7 @@ E24.2)**:
    - Epic goals and scope
    - Definition of Done
    - Deliverables (name the exact surfaces and anchors from the Milestone spec's Epic Detail —
-     AOG §16, guide §5/§7, the LTX-Video reference bundle)
+     AOG §17, guide §5/§7, the LTX-Video reference bundle)
    - Dependencies and prerequisites
    - Acceptance criteria
 
@@ -191,7 +191,7 @@ Do NOT issue without explicit Phase Chat acceptance.
 
 - Treat the Milestone spec as the single source of truth for M24.
 - Produce Epic deliverables one Epic at a time; await acceptance before proceeding.
-- E24.1 before E24.2 (soft dependency + shared AOG §16 / guide); use a worktree (GH-2) on overlap.
+- E24.1 before E24.2 (soft dependency + shared AOG §17 / guide); use a worktree (GH-2) on overlap.
 - **Behavior, not schema:** keep both epics as *guidance that uses M23's §7 binding* — reference
   the schema documented once in guide §7; do not restate or redefine it, and do not regress by-link.
 - **No plumbing:** the helper and the LTX-Video path are unchanged; E24.2 references the verified

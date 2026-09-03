@@ -86,7 +86,7 @@ Epic's set at a time; await acceptance before proceeding to the next.
   by-link across **four named surfaces** and record the reversal in two changelogs:
   1. `governance/guides/visual-artifacts.md` — §4 "Output formats" prose, the §1 source-repo
      note, **and** the §5 worked-example `--output` paths (all imply commit today).
-  2. `governance/AI-OPERATING-GUIDELINES.md` §16.5 "What to commit, and where" (the "Generated
+  2. `governance/AI-OPERATING-GUIDELINES.md` §17.5 "What to commit, and where" (the "Generated
      artifacts … and committed" bullet + the source-repo bullet). AOG is at v2.2.0.
   3. `bin/ai-project-visual` **output guidance only** — docstring usage example + `--output`
      help text frame `--output` as a local working file to host and link, not commit. **No

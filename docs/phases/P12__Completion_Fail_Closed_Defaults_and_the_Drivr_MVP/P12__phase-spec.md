@@ -866,7 +866,7 @@ The CFO (Layer 8) will accept P12 complete when:
 - **A reachable engine** for M45 and M47. An engine now resolves in the sandbox (M40, reversing M38)
   on the **reverse** endpoint shape from B2.1; this remains the phase's most fragile assumption
 - **The hosted ComfyUI behind a fixed `ngrok` URL** — in spec as written; availability is explicitly
-  the CFO's responsibility. §16.4 already **fails closed** here, recording intent and deferring
+  the CFO's responsibility. §17.4 already **fails closed** here, recording intent and deferring
   rather than fabricating a render, and is a worked model for what P12 generalizes
 - **The escalation terminus** (SN-36/37 Carry-Over 1) — when a blocker reaches the CFO and he cannot
   resolve it there, nothing is above him and the corpus has no name for that state. Rare; P12 does

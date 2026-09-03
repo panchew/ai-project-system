@@ -146,7 +146,7 @@ required actions:
    SN-22). SN-21's carry-over items (MCP write path, volume/sweep cadence) stay out of scope —
    they belong to ai-project-system-mcp's roadmap and future triage respectively.
 
-**P8-GH-1 — stale opt-out prose (Medium).** AOG §16.5's source-repo sentence,
+**P8-GH-1 — stale opt-out prose (Medium).** AOG §17.5's source-repo sentence,
 `governance/guides/visual-artifacts.md` §1 note and §6, and any sibling remnant still describe
 this repo as opted out — contradicting the actual state since E29.2 (`enabled: true`, real
 passing endpoint test, opt-out env var for the no-endpoint case). Reconcile all of it.

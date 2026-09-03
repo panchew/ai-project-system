@@ -43,7 +43,7 @@ written into governance before anything gets built against it.
 
 ## Process Record
 
-Closure was recorded under the **SN-13 default-accept model** (PSG §11.6 / AOG §12): each
+Closure was recorded under the **SN-13 default-accept model** (PSG §11.6 / AOG §14): each
 milestone's delivery was independently re-verified by this Phase Chat — live suite re-runs,
 direct reads of both this repo's committed diffs and, for the cross-repo milestones (M33,
 M34), the target projects themselves (agent files, governance pins, `framework_version`

@@ -417,7 +417,7 @@ dependency chain)
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -433,7 +433,7 @@ flowchart LR
 - **Description:** M30's three-epic flow — capture real token data first, derive the audit
   report, policy, and `models:` refresh from it, and size context-load reduction by what the
   numbers show. E30.2's policy output is the binding-order link M31 consumes. Proposed-track
-  Structural diagram (AOG §16.3/§16.6).
+  Structural diagram (AOG §17.3/§17.6).
 
 ---
 
@@ -451,7 +451,7 @@ flowchart LR
 - **M30's output is M31's input.** The refreshed `models:` block is the mapping M31's
   manual-mode guardrail verifies against, and the recorded policy is what M31's agentic
   paid-vs-local logic applies. Deliver them as things another milestone can consume.
-- Default-accept (PSG §11.6 / AOG §12) governs this milestone's delivery: clean Epic/
+- Default-accept (PSG §11.6 / AOG §14) governs this milestone's delivery: clean Epic/
   Milestone deliveries are accepted by silence; a Review Decision is the exception path only.
   Per SN-19, acceptance and the merge instruction are in-chat acts — no ceremonial artifact.
   The harness enforces explicit human authorization on every merge regardless.

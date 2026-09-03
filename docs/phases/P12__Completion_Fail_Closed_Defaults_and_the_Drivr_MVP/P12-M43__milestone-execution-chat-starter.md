@@ -47,7 +47,7 @@ is the same circularity M42 refuses one tier down. Record `Execution Mode: manua
 section only** — §P12.3, §Milestones→M43, §Acceptance Criteria, §Dependencies; the `P12-GH-1`
 carry-forward note (full — it is E43.3's specification); PSG preamble+§1, §1A, §2, §5, §6, §7, §8,
 §9, §10, §11, §11.5, **§11.6 and §11.6.1 in full — they are this milestone's subject**, §12, §13C,
-§15; AOG preamble+§1, §1A, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §10, **§12**, §13, §14.
+§15; AOG preamble+§1, §1.1, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §12, **§14**, §15, §16.
 
 **Critical rules:**
 - Documentation is authoritative; chat is ephemeral.

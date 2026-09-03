@@ -155,8 +155,8 @@ Downward: each layer launches the layer below with a Chat Starter, and acknowled
 acceptance in-chat (SN-19 — no Delivery Authorization artifact; the standing merge
 instruction carries the same authority). Upward: each layer reports completion with a
 Completion Notice; a clean delivery is accepted by an acknowledgment that names the party that
-reviewed and accepted (silence accepts nothing — PSG §11.6 / AOG §12), and a Review Decision comes back
-only on the exception path (PSG §11.6 / AOG §12); after merge it produces a Delivery Notice.
+reviewed and accepted (silence accepts nothing — PSG §11.6 / AOG §14), and a Review Decision comes back
+only on the exception path (PSG §11.6 / AOG §14); after merge it produces a Delivery Notice.
 
 **Reference:** [`artifact-communication-protocol.md`](artifact-communication-protocol.md)
 defines every artifact schema. Storage convention:
