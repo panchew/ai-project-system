@@ -608,7 +608,7 @@ phase's proof.** Its schedule risk is other milestones' schedule risk.
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -666,7 +666,7 @@ flowchart TB
   (G1); inverting the merge test does **not** cover the approval bypass, which has **no test at all**
   (G2); and the blast radius is **six guides, seven other `bin/` scripts, seven test files and
   Drivr**, not three guides (G3). On closure M42 releases **both** M47 and M41's terminal epic.
-  Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid, no ComfyUI.
+  Proposed-track Structural diagram (AOG §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 

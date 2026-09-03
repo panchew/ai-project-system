@@ -148,7 +148,7 @@ A Completion Notice is a structured artifact that signals an Epic has finished a
    reviewed and accepted (the merge plus the in-chat
    acknowledgment is the acceptance record; no artifact; silence accepts nothing — PSG §11.6);
    issue a **Review Decision**
-   artifact only on the exception path (PSG §11.6 / AOG §12)
+   artifact only on the exception path (PSG §11.6 / AOG §14)
 4. **Aggregate** all Epic Completion Notices into a **Milestone Completion Notice** when all Epics are done
 
 ### Workflow
@@ -190,7 +190,7 @@ Clean? (DoD, acceptance criteria, spec all met)
 ### Issuing a Review Decision (exception path only)
 
 A Review Decision is issued **only when a delivery is not clean** — to reject it or to
-accept it with follow-up Epic(s) (PSG §11.6 / AOG §12). A clean delivery is accepted by an
+accept it with follow-up Epic(s) (PSG §11.6 / AOG §14). A clean delivery is accepted by an
 acknowledgment naming the party that reviewed and accepted (silence accepts nothing):
 the merge plus the in-chat acknowledgment is the acceptance record, and no artifact is
 produced. When you do issue one, use this template:
@@ -270,7 +270,7 @@ Then the parent Phase Chat reviews it — accepting a clean Milestone delivery b
 ## Acceptance Outcomes — Worked Examples (P4.1)
 
 A clean delivery is accepted **by an acknowledgment that names the party that reviewed and accepted** — no Review Decision is produced; the merge
-plus the in-chat acknowledgment is the acceptance record (PSG §11.6 / AOG §12; **silence accepts nothing**). A Review
+plus the in-chat acknowledgment is the acceptance record (PSG §11.6 / AOG §14; **silence accepts nothing**). A Review
 Decision is the binding **exception-path** artifact, issued only when a delivery is not
 clean. It is committed to the repository — a decision made only in chat is not
 authoritative. Use the template `governance/templates/review-decision.md`.

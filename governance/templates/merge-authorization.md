@@ -121,7 +121,7 @@ Delivery Notice, and stopped.
 
 - A Merge Authorization is only valid after **parent acceptance** of the delivery — by an
   acknowledgment naming the party that reviewed and accepted for a clean delivery, or an accepting **Review Decision** on the exception path
-  (PSG §11.6 / AOG §12). It does not replace the review — it records the act that acts
+  (PSG §11.6 / AOG §14). It does not replace the review — it records the act that acts
   on its outcome.
 - Only the parent that performed the merge may record a Merge Authorization. A child
   **never** holds merge authorization and **MUST NOT** merge its own branch — the parent

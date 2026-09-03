@@ -28,8 +28,8 @@ as mandatory automatic steps of closure, with no out-of-band Steering Note.
 | Milestone | Epics | Scope / gaps closed | PR | Merge commit |
 |-----------|-------|---------------------|-----|--------------|
 | M23 — By-Link Storage Model and Binding Convention | E23.1, E23.2 (2) | Reverse v5.0.0 commit-the-binary → **by-link** (no generated binaries in git); five-element **binding convention** (link + What/Level/State/Description) with per-level placement (guide §7) | #96 | `24a36f6` |
-| M24 — Comprehension Behavior and Clips | E24.1, E24.2 (2) | AOG §16.6 **proposed-vs-implemented** as the routine default (Structural-first, "nothing is too much"); AOG §16.7 + guide §8 **single-parent clips** on the verified LTX-Video path, publish-as-reuse | #99 | `7177e04` |
-| M25 — Process Refinements | E25.1–E25.6 (6) | PSG **§5C** canonical phase closure; **SN-13 default-accept codified** (PSG §11.6 / AOG §12) + reconciled framework-wide with Layer-8 review preserved; `ai-project-init` → tool-neutral **`.ai-project/agents/`** | #102 | `91dae8f` |
+| M24 — Comprehension Behavior and Clips | E24.1, E24.2 (2) | AOG §17.6 **proposed-vs-implemented** as the routine default (Structural-first, "nothing is too much"); AOG §17.7 + guide §8 **single-parent clips** on the verified LTX-Video path, publish-as-reuse | #99 | `7177e04` |
+| M25 — Process Refinements | E25.1–E25.6 (6) | PSG **§5C** canonical phase closure; **SN-13 default-accept codified** (PSG §11.6 / AOG §14) + reconciled framework-wide with Layer-8 review preserved; `ai-project-init` → tool-neutral **`.ai-project/agents/`** | #102 | `91dae8f` |
 
 **10 epics across 3 milestones.** Suite at delivery: **260 passed, 1 skipped** (the visual-artifact
 endpoint integration test, skipped by design at the repo default `enabled: false`). Governance at
@@ -71,14 +71,14 @@ delivery: **PSG v2.3.0**, **AOG v2.6.0**.
 - A **binding convention** (guide §7) records a link plus load-bearing metadata (What / Level /
   State / Description) with a defined placement at every level, so the record survives link rot.
 - **Proposed-vs-implemented** visuals are the documented routine default at every level (AOG
-  §16.6), Structural-first so generous coverage stays cheap.
-- **Clips** (AOG §16.7 + guide §8) are single-parent documentation that doubles as publishable
+  §17.6), Structural-first so generous coverage stays cheap.
+- **Clips** (AOG §17.7 + guide §8) are single-parent documentation that doubles as publishable
   media, produced on the verified LTX-Video path and published by reusing the same hosted asset.
 
 **Process refinements (M25):**
 - **Canonical phase closure** (PSG §5C) — README update, version bump, and git tag are mandatory
   automatic steps; no Steering Note required. This declaration is the first output of it.
-- **SN-13 default-accept codified** (PSG §11.6, AOG §12) and reconciled framework-wide across the
+- **SN-13 default-accept codified** (PSG §11.6, AOG §14) and reconciled framework-wide across the
   normative, reference/protocol/role/diagram, and templates tiers — with **Layer-8 human review
   preserved** (two gates, not one). The Bugfix Workflow and the CFO production
   `deployment-authorization` gate remain documented, deliberate exceptions.

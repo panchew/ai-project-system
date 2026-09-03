@@ -48,8 +48,8 @@ not a general ruling about local inference.**
 targeted section only** — §P12.2, §Milestones→M42, §Acceptance Criteria, §Dependencies; the
 `P12-GH-2` carry-forward note (full — it is short and it is E42.4's specification); PSG
 preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6, §12, §13C, §15; AOG preamble+§1,
-§1A, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §10, §12, §13, §14. Load on trigger: PSG §5B + AOG
-§3.4 at milestone-closure time; AOG §16 when a visual binding is due.
+§1.1, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §12, §14, §15, §16. Load on trigger: PSG §5B + AOG
+§3.4 at milestone-closure time; AOG §17 when a visual binding is due.
 
 **Critical rules:**
 - Documentation is authoritative; chat is ephemeral.

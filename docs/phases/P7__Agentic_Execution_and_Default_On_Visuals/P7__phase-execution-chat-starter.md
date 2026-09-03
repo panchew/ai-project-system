@@ -33,7 +33,7 @@ You are operating under the AI Project System governance framework as a **Phase 
   planning artifacts, and open a long-lived `phase/P7 → master` PR for HQ review. Not merged
   until Stage 2 completes.
 - Stage 2: receive Milestone Completion Notices; under the **SN-13 default-accept model**
-  (codified in P6 as PSG §11.6 / AOG §12), accept clean deliveries by silence — issue a
+  (codified in P6 as PSG §11.6 / AOG §14), accept clean deliveries by silence — issue a
   Review Decision only on the exception path. All milestone merges land on `phase/P7`; merge
   `phase/P7 → master` on HQ Accept via the **PSG §5C** canonical closure sequence; send Phase
   Delivery Notice.
@@ -147,7 +147,7 @@ vehicle — isolates the run from unrelated scope and keeps M26 independent of M
 **M27 — Visuals Default-On (SN-17)** — the four binding decisions as epics + the coexistence
 design task.
 
-- **E27.1 — Default-on flip + enforcement setting** (SN-17 decisions 1 & 4): AOG §16.1 opt-in →
+- **E27.1 — Default-on flip + enforcement setting** (SN-17 decisions 1 & 4): AOG §17.1 opt-in →
   default-on with opt-out; add the defaulted-true enforcement setting to the `visual_artifacts`
   block; reconcile `ai-project-yml-spec.md` §3.5, `governance/guides/visual-artifacts.md`, the
   spec templates' Visual Bindings sections, and agent definitions.
@@ -180,7 +180,7 @@ design task.
   E25.6-shaped. Remove the Delivery Authorization sections + their Completion-Requirements lines
   from both starter **templates** and the `governance/systems/` **mirrors**
   (milestone/phase/hq); fold the merge instruction into each starter's execution instructions;
-  reword AOG §1A step 6 + the two §10 bullets to in-chat authorization language. **Preserve the
+  reword AOG §1.1 step 6 + the two §12 bullets to in-chat authorization language. **Preserve the
   in-chat merge authorization unchanged** (retire the artifact, not the authorization). The live
   P7 phase starter is already amended (this document); the live **M26 milestone starter** carries
   the same block — sweep it as a mid-flight amendment (GH-9) when planning M28.

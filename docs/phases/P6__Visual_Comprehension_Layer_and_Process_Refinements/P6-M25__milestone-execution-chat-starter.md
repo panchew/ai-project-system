@@ -62,7 +62,7 @@ You are operating under the AI Project System governance framework as a **Milest
 
 **Governance document versions in use:**
 - PROJECT-SYSTEM-GUIDELINES.md: v2.1.0
-- AI-OPERATING-GUIDELINES.md: v2.5.0 *(M23→v2.3.0 by-link; M24→v2.4.0 §16.6, v2.5.0 §16.7)*
+- AI-OPERATING-GUIDELINES.md: v2.5.0 *(M23→v2.3.0 by-link; M24→v2.4.0 §17.6, v2.5.0 §17.7)*
 
 **Phase context:**
 - M23 and M24 are **merged on `phase/P6`** (consolidation merges `24a36f6`, `7177e04`). **M25 is

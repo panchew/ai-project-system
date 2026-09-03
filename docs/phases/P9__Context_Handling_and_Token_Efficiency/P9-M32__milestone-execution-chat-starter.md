@@ -15,7 +15,7 @@ You are operating under the AI Project System governance framework as a **Milest
 **Authoritative governance documents:**
 - [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v2.3.0
 - [AI-OPERATING-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/AI-OPERATING-GUIDELINES.md) v2.10.0 — verify the versions in force
-  on `phase/P9` at session start; E32.3 itself edits AOG §16.5, so re-check the version
+  on `phase/P9` at session start; E32.3 itself edits AOG §17.5, so re-check the version
   after that epic lands before quoting section numbers in later epics.
 
 **Governance hierarchy (for this session):**
@@ -69,10 +69,10 @@ You are operating under the AI Project System governance framework as a **Milest
 - Load at session start: this starter; the Milestone spec (full); the Phase spec **by
   targeted section only** — §P9.3 and the M32 entry in §Milestones plus the phase
   §Acceptance Criteria, not the whole document; PSG preamble+§1, §1A, §2, §5, §6, §7, §8,
-  §9, §10, §11, §11.5, §11.6, §12, §13C, §15; AOG preamble+§1, §1A, §2, §3.7, §3.9, §3.10,
-  §4, §5, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
+  §9, §10, §11, §11.5, §11.6, §12, §13C, §15; AOG preamble+§1, §1.1, §2, §3.7, §3.9, §3.10,
+  §4, §5, §6, §7, §9, §12, §14, §15 (Exit Ritual), §16 (Error Handling)
 - Load on trigger (before acting on that situation): PSG §5B + AOG §3.4 at milestone-closure
-  time; PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §11, §16 (visual bindings due)
+  time; PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §13, §17 (visual bindings due)
 - Do not load: PSG/AOG changelogs, other levels' role or starter-format sections, sibling
   specs
 - Use targeted section reads; never re-read a whole document to reach one section. PSG and
@@ -116,7 +116,7 @@ Do NOT proceed to execution or merge without Phase Chat acceptance.
   the existing read-only MCP bridge. Two artifact types are already in field use —
   `system_request` and `system_response` — following the Artifact Communication Protocol's
   existing rules. HQ's triage decision: canonize now, in P9 (not observe-and-wait).
-- **P8 carry-forwards, both confirmed still live at planning time:** P8-GH-1 (AOG §16.5 +
+- **P8 carry-forwards, both confirmed still live at planning time:** P8-GH-1 (AOG §17.5 +
   `visual-artifacts.md` still describe this repo as opted out of `visual_artifacts`,
   contradicting `enabled: true` since E29.2) and P8-GH-3 (six pre-P9 documents still use
   the vestigial "Phase Delivery Notice" phrase; the P8 closure declaration's own occurrence
@@ -172,7 +172,7 @@ add/drop):**
   outside the per-project template set) — System HQ is explicitly not a per-project chat,
   so weigh that when choosing. Must not touch E31.3's guardrail instruction already present
   in `genesis.md`/`seed.md` if this epic's Coding Agent works in that file.
-- **E32.3 — Governance hygiene reconciliation.** P8-GH-1: AOG §16.5's "stays opted out
+- **E32.3 — Governance hygiene reconciliation.** P8-GH-1: AOG §17.5's "stays opted out
   because..." framing removed and replaced with the accurate current state;
   `visual-artifacts.md`'s stale callout (~line 48) and §6 (~line 360) both corrected for
   this repo while preserving §6's still-accurate general no-live-endpoint guidance for

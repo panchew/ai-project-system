@@ -83,8 +83,8 @@ You are operating under the AI Project System governance framework as a **Phase 
   and you escalate to HQ Chat; silent fourth attempts are a governance violation.
 
 **Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
-- Load at session start: this starter; the Phase spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6, §12, §13B, §13D; AOG preamble+§1, §1A, §2, §3.6, §3.9, §3.10, §4, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)
-- Load on trigger (before acting on that situation): PSG §5B + AOG §3.4/§3.7 during a milestone's closure; PSG §5C at phase-closure time; PSG §3, §8A, §14A, §14C, §18; AOG §8, §11, §16
+- Load at session start: this starter; the Phase spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6, §12, §13B, §13D; AOG preamble+§1, §1.1, §2, §3.6, §3.9, §3.10, §4, §6, §7, §9, §12, §14, §15 (Exit Ritual), §16 (Error Handling)
+- Load on trigger (before acting on that situation): PSG §5B + AOG §3.4/§3.7 during a milestone's closure; PSG §5C at phase-closure time; PSG §3, §8A, §14A, §14C, §18; AOG §8, §13, §17
 - Do not load: PSG/AOG changelogs, other levels' role or starter-format sections; milestone/epic specs except by targeted section during review
 - Use targeted section reads; never re-read a whole document to reach one section. PSG and AOG remain fully authoritative — a triggered situation requires its section loaded before acting.
 

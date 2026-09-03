@@ -63,7 +63,7 @@ example of GH-3 (scope routing) and GH-8 (adjacency) working as designed.
   Step 0 (seed.md) in `start-a-project.md`; platform-agnostic `.ai-project/agents/`
   convention; integration guides for Claude Code, Cursor, Windsurf, and Copilot.
 - **Visual artifacts:** `visual_artifacts` block in `.ai-project.yml` spec and schema
-  tests; AOG §16 per-level production guidance; `seed.md` Rule 4 visual intent
+  tests; AOG §17 per-level production guidance; `seed.md` Rule 4 visual intent
   elicitation; `bin/ai-project-visual` ComfyUI helper; `governance/guides/visual-artifacts.md`;
   skip-on-disabled integration test.
 

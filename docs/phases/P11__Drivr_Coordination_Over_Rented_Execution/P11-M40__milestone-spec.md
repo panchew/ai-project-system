@@ -417,7 +417,7 @@ E40.5 is small but **positionally binding**.
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -455,7 +455,7 @@ flowchart TB
   `undetermined` or a wrong `did-not-complete`, never a positive verdict, so a scheduler consuming it
   as-is escalates every run. The Hard Constraint binds all five: **the last milestone's drift is
   declaring rather than measuring.** On completion, `is_final: true` triggers PSG §5C's nine-step
-  phase closure. Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid, no ComfyUI.
+  phase closure. Proposed-track Structural diagram (AOG §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 
@@ -473,6 +473,6 @@ flowchart TB
 - **E40.5 is small, positionally binding, and the most overdue item in the phase.** P9-GH-1 has been
   open since P9; it now has a dated instance in which the framework did not catch what a human did.
 - **`is_final: true` changes the closure obligation**, not the review model. Default-accept still
-  governs delivery (PSG §11.6 / AOG §12); acceptance and merge instruction remain **in-chat acts**
+  governs delivery (PSG §11.6 / AOG §14); acceptance and merge instruction remain **in-chat acts**
   (SN-19); the harness still enforces human merge authorization; and **merge authorization for a child
   PR belongs in the Phase Chat's Stage-2 review** — which is E40.5's own subject.

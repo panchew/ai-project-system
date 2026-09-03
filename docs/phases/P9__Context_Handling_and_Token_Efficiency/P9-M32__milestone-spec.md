@@ -84,7 +84,7 @@ Three verified gaps, confirmed against current repository state and the SN-21 fi
   Chat's Genesis seed. SN-21 names this explicitly as a concrete requirement, confirmed by
   the CFO.
 - **Two P8 documentation debts are unresolved, both grep-verified still live:**
-  - AOG §16.5 (lines ~948–953) still states this repo's `visual_artifacts.enabled: false`
+  - AOG §17.5 (lines ~948–953) still states this repo's `visual_artifacts.enabled: false`
     is the current state and explains why — contradicting E29.2's actual flip to
     `enabled: true` with a real passing endpoint test. `governance/guides/visual-artifacts.md`
     carries the same stale claim (line ~48's callout) plus a §6 framing (line ~360) that
@@ -149,7 +149,7 @@ This milestone explicitly does **not**:
   placement decision; normative authority-boundary statement.
 - **E32.2** — System Chat re-instantiation seed: the daily-spawn artifact, Genesis-seed
   analogue, its home decided and documented.
-- **E32.3** — Governance hygiene reconciliation: P8-GH-1 (AOG §16.5 +
+- **E32.3** — Governance hygiene reconciliation: P8-GH-1 (AOG §17.5 +
   `visual-artifacts.md`) and P8-GH-3 (vestigial phrase purge across pre-P9 docs and
   templates); P8-GH-2's deferred-with-trigger status restated, not resolved.
 
@@ -302,7 +302,7 @@ contention — record the call either way.
 triage (both Into P9, routed to M32).
 
 **Grounding — P8-GH-1 (Medium), confirmed still live at M32 planning time:**
-- `governance/AI-OPERATING-GUIDELINES.md` §16.5 (~lines 948–953): "It stays opted out
+- `governance/AI-OPERATING-GUIDELINES.md` §17.5 (~lines 948–953): "It stays opted out
   because `bin/ai-project-visual`'s `--type diagrams` is a ComfyUI-generative call in the
   current implementation... enabling the capability here would require a live endpoint the
   suite doesn't [have]" — contradicts `.ai-project.yml`'s actual `enabled: true` since
@@ -324,7 +324,7 @@ not purged. **P9's own documents need no edit** — verified clean at planning t
 occurrence in P9 docs is a discussion of the carry-forward item in quotes).
 
 **Deliverables:**
-1. AOG §16.5 updated to state the current, accurate status (`enabled: true`, real passing
+1. AOG §17.5 updated to state the current, accurate status (`enabled: true`, real passing
    endpoint test since E29.2) — remove the "stays opted out because" framing entirely.
 2. `governance/guides/visual-artifacts.md` line ~48's callout and §6 both updated to match
    current reality for this repo, while preserving §6's still-accurate general guidance for
@@ -385,7 +385,7 @@ further milestone to plan.
   - `governance/templates/genesis.md` / `governance/templates/seed.md` (System Chat seed
     reference pattern; already carry E31.3's guardrail instruction — E32.2 must preserve
     it)
-  - `governance/AI-OPERATING-GUIDELINES.md` §16.5 and `governance/guides/
+  - `governance/AI-OPERATING-GUIDELINES.md` §17.5 and `governance/guides/
     visual-artifacts.md` (P8-GH-1 edit targets)
   - The six pre-P9 documents named in E32.3's grounding (P8-GH-3 edit targets) and the P8
     phase closure declaration (preserve, do not edit)
@@ -455,7 +455,7 @@ surface disjointness, minimal dependency chain)
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -474,7 +474,7 @@ flowchart LR
 - **Description:** M32's flow — canonize the system participant and its seed as one
   reference-linked pair, with governance hygiene running independently in parallel since
   its surfaces don't overlap. M32's closure is the final P9 milestone gate before phase
-  delivery. Proposed-track Structural diagram (AOG §16.3/§16.6).
+  delivery. Proposed-track Structural diagram (AOG §17.3/§17.6).
 
 ---
 
@@ -499,7 +499,7 @@ flowchart LR
   checks to pass before P9 can close.
 - Reference-first applies to this milestone's own workflow (AOG §3.1.1 v2.10.0, E30.4): all
   deliveries by reference, producer no-echo, consumer selective-read.
-- Default-accept (PSG §11.6 / AOG §12) governs this milestone's delivery: clean deliveries
+- Default-accept (PSG §11.6 / AOG §14) governs this milestone's delivery: clean deliveries
   accepted by silence; Review Decision is the exception path. Per SN-19, acceptance and
   merge instruction are in-chat acts; the harness enforces explicit human authorization on
   every merge regardless.

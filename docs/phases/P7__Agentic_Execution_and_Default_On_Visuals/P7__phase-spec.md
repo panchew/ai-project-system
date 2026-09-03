@@ -97,7 +97,7 @@ criterion, not an optional follow-up.
 Flip visual production from opt-in to the default lens, per SN-17's four binding decisions
 (carried into P7 unchanged by SN-18):
 
-1. **Default-on with an explicit opt-out.** AOG §16.1 flips from opt-in to default-on;
+1. **Default-on with an explicit opt-out.** AOG §17.1 flips from opt-in to default-on;
    `visual_artifacts.enabled: false` is the opt-out. Reconcile `ai-project-yml-spec.md` §3.5,
    `governance/guides/visual-artifacts.md`, the spec templates' Visual Bindings sections, and
    the agent definitions.
@@ -142,7 +142,7 @@ and visual work.
   default-accept reconciliation. PSG §1A gate-scoping (under §11.6) already demoted delivery
   authorization to an **in-chat act — no artifact** on the happy path, but the artifact-shaped
   blocks persist in both starter templates, the `governance/systems/` mirrors
-  (milestone/phase/hq execution-chat-starter), and AOG §1A step 6 + the two §10 enforcement
+  (milestone/phase/hq execution-chat-starter), and AOG §1.1 step 6 + the two §12 enforcement
   bullets. A docs-only reconciliation (E25.6-shaped): **retire the ceremonial block; preserve
   the in-chat merge authorization unchanged** (the CFO still says "merge it"; the harness
   enforces human merge authorization regardless). Fold the load-bearing **merge instruction**
@@ -213,7 +213,7 @@ acceptance.
 Ollama+ComfyUI coexistence as a design task within.
 
 **Indicative Epics:**
-- **E27.1 — Default-on flip + enforcement setting** (decisions 1 & 4) — AOG §16.1 opt-in →
+- **E27.1 — Default-on flip + enforcement setting** (decisions 1 & 4) — AOG §17.1 opt-in →
   default-on with opt-out; add the defaulted-true enforcement setting to the `visual_artifacts`
   block; reconcile spec §3.5, guide, templates, agent definitions.
 - **E27.2 — Structural-first + trigger-set behavior** (decisions 2 & 3) — codify structural-first
@@ -238,8 +238,8 @@ in parallel with M27 at the Phase Chat's discretion.
   E25.6-shaped. Remove the Delivery Authorization sections and their Completion-Requirements
   checklist lines from both starter **templates** (`governance/templates/{milestone,phase}-execution-chat-starter.md`)
   and the `governance/systems/` **mirrors** (milestone/phase/hq execution-chat-starter); fold
-  the load-bearing merge instruction into each starter's execution instructions. Reword AOG §1A
-  step 6 and the two §10 enforcement bullets to the in-chat authorization language PSG §1A
+  the load-bearing merge instruction into each starter's execution instructions. Reword AOG §1.1
+  step 6 and the two §12 enforcement bullets to the in-chat authorization language PSG §1A
   gate-scoping already uses (authorization preserved; artifact retired). The live P7 phase
   starter is already amended (HQ, GH-9); the M26 milestone starter is the Phase Chat's to sweep.
 
@@ -255,7 +255,7 @@ in parallel with M27 at the Phase Chat's discretion.
 2. ✅ **The `04_epic.json` mock trigger is retired** and `epic_dev` is off `llama3:8b`
 3. ✅ **The cross-repo hand-back is complete** — the run's transcript is accepted in
    `local-agent-runner`'s P2-M3 Milestone Chat (AE-1 exit criterion)
-4. ✅ **Visuals are default-on with an opt-out** — AOG §16.1 flipped; structural-first at zero
+4. ✅ **Visuals are default-on with an opt-out** — AOG §17.1 flipped; structural-first at zero
    infra; automatic for specs + delivery/closure declarations; enforcement setting present and
    defaulted true; spec §3.5 / guide / templates / agent defs reconciled
 5. ✅ **Coexistence is designed** — a documented GPU/VRAM scheduling design for Ollama+ComfyUI
@@ -265,7 +265,7 @@ in parallel with M27 at the Phase Chat's discretion.
 7. ✅ **Delivery-Notice ordering reconciled** (P6-GH-14) and **`ai-project-init` installs the
    canonical agent file** (P6-GH-15)
 8. ✅ **Delivery Authorization ceremonial block retired** (P7-GH-17) — gone from the starter
-   templates, the `governance/systems/` mirrors, and AOG §1A/§10; the in-chat merge
+   templates, the `governance/systems/` mirrors, and AOG §1.1/§12; the in-chat merge
    authorization preserved unchanged
 
 ---
@@ -287,7 +287,7 @@ The CFO (Layer 8) will accept P7 complete when:
   contradict each other on the Level-0 handoff; an HQ starter template is in `templates/`
 - [ ] `bin/ai-project-init` installs `governance.agent.md`
 - [ ] No Delivery Authorization ceremonial block remains in the starter templates,
-  `governance/systems/` mirrors, or AOG §1A/§10; each starter still carries the merge
+  `governance/systems/` mirrors, or AOG §1.1/§12; each starter still carries the merge
   instruction as an in-chat act
 
 ---
@@ -336,7 +336,7 @@ The CFO (Layer 8) will accept P7 complete when:
 - GitHub issues [#111](https://github.com/panchew/ai-project-system/issues/111) (P7-AE-1),
   [#110](https://github.com/panchew/ai-project-system/issues/110) (P7-GH-16)
 - `bin/ai-project-orchestrator` — Agentic Mode (proven, dev/QA previously mocked)
-- `governance/AI-OPERATING-GUIDELINES.md` §16.1 — opt-in policy to flip to default-on
+- `governance/AI-OPERATING-GUIDELINES.md` §17.1 — opt-in policy to flip to default-on
 - `governance/guides/visual-artifacts.md`, `governance/ai-project-yml-spec.md` §3.5
 
 ### Ratified Decisions (settled — NOT for re-debate)
@@ -358,4 +358,4 @@ The CFO (Layer 8) will accept P7 complete when:
 | Version | Date | Change |
 |---------|------|--------|
 | 1.0.0 | 2026-07-12 | Initial P7 phase spec. Three milestones (M26–M28), ~8–9 Epics. Agentic execution (first real run, P7-AE-1) + default-on visuals (SN-17) + governance reconciliations (P7-GH-16, P6-GH-14, P6-GH-15). Scoped by SN-18 on the HQ ruling (2026-07-11) and SN-17; AE-1 fixed as milestone one with a cross-repo E3.2 acceptance exit criterion. |
-| 1.1.0 | 2026-07-12 | Mid-flight amendment (GH-9) accepting **SN-19**: added **E28.4 (P7-GH-17)** to M28 — retire the Delivery Authorization ceremonial block (SN-13 missed reconciliation) across starter templates, `governance/systems/` mirrors, and AOG §1A/§10, preserving the in-chat merge authorization. Live P7 phase-execution starter amended at the same time (HQ, GH-9). M28 now 4 epics. |
+| 1.1.0 | 2026-07-12 | Mid-flight amendment (GH-9) accepting **SN-19**: added **E28.4 (P7-GH-17)** to M28 — retire the Delivery Authorization ceremonial block (SN-13 missed reconciliation) across starter templates, `governance/systems/` mirrors, and AOG §1.1/§12, preserving the in-chat merge authorization. Live P7 phase-execution starter amended at the same time (HQ, GH-9). M28 now 4 epics. |

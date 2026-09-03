@@ -11,7 +11,7 @@ version: 1.0.0
 
 ## Executive Summary
 
-P5 shipped the visual-artifacts **framework** (the `visual_artifacts` block, AOG §16,
+P5 shipped the visual-artifacts **framework** (the `visual_artifacts` block, AOG §17,
 `bin/ai-project-visual`, `governance/guides/visual-artifacts.md`) — inert, `enabled: false`.
 The CFO has since delivered and **verified end-to-end** the producer side: three
 API-format ComfyUI workflows (FLUX-schnell, SDXL/Juggernaut-XL, LTX-Video 2B) driven
@@ -84,7 +84,7 @@ The reconciliation must touch **all four** of these surfaces, named explicitly:
 1. `governance/guides/visual-artifacts.md` — §4 (Output formats: the `.ai-project/visuals/...`
    path and "commit the generated file together with the artifact" instruction) and the §1
    source-repo note
-2. `governance/AI-OPERATING-GUIDELINES.md` §16.5 ("What to commit, and where" — the
+2. `governance/AI-OPERATING-GUIDELINES.md` §17.5 ("What to commit, and where" — the
    "Generated artifacts are written under … and committed" bullet)
 3. `bin/ai-project-visual` output guidance — clarify that `--output` writes a **local
    working file** to be hosted and linked, not committed (see Open Design Question B)
@@ -119,7 +119,7 @@ Make proposed-vs-implemented visuals **routinely happen** at every level. The fr
 already splits **Structural** (Mermaid/PlantUML — text, free, no endpoint; carries most
 architecture/scope/component/flow diagrams) from **Generative** (ComfyUI — concept/vision
 imagery, infographics, mockups, clips). Generous coverage is cheap precisely because most
-of it is Structural. Deliverables: AOG §16 guidance establishing the two-track expectation
+of it is Structural. Deliverables: AOG §17 guidance establishing the two-track expectation
 as the default at every level, per-level examples of what "proposed" and "implemented"
 look like, tied to the M23 binding convention.
 
@@ -207,7 +207,7 @@ link + metadata binding convention that becomes load-bearing under by-link.
 
 **Indicative Epics** (the Milestone Chat owns final epic planning):
 - **E23.1 — By-link storage reconciliation** (P6-VC-1) — the explicit reversal across all
-  four named surfaces (guide §4/§1, AOG §16.5, helper output guidance, integration test);
+  four named surfaces (guide §4/§1, AOG §17.5, helper output guidance, integration test);
   flagged in changelogs as a reversal of v5.0.0 shipped guidance. Resolves Open Design
   Question B.
 - **E23.2 — Link + metadata binding convention** (P6-VC-2) — binding schema (link + what /
@@ -221,7 +221,7 @@ single-parent documentation that doubles as publishable media. Depends on M23's 
 convention.
 
 **Indicative Epics:**
-- **E24.1 — Proposed-vs-implemented comprehension behavior** (P6-VC-3) — AOG §16 two-track
+- **E24.1 — Proposed-vs-implemented comprehension behavior** (P6-VC-3) — AOG §17 two-track
   expectation as default; Structural-first generous coverage; per-level proposed/implemented
   examples bound via the M23 convention.
 - **E24.2 — Clips as documentation + publishable media** (P6-VC-4) — single-parent clip
@@ -248,12 +248,12 @@ convention.
 ### P6 is Complete When:
 
 1. ✅ **By-link storage is the framework default** — the four named surfaces (guide §4/§1,
-   AOG §16.5, helper output guidance, integration test) all describe by-link; no instruction
+   AOG §17.5, helper output guidance, integration test) all describe by-link; no instruction
    to commit generated binaries remains; the reversal is recorded in the AOG and guide
    changelogs
 2. ✅ **The binding convention is documented and load-bearing** — a visual binding records
    what / level / proposed-vs-implemented / description, with a defined placement per level
-3. ✅ **Proposed-vs-implemented coverage is the documented default** — AOG §16 directs every
+3. ✅ **Proposed-vs-implemented coverage is the documented default** — AOG §17 directs every
    level to track both tracks, Structural-first, "nothing is too much"
 4. ✅ **A clip is single-parent and reusable** — the clip convention binds one node, produces
    from the verified LTX-Video path, and defines the publish path as the same asset reused
@@ -268,12 +268,12 @@ convention.
 
 The CFO (Layer 8) will accept P6 complete when:
 
-- [ ] `governance/guides/visual-artifacts.md` and AOG §16.5 instruct referencing visuals by
+- [ ] `governance/guides/visual-artifacts.md` and AOG §17.5 instruct referencing visuals by
   link and explicitly state no generated binaries are committed to git
 - [ ] The integration test no longer expects a committed binary under `.ai-project/visuals/`
 - [ ] A documented binding schema shows how a link + metadata attaches to an artifact at each
   level
-- [ ] AOG §16 directs an agent to produce both a *proposed* and an *implemented* visual for
+- [ ] AOG §17 directs an agent to produce both a *proposed* and an *implemented* visual for
   its level when `visual_artifacts.enabled: true`
 - [ ] The clip convention is documented as single-parent with a defined publish path
 - [ ] The phase-closure process lists README update, version bump, and tag as mandatory steps
@@ -318,7 +318,7 @@ The CFO (Layer 8) will accept P6 complete when:
 - `.ai-project/artifacts/reference/comfyui-endpoint/` — verified ComfyUI contract (3 workflows + endpoint doc)
 - `docs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5__phase-closure-declaration.md` — carry-forwards GH-10, GH-11
 - `governance/guides/visual-artifacts.md` — §4 / §1 storage guidance to RECONCILE to by-link
-- `governance/AI-OPERATING-GUIDELINES.md` §16.5 — commit guidance to RECONCILE to by-link
+- `governance/AI-OPERATING-GUIDELINES.md` §17.5 — commit guidance to RECONCILE to by-link
 - `bin/ai-project-visual` — the verified ComfyUI helper (plumbing — already done)
 - `governance/systems/chat-hierarchy.md` — Level 0–4 definition
 

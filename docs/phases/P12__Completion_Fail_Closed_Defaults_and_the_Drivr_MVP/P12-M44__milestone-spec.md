@@ -456,7 +456,7 @@ number** (`13` and `14` each appear twice) **or by title** (two sections are bot
    fences.** The inventory is a deliverable in its own right and precedes any edit.
 2. **Sections renumbered `1..n`**, no duplicate number, no duplicate title.
 3. **The cross-reference sweep**, corpus-wide, **distinguishing a citation from an example.** `§11.6`,
-   `§11.6.1`, `§5C`, `§16.3` are cited across the corpus, the starters and multiple rulings. **A
+   `§11.6.1`, `§5C`, `§17.3` are cited across the corpus, the starters and multiple rulings. **A
    reference inside a quoted example is not a cross-reference.**
 4. **An AOG version bump** and a changelog row. **Ruled explicitly not a hotfix** — a change that
    silently invalidates citations is worse than the defect.
@@ -597,7 +597,7 @@ estimate**
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -656,7 +656,7 @@ flowchart TB
   documents against a recorded ten (X2); the HQ ritual is **recording** while the handoff is **design**
   (X3); G1/G2 are confirmed trapped in epic-tier artifacts (X4). **`P12-GH-3` is deliberately excluded
   and shown as such**, because absorbing it would ship `P12-GH-1`'s defect inside the phase that fixes
-  it. Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid, no ComfyUI.
+  it. Proposed-track Structural diagram (AOG §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 

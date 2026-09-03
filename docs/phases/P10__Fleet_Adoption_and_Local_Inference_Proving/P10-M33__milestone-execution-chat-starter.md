@@ -63,10 +63,10 @@ Milestone P10-M33.
 - Load at session start: this starter; the Milestone spec (full); the Phase spec **by targeted
   section only** — M33's entry in §Milestones plus the phase §Acceptance Criteria, not the
   whole document; PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6, §12,
-  §13C, §15; AOG preamble+§1, §1A, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §10, §12, §13
-  (Exit Ritual), §14 (Error Handling).
+  §13C, §15; AOG preamble+§1, §1.1, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §12, §14, §15
+  (Exit Ritual), §16 (Error Handling).
 - Load on trigger (before acting on that situation): PSG §5B + AOG §3.4 at milestone-closure
-  time; PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §11, §16 (visual bindings due).
+  time; PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §13, §17 (visual bindings due).
 - Do not load: PSG/AOG changelogs, other levels' role or starter-format sections, sibling specs
   (M34/M35).
 - Use targeted section reads; never re-read a whole document to reach one section. PSG and AOG
