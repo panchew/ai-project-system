@@ -170,7 +170,7 @@ Windsurf, or GitHub Copilot).
 The HQ Chat becomes the **strategic control plane** for the project:
 - Defines Phases, Milestones, and Epics
 - Produces Epic specs and Epic Execution Chat Starters
-- Accepts clean deliveries by silence (a Review Decision is the exception path only — PSG §11.6) and issues Delivery Authorizations
+- Accepts clean deliveries by an acknowledgment that names the party that reviewed and accepted (a Review Decision is the exception path only — PSG §11.6; silence accepts nothing) and issues Delivery Authorizations
 - Never executes code
 
 ---
@@ -207,4 +207,5 @@ A project is started when **intent, structure, and governance are explicit**.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** The HQ Chat duties list's accept-clean-deliveries line reconciled to the amended PSG §11.6: acceptance is by an **in-chat acknowledgment that names the party that reviewed and accepted** — silence accepts nothing. |
 | 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/start-a-project.md`. |

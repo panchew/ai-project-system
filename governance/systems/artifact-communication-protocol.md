@@ -1,8 +1,8 @@
 ---
 type: system
 status: active
-effective_date: 2026-05-29
-version: 1.4.1
+effective_date: 2026-09-02
+version: 1.5.0
 ---
 
 # Artifact Communication Protocol (P4.1)
@@ -29,9 +29,9 @@ This document defines the canonical artifact formats and communication rules for
 1. **Artifact-First Communication** — Every chat-to-chat handoff uses one of the canonical artifacts
 2. **Frontmatter + Body** — YAML frontmatter for machine parsing, markdown body for human context
 3. **Reference Integrity** — Every artifact includes parent_id, child_id, epic_id, milestone_id, phase_id as appropriate
-4. **One Way Per Direction** — Delivery Notice flows up at execution completion; a Review Decision flows down only on the exception path (a clean delivery is accepted by silence — PSG §11.6 / AOG §12)
+4. **One Way Per Direction** — Delivery Notice flows up at execution completion; a Review Decision flows down only on the exception path (a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted — silence accepts nothing — PSG §11.6 / AOG §12)
 5. **Immutability** — Once an artifact is created, it is archived; modifications create a new versioned artifact
-6. **Terminal States** — A chat declares completion via its Delivery Notice, the parent accepts a clean delivery by silence (merge + in-chat acknowledgment) and rejects or accepts-with-follow-ups via artifact on the exception path (PSG §11.6); no further artifact is produced in the standard flow after merge
+6. **Terminal States** — A chat declares completion via its Delivery Notice, the parent accepts a clean delivery by an acknowledgment that names the party that reviewed and accepted (merge + in-chat acknowledgment; silence accepts nothing) and rejects or accepts-with-follow-ups via artifact on the exception path (PSG §11.6); no further artifact is produced in the standard flow after merge
 
 ---
 
@@ -43,7 +43,7 @@ This document defines the canonical artifact formats and communication rules for
 
 **Direction:** Upward (child → parent)
 
-**Purpose:** Signal readiness for parent acceptance. The parent accepts a clean delivery by silence; it issues a Review Decision (Reject, or Accept with follow-up Epics) only on the exception path (PSG §11.6 / AOG §12).
+**Purpose:** Signal readiness for parent acceptance. The parent accepts a clean delivery by an acknowledgment naming the party that reviewed and accepted (silence accepts nothing); it issues a Review Decision (Reject, or Accept with follow-up Epics) only on the exception path (PSG §11.6 / AOG §12).
 
 #### Structure
 
@@ -95,7 +95,7 @@ pr_details:
 This Epic is complete and submitted for <Milestone|Phase|HQ> Chat review and acceptance.
 
 **Next Action:** Parent Chat reviews this artifact. Then (PSG §11.6):
-- **Clean delivery** → accepted by silence (merge + in-chat acknowledgment; no artifact)
+- **Clean delivery** → accepted by an acknowledgment naming the party that reviewed and accepted (merge + in-chat acknowledgment; no artifact; silence accepts nothing)
 - **Not clean** → exception-path **Review Decision** (Reject → rework, or Accept with follow-up Epics)
 ```
 
@@ -168,7 +168,7 @@ This Epic is complete and submitted for Milestone Chat review and acceptance.
 
 ### 2. Review Decision (Milestone → Epic, Phase → Milestone, HQ → Phase) — exception path
 
-**Trigger:** Parent reviews a Delivery Notice and finds the delivery **not clean**. This is the exception path (PSG §11.6 / AOG §12): a clean delivery is accepted by silence — the merge plus the in-chat acknowledgment is the acceptance record — and produces no Review Decision.
+**Trigger:** Parent reviews a Delivery Notice and finds the delivery **not clean**. This is the exception path (PSG §11.6 / AOG §12): a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted — the merge plus the in-chat acknowledgment is the acceptance record, silence accepts nothing — and produces no Review Decision.
 
 **Direction:** Downward (parent → child)
 
@@ -209,7 +209,8 @@ authorization:
 
 ## Authorization
 <If ACCEPT:>
-You are authorized to merge this work. Follow these steps:
+The parent performs the merge of this work (PSG §11.6 — a child never holds merge
+authorization). The parent's own steps:
 1. <step 1>
 2. <step 2>
 3. ...
@@ -224,7 +225,8 @@ This submission has been rejected. Please address the following before resubmitt
 #### Examples
 
 Both examples below are **exception-path** artifacts. A clean delivery produces no
-Review Decision at all — it is accepted by silence, with the merge plus the in-chat
+Review Decision at all — it is accepted by an acknowledgment naming the party that
+reviewed and accepted (silence accepts nothing), with the merge plus the in-chat
 acknowledgment as the acceptance record (PSG §11.6).
 
 **Epic Review Decision (Accept with follow-up Epic — exception path):**
@@ -262,7 +264,8 @@ the API documentation named in the spec was not delivered. The delivery is not c
 this exception-path decision records acceptance with follow-up Epic E1.3 (API docs).
 
 ## Authorization
-You are authorized to merge this work. Follow these steps:
+The parent (Milestone Agent) performs the merge of this work (PSG §11.6 — a child
+never holds merge authorization). The parent's own steps:
 1. Ensure PR #428 passes all CI/CD checks
 2. Merge PR #428 to milestone/M1 using squash-and-merge strategy
 3. Delete the epic/E1.1 branch after merge
@@ -346,13 +349,14 @@ Epic Execution Chat
 Milestone Chat
     ↓
     [Review]  (PSG §11.6)
-    ↓ clean     → accepted by silence (no artifact; in-chat acknowledgment + merge)
+    ↓ clean     → accepted by acknowledgment naming the party that reviewed
+    ↓             (no artifact; in-chat acknowledgment + merge; silence accepts nothing)
     ↓ not clean → ARTIFACT: Review Decision (Reject ← rework required,
     ↓             or Accept with follow-up Epics)
     ↓
 Epic Execution Chat (if Reject: rework and resubmit)
     ↓
-    [Rework] → Delivery Notice (v1.1) → re-review (clean → accepted by silence)
+    [Rework] → Delivery Notice (v1.1) → re-review (clean → accepted by acknowledgment naming the party that reviewed)
     ↓
 Epic Execution Chat
     ↓
@@ -375,7 +379,7 @@ Phase Chat
 ### Creation Rules
 
 1. **Delivery Notice** is created by the child chat when work is finished (all Definition of Done items met, PR open/merged).
-2. **Review Decision** is created by the parent chat only on the exception path — when its review of the Delivery Notice finds the delivery not clean (PSG §11.6). A clean delivery is accepted by silence; review happens within 24 hours or escalates, but produces no artifact.
+2. **Review Decision** is created by the parent chat only on the exception path — when its review of the Delivery Notice finds the delivery not clean (PSG §11.6). A clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted (silence accepts nothing); review happens within 24 hours or escalates, but produces no artifact.
 3. The post-merge "Delivery Notice" (previously created by the child chat after PR merge) is retired for the standard flow as of v1.2.0 — see §3. The Bugfix Workflow continues to create its own two-artifact pair; not restated here.
 
 ### Formatting Rules
@@ -389,7 +393,7 @@ Phase Chat
 ### Workflow Rules
 
 1. A Delivery Notice MUST precede a Review Decision.
-2. Parent acceptance MUST precede the merge. On the happy path a clean delivery is accepted by silence — no Review Decision exists (PSG §11.6 / AOG §12); on the exception path the Review Decision (Accept with follow-ups) MUST precede the merge.
+2. Parent acceptance MUST precede the merge. On the happy path a clean delivery is accepted by an acknowledgment naming the party that reviewed and accepted — no Review Decision exists (PSG §11.6 / AOG §12; silence accepts nothing); on the exception path the Review Decision (Accept with follow-ups) MUST precede the merge.
 3. If a Review Decision rejects, the child chat creates a new Delivery Notice (v1.1) after rework.
 4. Artifacts are immutable once created; modifications create new versions (v1.1, v1.2, etc.).
 
@@ -410,8 +414,9 @@ files and hand them to parent chats **by reference** per AI-OPERATING-GUIDELINES
 §3.1.1 (the canonical artifact-handoff rule): IDE-attach + one line of intent, or
 the canonical reference line (artifact type + id — repo-relative path — status).
 The parent chat reads the referenced file selectively (frontmatter + Summary +
-DoD/QA suffices under PSG §11.6); a clean delivery is accepted by silence with an
-in-chat acknowledgment, and on the exception path the Review Decision is handed
+DoD/QA suffices under PSG §11.6); a clean delivery is accepted by an acknowledgment that
+names the party that reviewed and accepted, with an
+in-chat acknowledgment (silence accepts nothing), and on the exception path the Review Decision is handed
 back the same way — by reference.
 
 *Fallback — no repo access?* For genuinely repo-less setups only, copy-paste
@@ -428,9 +433,9 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 1. Epic Chat completes → writes Delivery Notice to `.ai-project/artifacts/completion-notices/`
 2. Daemon detects Delivery Notice → routes to parent (Milestone Chat or HQ Chat)
-3. Parent Chat reads and reviews → clean: accepts by silence and acknowledges to the child (no artifact — PSG §11.6); not clean: writes exception-path Review Decision to `.ai-project/artifacts/review-decisions/`
+3. Parent Chat reads and reviews → clean: accepts by an acknowledgment naming the party that reviewed and accepted, and acknowledges to the child (no artifact — PSG §11.6; silence accepts nothing); not clean: writes exception-path Review Decision to `.ai-project/artifacts/review-decisions/`
 4. Daemon detects an exception-path Review Decision → routes back to child (Epic Chat or Milestone Chat)
-5. Child Chat proceeds on acceptance (silence, or Accept-with-follow-ups) → merges; no further artifact is produced in the standard flow (§3). On Reject it reworks and resubmits a new Delivery Notice (v1.1).
+5. Child Chat proceeds on acceptance (the attributed acknowledgment, or Accept-with-follow-ups) → merges; no further artifact is produced in the standard flow (§3). On Reject it reworks and resubmits a new Delivery Notice (v1.1).
 
 ---
 
@@ -450,6 +455,7 @@ In agentic mode (daemon running), these artifacts flow through the queue system:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.5.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** Every "accepted by silence" statement reconciled to the amended PSG §11.6: a clean delivery is accepted by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity); **silence accepts nothing**. Amended: Core Principles 4 and 6, the Delivery Notice purpose, the Completion Notice next-action flow, the Review Decision trigger and examples, the communication flow diagram, the Creation/Workflow rules, and the Manual/Agentic Mode integration steps. No artifact type, schema, or storage rule changed — the signal rides the acknowledgment, not a new object. Backed by `tests/test_acceptance_distinguishable_from_absence.py`. |
 | 1.4.1 | 2026-08-03 | **SN-23 citations date-qualified (SN-28; HQ Ruling 2026-08-01, Decision 4).** Two Steering Notes hold `id: SN-23` — 2026-07-18 (reference-first handoff / platform agnosticism) and 2026-07-20 (the P10 adoption spine). Both SN-23 citations in this document (§Integration with Manual Mode's repo-less fallback pointer, and the v1.3.0 changelog entry) mean the **2026-07-18** note and now carry the date form `SN-23 (2026-07-18)`. **Citation disambiguation only — no schema, storage rule, flow, or acceptance-model change, and neither note is renumbered.** Allocation and separating rules recorded in `governance/systems/creation-chat-guide.md`, "Steering Note ID Allocation". E36.1 (P11-M36). |
 | 1.4.0 | 2026-07-20 | Added a `## Reference` pointer to the new companion document `governance/systems/system-hq.md`, which canonizes the framework's first **cross-project** artifact pair (`system_request`/`system_response`) and the System HQ participant. Design Decision 1B (SN-21): the cross-project pair lives in a companion document rather than this document's intra-project `## Artifact Types` section, whose Core Principles and Communication Flow Diagram assume a single-project chain. No existing schema, example, flow diagram, or storage rule changed. (P9-M32-E32.1) |
 | 1.0.0 | 2026-05-29 | Initial release. Defines Completion Notice, Review Decision, Delivery Notice schemas and integration with manual & agentic modes. |

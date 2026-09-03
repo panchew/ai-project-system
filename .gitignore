@@ -43,3 +43,6 @@ htmlcov/
 
 # Runtime logs (daemon, orchestrator)
 .ai-project/logs/
+
+# Session worktrees — never stage these (P12-M43 review: git add -A swept four live gitlinks)
+.ai-project/scratchpad/

@@ -9,7 +9,7 @@ Scope and non-scope
 This tool **reports**. It never edits a config, never edits a project, and never
 "fixes" what it finds. Epic P11-M38-E38.3 built it under an explicit boundary: the
 fleet is invalid in several places, ``bin/ai-project-init`` produces §4-invalid output,
-and three fields in live configs have no schema entry at all. All of that is recorded
+and fields in live configs have no schema entry at all. All of that is recorded
 and escalated; none of it is repaired here.
 
 Two normative distinctions this tool is careful about
@@ -56,6 +56,12 @@ warning keeps the schema-drift class **visible** without declaring configs inval
 rule the spec never wrote. The gap is escalated for a ruling; until that ruling lands,
 this behaviour is a documented default, not a settled contract.
 
+**What is NOT in that class, after Epic E43.4 (P12-M43):** ``cfo_review_gate`` and the
+new ``rework_exhaustion_flip`` are **blessed** — §3.7/§3.8 schema entries and §4 rules
+27/28 below. A config carrying either with a valid ``enabled``/``disabled`` value is
+reported clean. The remaining unblessed live keys (``created_at``, ``submodule_path``)
+stay in the schema-drift class and continue to warn.
+
 Usage
 -----
     ai-project-validate PATH [PATH ...]     # a config file, or a directory holding one
@@ -86,7 +92,7 @@ CONFIG_NAME = ".ai-project.yml"
 
 # Spec this implementation targets. Bumped alongside governance/ai-project-yml-spec.md
 # whenever a rule changes; a mismatch is a signal to re-read §4, not an error condition.
-SPEC_VERSION = "2.8.0"
+SPEC_VERSION = "2.9.0"
 
 SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
 # `v?` is deliberate — see RULE_26 below.
@@ -109,6 +115,8 @@ KNOWN_TOP_LEVEL = {
     "models",
     "visual_artifacts",
     "framework_version",
+    "cfo_review_gate",
+    "rework_exhaustion_flip",
 }
 KNOWN_GOVERNANCE = {"source", "version", "ref"}
 KNOWN_PROJECT = {"name", "description"}
@@ -127,6 +135,10 @@ KNOWN_VISUAL = {"enabled", "comfyui_url", "types", "visual_required_for_specs"}
 ALLOWED_BRANCH_STRATEGY = {"trunk-based", "gitflow"}
 ALLOWED_MERGE_STRATEGY = {"merge", "squash", "rebase"}
 ALLOWED_VISUAL_TYPES = {"diagrams", "infographics", "video"}
+# §4 rules 27/28 — the top-level opt-out gate keys share one vocabulary. `enabled`
+# is the default-on state; `disabled` is the explicit opt-out (cfo_review_gate §3.7,
+# rework_exhaustion_flip §3.8).
+ALLOWED_GATE_VALUES = {"enabled", "disabled"}
 
 # §4 rules this implementation does not check, and why. Reported under `rules_not_checked`
 # so the coverage claim is auditable rather than asserted.
@@ -457,6 +469,24 @@ def validate_text(text: str, path: str = CONFIG_NAME) -> Report:
                 "framework_version",
                 f"{val!r} must be a non-empty string matching ^v?\\d+\\.\\d+\\.\\d+$.",
                 framework_version.line,
+            )
+
+    # ---- Rules 27, 28 — the top-level opt-out gate keys --------------------------
+    #
+    # Added at spec v2.9.0 (Epic E43.4, P12-M43; finding W1). Both keys are OPTIONAL:
+    # absent means enabled at the default, so only the value is constrained when present.
+    # `cfo_review_gate` was an unblessed top-level key that warned as schema drift; the
+    # blessing moves it out of that class, and `rework_exhaustion_flip` is the new key
+    # it is blessed alongside — the system's first fail-closed default must never ship
+    # as a key nothing validates.
+    for key, rule in (("cfo_review_gate", 27), ("rework_exhaustion_flip", 28)):
+        node = root.get(key)
+        if node is not None and node.value not in ALLOWED_GATE_VALUES:
+            report.err(
+                rule,
+                key,
+                f"Invalid {key}: {node.value!r}. Must be one of: enabled, disabled.",
+                node.line,
             )
 
     # ---- Unknown keys where §4 is SILENT ----------------------------------------

@@ -65,7 +65,7 @@ You are operating under the AI Project System governance framework.
 - Documentation is authoritative, chat is ephemeral
 - You must follow the canonical happy path for Epic closure
 - You must produce a Delivery Notice upon execution completion
-- You must stop after PR creation and await HQ authorization for merge
+- You must stop after PR creation and await the parent's merge — you do not merge your own branch (PSG §11.6)
 - Accept/reject decisions are made by HQ Chat (human), not by you
 - **If given merge authorization directly in this chat** (rather than via the parent
   **Milestone Chat** — or HQ Chat during bootstrap — after its own Stage-2 review),
@@ -73,9 +73,16 @@ You are operating under the AI Project System governance framework.
   parent Milestone Chat's Stage-2 review, and confirm the human intends to bypass that
   step before proceeding (P9-M31 precedent — a direct in-chat authorization was given
   and acted on without this check, skipping the parent chat's independent review
-  entirely). **Running unattended does not change this:
+  entirely). **This is a backstop (E43.1, P12-M43), not the primary guard:** the
+  parent performs the merge of a child's branch (PSG §11.6), so a child never holds
+  merge authorization — unavailable is not impossible, and a backstop that fires is
+  evidence. **Running unattended does not change this:
   mode is what may run, not what may be authorized**
   (`governance/systems/chat-hierarchy.md`, "Mode is not authority").
+- **Rework limit (P12-GH-1):** the rework limit and its extension semantics are
+  normative in PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" and are reached
+  here by citation. On exhaustion, produce an **Escalation Notice** and escalate to the
+  parent Milestone Chat; silent fourth attempts are a governance violation.
 
 **Context scoping (per-level context-scoping standard, P9-M30-E30.3):**
 - Load at session start: this starter; the Epic spec (full); PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §11, §11.5, §11.6, §12; AOG preamble+§1, §1A, §2, §3.2, §3.8, §3.10, §4, §5, §6, §7, §9, §10, §12, §13 (Exit Ritual), §14 (Error Handling)

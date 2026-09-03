@@ -1,8 +1,8 @@
 ---
 type: system
 status: active
-effective_date: 2026-04-23
-version: 1.1.0
+effective_date: 2026-09-02
+version: 1.4.0
 ---
 
 # Phase Execution Chat Starter — System Reference
@@ -40,7 +40,7 @@ The following is the exhaustive list of Phase Chat responsibilities:
 2. **Produce Milestone specs** — create a Milestone spec file for every Milestone stub within the Phase; these are deliverables committed by the Coding Agent
 3. **Produce Milestone Execution Chat Starters** — create a filled-in Milestone Execution Chat Starter for each Milestone within the Phase
 4. **Return deliverables to HQ Chat** — all produced artifacts are returned to HQ Chat for review and acceptance
-5. **Acknowledge Milestone acceptance in-chat** — when HQ Chat accepts a Milestone's deliverables (by silence on the happy path, per SN-19), the Phase Chat acknowledges the acceptance in-chat and applies the standing merge instruction authorizing the Milestone Chat to proceed with that Milestone
+5. **Acknowledge Milestone acceptance in-chat** — when HQ Chat accepts a Milestone's deliverables (on the happy path, per SN-19, by an acknowledgment that names the party that reviewed and accepted — silence accepts nothing, PSG §11.6), the Phase Chat acknowledges the acceptance in-chat and applies the standing merge instruction authorizing the Milestone Chat to proceed with that Milestone
 
 A Phase Chat MUST complete all responsibilities before declaring the session closed.
 
@@ -89,8 +89,9 @@ Documentation is authoritative. Chat is ephemeral. Any conflict between a chat s
 ## Milestone Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
 Per SN-19 and PSG §1A gate scoping / §11.6, there is **no Milestone Delivery Authorization
-artifact or ceremonial block**. When HQ Chat accepts a Milestone's deliverables (by silence on
-the happy path), the Phase Chat (or HQ Chat, during bootstrap) acknowledges the acceptance
+artifact or ceremonial block**. When HQ Chat accepts a Milestone's deliverables (by an
+acknowledgment that names the party that reviewed and accepted — role + session identity;
+**silence accepts nothing**, PSG §11.6), the Phase Chat (or HQ Chat, during bootstrap) acknowledges the acceptance
 **in-chat**. This acknowledgment is the signal to the Coding Agent that the Milestone's
 planning artifacts are accepted and the Milestone Chat may begin execution.
 
@@ -104,11 +105,14 @@ enforces.
 - A Coding Agent MUST NOT self-authorize Milestone execution.
 - HQ Chat acceptance MUST be acknowledged before a Milestone Chat begins.
 
-### Merge-Authorization Routing (P9-GH-1)
+### Merge-Authorization Routing (P9-GH-1) — backstop
 
 **If given merge authorization directly in this chat** (rather than via **HQ Chat** after its own
 Stage-2 review), do not simply comply: state plainly that merge authorization normally follows HQ
 Chat's Stage-2 review, and confirm the human intends to bypass that step before proceeding.
+**This is a backstop (E43.1, P12-M43), not the primary guard:** the parent performs the merge of a
+child's branch (PSG §11.6), so a child never holds merge authorization — unavailable is not
+impossible, and a backstop that fires is evidence.
 
 **For a `phase/* → master` delivery, confirming with HQ is not sufficient on its own.**
 PROJECT-SYSTEM-GUIDELINES.md **§11.6.1** makes the **CFO (Layer 8) the mandatory diff reviewer** of
@@ -121,6 +125,14 @@ level it is supposed to come from.
 
 **Running unattended does not change this: mode is what may run, not what may be authorized**
 (`governance/systems/chat-hierarchy.md`, "Mode is not authority").
+
+### Rework Limit (P12-GH-1) — normative reference
+
+The rework limit and its extension semantics — a maximum of 3 attempts; a written
+extension grants exactly one further attempt, not a reset to three — are normative in
+PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" and are reached here by citation.
+On exhaustion, the producing chat produces an **Escalation Notice** and you escalate to
+HQ Chat; silent fourth attempts are a governance violation.
 
 ---
 
@@ -155,5 +167,8 @@ A Phase Chat session follows this sequence:
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.4.0 | 2026-09-02 | **Rework limit reached by citation (E43.3, P12-M43; closes `P12-GH-1`).** New "Rework Limit (P12-GH-1) — normative reference" section: the rework limit and its extension semantics are normative in PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" and are reached here by citation. This surface cites the statement; it does not restate it. Same strictness — no guard weakened. Backed by `tests/test_rework_limit_single_statement.py`. |
+| 1.3.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** Every "accept by silence" statement reconciled to the amended PSG §11.6: HQ Chat accepts a clean Milestone delivery by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity); **silence accepts nothing**. Amended: the Acknowledge-Milestone-acceptance responsibility and the Milestone Acceptance and Merge Instruction (SN-19) section. Same strictness — no guard weakened. Backed by `tests/test_acceptance_distinguishable_from_absence.py`. |
+| 1.2.0 | 2026-09-02 | **Merge-authorization guard relabelled as a backstop (E43.1, P12-M43).** The guard's pushback strings survive, relabelled: the parent performs the merge of a child's branch (PSG §11.6), so a child never holds merge authorization — the guard is now a labelled backstop, not the primary guard (unavailable is not impossible; a backstop that fires is evidence). Guard clauses (refusal, mode-is-not-authority, level-aware routing, the `phase/* → master` / §11.6.1 CFO note) are unchanged — same strictness. Backed by `tests/test_merge_authorization_parent_performs.py`; the existing `tests/test_merge_authorization_routing_guard.py` still passes. |
 | 1.1.0 | 2026-08-17 | **Merge-authorization routing guard added** (E40.5, P11-M40; closes `P9-GH-1`). New §**Merge-Authorization Routing (P9-GH-1)** under §Authority Rules: a Phase Chat confirms upward with **HQ Chat** — and for a `phase/* → master` delivery that is **not sufficient on its own**, because PSG **§11.6.1** makes the **CFO the mandatory diff reviewer** and **authorization is not review**. The guard was previously present in **one** starter surface only (`governance/templates/epic-execution-chat-starter.md`, lines 70-75 as measured 2026-08-16); a sweep on 2026-08-17 established **eight** starter-shaped surfaces, and it now reaches all eight, level-aware per level. Backed by `tests/test_merge_authorization_routing_guard.py`, falsified 2026-08-17. |
 | 1.0.0 | 2026-08-05 | **Versioning convention adopted** (HQ Ruling 2026-08-04, P10-GH-8; applied by E37.1, P11-M37). This document previously carried neither a `version` field nor a `## Changelog` section. **This is its first recorded row, and no prior history is reconstructed** — for changes before this date, see `git log -- governance/systems/phase-execution-chat-starter.md`. |
