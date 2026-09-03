@@ -1,7 +1,7 @@
 # PROJECT SYSTEM GUIDELINES
 *(Authoritative Project Structure, Documentation, and Execution Policy)*
 
-**Version:** 2.8.0  
+**Version:** 2.9.0  
 **Effective Date:** 2026-09-03  
 **Status:** Current  
 
@@ -64,6 +64,26 @@ All Epics MUST follow the single canonical happy path for closure:
 
 - **Delivery follows hierarchy, not convenience**  
   Branch promotion is governed, not inferred.
+
+- **Quote the non-uniform element verbatim** (`G1`)  
+  Any input with exactly one non-uniform element has that element quoted verbatim rather
+  than described. **Remove the derivation step** — do not re-derive what can be quoted.
+  A non-uniform element is the one row, line, or figure that differs from the pattern
+  around it; describing it instead of quoting it is where an undercount or a
+  misattribute enters. (Generalized form; the M37 original bound it to a specific
+  changelog row. Recorded from the E38.6 epic spec; promoted here so an Epic spec cites
+  this principle rather than restating it.)
+
+- **The reviewer re-measures; the executor's report is not the evidence** (`G2`)  
+  Completion is judged externally and mechanically, never from the executor's own
+  report. **Record the exit code; do not rely on it** — the exit code is untrustworthy
+  in both directions (E33.2 Run A exited `0` having done zero work; E33.4 exited `2`
+  with complete green work; B3.1 reproduced both). And never trust an agent's prose:
+  in B3.1 the prose lied in both arms while the structured signal was correct in the
+  same run. A passing check is evidence, and a human or a governed parent still accepts
+  (this is the automated-check clause of `governance-propagation.md`). (Generalized
+  form; recorded from the E38.6 epic spec; promoted here so an Epic spec cites this
+  principle rather than restating it.)
 
 ---
 
@@ -1019,6 +1039,7 @@ Structure is leverage.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.9.0 | 2026-09-03 | **G1 and G2 promoted into the constitution (E44.6, P12-M44; SN-30 Rec 2).** Added to §2 Core Principles, in the generalized (E38.6) form: **G1** — *quote the non-uniform element verbatim rather than describing it; remove the derivation step*; **G2** — *the reviewer re-measures; the executor's report is not the evidence; record the exit code, do not rely on it* — each with its origin recorded (M37 original → E38.6 generalized) and the automated-check clause cross-referenced. These two general rules previously lived in an Epic spec (E38.6), restated with re-explained provenance per epic; every new epic had to rediscover or re-cite them. Promoted **verbatim-in-substance, not rewritten** — the G2 tie to `governance-propagation.md`'s *automated checks do not confer acceptance* is an explicit cross-reference, not a redefinition. Epic specs may now cite this §2 rather than restate. |
 | 2.8.0 | 2026-09-03 | **The Phase Completion Declaration, named at §5C Step 2 (E44.1, P12-M44; lands `P11-GH-3`).** §5C Step 2 now names the artifact that records *"Phase P<id> complete"*: a **Phase Completion Declaration** committed to `docs/phases/P<id>__<Phase_Name>/P<id>__phase-completion-declaration.md` using `governance/templates/phase-completion-declaration.md`, marked `COMPLETE (awaiting consolidation)`, carrying the verification checklist, milestone table and phase summary that previously had no home (in P11 they landed in a PR comment). Written **while the phase is still open**, it is the one artifact guaranteed to be written before the phase's parent gate and is the backstop terminus for deferred phase-spec corrections. §5C Step 6 now names it as the artifact the delivery review verifies. **Step 9 is untouched** — the Phase-Closure Declaration and `governance/templates/phase-closure-declaration.md` are unchanged; the new declaration is **additional, not a relocation**, and records completion (Step 2) rather than delivery (Step 9). |
 | 2.7.0 | 2026-09-02 | **The rework-exhaustion flip, stated normatively (E43.4, P12-M43).** Added §11.6 "The Rework-Exhaustion Flip", the one normative statement of the system's **first fail-closed default**: **exhausted rework** (the 3-attempt maximum plus any written `+1`, spent without an acceptable delivery — the definition in "The Rework Limit" above) **flips the receiving parent to manual Execution Mode**. **Opt-out, on by default** — governed by the new `rework_exhaustion_flip` key in `.ai-project.yml` (`ai-project-yml-spec.md` §3.8), `enabled` by default, `disabled` only deliberately. **Drivr performs the flip and records it** — the committed Execution Chat Starter is not mutated, so the committed-starter invariant survives and the flip is discoverable from the record; **resume** restores the declared mode, never promotes manual → agentic, and returns the mode, not the budget (both stated at `chat-hierarchy.md`). The trigger definition and the `+1` semantics are unchanged (E43.3). No gate, authority, or §11.6.1 rule changed. |
 | 2.6.0 | 2026-09-02 | **The rework limit, as one normative statement (E43.3, P12-M43; closes `P12-GH-1`).** Added §11.6 "The Rework Limit": at every parent-chat → child gate a parent may reject a child's delivery a **maximum of three (3) attempts**; on a third still-unacceptable Completion Notice the parent issues no fourth rejection-and-retry, the child produces an **Escalation Notice**, and the parent escalates. **A written extension grants exactly ONE further attempt, not a reset to three** (SN-36/37, CFO-decided, stricter than the earlier "resets" wording — the surviving semantics). Defines **rework exhaustion** (3 attempts + any written +1, without an acceptable delivery) as the state E43.4's flip triggers on. The rule was previously in exactly one starter surface (`systems/milestone-execution-chat-starter.md`), absent from every template and the normative tier, and carried two contradictory extension semantics; it is now stated once here, and every starter-shaped surface reaches it by carry or cite. |
