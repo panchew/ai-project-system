@@ -18,8 +18,8 @@
 
 You are operating as a **Milestone Chat** for P12-M44.
 
-- [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v2.4.0
-- [AI-OPERATING-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/AI-OPERATING-GUIDELINES.md) v2.10.1 — **and note that E44.4 renumbers this document and bumps its version. Cite the version you actually read.**
+- [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) — **read its Changelog for the current version; not stamped here** (was `v2.4.0`, stale by M43)
+- [AI-OPERATING-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/AI-OPERATING-GUIDELINES.md) — **read its Changelog for the current version; not stamped here** (was `v2.10.1`, stale by M43) — **and note that E44.4 renumbers this document and bumps its version. Cite the version you actually read.**
 
 **Governance hierarchy:** PSG → AOG → this Starter → the M44 spec → session decisions → system
 references → chat messages.
@@ -34,7 +34,8 @@ this document for the value.** **If both are present and disagree, STOP** and st
 **Critical rules:**
 - Documentation is authoritative; chat is ephemeral.
 - **Stage 1:** produce Epic specs and Starters, commit, open a PR. **Stage 2:** oversee delivery,
-  **accept clean deliveries by silence** (PSG §11.6), merge when all Epics are accepted.
+  **accept clean deliveries by a NAMED acknowledgment — silence accepts nothing** (PSG §11.6, as
+  amended by P12-M43-E43.2), merge when all Epics are accepted.
 - You MUST NOT implement project code. **The normative edits belong to your Epic Chats.**
 - **Adjacency:** Epic specs and Epic Execution Chat Starters only.
 - You report to the **P12 Phase Chat**. Do not reach across to M41, M42, M43.
@@ -206,7 +207,8 @@ silence.
 
 ## Epic Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-No Epic Delivery Authorization artifact. On acceptance — by silence on the happy path — acknowledge
+No Epic Delivery Authorization artifact. On acceptance — **a named acknowledgment; silence accepts
+nothing** — acknowledge
 in-chat and proceed. **Merge `epic/P12-M44-E44.<n>` to `milestone/M44` upon completion, Phase Chat
 acceptance, and explicit human merge authorization.**
 
