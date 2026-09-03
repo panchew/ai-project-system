@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.11.0  
-**Effective Date:** 2026-09-02  
+**Version:** 2.12.0  
+**Effective Date:** 2026-09-03  
 **Status:** Current  
 
 ---
@@ -1039,6 +1039,7 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
+| 2.12.0 | 2026-09-03 | **The fence-aware renumber (E44.4, P12-M44).** Renumbered the real sections to `1..n` — no duplicate number, no duplicate title. `1A` (Canonical Happy Path Enforcement) is folded into section 1 as sub-part `1.1` (E44.4's recorded design decision, spec option 2), so sections 2–9 keep their numbers and the tail renumbers in place: `13, 14, 10, 11, 12, 13, 14, 16, 15` → `10, 11, 12, 13, 14, 15, 16, 17, 18`. The "Error Handling" title collision resolves: the first (now §10) is titled "Error Handling (Duplicate)"; the second (now §16) keeps "Error Handling". Visual sub-sections 16.1–16.8 → 17.1–17.8. Cross-references to changed numbers are swept corpus-wide (governance, templates, systems, starters, rulings, phase/milestone/epic specs); no quoted example was rewritten — the fenced example blocks are byte-identical. `Changelog` remains unnumbered by exemption. Not a hotfix (ruling Decision 6): renumber, sweep, and bump travel together. No authority, mode, or normative-text change. |
 | 2.11.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** §14 "Default-Accept (SN-13) — Normative" and its outcome-1 line now state that a clean delivery is accepted by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity) — **silence accepts nothing** — with the acceptance record unchanged (merge + in-chat acknowledgment, no new artifact). Amended the always-restate Stage-2 lines in §3.6/§3.7 and the §12 HQ review-behavior bullet from "accept by silence" to the attributable-acknowledgment model, each citing the normative definition at PSG §11.6. No authority, mode, or §11.6.1 rule changed. |
 | 2.10.2 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Corrected every statement that instructed a child to merge its own branch, in agreement with the one normative statement now in PROJECT-SYSTEM-GUIDELINES.md §11.6: §1.1 step 7 (the parent performs the merge after authorization — a child never holds merge authorization) and §3.7 Stage 2 (the Milestone Chat performs the merge of each accepted Epic's branch as the parent; the Phase Execution Chat delivers the Milestone by merging the milestone branch). The parent's-merge rule is defined in PSG §11.6; this document cites it, not restates it. No authority, mode, or §11.6.1 rule changed. |
 | 2.10.1 | 2026-08-03 | **SN-23 citations date-qualified (SN-28; HQ Ruling 2026-08-01, Decision 4).** Two different Steering Notes hold `id: SN-23` — 2026-07-18 (reference-first handoff / platform agnosticism) and 2026-07-20 (the P10 adoption spine) — and this document and `governance/systems/chat-hierarchy.md` each cited *"SN-23 Decision 2"* meaning **unrelated** decisions, with the latter declaring its one superseded. A reader following this document's citation by number reached the supersession notice and could conclude **platform agnosticism was superseded. It was not.** All three SN-23 citations here (§3.1.1 intro, §3.1.1 "Fallback — repo-less delivery", and the v2.10.0 changelog entry) now carry the date form `SN-23 (2026-07-18)`. **Citation disambiguation only — no normative requirement added, removed, or changed, and neither note is renumbered** (Decision 4: both keep `id: SN-23` permanently). The allocation and separating rules are recorded in `governance/systems/creation-chat-guide.md`, "Steering Note ID Allocation". E36.1 (P11-M36). |
