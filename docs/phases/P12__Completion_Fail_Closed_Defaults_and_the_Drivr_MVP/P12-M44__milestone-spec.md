@@ -163,8 +163,11 @@ an improvisation** — M41 must not invent a convention M44 would then have to c
 6. **`P11-GH-1`'s instance records evidence and does NOT reopen the fix.** Ruling Decision 12 stands.
    **Cite by artifact and defect, never by ordinal** — the note records two instances, P11's closure
    counts four, the tally is ruled unusable, and *"the Nth instance"* reproduces the defect being filed.
-7. **The decided-but-unconfigured convention must exist before E41.5 lands** (X5). Escalation, not
-   improvisation.
+7. **~~The decided-but-unconfigured convention must exist before E41.5 lands~~ (X5) — SPENT, amended
+   2026-09-03 (v1.2.1).** E41.5 landed **first**, on 2026-09-01, and declined the rewrite rather than
+   improvising a convention; the escalation X5 called for was raised by the M44 Chat and **ruled at
+   v1.2.0**. The surviving constraint is: **E44.2 executes the row P4 rewrite**, and must not leave
+   E41.5's note reading as a competing account.
 8. **`P12-GH-3` (derived-claim rot) is NOT in this milestone.** Filed unowned with a trigger. **Do not
    absorb it.** A convention marking derived claims, with no mechanism to detect an unmarked one, is
    `P12-GH-1` reproduced — the defect M43 exists to fix.
@@ -187,7 +190,31 @@ one that is missing, because a missing record is visible.**
   (the HQ ritual, nine instances), **the deliverable is a description that matches, not a design that
   supersedes.** A discrepancy between the nine and the written ritual is a finding, not a bug to fix
   silently.
-- **State the layer, time and scope of every claim** (`P11-GH-2`).
+- **State the layer, time and scope of every claim** (`P11-GH-2`) — **and the REF you measured against.**
+
+  > **⚠ A check can be correct and still return different answers to different readers.** Measured
+  > 2026-08-21: `git log -1 … -- '<path>' <ref>` places the ref *after* the `--`, so git treats it as a
+  > pathspec and falls back to **implicit HEAD**. On a tree checked out at `milestone/M41` it returned
+  > a commit; on one at `master` it returned **exit 0 and nothing.** Same command string, two readers,
+  > **no error either way.**
+  >
+  > **And empty is the LUCKY outcome.** Re-run by a third party with a slightly different pathspec,
+  > the same defect returned **two different valid-looking commits** — `9940820` from one tree,
+  > `b27b4ed` from another. **Nothing was empty and nothing looked wrong.** So the failure has three
+  > faces — a plausible wrong answer, an empty result, and a correct one — **and which one a reader
+  > gets depends on where they stand, not on what they asked.** You cannot catch this by
+  > sanity-checking the output; **only by pinning the ref.**
+  >
+  > **This is worse than a check that always fails**, because a check that always fails gets noticed.
+  > **And this project's sessions share a working directory that moves under them** — which is how a
+  > Milestone Chat once committed onto another session's branch.
+  >
+  > **So: pin the ref explicitly (`origin/<branch>`), put it BEFORE the `--`, never rely on implicit
+  > HEAD, and record which ref a measurement was taken against.** A number without a ref is not a
+  > measurement.
+  >
+  > **It was found by two chats each re-running the other's claim** — and each of us first
+  > generalized from the single branch we happened to be standing on, in opposite directions.
 
 ---
 
@@ -211,13 +238,48 @@ Chat Starter.
 
 ## Epic Detail
 
-### E44.2 — The decided-but-unconfigured convention *(FIRST — external deadline)*
+### E44.2 — The decided-vs-evidenced convention *(deadline spent; now executes the rewrite)*
 
 **Organizing question: how does the record show that a decision is made and its configuration is
 not?**
 
 Until R6, this corpus recorded a decision **by making the edit** — one act. **R6 separated them**:
 `phase`, `milestone` and `epic_manual` are decided and unconfigured on a trigger with **no expiry**.
+
+> **⚠ AMENDED 2026-09-03 BY THE PHASE CHAT — THE PREMISE INVERTED, AND THE ANSWER IS (2).**
+> The M44 Chat asked whether E44.2 is specified under this section as written, or under the amended
+> reality. **Under the amended reality: E44.2 EXECUTES the row P4 language rewrite.**
+>
+> **What changed.** This section was written 2026-08-20 assuming **E41.5 performs and M44 only
+> specifies.** E41.5 landed first, on 2026-09-01, and **explicitly did not perform the rewrite** — it
+> filed a bounded note beside row P4 and handed the work over in the file itself:
+> *"Actually rewriting the row's language to describe an allowance-decided value is M44's E44.2 to
+> execute"* (`model-routing-policy.md:116-117`, citing M41 spec v1.6.0). **M41 is closed and E41.5 is
+> merged, so there is no longer an epic to reach into.**
+>
+> **The exemplar moved, and so did the state it exemplifies.** All three "carried rows" are now
+> **configured** — `phase: remote:gpt-5.6-sol`, `milestone: remote:deepseek-v4-pro`,
+> `epic_manual: remote:deepseek-v4-flash` (verified in `.ai-project.yml`, this branch, 2026-09-03).
+> **The decided-but-unconfigured state this epic was named for no longer holds for any row**, so
+> option (1) is not merely stale — **it would specify a convention against a state nothing is in.**
+>
+> **The live state is a different one:** *configured, but not evidenced.* Four of five values were set
+> by **CFO allowance decision (SN-41), not by measurement**, while row P4's `why` cell still describes
+> an evidential derivation that no longer applies. **The convention must therefore cover both faces —
+> decision-ahead-of-configuration (the R6 case that forced it, now historical) and
+> configuration-ahead-of-evidence (the SN-41 case, live)** — or state which it covers and why.
+>
+> **X5's deadline is spent, and the harm it guarded against did not occur.** The ordering
+> (E44.2 before E41.5) was **not achieved**. X5 said that if E41.5 got there first it would be *"an
+> escalation, not an improvisation — M41 must not invent a convention M44 would then have to change."*
+> **M41 invented nothing**: E41.5 recorded *"beside the row, per the file's own convention above"* and
+> enumerated what it did not do. **This is the escalation X5 called for, ruled here rather than
+> improvised.**
+>
+> **Ruled at this level, not escalated.** No CFO-enumerated value moves — the SN-41 lineup stays
+> exactly as landed. E44.2 rewrites **the row's language**, which is record-shaping, and record-shaping
+> is M44's subject. *(Phase Chat test: changing a value the CFO enumerated escalates; supplying a term
+> he left unenumerated belongs to the level that owes it.)*
 
 **The failure mode is precise:** a reader assumes the file matches the ruling. **That is the divergence
 the guards exist to catch, arriving in the prose, where no guard reaches** — and it is `P12-GH-3`'s
@@ -227,8 +289,11 @@ shape at the configuration layer.
 
 1. **The convention**, defined once, for recording a decided-but-unconfigured state — what is written,
    where, and how a reader distinguishes it from a configured one.
-2. **Its application to the case that forced it** — row P4 and the three carried rows — **specified,
-   not performed.** E41.5 performs; **M44 must not reach into M41's epic.**
+2. **Its application, PERFORMED** (amended 2026-09-03) — rewrite row P4's language so it describes an
+   **allowance-decided** value, discharging the handoff E41.5 filed at `model-routing-policy.md:116`.
+   The three carried rows are **retained as the historical case that forced the convention**, not as a
+   pending edit: they are configured. **E41.5's bounded note is not superseded — it is the record that
+   the gap existed, and the rewrite closes it.**
 3. **A statement of what makes the two facts distinguishable without inference**, since inference is
    the failure mode.
 
@@ -236,9 +301,17 @@ shape at the configuration layer.
 
 - [ ] A reader can tell a decided-and-configured row from a decided-and-pending one **from the record
       alone, without inferring either from the other**
-- [ ] The convention is stated once, in a place E41.5 can cite
-- [ ] Delivered **before E41.5 lands**; if E41.5 approaches that point first, **escalate**
-- [ ] It does not perform M41's edit
+- [ ] The convention is stated once, in a place the routing policy can cite
+- [ ] **Row P4's language describes an allowance-decided value**, and E41.5's note at `:72-118` reads
+      as consistent with it rather than as a competing account
+- [ ] **The guard gap is disposed, not inherited.** `test_policy_mapping_agrees_with_yml_block` forces
+      the mapping table to agree with `.ai-project.yml`, but **the tier cells sit outside its parse** —
+      which is precisely why E41.5 left them put. E44.2 either **brings the rewritten language under a
+      guard, or states plainly that it did not and why.** *(This is the surviving substance of the
+      retired "does not perform M41's edit" criterion: the old rule protected these cells by forbidding
+      the edit; performing it means the protection must now come from somewhere else.)*
+- [ ] The convention covers **both faces** — decision-ahead-of-configuration and
+      configuration-ahead-of-evidence — or names which it covers and why
 
 ---
 
@@ -258,6 +331,28 @@ artifacts, one question, **and two different kinds of task** (X3).
    instances** (X3); `hq-chat.md` and the opener template **cite it rather than restating it**. The
    Creation Chat's ritual (SN-26, P11-M36-E36.3) is the model. **Any discrepancy between the nine and
    the written ritual is reported, not silently normalized.**
+
+   > **⚠ TWO SPECIMENS OF DEPARTURE, AND THE SECOND BREAKS THE OBVIOUS DESIGN.** Offered by HQ
+   > 2026-08-21 as an input, not placed; taken here because E44.1 already owns departure.
+   >
+   > | | What happened |
+   > |---|---|
+   > | **Specimen 1** — 2026-08-20 | A deferral whose trigger was, in effect, **a session's continued existence**. It failed within four hours. **The session knew what it was holding.** |
+   > | **Specimen 2** — 2026-08-20 | A VS Code layout change **forked the session**. Two authentic HQ sessions ran concurrently, neither able to observe the other. **The session did not know it had departed, and its successor could not tell that it had.** |
+   >
+   > **A departure ritual that assumes the departing session knows it is leaving covers the first and
+   > not the second.** Specimen 2's session was never going to write a handover, because from inside
+   > it nothing ended.
+   >
+   > **The design consequence, stated so the epic does not have to rediscover it:** the ritual cannot
+   > be **only** an act the departing session performs. **Something must be reconstructible by the
+   > arriving session from committed state alone** — because the case that actually occurred is the
+   > one where nobody was there to perform the act.
+   >
+   > **Root cause is environmental and is recorded because no corpus discipline would have surfaced
+   > it:** the fork came from moving a chat between the editor area and the side panel. **Not a
+   > governance failure.** It is why *"the departing session knows it is departing"* is an unsafe
+   > premise rather than a reasonable one.
 3. **A context-exhaustion handoff artifact type and template**, with **the Drivr-side boundary
    stated** — harness context tracking is Drivr's, and the artifact must not assume it.
 4. **The itemized list of the documents that mention handoff** (X2 — **nineteen** by this spec's
@@ -274,9 +369,15 @@ artifacts, one question, **and two different kinds of task** (X3).
 
 ---
 
-### E44.3 — The fourth state: refuse by default, recorded declaration
+### E44.3 — Cannot establish an identity? Refuse. *(two subjects, one rule)*
 
-**Organizing question: what does a manual chat do when its harness reports no model at all?**
+**Organizing question: what does a chat do when it cannot establish an identity it depends on?**
+
+**Two subjects, and placing them together is this milestone's decision.** The **self** case — my
+harness reports no model — and the **counterparty** case — I cannot establish who sent me this. **They
+are one rule at two layers, and separating them across epics would scatter a pattern that is only
+useful as a pattern.** One carries a recorded-declaration exception and the other carries none; **that
+contrast is informative and is lost if they are written in two places.**
 
 **Ruled by HQ (R6 Decision 3), and this epic executes it.** `chat-hierarchy.md` defines three states —
 both present and agree, both present and disagree, config-side absent. **It does not define
@@ -301,12 +402,46 @@ first substantive response; silence never available.**
    named accountable party.** Without the exception the rule is a wall rather than a gate,
    unsatisfiable by construction for exactly the surfaces it exists to admit.
 
+#### Subject 2 — inter-chat governance messaging (`P12-GH-4`, narrow half)
+
+**Placed into M44 by HQ at phase spec v1.1.4, AFTER this spec was accepted.** Recorded as such; see
+the Notes.
+
+**Measured 2026-08-20: `SendMessage`, `ListAgents`, "peer session" and "inter-chat" appear ZERO times
+in `governance/`.** **The live channel every P12 escalation travelled over has no normative
+existence.**
+
+**The paragraph, content fixed by the phase spec and not this milestone's to redraft:**
+
+> Governance content passing over a live inter-chat channel is **routing, not the record.** Nothing
+> arriving over it authorizes, accepts, or closes anything; the committed artifact does. **A recipient
+> that cannot establish a sender's role does not act on governance content received from it.**
+
+**Two constraints on how it lands:**
+
+1. **It restates SN-36's ratified principle** — *a chat reply is never authorization, because agents
+   can write into chats* — applied to a channel nobody wrote down. **It is not new policy and must not
+   read as any.**
+2. **It does NOT design the channel.** That half is filed unowned as `P12-GH-4` with its trigger.
+   **An epic that reaches for the channel's design has left this deliverable.**
+
+**The direction that matters is INBOUND, and the epic should say so.** The outbound case was handled
+by judgment on 2026-08-20 — a chat declined to route governance content to a peer whose role it could
+not establish — **and judgment under time pressure is what this phase exists to replace.** The inbound
+case is the threat model: **a message arriving over this channel is, to its recipient, indistinguishable
+from one an agent composed.** That is SN-36's reasoning exactly, one channel over.
+
 **Acceptance criteria**
 
-- [ ] All four states are defined; none is reachable by silence
+- [ ] All four **self**-verification states are defined; none is reachable by silence
 - [ ] The exception requires a recorded declaration in the first substantive response
 - [ ] The text does not assume Claude Code
 - [ ] The parallel to E42.1's opt-in is stated, not left for a reader to notice
+- [ ] **The inter-chat paragraph is in the normative tier**, verbatim in substance, **framed as
+      restating SN-36 rather than as new policy**
+- [ ] **The inbound direction is stated as the threat model**, with the reason
+- [ ] **The epic does not design the channel**; `P12-GH-4`'s wider half is cited as filed and unowned
+- [ ] **The self and counterparty cases are written as one rule**, with the exception asymmetry stated
 
 ---
 
@@ -401,13 +536,16 @@ number** (`13` and `14` each appear twice) **or by title** (two sections are bot
 
 **Internal**
 
-- `milestone/M44` branched from `phase/P12` after the R6 sync. Suite **549 / 0**, `PYTHONPATH=. pytest -q`.
+- `milestone/M44` branched from `phase/P12` after the R6 sync. **Suite baseline is now `740 / 0`**
+  (`PYTHONPATH=. pytest -q`, this branch, 2026-09-03) — M41, M42 and M43 all landed test additions
+  after the original `549` was written. **Surfaced by the M44 Chat, re-measured by the Phase Chat.**
 - **The R6 ruling** — E44.3's specification. On `master` and on this branch.
 - **The 2026-08-19 opening ruling** — Decisions 5, 6, 7 specify E44.5 and E44.6.
 - **M44 must complete before P12 closes** — `P11-GH-3` lands here and **P12's own closure is its first
   customer.**
-- **E44.2 must deliver before E41.5 lands** (X5) — **an unenforced ordering across independent
-  milestones.**
+- **~~E44.2 must deliver before E41.5 lands~~ (X5) — the ordering was NOT achieved**, and the
+  unenforced edge is the reason. E41.5 landed 2026-09-01; **the harm X5 named did not occur** (M41
+  invented no competing convention), and E44.2 now **executes** the rewrite per v1.2.0.
 
 **External**
 
@@ -431,7 +569,8 @@ number** (`13` and `14` each appear twice) **or by title** (two sections are bot
 - [ ] `P11-GH-1`'s note carries P12's instance, **no ordinal**, gap still open and unscoped
 - [ ] **No deliverable states a coverage count where a list belongs**
 - [ ] **`P12-GH-3` was not absorbed** — it remains filed, unowned, with its trigger
-- [ ] Suite green at **549** plus this milestone's additions
+- [ ] Suite green at **740** plus this milestone's additions *(baseline corrected v1.2.1; `549`
+      predated M41/M42/M43)*
 - [ ] Milestone Closure Declaration committed, `is_final: false`
 
 ---
@@ -523,6 +662,16 @@ flowchart TB
 
 ## Notes
 
+- **On declining to object a third time, since HQ offered the standing explicitly.** I have twice
+  refused scope for M44 — `P12-GH-3`, and before that by insisting the M44 question be answered before
+  planning. **I decline to object here, and the test is worth stating so the earlier refusals do not
+  read as reflex.** `P12-GH-3` was a convention **plus an enforcement mechanism that does not exist**,
+  and placing it would have shipped `P12-GH-1`'s defect inside the phase that fixes it. **This is one
+  paragraph whose content is already fixed, restating a principle already ratified, bounded away from
+  the design work that would make it large.** The two are not the same size and refusing both would
+  mean the first refusal was about volume rather than about reasoning. **What I did exercise is the
+  part that is mine: where inside M44 it lands.**
+
 - **The exclusion is a deliverable of this spec, not an omission from it.** HQ warned twice that M44
   must not become the place things get put, and the test of that warning is whether a well-argued,
   newly-scopeable item gets refused. **`P12-GH-3` is refused, with its reasoning, and the diagram shows
@@ -597,6 +746,27 @@ flowchart TB
      it each:** E44.1 defines what a departing session leaves behind; **the registry is what makes a
      successor findable at all.**
 
+- **⚠ A `P11-GH-1` INSTANCE WITH NO DETECTION PROBLEM, AND IT IS THE FIRST OF ITS KIND ON RECORD.**
+
+  **HQ placed new scope into M44 after accepting M44's planning** — `P12-GH-4`'s narrow half, phase
+  spec v1.1.4, after #224 was accepted and merged. This spec's six epics were correct at their date
+  and covered none of it.
+
+  **What makes this instance different from every other in the file:** the earlier ones are detection
+  failures — nobody noticed the premise had moved. **HQ knew at the time.** Its own words: *"I placed
+  scope into an accepted milestone and did not say so at the time. The carrier channel exists
+  precisely for this and I did not use it."*
+
+  **So `P11-GH-1`'s remedy cannot be a detector alone.** Every instance before this one would have
+  been caught by something that noticed a premise moving; **this one would not**, because nothing had
+  failed to be noticed. **A channel is only as good as the obligation to use it**, and that obligation
+  currently rests on the amender remembering — which is the same shape as the trigger that failed four
+  hours earlier by resting on a session's continued existence.
+
+  **E44.6 has discretion over whether this joins the carry-forward note.** It is recorded here because
+  the discretion should be exercised against the strongest specimen, not the earliest. **Cite by
+  artifact and defect, never by ordinal.**
+
 - **On `P11-GH-1`.** Amendments reach a running child by: amending this file on `milestone/M44` with a
   changelog row; **notifying the chat in-session, naming the section**; requiring it to re-read and to
   state that it did; escalating if blocking; and **`git log` on this spec against each epic's branch
@@ -610,6 +780,10 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.1 | 2026-09-03 | **Completes the v1.2.0 amendment, which reached the E44.2 section and the changelog but NOT three other surfaces — `P11-GH-1`'s own shape, in the spec that carries the rule.** The M44 Chat flagged **Binding Constraint 7** (`:166`); re-measurement found **a second stale deadline** in Execution Notes (`:541`) and **two stale `549` baselines** (`:536`, `:566`) against a re-measured **`740 / 0`**. All four corrected; the two spent-deadline lines are **struck through and annotated rather than deleted**, so a reader sees the ordering was attempted and missed. **Lesson recorded: amending the section a change is *about* is not amending the spec** — the constraint, the notes and the DoD each restate it, and a changelog entry is not a search. |
+| 1.2.0 | 2026-09-03 | **E44.2 re-scoped from *specified* to *performed*, on a question raised by the M44 Chat — the premise inverted.** This section assumed **E41.5 performs and M44 specifies**; E41.5 landed first (2026-09-01), declined the rewrite, and **handed it to E44.2 in the file itself** (`model-routing-policy.md:116-117`, citing M41 spec v1.6.0). M41 is closed, so **there is no epic left to reach into.** **All three "carried rows" are now configured** (verified in `.ai-project.yml`, 2026-09-03), so the decided-but-unconfigured state the epic was named for **holds for no row** and option (1) would specify against a state nothing is in. **The live state is *configured but not evidenced*** — SN-41 set four of five values by allowance, not measurement, while row P4's `why` cell still describes an evidential derivation. **X5's ordering was not achieved, but the harm it named did not occur**: M41 invented no competing convention, recording *"beside the row, per the file's own convention"* and bounding itself. **The retired "does not perform M41's edit" criterion is replaced by its surviving substance**, not deleted: the tier cells sit outside `test_policy_mapping_agrees_with_yml_block`'s parse, so E44.2 must bring the rewritten language under a guard or say it did not and why. **Ruled at phase level** — no CFO-enumerated value moves; the SN-41 lineup stands as landed. |
+| 1.1.1 | 2026-08-21 | **Adds a second departure specimen to E44.1's HQ-ritual deliverable**, offered by HQ as an input and taken here because E44.1 already owns departure. **It breaks the obvious design:** specimen 1 (a deferral resting on a session's continued existence) is a session that **knew what it was holding**; specimen 2 is a session **forked by a VS Code layout change**, which **did not know it had departed** and whose successor could not tell that it had. **A ritual that assumes the departing session knows it is leaving covers the first and not the second** — so the ritual cannot be only an act the departing session performs, and **something must be reconstructible by the arriving session from committed state alone.** Records the root cause as environmental — a chat moved between the editor area and the side panel — **explicitly not a governance failure**, and the reason *"the departing session knows it is departing"* is an unsafe premise. **No epic added or removed; no ordering, gate or acceptance-criterion change.** |
+| 1.1.0 | 2026-08-20 | **New scope, placed by HQ at phase spec v1.1.4 after this spec was accepted** — `P12-GH-4`'s narrow half, one normative paragraph on inter-chat governance messaging. **Placed into E44.3 rather than E44.5, which is this milestone's decision and not HQ's.** E44.3's organizing question is widened from *what does a manual chat do when its harness reports no model* to **what does a chat do when it cannot establish an identity it depends on**, with two subjects: the **self** case (model identity, R6 Decision 3) and the **counterparty** case (sender role). **They are one rule at two layers**, one carrying a recorded-declaration exception and one carrying none, **and that contrast is only visible if they are written together.** The epic is bounded against the channel's design, which stays filed unowned. **The Phase Chat declined to object to the placement** — see Notes for the test applied. **Also records a `P11-GH-1` instance with no detection problem**, the first on file: HQ knew it was placing scope into an accepted milestone and did not use the channel at the time. **The remedy therefore cannot be a detector alone** — every prior instance would have been caught by one; this one would not. **No epic added or removed; no ordering, gate or acceptance-criterion change elsewhere.** |
 | 1.0.2 | 2026-08-20 | **Corrects a false claim this spec made at v1.0.1: *"the session holding them ended."* HQ did not end** — it was live under a peer name the Phase Chat could not map to a governance role. **The error is recorded as its own class rather than edited away:** what was observed was a name failing to resolve; what was asserted was a session ceasing to exist. **That is `P11-GH-2` — a claim about one layer from a measurement in another — committed by the chat citing that gap record at every review this phase.** **The finding survives and HQ confirms it stands:** the roster shows **addresses, not roles**, and **an address change is indistinguishable from a session ending**, which is why the wrong diagnosis still produced the right action — refusing to route governance content to an unidentified peer. **All three annotations are discharged** (phase spec v1.1.3, PR #225), and HQ records that this entry is the only reason they survived. **Both recommendations adopted into M44's scope:** the HQ ritual must cover **departure**, not only arrival — the nine committed openers all describe arrival — and the **Phase Completion Declaration is the backstop terminus** for deferred phase-spec corrections. **Adds a third consequence:** the routing gap is an M46 input HQ has now placed — a **role registry** is a prerequisite for auto-open and go-to-blocker, not a convenience, and is Drivr's. **No scope, epic, ordering or acceptance-criterion change.** |
 | 1.0.1 | 2026-08-20 | **Records three outstanding phase-spec annotations that lost their owner mid-flight.** HQ adopted W3's sharpening, W4's understatement and X2's count on accepting M43/M44, deferred the edit with a stated trigger — flagging that *"a deferred correction with no trigger is how SN-30 sat for six days"* — and **that HQ session ended before the trigger fired**, with the Phase Chat's reply undeliverable. The corrections are safe in the milestone specs that found them; **the obligation to fold them into the phase spec is now unowned.** Recorded here because it belongs to this milestone twice: **E44.1 gains a live dated specimen** — the HQ re-instantiation ritual failed in real time, in the phase building it, and the failure was on **departure** while the nine existing openers describe **arrival** — and **P12's closure gains a recommended terminus**, the Phase Completion Declaration being the one artifact guaranteed to be written while the phase is still open. **No scope, epic, ordering or acceptance-criterion change; the phase spec is HQ's and the disposition remains HQ's.** |
 | 1.0.0 | 2026-08-20 | Initial M44 spec, from the P12 phase spec v1.1.2, the 2026-08-19 opening ruling (Decisions 5, 6, 7, 9, 12), the 2026-08-20 R6 ruling (Decision 3), SN-30/33/34/35 and SN-31 Carry-Overs 2 and 10. **Six epics, each with a stated organizing question**, and **`P12-GH-3` deliberately excluded and shown as excluded.** **Five planning-time findings:** the AOG repair must be **fence-aware** — only **20 of 29** `##` matches are real sections, nine are inside ```markdown example blocks, and a naive renumber or cross-reference sweep would rewrite the templates the document quotes; **the finding exists because the Phase Chat produced a false positive** (a "second duplicate title" that was fenced example content) and caught it by reading context (X1). *"Handoff"* appears in **nineteen** governance documents against the record's **ten**, with the pattern stated (X2). The HQ ritual is **recording** — nine instances exist — while the handoff artifact is **design**, zero templates exist; the two halves of E44.1 are different kinds of task (X3). **G1/G2 are confirmed to live only in epic-tier artifacts** (X4). **E44.2's deadline is real and unenforced** — E41.5 is gated on M42, M44 is independent of both, and no edge connects them, so E44.2 runs first for a reason external to this milestone (X5). |

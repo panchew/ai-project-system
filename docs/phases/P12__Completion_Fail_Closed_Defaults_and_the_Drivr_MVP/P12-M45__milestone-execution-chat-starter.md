@@ -19,8 +19,8 @@
 
 You are operating as a **Milestone Chat** for P12-M45.
 
-- [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) v2.4.0
-- [AI-OPERATING-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/AI-OPERATING-GUIDELINES.md) v2.10.1 — **M44 renumbers this document; cite the version you actually read.**
+- [PROJECT-SYSTEM-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/PROJECT-SYSTEM-GUIDELINES.md) — **read its Changelog for the current version; not stamped here** (a stamped version rots: M43 bumped PSG twice)
+- [AI-OPERATING-GUIDELINES.md](https://github.com/panchew/ai-project-system/blob/master/governance/AI-OPERATING-GUIDELINES.md) — **read its Changelog for the current version; not stamped here** — **M44 renumbers this document; cite the version you actually read.**
 
 **Hierarchy:** PSG → AOG → this Starter → the M45 spec → session decisions → system references → chat.
 
@@ -36,7 +36,8 @@ and M41 for the model line-up.
 **Critical rules:**
 - Documentation is authoritative; chat is ephemeral.
 - **Stage 1:** Epic specs and Starters, committed, one PR. **Stage 2:** oversee delivery, accept clean
-  deliveries **by silence** (PSG §11.6), merge when all epics are accepted.
+  deliveries **by a NAMED acknowledgment — silence accepts nothing** (PSG §11.6, as amended by
+  P12-M43-E43.2), merge when all epics are accepted.
 - **Adjacency:** Epic specs and Epic Execution Chat Starters only. **You do not write Drivr code** —
   that is your Epic Chats' work.
 - You report to the **P12 Phase Chat**. Do not reach across to M41–M44.
@@ -184,13 +185,15 @@ summary. **Do not echo bodies into chat.**
 **Delivery vehicle:** open **ONE PR** — `milestone/M45` → `phase/P12` — **at set 1**, pushing each
 accepted set onto it; it merges once at Stage-1 completion. Precedent: #191, #205, #220, #222, #224.
 
-After each set, **request Phase Chat review.** Under §11.6 a clean set is accepted by silence.
+After each set, **request Phase Chat review.** Under §11.6 **as amended by P12-M43-E43.2, a clean set
+is accepted by a NAMED acknowledgment — silence accepts nothing. Do not read silence as approval.**
 
 ---
 
 ## Epic Acceptance and Merge Instruction (SN-19 — in-chat, no artifact)
 
-On acceptance — by silence on the happy path — acknowledge in-chat and proceed. **Merge
+On acceptance — **a named acknowledgment; silence accepts nothing** — acknowledge in-chat and
+proceed. **Merge
 `epic/P12-M45-E45.<n>` to `milestone/M45` upon completion, Phase Chat acceptance, and explicit human
 merge authorization.**
 
