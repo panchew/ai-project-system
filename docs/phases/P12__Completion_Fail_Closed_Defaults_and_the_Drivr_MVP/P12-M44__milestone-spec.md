@@ -235,13 +235,48 @@ Chat Starter.
 
 ## Epic Detail
 
-### E44.2 — The decided-but-unconfigured convention *(FIRST — external deadline)*
+### E44.2 — The decided-vs-evidenced convention *(deadline spent; now executes the rewrite)*
 
 **Organizing question: how does the record show that a decision is made and its configuration is
 not?**
 
 Until R6, this corpus recorded a decision **by making the edit** — one act. **R6 separated them**:
 `phase`, `milestone` and `epic_manual` are decided and unconfigured on a trigger with **no expiry**.
+
+> **⚠ AMENDED 2026-09-03 BY THE PHASE CHAT — THE PREMISE INVERTED, AND THE ANSWER IS (2).**
+> The M44 Chat asked whether E44.2 is specified under this section as written, or under the amended
+> reality. **Under the amended reality: E44.2 EXECUTES the row P4 language rewrite.**
+>
+> **What changed.** This section was written 2026-08-20 assuming **E41.5 performs and M44 only
+> specifies.** E41.5 landed first, on 2026-09-01, and **explicitly did not perform the rewrite** — it
+> filed a bounded note beside row P4 and handed the work over in the file itself:
+> *"Actually rewriting the row's language to describe an allowance-decided value is M44's E44.2 to
+> execute"* (`model-routing-policy.md:116-117`, citing M41 spec v1.6.0). **M41 is closed and E41.5 is
+> merged, so there is no longer an epic to reach into.**
+>
+> **The exemplar moved, and so did the state it exemplifies.** All three "carried rows" are now
+> **configured** — `phase: remote:gpt-5.6-sol`, `milestone: remote:deepseek-v4-pro`,
+> `epic_manual: remote:deepseek-v4-flash` (verified in `.ai-project.yml`, this branch, 2026-09-03).
+> **The decided-but-unconfigured state this epic was named for no longer holds for any row**, so
+> option (1) is not merely stale — **it would specify a convention against a state nothing is in.**
+>
+> **The live state is a different one:** *configured, but not evidenced.* Four of five values were set
+> by **CFO allowance decision (SN-41), not by measurement**, while row P4's `why` cell still describes
+> an evidential derivation that no longer applies. **The convention must therefore cover both faces —
+> decision-ahead-of-configuration (the R6 case that forced it, now historical) and
+> configuration-ahead-of-evidence (the SN-41 case, live)** — or state which it covers and why.
+>
+> **X5's deadline is spent, and the harm it guarded against did not occur.** The ordering
+> (E44.2 before E41.5) was **not achieved**. X5 said that if E41.5 got there first it would be *"an
+> escalation, not an improvisation — M41 must not invent a convention M44 would then have to change."*
+> **M41 invented nothing**: E41.5 recorded *"beside the row, per the file's own convention above"* and
+> enumerated what it did not do. **This is the escalation X5 called for, ruled here rather than
+> improvised.**
+>
+> **Ruled at this level, not escalated.** No CFO-enumerated value moves — the SN-41 lineup stays
+> exactly as landed. E44.2 rewrites **the row's language**, which is record-shaping, and record-shaping
+> is M44's subject. *(Phase Chat test: changing a value the CFO enumerated escalates; supplying a term
+> he left unenumerated belongs to the level that owes it.)*
 
 **The failure mode is precise:** a reader assumes the file matches the ruling. **That is the divergence
 the guards exist to catch, arriving in the prose, where no guard reaches** — and it is `P12-GH-3`'s
@@ -251,8 +286,11 @@ shape at the configuration layer.
 
 1. **The convention**, defined once, for recording a decided-but-unconfigured state — what is written,
    where, and how a reader distinguishes it from a configured one.
-2. **Its application to the case that forced it** — row P4 and the three carried rows — **specified,
-   not performed.** E41.5 performs; **M44 must not reach into M41's epic.**
+2. **Its application, PERFORMED** (amended 2026-09-03) — rewrite row P4's language so it describes an
+   **allowance-decided** value, discharging the handoff E41.5 filed at `model-routing-policy.md:116`.
+   The three carried rows are **retained as the historical case that forced the convention**, not as a
+   pending edit: they are configured. **E41.5's bounded note is not superseded — it is the record that
+   the gap existed, and the rewrite closes it.**
 3. **A statement of what makes the two facts distinguishable without inference**, since inference is
    the failure mode.
 
@@ -260,9 +298,17 @@ shape at the configuration layer.
 
 - [ ] A reader can tell a decided-and-configured row from a decided-and-pending one **from the record
       alone, without inferring either from the other**
-- [ ] The convention is stated once, in a place E41.5 can cite
-- [ ] Delivered **before E41.5 lands**; if E41.5 approaches that point first, **escalate**
-- [ ] It does not perform M41's edit
+- [ ] The convention is stated once, in a place the routing policy can cite
+- [ ] **Row P4's language describes an allowance-decided value**, and E41.5's note at `:72-118` reads
+      as consistent with it rather than as a competing account
+- [ ] **The guard gap is disposed, not inherited.** `test_policy_mapping_agrees_with_yml_block` forces
+      the mapping table to agree with `.ai-project.yml`, but **the tier cells sit outside its parse** —
+      which is precisely why E41.5 left them put. E44.2 either **brings the rewritten language under a
+      guard, or states plainly that it did not and why.** *(This is the surviving substance of the
+      retired "does not perform M41's edit" criterion: the old rule protected these cells by forbidding
+      the edit; performing it means the protection must now come from somewhere else.)*
+- [ ] The convention covers **both faces** — decision-ahead-of-configuration and
+      configuration-ahead-of-evidence — or names which it covers and why
 
 ---
 
@@ -727,6 +773,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.0 | 2026-09-03 | **E44.2 re-scoped from *specified* to *performed*, on a question raised by the M44 Chat — the premise inverted.** This section assumed **E41.5 performs and M44 specifies**; E41.5 landed first (2026-09-01), declined the rewrite, and **handed it to E44.2 in the file itself** (`model-routing-policy.md:116-117`, citing M41 spec v1.6.0). M41 is closed, so **there is no epic left to reach into.** **All three "carried rows" are now configured** (verified in `.ai-project.yml`, 2026-09-03), so the decided-but-unconfigured state the epic was named for **holds for no row** and option (1) would specify against a state nothing is in. **The live state is *configured but not evidenced*** — SN-41 set four of five values by allowance, not measurement, while row P4's `why` cell still describes an evidential derivation. **X5's ordering was not achieved, but the harm it named did not occur**: M41 invented no competing convention, recording *"beside the row, per the file's own convention"* and bounding itself. **The retired "does not perform M41's edit" criterion is replaced by its surviving substance**, not deleted: the tier cells sit outside `test_policy_mapping_agrees_with_yml_block`'s parse, so E44.2 must bring the rewritten language under a guard or say it did not and why. **Ruled at phase level** — no CFO-enumerated value moves; the SN-41 lineup stands as landed. |
 | 1.1.1 | 2026-08-21 | **Adds a second departure specimen to E44.1's HQ-ritual deliverable**, offered by HQ as an input and taken here because E44.1 already owns departure. **It breaks the obvious design:** specimen 1 (a deferral resting on a session's continued existence) is a session that **knew what it was holding**; specimen 2 is a session **forked by a VS Code layout change**, which **did not know it had departed** and whose successor could not tell that it had. **A ritual that assumes the departing session knows it is leaving covers the first and not the second** — so the ritual cannot be only an act the departing session performs, and **something must be reconstructible by the arriving session from committed state alone.** Records the root cause as environmental — a chat moved between the editor area and the side panel — **explicitly not a governance failure**, and the reason *"the departing session knows it is departing"* is an unsafe premise. **No epic added or removed; no ordering, gate or acceptance-criterion change.** |
 | 1.1.0 | 2026-08-20 | **New scope, placed by HQ at phase spec v1.1.4 after this spec was accepted** — `P12-GH-4`'s narrow half, one normative paragraph on inter-chat governance messaging. **Placed into E44.3 rather than E44.5, which is this milestone's decision and not HQ's.** E44.3's organizing question is widened from *what does a manual chat do when its harness reports no model* to **what does a chat do when it cannot establish an identity it depends on**, with two subjects: the **self** case (model identity, R6 Decision 3) and the **counterparty** case (sender role). **They are one rule at two layers**, one carrying a recorded-declaration exception and one carrying none, **and that contrast is only visible if they are written together.** The epic is bounded against the channel's design, which stays filed unowned. **The Phase Chat declined to object to the placement** — see Notes for the test applied. **Also records a `P11-GH-1` instance with no detection problem**, the first on file: HQ knew it was placing scope into an accepted milestone and did not use the channel at the time. **The remedy therefore cannot be a detector alone** — every prior instance would have been caught by one; this one would not. **No epic added or removed; no ordering, gate or acceptance-criterion change elsewhere.** |
 | 1.0.2 | 2026-08-20 | **Corrects a false claim this spec made at v1.0.1: *"the session holding them ended."* HQ did not end** — it was live under a peer name the Phase Chat could not map to a governance role. **The error is recorded as its own class rather than edited away:** what was observed was a name failing to resolve; what was asserted was a session ceasing to exist. **That is `P11-GH-2` — a claim about one layer from a measurement in another — committed by the chat citing that gap record at every review this phase.** **The finding survives and HQ confirms it stands:** the roster shows **addresses, not roles**, and **an address change is indistinguishable from a session ending**, which is why the wrong diagnosis still produced the right action — refusing to route governance content to an unidentified peer. **All three annotations are discharged** (phase spec v1.1.3, PR #225), and HQ records that this entry is the only reason they survived. **Both recommendations adopted into M44's scope:** the HQ ritual must cover **departure**, not only arrival — the nine committed openers all describe arrival — and the **Phase Completion Declaration is the backstop terminus** for deferred phase-spec corrections. **Adds a third consequence:** the routing gap is an M46 input HQ has now placed — a **role registry** is a prerequisite for auto-open and go-to-blocker, not a convenience, and is Drivr's. **No scope, epic, ordering or acceptance-criterion change.** |
