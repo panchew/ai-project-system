@@ -23,7 +23,7 @@ If AI behavior conflicts with this document, **this document wins**.
 
 ---
 
-## 1A. Canonical Happy Path Enforcement (Mandatory)
+### 1.1 Canonical Happy Path Enforcement (Mandatory)
 
 All AI agents (Coding Agents and HQ Chats) MUST enforce the single canonical happy path for Epic closure:
 
@@ -698,7 +698,7 @@ AI must NOT ask:
 - Open-ended design questions during execution
 ---
 
-## 13. Error Handling
+## 10. Error Handling (Duplicate)
 
 If AI detects:
 - Missing specs
@@ -714,7 +714,7 @@ Silent failure or guessing is prohibited.
 
 ---
 
-## 14. Evolution
+## 11. Evolution
 
 These guidelines evolve:
 - Intentionally
@@ -724,7 +724,7 @@ These guidelines evolve:
 AI must always prefer the most recent version.
 ---
 
-## 10. Execution Completion vs. Acceptance
+## 12. Execution Completion vs. Acceptance
 
 **Critical distinction:** Execution completion is NOT the same as acceptance.
 
@@ -777,7 +777,7 @@ This separation prevents ambiguity and ensures human judgment is properly captur
 
 ---
 
-## 11. Human Review and Epic Review Seal
+## 13. Human Review and Epic Review Seal
 
 After a Coding Agent reports execution completion, human review is required before acceptance can be finalized.
 
@@ -822,7 +822,7 @@ Example Epic Review Seal structure (see governance/templates/epic-review-seal.md
 
 ---
 
-## 12. Acceptance Outcomes
+## 14. Acceptance Outcomes
 
 HQ Chat makes explicit acceptance decisions using one of three outcomes:
 
@@ -844,7 +844,7 @@ Full normative definition: PROJECT-SYSTEM-GUIDELINES.md **§11.6 "Default-Accept
 
 ---
 
-## 13. Exit Ritual (Mandatory)
+## 15. Exit Ritual (Mandatory)
 
 A Coding Agent chat concludes ONLY when:
 
@@ -858,7 +858,7 @@ A Coding Agent chat concludes ONLY when:
 
 ---
 
-## 14. Error Handling
+## 16. Error Handling
 
 If AI detects:
 - Missing specs
@@ -874,14 +874,14 @@ Silent failure or guessing is prohibited.
 
 ---
 
-## 16. Visual Artifact Production
+## 17. Visual Artifact Production
 
 Visual artifacts are a **default-on** capability (SN-17): visuals are the CFO's default lens on an
 increasingly autonomous system. Every chat level may produce a visual appropriate to its altitude —
 but only when the capability is active and the producing agent can call tools. This section governs
 *use*; the configuration schema is defined in `governance/ai-project-yml-spec.md` §3.5.
 
-### 16.1 Default-on gating
+### 17.1 Default-on gating
 
 The capability is active by default; `.ai-project.yml` carrying `visual_artifacts.enabled: false` is
 the explicit **opt-out**. An **absent block or an explicit `enabled: true` means the capability is
@@ -894,7 +894,7 @@ automatically, see §16.2 and the milestone-level structural-first/trigger-set p
 the single config source in `bin/ai-project-orchestrator` (`load_yml_config` /
 `resolve_visual_artifacts`).
 
-### 16.2 Per-level abstraction
+### 17.2 Per-level abstraction
 
 Each chat level produces visuals at its own level of abstraction. An agent produces the visual for
 **its** level — it does not reach up or down the cascade:
@@ -915,7 +915,7 @@ abstraction in **both** tracks — a proposed and an implemented visual (§16.6)
 This table names *what kind* of visual a level produces; it does not say *when* production is
 automatic versus on request — see §16.8 for the trigger-set policy.
 
-### 16.3 Two modes
+### 17.3 Two modes
 
 - **Structural** — diagrams expressed as text (Mermaid / PlantUML), committed alongside the artifact
   they illustrate. Structural visuals need no endpoint and no capability beyond writing a fenced code
@@ -927,7 +927,7 @@ automatic versus on request — see §16.8 for the trigger-set policy.
 Prefer Structural for most coverage: it is what makes the proposed→implemented two-track default
 (§16.6) affordable, since most pairs are two text diagrams at no cost.
 
-### 16.4 Tool-capability gating
+### 17.4 Tool-capability gating
 
 The gate is **capability, not the chat-level label.** An agent produces a generative visual only if
 it can call tools (run `bin/ai-project-visual` and reach the endpoint). A chat operating in a
@@ -936,7 +936,7 @@ it cannot produce. When a level's visual requires generation and the agent lacks
 records the visual intent in its artifact and defers generation to a tool-capable agent rather than
 fabricating a result.
 
-### 16.5 What to commit, and where
+### 17.5 What to commit, and where
 
 - **Structural** diagrams live inline in the governing artifact (spec, brief, guide) or as a sibling
   `.mmd` / `.puml` file next to it.
@@ -952,7 +952,7 @@ fabricating a result.
   generated output: it ships the guidance, the helper, and the test, and references any generated
   artifact by link like every other adopter.
 
-### 16.6 Proposed vs. implemented
+### 17.6 Proposed vs. implemented
 
 When the capability is enabled, every level produces **both** a *proposed* visual (the intent, before
 the work is built) and an *implemented* visual (what was actually built, after) — not one or the
@@ -981,7 +981,7 @@ the agent records the intent and defers it per §16.4 rather than fabricating a 
 See `governance/guides/visual-artifacts.md` for endpoint configuration, structural-diagram tooling,
 output formats, and a worked example per chat level.
 
-### 16.7 Clips
+### 17.7 Clips
 
 A **clip** is a short video that renders **one** governance node's proposed→implemented story (§16.6)
 as motion — the most CFO-facing visual, and the one that doubles as publishable media. Its policy is
@@ -1002,7 +1002,7 @@ same hosted asset reused, not a second production), see `governance/guides/visua
 **Reference §7 for the binding schema — `clip` is an existing `What` value; do not restate the schema
 here.**
 
-### 16.8 Default-on trigger policy
+### 17.8 Default-on trigger policy
 
 With the capability on (default per §16.1), **structural-first governs the zero-infrastructure
 default path**: no `comfyui_url` configured ⇒ Structural only (§16.3); Generative activates only
@@ -1026,7 +1026,7 @@ Where each of these artifact types records its binding is defined by the placeme
 
 ---
 
-## 15. Closing Statement
+## 18. Closing Statement
 
 AI is a force multiplier only when it is constrained.
 
