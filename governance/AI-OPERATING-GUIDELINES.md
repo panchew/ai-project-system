@@ -1,8 +1,8 @@
 # AI OPERATING GUIDELINES
 *(Authoritative AI Usage and Execution Policy)*
 
-**Version:** 2.11.0  
-**Effective Date:** 2026-09-02  
+**Version:** 2.12.0  
+**Effective Date:** 2026-09-03  
 **Status:** Current  
 
 ---
@@ -23,7 +23,7 @@ If AI behavior conflicts with this document, **this document wins**.
 
 ---
 
-## 1A. Canonical Happy Path Enforcement (Mandatory)
+### 1.1 Canonical Happy Path Enforcement (Mandatory)
 
 All AI agents (Coding Agents and HQ Chats) MUST enforce the single canonical happy path for Epic closure:
 
@@ -499,7 +499,7 @@ Phase Execution Chat is a **finite autonomous execution and delivery agent scope
 
 **Stage 1 — Execution:** Reviews the Phase spec, produces Milestone specs and Milestone Execution Chat Starters, creates a phase branch, commits all planning artifacts, and opens a PR to HQ Chat for review.
 
-**Stage 2 — Delivery:** After HQ Chat accepts the PR, oversees Milestone execution — receives Milestone Completion Notices, accepts clean Milestone deliveries by an in-chat acknowledgment that names the party that reviewed and accepted (a Milestone Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing), and when all Milestones are accepted, delivers the Phase by executing the canonical phase-closure sequence (PROJECT-SYSTEM-GUIDELINES.md §5C) — the consolidation merge plus the mandatory README-update, version-bump, and git-tag steps.
+**Stage 2 — Delivery:** After HQ Chat accepts the PR, oversees Milestone execution — receives Milestone Completion Notices, accepts clean Milestone deliveries by an in-chat acknowledgment that names the party that reviewed and accepted (a Milestone Review Decision is the exception path only — see §14 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing), and when all Milestones are accepted, delivers the Phase by executing the canonical phase-closure sequence (PROJECT-SYSTEM-GUIDELINES.md §5C) — the consolidation merge plus the mandatory README-update, version-bump, and git-tag steps.
 
 Phase Execution Chat does NOT:
 - Implement project code or modify infrastructure
@@ -518,7 +518,7 @@ Milestone Execution Chat is a **finite autonomous execution and delivery agent s
 
 **Stage 1 — Execution:** Reviews the Milestone spec, produces Epic specs and Epic Execution Chat Starters, creates a milestone branch, commits all planning artifacts, and opens a PR to the parent chat for review.
 
-**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), accepts clean Epic deliveries by an in-chat acknowledgment that names the party that reviewed and accepted (an Epic Review Decision is the exception path only — see §12 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing), and performs the merge of each accepted Epic's branch as the parent; when all Epics are accepted, the **Phase Execution Chat** delivers the Milestone by merging the milestone branch (§11.6 — the parent performs the merge of a child's branch).
+**Stage 2 — Delivery:** After the parent chat accepts the PR, oversees Epic execution — receives Epic Completion Notices (Delivery Notices from Coding Agents), accepts clean Epic deliveries by an in-chat acknowledgment that names the party that reviewed and accepted (an Epic Review Decision is the exception path only — see §14 "Acceptance Outcomes" and PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing), and performs the merge of each accepted Epic's branch as the parent; when all Epics are accepted, the **Phase Execution Chat** delivers the Milestone by merging the milestone branch (§11.6 — the parent performs the merge of a child's branch).
 
 Milestone Execution Chat does NOT:
 - Implement project code or modify infrastructure
@@ -698,7 +698,7 @@ AI must NOT ask:
 - Open-ended design questions during execution
 ---
 
-## 13. Error Handling
+## 10. Error Handling (Duplicate)
 
 If AI detects:
 - Missing specs
@@ -714,7 +714,7 @@ Silent failure or guessing is prohibited.
 
 ---
 
-## 14. Evolution
+## 11. Evolution
 
 These guidelines evolve:
 - Intentionally
@@ -724,7 +724,7 @@ These guidelines evolve:
 AI must always prefer the most recent version.
 ---
 
-## 10. Execution Completion vs. Acceptance
+## 12. Execution Completion vs. Acceptance
 
 **Critical distinction:** Execution completion is NOT the same as acceptance.
 
@@ -741,7 +741,7 @@ Human review (plain language) → AI-generated Epic Review Seal → HQ decision
 **HQ Chat review behavior:**
 - Ask humans for plain-language findings only; do not require markdown editing.
 - Generate or request AI-generated Epic Review Seals from human input, then confirm accuracy with the human before deciding.
-- Accept clean deliveries by an acknowledgment that names the party that reviewed and accepted per default-accept (§12 "Acceptance Outcomes"; PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing); record exception-path decisions (reject / accept-with-follow-ups) in the Review Decision; do not introduce execution or acceptance loops.
+- Accept clean deliveries by an acknowledgment that names the party that reviewed and accepted per default-accept (§14 "Acceptance Outcomes"; PROJECT-SYSTEM-GUIDELINES.md §11.6; silence accepts nothing); record exception-path decisions (reject / accept-with-follow-ups) in the Review Decision; do not introduce execution or acceptance loops.
 
 **Coding Agent support during review:**
 - When asked, generate Epic Review Seal drafts from human-provided natural language without altering intent.
@@ -777,7 +777,7 @@ This separation prevents ambiguity and ensures human judgment is properly captur
 
 ---
 
-## 11. Human Review and Epic Review Seal
+## 13. Human Review and Epic Review Seal
 
 After a Coding Agent reports execution completion, human review is required before acceptance can be finalized.
 
@@ -822,7 +822,7 @@ Example Epic Review Seal structure (see governance/templates/epic-review-seal.md
 
 ---
 
-## 12. Acceptance Outcomes
+## 14. Acceptance Outcomes
 
 HQ Chat makes explicit acceptance decisions using one of three outcomes:
 
@@ -844,7 +844,7 @@ Full normative definition: PROJECT-SYSTEM-GUIDELINES.md **§11.6 "Default-Accept
 
 ---
 
-## 13. Exit Ritual (Mandatory)
+## 15. Exit Ritual (Mandatory)
 
 A Coding Agent chat concludes ONLY when:
 
@@ -858,7 +858,7 @@ A Coding Agent chat concludes ONLY when:
 
 ---
 
-## 14. Error Handling
+## 16. Error Handling
 
 If AI detects:
 - Missing specs
@@ -874,14 +874,14 @@ Silent failure or guessing is prohibited.
 
 ---
 
-## 16. Visual Artifact Production
+## 17. Visual Artifact Production
 
 Visual artifacts are a **default-on** capability (SN-17): visuals are the CFO's default lens on an
 increasingly autonomous system. Every chat level may produce a visual appropriate to its altitude —
 but only when the capability is active and the producing agent can call tools. This section governs
 *use*; the configuration schema is defined in `governance/ai-project-yml-spec.md` §3.5.
 
-### 16.1 Default-on gating
+### 17.1 Default-on gating
 
 The capability is active by default; `.ai-project.yml` carrying `visual_artifacts.enabled: false` is
 the explicit **opt-out**. An **absent block or an explicit `enabled: true` means the capability is
@@ -890,11 +890,11 @@ visual production, and the integration test that exercises it MUST skip (not fai
 are `enabled` (bool), `comfyui_url` (URL), `types` (a subset of `diagrams`, `infographics`, `video`),
 and `visual_required_for_specs` (bool, defaulted `true` — an enforcement setting governing whether
 specs are required to carry a visual; it does not decide *which* artifact types are produced
-automatically, see §16.2 and the milestone-level structural-first/trigger-set policy), read through
+automatically, see §17.2 and the milestone-level structural-first/trigger-set policy), read through
 the single config source in `bin/ai-project-orchestrator` (`load_yml_config` /
 `resolve_visual_artifacts`).
 
-### 16.2 Per-level abstraction
+### 17.2 Per-level abstraction
 
 Each chat level produces visuals at its own level of abstraction. An agent produces the visual for
 **its** level — it does not reach up or down the cascade:
@@ -910,12 +910,12 @@ Each chat level produces visuals at its own level of abstraction. An agent produ
 Visual intent originates at the **Creation Chat** — elicited at inception via `seed.md` Rule 4 ("What
 does success look like visually?") — and propagates down the artifact cascade: each level translates
 the level above's vision into the visual appropriate to its own scope. Each level produces that
-abstraction in **both** tracks — a proposed and an implemented visual (§16.6) — at its own altitude.
+abstraction in **both** tracks — a proposed and an implemented visual (§17.6) — at its own altitude.
 
 This table names *what kind* of visual a level produces; it does not say *when* production is
-automatic versus on request — see §16.8 for the trigger-set policy.
+automatic versus on request — see §17.8 for the trigger-set policy.
 
-### 16.3 Two modes
+### 17.3 Two modes
 
 - **Structural** — diagrams expressed as text (Mermaid / PlantUML), committed alongside the artifact
   they illustrate. Structural visuals need no endpoint and no capability beyond writing a fenced code
@@ -925,9 +925,9 @@ automatic versus on request — see §16.8 for the trigger-set policy.
   imagery, infographics, and UI mockups where a rendered image communicates better than a diagram.
 
 Prefer Structural for most coverage: it is what makes the proposed→implemented two-track default
-(§16.6) affordable, since most pairs are two text diagrams at no cost.
+(§17.6) affordable, since most pairs are two text diagrams at no cost.
 
-### 16.4 Tool-capability gating
+### 17.4 Tool-capability gating
 
 The gate is **capability, not the chat-level label.** An agent produces a generative visual only if
 it can call tools (run `bin/ai-project-visual` and reach the endpoint). A chat operating in a
@@ -936,7 +936,7 @@ it cannot produce. When a level's visual requires generation and the agent lacks
 records the visual intent in its artifact and defers generation to a tool-capable agent rather than
 fabricating a result.
 
-### 16.5 What to commit, and where
+### 17.5 What to commit, and where
 
 - **Structural** diagrams live inline in the governing artifact (spec, brief, guide) or as a sibling
   `.mmd` / `.puml` file next to it.
@@ -952,7 +952,7 @@ fabricating a result.
   generated output: it ships the guidance, the helper, and the test, and references any generated
   artifact by link like every other adopter.
 
-### 16.6 Proposed vs. implemented
+### 17.6 Proposed vs. implemented
 
 When the capability is enabled, every level produces **both** a *proposed* visual (the intent, before
 the work is built) and an *implemented* visual (what was actually built, after) — not one or the
@@ -964,7 +964,7 @@ is the routine default, not an exception.**
 is *coverage* — a proposed→implemented pair at each enabled level — not restraint.
 
 **Structural-first is what makes that affordable.** Most coverage is free: a proposed and an
-implemented Mermaid/PlantUML diagram are two text blocks with no endpoint and no cost (§16.3). Lean on
+implemented Mermaid/PlantUML diagram are two text blocks with no endpoint and no cost (§17.3). Lean on
 Structural for most pairs and reserve Generative (ComfyUI) for the levels where a rendered image
 genuinely communicates better — a Creation concept, an Epic mockup. Because the cheap path carries
 most of the load, "nothing is too much" stays cheap.
@@ -974,23 +974,23 @@ The two tracks are recorded through the **`State` field of the §7 binding** (`p
 of each `State`. This subsection sets the *expectation*; §7 defines *how* a track is recorded. Do not
 restate that schema here.
 
-The gates still bind: the two-track default applies **only when enabled** (§16.1), and a tool-less
-surface produces **Structural** visuals only (§16.4) — where a proposed visual would need generation,
-the agent records the intent and defers it per §16.4 rather than fabricating a render.
+The gates still bind: the two-track default applies **only when enabled** (§17.1), and a tool-less
+surface produces **Structural** visuals only (§17.4) — where a proposed visual would need generation,
+the agent records the intent and defers it per §17.4 rather than fabricating a render.
 
 See `governance/guides/visual-artifacts.md` for endpoint configuration, structural-diagram tooling,
 output formats, and a worked example per chat level.
 
-### 16.7 Clips
+### 17.7 Clips
 
-A **clip** is a short video that renders **one** governance node's proposed→implemented story (§16.6)
+A **clip** is a short video that renders **one** governance node's proposed→implemented story (§17.6)
 as motion — the most CFO-facing visual, and the one that doubles as publishable media. Its policy is
 single-parent binding:
 
 - **Single-parent.** A clip binds to exactly **one** node — one epic, one milestone, or one phase —
   via the §7 binding with `What: clip` and `Level` set to that node. It narrates **that node's** two
-  tracks (§16.6); it does not reach up or down the cascade (the altitude rule, §16.2).
-- **Hosted and linked, never committed.** A clip is a generated `.webm`, so by-link (§16.5 / §7) binds
+  tracks (§17.6); it does not reach up or down the cascade (the altitude rule, §17.2).
+- **Hosted and linked, never committed.** A clip is a generated `.webm`, so by-link (§17.5 / §7) binds
   it exactly as it binds an image: the helper writes a local working file, the agent hosts it, and the
   **link** — not the binary — travels with the decision record. Do not commit the `.webm`.
 - **No cross-cutting reel.** A clip is single-parent by rule. A project-spanning editorial montage that
@@ -1002,12 +1002,12 @@ same hosted asset reused, not a second production), see `governance/guides/visua
 **Reference §7 for the binding schema — `clip` is an existing `What` value; do not restate the schema
 here.**
 
-### 16.8 Default-on trigger policy
+### 17.8 Default-on trigger policy
 
-With the capability on (default per §16.1), **structural-first governs the zero-infrastructure
-default path**: no `comfyui_url` configured ⇒ Structural only (§16.3); Generative activates only
-once an endpoint is present and the tool-capability gate (§16.4) is satisfied. This subsection does
-not alter the §16.3/§16.4 mode split or gate — it states which path fires by default.
+With the capability on (default per §17.1), **structural-first governs the zero-infrastructure
+default path**: no `comfyui_url` configured ⇒ Structural only (§17.3); Generative activates only
+once an endpoint is present and the tool-capability gate (§17.4) is satisfied. This subsection does
+not alter the §17.3/§17.4 mode split or gate — it states which path fires by default.
 
 **The automatic trigger set.** Two artifact families get a visual automatically, with no request
 required:
@@ -1026,7 +1026,7 @@ Where each of these artifact types records its binding is defined by the placeme
 
 ---
 
-## 15. Closing Statement
+## 18. Closing Statement
 
 AI is a force multiplier only when it is constrained.
 
@@ -1039,19 +1039,20 @@ Constraints enable autonomy.
 
 | Version | Date | Change |
 |---|---|---|
-| 2.11.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** §12 "Default-Accept (SN-13) — Normative" and its outcome-1 line now state that a clean delivery is accepted by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity) — **silence accepts nothing** — with the acceptance record unchanged (merge + in-chat acknowledgment, no new artifact). Amended the always-restate Stage-2 lines in §3.6/§3.7 and the §10 HQ review-behavior bullet from "accept by silence" to the attributable-acknowledgment model, each citing the normative definition at PSG §11.6. No authority, mode, or §11.6.1 rule changed. |
-| 2.10.2 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Corrected every statement that instructed a child to merge its own branch, in agreement with the one normative statement now in PROJECT-SYSTEM-GUIDELINES.md §11.6: §1A step 7 (the parent performs the merge after authorization — a child never holds merge authorization) and §3.7 Stage 2 (the Milestone Chat performs the merge of each accepted Epic's branch as the parent; the Phase Execution Chat delivers the Milestone by merging the milestone branch). The parent's-merge rule is defined in PSG §11.6; this document cites it, not restates it. No authority, mode, or §11.6.1 rule changed. |
+| 2.12.0 | 2026-09-03 | **The fence-aware renumber (E44.4, P12-M44).** Renumbered the real sections to `1..n` — no duplicate number, no duplicate title. `1A` (Canonical Happy Path Enforcement) is folded into section 1 as sub-part `1.1` (E44.4's recorded design decision, spec option 2), so sections 2–9 keep their numbers and the tail renumbers in place: `13, 14, 10, 11, 12, 13, 14, 16, 15` → `10, 11, 12, 13, 14, 15, 16, 17, 18`. The "Error Handling" title collision resolves: the first (now §10) is titled "Error Handling (Duplicate)"; the second (now §16) keeps "Error Handling". Visual sub-sections 16.1–16.8 → 17.1–17.8. Cross-references to changed numbers are swept corpus-wide (governance, templates, systems, starters, rulings, phase/milestone/epic specs); no quoted example was rewritten — the fenced example blocks are byte-identical. `Changelog` remains unnumbered by exemption. Not a hotfix (ruling Decision 6): renumber, sweep, and bump travel together. No authority, mode, or normative-text change. |
+| 2.11.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43).** §14 "Default-Accept (SN-13) — Normative" and its outcome-1 line now state that a clean delivery is accepted by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity) — **silence accepts nothing** — with the acceptance record unchanged (merge + in-chat acknowledgment, no new artifact). Amended the always-restate Stage-2 lines in §3.6/§3.7 and the §12 HQ review-behavior bullet from "accept by silence" to the attributable-acknowledgment model, each citing the normative definition at PSG §11.6. No authority, mode, or §11.6.1 rule changed. |
+| 2.10.2 | 2026-09-02 | **The parent performs the merge (E43.1, P12-M43).** Corrected every statement that instructed a child to merge its own branch, in agreement with the one normative statement now in PROJECT-SYSTEM-GUIDELINES.md §11.6: §1.1 step 7 (the parent performs the merge after authorization — a child never holds merge authorization) and §3.7 Stage 2 (the Milestone Chat performs the merge of each accepted Epic's branch as the parent; the Phase Execution Chat delivers the Milestone by merging the milestone branch). The parent's-merge rule is defined in PSG §11.6; this document cites it, not restates it. No authority, mode, or §11.6.1 rule changed. |
 | 2.10.1 | 2026-08-03 | **SN-23 citations date-qualified (SN-28; HQ Ruling 2026-08-01, Decision 4).** Two different Steering Notes hold `id: SN-23` — 2026-07-18 (reference-first handoff / platform agnosticism) and 2026-07-20 (the P10 adoption spine) — and this document and `governance/systems/chat-hierarchy.md` each cited *"SN-23 Decision 2"* meaning **unrelated** decisions, with the latter declaring its one superseded. A reader following this document's citation by number reached the supersession notice and could conclude **platform agnosticism was superseded. It was not.** All three SN-23 citations here (§3.1.1 intro, §3.1.1 "Fallback — repo-less delivery", and the v2.10.0 changelog entry) now carry the date form `SN-23 (2026-07-18)`. **Citation disambiguation only — no normative requirement added, removed, or changed, and neither note is renumbered** (Decision 4: both keep `id: SN-23` permanently). The allocation and separating rules are recorded in `governance/systems/creation-chat-guide.md`, "Steering Note ID Allocation". E36.1 (P11-M36). |
 | 2.10.0 | 2026-07-18 | **Reference-first artifact handoff (SN-23 (2026-07-18)).** Rewrote §3.1.1 from "Epic Execution Chat Starter Format" into the generalized normative artifact-handoff rule: a committed, git-tracked artifact is passed **by reference, never by paste or full-body display** (IDE attach + one-line intent, or the canonical reference line defined in-section); producer no-echo half (never display a body you wrote to file) + consumer selective-read half (read once, selectively; frontmatter + Summary + DoD/QA suffices under PSG §11.6). The four-backtick fenced full-body form is **retained, demoted to the documented repo-less fallback** (SN-23 (2026-07-18) Decision 2 — platform agnosticism preserved; paste is not deleted). All other mandating surfaces (three `governance/templates/` starters, `governance/systems/epic-execution-chat-starter.md`, `governance/systems/artifact-communication-protocol.md` §Manual Mode, `governance/EPIC-EXECUTION-CHAT-STARTER.md`, `governance/agents/governance.agent.md`) now cite §3.1.1 instead of restating the paste mandate. Evidence: `.ai-project/artifacts/reference/token-measurement/echo-cost-note.md` (E30.1 mechanism, honest bound stated). Per SN-23 (2026-07-18), CFO-ratified; E30.4 (P9-M30). |
-| 2.9.0 | 2026-07-13 | **Retired the Delivery Authorization ceremonial block (SN-19).** Reworded §1A step 6, the line-716 "Delivery Notice... prerequisite" bullet, and the line-756 HQ-enforcement bullet from "issue explicit Epic Delivery Authorization" to in-chat acceptance acknowledgment — the ceremonial artifact is removed, the underlying human merge-authorization gate is preserved unchanged (harness-enforced). Companion edits retired the same ceremony from `governance/templates/{milestone,phase}-execution-chat-starter.md` and all touch points in the three `governance/systems/` mirrors (Milestone, Phase, HQ); the CFO Deployment Authorization (a separate, untouched ceremony) is unaffected. Per SN-19/P7-GH-17; E28.4 (P7-M28). |
-| 2.8.0 | 2026-07-13 | **Default-on trigger policy (SN-17).** Added §16.8 "Default-on trigger policy": states structural-first as the zero-infrastructure default path (no `comfyui_url` ⇒ Structural only; Generative activates only with an endpoint present and the §16.4 gate satisfied — cross-references §16.3/§16.4, does not restate them) and codifies **the automatic trigger set** — Phase/Milestone/Epic specs plus the four delivery/closure declarations (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`) get a visual automatically; every other artifact type is on-demand only. Added a one-line pointer from §16.2 to §16.8 (§16.2 states *what kind*, §16.8 states *when automatic*). **Appended as §16.8, following the §16.6/§16.7 precedent — §16.2-§16.7 not renumbered.** Closes the delivery/closure Visual-Bindings gap found during grounding: added a "Visual Bindings" section (mirroring the existing spec-template pattern) to all four delivery/closure templates, and extended the `visual-artifacts.md` §7 placement table with the four new rows. Completes, with E27.1, the milestone-level joint criterion: a fresh project with no `visual_artifacts` block now produces structural visuals for a new spec by default. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
-| 2.7.0 | 2026-07-13 | **Default-on flip (SN-17).** Rewrote §16 intro and §16.1 "Opt-in gating" → "Default-on gating": `visual_artifacts.enabled: false` is now the explicit **opt-out**; an absent block or `enabled: true` means the capability is **on**. Added the new `visual_required_for_specs` enforcement-setting key (defaulted `true`) to the §16.1 key list — governs whether specs are required to carry a visual, distinct from *which* artifact types are automatic (E27.2's surface). Reconciled §16.5's source-repo sentence: this repo keeps `enabled: false` (the explicit opt-out) — investigated dogfooding default-on but `bin/ai-project-visual --type diagrams` is a ComfyUI-generative call in the current implementation, not an endpoint-free structural diagram, so enabling would require a live endpoint the suite doesn't have (verified). Schema in `ai-project-yml-spec.md` §3.5 (v2.3.0). Per SN-17 (ratified SN-18); E27.1 (P7-M27). |
-| 2.6.0 | 2026-07-02 | Codified **SN-13 default-accept** as the normative acceptance model — new "Default-Accept (SN-13) — Normative" block in §12 "Acceptance Outcomes": **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) accepted **by silence**, no Review Decision artifact, merge + in-chat acknowledgment as the acceptance record; **exception path** = Review Decision (Epic Review Seal at Epic level) issued only when a delivery is not clean; **Layer-8 human review preserved** (two gates, not one). Reconciled §3.6/§3.7 Stage-2 "issues … Review Decisions" clauses (E25.1's §5C phase-delivery language kept intact), the §10 HQ-review-behavior bullet, and the §12 immutability sentence to the exception path. Full normative definition lives at PSG §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
+| 2.9.0 | 2026-07-13 | **Retired the Delivery Authorization ceremonial block (SN-19).** Reworded §1.1 step 6, the line-716 "Delivery Notice... prerequisite" bullet, and the line-756 HQ-enforcement bullet from "issue explicit Epic Delivery Authorization" to in-chat acceptance acknowledgment — the ceremonial artifact is removed, the underlying human merge-authorization gate is preserved unchanged (harness-enforced). Companion edits retired the same ceremony from `governance/templates/{milestone,phase}-execution-chat-starter.md` and all touch points in the three `governance/systems/` mirrors (Milestone, Phase, HQ); the CFO Deployment Authorization (a separate, untouched ceremony) is unaffected. Per SN-19/P7-GH-17; E28.4 (P7-M28). |
+| 2.8.0 | 2026-07-13 | **Default-on trigger policy (SN-17).** Added §17.8 "Default-on trigger policy": states structural-first as the zero-infrastructure default path (no `comfyui_url` ⇒ Structural only; Generative activates only with an endpoint present and the §17.4 gate satisfied — cross-references §17.3/§17.4, does not restate them) and codifies **the automatic trigger set** — Phase/Milestone/Epic specs plus the four delivery/closure declarations (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`) get a visual automatically; every other artifact type is on-demand only. Added a one-line pointer from §17.2 to §17.8 (§17.2 states *what kind*, §17.8 states *when automatic*). **Appended as §17.8, following the §17.6/§17.7 precedent — §17.2-§17.7 not renumbered.** Closes the delivery/closure Visual-Bindings gap found during grounding: added a "Visual Bindings" section (mirroring the existing spec-template pattern) to all four delivery/closure templates, and extended the `visual-artifacts.md` §7 placement table with the four new rows. Completes, with E27.1, the milestone-level joint criterion: a fresh project with no `visual_artifacts` block now produces structural visuals for a new spec by default. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
+| 2.7.0 | 2026-07-13 | **Default-on flip (SN-17).** Rewrote §17 intro and §17.1 "Opt-in gating" → "Default-on gating": `visual_artifacts.enabled: false` is now the explicit **opt-out**; an absent block or `enabled: true` means the capability is **on**. Added the new `visual_required_for_specs` enforcement-setting key (defaulted `true`) to the §17.1 key list — governs whether specs are required to carry a visual, distinct from *which* artifact types are automatic (E27.2's surface). Reconciled §17.5's source-repo sentence: this repo keeps `enabled: false` (the explicit opt-out) — investigated dogfooding default-on but `bin/ai-project-visual --type diagrams` is a ComfyUI-generative call in the current implementation, not an endpoint-free structural diagram, so enabling would require a live endpoint the suite doesn't have (verified). Schema in `ai-project-yml-spec.md` §3.5 (v2.3.0). Per SN-17 (ratified SN-18); E27.1 (P7-M27). |
+| 2.6.0 | 2026-07-02 | Codified **SN-13 default-accept** as the normative acceptance model — new "Default-Accept (SN-13) — Normative" block in §14 "Acceptance Outcomes": **happy path** = a clean delivery (Definition of Done + acceptance criteria + spec) accepted **by silence**, no Review Decision artifact, merge + in-chat acknowledgment as the acceptance record; **exception path** = Review Decision (Epic Review Seal at Epic level) issued only when a delivery is not clean; **Layer-8 human review preserved** (two gates, not one). Reconciled §3.6/§3.7 Stage-2 "issues … Review Decisions" clauses (E25.1's §5C phase-delivery language kept intact), the §12 HQ-review-behavior bullet, and the §14 immutability sentence to the exception path. Full normative definition lives at PSG §11.6. Codifies SN-13 (P5); fixes P6-GH-10; E25.2 (P6-M25). |
 | 2.5.1 | 2026-07-02 | Reconciled the §3.6 Stage 2 phase-delivery clause to the canonical phase-closure sequence (PSG §5C, new in PSG v2.2.0): the Phase Chat delivers the Phase by executing §5C — the consolidation merge **plus** the mandatory README-update, version-bump, and git-tag steps — not by merging the phase branch alone. No acceptance / Review-Decision language changed (that surface is E25.2). E25.1 (P6-M25). |
-| 2.5.0 | 2026-07-02 | Added §16.7 "Clips": a clip is a short video rendering **one** governance node's proposed→implemented story (§16.6) as motion. Establishes the clip convention at policy altitude — **single-parent** (binds to exactly one epic / milestone / phase via the §7 binding with `What: clip`, narrating that node's two tracks, not spanning the cascade), **hosted and linked, never committed** (by-link, §16.5 / §7, holds for `.webm` as for images), and the **no-cross-cutting-reel boundary** (a project-spanning montage is deferred in P6). Points to `governance/guides/visual-artifacts.md` §8 for production (on the verified LTX-Video path) and publish (same hosted asset reused). The §7 schema is **referenced, not restated**; `clip` is an existing `What` value (not re-added). Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
-| 2.4.0 | 2026-06-29 | Added §16.6 "Proposed vs. implemented": establishes the **two-track expectation as the routine default** — when `visual_artifacts.enabled: true`, every level produces **both** a *proposed* (intent, before build) and an *implemented* (after) visual, with the **"nothing is too much"** coverage bar and a **Structural-first** preference (most pairs are two free text diagrams; reserve Generative for where a render communicates better). The two tracks are recorded via the §7 binding's `State` field (referenced, **not** restated); the §16.1 opt-in and §16.4 tool-capability gates still bind (a tool-less surface produces Structural only and defers generative intent). Added a one-line tie-in to §16.2 and §16.3. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
-| 2.3.0 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Rewrote §16.5 to the **by-link** storage model: generated visual artifacts are **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend and references by link from the governing artifact (the link, not the binary, travels with the decision record). Generalized the source-repo bullet so that *no* project commits generated binaries — `enabled: false` is one instance of that universal rule. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
-| 2.2.0 | 2026-06-28 | Added §16 "Visual Artifact Production": per-level abstraction table (SN-11), structural vs. generative modes, tool-capability gating, and commit guidance — opt-in on `visual_artifacts.enabled` (ai-project-yml-spec.md §3.5). Part of E22.2 (P5-M22), which completes VA-1 with `seed.md` Rule 4 visual-intent elicitation, the `bin/ai-project-visual` helper, `governance/guides/visual-artifacts.md`, and a skip-on-disabled integration test. |
+| 2.5.0 | 2026-07-02 | Added §17.7 "Clips": a clip is a short video rendering **one** governance node's proposed→implemented story (§17.6) as motion. Establishes the clip convention at policy altitude — **single-parent** (binds to exactly one epic / milestone / phase via the §7 binding with `What: clip`, narrating that node's two tracks, not spanning the cascade), **hosted and linked, never committed** (by-link, §17.5 / §7, holds for `.webm` as for images), and the **no-cross-cutting-reel boundary** (a project-spanning montage is deferred in P6). Points to `governance/guides/visual-artifacts.md` §8 for production (on the verified LTX-Video path) and publish (same hosted asset reused). The §7 schema is **referenced, not restated**; `clip` is an existing `What` value (not re-added). Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
+| 2.4.0 | 2026-06-29 | Added §17.6 "Proposed vs. implemented": establishes the **two-track expectation as the routine default** — when `visual_artifacts.enabled: true`, every level produces **both** a *proposed* (intent, before build) and an *implemented* (after) visual, with the **"nothing is too much"** coverage bar and a **Structural-first** preference (most pairs are two free text diagrams; reserve Generative for where a render communicates better). The two tracks are recorded via the §7 binding's `State` field (referenced, **not** restated); the §17.1 opt-in and §17.4 tool-capability gates still bind (a tool-less surface produces Structural only and defers generative intent). Added a one-line tie-in to §17.2 and §17.3. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
+| 2.3.0 | 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Rewrote §17.5 to the **by-link** storage model: generated visual artifacts are **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend and references by link from the governing artifact (the link, not the binary, travels with the decision record). Generalized the source-repo bullet so that *no* project commits generated binaries — `enabled: false` is one instance of that universal rule. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
+| 2.2.0 | 2026-06-28 | Added §17 "Visual Artifact Production": per-level abstraction table (SN-11), structural vs. generative modes, tool-capability gating, and commit guidance — opt-in on `visual_artifacts.enabled` (ai-project-yml-spec.md §3.5). Part of E22.2 (P5-M22), which completes VA-1 with `seed.md` Rule 4 visual-intent elicitation, the `bin/ai-project-visual` helper, `governance/guides/visual-artifacts.md`, and a skip-on-disabled integration test. |
 | 2.1.0 | 2026-06-23 | Added §3.5–3.7 definitions for Creation Chat, Phase Chat, and Milestone Chat. Added chat hierarchy table to §3 intro. Updated Purpose to name all five chat types. Fixes P5-GH-7: Phase/Milestone chat roles introduced in P4 were absent from this document, causing HQ Chat to use Epic-level rules when producing Phase/Milestone starters. |
 | 2.0.0 | 2026-04-20 | Governance files migrated from `docs/` to `/governance/` (E6.2). Updated template path references. |
 | 1.4.1 | 2026-02-22 | Previous version — governance lived in `docs/`. |

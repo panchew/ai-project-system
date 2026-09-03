@@ -115,7 +115,7 @@ This milestone explicitly does **not**:
 ## In Scope
 
 - **E23.1** — by-link reconciliation across the four named surfaces (guide §4 + §1 note; AOG
-  §16.5; `bin/ai-project-visual` output guidance; the integration-test surface) and the
+  §17.5; `bin/ai-project-visual` output guidance; the integration-test surface) and the
   reversal records in the AOG and guide changelogs.
 - **E23.2** — the binding schema (link + four metadata fields), the per-level placement
   convention, and the guide/template updates that let each level record a binding.
@@ -173,10 +173,10 @@ version-controlled project. **No binaries in git.** The adopter owns the storage
     These example paths imply commit and **must be reconciled** so they do not contradict the
     §4 rewrite (the acceptance criterion is "no instruction to commit generated binaries
     remains" — residual example paths count).
-- `governance/AI-OPERATING-GUIDELINES.md` **§16.5 "What to commit, and where"** — the bullet
+- `governance/AI-OPERATING-GUIDELINES.md` **§17.5 "What to commit, and where"** — the bullet
   "**Generated** artifacts are written under … `.ai-project/visuals/<level>/<artifact-id>.<ext>`
   … Commit the generated file together with the artifact that references it, so the visual
-  travels with its decision record." Rewrite to by-link. The §16.5 source-repo bullet
+  travels with its decision record." Rewrite to by-link. The §17.5 source-repo bullet
   generalizes the same way as the guide's §1 note. AOG is at **v2.2.0**.
 - `bin/ai-project-visual` **output guidance** — the docstring usage example (`--output
   .ai-project/visuals/hq/architecture.png`) and the `--output` help text frame `--output` as a
@@ -194,7 +194,7 @@ version-controlled project. **No binaries in git.** The adopter owns the storage
 
 1. Rewrite the guide §4 prose and the §1 source-repo note to the by-link model; reconcile the
    §5 worked-example `--output` paths so none implies committing a generated binary.
-2. Rewrite the AOG §16.5 "Generated artifacts … and committed" bullet (and the §16.5
+2. Rewrite the AOG §17.5 "Generated artifacts … and committed" bullet (and the §17.5
    source-repo bullet) to the by-link model.
 3. Clarify the `bin/ai-project-visual` output guidance (docstring + `--output` help) that
    `--output` writes a local working file to host and link, not commit — **no behaviour change,
@@ -208,7 +208,7 @@ version-controlled project. **No binaries in git.** The adopter owns the storage
 
 **Definition of Done:**
 - [ ] Guide §4, §1 note, and §5 example paths describe by-link; no commit-the-binary instruction remains
-- [ ] AOG §16.5 describes by-link; no commit-the-binary instruction remains
+- [ ] AOG §17.5 describes by-link; no commit-the-binary instruction remains
 - [ ] `bin/ai-project-visual` output guidance frames `--output` as a local working file (behaviour unchanged)
 - [ ] The integration-test surface is verified by-link-consistent (recorded), with no make-work edit
 - [ ] The reversal is recorded as a reversal of v5.0.0 guidance in the AOG changelog and a guide changelog
@@ -348,7 +348,7 @@ M23 is **not** the final P6 milestone (`is_final: false`); M24 and M25 follow on
 
 ## Acceptance Criteria (Milestone)
 
-1. `governance/guides/visual-artifacts.md` and AOG §16.5 instruct referencing visuals by link
+1. `governance/guides/visual-artifacts.md` and AOG §17.5 instruct referencing visuals by link
    and explicitly state no generated binaries are committed to git (E23.1).
 2. `bin/ai-project-visual` output guidance frames `--output` as a local working file to host
    and link, with no behaviour change and no upload step (E23.1).

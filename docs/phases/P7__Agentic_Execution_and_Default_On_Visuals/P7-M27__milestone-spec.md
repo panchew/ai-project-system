@@ -32,7 +32,7 @@ ai-project-yml-spec.md` §3.5, `governance/guides/visual-artifacts.md`).
 
 SN-17's four decisions carry into M27 unchanged (ratified by SN-18, the P7 spine):
 
-1. **Default-on with an explicit opt-out.** AOG §16.1 flips from opt-in to default-on;
+1. **Default-on with an explicit opt-out.** AOG §17.1 flips from opt-in to default-on;
    `visual_artifacts.enabled: false` becomes the opt-out, not the baseline.
 2. **Structural-first default.** With no `comfyui_url` configured (or generative otherwise
    unreachable), default-on produces **structural** visuals (Mermaid/PlantUML) only.
@@ -59,7 +59,7 @@ The visual-artifacts framework (P5/P6) was built and shipped **opt-in and off by
 correct for its own milestone, but now the wrong default for the phase's stated goal (visuals
 as the CFO's default lens on an increasingly autonomous system). Verified on `phase/P7`:
 
-- **AOG §16.1** states plainly: "Visual artifacts are an **opt-in** capability... **absent
+- **AOG §17.1** states plainly: "Visual artifacts are an **opt-in** capability... **absent
   block or `enabled: false` means the capability is off**."
 - **`governance/ai-project-yml-spec.md` §3.5** — the `enabled` field's documented default is
   **`false`**; "When the block is **absent**, the visual-artifacts capability is
@@ -74,7 +74,7 @@ as the CFO's default lens on an increasingly autonomous system). Verified on `ph
   rename.
 - **The source repo's own `.ai-project.yml`** explicitly sets `visual_artifacts.enabled:
   false`, commented as keeping "the suite... green without a live ComfyUI endpoint" — but
-  structural visuals need no endpoint (§16.3), so this reasoning does not, on its face,
+  structural visuals need no endpoint (§17.3), so this reasoning does not, on its face,
   justify disabling structural once the default flips. Whether the source repo's own config
   changes is an Epic-level call (see E27.1).
 - **The single-GPU contention is real and currently undesigned.** `~/soft-dev/ai-stack/
@@ -89,7 +89,7 @@ as the CFO's default lens on an increasingly autonomous system). Verified on `ph
 
 By the end of this milestone:
 
-1. **Visuals are default-on with an opt-out.** AOG §16.1 reads default-on/opt-out; the
+1. **Visuals are default-on with an opt-out.** AOG §17.1 reads default-on/opt-out; the
    yml-spec's documented `enabled` default is `true`; `resolve_visual_artifacts()`'s hardcoded
    `False` becomes a default of `True` when the block is absent, while an explicit `enabled:
    false` still disables (E27.1).
@@ -129,14 +129,14 @@ This milestone explicitly does **not**:
 
 ## In Scope
 
-- **E27.1** — the default-on flip in AOG §16.1, the yml-spec §3.5 default change, the
+- **E27.1** — the default-on flip in AOG §17.1, the yml-spec §3.5 default change, the
   `bin/ai-project-orchestrator` code flip, the new enforcement setting, and reconciliation of
   every surface that currently asserts opt-in/off-by-default (`governance/guides/
   visual-artifacts.md`, the spec templates' Visual Bindings sections if they assert opt-in
   language, agent definitions if they need updating).
 - **E27.2** — codifying structural-first as the zero-infra default behavior and the automatic
   trigger set (specs + delivery/closure only; everything else on-demand) — primarily a
-  normative-documentation epic (AOG §16 already has the structural/generative and per-level
+  normative-documentation epic (AOG §17 already has the structural/generative and per-level
   machinery from P5/P6; E27.2 states the *default-on* trigger policy on top of it).
 - **E27.3** — a documented GPU/VRAM scheduling design for Ollama+ComfyUI coexistence, grounded
   in the concrete `docker-compose.yml` finding above, plus any config or guardrails the design
@@ -177,7 +177,7 @@ This milestone explicitly does **not**:
 
 **Grounding (verified on `phase/P7`):**
 
-- `governance/AI-OPERATING-GUIDELINES.md` §16.1 — the opt-in gating language to flip
+- `governance/AI-OPERATING-GUIDELINES.md` §17.1 — the opt-in gating language to flip
   ("Visual artifacts are an **opt-in** capability... absent block or `enabled: false` means
   the capability is off").
 - `governance/ai-project-yml-spec.md` §3.5 — the `enabled` field's table row (`Default:
@@ -198,12 +198,12 @@ This milestone explicitly does **not**:
   `visual_required_for_specs: true`).
 - **Epic-level design point:** whether the source repo's own `.ai-project.yml` (currently
   explicit `enabled: false`) changes as part of this epic's dogfooding, given structural
-  visuals need no endpoint and are not "generated binaries" in the §16.5 sense. Decide and
+  visuals need no endpoint and are not "generated binaries" in the §17.5 sense. Decide and
   document; do not assume either way without stating the reasoning.
 
 **Deliverables:**
 
-1. AOG §16.1 rewritten: default-on with `enabled: false` as the explicit opt-out.
+1. AOG §17.1 rewritten: default-on with `enabled: false` as the explicit opt-out.
 2. `ai-project-yml-spec.md` §3.5: `enabled`'s documented default → `true`; prose reconciled;
    version bump + changelog row.
 3. `bin/ai-project-orchestrator`: `DEFAULT_VISUAL_ARTIFACTS["enabled"]` → `True`;
@@ -224,7 +224,7 @@ This milestone explicitly does **not**:
 8. AOG + yml-spec version bumps and changelog rows.
 
 **Definition of Done:**
-- [ ] AOG §16.1 describes default-on/opt-out
+- [ ] AOG §17.1 describes default-on/opt-out
 - [ ] yml-spec §3.5 documents `enabled` defaulting to `true`
 - [ ] `resolve_visual_artifacts()` resolves an absent block to enabled (not disabled)
 - [ ] The enforcement-setting key exists, is validated, defaults `true`, and is documented
@@ -249,7 +249,7 @@ This milestone explicitly does **not**:
 
 **Grounding (verified on `phase/P7`):**
 
-- AOG §16.3 ("Two modes") and §16.4 ("Tool-capability gating") **already** define
+- AOG §17.3 ("Two modes") and §17.4 ("Tool-capability gating") **already** define
   Structural/Generative and the capability gate from P5/P6 — this epic does not rebuild that
   machinery. What is missing is the **default-on trigger policy** layered on top: which
   artifact types get a visual *automatically* now that the capability is on by default, versus
@@ -264,14 +264,14 @@ This milestone explicitly does **not**:
 
 **Deliverables:**
 
-1. AOG (§16, likely a new subsection alongside §16.1) states: with the capability on
+1. AOG (§16, likely a new subsection alongside §17.1) states: with the capability on
    (default), structural-first governs — no `comfyui_url` ⇒ structural only, generative
-   activates only when an endpoint is present (restating/cross-referencing §16.3/§16.4, not
+   activates only when an endpoint is present (restating/cross-referencing §17.3/§17.4, not
    duplicating them).
 2. AOG states the automatic trigger set explicitly: specs + delivery/closure declarations
    automatic; all other artifact types on-demand (asked for in the proper chat, pointing at
    the artifact file).
-3. Per-level guidance reconciled if §16.2's existing per-level table needs a note on which
+3. Per-level guidance reconciled if §17.2's existing per-level table needs a note on which
    levels' spec-shaped artifacts are covered by the automatic trigger.
 4. `governance/guides/visual-artifacts.md` reconciled to describe the trigger-set behavior
    (which artifacts are automatic vs. on-demand) alongside its existing structural/generative
@@ -380,7 +380,7 @@ per the phase spec's "Independent — may parallel M27" note).
 
 ## Dependencies and Sequencing
 
-- **E27.1 and E27.2 both edit AOG §16** (E27.1: §16.1's on/off default + the new enforcement
+- **E27.1 and E27.2 both edit AOG §17** (E27.1: §17.1's on/off default + the new enforcement
   key; E27.2: the structural-first/trigger-set subsection). Serialize them or use a worktree
   (GH-2) to avoid file contention — same discipline P6-M25 used for its own PSG-editing pair.
 - **E27.1 and E27.2 are logically coupled at the acceptance-criteria level**: "a fresh project
@@ -398,7 +398,7 @@ per the phase spec's "Independent — may parallel M27" note).
 
 - [ ] E27.1, E27.2, and E27.3 each meet their Definition of Done above
 - [ ] All three epic branches merged to `milestone/M27`
-- [ ] AOG §16.1 describes default-on/opt-out; the enforcement setting exists and defaults true
+- [ ] AOG §17.1 describes default-on/opt-out; the enforcement setting exists and defaults true
 - [ ] `resolve_visual_artifacts()` resolves an absent block to enabled, structural-first
 - [ ] The automatic trigger set (specs + delivery/closure) and on-demand path are codified
 - [ ] A documented Ollama+ComfyUI coexistence design addresses the confirmed GPU contention
@@ -455,7 +455,7 @@ per the phase spec's "Independent — may parallel M27" note).
   contract (default-on/opt-out; structural-first at zero infra; specs+delivery/closure
   automatic, everything else on-demand; enforcement setting defaulted true; coexistence
   designed against the confirmed contention), not the wording.
-- Default-accept (PSG §11.6 / AOG §12) governs M27's own delivery: clean Epic/Milestone
+- Default-accept (PSG §11.6 / AOG §14) governs M27's own delivery: clean Epic/Milestone
   deliveries are auto-accepted by silence; Review Decisions are the exception path only. Per
   SN-19, Epic/Milestone acceptance and the merge instruction are in-chat acts — no Delivery
   Authorization artifact.

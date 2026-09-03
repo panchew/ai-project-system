@@ -391,7 +391,7 @@ that renders it?**
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -447,7 +447,7 @@ flowchart TB
   (Y4), which makes it a design attractor and obliges a stated principle rather than a patch — and
   **only live runs found either instance.** E45.1 lands the bar as its first commit, the form E41.2
   proved; E45.4 hands M46 a written contract, which is why M45 gates it. Proposed-track Structural
-  diagram (AOG §16.3/§16.6), Mermaid, no ComfyUI.
+  diagram (AOG §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 

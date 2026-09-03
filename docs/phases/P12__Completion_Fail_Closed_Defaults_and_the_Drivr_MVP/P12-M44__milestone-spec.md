@@ -2,7 +2,7 @@
 milestone: M44
 name: "Rituals, Records, and the Normative Repairs"
 phase: P12
-status: planned
+status: completed
 start_date: 2026-08-20
 epics:
   - E44.1
@@ -456,7 +456,7 @@ number** (`13` and `14` each appear twice) **or by title** (two sections are bot
    fences.** The inventory is a deliverable in its own right and precedes any edit.
 2. **Sections renumbered `1..n`**, no duplicate number, no duplicate title.
 3. **The cross-reference sweep**, corpus-wide, **distinguishing a citation from an example.** `§11.6`,
-   `§11.6.1`, `§5C`, `§16.3` are cited across the corpus, the starters and multiple rulings. **A
+   `§11.6.1`, `§5C`, `§17.3` are cited across the corpus, the starters and multiple rulings. **A
    reference inside a quoted example is not a cross-reference.**
 4. **An AOG version bump** and a changelog row. **Ruled explicitly not a hotfix** — a change that
    silently invalidates citations is worse than the defect.
@@ -597,7 +597,7 @@ estimate**
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -656,7 +656,7 @@ flowchart TB
   documents against a recorded ten (X2); the HQ ritual is **recording** while the handoff is **design**
   (X3); G1/G2 are confirmed trapped in epic-tier artifacts (X4). **`P12-GH-3` is deliberately excluded
   and shown as such**, because absorbing it would ship `P12-GH-1`'s defect inside the phase that fixes
-  it. Proposed-track Structural diagram (AOG §16.3/§16.6), Mermaid, no ComfyUI.
+  it. Proposed-track Structural diagram (AOG §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 
@@ -780,6 +780,7 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.0 | 2026-09-03 | **CLOSURE ACCEPTED by the Phase Chat, and `status` flipped to `completed` in the same act as closure consolidation** (PR #262). **Not flipped at the planning merge (#255)** — that landed twelve documents with zero epics run, and asserting completion there would have been the false-record class this milestone exists to close; the M43 precedent (`planned` through #249, `completed` at #254) governs. **Verified by re-measurement, not report (G2):** six epic merges confirmed (#256–#261); AOG independently re-measured as **`1..18` monotonic, no duplicate numbers**, the nine fenced example headings byte-identical; **PSG 2.9.0**, **AOG 2.12.0**. **The suite claim resolved from the opposite environment** — the declaration reports `766 passed / 1 skipped`, this chat measured `767 passed / 0 skipped`, and the two agree: same 767 collected, and the test that skipped there passes here. It is the pre-existing live-ComfyUI integration test, gated on `visual_artifacts.enabled` and an opt-out env var, **neither introduced by M44** — so DoD 13's *no skip introduced* is confirmed by a second environment rather than by re-running the first. Four residual findings carried to the phase record; **the Delivery Notice location split is the one with weight** — template and practice disagree, this milestone reproduced **both sides in a single run**, no test catches it because both locations are findable, and it is the same **bi-located corpus** observed in P11-M40, now unowned across two phases. |
 | 1.2.1 | 2026-09-03 | **Completes the v1.2.0 amendment, which reached the E44.2 section and the changelog but NOT three other surfaces — `P11-GH-1`'s own shape, in the spec that carries the rule.** The M44 Chat flagged **Binding Constraint 7** (`:166`); re-measurement found **a second stale deadline** in Execution Notes (`:541`) and **two stale `549` baselines** (`:536`, `:566`) against a re-measured **`740 / 0`**. All four corrected; the two spent-deadline lines are **struck through and annotated rather than deleted**, so a reader sees the ordering was attempted and missed. **Lesson recorded: amending the section a change is *about* is not amending the spec** — the constraint, the notes and the DoD each restate it, and a changelog entry is not a search. |
 | 1.2.0 | 2026-09-03 | **E44.2 re-scoped from *specified* to *performed*, on a question raised by the M44 Chat — the premise inverted.** This section assumed **E41.5 performs and M44 specifies**; E41.5 landed first (2026-09-01), declined the rewrite, and **handed it to E44.2 in the file itself** (`model-routing-policy.md:116-117`, citing M41 spec v1.6.0). M41 is closed, so **there is no epic left to reach into.** **All three "carried rows" are now configured** (verified in `.ai-project.yml`, 2026-09-03), so the decided-but-unconfigured state the epic was named for **holds for no row** and option (1) would specify against a state nothing is in. **The live state is *configured but not evidenced*** — SN-41 set four of five values by allowance, not measurement, while row P4's `why` cell still describes an evidential derivation. **X5's ordering was not achieved, but the harm it named did not occur**: M41 invented no competing convention, recording *"beside the row, per the file's own convention"* and bounding itself. **The retired "does not perform M41's edit" criterion is replaced by its surviving substance**, not deleted: the tier cells sit outside `test_policy_mapping_agrees_with_yml_block`'s parse, so E44.2 must bring the rewritten language under a guard or say it did not and why. **Ruled at phase level** — no CFO-enumerated value moves; the SN-41 lineup stands as landed. |
 | 1.1.1 | 2026-08-21 | **Adds a second departure specimen to E44.1's HQ-ritual deliverable**, offered by HQ as an input and taken here because E44.1 already owns departure. **It breaks the obvious design:** specimen 1 (a deferral resting on a session's continued existence) is a session that **knew what it was holding**; specimen 2 is a session **forked by a VS Code layout change**, which **did not know it had departed** and whose successor could not tell that it had. **A ritual that assumes the departing session knows it is leaving covers the first and not the second** — so the ritual cannot be only an act the departing session performs, and **something must be reconstructible by the arriving session from committed state alone.** Records the root cause as environmental — a chat moved between the editor area and the side panel — **explicitly not a governance failure**, and the reason *"the departing session knows it is departing"* is an unsafe premise. **No epic added or removed; no ordering, gate or acceptance-criterion change.** |

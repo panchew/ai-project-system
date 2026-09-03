@@ -19,7 +19,7 @@ Make `visual_artifacts` real in this repository. P5–P7 built the framework, fl
 default-on framework-wide (M27), and verified the generative endpoint against three workflows
 (P6) — but this source repo has never run its own capability; it still carries
 `visual_artifacts.enabled: false` because of a naming collision between the `.ai-project.yml`
-schema's `types: diagrams` value and AOG §16.3's endpoint-free Structural mode. M29 resolves
+schema's `types: diagrams` value and AOG §17.3's endpoint-free Structural mode. M29 resolves
 that collision, flips the switch, replaces the one remaining skip in the suite with a real pass
 against the live local ComfyUI endpoint, and answers the precision question P6/P7 left open:
 whether the verified workflows are good enough for technical explanation, not merely "renders
@@ -59,7 +59,7 @@ Three independent, verified gaps, each confirmed directly against current reposi
 - **The schema and its own documentation contradict the code.** `governance/ai-project-yml-spec.md`
   §3.5's field table states: `diagrams`: Mermaid/PlantUML structural. `bin/ai-project-visual`'s
   actual implementation has no code path where `--type diagrams` produces Structural output — it
-  is unconditionally a ComfyUI generative call (txt2img workflow selection). AOG §16.3 defines
+  is unconditionally a ComfyUI generative call (txt2img workflow selection). AOG §17.3 defines
   Structural as "no ComfyUI needed" and Generative as "produced ... via the configured ComfyUI
   endpoint, using the `bin/ai-project-visual` helper" — by AOG's own definition, `diagrams` as
   implemented is Generative, not Structural, yet the schema table and this repo's own
@@ -78,7 +78,7 @@ Three independent, verified gaps, each confirmed directly against current reposi
 - **"Renders successfully" was never checked against "good enough to explain something technical."**
   P6 verified that FLUX-schnell, SDXL, and LTX-Video each produce valid output from
   `bin/ai-project-visual` against the live endpoint. No P5/P6/P7 milestone checked whether that
-  output is precise enough for its intended governance use (per AOG §16.2, e.g. a Milestone
+  output is precise enough for its intended governance use (per AOG §17.2, e.g. a Milestone
   component/flow diagram or a Creation-Chat concept image) — the phase and milestone specs both
   name this explicitly as an open question, not an assumption.
 
@@ -132,7 +132,7 @@ This milestone explicitly does **not**:
   and a decision on how a no-live-endpoint contributor/CI environment is handled.
 - **E29.3** — one workflow-diagram-style generated case and one short explainer-clip case
   (LTX-Video), each judged against the technical-explanation precision bar and documented,
-  hosted and linked per AOG §16.5 (never committed as binaries).
+  hosted and linked per AOG §17.5 (never committed as binaries).
 
 ## Out of Scope
 
@@ -218,7 +218,7 @@ close P7-GH-21.
 - [ ] Full test suite passes
 
 **Acceptance Criteria:**
-- [ ] P7-GH-21 is closed: the schema value and AOG §16.3's Structural/Generative split no
+- [ ] P7-GH-21 is closed: the schema value and AOG §17.3's Structural/Generative split no
       longer share a confusable name
 
 **Sequencing:** recommended to land before E29.2 — enabling the capability against a
@@ -283,11 +283,11 @@ prior milestone performed that judgment.
 
 **Deliverables:**
 1. One **workflow-diagram-style case** — a generated visual explaining a governance or code
-   flow (agent-chosen form and workflow per AOG §16.3/§16.6/§16.7; Structural vs. Generative is
+   flow (agent-chosen form and workflow per AOG §17.3/§17.6/§17.7; Structural vs. Generative is
    an open choice per SN-20 ratified decision 3, not fixed here).
 2. One **short explainer-clip case** (LTX-Video) — narrating a proposed→implemented arc per AOG
-   §16.6/§16.7 (single-parent binding to one node).
-3. Both hosted and linked per AOG §16.5 / the §7 binding schema (`governance/guides/
+   §17.6/§17.7 (single-parent binding to one node).
+3. Both hosted and linked per AOG §17.5 / the §7 binding schema (`governance/guides/
    visual-artifacts.md`) — **never committed as binaries**.
 4. A documented finding per case: pass / partial / fail against "could a reader unfamiliar with
    the underlying flow follow it from the artifact alone?" — not "did it render."
@@ -339,12 +339,12 @@ update + version bump + tag), closing with the P8 Phase Closure Declaration.
   - `.ai-project.yml` (this repo's own config)
   - `.ai-project/artifacts/reference/comfyui-endpoint/VISUAL-ARTIFACTS.md`
   - `tests/integration/test_visual_artifacts_helper.py`
-  - `governance/AI-OPERATING-GUIDELINES.md` §16.1–§16.8 (reference only — not an M29 edit
+  - `governance/AI-OPERATING-GUIDELINES.md` §17.1–§17.8 (reference only — not an M29 edit
     target unless an epic finds a defect while working its own surface)
 - **External dependency:** a live, reachable ComfyUI endpoint at `http://localhost:8188` for
   E29.2 and E29.3. Confirmed reachable at phase-open (`system_stats` responded; RTX 5060 Ti
   16 GB; all six P6 models present). Availability during Epic execution is the CFO's
-  responsibility (AOG §16.5), as with any generative-mode work.
+  responsibility (AOG §17.5), as with any generative-mode work.
 
 ---
 
@@ -407,7 +407,7 @@ dependencies)
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -421,7 +421,7 @@ flowchart LR
 
 - **Description:** M29's three-epic flow — resolve the naming collision, then enable and prove
   the capability against the live endpoint, then validate precision and hand the finding to the
-  CFO. This is a proposed-track Structural diagram (AOG §16.3/§16.6); the milestone's
+  CFO. This is a proposed-track Structural diagram (AOG §17.3/§17.6); the milestone's
   implemented-track visual is E29.3's own deliverable — a Generative diagram-style case produced
   against the live endpoint once the capability is on, distinct from this planning-stage
   Structural flow diagram.
@@ -445,7 +445,7 @@ flowchart LR
 - **E29.3's finding is evidence, not a decision.** SN-20 Carry-Over item 3 (whether a separate
   governed ComfyUI-workflow project is needed) belongs to the CFO. E29.3 documents pass/partial/
   fail per case and stops there.
-- Default-accept (PSG §11.6 / AOG §12) governs this milestone's own delivery: clean Epic/
+- Default-accept (PSG §11.6 / AOG §14) governs this milestone's own delivery: clean Epic/
   Milestone deliveries are auto-accepted by silence; a Review Decision is the exception path
   only. Per SN-19, Epic/Milestone acceptance and the merge instruction are in-chat acts — no
   Delivery Authorization artifact.

@@ -38,7 +38,7 @@ dataset cannot separate them (G4–G7), which is Hard-Constraint-compliant.
 | P1 | creation × all | **Paid frontier, manual** | CFO-facing inception judgment; manual-by-design (SN-22). Measured as level totals only — task split invisible to repo-write signals (report §3; G6). No `models:` key exists or is needed (report §7.2). | Task split gap-recorded (G6) | Creation ever entering agentic scope (no current plan) |
 | P2 | hq × all | **Paid frontier, manual** | Scoping/digest/coordination judgment feeding CFO decisions (report §3); manual-by-design (SN-22). Per-task split gap-recorded (G5). | Task split gap-recorded (G5) | HQ ever entering agentic scope (no current plan) |
 | P3 | phase × all | **Paid frontier** | Long-horizon governance judgment + review/closure authority; costliest sessions per unit (median $20.84 — report §2.2); errors propagate into merges (report §3). Per-task split inside mixed sessions gap-recorded (G4/G7), so selective offload is untargetable today. | Mixed-bucket attribution (G4, G7) | Within-session task segmentation landing (report §8) |
-| P4 | milestone × all | **Paid frontier** | Largest spend share (37% — report §2.2) *and* the level where Stage-2 accept authority lives; same mixed-bucket shape as phase (report §3; G4/G7). **Evaluated against local inference 2026-07-31 and not moved** — see the P4 note below. | Mixed-bucket attribution (G4, G7); local candidate established but **prescription variance unmeasured, search/absence-detection and tool-using verification untested** (G-P4-a/b/c) | Same as P3, **or** an evaluation clearing G-P4-a, G-P4-b and G-P4-c (HQ Ruling 2026-07-31) |
+| P4 | milestone × all | **Paid frontier** | Largest spend share (37% — report §2.2) *and* the level where Stage-2 accept authority lives; same mixed-bucket shape as phase (report §3; G4/G7). **The tier stays paid frontier** — evaluated against local inference 2026-07-31 and not moved (see the P4 note below). **The value is set by CFO allowance decision (SN-41), not by measurement** (mapping row); the one measurement of the configured engine (E41.4, 2026-09-01) is neutral toward the decision (see the P4 note below). | Mixed-bucket attribution (G4, G7); local candidate established but **prescription variance unmeasured, search/absence-detection and tool-using verification untested** (G-P4-a/b/c) | Same as P3, **or** an evaluation clearing G-P4-a, G-P4-b and G-P4-c (HQ Ruling 2026-07-31) |
 | P5 | epic × execution | **Paid frontier today; designated local-offload experiment (M31)** | Highest-volume attributed cell, bounded and spec-driven (38 sessions, median $2.92 — report §2.2/§3): the best offload candidate *by shape*. Local capability unproven: one measured local run, 404 output tokens (dataset §5), input unmeasured (G9), no quality measure (G12). Paid remains the default until M31 dual-mode produces run evidence. | Local evidence thin (G9, G12) | M31 dual-mode runs at epic level |
 | P6 | epic × dev-agent lane (`epic_dev`) | **`local:qwen3-coder:30b`** — the local lane M31's runner uses when the P5 experiment runs | **Row changed on new cited evidence (P10-M33, applied P10-M34-E34.3).** The prior value `qwen2.5-coder:14b` was *falsified by running it*, not by argument: E33.2 **Run A** dispatched the then-configured `epic_dev`/`epic_qa` model against a real epic and returned **exit 0 having done nothing** — 0 tool rounds, 0 files changed, SN-3 markdown-plan mode. **Run B** — same epic, same Ollama runtime, `qwen3-coder:30b` — produced mergeable work; **E33.4** then ran a second real epic (`home_finance`) on the same model to complete, green work (275 examples, 0 failures). The model was the lever; the runtime was never the problem. Loadability envelope, recorded honestly: Q4_K_M/18.6 GB **exceeds** the proving box's 16 GB VRAM and **partially offloads to RAM** (12.9 GB VRAM / 21.4 GB total), running ~9.4 tok/s against the 14b's 12.2 on the same epic — slower, but it finishes. That is the ratified trade. Cited: `docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.2__runtime-decision.md`; `agentic-runs/P10-M33-E33.2/run-record.md`; `agentic-runs/P10-M33-E33.4/run-record.md`. | Two real epics on the new value, one comparative same-runtime pair; **no quality signal captured (G12 still open)**; input-token measurement gap (G9) unchanged. Exit codes proven unreliable in *both* directions on this stack (E33.2 Run A: exit 0, zero work; E33.4: exit 2, complete work) — verification reads the transcript and the target repo, never the exit status | A third real agentic epic on the raised tier disagreeing with these two, the first captured **quality** signal (G12), or a loadability change on the execution host (the partial RAM offload is the standing fragility) |
 | P7 | epic × qa-agent lane (`epic_qa`) | **`local:qwen3-coder:30b`** | **Referent updated; the reasoning is unchanged, and that is deliberate.** The QA role still has **zero** captured runs of its own — **G11 remains open**. M33 produced no isolated QA-role run because the runner dispatches dev and QA from one model in practice (E33.2 run record: *"Run A is the configured `epic_dev`/`epic_qa` model"*), so E33.2/E33.4 gave the **dev** lane its evidence, not this one. This row therefore does **not** move on new QA-lane evidence — none exists. It moves on exactly the reasoning it already carried, *gap-grounded interim default: the one local model with any run evidence* (report §7.2 standard), with the referent updated from `qwen2.5-coder:14b` — which E33.2 Run A falsified — to `qwen3-coder:30b`. No QA-lane evidence is claimed here. | Gap-grounded (**G11 open — zero captured QA-role runs**); evidence is dev-lane adjacent only (G9, G12) | The first **isolated QA-role** run — G11's own closure condition, still unfired; a dispatch change that gives the QA lane a separate model would fire it sooner |
@@ -117,6 +117,48 @@ not re-close or re-open row P4 — that decision stands as HQ recorded it. **Act
 row's language to describe an allowance-decided value is M44's E44.2 to execute** (M41 spec
 v1.6.0, changelog 2.0.0); this note is the record that the gap exists and is bounded, filed by
 P12-M41-E41.5 per its spec v2.0.0 deliverable D-A.
+
+## The decided-vs-evidenced convention (P12-M44-E44.2)
+
+A row in this file records three facts about its value, and the convention is that a reader can
+tell them apart **from the row alone, without inference**:
+
+- **DECIDED** — a decision named the value (or the tier). Written form: a dated decision citation
+  (a ruling ref) beside the row or in the row's own note — e.g. row P4's 2026-08-19 closure and
+  the SN-40..46 lineup.
+- **CONFIGURED** — the value has landed. Written form: the value's presence in the mapping table
+  below, which `test_policy_mapping_agrees_with_yml_block` forces to agree with `.ai-project.yml`.
+- **EVIDENCED** — a measurement supports the value, or the record says plainly it was not measured.
+  Written form: the provenance clause in the row's `why` cell — *"value set by CFO allowance
+  decision (SN-41), not by measurement"* for an allowance-decided value, or a cited measurement
+  for an evidenced one.
+
+**Both faces are covered:**
+
+1. **decision-ahead-of-configuration** (the R6 case, now historical): a decision is recorded while
+   its value is still pending. Written form: the decision named beside the row with the state
+   *"value not configured"*, and no value in the mapping table until it lands. The three carried
+   rows — `phase`, `milestone`, `epic_manual` — are the historical instance: decided under R6,
+   configured since SN-41, retained as the case that forced the convention, **not as a pending
+   edit**.
+2. **configuration-ahead-of-evidence** (the SN-41 case, live): a value is configured by allowance,
+   not by measurement. Written form: the mapping row carries the allowance attribution *"value set
+   by CFO allowance decision (SN-41), not by measurement"*, and the tier row's `why` cell says the
+   same — it must not describe an evidential derivation that never produced the value. **Row P4 is
+   the worked case**: its `why` cell now reads *"The value is set by CFO allowance decision
+   (SN-41), not by measurement … the one measurement of the configured engine (E41.4) is neutral
+   toward the decision."*
+
+**Why one place rather than several:** a decision and its evidence attach to the **same row**, and a
+reader who must read a second document to reconcile them has already lost. Stating the convention
+here — in the file that owns the rows — means a reader meets the rule at the row it governs.
+
+**Distinguishability without inference:** the three facts are distinguishable from the record alone
+because each has a stated written form in a named place — a decision is a dated citation, a
+configuration is a value present in the mapping table, an evidence claim is a provenance clause in
+the `why` cell. None is inferred from another: a mapping value present is configured even if its
+`why` cell is silent; a `why` cell that says "not by measurement" is an allowance-decided value even
+if no ruling is quoted in the same cell.
 
 ## Mapping to `.ai-project.yml` `models:` (the M31 guardrail target)
 

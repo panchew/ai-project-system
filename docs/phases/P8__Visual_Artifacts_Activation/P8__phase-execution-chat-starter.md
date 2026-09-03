@@ -30,7 +30,7 @@ You are operating under the AI Project System governance framework as a **Phase 
   planning artifacts, and open a long-lived `phase/P8 → master` PR for HQ review. Not merged
   until Stage 2 completes.
 - Stage 2: receive the Milestone Completion Notice; under the **SN-13 default-accept model**
-  (PSG §11.6 / AOG §12), accept a clean delivery by silence — issue a Review Decision only on the
+  (PSG §11.6 / AOG §14), accept a clean delivery by silence — issue a Review Decision only on the
   exception path. The milestone merge lands on `phase/P8`; merge `phase/P8 → master` on HQ Accept
   via the **PSG §5C** canonical closure sequence; produce the Phase Closure Declaration.
 - **Artifact scope (adjacency).** You produce artifacts only for your direct parent or direct
@@ -61,7 +61,7 @@ You are operating under the AI Project System governance framework as a **Phase 
 - This repo's own `.ai-project.yml` carries `visual_artifacts.enabled: false` — the opt-out this
   phase reverses. The reason is a naming collision (carry-forward **P7-GH-21**): the schema's
   `types: diagrams` value and `governance/ai-project-yml-spec.md` §3.5's own documentation
-  describe `diagrams` as endpoint-free Mermaid/PlantUML "Structural" (AOG §16.3), but
+  describe `diagrams` as endpoint-free Mermaid/PlantUML "Structural" (AOG §17.3), but
   `bin/ai-project-visual --type diagrams` is, in the current implementation, always a ComfyUI
   generative call — there is no code path where `types: [diagrams]` produces Structural output.
 - The local ComfyUI endpoint (`http://localhost:8188`) was confirmed **live and reachable** at
@@ -114,7 +114,7 @@ verified P6 workflows meet the bar for technical-explanation precision.
 
 **Indicative Epics (3):**
 - **E29.1 — Naming-collision resolution (P7-GH-21).** Disambiguate the `.ai-project.yml`
-  schema's generative `types` values from AOG §16.3's Structural mode. This is a **design
+  schema's generative `types` values from AOG §17.3's Structural mode. This is a **design
   decision for the Epic Chat**, not fixed by this starter — candidate directions include renaming
   the schema's generative `diagrams` value to something that can't be read as Structural, or
   reframing `types` as generative-only with documentation that Structural mode needs no
@@ -136,7 +136,7 @@ verified P6 workflows meet the bar for technical-explanation precision.
 - **E29.3 — Precision validation.** Produce and judge two cases against the bar of "good enough
   for technical explanation" (not merely "renders successfully" — the P6/P7 bar left explicitly
   unconfirmed at P7 closure): a **workflow-diagram-style case** and a **short explainer-clip
-  case** (LTX-Video), agent-chosen form per AOG §16.3/§16.6/§16.7. Host and link per AOG §16.5 —
+  case** (LTX-Video), agent-chosen form per AOG §17.3/§17.6/§17.7. Host and link per AOG §17.5 —
   do not commit generated binaries. Document the finding (pass / partial / fail, per case) — this
   is the evidence the CFO needs to close SN-20 Carry-Over item 3 (whether a separate governed
   ComfyUI-workflow project is still wanted).
@@ -146,7 +146,7 @@ with `test_helper_generates_against_endpoint` (or its renamed/replacement equiva
 for real** against the live endpoint — re-disabling `visual_artifacts.enabled` or re-skipping the
 test to keep the suite green is not an acceptable resolution.
 
-**Reference:** `governance/AI-OPERATING-GUIDELINES.md` §16.1–§16.8;
+**Reference:** `governance/AI-OPERATING-GUIDELINES.md` §17.1–§17.8;
 `governance/ai-project-yml-spec.md` §3.5; `bin/ai-project-visual`;
 `tests/integration/test_visual_artifacts_helper.py`;
 `.ai-project/artifacts/reference/comfyui-endpoint/VISUAL-ARTIFACTS.md`;

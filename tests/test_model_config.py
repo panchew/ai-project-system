@@ -288,3 +288,68 @@ def test_chat_hierarchy_manual_mapping_agrees_with_yml_block(key):
         f"table says {documented_value!r}, .ai-project.yml's models.{key} says "
         f"{config_value!r}. Update both together."
     )
+
+
+# --- row P4 tier-cell provenance (P12-M44-E44.2 D3) ------------------------------
+# The tier cells (row P4's `why`) sit OUTSIDE test_policy_mapping_agrees_with_yml_block's
+# parse, which reads the mapping table only. E44.2 rewrote row P4's `why` cell to describe
+# an allowance-decided value; this guard closes the gap: the tier cell and its mapping row
+# must describe the same value-provenance. Scoped to the rewritten cell (row P4) per the
+# epic's scope; the other tier rows carry their own deliberately-retained prose.
+_ALLOWANCE_ATTRIBUTION = "set by CFO allowance decision (SN-41), not by measurement"
+
+
+def _policy_mapping_row_cell(key):
+    """The policy-row cell (3rd column) of the mapping table's `key` row — the cell that
+    carries the value-provenance attribution. Same narrow, documented section parse as
+    `_policy_mapping_table`; the mapping table's own rows only, not the file's prose."""
+    text = POLICY_PATH.read_text(encoding="utf-8")
+    marker = "## Mapping to `.ai-project.yml`"
+    start = text.index(marker)
+    rest = text[start + len(marker):]
+    next_heading = re.search(r"^##\s", rest, re.MULTILINE)
+    section = rest[: next_heading.start()] if next_heading else rest
+    for line in section.splitlines():
+        match = _MAPPING_ROW.match(line.strip())
+        if match and match.group(1) == key:
+            cells = [c.strip() for c in line.strip().strip("|").split("|")]
+            return cells[2] if len(cells) >= 3 else ""
+    return None
+
+
+def _policy_row_why_cell(row):
+    """Row `row`'s `why` cell from the `## Policy rows` tier table — the cell that sits
+    outside `test_policy_mapping_agrees_with_yml_block`'s parse. Narrow, documented parse:
+    only lines whose first cell is the row id, never the notes that follow the table."""
+    text = POLICY_PATH.read_text(encoding="utf-8")
+    marker = "## Policy rows"
+    start = text.index(marker)
+    rest = text[start + len(marker):]
+    next_heading = re.search(r"^##\s", rest, re.MULTILINE)
+    section = rest[: next_heading.start()] if next_heading else rest
+    for line in section.splitlines():
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 4 and cells[0] == row:
+            return cells[3]
+    return None
+
+
+def test_row_p4_tier_cell_provenance_agrees_with_mapping_row():
+    """P12-M44-E44.2 (D3): the tier cells sit outside `test_policy_mapping_agrees_with_yml_block`'s
+    parse, which reads the mapping table only. Row P4's `why` cell was rewritten to describe an
+    allowance-decided value; this guard closes the gap — the tier cell and its mapping row must
+    describe the same value-provenance. If the `why` cell drifts back to a measurement derivation
+    while the mapping row says allowance (or vice versa), this fails."""
+    p4_why = _policy_row_why_cell("P4")
+    milestone_policy_row = _policy_mapping_row_cell("milestone")
+    assert p4_why is not None, "row P4 not found in the ## Policy rows tier table"
+    assert milestone_policy_row is not None, (
+        "milestone mapping row not found in the ## Mapping to table"
+    )
+    assert _ALLOWANCE_ATTRIBUTION in milestone_policy_row, (
+        f"milestone mapping row lost the allowance attribution: {milestone_policy_row!r}"
+    )
+    assert _ALLOWANCE_ATTRIBUTION in p4_why, (
+        f"row P4's `why` cell must describe an allowance-decided value matching its mapping "
+        f"row; it does not: {p4_why!r}"
+    )
