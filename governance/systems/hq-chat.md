@@ -143,6 +143,11 @@ HQ Chats persist across all of these steps.
 
 ## Standard HQ Chat Opener (Recommended)
 
+**Re-instantiation is governed by `governance/systems/hq-re-instantiation.md` — "HQ Chat
+Re-instantiation Ritual" — and is cited there, not restated here.** That document records
+the ritual from the nine committed opener instances (`.ai-project/artifacts/hq-openers/`),
+covers departure as well as arrival, and reports its divergences.
+
 When starting an HQ Chat for a new project, the following context should be established:
 
 - Project name
