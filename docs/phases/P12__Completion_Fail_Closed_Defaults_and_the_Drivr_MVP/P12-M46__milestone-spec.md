@@ -84,6 +84,26 @@ act it governs** — whoever writes last becomes the holder, so a mistaken write
 legitimizes itself. **Exclusivity must be enforced by something outside the state the forks write**,
 which is Drivr's side of the boundary, not the corpus's.
 
+**(c) A malformed tie-break does not produce a tie — it produces two confident forks.** A ref placed
+after `--` is read as a pathspec, so git falls back to **implicit `HEAD`**, and the rule becomes
+**reader-dependent rather than broken**. Measured three ways, each correcting the last: first reported
+as *"silently returns nothing"*; then *"empty from `master`, correct from `milestone/M41`"*; then HQ's
+own run returned **`9940820` from `master` and `b27b4ed` from `milestone/M41`** — neither empty, both
+valid-looking. **A rule that always fails gets noticed; a rule that returns a different valid-looking
+answer to each reader shows nobody anything wrong** — and a tie-break's entire value is that both forks
+compute it identically. **Any form resting on implicit `HEAD` is disqualified.**
+
+**(d) A lookup that cannot read its source must not answer "absent".** *Added 2026-09-04 from the M46
+Milestone Chat's E46.1, and adopted here because the label was being cited before the parent defined
+it.* A registry lookup returning **"no holder"** for a registry it **could not read** is a silent
+failure wearing the costume of a meaningful value — **this phase's organizing finding at the registry
+layer**. The remedy is the three-valued lookup `held` / `vacant` / `undetermined`, where `undetermined`
+is returned when the registry cannot be read and is **distinct from `vacant`**, so a consumer can never
+read *"could not read"* as *"nobody holds it"*. **This is the fourth application of *empty means
+UNDETERMINED and escalates*** — after the completion signal (M45), the tie-break above, and the
+missing-delivery branch (E45.3) — and it is why E46.4's go-to-blocker **refuses to guess** rather than
+routing to a wrong address.
+
 **And it cannot be repaired by reading the record.** Measured 2026-08-21:
 `git log --all --format='%an <%ae>' | sort -u` returns **exactly one author** across the entire
 repository, because the harness signs as the human. **The corpus cannot tell whether two artifacts in
@@ -306,4 +326,5 @@ cannot support?**
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-09-04 | **Defines V2(c) and V2(d), which the epic specs were already citing — 16 citations across the set resolved to labels this spec did not define.** (c) is the implicit-`HEAD` hazard, referenced in BC4 but never labelled here; (d) is **new work from the M46 Milestone Chat's E46.1**, adopted upward: *a lookup that cannot read its source must not answer "absent"*, remedied by the three-valued `held`/`vacant`/`undetermined` registry read. **The defect was this spec's, not the epics'** — a child cited a parent label the parent had not written, which is `P12-GH-1`'s shape pointed upward, and it was found by tracing a citation rather than by any mechanism. |
 | 1.0.0 | 2026-09-04 | Initial M46 spec, from the P12 phase spec's P12.6 and success criteria 17/18, the M46 role-identification and currency inputs (amended four times, three of them from live forks), and M45's handover contract. Five epics; **E46.1 first** as a prerequisite. Records **V1** (the impossibility argument is dead, the requirement survives), **V2** (a fork that agrees is invisible; exclusivity must live outside the state the forks write; the corpus cannot settle it because the harness signs every commit as one author), **V3** (the contract is an input, not a subject), **V4** (unrepresentable is a stronger claim than validated, and absence needs a constructibility test), **V5** (the bar precedes the suite, per E45.1's worked precedent). **BC9 binds the M43/M45 defect**: a Drivr DoD item measured only on an epic branch is not met. |
