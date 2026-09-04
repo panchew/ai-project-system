@@ -161,3 +161,65 @@ not this Milestone Chat's:**
 **`milestone/M46` depends on this milestone** — M45 gates M46 by construction, and M46 must not be
 planned ahead of the contract M45 just handed over. The Drivr publication decision (the CFO's
 "local-only for now") is the Phase Chat's to hold, with the carry-forward note as its record.
+
+---
+
+## Stage-2 Review — Phase Chat Decision: **ACCEPTED**
+
+**Reviewed and accepted by:** the **P12 Phase Execution Chat** (session `4710216f`), acting as M45's
+parent, per E43.2's named-acknowledgment rule. **Reviewed at:** `origin/milestone/M45` @ `e2bb95c`
+and Drivr `e9956f2`, on 2026-09-04.
+
+### Re-measured, not inherited (G2)
+
+| Claim | Re-measured | Result |
+|---|---|---|
+| Drivr suite **471** | `python3 -m pytest -q` at Drivr `e9956f2` | **471 passed** — exact |
+| `_decide` still reads nothing beyond the ledger | `inspect.signature` | params exactly `['ledger', 'files_changed']` — **unchanged** |
+| `_decide` now reads inspection | `completion.py` | `INSPECTION` present (**was 0** at `f15e239`) |
+| Two-`Disposition` collision resolved | `drivr/` | `outcome.py:90` → **`Conclusion`**; `completion.py:137` keeps `Disposition`. One name each |
+| The bar was the **first** commit on E45.1's branch | `git log` from the branch point `201a4ea` | **`da0c66a`, first** — confirmed |
+| Four epic merges | `git log` | `03e71c5`, `0064603`, `9f9e76b`, `acbc728` — all present |
+
+*Method note, recorded because it nearly produced a false finding:* the bar check first returned **NO**,
+because measuring `--reverse` from the **phase/P12** merge-base includes M45's four planning commits.
+Measured from the branch point the epic actually cut from, `da0c66a` is first. **The claim was right and
+the measurement was wrong** — the third time this session that a disagreement resolved against the
+reviewer's method rather than the executor's number.
+
+### Findings 1–5 accepted as written. **A sixth is added, and it is a RECURRENCE.**
+
+**F6 — the M45 Drivr work is verified but NOT MERGED into Drivr's `main`, and this is the second
+consecutive milestone in which that has happened.**
+
+Drivr `main` stands at **`f15e239`** — the commit this Phase Chat merged to discharge **M43's
+carry-forward D**. Both M45 commits (`17aef91` E45.2, `e9956f2` E45.4) sit on
+`epic/P12-M45-E45.4`, unmerged. Measured on `main`:
+
+- `INSPECTION` in `completion.py`: **0** — the judgment does **not** read inspection
+- `class Conclusion` in `outcome.py`: **absent** — the two-`Disposition` collision is **live**
+- `docs/m46-completion-signal-contract.md`: **does not exist**
+
+**This is distinct from Finding 1.** Finding 1 is *recoverability* — Drivr has no remote, so the code
+lives on one disk. F6 is *integration* — even on that disk, the mainline lacks the work. A repository
+can have a remote and still be unmerged; it can be local-only and still be merged. **The CFO's
+"local-only for now" ruling disposes of publication; it does not dispose of this.**
+
+**The consequence is immediate and lands on the next milestone.** DoD items 2 and 6 read as *a
+read-only run is no longer reported as `DID_NOT_COMPLETE`* and *`undetermined` survives end to end* —
+**true on the epic branch, false in Drivr's mainline.** And **M46 is gated on the contract M45 just
+wrote, which does not exist on `main`.** An M46 chat branching from Drivr `main` would find neither the
+contract nor the signal it describes, and would be building the board against the pre-E45.2 behaviour
+this milestone exists to have fixed.
+
+**The class was never closed, only the instance.** At M43's closure this Phase Chat filed carry-forward
+D, then discharged it *by merging that one branch* — and put nothing in place to stop the next
+milestone doing the same thing. That is the phase's own organising finding applied to its own remedy:
+**the fix addressed the occurrence and left the mechanism that produced it untouched.** The defect is
+mine, not this Milestone Chat's, and it is recorded here rather than in a message so the next reader
+sees it beside the DoD items it qualifies.
+
+**Disposition:** the milestone is **ACCEPTED** — the work is real, re-measured, and correct on the refs
+where it lives. **Drivr `epic/P12-M45-E45.4` → `main` requires explicit CFO authorization** and should
+land **before M46 is planned**, not after. Consolidation of `milestone/M45 → phase/P12` likewise awaits
+authorization; acceptance is not authorization.
