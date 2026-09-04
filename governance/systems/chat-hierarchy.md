@@ -743,6 +743,49 @@ costs nothing and building on it costs everything. **P11 (Drivr) builds the dete
 channel, the mode switch, and the surfacing against these rules; none of them exists in this
 repository today** (HQ Ruling on SN-25, Decision 8).
 
+> **RE-RATED 2026-09-03 (Epic P12-M45-E45.3) — on measured evidence, not on age.**
+> This gap is **re-rated, not closed.** The evidence does not show block detection is
+> trustworthy; it shows detection is **structurally absent** in one direction and correctly
+> refusing the wrong signal in the other. Closing it on this measurement would be exactly
+> the bar-after-the-data error the milestone refuses. Measured and adjudicated at Drivr
+> `17aef91` (== `f15e239` for the block-detection modules; `git diff f15e239 17aef91 --`
+> shows E45.2 changed only `completion.py`/`projections.py`/tests), 2026-09-03; the full
+> record is `docs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M45-E45.3__record__measurement-and-adjudication.md`.
+>
+> **What was re-confirmed (Direction B — the exit code):** E33.2 Run A (exit 0, zero work) and
+> E33.4 (exit 2, green work) stand as cited live evidence that **the exit code is not a
+> completion signal** (`interface.py:147` — "Known untrustworthy in both directions"). The
+> judgment already refuses to read it (`_decide`'s parameter list is `["ledger",
+> "files_changed"]`, pinned by `tests/test_judgment_independence.py`). **This part is not an
+> active false report today; it is a hard constraint on whatever detector is later built** —
+> a detector that reads `exit_code` or `timed_out` as a rule term would re-create the
+> "constant false escalations" this section warns of (Binding Constraint 5, refused in
+> advance).
+>
+> **What was re-scoped (Direction A — the missing delivery, and now the precise gap):** it is
+> the scheduler's **missing-Delivery-Notice branch**, and it is a **mechanism-absence**, not a
+> signal defect. A run that is claimed but never finishes writes **no journal record** (the
+> `DispatchRecord` is written only when the adapter returns), and the job sits in `claimed/`
+> with **nothing** aging it; a run that finishes `UNDETERMINED` is journalled and **the lane
+> moves on** — *"No escalation, no retry, no blocking"* (`scheduler.py:28`). So **absence of a
+> finished record reads as "still in flight"** — the fail-open default exactly as SN-31
+> Carry-Over 3 described it. **The data to build the detector already exists** (dispatch
+> timestamps, the `claimed/` directory, the absence of a finished record); **nothing reads it.**
+>
+> **Amended gap statement:** P10-GH-7 is no longer the broad *"detection is measured broken in
+> both directions."* It is, precisely: **block detection is structurally absent** — a claimed but
+> never-finished run, or a run that finishes `undetermined`, produces no signal that a
+> block/delivery-absence occurred, so absence defaults to "still working"; **and the one signal a
+> naive detector would reach for (the exit code) is confirmed-unreliable and already refused**.
+> The block detector does **not** exist. **Severity: High (unchanged)** — the mechanism is still
+> absent and the milestone's own framing (*"a blocked run reported as running"*) is un-fixed.
+> **Owner: unassigned (unchanged)** — the detector's build is M46/later, and this epic does not
+> assign staffing. **G11 (`epic_qa` zero captured runs) remains a compounding gap**, recorded and
+> not exercised here (M41's lane measurement is that epic's; filling it is out of scope for this
+> one). Whether and how the detector implements the missing-delivery branch (signal: elapsed-time
+> since dispatch + record-absence, **not** `exit_code`/`timed_out`) is stated in the E45.3 record
+> and is **M46/later's**, not built here.
+
 ---
 
 ## Level 0: Creation Chat (Project Bootstrap)
@@ -1311,6 +1354,7 @@ it without a second hop. The two statements must always agree; on any divergence
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.7.0 | 2026-09-03 | **`P10-GH-7` re-rated on measured evidence, not closed (E45.3, P12-M45).** The gap record at "The signal this rule depends on is measured broken (P10-GH-7)" is amended with a dated re-rating block. Status: **re-rated (not closed)** — the evidence does not show block detection is trustworthy; it shows detection is **structurally absent** (Direction A: a claimed-but-never-finished run writes no journal record, nothing ages `claimed/`, absence of a finished record reads as "still in flight") and **correctly refusing the wrong signal** (Direction B: `exit_code` confirmed untrustworthy, already reads as `IGNORED` per the judgment). Severity **High, owner unassigned — both unchanged** (the mechanism is still absent; the build is M46/later). Amended gap statement narrows the claim from *"detection is measured broken in both directions"* to *block detection is structurally absent, and the signal a naive detector would reach for (the exit code) is confirmed-unreliable and already refused*. Measured at Drivr `17aef91` (== `f15e239` for the block-detection modules, G2-verified), 2026-09-03; full record in the E45.3 measurement-and-adjudication record. No authority, gate, or §11.6.1 rule changed. |
 | 1.6.0 | 2026-09-03 | **The fourth verification state and the inter-chat rule (E44.3, P12-M44, executing R6 Decision 3).** **(a)** New subsection "Config present + self-report absent: refuse by default; the recorded-declaration exception" in §Manual Chat Model Verification, defining the **fourth** state (config present + self-report absent) alongside the existing three, itemized, with the four states together admitting no path taken in silence. Disposition ruled, not written: **refuse by default**; the single exception is a **recorded human declaration** the chat states in its **first substantive response** (proceeded on a declared rather than self-reported identity, and what was declared); **silence never available**. States the E42.1 parallel (a fail-closed default with an explicit, recorded human opt-in is now a **pattern**, not a one-off), the why-of-the-exception (a recorded declaration is the same epistemic strength as the conceded-unverifiable self-report, **with a named accountable party**; without it the rule is a wall, not a gate), and writes for a corpus where **Claude Code is one surface among several** (the state is defined by the absence of a self-report to read, not by which harness is in use). **(b)** New section "Cannot establish a sender's role? Refuse — the counterparty layer" — the narrow half of `P12-GH-4`, written as the **second layer of the same rule** (the self case carries the exception, the counterparty case carries **none** — the asymmetry is the point), restating **SN-36** (*a chat reply is never authorization, because agents can write into chats*) applied to the live inter-chat channel, **inbound-as-threat-model**, with the content-fixed paragraph landed in the normative tier verbatim in substance, and the wider half cited as **filed unowned** — the channel is **not designed** here. No authority, gate, or §11.6.1 rule changed. |
 | 1.5.0 | 2026-09-02 | **The rework-exhaustion flip and resume (E43.4, P12-M43).** **(a)** New subsection "The rework-exhaustion flip: the invariant survives, the record is the source" — added immediately after the Declaration-mechanism committed-starter invariant (`:229-231`): a runtime flip **never rewrites the committed starter**; Drivr performs and records the flip, so the committed record stays the source of truth and the flip is discoverable from the **record**, not from a mutated committed file. The flip itself is stated **by reference** to the one normative statement at PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework-Exhaustion Flip". **(b)** New subsection "Resume: restores, never promotes; returns the mode, not the budget" — the **normative home** of resume (finding W5: it existed in no normative document): resume **restores** the declared mode and **never promotes** (only an agentic-declared starter may be resumed to agentic; no control moves manual → agentic) and **returns the mode, not the budget** (no rework-counter reset). Drivr performs and records the resume in the same recorded mode transition as the flip. No authority, gate, or §11.6.1 rule changed. |
 | 1.4.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43, D3).** Reconciled the §Execution Mode corollary (`:201-205`) with the amended PROJECT-SYSTEM-GUIDELINES.md §11.6: the corollary no longer rests default-accept on the attendance presumption (*"the human's key is present at the session by construction"*). It now states that acceptance is carried by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity) — a **positive signal an identified party emitted**, never an absence attributed to a role — and that **silence accepts nothing**; presence is not evidence of review, the acknowledgment is. The manual/agentic line survives: an agentic instance's silence is not an acknowledgment and does not by itself accept a delivery. No authority, mode, gate, or §11.6.1 rule changed. |

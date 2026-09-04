@@ -2,7 +2,7 @@
 milestone: M45
 name: "Trustworthy Completion Signal"
 phase: P12
-status: planned
+status: completed
 start_date: 2026-08-22
 epics:
   - E45.1
@@ -476,4 +476,5 @@ flowchart TB
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.0 | 2026-09-04 | **CLOSURE ACCEPTED by the Phase Chat, and `status` flipped to `completed` in the same act as closure consolidation** (the M42–M44 precedent: `planned` through planning, `completed` only at closure). **Verified by re-measurement, not report (G2):** Drivr suite **471** at `e9956f2`; `_decide`'s parameter list still exactly `['ledger','files_changed']`, so the independence guarantee survived the fix; `INSPECTION` now read where it was **0**; the two-`Disposition` collision resolved by renaming the scheduler's type to `Conclusion`; the bar `da0c66a` confirmed as the **first** commit on E45.1's branch. **A sixth finding was added at review and is the Phase Chat's own defect:** the M45 Drivr work was verified but **unmerged into Drivr's `main`** — the second consecutive milestone with that gap, because M43's carry-forward D was discharged by merging the instance without closing the class. Before the remedy, `main` carried `INSPECTION=0`, no `Conclusion`, and **no `m46-completion-signal-contract.md`** — so M46 would have branched from a mainline lacking both the contract it builds against and the signal that contract describes. **Merged to Drivr `main` at `4872107` under CFO authorization, 471 passed**, before M46 is planned. |
 | 1.0.0 | 2026-08-22 | Initial M45 spec, from the P12 phase spec §P12.5, M39's judgment, M40's F5, `P10-GH-7`, and SN-36/37's first-class `undetermined`. **Five planning-time findings verified at source against Drivr `f60164c`.** **Y1: F5's consequence is worse than recorded** — a read-only run is not returned as unknown but as **`DID_NOT_COMPLETE`**, because `_decide` contains zero occurrences of `INSPECTION` and `reading()` maps `NO_EFFECTS_OBSERVED` explicitly onto a confident negative, while `Reading.UNDETERMINED` sits reachable in the same enum. **Y2: the gap is documented in the code against itself** (`projections.py:45`), making this the closing of a known hole rather than a debugging exercise. **Y3: two enums, two layers, and no `Completion.UNDETERMINED`** — the CFO's ruling is about the `Reading` layer, so every change must name its layer. **Y4: a second, independently-built instrument reproduced the same failure this week** — E41.2's checker failed an honest read-only run — making it a **design attractor** that obliges a principle rather than a patch, **and only live runs found either instance.** **Y5: a Phase Chat near-miss** — a grep for a member that does not exist returns zero identically to one that exists and is unused. Four epics; **E45.1's bar lands as its branch's first commit**, the form E41.2 proved. |
