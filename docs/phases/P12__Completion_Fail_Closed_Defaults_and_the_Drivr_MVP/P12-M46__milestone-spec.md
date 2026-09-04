@@ -141,7 +141,8 @@ must be shown by a test that fails if the state becomes constructible.
 ### V5 — The qualification bar must be committed before the suite it grades, and M45 proved the form works
 
 SN-37's gate must **detect *successful nothing*** — a run that returns a confident verdict having
-done nothing — **on both recorded historical failures**: the `epic_qa` dispatch that returned
+done nothing — **on the itemized historical set: E33.2 Run A, E39.3, and E41.2's DEV RUN 2**
+*(corrected 2026-09-04; v1.0.0 of this spec named a different pair — see the changelog)*: the `epic_qa` dispatch that returned
 `VERDICT: PASS` with **zero tool rounds** while citing a `framework_version` key the file does not
 have (P11-M39-E39.3), and the four-times-overpacked `llama3.1:8b` observation (P12-M41-E41.1).
 
@@ -326,5 +327,6 @@ cannot support?**
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.2.0 | 2026-09-04 | **Corrects V5's historical set, on the M46 Milestone Chat's escalation (its closure Finding 4).** v1.0.0 named *E39.3 + the `llama3.1:8b` overpack*; the phase spec's M47 criterion names **E33.2 Run A, E39.3, and E41.2's DEV RUN 2**. **The overpack is not a successful-nothing case at all** — it is a context-declaration defect, caught by the bar's context check, and conflating the two classes was this spec's error. The phase spec was itself inconsistent (*twice* / *both E33.2 and E39.3* / *three*) and is reconciled at v1.3.3; **the root cause is a count standing where a list belongs**, in the phase's own success criteria. E46.5 built against v1.0.0's pair and additionally flagged E33.2 Run A, so **the delivered gate covers the corrected set** — the correction is to the record, not to the code. |
 | 1.1.0 | 2026-09-04 | **Defines V2(c) and V2(d), which the epic specs were already citing — 16 citations across the set resolved to labels this spec did not define.** (c) is the implicit-`HEAD` hazard, referenced in BC4 but never labelled here; (d) is **new work from the M46 Milestone Chat's E46.1**, adopted upward: *a lookup that cannot read its source must not answer "absent"*, remedied by the three-valued `held`/`vacant`/`undetermined` registry read. **The defect was this spec's, not the epics'** — a child cited a parent label the parent had not written, which is `P12-GH-1`'s shape pointed upward, and it was found by tracing a citation rather than by any mechanism. |
 | 1.0.0 | 2026-09-04 | Initial M46 spec, from the P12 phase spec's P12.6 and success criteria 17/18, the M46 role-identification and currency inputs (amended four times, three of them from live forks), and M45's handover contract. Five epics; **E46.1 first** as a prerequisite. Records **V1** (the impossibility argument is dead, the requirement survives), **V2** (a fork that agrees is invisible; exclusivity must live outside the state the forks write; the corpus cannot settle it because the harness signs every commit as one author), **V3** (the contract is an input, not a subject), **V4** (unrepresentable is a stronger claim than validated, and absence needs a constructibility test), **V5** (the bar precedes the suite, per E45.1's worked precedent). **BC9 binds the M43/M45 defect**: a Drivr DoD item measured only on an epic branch is not met. |
