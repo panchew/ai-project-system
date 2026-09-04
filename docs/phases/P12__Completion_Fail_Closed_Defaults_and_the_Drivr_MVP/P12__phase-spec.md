@@ -560,7 +560,8 @@ precisely because it carried `PASS 4/5, 0 false alarms` in advance.
   **incumbent** first; the candidate must be no worse on every objective check and strictly better on
   at least one, over an absolute floor of **tool rounds > 0 and files changed > 0**. No subjective
   quality score — judgment is precisely what cannot be trusted from the thing under test. **Its first
-  job is detecting successful nothing**, because this project has recorded that failure twice: E33.2's
+  job is detecting successful nothing**, because this project has recorded that failure in **three** runs,
+  itemized rather than counted (see the M46/M47 criteria below) — E33.2 Run A, E39.3, and E41.2's DEV RUN 2: E33.2's
   14b returned exit 0 having done nothing; E39.3's dispatches returned confident `VERDICT: PASS` with
   zero tool rounds, citing a config key the file does not contain. Both pass any subjective read.
   They fail only on counts. Drivr is the runner — run the suite, gate the swap, record the result;
@@ -731,7 +732,8 @@ Run record is the deliverable, including what the framework got wrong.
 17. ✅ **Drivr's MVP surface exists and makes at least three governance rules unrepresentable** — no
     agentic at Creation/HQ, no Phase/Milestone dispatch, no mode control implying merge authority.
 18. ✅ **A model may not be swapped without passing a qualification suite whose bar was set before it
-    ran**, and the suite detects *successful nothing* on both recorded historical failures.
+    ran**, and the suite detects *successful nothing* on the **itemized** historical set — **E33.2 Run A,
+    E39.3, and E41.2's DEV RUN 2** *(corrected 2026-09-04 from "both recorded historical failures")*.
 19. ✅ **One real epic in one real project has been carried end to end agentically by Drivr**, with
     its run record — including the framework's own failures during it — committed.
 20. ✅ **The parked and deferred items are recorded with their triggers**, and llama.cpp is recorded
@@ -809,7 +811,12 @@ The CFO (Layer 8) will accept P12 complete when:
       records which** — a runner that cannot tell an empty credential store from an unreachable target
       reports a clean-looking negative and fails at the thing it was commissioned for
 - [ ] The qualification suite's bar is committed **before** its first run, is relative to the
-      incumbent, and flags both E33.2 and E39.3 as failures when replayed
+      incumbent, and flags **the itemized successful-nothing set — E33.2 Run A, E39.3, and E41.2's
+      DEV RUN 2** — as failures when replayed. *(Corrected 2026-09-04: this line and the "twice" above
+      named a pair while the M47 criterion below named three. **"Both" was a count standing where a
+      list belongs** — Hard Constraint 1, in the phase's own success criteria. The **`llama3.1:8b`
+      overpack is NOT in this set**: it is a context-declaration defect caught by the bar's context
+      check, a different class from a run that reports success having done nothing.)*
 - [ ] **The M47 proof run is checked by `bin/successful-nothing-instrument`**, and its run record
       carries **tool rounds, files changed and claims-resolution** rather than an exit status.
       *"A real epic ran agentically end to end" is not the claim; the claim is "…and we can show it
@@ -990,6 +997,7 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.3 | 2026-09-04 | **Reconciles the successful-nothing set, which this spec stated three different ways.** `:563` said the failure was recorded **twice**; the qualification criterion said *"flags **both** E33.2 and E39.3"*; the M47 criterion said **three** — *E33.2 Run A, E39.3, and E41.2's DEV RUN 2*. **The set is three, itemized.** *"Both"* and *"twice"* were **counts standing where a list belongs** — Hard Constraint 1, in this spec's own success criteria, which is why the discrepancy survived three amendments unnoticed. Also records that the **`llama3.1:8b` overpack is not a member**: it is a context-declaration defect caught by the bar's context check, a different class from a run reporting success having done nothing. **Escalated by the M46 Milestone Chat at planning close** (its Finding 4) after the Phase Chat's M46 spec propagated a fourth variant. |
 | 1.3.2 | 2026-08-27 | **Amends the M46 role-identification input: the harness moved.** `ListAgents` now reports a session its own address; it did not on 2026-08-20. **The *requires-an-outside-correlator* claim dies** — it lived in messages and **never reached an artifact**, so nothing had to be unwound. **The registry requirement survives, re-justified**: names carry no role, which is what M46 must build against. Caught by the M41 chat running the command instead of asserting from memory, one turn short of shipping — `P12-GH-3` with a claim-in-flight about the environment as its dependent. **HQ had seen the self-address line hours earlier and amended nothing**, which is recorded here as the counter-example. |
 | 1.3.1 | 2026-08-27 | **Ordering defect in v1.3.0's own criterion, found by the P12 Phase Chat and corrected.** The flip was placed *as part of* closure; **the Phase Chat runs the closure and is one of the chats the flip halts**, so a mid-sequence flip stops the executor half-finished and the phase cannot close itself. **Now the LAST act, performed by HQ** — the only level besides Creation that survives it. Deferring to the boundary was right; placing it *inside* the boundary was not. **No decision changed; only who acts and when.** |
 | 1.3.0 | 2026-08-27 | **Two CFO decisions recorded with their consequences, not merely their content.** **(a) `model_verification` flips to `blocking` AT P12's CLOSURE**, as an acceptance criterion the phase cannot close without disposing of — deferred to the boundary **specifically so no chat halts mid-execution**, since Phase and Milestone chats run on Claude while the baseline configures GPT and Deepseek. SN-37's gate and HQ's suspended fidelity condition resume at the same moment. **The trigger is an EVENT, not a session's survival** — the failure mode this phase recorded twice. **(b) SN-42's shape: EXTEND M47 by CFO preference**, with a new milestone available as a justified escalation rather than a free choice. No epic added, no ordering change. |
