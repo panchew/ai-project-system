@@ -166,3 +166,75 @@ not this Milestone Chat's:**
 (CFO: "local-only for now"); the milestone-V5 vs phase-P12.6 "both historical failures" reconciliation
 (Finding 4); and — unchanged from M45 — the escalation-terminus disposition and `model_verification`'s
 flip to `blocking`, both of which come due at M47's completion, not here.
+
+---
+
+## Stage-2 Review — Phase Chat Decision: **ACCEPTED**
+
+**Reviewed and accepted by:** the **P12 Phase Execution Chat** (session `4710216f`), acting as M46's
+parent, per E43.2. **Reviewed at:** `origin/milestone/M46` @ `5fea977` and Drivr `main` `114de1c`,
+on 2026-09-04.
+
+### Re-measured, not inherited (G2)
+
+| Claim | Re-measured | Result |
+|---|---|---|
+| Drivr suite **581** | `python3 -m pytest -q` at Drivr `main` `114de1c` | **581 passed / 0 failed / 0 skipped** — exact |
+| **BC9** — every Drivr deliverable on `main` | `git merge-base --is-ancestor` for all five epic branches | **all five MERGED, 0 commits ahead** |
+| The four modules exist | Drivr `main` | `drivr/registry`, `drivr/board`, `drivr/capabilities`, `drivr/controls` — all present |
+| The agreeing-fork case demonstrated | `tests/test_role_registry.py:123` | `test_a_correct_converging_second_claimant_is_still_refused` — **present** |
+| E46.5's bar was the **first** commit | `git log` from the branch point `43276da` | `95f7656` (bar) precedes `f33af95` (gate) — **confirmed** |
+| The capability model is closed | `drivr/capabilities/__init__.py` | Three rules named; closed vocabulary; `ast`-scan for rule 3; **level axis held distinct from E46.1's role axis and the board's subject vocabulary** |
+
+### BC9 held, and that is the finding worth recording
+
+**This is the first milestone in which the Drivr integration gap did not occur.** It occurred in M43
+(carry-forward D), recurred identically in M45 (F6), and both times a human-directed review caught it
+rather than any mechanism — because both times the Phase Chat discharged the **instance** by merging
+the branch and left the **class** untouched.
+
+M46 wrote it as **Binding Constraint 9** — *a Drivr DoD item measured only on an epic branch is not
+met* — and it propagated: each epic's Delivery Notice carried BC9 as an open item, E46.2's DoD named
+it explicitly, and all five were merged before closure. **A constraint stated once in the milestone
+spec did what two carry-forwards and two manual merges did not.**
+
+### Findings 1, 2, 3 and 5 accepted as written. **Finding 4 is upheld and RESOLVED at phase level.**
+
+**Finding 2 deserves a note.** E46.1 re-measured `ListAgents` at build time and found the harness now
+reports **`ses_<id>`**, not the `ai-project-system-<hex>` form V1 recorded on 2026-08-27. **The
+capability survived; the token form moved.** The registry was designed agnostic to the form, so
+nothing broke — but this is **V1's lesson firing correctly, twice over**: the same harness claim has
+now gone stale **twice in eight days**, and both times it was caught by re-measuring at the moment of
+use rather than by trusting a finding that was true when recorded. Any artifact citing the
+`ai-project-system-<hex>` literal is now stale.
+
+**Finding 4 — the successful-nothing set — is upheld, and the discrepancy was worse than reported.**
+The M46 Chat found two authoritative statements disagreeing. There were **four**:
+
+| Source | Set named |
+|---|---|
+| Phase spec `:563` | *"recorded that failure **twice**"* |
+| Phase spec `:812` | *"flags **both** E33.2 and E39.3"* |
+| Phase spec `:816` | **three** — E33.2 Run A, E39.3, **E41.2's DEV RUN 2** |
+| M46 spec V5 (mine) | E39.3 + the **`llama3.1:8b` overpack** |
+
+**Ruled: the set is THREE, itemized — E33.2 Run A, E39.3, and E41.2's DEV RUN 2.** The
+**`llama3.1:8b` overpack is not a member**: it is a *context-declaration* defect caught by the bar's
+context check, a different class from a run that reports success having done nothing. **Conflating
+the two classes was the Phase Chat's error**, and it introduced a fourth variant into a spec written
+to correct the first three.
+
+**The root cause is Hard Constraint 1, violated in the phase's own success criteria.** *"Both"* and
+*"twice"* are **counts standing where a list belongs** — which is precisely why the discrepancy
+survived three amendments unnoticed: a count cannot disagree with itself visibly, and only an
+itemization exposes that the members differ. Reconciled at **phase spec v1.3.3** and **M46 spec
+v1.2.0** (`9558f0b`).
+
+**E46.5 is unaffected.** It built against V5's pair *and additionally flagged E33.2 Run A through the
+same counts mechanism*, so **the delivered gate already covers the corrected set.** The correction is
+to the record, not to the code — which is the outcome a Milestone Chat that escalates rather than
+absorbs makes possible.
+
+**Disposition: ACCEPTED.** All eleven DoD items verified; five milestone acceptance criteria hold; no
+rework attempt consumed. **Consolidation `milestone/M46 → phase/P12` is the Phase Chat's act per
+E43.1 and awaits explicit CFO authorization** — acceptance is not authorization.
