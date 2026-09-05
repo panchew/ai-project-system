@@ -1,0 +1,21 @@
+{
+  "check": "E47.2 readiness check",
+  "mechanism": "parse .ai-project.yml models block; classify epic lanes against the E47.1 remote-dispatch route (SN-43: local inference PARKED)",
+  "project": "/home/panchew/soft-dev/panchew-io",
+  "yml_path": "/home/panchew/soft-dev/panchew-io/.ai-project.yml",
+  "yml_exists": true,
+  "models_block_present": true,
+  "epic_lanes": {
+    "epic_dev": {
+      "value": "local:qwen3-coder:30b",
+      "classification": "PARKED_LOCAL"
+    },
+    "epic_qa": {
+      "value": "local:qwen3-coder:30b",
+      "classification": "PARKED_LOCAL"
+    }
+  },
+  "verdict": "FAIL — epic lanes not dispatchable for the remote route (parked local: epic_dev, epic_qa — SN-43: local inference PARKED)",
+  "exit_status": 1,
+  "note": "PRE-FIX run (before the CFO-authorized readiness fix), 2026-09-05. This is the failing state the run check caught — an assert would have passed it."
+}

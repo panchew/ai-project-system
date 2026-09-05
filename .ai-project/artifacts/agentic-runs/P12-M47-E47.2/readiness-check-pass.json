@@ -1,0 +1,20 @@
+{
+  "check": "E47.2 readiness check",
+  "mechanism": "parse .ai-project.yml models block; classify epic lanes against the E47.1 remote-dispatch route (SN-43: local inference PARKED)",
+  "project": "/home/panchew/soft-dev/panchew-io",
+  "yml_path": "/home/panchew/soft-dev/panchew-io/.ai-project.yml",
+  "yml_exists": true,
+  "models_block_present": true,
+  "epic_lanes": {
+    "epic_dev": {
+      "value": "remote:deepseek-v4-flash",
+      "classification": "REMOTE_DISPATCHABLE"
+    },
+    "epic_qa": {
+      "value": "remote:deepseek-v4-flash",
+      "classification": "REMOTE_DISPATCHABLE"
+    }
+  },
+  "verdict": "PASS \u2014 epic lanes resolve to a remote-dispatchable engine for the proof's route",
+  "exit_status": 0
+}
