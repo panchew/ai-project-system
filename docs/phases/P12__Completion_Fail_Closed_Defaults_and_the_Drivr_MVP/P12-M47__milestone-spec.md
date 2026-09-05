@@ -151,8 +151,9 @@ criterion rather than a suggestion.
 
 ## Binding Constraints (settled — NOT for re-debate)
 
-1. **M42 is a hard prerequisite.** No M47 epic may be dispatched agentically until M42 closes (SN-31
-   Decision 2). **M42 has not closed.**
+1. **M42 is a hard prerequisite — SATISFIED.** No M47 epic may be dispatched agentically until M42
+   closes (SN-31 Decision 2). **M42 CLOSED 2026-09-02** — Closure Declaration accepted by the Phase Chat, consolidated to `phase/P12` by PR #248 (merge `90335ca`), `status: completed`. All four defects re-measured gone at acceptance (host `shell=True` fallback, unscoped `git add .`, the `--admin` rung, the placeholder-agent stub); suite `582` at closure.
+   **The prerequisite is discharged; dispatch is no longer blocked on it.**
 2. **The proof run is checked by `bin/successful-nothing-instrument`** — HQ acceptance criterion. The
    record carries **tool rounds, files changed and claims-resolution**, not an exit status.
 3. **The claim is *"and we can show it did work."*** Not *"it ran."*
@@ -284,7 +285,7 @@ does that path carry?**
 
 **Internal**
 
-- **M42's closure — hard, and NOT MET.** No closure declaration exists for M42.
+- **M42's closure — hard, and MET (2026-09-02).** **M42 CLOSED 2026-09-02** — Closure Declaration accepted by the Phase Chat, consolidated to `phase/P12` by PR #248 (merge `90335ca`), `status: completed`. All four defects re-measured gone at acceptance (host `shell=True` fallback, unscoped `git add .`, the `--admin` rung, the placeholder-agent stub); suite `582` at closure.
 - **M41 — closed 2026-09-01**, supplying the instrument (Z4) and the transport substrate (Z2).
 - **M45** — makes the completion signal trustworthy. **Not a gate on M47**, but E47.3 records the
   signal's trustworthiness rather than assuming it.
@@ -326,7 +327,7 @@ does that path carry?**
 
 ## Timeline
 
-**Target Start:** on M42's closure · **Target Completion:** it is the phase's last substantive
+**Target Start:** M42 closed 2026-09-02; M43–M46 have since closed, so M47 is unblocked · **Target Completion:** it is the phase's last substantive
 milestone
 **Actual Start:** Not started · **Actual Completion:** In progress
 
@@ -353,4 +354,5 @@ milestone
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.0 | 2026-09-04 | **Records M42's closure across every surface that asserted the opposite** — Binding Constraint 1, the Prerequisites entry, and the Timeline each stated *"M42 has not closed"* or *"NOT MET"*, which stopped being true on **2026-09-02** (PR #248, merge `90335ca`, `status: completed`). **Raised by the M47 Milestone Chat as a blocking question rather than edited silently** — the correct call: a governing spec is amended through the parent, not by the child that reads it. **Three surfaces, not one** — the same `P12-GH-1` shape this phase has now swept four times, which is why the fix was a search for the claim rather than a patch to the line that was quoted. M43, M44, M45 and M46 have also closed since; M47 is the phase's last milestone and is unblocked. |
 | 1.0.0 | 2026-09-01 | Initial M47 spec, written after M41's closure was accepted and consolidated. **Five planning-time findings.** **Z1: SN-42 sized M47-SIZED on evidence, with a flip trigger** — this repository cannot dispatch remote (`run-dev-agent:114` gates on `local:`), **Drivr's adapter is provider-generic** (`opencode.py:164`, unknown provider hits an early `return config`), and M47's text always said *through Drivr*; **but no remote dispatch has been run, and if it needs new machinery rather than configuration that is the justified escalation.** **Z2: transport and dispatch share a substrate and split at the loop** — E35.5's back-test is single-turn and tool-free, so **M41 already established the transport and M47 inherits it.** **Z3: the phase spec's candidate list is stale** — `home_finance` and `local-agent-runner` last moved 2026-07-20; **`panchew-io` is the only fleet project with current in-flight epic work (five planned epics), and it has NO `models:` block, so it cannot dispatch today.** **Z4: the acceptance instrument exists and is tested** — nothing to build. **Z5: the routing choice decides which defects M47 inherits** — `local-agent-runner` carries the unowned parse defect that produced DEV RUN 2, one of the three cases the criterion exists to catch; Drivr's adapter carries the located `XDG_DATA_HOME` defect instead. Three epics; **E47.1 answers the escalation question before anything depends on it.** |

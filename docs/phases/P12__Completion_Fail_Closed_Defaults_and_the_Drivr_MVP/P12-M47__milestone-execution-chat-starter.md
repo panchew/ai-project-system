@@ -15,14 +15,15 @@
 
 ---
 
-## ⚠ M42 HAS NOT CLOSED. NOTHING HERE DISPATCHES UNTIL IT DOES.
+## ✅ M42 CLOSED 2026-09-02 — the dispatch prerequisite is DISCHARGED.
 
-**Hard prerequisite, SN-31 Decision 2:** **no M47 epic may be dispatched agentically until M42 is
-closed.** No closure declaration exists for M42.
+**Hard prerequisite, SN-31 Decision 2:** no M47 epic may be dispatched agentically until M42 is
+closed. **M42 CLOSED 2026-09-02** — Closure Declaration accepted by the Phase Chat, consolidated to `phase/P12` by PR #248 (merge `90335ca`), `status: completed`. All four defects re-measured gone at acceptance (host `shell=True` fallback, unscoped `git add .`, the `--admin` rung, the placeholder-agent stub); suite `582` at closure.
+**M43, M44, M45 and M46 have since closed too — M47 is the phase's last milestone.**
 
 **What this does and does not block.** **E47.1's dispatch and E47.3's run are blocked.** **Planning is
 not**, and **E47.2's project selection and readiness work is not.** **If you reach the point of
-needing a dispatch and M42 has not closed, that is an escalation to the Phase Chat, not a judgement
+needing a dispatch before its own prerequisites hold, that is an escalation to the Phase Chat, not a judgement
 call.**
 
 ---
@@ -133,7 +134,7 @@ the chat overseeing it is manual.** Do not let the proof's subject blur into the
 
 ## Binding — settled above you
 
-- **M42 is a hard prerequisite.**
+- **M42 is a hard prerequisite — satisfied 2026-09-02.**
 - **The run is checked by `bin/successful-nothing-instrument`** — tool rounds, files changed,
   claims-resolution. **Never an exit status.**
 - **Project selection is the CFO's**, recorded with reasoning.
@@ -151,7 +152,7 @@ the chat overseeing it is manual.** Do not let the proof's subject blur into the
   one.**
 - **What the run record must contain** beyond the criterion — E47.3's.
 
-**Escalate instead of deciding:** dispatch before M42 closes; anything that would substitute a human
+**Escalate instead of deciding:** dispatch before a stated prerequisite holds; anything that would substitute a human
 judgment for the completion signal silently; and **Z1's trigger firing** — machinery rather than
 configuration.
 
