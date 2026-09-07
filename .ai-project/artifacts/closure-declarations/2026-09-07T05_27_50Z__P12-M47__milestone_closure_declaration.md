@@ -164,3 +164,66 @@ re-apply (`gemini` as `epic_dev`).
 Disposition: **ACCEPTED.** All nine DoD items verified; all three milestone acceptance criteria hold;
 no rework attempt consumed. **Consolidation `milestone/M47 → phase/P12` is the Phase Chat's act per
 E43.1 and awaits explicit CFO authorization** — acceptance is not authorization.
+
+---
+
+## Stage-2 Review — Phase Chat Decision: **ACCEPTED**
+
+**Reviewed and accepted by:** the **P12 Phase Execution Chat** (session `4710216f`), acting as M47's
+parent, per E43.2. **Reviewed at:** `origin/milestone/M47` @ `720da02`, 2026-09-07.
+
+### Re-measured from raw data, not from the record (G2)
+
+| Claim | How re-measured | Result |
+|---|---|---|
+| **C-A = 111 tool rounds** | parsed `transcript-gemini.json` directly — **not** the record's per-tool breakdown | **111 entries**, each a `{tool_call, tool_result}` pair — exact |
+| **C-B = 21 files changed** | `git show --name-only` on the two commits on `panchew-io` `epic/E1.1`, deduplicated | **17 + 4 = 21 unique** — exact, and independently of the instrument |
+| Instrument verdict | `instrument-verdict.json` | **`PASS`**, `files_changed.provenance: "worktree"`, `lower_bound: false` — measured against the tree, the stronger provenance |
+| **The exit code is never load-bearing** | read `bin/successful-nothing-instrument` | `verdict = "PASS" if all(t["passes"] for t in scored)`; `exit_code` appears **once**, inside `recorded_never_scored` alongside `status`, `tokens`, `duration_ms`, `model`, `endpoint` — structurally outside the verdict |
+| The run is real | `panchew-io` on disk | `epic/E1.1` carries both commits; 23 commits ahead of `main` |
+| The proof's supervision stayed manual | declaration + starters | E47.1/E47.2 manual; E47.3 is the agentic run, its overseeing chat manual |
+
+**The instrument's design is the part worth recording.** Its own docstring states the verdict is
+*"derived from those counters and nothing else, and it never emits a verdict without its counts: a
+verdict without its counts is not usable evidence."* And the per-lane floor is applied with the
+reason stated rather than asserted — C-B on `epic_qa` is `"scored": False` because
+`run-qa-agent:336-344` refuses a mutating tool set, **"so this was a constant"**. An always-zero
+metric carries no information, and saying so is why the S5 ruling holds up under use.
+
+### Findings 1–4 accepted. **Finding 1 is elevated to a PHASE carry-forward: it is LIVE.**
+
+Verified on disk, 2026-09-07: **`panchew-io`'s `.ai-project.yml` has no `models:` block at all**, and
+the CFO-authorized fix `863eb49` is **unreachable from both `main` and `milestone/M1`** — orphaned.
+The only commit touching that file on the reset history is `92fc4d3 chore: initialize governed
+project`.
+
+**This is not an M47 defect and M47 correctly refused to absorb it.** But it is a live, unowned fleet
+state, and its shape is the phase's own finding in a new place: **a subject project reverted a
+CFO-authorized configuration through its own restructure, and the reversal surfaced only in a
+retrospective note — not through the amendment channel.** Nothing noticed. The proof succeeded
+anyway *because the CFO routed around it on other credentials*, which means the config was never
+load-bearing for the run and its absence therefore produced no signal. **Carried to the phase record
+with its trigger: any fleet project whose governed config can be silently reverted by its own
+restructure.**
+
+### Finding 4 deserves its own note, because the direction matters
+
+The instrument's C-C2 backtick over-extraction flagged `@types/node`, `application/json` and
+`epic/E1.1` as unresolved claims on a genuinely working run — **false positives**. That is the
+**mirror** of E39.3, where the failure was a false *negative*. Because C-C is `recorded-not-scored`
+on `epic_dev`, the `PASS` is sound; the `4/12` figure would mislead a reader without the note, and
+the note is there. **The instrument found its own limitation in the safe direction and said so** —
+which is the property the milestone was built to demonstrate, arriving from the instrument itself
+rather than from its authors.
+
+### What this closure does NOT claim
+
+E47.3's §D5 is accepted as written and carried up verbatim in substance: **one project, one epic, one
+engine.** Not the fleet's generality, not defect-free, not E1.1-accepted, not the route's defects
+gone. **A proof that states its own limits is the only kind this phase would accept**, and M47 stated
+them without being asked.
+
+**Disposition: ACCEPTED.** All DoD items verified; no rework attempt consumed. **Consolidation
+`milestone/M47 → phase/P12` is the Phase Chat's act per E43.1 and awaits explicit CFO
+authorization** — acceptance is not authorization. **M47 is P12's last milestone; on its
+consolidation the phase moves to closure under PSG §5C.**
