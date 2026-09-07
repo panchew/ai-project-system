@@ -5,7 +5,7 @@ subject: "model_verification — the advisory→blocking flip, and E41.5's ungat
 raised_by: "P12 Phase Execution Chat"
 decided_by: "CFO (Layer-8); the flip itself is HQ's act and only HQ's"
 date: 2026-09-07
-status: awaiting-decision
+status: disposed
 ---
 
 # Disposal — `model_verification`, and the rows it would govern
@@ -175,3 +175,34 @@ path, with a better reason than it had this morning.
 
 **`epic_dev`/`epic_qa` dispose separately** as E41.5's ungated-rows carry-forward. Billing is resolved,
 so E46.5's gate **can** now measure them — but that is a different item and does not gate this flip.
+
+---
+
+## DECISION — CFO, 2026-09-07: **path (ii), record why not**
+
+> *"I don't deem it necessary now. It can be a carry-forward so when it runs, the model blocks are
+> already aligned."*
+
+**`model_verification` stays `advisory`. The flip is carried to P13 as `P12-CF-1`, with an alignment
+trigger rather than a date.** The phase spec's criterion offered two paths — *flip it, or record why
+not* — and the second is taken. **P12's closure obligation on this key is discharged.**
+
+**The trigger:** arm the flip when `models.phase`, `models.milestone` and `models.epic_manual` **name
+what those chats actually run on**. Alignment is the condition; whoever aligns them can arm it, and
+the original instruction stands for them — *the LAST act of a closure, performed by HQ*.
+
+**Why `advisory` is the honest setting meanwhile, not a deferral of work:** under `advisory` a chat
+whose self-report disagrees with its configured value **states the mismatch plainly in its first
+substantive response** and proceeds. The divergence is therefore **visible in every session it
+affects**, every time — which is a stronger position than a `blocking` gate armed over values the
+phase itself records as unsupported, where the only outcome is that the working level stops.
+
+**What was completed rather than deferred:** the key is **blessed** — the half with no decision
+attached — so the schema is now honest about a field the framework reads, and the validator is clean.
+**A future reader should not mistake `advisory` for an unfinished gate**: the gate is finished, armed
+by a condition, and the condition is written down.
+
+**Riding with `P12-CF-1`:** E41.5's ungated routing rows; `epic_manual`'s missing attribution row in
+the policy mapping; R6's never-performed surface confirmation for `epic_manual`. **Not riding with
+it:** `epic_dev`/`epic_qa`, which this key does not govern — they dispose separately, and E46.5's gate
+can now measure them since billing is resolved.
