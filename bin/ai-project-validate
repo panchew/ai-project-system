@@ -56,10 +56,12 @@ warning keeps the schema-drift class **visible** without declaring configs inval
 rule the spec never wrote. The gap is escalated for a ruling; until that ruling lands,
 this behaviour is a documented default, not a settled contract.
 
-**What is NOT in that class, after Epic E43.4 (P12-M43):** ``cfo_review_gate`` and the
-new ``rework_exhaustion_flip`` are **blessed** — §3.7/§3.8 schema entries and §4 rules
-27/28 below. A config carrying either with a valid ``enabled``/``disabled`` value is
-reported clean. The remaining unblessed live keys (``created_at``, ``submodule_path``)
+**What is NOT in that class, after Epic E43.4 (P12-M43) and P12's closure:**
+``cfo_review_gate``, ``rework_exhaustion_flip`` and ``model_verification`` are
+**blessed** — §3.7/§3.8/§3.9 schema entries and §4 rules 27/28/29 below. A config
+carrying any of them with a valid value is reported clean. ``model_verification`` was
+blessed at P12's closure disposal: E43.4 blessed the two gate keys and left this one
+only because it sat outside M43's scope, so its warning was a **gap, not a decision**. The remaining unblessed live keys (``created_at``, ``submodule_path``)
 stay in the schema-drift class and continue to warn.
 
 Usage
@@ -117,6 +119,7 @@ KNOWN_TOP_LEVEL = {
     "framework_version",
     "cfo_review_gate",
     "rework_exhaustion_flip",
+    "model_verification",
 }
 KNOWN_GOVERNANCE = {"source", "version", "ref"}
 KNOWN_PROJECT = {"name", "description"}

@@ -1,6 +1,6 @@
 # `.ai-project.yml` Specification
 
-**Version:** 2.9.0  
+**Version:** 2.10.0  
 **Status:** Active  
 **Effective Date:** 2026-08-11  
 **Introduced In:** Epic E6.3 (P2-M6); override specification completed in Epic E9.1 (P2-M9); `visual_artifacts` block added in Epic E22.1 (P5-M22); `epic_dev` default moved to a tool-calling-capable model in Epic E26.2 (P7-M26); `visual_artifacts` flipped to default-on and `visual_required_for_specs` enforcement key added in Epic E27.1 (P7-M27); `types` naming-collision resolved in Epic E29.1 (P8-M29); `models` defaults refreshed to the measurement-grounded mapping in Epic E30.2 (P9-M30); `models.creation` and `models.epic_manual` keys added (manual-chat-only, no agentic dispatch surface) in Epic E31.3 (P9-M31); the five paid-frontier `models` defaults refreshed `claude-opus-4-8` → `claude-opus-5` by HQ Ruling (`.ai-project/artifacts/escalation-notices/2026-07-28T20_00_00Z__P10-M34__escalation_notice.md`); the two agentic epic-lane `models` defaults moved `qwen2.5-coder:14b` → `qwen3-coder:30b` on M33 run evidence in Epic E34.3 (P10-M34); optional top-level `framework_version` given a schema entry and §4 rule 3's field count corrected in Epic E38.3 (P11-M38); the top-level opt-out gate keys `cfo_review_gate` and `rework_exhaustion_flip` blessed with schema entries (§3.7/§3.8) and §4 rules 27/28 in Epic E43.4 (P12-M43)
@@ -47,6 +47,9 @@ cfo_review_gate: <enabled|disabled>   # OPTIONAL. CFO PR review gate. Absent ⇒
 rework_exhaustion_flip: <enabled|disabled>  # OPTIONAL. Rework-exhaustion flip to manual.
                                             # Absent ⇒ enabled. `disabled` is the explicit
                                             # opt-out. Full spec: §3.8.
+
+model_verification: <advisory|blocking>  # OPTIONAL. Manual-chat model verification.
+                                         # Absent ⇒ advisory. Full spec: §3.9.
 
 governance:
   source: <string>       # REQUIRED. URL or path to governance source repository.
@@ -641,6 +644,41 @@ rework_exhaustion_flip: 1           # not an allowed value
 
 ---
 
+### 3.9 Optional Fields — `model_verification` (Manual-Chat Model Verification)
+
+The `model_verification` field is **optional** and lives at the **top level**. When **absent**, the
+behaviour is **advisory**; `blocking` is the explicit opt-in to refusal. It governs what a manual chat
+does when its harness-reported model and its level's configured value **both exist and disagree**
+(SN-40, CFO Decision 3, 2026-08-27).
+
+| Property | Value |
+|----------|-------|
+| Type | String |
+| Required | No |
+| Default | `advisory` |
+| Allowed Values | `advisory`, `blocking` |
+| Constraint | When present, must be one of: `advisory`, `blocking` |
+| Validation Error | `"Invalid model_verification: '<value>'. Must be one of: advisory, blocking."` |
+
+`advisory` means the chat **states the mismatch plainly** in its first substantive response and
+proceeds. `blocking` means the chat **MUST stop** before any further planning, review or execution and
+state the mismatch — a refusal, not an advisory. The normative behaviour for both values lives in
+`governance/systems/chat-hierarchy.md` ("Mismatch: ADVISORY by default, blocking by opt-in", and "The
+blocking behaviour, retained verbatim"); this section blesses the **key**, not the behaviour.
+
+**What this key does NOT claim, stated because the honesty is load-bearing.** There is **no code
+process** wrapping a manual chat session, so `blocking` is enforced by **the agent's compliance with
+governing documentation**, exactly as `chat-hierarchy.md` already states of itself — not by a
+technical impossibility-to-proceed. Blessing the key makes the schema honest about a field the
+framework reads; it does not add enforcement, and no reader should infer that it does.
+
+**Why this key is blessed (P12 closure disposal, 2026-09-07):** E43.4 blessed `cfo_review_gate` and
+`rework_exhaustion_flip` in one change and left `model_verification` warning **only because it sat
+outside M43's scope**. The key was therefore **neither blessed by the schema nor enforced by code** —
+a gap with no decision attached, distinct from the separate question of which *value* it should hold.
+Blessing is independent of that question and was taken first.
+
+
 ## 4. Validation Rules
 
 A `.ai-project.yml` file is **valid** when all of the following are true:
@@ -694,6 +732,7 @@ When the top-level `cfo_review_gate` field is present, the following additional 
 When the top-level `rework_exhaustion_flip` field is present, the following additional validation rule applies:
 
 28. `rework_exhaustion_flip`, when present, must be one of: `enabled`, `disabled` (see Section 3.8). The field is **optional**: an absent `rework_exhaustion_flip` is valid and means the flip is enabled at its default; `disabled` is the explicit opt-out.
+29. `model_verification`, when present, must be one of: `advisory`, `blocking` (see Section 3.9). The field is **optional**: an absent `model_verification` is valid and means `advisory`. Blessing the key is independent of which value it holds; the schema does not require `blocking`.
 
 A `.ai-project.yml` file is **invalid** if any required field is absent, any constraint above is violated, any known override field contains an invalid value, any `visual_artifacts` value violates rules 19–21 or 25, `framework_version` is present and violates rule 26, `cfo_review_gate` is present and violates rule 27, `rework_exhaustion_flip` is present and violates rule 28, or the file is not valid YAML.
 
@@ -837,6 +876,7 @@ at its documented defaults and remains valid. Setting `enabled: false` is the ex
 
 | Version | Date | Change |
 |---------|------|--------|
+| 2.10.0 | 2026-09-07 | **Blesses `model_verification`** — §3.9 schema entry, §4 rule 29, declaration-block entry, and `KNOWN_TOP_LEVEL` in `bin/ai-project-validate`. It was the **only** warning the validator emitted. E43.4 blessed its two sibling gate keys and left this one solely because it sat outside M43's scope, so the warning was **a gap, not a decision** — and the key was **neither blessed by the schema nor enforced by code**. §3.9 states that limitation explicitly rather than letting the blessing imply enforcement: `blocking` is carried by agent compliance with governing documentation, as `chat-hierarchy.md` already says of itself. **Blessing is independent of which value the key holds**; the advisory→blocking decision is HQ's act at P12's closure and is untouched here. |
 | 2.9.0 | 2026-09-02 | **The top-level opt-out gate keys blessed — `cfo_review_gate` and the new `rework_exhaustion_flip` (E43.4, P12-M43; closes finding W1 of the M43 milestone spec).** **(a) New §3.8 + §4 rule 28** blesses `rework_exhaustion_flip` — the system's **first fail-closed default** — on the `cfo_review_gate` pattern: optional top-level key, **on by default, disabled deliberately**, values `enabled`/`disabled`, absent-key-valid-and-means-enabled. The behaviour it names (exhausted rework — the 3-attempt maximum plus any written `+1`, without an acceptable delivery — flips the **receiving parent** to manual, **performed and recorded by Drivr** so the committed starter stays the source of truth) is normative in PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework Limit" and `governance/systems/chat-hierarchy.md`; this entry is the schema blessing. **(b) `cfo_review_gate` blessed in the same change — §3.7 + §4 rule 27.** W1's defect is that the precedent itself was unvalidated (`bin/ai-project-validate` warned on it); blessing the successor while leaving the precedent warned would leave a standing validator warning on this repo's own config, so both keys are blessed together and the whole top-level opt-out surface is validated rather than half-warned. **(c)** §3.1 schema block and the §4 closing gap note updated: `cfo_review_gate` leaves the three-member schema-drift class, leaving `created_at`/`submodule_path` (both `bin/ai-project-init`-written) as the escalated remainder. No existing field, default, or validation rule changed. |
 | 2.8.0 | 2026-08-11 | **`framework_version` given a schema entry (`P10-GH-1`), and §4 rule 3's field count corrected.** **(a) New §3.6** defines the optional top-level `framework_version` — the version a project has **adopted**, as against `governance.version`, which is what it **pins** — with a §3.1 schema-block entry and **new §4 rule 26** (non-empty string matching `^v?\d+\.\d+\.\d+$` when present). It is **optional** and the `v` prefix is **accepted**, both deliberately: measured on the reference machine on **2026-08-11** across **13 enrolled projects**, **6 carried no stamp** and **all 7 that did were `v`-prefixed** (`v7.0.0` ×6, `v7.1.0` ×1), so requiring the field, or requiring the bare semver form rule 5 imposes on `governance.version`, would have invalidated six or seven live configs respectively — a fleet-wide reconciliation rather than a schema entry. Recorded honestly in §3.6: in all **7 of 7** configs carrying both, the two fields named the **same version**, so the field is *currently* redundant in practice; it is defined anyway because that is a property of a fleet stamped and pinned in one operation, not of the field's meaning, and tooling **must not** infer either field from the other. **(b) §4 rule 3 read *"All four required fields"* while listing five** — from v1.0.0 (2026-04-20) until this row. §3.1 marks five REQUIRED and §3.2 documents five, so **five is right and the word was wrong**; the count is now **five**. **This correction is standalone, not a consequence of (a):** `framework_version` is optional and therefore never belonged in rule 3's list, so blessing it moved the count from a wrong four to a right five rather than to six. **(c) §4 gains a closing note recording an open gap it does not close:** rules 11, 16 and 22 mandate a warning for unknown keys inside `overrides`, `models` and `visual_artifacts`, and **no rule of this section covers unknown keys at the top level or inside `governance:` / `project:`**. Three such keys are live today — `created_at`, `submodule_path` (both written by `bin/ai-project-init`) and `cfo_review_gate` — and **none of the three is blessed here**; the reference implementation warns and reports them with no rule number, and the gap is escalated. **No existing rule was renumbered, no existing field changed, and no default moved.** New reference implementation: `bin/ai-project-validate` (`P10-GH-5`, first enforcement of this section since it was written), with `tests/test_ai_project_validate.py`. Derivation: `docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.3__delivery-notice.md` (Epic E38.3, P11-M38). |
 | 2.7.0 | 2026-07-28 | The two **agentic epic-lane** `models` defaults — `epic_dev` and `epic_qa` — moved `local:qwen2.5-coder:14b` → `local:qwen3-coder:30b`, applying the runtime choice P10-M33 settled by running it (**keep Ollama, raise the model tier**). Unlike 2.6.0 this is a **policy-row change, not a mapping refresh**: `model-routing-policy.md`'s rows **P6/P7 name the model in their own Decision column**, so the file's **Change discipline** is engaged and is satisfied with new cited evidence — E33.2 **Run A** (the 14b: exit 0, 0 tool rounds, 0 files changed on a real epic), **Run B** (same epic, same Ollama runtime, 30b: mergeable work), and **E33.4** (a second real epic, `home_finance`, complete and green). P7 moves on its **existing** gap-grounded interim reasoning with the referent updated — **G11 (zero captured QA-role runs) remains open** and no QA-lane evidence is claimed. Loadability envelope recorded: Q4_K_M/18.6 GB exceeds a 16 GB-VRAM box and partially offloads to RAM (12.9 GB VRAM / 21.4 GB total, ~9.4 tok/s vs 12.2) — slower, but it finishes. Updated §3.1 schema comments, §3.4 field table defaults/examples + new agentic-lane sizing note, and format-constraint examples. The five paid-frontier keys are **untouched** (different surface, different gate). No field, key, or validation rule changed — value/documentation refresh only. Derivation: `docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.2__runtime-decision.md` + `.ai-project/artifacts/agentic-runs/P10-M33-E33.2/run-record.md` + `.../P10-M33-E33.4/run-record.md` (Epic E34.3, P10-M34). |
