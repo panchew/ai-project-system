@@ -90,7 +90,7 @@ models:
 # Defaults to advisory until the CFO declares it is OK to enforce the switching gates.
 # Until that declaration NO GATE blocks a lineup change, including SN-37's
 # model-qualification gate — SUSPENDED for lineup changes, not reversed.
-model_verification: advisory
+model_verification: blocking
 
 # Visual artifacts (M22/M27, VA-1, SN-17) — default-on, opt-out via enabled: false.
 # This repo is ENABLED (enabled: true) as of Epic E29.2 (P8-M29): the live local
