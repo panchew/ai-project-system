@@ -6,9 +6,11 @@ Turn AI coding assistants into reliable project executors through structured spe
 
 ---
 
-## 🎉 All Phases Complete — v8.0.0
+## 🎉 All Phases Complete — v9.0.0
 
-**The AI Project System was built using its own governance.** All eleven phases (P1–P11) are complete and consolidated to `master` at **v8.0.0** with **549 tests passing (0 skipped)**.
+**The AI Project System was built using its own governance.** All twelve phases (P1–P12) are complete and consolidated to `master` at **v9.0.0** with **774 tests passing**.
+
+*The suite count is environment-dependent where `visual_artifacts.enabled: true` — the live-ComfyUI integration test runs, skips or fails by machine, so `773+1 skipped` and `774` are the same suite. Recorded rather than rounded; carried forward from P12 with its trigger.*
 
 P11 also produced a **second repository — [Drivr](../drivr)**, the coordination daemon: enrolled under this framework, invoking a CLI engine it does not implement, with **452 tests** of its own.
 
@@ -660,13 +662,50 @@ consumer inferring state from **absence** in a system that records state by **pr
 recorded honestly in M39 was falsified by measurement in M40, because nobody had yet looked at the
 engine's own event stream.
 
-### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9 + P10 + P11)
-✅ **132 Epics** delivered across **40 milestones** over **11 phases**
+### Phase P12 — Completion: Fail-Closed Defaults and the Drivr MVP (Complete)
+P11 built the coordinator; P12 was scoped as **completion, not redesign**, on one confirmed finding:
+**when the evidence that should gate an action is absent, the action proceeds.** Four instances were
+verified before the phase opened. The work was to make absence *stop* the action instead — at every
+tier the disposition had been found in — and then to use what was built.
+
+**M41** measured the model line-up and recorded, honestly, that the values landed by CFO decision
+outside the milestone's own machinery. **M42** closed the execution tier: sandbox absence aborts
+instead of falling back to the host, staging is epic-scoped, approval failure aborts, the `--admin`
+override is gone, and `ai-project-init` no longer manufactures a governance agent and then validates
+its own placeholder. **M43** made the acceptance chain structural rather than procedural — the parent
+performs the merge so a child never holds the authorization, acceptance carries a named attributable
+signal so *silence accepts nothing*, the rework limit exists in one place reachable from every
+surface, and exhausted rework flips the parent to manual: the system's first fail-closed default.
+**M44** wrote the records other work depends on, including the Phase Completion Declaration this phase
+was then closed with. **M45** made the completion signal trustworthy: the judgment reads inspection
+evidence, so a read-only run reads `undetermined` instead of *did not complete*, and `undetermined`
+survives end to end without being folded. **M46** built the Drivr MVP surface, where three governance
+rules are **unrepresentable** rather than validated-and-refused. **M47** ran one real epic on a real
+project end to end through Drivr, checked by an instrument whose bar was committed before it graded
+anything.
+
+**P12 highlights:** absence stops the action at five tiers · a child cannot hold merge authorization ·
+`undetermined` as a first-class state carried without folding · governance rules made unconstructible
+rather than rejected · a qualification bar committed before the run it grades · a real agentic run
+whose record shows the work was **done**, not merely that a process exited.
+
+**What the phase learned about itself, and recorded rather than smoothed:** its own specs kept doing
+the thing they prohibited. A correction quoted at one line lived at eight; a count stood where a list
+belonged inside the phase's own success criteria, and disagreed with itself three ways for a month; a
+carry-forward note outlived the remedy that closed it. The Drivr integration gap recurred across two
+consecutive milestones because the first fix discharged the instance and left the class — and stopped
+only when it was written as a binding constraint instead of caught again by a reviewer. **Every one of
+these was found by re-measuring at the moment of use, never by a mechanism** — which is the phase's
+own finding, pointed inward, and the reason `undetermined` had to become sayable.
+
+### Totals (P1 + P2 + P3 + P4 + P5 + P6 + P7 + P8 + P9 + P10 + P11 + P12)
+✅ **164 Epics** delivered across **47 milestones** over **12 phases**
 
 ### Governance
-- PROJECT-SYSTEM-GUIDELINES.md v2.4.0 (effective 2026-07-31)
-- AI-OPERATING-GUIDELINES.md v2.10.0 (effective 2026-07-18)
-- Framework version: v8.0.0
+- PROJECT-SYSTEM-GUIDELINES.md v2.9.0 (effective 2026-09-03)
+- AI-OPERATING-GUIDELINES.md v2.12.0 (effective 2026-09-03)
+- ai-project-yml-spec.md v2.10.0 (effective 2026-09-07)
+- Framework version: v9.0.0
 
 ---
 
@@ -720,9 +759,10 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Phase P7 Complete** — Agentic Execution & Default-On Visuals (3 milestones, 10 Epics)
 - ✅ **Phase P8 Complete** — Visual Artifacts Activation (1 milestone, 3 Epics)
 - ✅ **Phase P9 Complete** — Context Handling and Token Efficiency (3 milestones, 10 Epics)
-- ✅ **Phase P11 Complete** — Drivr: Coordination over Rented Execution (5 milestones, 21 Epics)
 - ✅ **Phase P10 Complete** — Fleet Adoption and Local-Inference Proving (3 milestones, 12 Epics)
-- ✅ **111 total Epics** delivered across 35 milestones, 10 phases
+- ✅ **Phase P11 Complete** — Drivr: Coordination over Rented Execution (5 milestones, 21 Epics)
+- ✅ **Phase P12 Complete** — Completion: Fail-Closed Defaults and the Drivr MVP (7 milestones, 32 Epics)
+- ✅ **164 total Epics** delivered across 47 milestones, 12 phases
 - ✅ **Production-ready** — Stable baseline for adoption and autonomous operation
 - ✅ **Battle-tested** — Built using itself (dogfooding validated)
 - ✅ **First real, non-mocked agentic execution** — the system executes its own epics through the orchestrator on local models
@@ -732,7 +772,10 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Adoption proven on real projects** — six enrolled projects confirmably at `framework_version: v7.0.0`, with real Agentic/Local epics run end-to-end, not scaffolds
 - ✅ **Fleet-operator role canonized** — role, duties, and authority boundary written down (`governance/systems/fleet-operator.md`) before anything is built against them; a blocked autonomous instance can hand back to its immediate parent, normatively
 - ✅ **Execution matrix ratified** — Phase and Milestone may run agentically, with *mode is not authority* stated explicitly: Stage-2 acceptance and merge authorization still require the human's key
-- ✅ **Governance stable** — v8.0.0 (effective 2026-08-17)
+- ✅ **Governance stable** — v9.0.0 (effective 2026-09-07)
+- ✅ **Gates fail closed by construction** — no path in `bin/` proceeds on absent gating evidence; a child never holds merge authorization; three governance rules are **unrepresentable** in the Drivr surface rather than validated and refused
+- ✅ **The completion signal can say "I don't know"** — `undetermined` is first-class end to end and is never folded into a neighbour
+- ✅ **One real epic carried end to end agentically by Drivr** — checked by an instrument whose bar was committed before it ran
 - ✅ **Complete documentation** — Quick-start, templates, examples, diagrams, FAQ
 - ✅ **CLI tool** — `ai-project init` for one-command project setup
 - ✅ **Governance Agent** — Single unified agent with HQ/Phase/Milestone/Epic modes
@@ -743,12 +786,14 @@ See [Authority Hierarchy Diagram](governance/diagrams/authority-hierarchy.md) fo
 - ✅ **Hybrid model routing** — Remote for planning, local for execution
 - ✅ **Licensed for adoption** — MIT + CC BY-SA 4.0 dual license
 
-**What's Next (Future Phases):**
-- **P4 — Team Collaboration & Artifact-Driven Communication** — Complete. See the [P4 Governance System Guide](docs/team-collaboration/P4-governance-system-guide.md).
-- **P5 — Process Hardening & Visual Artifacts** — Complete. Governance hardened, visual artifacts framework in place.
-- **P6 — Visual Comprehension Layer & Process Refinements** — Complete. By-link storage, binding convention, proposed-vs-implemented as routine, canonical phase closure (PSG §5C).
-- **P7 — Agentic Execution & Default-On Visuals** — Complete. First real non-mocked agentic run, default-on visuals framework-wide, governance reconciliations.
-- **P8** — Not yet scoped. See [`docs/roadmap/overview.md`](docs/roadmap/overview.md) for the current focus.
+**What's Next:**
+- **P13 — not yet scoped.** See [`docs/roadmap/overview.md`](docs/roadmap/overview.md) for the current focus.
+- **Carried into P13 with their triggers**, from P12's Phase Completion Declaration:
+  - **`P12-CF-1`** — the `model_verification` `advisory → blocking` flip. Disposed at P12's closure by the criterion's second path (*record why not*): the three governed rows that would halt **cannot be measured**, because the key governs manual instances only and this framework made those levels undispatchable. **Arm it when `models.phase`, `models.milestone` and `models.epic_manual` name what those chats actually run on.** The key itself is now blessed in the schema.
+  - **The Delivery Notice corpus is bi-located** — template and practice disagree and no test catches it. Observed since P11-M40.
+  - **The suite is non-deterministic where `visual_artifacts.enabled: true`** — the live-ComfyUI integration test runs, skips or fails by machine. *"Suite green" is the gate every closure reports against.*
+  - `P12-GH-3` (derived-claim rot), `P12-GH-4` (the inter-chat channel, narrow half landed), `P12-GH-5` (declared context exceeds loaded) — filed, unowned, each with its trigger.
+  - **Drivr has no remote** — every Drivr commit exists on one disk. CFO ruling: local-only for now.
 
 **Intentional Characteristics:**
 - Evolving deliberately based on real usage, not speculatively
