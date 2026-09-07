@@ -1,0 +1,82 @@
+{
+  "declared": 1,
+  "reported": 1,
+  "records": [
+    {
+      "label": "DEV RUN 2",
+      "lane": "epic_dev",
+      "verdict": "FAIL",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 0,
+        "files_changed": {
+          "count": 0,
+          "provenance": "worktree",
+          "lower_bound": false,
+          "paths": [],
+          "excluded_paths": [
+            ".ai-project/artifacts/"
+          ],
+          "workspace": "/tmp/claude-1000/-home-panchew-soft-dev-ai-project-system/7495013d-d596-4ef9-b0a7-8e744269fd63/scratchpad/dev-run2/e412-dev-workspace"
+        },
+        "claims": {
+          "asserted": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "rate": null,
+          "vacuous": true
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 0,
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 0,
+          "passes": false,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "0/0",
+          "passes": true,
+          "scored": false,
+          "note": "recorded on epic_dev; the dev floor's terms are C-A and C-B"
+        }
+      ],
+      "unresolved_claims": [],
+      "all_claims": [],
+      "advertised_tools": {
+        "tool_set_path": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-DEV-RUN2/advertised-tools.json",
+        "enabled": [
+          "read_file",
+          "write_file",
+          "edit_file",
+          "list_dir",
+          "run_command",
+          "git"
+        ],
+        "sha256_at_run_time": null,
+        "provenance": "read from the tool-set file NOW; the run metadata names the path but did not capture its content, so this is the file's current content and not provably the run's",
+        "sha256_now": "6d28a5be36fb6caa2eb9e26f1422ea6a6196e94a4d9ead338a11a4d98cf28d85"
+      },
+      "recorded_never_scored": {
+        "exit_code": 0,
+        "status": "completed",
+        "tokens": 55,
+        "duration_ms": 4226,
+        "model": "qwen3-coder:30b",
+        "endpoint": "runner-default",
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-DEV-RUN2/transcript.json",
+      "metadata_path": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-DEV-RUN2/run-metadata.json",
+      "executed_calls": []
+    }
+  ]
+}

@@ -10,7 +10,7 @@ every chat level.
 |---|---|
 | **Audience** | Adopters enabling visual generation; tool-capable agents producing visuals |
 | **Configuration spec** | [`../ai-project-yml-spec.md`](../ai-project-yml-spec.md) §3.5 |
-| **Operating policy** | [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §16 |
+| **Operating policy** | [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §17 |
 | **Helper** | [`../../bin/ai-project-visual`](../../bin/ai-project-visual) |
 
 ---
@@ -159,7 +159,7 @@ Each chat level produces the visual appropriate to its altitude (the SN-11 abstr
 produces the visual for **its own** level — it does not reach up or down the cascade. Visual intent
 originates at the Creation Chat (elicited via `seed.md` Rule 4) and propagates downward.
 
-Per **AOG §16.6**, when the capability is enabled each level produces **both** a *proposed* visual
+Per **AOG §17.6**, when the capability is enabled each level produces **both** a *proposed* visual
 (the intent, before build) and an *implemented* visual (what was built, after). Every example below
 shows that pair, and each is recorded as a **§7 binding** distinguished by its `State` field —
 `proposed` or `implemented`. The binding schema is documented once in §7; these examples *use* it,
@@ -442,8 +442,8 @@ references it rather than restating it.
 ## 8. Clips
 
 A **clip** is a short video that renders **one** governance node's proposed→implemented arc (§5, AOG
-§16.6) as motion. It is the most CFO-facing visual — a few seconds that let the CFO follow a node's
-story — and it doubles as publishable media. A clip is **single-parent** (AOG §16.7): it binds to
+§17.6) as motion. It is the most CFO-facing visual — a few seconds that let the CFO follow a node's
+story — and it doubles as publishable media. A clip is **single-parent** (AOG §17.7): it binds to
 exactly one node via a §7 binding with `What: clip`; it does **not** stitch many nodes into a
 cross-cutting reel (that montage is deferred in P6).
 
@@ -486,7 +486,7 @@ Publishing to YouTube / TikTok / Instagram / Facebook is **the same hosted asset
 second render and not a separate production. The clip is already hosted (that is what by-link
 requires), and the hosted link is what gets published. The framework **documents this path; it does
 not build a publisher, a pipeline, or host the asset** — where a clip is hosted and how it reaches a
-social channel is the adopter's decision (infrastructure-agnostic, consistent with §4 / AOG §16.5).
+social channel is the adopter's decision (infrastructure-agnostic, consistent with §4 / AOG §17.5).
 
 ### Open Design Question A — resolved: reference, not vendor
 
@@ -501,12 +501,12 @@ re-implement it.
 
 ## 9. Automatic vs. on-demand production (the trigger set)
 
-The capability is on by default (§1, AOG §16.1) — this section states what "on" actually produces,
+The capability is on by default (§1, AOG §17.1) — this section states what "on" actually produces,
 and when.
 
 **Structural-first at zero infrastructure.** With no `comfyui_url` configured, only Structural
 visuals (§2) are produced; Generative activates only once an endpoint is present and the agent has
-tool capability (AOG §16.4). This is the same mode split and gate documented in §2 above — this
+tool capability (AOG §17.4). This is the same mode split and gate documented in §2 above — this
 section adds no new machinery, only states which path fires by default.
 
 **The automatic trigger set.** Two artifact families get a visual automatically, with no request
@@ -523,7 +523,7 @@ for an artifact type outside this list.
 All eight automatic-trigger artifact types have a defined binding home in the §7 placement table —
 the four delivery/closure rows close a gap the original five spec-only rows left open.
 
-This is the adopter-facing restatement of AOG §16.8; the normative rule lives there.
+This is the adopter-facing restatement of AOG §17.8; the normative rule lives there.
 
 ---
 
@@ -532,7 +532,7 @@ This is the adopter-facing restatement of AOG §16.8; the normative rule lives t
 | Document | Purpose |
 |----------|---------|
 | [`../ai-project-yml-spec.md`](../ai-project-yml-spec.md) §3.5 | The `visual_artifacts` config block (schema + validation) |
-| [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §16 | Operating policy: per-level abstraction, modes, gating, by-link storage guidance |
+| [`../AI-OPERATING-GUIDELINES.md`](../AI-OPERATING-GUIDELINES.md) §17 | Operating policy: per-level abstraction, modes, gating, by-link storage guidance |
 | [`../templates/seed.md`](../templates/seed.md) | Rule 4 — visual-intent elicitation at inception |
 | [`../../bin/ai-project-visual`](../../bin/ai-project-visual) | The ComfyUI helper |
 | [`gpu-coexistence.md`](gpu-coexistence.md) | Ollama + ComfyUI GPU/VRAM coexistence design; the execution-lock guardrail (exit code `5`) |
@@ -544,8 +544,8 @@ This is the adopter-facing restatement of AOG §16.8; the normative rule lives t
 | Date | Change |
 |------|--------|
 | 2026-07-13 | **Execution-lock guardrail exit code (`5`) added.** `bin/ai-project-visual` now refuses a generative call while a live agentic epic execution holds `bin/ai-project-orchestrator`'s execution lock (GPU contention with live Ollama inference) — new exit code `5` added to the §3 exit-code table, and a new "Related documents" row for [`gpu-coexistence.md`](gpu-coexistence.md), the new guide documenting the confirmed Ollama+ComfyUI contention and the guardrail design. No other section changed. Per SN-18; E27.3 (P7-M27). |
-| 2026-07-13 | **Trigger-set behavior (§9) added.** New §9 "Automatic vs. on-demand production (the trigger set)": adopter-facing restatement of AOG §16.8 — structural-first at zero infrastructure (cross-referencing §2/AOG §16.4, no new machinery), and the automatic trigger set (Phase/Milestone/Epic specs + the four delivery/closure declarations automatic; everything else on-demand). Extended the §7 placement table with four new rows (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`), closing the gap where the delivery/closure half of the trigger set had no defined binding home; the existing five spec rows are unchanged. Appended as §9, following the §8 precedent — §1-§8 not renumbered. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
-| 2026-07-02 | **Clips (§8) added.** New §8 "Clips": a clip is a short video rendering **one** node's proposed→implemented arc (§5 / AOG §16.6) as motion — single-parent (AOG §16.7), the most CFO-facing visual, doubling as publishable media. Documents **production on the verified LTX-Video path** (`ltxv-video.json` → `.webm` via `--type video --workflow`), **citing** the preserved reference bundle (`.ai-project/artifacts/reference/comfyui-endpoint/`) for the exact command and verified parameters (768×512, 97 frames @ 25 fps) rather than re-transcribing or shipping the workflow (**no new plumbing**); a **worked §7 clip binding** (`What: clip`, hosted `.webm` link, `implemented`); the **publish path as reuse** of the same hosted asset (YouTube / TikTok / IG / FB — no publisher or pipeline built); and records **Open Design Question A — reference, not vendor** (the workflow JSONs stay CFO-side; no runnable `workflows/` directory shipped). The §7 schema and by-link (§4) are referenced, **not** restated or changed; `clip` is an existing `What` value. Implements AOG §16.7. Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
-| 2026-06-29 | **Proposed/implemented per-level examples (two-track behavior).** Extended §5 so every level (Creation / HQ / Phase / Milestone / Epic) shows a **proposed** and an **implemented** worked example, each recorded as a **§7 binding** distinguished by its `State` field — the same block in two states, not a second schema. Most pairs are two cheap Structural diagrams; Creation and Epic show a Generative pair where a render communicates better (Structural-first economy). The §7 binding schema and by-link (§4) are referenced, **not** restated or changed. Implements the AOG §16.6 two-track default. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
-| 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Reversed the commit-the-binary storage model to **by-link**: generated artifacts are referenced by link and **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend (the adopter owns the storage backend) and links from the governing artifact. Updated §1 (source-repo note generalized — no project commits generated binaries), §3 and §5 (`--output` examples now name local working files), §4 prose, and the §16 related-documents row. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
+| 2026-07-13 | **Trigger-set behavior (§9) added.** New §9 "Automatic vs. on-demand production (the trigger set)": adopter-facing restatement of AOG §17.8 — structural-first at zero infrastructure (cross-referencing §2/AOG §17.4, no new machinery), and the automatic trigger set (Phase/Milestone/Epic specs + the four delivery/closure declarations automatic; everything else on-demand). Extended the §7 placement table with four new rows (`delivery-notice.md`, `epic-closure-notice.md`, `milestone-closure-declaration.md`, `phase-closure-declaration.md`), closing the gap where the delivery/closure half of the trigger set had no defined binding home; the existing five spec rows are unchanged. Appended as §9, following the §8 precedent — §1-§8 not renumbered. Per SN-17 (ratified SN-18); E27.2 (P7-M27). |
+| 2026-07-02 | **Clips (§8) added.** New §8 "Clips": a clip is a short video rendering **one** node's proposed→implemented arc (§5 / AOG §17.6) as motion — single-parent (AOG §17.7), the most CFO-facing visual, doubling as publishable media. Documents **production on the verified LTX-Video path** (`ltxv-video.json` → `.webm` via `--type video --workflow`), **citing** the preserved reference bundle (`.ai-project/artifacts/reference/comfyui-endpoint/`) for the exact command and verified parameters (768×512, 97 frames @ 25 fps) rather than re-transcribing or shipping the workflow (**no new plumbing**); a **worked §7 clip binding** (`What: clip`, hosted `.webm` link, `implemented`); the **publish path as reuse** of the same hosted asset (YouTube / TikTok / IG / FB — no publisher or pipeline built); and records **Open Design Question A — reference, not vendor** (the workflow JSONs stay CFO-side; no runnable `workflows/` directory shipped). The §7 schema and by-link (§4) are referenced, **not** restated or changed; `clip` is an existing `What` value. Implements AOG §17.7. Per SN-16 (ratified 2026-06-29), binding decision 3; E24.2 (P6-M24). |
+| 2026-06-29 | **Proposed/implemented per-level examples (two-track behavior).** Extended §5 so every level (Creation / HQ / Phase / Milestone / Epic) shows a **proposed** and an **implemented** worked example, each recorded as a **§7 binding** distinguished by its `State` field — the same block in two states, not a second schema. Most pairs are two cheap Structural diagrams; Creation and Epic show a Generative pair where a render communicates better (Structural-first economy). The §7 binding schema and by-link (§4) are referenced, **not** restated or changed. Implements the AOG §17.6 two-track default. Per SN-15/SN-16 (ratified 2026-06-29); E24.1 (P6-M24). |
+| 2026-06-29 | **Reversal of v5.0.0 shipped guidance.** Reversed the commit-the-binary storage model to **by-link**: generated artifacts are referenced by link and **never committed to git** — the helper writes a local working file, which the agent hosts on the adopter's storage backend (the adopter owns the storage backend) and links from the governing artifact. Updated §1 (source-repo note generalized — no project commits generated binaries), §3 and §5 (`--output` examples now name local working files), §4 prose, and the §17 related-documents row. Structural-diagram (Mermaid/PlantUML) guidance unchanged. Per SN-16 (ratified 2026-06-29); E23.1 (P6-M23). |
 | 2026-06-29 | **Binding convention added (by-link survivability).** Added §7 "Binding a visual to an artifact": a five-element **binding schema** (link + What / Level / State / Description) that records a hosted **link, never a committed path**, and a **per-level placement convention** (Creation → `seed.md` Rule 4 *Visual success*; HQ → `genesis.md` HQ Context Packet; Phase / Milestone / Epic → a "Visual Bindings" section in each spec template). `State` is a single field carrying the proposed/implemented two-track, so a level can hold one of each. Per-level templates updated with a defined binding placement. By-link reversal (§4) and structural-diagram guidance unchanged. Per SN-16 (ratified 2026-06-29), binding decision 2; E23.2 (P6-M23). |

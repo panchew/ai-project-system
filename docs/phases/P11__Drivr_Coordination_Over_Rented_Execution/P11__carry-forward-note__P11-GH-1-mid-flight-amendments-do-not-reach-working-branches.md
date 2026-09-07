@@ -6,7 +6,7 @@ type: note
 status: active
 issuer_chat: HQ Chat (ai-project-system)
 issued_to: Phase Chat (P11) → P11 Closure Declaration
-last_updated: 2026-08-04
+last_updated: 2026-09-03
 severity: medium
 ---
 
@@ -50,6 +50,36 @@ Instance 2 is the sharper one. The M36 milestone spec **predates the ruling**, s
 appears in no document the Milestone Chat reads, and its Closure Declaration DoD item says only
 *"Milestone Closure Declaration produced (`is_final: false`)"*. **Nothing downstream was wrong.
 Every chat was working correctly from the newest document it could see.**
+
+---
+
+## Instances recorded in P12 — cited by artifact and defect, never by ordinal
+
+The instances above are P11's. **P12 produced further instances of the same gap**, and they are
+recorded here — **each by the artifact and defect that identifies it, not by an ordinal**, because
+the tally is ruled unusable (P11's closure counts four, this note records two, and the
+count-error-tally record is reconciled at a floor rather than as a running integer). None of the
+three below re-opens the fix: **this records evidence only** (opening ruling, Decision 12 — `P11-GH-1`
+is not scoped as work in P12).
+
+| Instance (artifact + defect) | Direction | Path by which it was caught | Recorded |
+|---|---|---|---|
+| **P12 phase spec on `governance/hq-p12-opening`** — cut from `master` at `19c77ab`, while SN-38 landed at `3eda074` and was amended at `afe5d79`, **both after the cut**; the phase spec on that branch carried **zero** occurrences of `SN-38`, `Deepseek` or `epic_qa` | downward (parent amends, child already executing) | **out-of-chain** — a **Creation Chat reading `master`**, not the level below and not any mechanism (SN-39) | resolved by merging `master` (`0a19563`) and reconciling before `#215` merged (`8f5fb7c`). **Facts from the P12 phase spec, not re-derived (P11-GH-2).** |
+| **M41 milestone spec v1.1.0 citing the F6 ruling (`ff24a48`, on `master` at `f504be2`) in three places, while the file is absent from `milestone/M41`** | **upward** (a child branch drifts behind its parent while its own artifacts cite content the branch does not have) | the Phase Chat, directed by HQ, after HQ noticed — **a carrier, not a detector** | recorded in `P12-M41__milestone-spec.md` v1.1.1 (`2026-08-20`); the direction that makes it distinct is the gap's other half — *downward amendment is mechanised; upward branch staleness is unowned*. |
+| **E41.1 spec v1.0.2's *"the R6 citation does not yet resolve on this branch"*** — true when written, because `#221` was unmerged; `#221` merged (`master` `f31ec78`) and the premise moved, and the claim was not re-derived | **derived-claim rot** (a claim's premise moves and the claim is not recomputed — `P12-GH-3`) | the M41 Milestone Chat, told by HQ; the repair was manual | corrected at E41.1 v1.0.3 (`2026-08-20`), which kept the account rather than only the outcome: nothing detected the staleness, HQ told, the repair was manual — **a resolving citation pointing at rotted content gives no sign**. |
+
+**What makes P12's primary instance worth the entry rather than a tally mark:** it fired **inside the
+phase that owns the gap**, on **HQ's own branch** (`governance/hq-p12-opening`), and was caught by a
+chat **outside the parent chain** — a Creation Chat reading `master` — rather than by the
+one-level-down review that caught every P11 instance. That is a **detection path unlike every case
+on file** (`SN-39`), and it is the part a future remedy has to account for.
+
+**The gap is left open and unscoped.** Recording these instances does not scope `P11-GH-1` as work;
+it is the phase's deliberate decision to let three parallel tracks produce more evidence before a
+remedy is designed. The gap remains **open and unscoped**, its severity medium.
+
+**Amending a prior phase's carry-forward note from a later phase is established practice**
+(`P10-GH-2`, `P11-M36-E36.5`) — the note is a living record, not a closed phase artifact.
 
 ---
 

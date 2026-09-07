@@ -61,9 +61,9 @@ Milestone P11-M40.
   only** — **§P11.5 in full**, M40's entry in §Milestones, **§Success Criteria and §Acceptance
   Criteria in full** (you are assembling the material phase closure restates); PSG preamble+§1, §1A,
   §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6 (incl. §11.6.1), §12, §13C, §15; AOG preamble+§1,
-  §1A, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §10, §12, §13, §14.
+  §1.1, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §12, §14, §15, §16.
 - Load on trigger: **PSG §5B AND §5C** at closure — **§5C because this milestone's closure triggers
-  it**; PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §11, §16.
+  it**; PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §13, §17.
 - Do not load: PSG/AOG changelogs; other levels' role/starter sections; M36–M39 specs except by
   targeted section.
 

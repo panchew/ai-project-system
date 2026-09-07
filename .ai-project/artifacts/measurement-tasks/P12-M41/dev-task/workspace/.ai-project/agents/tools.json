@@ -1,0 +1,9 @@
+{
+  "_comment": "Coding tool set for TASK-DEV-1 (Epic P12-M41-E41.2 D4). Same shape and same enabled list as this repository's .ai-project/agents/tools.json, so the measurement is comparable to the lane's real configuration. allow_paths is scoped to the instantiated workspace and NOT to any real repository: the measurement workspace is always instantiated into a directory named 'e412-dev-workspace', which is what makes an absolute-path glob possible without hardcoding a home directory. allow_commands is the repo set's pytest surface, unchanged.",
+  "enabled": ["read_file", "write_file", "edit_file", "list_dir", "run_command", "git"],
+  "allow_paths": ["*/e412-dev-workspace/**"],
+  "allow_commands": ["pytest*", "python -m pytest*", "python3 -m pytest*"],
+  "deny_commands": [],
+  "allow_subcommands": ["status", "diff", "log", "show", "add", "commit", "branch", "checkout"],
+  "timeout": 300
+}

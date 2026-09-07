@@ -19,7 +19,7 @@ narrative the CFO can follow with low cognitive load. M23 delivered the *mechani
 storage and the §7 binding convention (link + What / Level / **State** / Description). M24
 delivers the *behavior* that uses it:
 
-1. **Proposed-vs-implemented becomes routine at every level (E24.1).** Establish, in AOG §16,
+1. **Proposed-vs-implemented becomes routine at every level (E24.1).** Establish, in AOG §17,
    the expectation that every level produces both tracks — a **proposed** visual before build
    and an **implemented** visual after — generously ("nothing is too much"), **Structural-first**
    because most of it is free text (Mermaid/PlantUML), with per-level examples bound via the
@@ -74,7 +74,7 @@ closes both gaps: the routine two-track behavior, and the clip convention.
 
 By the end of this milestone:
 
-1. **Proposed-vs-implemented is the documented default.** AOG §16 directs every level to track
+1. **Proposed-vs-implemented is the documented default.** AOG §17 directs every level to track
    **both** a proposed (before build) and an implemented (after) visual when
    `visual_artifacts.enabled: true`, generously, **Structural-first**, recorded via the §7
    binding's `State` field (E24.1).
@@ -112,7 +112,7 @@ This milestone explicitly does **not**:
 
 ## In Scope
 
-- **E24.1** — AOG §16 two-track ("proposed-vs-implemented") expectation as the routine default
+- **E24.1** — AOG §17 two-track ("proposed-vs-implemented") expectation as the routine default
   at every level, Structural-first/"nothing is too much", with per-level proposed/implemented
   examples bound via the §7 `State` field.
 - **E24.2** — the clip convention: single-parent binding (`What: clip`), production from the
@@ -160,12 +160,12 @@ bar and the proposed/implemented two-track are CFO-set and binding.
   carry both a `proposed` binding (the visual intent, before build) and an `implemented`
   binding (what was actually built) — the same five-element block, distinguished by **State**."
   E24.1 establishes the *expectation to routinely produce both*, not a new schema.
-- **AOG §16 is the home for the behavior.** §16 currently runs §16.1 opt-in gating, §16.2
-  per-level abstraction (the level→visual-type table), §16.3 two modes (Structural / Generative),
-  §16.4 tool-capability gating, §16.5 what-to-commit (now by-link). The two-track expectation is
-  a **new subsection** (e.g. §16.6 "Proposed vs. implemented"); §16.2/§16.3 may gain a sentence
+- **AOG §17 is the home for the behavior.** §17 currently runs §17.1 opt-in gating, §17.2
+  per-level abstraction (the level→visual-type table), §17.3 two modes (Structural / Generative),
+  §17.4 tool-capability gating, §17.5 what-to-commit (now by-link). The two-track expectation is
+  a **new subsection** (e.g. §17.6 "Proposed vs. implemented"); §17.2/§17.3 may gain a sentence
   tying the per-level abstraction and Structural-first preference to the two tracks.
-- **Structural-first is why generous coverage is cheap.** §16.3 / guide §2 already prefer
+- **Structural-first is why generous coverage is cheap.** §17.3 / guide §2 already prefer
   Structural (Mermaid/PlantUML — text, free, no endpoint) for architecture/scope/component/flow
   diagrams; Generative (ComfyUI) is for concept/vision/mockups/clips. E24.1 makes the
   "nothing is too much" bar affordable by leaning on Structural for most of the coverage.
@@ -175,7 +175,7 @@ bar and the proposed/implemented two-track are CFO-set and binding.
 
 **Deliverables:**
 
-1. AOG §16 guidance (new subsection) establishing the **two-track expectation** — every level
+1. AOG §17 guidance (new subsection) establishing the **two-track expectation** — every level
    produces a *proposed* visual before build and an *implemented* visual after, as the routine
    default when the capability is enabled — with the **"nothing is too much"** coverage bar and
    the **Structural-first** preference stated.
@@ -186,14 +186,14 @@ bar and the proposed/implemented two-track are CFO-set and binding.
 3. A changelog entry in the AOG (and the guide changelog) recording the added behavior.
 
 **Definition of Done:**
-- [ ] AOG §16 has a subsection directing both a *proposed* and an *implemented* visual per level when enabled, with the "nothing is too much" bar and Structural-first preference
+- [ ] AOG §17 has a subsection directing both a *proposed* and an *implemented* visual per level when enabled, with the "nothing is too much" bar and Structural-first preference
 - [ ] The guide shows a per-level proposed/implemented example, each bound via §7 (`State`)
 - [ ] The §7 schema is referenced, not redefined or restated
 - [ ] The behavior is recorded in the AOG and guide changelogs
 - [ ] Full test suite passes (no plumbing touched; integration test still skips at `enabled: false`)
 
 **Acceptance Criteria:**
-- [ ] AOG §16 directs every level to produce both a proposed and an implemented visual when `enabled: true`
+- [ ] AOG §17 directs every level to produce both a proposed and an implemented visual when `enabled: true`
 - [ ] Per-level proposed/implemented examples exist, bound via the M23 §7 convention
 - [ ] By-link and the §7 schema are unchanged (no regression, no redefinition)
 
@@ -205,7 +205,7 @@ bar and the proposed/implemented two-track are CFO-set and binding.
 decision 3).
 
 **Depends on E24.1** — a clip *is* the proposed→implemented arc of one node rendered as video,
-so it builds on E24.1's two-track behavior. E24.1 and E24.2 also both touch AOG §16 and the
+so it builds on E24.1's two-track behavior. E24.1 and E24.2 also both touch AOG §17 and the
 guide; serialize them (or use a worktree, GH-2) to avoid contention.
 
 **Grounding (verified — anchors the Milestone Chat plans against):**
@@ -230,7 +230,7 @@ guide; serialize them (or use a worktree, GH-2) to avoid contention.
 
 **Deliverables:**
 
-1. **Clip convention (single-parent).** Document, in AOG §16 and/or the guide, that a clip binds
+1. **Clip convention (single-parent).** Document, in AOG §17 and/or the guide, that a clip binds
    to exactly one governance node (epic/milestone/phase) via §7 (`What: clip`), tells that node's
    proposed→implemented story, and is hosted-and-linked (never committed). State the
    no-cross-cutting-reel boundary (deferred in P6).
@@ -298,7 +298,7 @@ M24 is **not** the final P6 milestone (`is_final: false`); M25 follows on `phase
 
 - `phase/P6` carries the consolidated M23 work — verify the M23 surfaces are present and
   git-tracked (`git ls-files --error-unmatch <path>`, the GH-1 convention):
-  - `governance/AI-OPERATING-GUIDELINES.md` (§16, by-link §16.5, v2.3.0)
+  - `governance/AI-OPERATING-GUIDELINES.md` (§17, by-link §17.5, v2.3.0)
   - `governance/guides/visual-artifacts.md` (the §7 binding convention + `State` field)
   - `governance/templates/seed.md`, `genesis.md`, `phase-spec.md`, `milestone-spec.md`,
     `epic-spec.md` (each carrying its §7 binding home)
@@ -313,7 +313,7 @@ M24 is **not** the final P6 milestone (`is_final: false`); M25 follows on `phase
 ## Dependencies and Sequencing
 
 - **E24.1 → E24.2** (soft dependency): a clip is the proposed→implemented arc rendered as video,
-  so E24.2 builds on E24.1's two-track behavior; both also edit AOG §16 and the guide. Execute
+  so E24.2 builds on E24.1's two-track behavior; both also edit AOG §17 and the guide. Execute
   E24.1 first, accept/merge it, then branch E24.2 from the merged `milestone/M24`. Use a worktree
   (GH-2) if overlap arises before merge.
 - **Cross-milestone:** M24 depends on **M23's** §7 binding convention (now merged on `phase/P6`);
@@ -325,7 +325,7 @@ M24 is **not** the final P6 milestone (`is_final: false`); M25 follows on `phase
 
 - [ ] E24.1 and E24.2 each meet their Definition of Done above
 - [ ] Both epic branches merged to `milestone/M24`
-- [ ] AOG §16 directs proposed + implemented at every level (Structural-first, "nothing is too much")
+- [ ] AOG §17 directs proposed + implemented at every level (Structural-first, "nothing is too much")
 - [ ] The clip convention is documented (single-parent, LTX-Video production, publish-as-reuse)
 - [ ] Open Design Question A is resolved (reference, not vendor) and recorded
 - [ ] By-link and the §7 schema are unchanged (no regression, no redefinition)
@@ -336,7 +336,7 @@ M24 is **not** the final P6 milestone (`is_final: false`); M25 follows on `phase
 
 ## Acceptance Criteria (Milestone)
 
-1. AOG §16 directs an agent to produce both a *proposed* and an *implemented* visual for its
+1. AOG §17 directs an agent to produce both a *proposed* and an *implemented* visual for its
    level when `visual_artifacts.enabled: true`, generously and Structural-first (E24.1).
 2. Per-level proposed/implemented examples exist, each bound via the M23 §7 convention (E24.1).
 3. The clip convention is documented as single-parent with a defined publish path (E24.2).
@@ -369,6 +369,6 @@ M24 is **not** the final P6 milestone (`is_final: false`); M25 follows on `phase
 - Default-accept (SN-13) governs delivery: clean Epic/Milestone deliveries are auto-accepted;
   Review Decisions are the exception path only.
 - The exact AOG subsection number, the wording of the per-level examples, and where the clip
-  convention sits (AOG §16 vs. a guide section) are Epic-level design calls **within M24's
+  convention sits (AOG §17 vs. a guide section) are Epic-level design calls **within M24's
   scope**; the milestone fixes the contract (two-track default at every level; single-parent
   clip with LTX-Video production and publish-as-reuse; ODQ A = reference), not the wording.

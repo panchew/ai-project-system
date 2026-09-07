@@ -1,0 +1,89 @@
+{
+  "runid": "R02",
+  "opaque": true,
+  "model_string": "anthropic/claude-opus-5",
+  "packet": "packet-1-decomposition-gap.md",
+  "attempt": 2,
+  "audit_header_transmitted": false,
+  "no_tuning_applied": true,
+  "sampling": "vendor defaults, seed not fixed",
+  "credential_visibility": {
+    "XDG_DATA_HOME": "UNSET",
+    "XDG_CONFIG_HOME": "UNSET",
+    "credential_path_present": "/home/panchew/.local/share/opencode/auth.json",
+    "count_credentials": "NOT-READ"
+  },
+  "run": {
+    "exit": 0,
+    "stderr": "",
+    "elapsed_s": 61.861,
+    "finish_reason": "stop",
+    "tokens": {
+      "total": 51333,
+      "input": 2,
+      "output": 5094,
+      "reasoning": 0,
+      "cache": {
+        "write": 0,
+        "read": 46237
+      }
+    },
+    "cost": 0.1504785,
+    "response": "NOT SOUND\n\n## Item-by-item trace\n\n### Milestone Definition of Done\n\n**1. \"E33.1, E33.2, and E33.3 each meet their Definition of Done above\"** \u2014 guaranteed trivially by each epic meeting its own DoD, and each epic's DoD does restate its milestone-level Epic Detail DoD faithfully. Covered.\n\n**2. \"All three epic branches merged to `milestone/M33`\"** \u2014 each epic DoD ends with \"PR opened to `milestone/M33`\"; the merge itself is the Milestone Chat's act. Normal division of labour, not a gap.\n\n**3. \"Both `home_finance` and `local-agent-runner` are stamped `framework_version: v7.0.0` (confirmable), each with a committed run record for at least one real Agentic/Local epic executed under the fixed posture\"** \u2014 **NOT guaranteed.** The stamp half is covered by E33.1. The run-record half is not covered by any epic.\n\nMilestone side:\n> \"Both `home_finance` and `local-agent-runner` are stamped \u2026 **each with a committed run record for at least one real Agentic/Local epic** executed under the fixed posture\"\n\nE33.2 side (its entire DoD commitment on this point):\n> \"- [ ] At least one real Agentic/Local epic ran on **a proving-pair project** under the fixed posture, and its run record is committed to the governance record\"\n\n\"A proving-pair project\" is one project, not both. This is not an accident of phrasing \u2014 E33.2 is built around picking one:\n> \"### 1. Which proving-pair project's first real epic to run \u2026 **Choose** on the basis of which offers a genuine, scoped, reviewable unit of real work\"\n\nand its Scope of Work \u00a71: \"**Select** the proving-pair project (Design Decision 1)\". Its Deliverables likewise say \"at least one real Agentic/Local epic executed on **a** proving-pair project\", singular. There is no clause anywhere in E33.2 that obliges a second run on the other project.\n\nThe blocker escape hatch does not close this. E33.2's DoD says:\n> \"- [ ] **Any project whose run could not complete** has an explicit blocker record + escalation (not a substituted decision)\"\n\nA project that was deliberately not selected as the run target is not a project \"whose run could not complete\" \u2014 no run was attempted, so no blocker exists to record. So under E33.2 as written, the unchosen project ends the milestone with neither a run record nor a blocker record, and milestone DoD item 3 and AC 1 are unmet while every epic DoD is fully satisfied. That is the definition of an unsound decomposition.\n\nNote the milestone spec is itself the origin of the slip: its Goal 1 and DoD/AC say **each**, while its own \u00a7Epic Detail \u2192 E33.2 DoD says \"**a** proving-pair project\". E33.2 inherited the weaker of the two. The mismatch is real either way, because the milestone's DoD and Acceptance Criteria are what the decomposition must satisfy.\n\nCorroborating signal: E33.3's grounding, written after E33.2 was executed, cites exactly one run directory \u2014 `.ai-project/artifacts/agentic-runs/P10-M33-E33.2/` with \"Run A `qwen2.5-coder:14b`\" and \"Run B `qwen3-coder:30b`\" \u2014 i.e. two model runs of one epic on one target, not one governed epic per proving-pair project. The gap materialised in practice.\n\n**4. \"A documented, repeatable enrolled-project v7.0.0 bump procedure exists and shows evidence of application to the pair\"** \u2014 covered by E33.1 DoD items 1\u20133 (\"documented with its mechanism and reasoning, and is repeatable (a reader could follow it against a project the procedure was never run on)\"; both projects stamped; confirmation evidence citing repo + commit + stamp location + verification method).\n\n**5. \"The Ollama-vs-llama.cpp+Qwen3.6 runtime decision is recorded with the run's own reasons\"** \u2014 covered by E33.2 DoD item 3, including the four dimensions (quality, throughput, loadability, review burden).\n\n**6. \"Real burn/validation data from the run exists in the governance record, with an explicit, evidence-backed honesty judgment\"** \u2014 covered by E33.3 DoD items 1 and 4.\n\n**7. \"Full suite green on `milestone/M33` for changes touching this repo (363 baseline \u2026)\"** \u2014 each epic carries the clause; E33.3 additionally guards the `measure-token-burn` behaviour contract. Covered.\n\n**8. \"Milestone Closure Declaration produced\"** \u2014 Milestone Chat's artifact, correctly outside epic scope.\n\n### Milestone Acceptance Criteria\n\n**AC 1** \u2014 \"`framework_version: v7.0.0` is stamped and confirmable in both proving-pair projects, **and each has a committed run record** for at least one real Agentic/Local epic under the fixed posture.\" First clause: E33.1. Second clause: **not guaranteed** \u2014 same mismatch as DoD item 3, quoted above.\n\n**AC 2** \u2014 traceability of the runtime decision to a real run: E33.2 AC 1 (\"a reader sees *which run* produced *which reasons* across the four dimensions\"). Covered.\n\n**AC 3** \u2014 \"Real burn/validation data \u2026 with a stated, evidence-backed judgment that `measure-token-burn`'s numbers for that run **can be trusted**.\" E33.3 delivers \"the run's numbers **can / cannot** be trusted, because \u2026\". Secondary, non-fatal mismatch: a well-formed \"cannot be trusted\" finding fully satisfies E33.3 but does not literally satisfy AC 3's positive wording. The milestone's own \u00a7Epic Detail E33.3 AC and \u00a7Notes make clear the intent is the honesty judgment, not a mandated verdict, so I read this as sloppy AC drafting rather than a coverage hole \u2014 but it should be corrected to \"can or cannot be trusted, stated and evidence-backed\" so the milestone cannot be failed by an honest negative result.\n\n**AC 4** \u2014 repeatable bump procedure applied to the pair: E33.1 DoD + AC. Covered.\n\n**AC 5** \u2014 \"Every decision traces to a real run \u2026 Where a run could not complete, an explicit blocker-and-escalation stands in its place\": E33.2 and E33.3 Hard Constraint sections and DoD items cover the attempted-but-blocked case. They do **not** cover the never-attempted case, which is the mechanism by which AC 1 fails.\n\n**AC 6** \u2014 suite green: covered by all three epics.\n\n## Verdict\n\nOne requirement \u2014 the milestone's headline \"proving pair\" claim, appearing in Goal 1, DoD item 3, and AC 1 \u2014 is guaranteed by no epic. E33.1 guarantees the *bump* on both projects; E33.2 guarantees a real governed run on only **one**, by explicit design. All three epics can pass their own DoDs in full while `home_finance` or `local-agent-runner` ends M33 stamped at v7.0.0 but never having carried a real governed epic \u2014 leaving the milestone's central assertion (\"Adoption is demonstrated, not asserted \u2014 the proving pair carries at least one real governed epic end-to-end\") half-unproven, and half of AC 1 unmet.\n\nMinimal fix: amend E33.2's DoD to \"at least one real Agentic/Local epic ran on **each** proving-pair project \u2026 and any project whose run could not complete **or was not attempted** has an explicit blocker record + escalation\", and reconcile the milestone's \u00a7Epic Detail \u2192 E33.2 DoD (\"a proving-pair project\") with its own DoD/AC (\"each\"). Alternatively, if a single-target run is genuinely the intent, weaken milestone DoD item 3 / AC 1 to match and drop the \"each\" language from Goal 1 \u2014 but that materially reduces what the milestone proves and should be a recorded, ratified scope change, not an inherited drafting slip.",
+    "event_count": 3,
+    "raw_events": [
+      {
+        "type": "step_start",
+        "timestamp": 1788291837207,
+        "sessionID": "ses_fa1801f46ffeSbtnKeiUYg3n1J",
+        "part": {
+          "id": "prt_05e7fed130010WzmjM6AroP9yD",
+          "messageID": "msg_05e7fe4600015XRWwaAMkWBRvA",
+          "sessionID": "ses_fa1801f46ffeSbtnKeiUYg3n1J",
+          "snapshot": "a678358d255d9a4d42e80a27378b2985be2bbfac",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788291895264,
+        "sessionID": "ses_fa1801f46ffeSbtnKeiUYg3n1J",
+        "part": {
+          "id": "prt_05e805e9b0013qdoNPVhDgl7Oa",
+          "messageID": "msg_05e7fe4600015XRWwaAMkWBRvA",
+          "sessionID": "ses_fa1801f46ffeSbtnKeiUYg3n1J",
+          "type": "text",
+          "text": "NOT SOUND\n\n## Item-by-item trace\n\n### Milestone Definition of Done\n\n**1. \"E33.1, E33.2, and E33.3 each meet their Definition of Done above\"** \u2014 guaranteed trivially by each epic meeting its own DoD, and each epic's DoD does restate its milestone-level Epic Detail DoD faithfully. Covered.\n\n**2. \"All three epic branches merged to `milestone/M33`\"** \u2014 each epic DoD ends with \"PR opened to `milestone/M33`\"; the merge itself is the Milestone Chat's act. Normal division of labour, not a gap.\n\n**3. \"Both `home_finance` and `local-agent-runner` are stamped `framework_version: v7.0.0` (confirmable), each with a committed run record for at least one real Agentic/Local epic executed under the fixed posture\"** \u2014 **NOT guaranteed.** The stamp half is covered by E33.1. The run-record half is not covered by any epic.\n\nMilestone side:\n> \"Both `home_finance` and `local-agent-runner` are stamped \u2026 **each with a committed run record for at least one real Agentic/Local epic** executed under the fixed posture\"\n\nE33.2 side (its entire DoD commitment on this point):\n> \"- [ ] At least one real Agentic/Local epic ran on **a proving-pair project** under the fixed posture, and its run record is committed to the governance record\"\n\n\"A proving-pair project\" is one project, not both. This is not an accident of phrasing \u2014 E33.2 is built around picking one:\n> \"### 1. Which proving-pair project's first real epic to run \u2026 **Choose** on the basis of which offers a genuine, scoped, reviewable unit of real work\"\n\nand its Scope of Work \u00a71: \"**Select** the proving-pair project (Design Decision 1)\". Its Deliverables likewise say \"at least one real Agentic/Local epic executed on **a** proving-pair project\", singular. There is no clause anywhere in E33.2 that obliges a second run on the other project.\n\nThe blocker escape hatch does not close this. E33.2's DoD says:\n> \"- [ ] **Any project whose run could not complete** has an explicit blocker record + escalation (not a substituted decision)\"\n\nA project that was deliberately not selected as the run target is not a project \"whose run could not complete\" \u2014 no run was attempted, so no blocker exists to record. So under E33.2 as written, the unchosen project ends the milestone with neither a run record nor a blocker record, and milestone DoD item 3 and AC 1 are unmet while every epic DoD is fully satisfied. That is the definition of an unsound decomposition.\n\nNote the milestone spec is itself the origin of the slip: its Goal 1 and DoD/AC say **each**, while its own \u00a7Epic Detail \u2192 E33.2 DoD says \"**a** proving-pair project\". E33.2 inherited the weaker of the two. The mismatch is real either way, because the milestone's DoD and Acceptance Criteria are what the decomposition must satisfy.\n\nCorroborating signal: E33.3's grounding, written after E33.2 was executed, cites exactly one run directory \u2014 `.ai-project/artifacts/agentic-runs/P10-M33-E33.2/` with \"Run A `qwen2.5-coder:14b`\" and \"Run B `qwen3-coder:30b`\" \u2014 i.e. two model runs of one epic on one target, not one governed epic per proving-pair project. The gap materialised in practice.\n\n**4. \"A documented, repeatable enrolled-project v7.0.0 bump procedure exists and shows evidence of application to the pair\"** \u2014 covered by E33.1 DoD items 1\u20133 (\"documented with its mechanism and reasoning, and is repeatable (a reader could follow it against a project the procedure was never run on)\"; both projects stamped; confirmation evidence citing repo + commit + stamp location + verification method).\n\n**5. \"The Ollama-vs-llama.cpp+Qwen3.6 runtime decision is recorded with the run's own reasons\"** \u2014 covered by E33.2 DoD item 3, including the four dimensions (quality, throughput, loadability, review burden).\n\n**6. \"Real burn/validation data from the run exists in the governance record, with an explicit, evidence-backed honesty judgment\"** \u2014 covered by E33.3 DoD items 1 and 4.\n\n**7. \"Full suite green on `milestone/M33` for changes touching this repo (363 baseline \u2026)\"** \u2014 each epic carries the clause; E33.3 additionally guards the `measure-token-burn` behaviour contract. Covered.\n\n**8. \"Milestone Closure Declaration produced\"** \u2014 Milestone Chat's artifact, correctly outside epic scope.\n\n### Milestone Acceptance Criteria\n\n**AC 1** \u2014 \"`framework_version: v7.0.0` is stamped and confirmable in both proving-pair projects, **and each has a committed run record** for at least one real Agentic/Local epic under the fixed posture.\" First clause: E33.1. Second clause: **not guaranteed** \u2014 same mismatch as DoD item 3, quoted above.\n\n**AC 2** \u2014 traceability of the runtime decision to a real run: E33.2 AC 1 (\"a reader sees *which run* produced *which reasons* across the four dimensions\"). Covered.\n\n**AC 3** \u2014 \"Real burn/validation data \u2026 with a stated, evidence-backed judgment that `measure-token-burn`'s numbers for that run **can be trusted**.\" E33.3 delivers \"the run's numbers **can / cannot** be trusted, because \u2026\". Secondary, non-fatal mismatch: a well-formed \"cannot be trusted\" finding fully satisfies E33.3 but does not literally satisfy AC 3's positive wording. The milestone's own \u00a7Epic Detail E33.3 AC and \u00a7Notes make clear the intent is the honesty judgment, not a mandated verdict, so I read this as sloppy AC drafting rather than a coverage hole \u2014 but it should be corrected to \"can or cannot be trusted, stated and evidence-backed\" so the milestone cannot be failed by an honest negative result.\n\n**AC 4** \u2014 repeatable bump procedure applied to the pair: E33.1 DoD + AC. Covered.\n\n**AC 5** \u2014 \"Every decision traces to a real run \u2026 Where a run could not complete, an explicit blocker-and-escalation stands in its place\": E33.2 and E33.3 Hard Constraint sections and DoD items cover the attempted-but-blocked case. They do **not** cover the never-attempted case, which is the mechanism by which AC 1 fails.\n\n**AC 6** \u2014 suite green: covered by all three epics.\n\n## Verdict\n\nOne requirement \u2014 the milestone's headline \"proving pair\" claim, appearing in Goal 1, DoD item 3, and AC 1 \u2014 is guaranteed by no epic. E33.1 guarantees the *bump* on both projects; E33.2 guarantees a real governed run on only **one**, by explicit design. All three epics can pass their own DoDs in full while `home_finance` or `local-agent-runner` ends M33 stamped at v7.0.0 but never having carried a real governed epic \u2014 leaving the milestone's central assertion (\"Adoption is demonstrated, not asserted \u2014 the proving pair carries at least one real governed epic end-to-end\") half-unproven, and half of AC 1 unmet.\n\nMinimal fix: amend E33.2's DoD to \"at least one real Agentic/Local epic ran on **each** proving-pair project \u2026 and any project whose run could not complete **or was not attempted** has an explicit blocker record + escalation\", and reconcile the milestone's \u00a7Epic Detail \u2192 E33.2 DoD (\"a proving-pair project\") with its own DoD/AC (\"each\"). Alternatively, if a single-target run is genuinely the intent, weaken milestone DoD item 3 / AC 1 to match and drop the \"each\" language from Goal 1 \u2014 but that materially reduces what the milestone proves and should be a recorded, ratified scope change, not an inherited drafting slip.",
+          "time": {
+            "start": 1788291866267,
+            "end": 1788291895261
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788291895289,
+        "sessionID": "ses_fa1801f46ffeSbtnKeiUYg3n1J",
+        "part": {
+          "id": "prt_05e80cff6001C5VpafeoJTFu2F",
+          "reason": "stop",
+          "snapshot": "a678358d255d9a4d42e80a27378b2985be2bbfac",
+          "messageID": "msg_05e7fe4600015XRWwaAMkWBRvA",
+          "sessionID": "ses_fa1801f46ffeSbtnKeiUYg3n1J",
+          "type": "step-finish",
+          "tokens": {
+            "total": 51333,
+            "input": 2,
+            "output": 5094,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 46237
+            }
+          },
+          "cost": 0.1504785
+        }
+      }
+    ]
+  }
+}

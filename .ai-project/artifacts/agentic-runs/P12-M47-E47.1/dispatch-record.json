@@ -1,0 +1,241 @@
+{
+  "route": "drivr OpenCodeAdapter (HostEnvironment)",
+  "adapter": "~/soft-dev/drivr/drivr/execution/opencode.py",
+  "adapter_ref": "114de1c",
+  "model": "opencode/deepseek-v4-flash",
+  "task": "Create a file named dispatch-proof.txt in the current working directory whose entire contents are exactly the single line: E47.1 remote dispatch through Drivr's OpenCode adapter completed. Then report that the file was written and its exact contents.",
+  "working_dir": "/tmp/opencode/e47-1-dispatch-work",
+  "credential_visibility": {
+    "XDG_DATA_HOME": "UNSET",
+    "XDG_CONFIG_HOME": "UNSET",
+    "credential_path_present": "/home/panchew/.local/share/opencode/auth.json",
+    "count_credentials": "NOT-READ"
+  },
+  "repository": "drivr (dispatch through its adapter); record lands in ai-project-system",
+  "execution_result": {
+    "engine": "opencode",
+    "model": "opencode/deepseek-v4-flash",
+    "environment": "host",
+    "command": [
+      "/home/panchew/.opencode/bin/opencode",
+      "run",
+      "--model",
+      "opencode/deepseek-v4-flash",
+      "--format",
+      "json",
+      "--auto",
+      "--dir",
+      "/tmp/opencode/e47-1-dispatch-work",
+      "Create a file named dispatch-proof.txt in the current working directory whose entire contents are exactly the single line: E47.1 remote dispatch through Drivr's OpenCode adapter completed. Then report that the file was written and its exact contents."
+    ],
+    "exit_code": 0,
+    "stdout": "{\"type\":\"step_start\",\"timestamp\":1788580950960,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"id\":\"prt_06fbb73ad001sciWok2EDPR0Cj\",\"messageID\":\"msg_06fbb6f9f001vxy9ophHbYG3hD\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"snapshot\":\"4b825dc642cb6eb9a060e54bf8d69288fbee4904\",\"type\":\"step-start\"}}\n{\"type\":\"tool_use\",\"timestamp\":1788580951735,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"type\":\"tool\",\"tool\":\"write\",\"callID\":\"call_7c7e0876aebd48a593e5a6dd\",\"state\":{\"status\":\"completed\",\"input\":{\"filePath\":\"/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt\",\"content\":\"E47.1 remote dispatch through Drivr's OpenCode adapter completed.\"},\"output\":\"Wrote file successfully.\",\"metadata\":{\"diagnostics\":{},\"filepath\":\"/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt\",\"exists\":false,\"truncated\":false},\"title\":\"dispatch-proof.txt\",\"time\":{\"start\":1788580951728,\"end\":1788580951734}},\"id\":\"prt_06fbb75f8001yJbrrgM7Uh7DUk\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"messageID\":\"msg_06fbb6f9f001vxy9ophHbYG3hD\"}}\n{\"type\":\"step_finish\",\"timestamp\":1788580951775,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"id\":\"prt_06fbb76dc0014ccpDvruwRnE1B\",\"reason\":\"tool-calls\",\"snapshot\":\"eeabda18a8346597319ef6163ddba277b878ecef\",\"messageID\":\"msg_06fbb6f9f001vxy9ophHbYG3hD\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"type\":\"step-finish\",\"tokens\":{\"total\":8170,\"input\":6169,\"output\":209,\"reasoning\":0,\"cache\":{\"write\":0,\"read\":1792}},\"cost\":0.000972356}}\n{\"type\":\"step_start\",\"timestamp\":1788580952426,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"id\":\"prt_06fbb7968001L97L6QrSV7g0d7\",\"messageID\":\"msg_06fbb76e6001lotOoMQFdpwm3Y\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"snapshot\":\"eeabda18a8346597319ef6163ddba277b878ecef\",\"type\":\"step-start\"}}\n{\"type\":\"tool_use\",\"timestamp\":1788580952721,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"type\":\"tool\",\"tool\":\"read\",\"callID\":\"call_445986edc00b46f38f3aefaf\",\"state\":{\"status\":\"completed\",\"input\":{\"filePath\":\"/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt\"},\"output\":\"<path>/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt</path>\\n<type>file</type>\\n<content>\\n1: E47.1 remote dispatch through Drivr's OpenCode adapter completed.\\n\\n(End of file - total 1 lines)\\n</content>\",\"metadata\":{\"preview\":\"E47.1 remote dispatch through Drivr's OpenCode adapter completed.\",\"truncated\":false,\"loaded\":[],\"display\":{\"type\":\"file\",\"path\":\"/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt\",\"text\":\"E47.1 remote dispatch through Drivr's OpenCode adapter completed.\",\"lineStart\":1,\"lineEnd\":1,\"totalLines\":1,\"truncated\":false}},\"title\":\"dispatch-proof.txt\",\"time\":{\"start\":1788580952711,\"end\":1788580952720}},\"id\":\"prt_06fbb7a32001OBZqD4wYPMOeod\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"messageID\":\"msg_06fbb76e6001lotOoMQFdpwm3Y\"}}\n{\"type\":\"step_finish\",\"timestamp\":1788580952782,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"id\":\"prt_06fbb7acc001yOOcePaF0NtGHm\",\"reason\":\"tool-calls\",\"snapshot\":\"eeabda18a8346597319ef6163ddba277b878ecef\",\"messageID\":\"msg_06fbb76e6001lotOoMQFdpwm3Y\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"type\":\"step-finish\",\"tokens\":{\"total\":8248,\"input\":248,\"output\":64,\"reasoning\":0,\"cache\":{\"write\":0,\"read\":7936}},\"cost\":0.000274848}}\n{\"type\":\"step_start\",\"timestamp\":1788580953399,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"id\":\"prt_06fbb7d34001Ky5QawHO09Atyq\",\"messageID\":\"msg_06fbb7ad8001MJd4BBC86sT878\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"snapshot\":\"eeabda18a8346597319ef6163ddba277b878ecef\",\"type\":\"step-start\"}}\n{\"type\":\"text\",\"timestamp\":1788580953519,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"id\":\"prt_06fbb7d35001v3yhM4X76sG6GM\",\"messageID\":\"msg_06fbb7ad8001MJd4BBC86sT878\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"type\":\"text\",\"text\":\"File `dispatch-proof.txt` was written successfully. Its exact contents:\\n\\n```\\nE47.1 remote dispatch through Drivr's OpenCode adapter completed.\\n```\",\"time\":{\"start\":1788580953397,\"end\":1788580953517}}}\n{\"type\":\"step_finish\",\"timestamp\":1788580953525,\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"part\":{\"id\":\"prt_06fbb7db3001D1drrT9hwZ05wf\",\"reason\":\"stop\",\"snapshot\":\"eeabda18a8346597319ef6163ddba277b878ecef\",\"messageID\":\"msg_06fbb7ad8001MJd4BBC86sT878\",\"sessionID\":\"ses_f904494e3ffePBpjRNEhh5OfE3\",\"type\":\"step-finish\",\"tokens\":{\"total\":8353,\"input\":127,\"output\":34,\"reasoning\":0,\"cache\":{\"write\":0,\"read\":8192}},\"cost\":0.000256676}}\n",
+    "stderr": "",
+    "duration_ms": 5431,
+    "timed_out": false,
+    "engine_status": null,
+    "files_changed": [
+      "dispatch-proof.txt"
+    ],
+    "declared_context_limit": null,
+    "context_limit_source": "unobserved",
+    "unenforced_constraints": [],
+    "structured_events": [
+      {
+        "type": "step_start",
+        "timestamp": 1788580950960,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "id": "prt_06fbb73ad001sciWok2EDPR0Cj",
+          "messageID": "msg_06fbb6f9f001vxy9ophHbYG3hD",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "snapshot": "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788580951735,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "type": "tool",
+          "tool": "write",
+          "callID": "call_7c7e0876aebd48a593e5a6dd",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt",
+              "content": "E47.1 remote dispatch through Drivr's OpenCode adapter completed."
+            },
+            "output": "Wrote file successfully.",
+            "metadata": {
+              "diagnostics": {},
+              "filepath": "/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt",
+              "exists": false,
+              "truncated": false
+            },
+            "title": "dispatch-proof.txt",
+            "time": {
+              "start": 1788580951728,
+              "end": 1788580951734
+            }
+          },
+          "id": "prt_06fbb75f8001yJbrrgM7Uh7DUk",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "messageID": "msg_06fbb6f9f001vxy9ophHbYG3hD"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788580951775,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "id": "prt_06fbb76dc0014ccpDvruwRnE1B",
+          "reason": "tool-calls",
+          "snapshot": "eeabda18a8346597319ef6163ddba277b878ecef",
+          "messageID": "msg_06fbb6f9f001vxy9ophHbYG3hD",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "type": "step-finish",
+          "tokens": {
+            "total": 8170,
+            "input": 6169,
+            "output": 209,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 1792
+            }
+          },
+          "cost": 0.000972356
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788580952426,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "id": "prt_06fbb7968001L97L6QrSV7g0d7",
+          "messageID": "msg_06fbb76e6001lotOoMQFdpwm3Y",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "snapshot": "eeabda18a8346597319ef6163ddba277b878ecef",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788580952721,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "type": "tool",
+          "tool": "read",
+          "callID": "call_445986edc00b46f38f3aefaf",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt"
+            },
+            "output": "<path>/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt</path>\n<type>file</type>\n<content>\n1: E47.1 remote dispatch through Drivr's OpenCode adapter completed.\n\n(End of file - total 1 lines)\n</content>",
+            "metadata": {
+              "preview": "E47.1 remote dispatch through Drivr's OpenCode adapter completed.",
+              "truncated": false,
+              "loaded": [],
+              "display": {
+                "type": "file",
+                "path": "/tmp/opencode/e47-1-dispatch-work/dispatch-proof.txt",
+                "text": "E47.1 remote dispatch through Drivr's OpenCode adapter completed.",
+                "lineStart": 1,
+                "lineEnd": 1,
+                "totalLines": 1,
+                "truncated": false
+              }
+            },
+            "title": "dispatch-proof.txt",
+            "time": {
+              "start": 1788580952711,
+              "end": 1788580952720
+            }
+          },
+          "id": "prt_06fbb7a32001OBZqD4wYPMOeod",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "messageID": "msg_06fbb76e6001lotOoMQFdpwm3Y"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788580952782,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "id": "prt_06fbb7acc001yOOcePaF0NtGHm",
+          "reason": "tool-calls",
+          "snapshot": "eeabda18a8346597319ef6163ddba277b878ecef",
+          "messageID": "msg_06fbb76e6001lotOoMQFdpwm3Y",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "type": "step-finish",
+          "tokens": {
+            "total": 8248,
+            "input": 248,
+            "output": 64,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 7936
+            }
+          },
+          "cost": 0.000274848
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788580953399,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "id": "prt_06fbb7d34001Ky5QawHO09Atyq",
+          "messageID": "msg_06fbb7ad8001MJd4BBC86sT878",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "snapshot": "eeabda18a8346597319ef6163ddba277b878ecef",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788580953519,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "id": "prt_06fbb7d35001v3yhM4X76sG6GM",
+          "messageID": "msg_06fbb7ad8001MJd4BBC86sT878",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "type": "text",
+          "text": "File `dispatch-proof.txt` was written successfully. Its exact contents:\n\n```\nE47.1 remote dispatch through Drivr's OpenCode adapter completed.\n```",
+          "time": {
+            "start": 1788580953397,
+            "end": 1788580953517
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788580953525,
+        "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+        "part": {
+          "id": "prt_06fbb7db3001D1drrT9hwZ05wf",
+          "reason": "stop",
+          "snapshot": "eeabda18a8346597319ef6163ddba277b878ecef",
+          "messageID": "msg_06fbb7ad8001MJd4BBC86sT878",
+          "sessionID": "ses_f904494e3ffePBpjRNEhh5OfE3",
+          "type": "step-finish",
+          "tokens": {
+            "total": 8353,
+            "input": 127,
+            "output": 34,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 8192
+            }
+          },
+          "cost": 0.000256676
+        }
+      }
+    ]
+  }
+}

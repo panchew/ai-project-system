@@ -523,7 +523,7 @@ epic's duration is discovered, not assumed)
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -539,7 +539,7 @@ flowchart LR
 - **Description:** M33's three-epic flow — bump the pair to v7.0.0 first, run a real
   Agentic/Local epic that settles the runtime fork with its own reasons, then take trustworthy
   measurement out of that run. E33.1's procedure and E33.2's settled runtime choice are the
-  binding-order links M34 consumes. Proposed-track Structural diagram (AOG §16.3/§16.6).
+  binding-order links M34 consumes. Proposed-track Structural diagram (AOG §17.3/§17.6).
 
 ---
 
@@ -568,7 +568,7 @@ flowchart LR
   deliverables are governance record/evidence here must keep it green; the target-repo bumps
   and code are governed by their own repos' checks. "Full suite green" clauses above apply to
   changes touching **this** repo.
-- Default-accept (PSG §11.6 / AOG §12) governs this milestone's delivery: clean Epic/Milestone
+- Default-accept (PSG §11.6 / AOG §14) governs this milestone's delivery: clean Epic/Milestone
   deliveries are accepted by silence; a Review Decision is the exception path only. Per SN-19,
   acceptance and the merge instruction are in-chat acts — no ceremonial artifact. The harness
   enforces explicit human authorization on every merge regardless.

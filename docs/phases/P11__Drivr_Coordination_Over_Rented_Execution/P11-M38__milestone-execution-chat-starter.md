@@ -60,10 +60,10 @@ Milestone P11-M38.
 - Load at session start: this starter; the Milestone spec (full); the Phase spec **by targeted section
   only** — **§P11.3 in full, including the measured Ollama/context technical note** — plus M38's entry in
   §Milestones and the phase §Acceptance Criteria; PSG preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10,
-  §11, §11.5, §11.6 (incl. §11.6.1), §12, §13C, §15; AOG preamble+§1, §1A, §2, §3.7, §3.9, §3.10, §4,
-  §5, §6, §7, §9, §10, §12, §13, §14.
+  §11, §11.5, §11.6 (incl. §11.6.1), §12, §13C, §15; AOG preamble+§1, §1.1, §2, §3.7, §3.9, §3.10, §4,
+  §5, §6, §7, §9, §12, §14, §15, §16.
 - Load on trigger: PSG §5B + AOG §3.4 at closure (**§5B, not §5C** — M38 is not final); PSG §3, §8A,
-  §13D, §14A, §14C, §18; AOG §3.2, §8, §11, §16.
+  §13D, §14A, §14C, §18; AOG §3.2, §8, §13, §17.
 - Do not load: PSG/AOG changelogs; other levels' role/starter-format sections; §P11.4/§P11.5 (M39/M40 —
   not yours); M36/M37 specs except by targeted section.
 

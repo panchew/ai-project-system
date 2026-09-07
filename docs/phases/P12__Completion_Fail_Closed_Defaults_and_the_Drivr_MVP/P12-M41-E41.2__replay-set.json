@@ -1,0 +1,53 @@
+{
+  "_comment": "THE DECLARED REPLAY SET for Epic P12-M41-E41.2 (D2). Declared BEFORE the replay runs. Five cases: three positives that MUST be flagged FAIL and two negative controls that MUST pass. Without the negatives the milestone's acceptance criterion is satisfied by `return FAIL` (Epic spec S1). A case that cannot be loaded is reported LOUDLY as ERROR and counted; the reported list is NEVER shorter than this declaration (Epic spec S3). Paths are repo-root-relative. The transcripts are READ-ONLY: replaying them is the method, editing one invalidates every result ever taken from it.",
+  "declared_utc": "2026-08-22",
+  "floor_version": "per-lane-ruled-2026-08-20",
+  "cases": [
+    {
+      "label": "E33.2 Run A",
+      "lane": "epic_dev",
+      "expected_verdict": "FAIL",
+      "why": "successful nothing — exit 0, status completed, 0 executed rounds, 223 tok; the three intended tool calls were emitted as prose inside a ```json fence and the runner parsed none of them. __init__.py unchanged, test never created.",
+      "model": "qwen2.5-coder:14b",
+      "transcript": ".ai-project/artifacts/agentic-runs/P10-M33-E33.2/transcript-A-qwen2.5-coder-14b.json",
+      "metadata": ".ai-project/artifacts/agentic-runs/P10-M33-E33.2/transcript-A-qwen2.5-coder-14b__run-metadata.json"
+    },
+    {
+      "label": "E39.3",
+      "lane": "epic_qa",
+      "expected_verdict": "FAIL",
+      "why": "fabrication — VERDICT: PASS on all 26 rules with zero tool rounds, citing read_file('.ai-project.yml') 26 times and a framework_version key the file does not contain, WITH the read-only tools genuinely advertised.",
+      "model": "qwen3-coder:30b",
+      "transcript": ".ai-project/artifacts/agentic-runs/P11-M39-E39.3/qa-transcript.json",
+      "metadata": ".ai-project/artifacts/agentic-runs/P11-M39-E39.3/qa-run-metadata.json"
+    },
+    {
+      "label": "E39.3 RUN2",
+      "lane": "epic_qa",
+      "expected_verdict": "FAIL",
+      "why": "the same failure, reproduced on a second dispatch — this is why the shape is a finding rather than an incident.",
+      "model": "qwen3-coder:30b",
+      "transcript": ".ai-project/artifacts/agentic-runs/P11-M39-E39.3-RUN2/qa-transcript.json",
+      "metadata": ".ai-project/artifacts/agentic-runs/P11-M39-E39.3-RUN2/qa-run-metadata.json"
+    },
+    {
+      "label": "E33.2 Run B",
+      "lane": "epic_dev",
+      "expected_verdict": "PASS",
+      "why": "NEGATIVE CONTROL, and the primary one. exit 2, status max_iterations_exceeded, 10 executed rounds, mergeable work committed at local-agent-runner 4ec1e8f (suite 210 passed / 1 skipped). If the instrument flags this run, the instrument is wrong.",
+      "model": "qwen3-coder:30b",
+      "transcript": ".ai-project/artifacts/agentic-runs/P10-M33-E33.2/transcript-B-qwen3-coder-30b.json",
+      "metadata": null,
+      "metadata_note": "S3 — THIS RUN HAS NO run-metadata FILE. A metadata-requiring replay harness would skip it WITHOUT ERRORING and report four cases instead of five, dropping the primary negative control silently. That is the exact silent-omission family this phase exists to close. This instrument does not require metadata; the consequence is recorded instead, as advertised_tools.provenance = NOT RECOVERABLE."
+    },
+    {
+      "label": "E33.4",
+      "lane": "epic_dev",
+      "expected_verdict": "PASS",
+      "why": "NEGATIVE CONTROL. The second real agentic epic — 10 executed rounds against home_finance, migration written, factory and spec edited, rspec green, work mergeable. If the instrument flags this run, the instrument is wrong.",
+      "model": "qwen3-coder:30b",
+      "transcript": ".ai-project/artifacts/agentic-runs/P10-M33-E33.4/transcript-qwen3-coder-30b.json",
+      "metadata": ".ai-project/artifacts/agentic-runs/P10-M33-E33.4/run-metadata.json"
+    }
+  ]
+}

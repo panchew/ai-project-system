@@ -436,7 +436,7 @@ dependency)
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -453,7 +453,7 @@ flowchart LR
 - **Description:** M31's flow — record the mode model first, then attach agentic
   policy-application and the manual refusal guardrail to it, then recapture measurements to
   check M30's forward-looking claims at delivery. Proposed-track Structural diagram (AOG
-  §16.3/§16.6).
+  §17.3/§17.6).
 
 ---
 
@@ -474,7 +474,7 @@ flowchart LR
 - **Reference-first applies to this milestone's own workflow** (AOG §3.1.1 v2.10.0, E30.4):
   all deliveries by reference, producer no-echo, consumer selective-read. E31.3's template
   edits must preserve E30.3's scoping blocks and E30.4's handoff rules.
-- Default-accept (PSG §11.6 / AOG §12) governs this milestone's delivery: clean deliveries
+- Default-accept (PSG §11.6 / AOG §14) governs this milestone's delivery: clean deliveries
   accepted by silence; Review Decision is the exception path. Per SN-19, acceptance and
   merge instruction are in-chat acts; the harness enforces explicit human authorization on
   every merge regardless.

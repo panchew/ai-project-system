@@ -38,7 +38,7 @@ HQ Chat/human resolution before any planning or review work.
   artifacts and open a long-lived `phase/P11 → master` PR for HQ review on the first milestone. Not
   merged until the phase completes.
 - **Stage 2:** receive each Milestone Completion Notice; under the **SN-13 default-accept model**
-  (PSG §11.6 / AOG §12), accept a clean delivery **by silence** — issue a Review Decision only on the
+  (PSG §11.6 / AOG §14), accept a clean delivery **by silence** — issue a Review Decision only on the
   exception path. Milestone merges land on `phase/P11`; when all milestones are closed, merge
   `phase/P11 → master` on HQ Accept via the **PSG §5C** nine-step closure sequence, ending with the
   Phase Closure Declaration (Step 9). There is no separate phase-delivery artifact beyond §5C's steps.
@@ -61,10 +61,10 @@ HQ Chat/human resolution before any planning or review work.
 
 **Context scoping (P9-M30-E30.3):**
 - Load at session start: this starter; the P11 phase spec (full); PSG preamble+§1, §1A, §2, §5, §6,
-  §7, §8, §9, §10, §11, §11.5, §11.6 (incl. §11.6.1), §12, §13B, §13D; AOG preamble+§1, §1A, §2, §3.6,
-  §3.9, §3.10, §4, §6, §7, §9, §10, §12, §13, §14
+  §7, §8, §9, §10, §11, §11.5, §11.6 (incl. §11.6.1), §12, §13B, §13D; AOG preamble+§1, §1.1, §2, §3.6,
+  §3.9, §3.10, §4, §6, §7, §9, §12, §14, §15, §16
 - Load on trigger: PSG §5B + AOG §3.4/§3.7 at a milestone's closure; PSG §5C at phase closure;
-  PSG §3, §8A, §14A, §14C, §18; AOG §8, §11, §16
+  PSG §3, §8A, §14A, §14C, §18; AOG §8, §13, §17
 - Do not load: PSG/AOG changelogs; other levels' role or starter-format sections; milestone/epic specs
   except by targeted section during review
 

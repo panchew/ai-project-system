@@ -1,0 +1,38 @@
+{
+  "epic_id": "P12-M41-E41.2-QA-RUN2",
+  "role": "qa",
+  "lane": "epic_qa",
+  "authority": "advisory",
+  "authority_note": "This verdict is advisory evidence only. Nothing in this repository consumes it, and no completion judgment takes it as a term (E39.1's binding decision). M39 judges; it does not act on its judgment.",
+  "model": "qwen3-coder:30b",
+  "model_provenance": {
+    "source": ".ai-project.yml:models.epic_qa",
+    "configured_value": "local:qwen3-coder:30b",
+    "resolved_tag": "qwen3-coder:30b",
+    "config_sha256": "c52622adb25c114bb7443205e13e257de2e83b55795d3c64ff9558744da519ee",
+    "active_model_env": "(unset)",
+    "env_agrees_with_config": false
+  },
+  "runner": "/home/panchew/soft-dev/ai-project-system/bin/local-agent-runner-shim",
+  "endpoint": "runner-default",
+  "exit_code": 0,
+  "exit_code_note": "Reports whether the QA run completed, never whether the assessed work passed.",
+  "started_utc": "2026-08-22T18:51:53.586417+00:00",
+  "duration_ms": 7389,
+  "transcript": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-QA-RUN2/qa-transcript.json",
+  "context": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-QA-RUN2/qa-context.md",
+  "standard": {
+    "path": "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/measurement-tasks/P12-M41/qa-task/standard/TASK-QA-1__standard__servicecard-spec.md",
+    "section": "Validation Rules"
+  },
+  "work": [
+    "/home/panchew/soft-dev/ai-project-system/.ai-project/artifacts/measurement-tasks/P12-M41/qa-task/work/servicecard.yml"
+  ],
+  "tools": ".ai-project/agents/qa-tools.json",
+  "tools_sha256": "83ff08e7b3492fd38aee92bbe13fe2118535d1d9fa8f120372b362c64cfb69e7",
+  "tools_enabled": [
+    "read_file",
+    "list_dir"
+  ],
+  "dispatch_path": "bin/run-qa-agent (built in Epic P11-M39-E39.3)"
+}

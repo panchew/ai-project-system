@@ -1,0 +1,158 @@
+{
+  "declared": 1,
+  "reported": 1,
+  "records": [
+    {
+      "label": "DEV RUN 1",
+      "lane": "epic_dev",
+      "verdict": "PASS",
+      "floor_version": "per-lane-ruled-2026-08-20",
+      "instrument_version": "1.0.3",
+      "counts": {
+        "tool_rounds": 10,
+        "files_changed": {
+          "count": 1,
+          "provenance": "worktree",
+          "lower_bound": false,
+          "paths": [
+            "durations/parse.py"
+          ],
+          "excluded_paths": [
+            ".ai-project/artifacts/"
+          ],
+          "workspace": "/tmp/claude-1000/-home-panchew-soft-dev-ai-project-system/7495013d-d596-4ef9-b0a7-8e744269fd63/scratchpad/dev-run1/e412-dev-workspace"
+        },
+        "claims": {
+          "asserted": 0,
+          "resolved": 0,
+          "unresolved": 0,
+          "rate": null,
+          "vacuous": true
+        }
+      },
+      "floor_terms": [
+        {
+          "check": "C-A tool rounds",
+          "value": 10,
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-B files changed",
+          "value": 1,
+          "passes": true,
+          "scored": true
+        },
+        {
+          "check": "C-C claims resolve",
+          "value": "0/0",
+          "passes": true,
+          "scored": false,
+          "note": "recorded on epic_dev; the dev floor's terms are C-A and C-B"
+        }
+      ],
+      "unresolved_claims": [],
+      "all_claims": [],
+      "advertised_tools": {
+        "tool_set_path": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-DEV-RUN1/advertised-tools.json",
+        "enabled": [
+          "read_file",
+          "write_file",
+          "edit_file",
+          "list_dir",
+          "run_command",
+          "git"
+        ],
+        "sha256_at_run_time": null,
+        "provenance": "read from the tool-set file NOW; the run metadata names the path but did not capture its content, so this is the file's current content and not provably the run's",
+        "sha256_now": "6d28a5be36fb6caa2eb9e26f1422ea6a6196e94a4d9ead338a11a4d98cf28d85"
+      },
+      "recorded_never_scored": {
+        "exit_code": 2,
+        "status": "max_iterations_exceeded",
+        "tokens": 2888,
+        "duration_ms": 121069,
+        "model": "qwen3-coder:30b",
+        "endpoint": "runner-default",
+        "note": "recorded as context; NEVER scored. E33.2: clean exit on the run that did nothing, failing exit on the run that shipped work."
+      },
+      "transcript": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-DEV-RUN1/transcript.json",
+      "metadata_path": ".ai-project/artifacts/agentic-runs/P12-M41-E41.2-DEV-RUN1/run-metadata.json",
+      "executed_calls": [
+        {
+          "name": "read_file",
+          "args": {
+            "path": "durations/parse.py"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "tests/test_parse_duration.py"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "write_file",
+          "args": {
+            "path": "durations/parse.py",
+            "content": "\"\"\"Compact duration parsing. See docs/TASK-DEV-1__spec__parse-duration.md.\"\"\"\n\n\ndef parse_duration(text):\n    \"\"\"Return the number of seconds in a compact duration string such as \"1h30m\".\"\"\"\n    # Check if input is a string\n    if not isinstance(text, str):\n        raise TypeError(\"parse_duration accepts str only\")\n    \n    # Strip leading and trailing whitespace\n    text = text.strip()\n    \n    # Check for empty string\n    if not text:\n        raise ValueError(\"Invalid duration format\")\n    \n    # Define unit mapping\n    units = {\n        'w': 604800,\n        'd': 86400,\n        'h': 3600,\n        'm': 60,\n        's': 1\n    }\n    \n    # Define valid order (strictly descending)\n    unit_order = ['w', 'd', 'h', 'm', 's']\n    \n    # Parse the string\n    result = 0\n    i = 0\n    used_units = set()\n    \n    while i < len(text):\n        # Find the number part\n        start = i\n        while i < len(text) and text[i].isdigit():\n            i += 1\n        \n        if i == start:\n            raise ValueError(\"Invalid duration format\")\n        \n        number_str = text[start:i]\n        \n        # Check for leading zeros (except for \"0\")\n        if len(number_str) > 1 and number_str[0] == '0':\n            raise ValueError(\"Invalid duration format\")\n        \n        try:\n            number = int(number_str)\n        except ValueError:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Get the unit\n        if i >= len(text):\n            raise ValueError(\"Invalid duration format\")\n            \n        unit = text[i]\n        \n        # Validate unit\n        if unit not in units:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Check if unit was already used\n        if unit in used_units:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Check order (must be in descending order)\n        if result > 0:  # Not the first unit\n            prev_unit = None\n            for u in unit_order:\n                if u in used_units:\n                    prev_unit = u\n                elif u == unit:\n                    break\n            \n            if prev_unit and unit_order.index(unit) >= unit_order.index(prev_unit):\n                raise ValueError(\"Invalid duration format\")\n        \n        # Add to result\n        result += number * units[unit]\n        used_units.add(unit)\n        i += 1\n    \n    # Verify that we consumed the entire string\n    if i != len(text):\n        raise ValueError(\"Invalid duration format\")\n    \n    return result\n"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "python3 -m pytest tests/test_parse_duration.py -v"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "edit_file",
+          "args": {
+            "path": "durations/parse.py",
+            "old": "\"\"\"Compact duration parsing. See docs/TASK-DEV-1__spec__parse-duration.md.\"\"\"\n\n\ndef parse_duration(text):\n    \"\"\"Return the number of seconds in a compact duration string such as \"1h30m\".\"\"\"\n    # Check if input is a string\n    if not isinstance(text, str):\n        raise TypeError(\"parse_duration accepts str only\")\n    \n    # Strip leading and trailing whitespace\n    text = text.strip()\n    \n    # Check for empty string\n    if not text:\n        raise ValueError(\"Invalid duration format\")\n    \n    # Define unit mapping\n    units = {\n        'w': 604800,\n        'd': 86400,\n        'h': 3600,\n        'm': 60,\n        's': 1\n    }\n    \n    # Define valid order (strictly descending)\n    unit_order = ['w', 'd', 'h', 'm', 's']\n    \n    # Parse the string\n    result = 0\n    i = 0\n    used_units = set()\n    \n    while i < len(text):\n        # Find the number part\n        start = i\n        while i < len(text) and text[i].isdigit():\n            i += 1\n        \n        if i == start:\n            raise ValueError(\"Invalid duration format\")\n        \n        number_str = text[start:i]\n        \n        # Check for leading zeros (except for \"0\")\n        if len(number_str) > 1 and number_str[0] == '0':\n            raise ValueError(\"Invalid duration format\")\n        \n        try:\n            number = int(number_str)\n        except ValueError:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Get the unit\n        if i >= len(text):\n            raise ValueError(\"Invalid duration format\")\n            \n        unit = text[i]\n        \n        # Validate unit\n        if unit not in units:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Check if unit was already used\n        if unit in used_units:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Check order (must be in descending order)\n        if result > 0:  # Not the first unit\n            prev_unit = None\n            for u in unit_order:\n                if u in used_units:\n                    prev_unit = u\n                elif u == unit:\n                    break\n            \n            if prev_unit and unit_order.index(unit) >= unit_order.index(prev_unit):\n                raise ValueError(\"Invalid duration format\")\n        \n        # Add to result\n        result += number * units[unit]\n        used_units.add(unit)\n        i += 1\n    \n    # Verify that we consumed the entire string\n    if i != len(text):\n        raise ValueError(\"Invalid duration format\")\n    \n    return result\n",
+            "new": "\"\"\"Compact duration parsing. See docs/TASK-DEV-1__spec__parse-duration.md.\"\"\"\n\n\ndef parse_duration(text):\n    \"\"\"Return the number of seconds in a compact duration string such as \"1h30m\".\"\"\"\n    # Check if input is a string\n    if not isinstance(text, str):\n        raise TypeError(\"parse_duration accepts str only\")\n    \n    # Strip leading and trailing whitespace\n    text = text.strip()\n    \n    # Check for empty string\n    if not text:\n        raise ValueError(\"Invalid duration format\")\n    \n    # Define unit mapping\n    units = {\n        'w': 604800,\n        'd': 86400,\n        'h': 3600,\n        'm': 60,\n        's': 1\n    }\n    \n    # Parse the string\n    result = 0\n    i = 0\n    used_units = set()\n    \n    # Keep track of last unit to ensure descending order\n    last_unit_index = -1\n    \n    while i < len(text):\n        # Find the number part (must be at least one digit)\n        start = i\n        while i < len(text) and text[i].isdigit():\n            i += 1\n        \n        if i == start:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Extract number and convert to int (this handles leading zeros automatically)\n        number_str = text[start:i]\n        number = int(number_str)\n        \n        # Get the unit\n        if i >= len(text):\n            raise ValueError(\"Invalid duration format\")\n            \n        unit = text[i]\n        \n        # Validate unit\n        if unit not in units:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Check if unit was already used\n        if unit in used_units:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Check order (must be in strictly descending unit order)\n        unit_index = ['w', 'd', 'h', 'm', 's'].index(unit)\n        if unit_index >= last_unit_index:\n            raise ValueError(\"Invalid duration format\")\n        \n        # Add to result\n        result += number * units[unit]\n        used_units.add(unit)\n        last_unit_index = unit_index\n        i += 1\n    \n    return result\n"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "python3 -m pytest tests/test_parse_duration.py -v"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "python3 -c \"from durations.parse import parse_duration; print(parse_duration('45s'))\""
+          },
+          "denied_or_errored": true
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "python3 -c \"\nimport sys\nsys.path.insert(0, '.')\nfrom durations.parse import parse_duration\ntry:\n    result = parse_duration('45s')\n    print('Result:', result)\nexcept Exception as e:\n    print('Error:', type(e).__name__, str(e))\n    import traceback\n    traceback.print_exc()\n\""
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "read_file",
+          "args": {
+            "path": "durations/parse.py"
+          },
+          "denied_or_errored": false
+        },
+        {
+          "name": "run_command",
+          "args": {
+            "command": "python3 -m pytest tests/test_parse_duration.py::test_valid_durations -v --tb=short"
+          },
+          "denied_or_errored": false
+        }
+      ]
+    }
+  ]
+}

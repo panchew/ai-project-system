@@ -1,0 +1,18 @@
+{
+  "workspace": "/tmp/claude-1000/-home-panchew-soft-dev-ai-project-system/7495013d-d596-4ef9-b0a7-8e744269fd63/scratchpad/dev-run2/e412-dev-workspace",
+  "directional_check": {
+    "tests_passed": 0,
+    "tests_total": 20
+  },
+  "tests_failed": 20,
+  "collection_errors": 0,
+  "pytest_summary": "20 failed in 0.02s",
+  "pytest_exit_code_recorded_not_scored": 1,
+  "files_changed_worktree": [],
+  "files_changed_count": 0,
+  "files_changed_excluded_run_exhaust": [
+    ".ai-project/artifacts/"
+  ],
+  "tests_modified": [],
+  "disqualified_for_editing_tests": false
+}

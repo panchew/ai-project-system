@@ -21,6 +21,17 @@ readonly SCRIPT_NAME="ai-project init"
 readonly DEFAULT_GOVERNANCE_SOURCE="https://github.com/panchew/ai-project-system"
 readonly DEFAULT_GOVERNANCE_VERSION="v2.0.0"
 
+# Where the governance submodule is installed inside a new project (E42.4, D4).
+# PSG §14B makes `.governance/` the normative path ("the submodule MUST be installed
+# at `.governance/`"), and the fleet follows it (M38: 8 of 11 projects; the three
+# exceptions are exactly the projects init created). The M38 escalation's finding —
+# "init hard-codes the path with no flag" — is disposed of deliberately: this remains
+# a hard-coded default, now named and documented, because deviating from the normative
+# path would manufacture non-conforming projects (a permissive path this milestone
+# closes). Every literal that used to say `governance` now derives from this constant,
+# and the agent source path (D1) is coupled to it — the two describe the same location.
+readonly GOVERNANCE_SUBMODULE_PATH=".governance"
+
 # Color codes for output
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
@@ -259,7 +270,7 @@ project:
 governance:
   source: $governance_source
   version: $governance_version
-  submodule_path: governance/
+  submodule_path: $GOVERNANCE_SUBMODULE_PATH/
 EOF
 )
   validate_ai_project_yml_content "$yml_content"
@@ -269,88 +280,93 @@ EOF
 
 add_governance_submodule() {
   local project_dir="$1" governance_source="$2" governance_version="$3"
+  local start_dir="$PWD"
   cd "$project_dir" || error "Failed to enter directory: $project_dir"
   info "Adding governance submodule (branch/ref: $governance_version)"
-  if ! git submodule add --branch "$governance_version" "$governance_source" governance > /dev/null 2>&1; then
+  if ! git submodule add --branch "$governance_version" "$governance_source" "$GOVERNANCE_SUBMODULE_PATH" > /dev/null 2>&1; then
     info "Primary add failed; attempting fallback add + manual checkout"
     # Fallback strategy:
-    # 1) Fresh clone at desired ref (tag/branch) into governance/
+    # 1) Fresh clone at desired ref (tag/branch) into $GOVERNANCE_SUBMODULE_PATH
     # 2) Adopt the cloned repo as a submodule with --force
-    rm -rf governance || true
+    rm -rf "$GOVERNANCE_SUBMODULE_PATH" || true
     # Try shallow clone at ref, else full fetch + checkout
-    if ! git clone --depth 1 --branch "$governance_version" "$governance_source" governance > /dev/null 2>&1; then
+    if ! git clone --depth 1 --branch "$governance_version" "$governance_source" "$GOVERNANCE_SUBMODULE_PATH" > /dev/null 2>&1; then
       info "Shallow clone failed; attempting full clone + checkout"
-      if ! git clone "$governance_source" governance > /dev/null 2>&1; then
+      if ! git clone "$governance_source" "$GOVERNANCE_SUBMODULE_PATH" > /dev/null 2>&1; then
         error "Failed to clone governance source $governance_source"
       fi
-      if ! git -C governance fetch --tags --quiet; then
+      if ! git -C "$GOVERNANCE_SUBMODULE_PATH" fetch --tags --quiet; then
         error "Failed to fetch tags for governance source"
       fi
-      if ! git -C governance checkout -q "$governance_version"; then
+      if ! git -C "$GOVERNANCE_SUBMODULE_PATH" checkout -q "$governance_version"; then
         error "Failed to checkout governance ref '$governance_version'"
       fi
     fi
     # Adopt as submodule (requires matching URL); force to accept existing path
-    if ! git submodule add -f "$governance_source" governance > /dev/null 2>&1; then
+    if ! git submodule add -f "$governance_source" "$GOVERNANCE_SUBMODULE_PATH" > /dev/null 2>&1; then
       error "Failed to register governance as a git submodule"
     fi
     # Persist desired branch/ref hint in .gitmodules for tooling parity
-    git config -f .gitmodules submodule.governance.branch "$governance_version" || true
+    git config -f .gitmodules "submodule.$GOVERNANCE_SUBMODULE_PATH.branch" "$governance_version" || true
   fi
   if ! git submodule update --init --recursive > /dev/null 2>&1; then
     error "Failed to initialize governance submodule"
   fi
-  if [[ ! -d "governance" ]] || [[ -z "$(ls -A governance 2>/dev/null)" ]]; then
+  if [[ ! -d "$GOVERNANCE_SUBMODULE_PATH" ]] || [[ -z "$(ls -A "$GOVERNANCE_SUBMODULE_PATH" 2>/dev/null)" ]]; then
     error "Governance submodule appears empty or missing after initialization"
   fi
-  cd - > /dev/null || error "Failed to return to previous directory"
+  cd "$start_dir" > /dev/null || error "Failed to return to previous directory"
   success "Governance submodule added and initialized"
 }
 
 init_git_repo() {
   local project_dir="$1" do_submodule="$2" governance_source="$3" governance_version="$4"
+  local start_dir="$PWD"
   cd "$project_dir" || error "Failed to enter directory: $project_dir"
   success "Initializing git repository"
   git init > /dev/null 2>&1 || error "Failed to initialize git repository"
   if [[ "$do_submodule" == true ]]; then
-    add_governance_submodule "." "$governance_source" "$governance_version"
+    add_governance_submodule "$project_dir" "$governance_source" "$governance_version"
   fi
   git add . > /dev/null 2>&1 || error "Failed to stage files with git"
   git commit -m "Initial project scaffold by ai-project init" > /dev/null 2>&1 || error "Failed to create initial git commit"
-  cd - > /dev/null || error "Failed to return to previous directory"
+  cd "$start_dir" > /dev/null || error "Failed to return to previous directory"
 }
 
 install_hq_agent() {
   # Install the HQ Chat agent file into the generated project.
-  # If the governance agent file is unavailable, create a stub placeholder.
+  # The source is the governance agent inside the cloned submodule. The submodule
+  # clones the WHOLE ai-project-system repository into $GOVERNANCE_SUBMODULE_PATH,
+  # so the agent resolves one level deeper than it would at the repo root:
+  #   $project_dir/$GOVERNANCE_SUBMODULE_PATH/governance/agents/governance.agent.md
+  # A missing source is an ERROR (E42.4, D2): no placeholder is manufactured.
   local project_dir="$1"
   local agents_dir="$project_dir/.ai-project/agents"
-  local src_file="$project_dir/governance/agents/governance.agent.md"
+  local src_file="$project_dir/$GOVERNANCE_SUBMODULE_PATH/governance/agents/governance.agent.md"
   local dest_file="$agents_dir/governance.agent.md"
 
   mkdir -p "$agents_dir" || error "Failed to create agents directory at $agents_dir"
 
-  if [[ -f "$src_file" ]]; then
-    cp -f "$src_file" "$dest_file" || error "Failed to copy HQ agent from governance"
-  else
-    # Create stub when governance agent is not yet available (e.g., during M8 work)
-    cat > "$dest_file" << 'EOF'
-# HQ Chat Agent
-
-This agent is under development in Milestone M8.
-
-For now, use this as a placeholder for the governance-aware HQ Chat agent.
-
-When M8 is complete, this file will be replaced with the full HQ agent implementation.
-EOF
+  if [[ ! -f "$src_file" ]]; then
+    error "Governance agent not found at $src_file; refusing to manufacture a placeholder"
   fi
 
-  # Basic validation: file exists, readable, non-empty, and starts with a Markdown header or frontmatter
+  # Validation (E42.4, D3) — on the SOURCE, before anything is written: a
+  # placeholder must not even land on the canonical path. Readable and non-empty
+  # are cheap sanity; the load-bearing assertion is the agent's identity marker —
+  # front-matter `name: hq` (the real agent carries it; the historical M8 stub had
+  # no front-matter and began with a header, so it cannot satisfy this check).
+  [[ -r "$src_file" ]] || error "Governance agent is not readable at $src_file"
+  [[ -s "$src_file" ]] || error "Governance agent is empty at $src_file"
+  if ! grep -Eq '^name:[[:space:]]+hq([[:space:]]|$)' "$src_file"; then
+    error "Governance agent at $src_file does not carry the governance agent identity (front-matter 'name: hq')"
+  fi
+
+  cp -f "$src_file" "$dest_file" || error "Failed to copy HQ agent from governance"
+
+  # Installed copy sanity: readable and non-empty.
   [[ -r "$dest_file" ]] || error "HQ agent file is not readable at $dest_file"
   [[ -s "$dest_file" ]] || error "HQ agent file is empty at $dest_file"
-  if ! head -n 1 "$dest_file" | grep -Eq '^(#|---)'; then
-    error "HQ agent file at $dest_file does not appear to contain valid Markdown header"
-  fi
 }
 
 # ============================================================================
@@ -382,6 +398,11 @@ main() {
 
   target_dir="${target_dir%/}"
   if [[ "$target_dir" != "." && "$target_dir" != "./" ]]; then target_dir="$target_dir/$project_name"; else target_dir="$project_name"; fi
+  # Resolve to an absolute path (E42.4). Every downstream helper treats $target_dir
+  # as the project root, and a relative path here breaks once git/submodule helpers
+  # change the working directory — the end-to-end run exposed that drift writing the
+  # agent into a nested <project>/<project>/ directory. Absolute from here on.
+  if [[ "$target_dir" != /* ]]; then target_dir="$PWD/$target_dir"; fi
 
   validate_project_name "$project_name"; success "Validating project name: $project_name"
   if [[ "$skip_git" == false ]]; then check_git_available; fi
@@ -404,13 +425,14 @@ main() {
 
   # If a git repo exists, include the agent file in the initial commit (amend) to keep history tidy
   if [[ "$skip_git" == false ]]; then
+    local start_dir="$PWD"
     cd "$target_dir" || error "Failed to enter directory: $target_dir"
     git add .ai-project/agents/governance.agent.md > /dev/null 2>&1 || error "Failed to stage HQ agent file"
     # Prefer amending the initial commit; if that fails (edge cases), fall back to a new commit
     if ! git commit --amend --no-edit > /dev/null 2>&1; then
       git commit -m "Add HQ agent file" > /dev/null 2>&1 || error "Failed to commit HQ agent file"
     fi
-    cd - > /dev/null || error "Failed to return to previous directory"
+    cd "$start_dir" > /dev/null || error "Failed to return to previous directory"
   fi
 
   echo ""
@@ -443,4 +465,10 @@ main() {
 # Entry Point
 # ============================================================================
 
-main "$@"
+# Run main only when executed, not when sourced (E42.4, D5). The inverted test in
+# tests/test_init_agent_path.py sources this script to exercise install_hq_agent
+# directly against a seeded submodule layout; without this guard, sourcing would
+# execute main.
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+  main "$@"
+fi

@@ -1,0 +1,527 @@
+{
+  "runid": "R30",
+  "opaque": true,
+  "model_string": "opencode/deepseek-v4-pro",
+  "packet": "packet-5-test-correctness.md",
+  "attempt": 2,
+  "audit_header_transmitted": false,
+  "no_tuning_applied": true,
+  "sampling": "vendor defaults, seed not fixed",
+  "credential_visibility": {
+    "XDG_DATA_HOME": "UNSET",
+    "XDG_CONFIG_HOME": "UNSET",
+    "credential_path_present": "/home/panchew/.local/share/opencode/auth.json",
+    "count_credentials": "NOT-READ"
+  },
+  "run": {
+    "exit": 0,
+    "stderr": "",
+    "elapsed_s": 91.901,
+    "finish_reason": "stop",
+    "tokens": {
+      "total": 26478,
+      "input": 579,
+      "output": 946,
+      "reasoning": 3131,
+      "cache": {
+        "write": 0,
+        "read": 21822
+      }
+    },
+    "cost": 0.01982733,
+    "response": "\n\n\n\n\n\n\n\n**Conclusion:** The test is red because of a false positive in `tests/test_starter_lint.py` \u2014 the reference flagged on line 111 is correct and deliberate, not a typo. The defect that should be changed is in the test, not in the starter document.\n\n## Reasons\n\n**1. What the test asserts, and its mechanism.**\n`test_no_branch_name_typos_in_starters` scans every `*epic-execution-chat-starter.md`, extracts every `milestone/M<n>` token via `BRANCH_RE = r\"milestone/M(\\d+)\\b\"`, and declares a token a typo unless it is either (a) a \"known milestone\" \u2014 derived strictly from starter filenames matching `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$` \u2014 or (b) a \"planned\" milestone: a number in the narrow window `(highest, highest + 10]`. Here `highest` is M41. `M1` fails both tests: it is *not* a known milestone (no `P1-M1-E*__epic-execution-chat-starter.md` exists \u2014 this repo's starter convention only begins at M9, so real milestones M1\u2013M8 are invisible to `known_milestones()`), and `M1` is *below* the frontier, so it can never satisfy the planned-milestone clause (which only admits numbers *above* the highest existing milestone). The guard can therefore only ever accept a below-frontier number if it happens to already be in the starter-derived set.\n\n**2. Is line 111 a mistake?** No. Two independent reasons it is legitimate, both surfaced in `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`:\n\n- The token describes the `footboard` repository's *own* `milestone/M1` branch. P10/E34.2's subject is bumping three *separate* repositories (`Getawayinsured2023`, `footboard`, `courtis`), each with its own governance numbering. A reference to another repository's branch is exactly what this cross-repo adoption epic exists to talk about, and the guard has no notion of a branch name belonging to a different repo.\n- M1 is also a *real milestone of this repository* (`P1-M1-E1.1__spec__\u2026` exists), just one that predates the starter-filename convention the detector keys on. So even absent the cross-repo aspect, the ground-truth derivation is incomplete.\n\nThe test's failure text (\"Fix the milestone number, likely a stray extra digit\") points at the wrong remedy: the digit is not stray, and the defect class the guard was built for (stray digits like M14\u2192M144, which land an order of magnitude *past* the frontier) is not present here.\n\n**3. What should be changed, in which file.** The bug lives in `tests/test_starter_lint.py`, not in the document. Two defects in the detector need fixing: (i) `known_milestones()` under-derives ground truth (starter filenames only, blind to M1\u2013M8 and other milestones without a starter file), and (ii) the guard cannot distinguish a foreign repo's branch reference from this repo's `milestone/M<n>`. The durable fixes are: widen the ground truth (derive known milestones from milestone specs/phase directories rather than starter filenames alone), and/or narrow the guard to its actual stated defect class (flag only references implausibly far past the frontier).\n\nNote on current state: my `git log`/`grep` shows the repo has *since* applied a document-level workaround \u2014 `P10-M34-E34.2__epic-execution-chat-starter.md` now reads \"`footboard` on its own `M1` milestone branch\" (with an inline \"Wording note \u2026 see P10-GH-6\"), so `milestone/M1` no longer appears and the suite is currently green. That is a workaround in one file, not a fix: any future cross-repo starter that names a target repo's `milestone/M<n>` below the frontier will fail the same way. The correct permanent change is to the test's detector logic, as recorded (without decision) in the P10-GH-6 carry-forward note.",
+    "event_count": 22,
+    "raw_events": [
+      {
+        "type": "step_start",
+        "timestamp": 1788293126325,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e9398b2001kbu05adD1ktjRm",
+          "messageID": "msg_05e938fab001pd1fBG7vogZIEM",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788293149961,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_db2708de8b2b4baa9457da34",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && find docs -name '*epic-execution-chat-starter.md' | sort"
+            },
+            "output": "docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.1__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.2__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.3__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.4__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.1__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.3__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.1__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.2__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.3__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.4__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.4__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37-E37.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37-E37.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.4__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.5__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.6__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M39-E39.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M39-E39.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M39-E39.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.4__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.5__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.1__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.2__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.3__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.4__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.5__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.1__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.2__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.3__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.4__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.1__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.2__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.3__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.4__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14-E14.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14-E14.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14-E14.3__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15-E15.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15-E15.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M16-E16.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M16-E16.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M17-E17.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M17-E17.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M18-E18.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M19-E19.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M19-E19.2__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.1__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.2__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.3__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.4__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.5__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M21-E21.1__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M21-E21.2__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M22-E22.1__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M22-E22.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M23-E23.1__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M23-E23.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M24-E24.1__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M24-E24.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.1__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.3__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.4__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.5__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.6__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.1__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.2__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.3__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M27-E27.1__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M27-E27.2__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M27-E27.3__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.1__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.2__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.3__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.4__epic-execution-chat-starter.md\ndocs/phases/P8__Visual_Artifacts_Activation/P8-M29-E29.1__epic-execution-chat-starter.md\ndocs/phases/P8__Visual_Artifacts_Activation/P8-M29-E29.2__epic-execution-chat-starter.md\ndocs/phases/P8__Visual_Artifacts_Activation/P8-M29-E29.3__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.1__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.2__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.3__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.4__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.1__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.1-PROVE__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2-PROVE__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.3__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M32-E32.1__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M32-E32.2__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M32-E32.3__epic-execution-chat-starter.md\ndocs/systems/epic-execution-chat-starter.md\n",
+            "metadata": {
+              "output": "docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.1__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.2__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.3__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M33-E33.4__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.1__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.3__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.1__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.2__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.3__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.4__epic-execution-chat-starter.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.4__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37-E37.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37-E37.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.4__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.5__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38-E38.6__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M39-E39.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M39-E39.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M39-E39.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.1__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.2__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.3__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.4__epic-execution-chat-starter.md\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M40-E40.5__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.1__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.2__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.3__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.4__epic-execution-chat-starter.md\ndocs/phases/P12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP/P12-M41-E41.5__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.1__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.2__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.3__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M10-E10.4__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.1__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.2__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.3__epic-execution-chat-starter.md\ndocs/phases/P2__Adoption_Architecture_and_Multi_Project_Support/P2-M9-E9.4__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14-E14.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14-E14.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M14-E14.3__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15-E15.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M15-E15.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M16-E16.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M16-E16.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M17-E17.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M17-E17.2__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M18-E18.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M19-E19.1__epic-execution-chat-starter.md\ndocs/phases/P4__Team_Collaboration_and_Artifact_Driven_Communication/P4-M19-E19.2__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.1__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.2__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.3__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.4__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M20-E20.5__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M21-E21.1__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M21-E21.2__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M22-E22.1__epic-execution-chat-starter.md\ndocs/phases/P5__Process_Hardening_and_Visual_Artifacts/P5-M22-E22.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M23-E23.1__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M23-E23.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M24-E24.1__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M24-E24.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.1__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.2__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.3__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.4__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.5__epic-execution-chat-starter.md\ndocs/phases/P6__Visual_Comprehension_Layer_and_Process_Refinements/P6-M25-E25.6__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.1__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.2__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M26-E26.3__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M27-E27.1__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M27-E27.2__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M27-E27.3__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.1__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.2__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.3__epic-execution-chat-starter.md\ndocs/phases/P7__Agentic_Execution_and_Default_On_Visuals/P7-M28-E28.4__epic-execution-chat-starter.md\ndocs/phases/P8__Visual_Artifacts_Activation/P8-M29-E29.1__epic-execution-chat-starter.md\ndocs/phases/P8__Visual_Artifacts_Activation/P8-M29-E29.2__epic-execution-chat-starter.md\ndocs/phases/P8__Visual_Artifacts_Activation/P8-M29-E29.3__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.1__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.2__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.3__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M30-E30.4__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.1__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.1-PROVE__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.2-PROVE__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M31-E31.3__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M32-E32.1__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M32-E32.2__epic-execution-chat-starter.md\ndocs/phases/P9__Context_Handling_and_Token_Efficiency/P9-M32-E32.3__epic-execution-chat-starter.md\ndocs/systems/epic-execution-chat-starter.md\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && find docs -name '*epic-execution-chat-starter.md' | sort",
+            "time": {
+              "start": 1788293149955,
+              "end": 1788293149959
+            }
+          },
+          "id": "prt_05e93f39c0011IY2T4TeY8lKD9",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "messageID": "msg_05e938fab001pd1fBG7vogZIEM"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788293150394,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_20e597d10fd242b2a4c8c9e0",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/"
+            },
+            "output": "P10-M33-E33.1__confirmation-evidence.md\nP10-M33-E33.1__delivery-notice.md\nP10-M33-E33.1__epic-execution-chat-starter.md\nP10-M33-E33.1__spec__v7-bump-procedure-and-apply-to-pair.md\nP10-M33-E33.2__delivery-notice.md\nP10-M33-E33.2__epic-execution-chat-starter.md\nP10-M33-E33.2__runtime-decision.md\nP10-M33-E33.2__spec__first-real-agentic-local-epic-and-runtime-decision.md\nP10-M33-E33.3__delivery-notice.md\nP10-M33-E33.3__epic-execution-chat-starter.md\nP10-M33-E33.3__spec__trustworthy-measurement-out-of-the-run.md\nP10-M33-E33.4__delivery-notice.md\nP10-M33-E33.4__epic-execution-chat-starter.md\nP10-M33-E33.4__spec__home-finance-real-agentic-local-epic.md\nP10-M33__milestone-execution-chat-starter.md\nP10-M33__milestone-spec.md\nP10-M34-E34.1__confirmation-evidence.md\nP10-M34-E34.1__delivery-notice.md\nP10-M34-E34.1__epic-execution-chat-starter.md\nP10-M34-E34.1__spec__mcp-superseded-agent-fix-and-v7-bump.md\nP10-M34-E34.2__confirmation-evidence.md\nP10-M34-E34.2__delivery-notice.md\nP10-M34-E34.2__epic-execution-chat-starter.md\nP10-M34-E34.2__roll-forward-roadmap.md\nP10-M34-E34.2__spec__dormant-project-roadmap-and-roll-forward.md\nP10-M34-E34.3__carry-forward-note.md\nP10-M34-E34.3__delivery-notice.md\nP10-M34-E34.3__epic-execution-chat-starter.md\nP10-M34-E34.3__spec__apply-settled-runtime-choice-models-routing.md\nP10-M34__carry-forward-note__P10-GH-4-delivery-notice-merge-details.md\nP10-M34__carry-forward-note__P10-GH-5-unenforced-yml-validation.md\nP10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\nP10-M34__milestone-execution-chat-starter.md\nP10-M34__milestone-spec.md\nP10-M35-E35.1__delivery-notice.md\nP10-M35-E35.1__epic-execution-chat-starter.md\nP10-M35-E35.1__spec__fleet-operator-role-and-no-authority-seam.md\nP10-M35-E35.2__delivery-notice.md\nP10-M35-E35.2__epic-execution-chat-starter.md\nP10-M35-E35.2__spec__operator-standing-brief.md\nP10-M35-E35.3__delivery-notice.md\nP10-M35-E35.3__epic-execution-chat-starter.md\nP10-M35-E35.3__spec__handback-one-level-escalation-and-creation-chat-awareness.md\nP10-M35-E35.4__delivery-notice.md\nP10-M35-E35.4__epic-execution-chat-starter.md\nP10-M35-E35.4__spec__execution-matrix-ratification-and-mode-is-not-authority.md\nP10-M35-E35.5__delivery-notice.md\nP10-M35-E35.5__epic-execution-chat-starter.md\nP10-M35-E35.5__spec__milestone-local-inference-backtest.md\nP10-M35__carry-forward-note__P10-GH-10-flaky-artifact-router-test.md\nP10-M35__carry-forward-note__P10-GH-8-unversioned-system-documents.md\nP10-M35__carry-forward-note__P10-GH-9-agentic-parents-default-accept-and-p9-gh-1.md\nP10-M35__milestone-execution-chat-starter.md\nP10-M35__milestone-spec.md\nP10__phase-closure-declaration.md\nP10__phase-execution-chat-starter.md\nP10__phase-spec.md\n",
+            "metadata": {
+              "output": "P10-M33-E33.1__confirmation-evidence.md\nP10-M33-E33.1__delivery-notice.md\nP10-M33-E33.1__epic-execution-chat-starter.md\nP10-M33-E33.1__spec__v7-bump-procedure-and-apply-to-pair.md\nP10-M33-E33.2__delivery-notice.md\nP10-M33-E33.2__epic-execution-chat-starter.md\nP10-M33-E33.2__runtime-decision.md\nP10-M33-E33.2__spec__first-real-agentic-local-epic-and-runtime-decision.md\nP10-M33-E33.3__delivery-notice.md\nP10-M33-E33.3__epic-execution-chat-starter.md\nP10-M33-E33.3__spec__trustworthy-measurement-out-of-the-run.md\nP10-M33-E33.4__delivery-notice.md\nP10-M33-E33.4__epic-execution-chat-starter.md\nP10-M33-E33.4__spec__home-finance-real-agentic-local-epic.md\nP10-M33__milestone-execution-chat-starter.md\nP10-M33__milestone-spec.md\nP10-M34-E34.1__confirmation-evidence.md\nP10-M34-E34.1__delivery-notice.md\nP10-M34-E34.1__epic-execution-chat-starter.md\nP10-M34-E34.1__spec__mcp-superseded-agent-fix-and-v7-bump.md\nP10-M34-E34.2__confirmation-evidence.md\nP10-M34-E34.2__delivery-notice.md\nP10-M34-E34.2__epic-execution-chat-starter.md\nP10-M34-E34.2__roll-forward-roadmap.md\nP10-M34-E34.2__spec__dormant-project-roadmap-and-roll-forward.md\nP10-M34-E34.3__carry-forward-note.md\nP10-M34-E34.3__delivery-notice.md\nP10-M34-E34.3__epic-execution-chat-starter.md\nP10-M34-E34.3__spec__apply-settled-runtime-choice-models-routing.md\nP10-M34__carry-forward-note__P10-GH-4-delivery-notice-merge-details.md\nP10-M34__carry-forward-note__P10-GH-5-unenforced-yml-validation.md\nP10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\nP10-M34__milestone-execution-chat-starter.md\nP10-M34__milestone-spec.md\nP10-M35-E35.1__delivery-notice.md\nP10-M35-E35.1__epic-execution-chat-starter.md\nP10-M35-E35.1__spec__fleet-operator-role-and-no-authority-seam.md\nP10-M35-E35.2__delivery-notice.md\nP10-M35-E35.2__epic-execution-chat-starter.md\nP10-M35-E35.2__spec__operator-standing-brief.md\nP10-M35-E35.3__delivery-notice.md\nP10-M35-E35.3__epic-execution-chat-starter.md\nP10-M35-E35.3__spec__handback-one-level-escalation-and-creation-chat-awareness.md\nP10-M35-E35.4__delivery-notice.md\nP10-M35-E35.4__epic-execution-chat-starter.md\nP10-M35-E35.4__spec__execution-matrix-ratification-and-mode-is-not-authority.md\nP10-M35-E35.5__delivery-notice.md\nP10-M35-E35.5__epic-execution-chat-starter.md\nP10-M35-E35.5__spec__milestone-local-inference-backtest.md\nP10-M35__carry-forward-note__P10-GH-10-flaky-artifact-router-test.md\nP10-M35__carry-forward-note__P10-GH-8-unversioned-system-documents.md\nP10-M35__carry-forward-note__P10-GH-9-agentic-parents-default-accept-and-p9-gh-1.md\nP10-M35__milestone-execution-chat-starter.md\nP10-M35__milestone-spec.md\nP10__phase-closure-declaration.md\nP10__phase-execution-chat-starter.md\nP10__phase-spec.md\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/",
+            "time": {
+              "start": 1788293150391,
+              "end": 1788293150393
+            }
+          },
+          "id": "prt_05e93f535001sKNnPftc461Okc",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "messageID": "msg_05e938fab001pd1fBG7vogZIEM"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788293150457,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e93f361001h75zEW42fpNXb2",
+          "messageID": "msg_05e938fab001pd1fBG7vogZIEM",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "text",
+          "text": "\n\n",
+          "time": {
+            "start": 1788293149537,
+            "end": 1788293150454
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788293150470,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e93f703001oOBA1oyP2TbXSv",
+          "reason": "tool-calls",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "messageID": "msg_05e938fab001pd1fBG7vogZIEM",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "step-finish",
+          "tokens": {
+            "total": 13683,
+            "input": 11632,
+            "output": 139,
+            "reasoning": 1899,
+            "cache": {
+              "write": 0,
+              "read": 13
+            }
+          },
+          "cost": 0.028067485
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788293151886,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e93fc8b0011T1ZgZCaN1JebU",
+          "messageID": "msg_05e93f70d001A0JD1484hb0s3E",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788293153281,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "type": "tool",
+          "tool": "read",
+          "callID": "call_71fcf6f42af64c6fbcc9e542",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "/home/panchew/soft-dev/ai-project-system/docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md"
+            },
+            "output": "<path>/home/panchew/soft-dev/ai-project-system/docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md</path>\n<type>file</type>\n<content>\n1: ---\n2: project: ai-project-system\n3: phase: P10\n4: milestone: M34\n5: type: note\n6: status: active\n7: issuer_chat: Epic Execution Chat (P10-M34-E34.2)\n8: issued_to: Milestone Chat (P10-M34) \u2192 Phase Chat (P10)\n9: last_updated: 2026-07-29\n10: ---\n11: \n12: # Carry-Forward Note \u2014 P10-GH-6: the Epic-starter lint flags real milestones as typos\n13: \n14: **Recorded, not fixed.** Changing `tests/test_starter_lint.py` is a framework *capability* change, and\n15: the bump procedure's Failure Mode 4 already establishes that framework-repo changes are **out of scope\n16: for adoption epics**. E34.2 worked around it in its own document and filed this instead.\n17: \n18: **Origin:** found during E34.2's Prerequisite Verification. The Epic spec and starter both state the\n19: suite baseline is **366 / 0 / 0**. It was actually **365 passed / 1 failed / 0 skipped** on\n20: `milestone/M34` before any E34.2 work \u2014 and the failing test was triggered by E34.2's *own* starter,\n21: committed in `973a7f5`.\n22: \n23: ---\n24: \n25: ## The finding\n26: \n27: ```\n28: E           Failed: Milestone branch-name typo(s) detected in Epic starters:\n29: E             docs/phases/P10__.../P10-M34-E34.2__epic-execution-chat-starter.md:111 -> milestone/M1 (not a known milestone)\n30: E           Fix the milestone number (likely a stray extra digit).\n31: ```\n32: \n33: The flagged reference is **not a typo**, and `milestone/M1` is **not a fake milestone**. Two\n34: independent reasons the guard is wrong here:\n35: \n36: 1. **M1 is a real milestone of this repo.** `docs/phases/P1__.../P1-M1-E1.1__spec__project-tracker-integration-system.md`\n37:    and its completion record both exist. But `known_milestones()` derives the set of real milestones\n38:    **exclusively from Epic-starter filenames** matching\n39:    `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$`. This repo has no M1 *starter* file, so\n40:    **every milestone that predates the starter naming convention is invisible to the guard.** The\n41:    lowest milestone it can see is M9; M1\u2013M8 are all unrepresentable.\n42: 2. **The reference was to another repository's branch.** Line 111 described `footboard` sitting on its\n43:    own `milestone/M1` branch \u2014 a target-repo fact, which is exactly the subject matter of a\n44:    cross-repo adoption epic. The guard has no notion of a branch name belonging to a different repo.\n45: \n46: The guard's own docstring scopes it to a specific defect class: a **stray extra digit** (`M14` \u2192\n47: `M144`, `M17` \u2192 `M147`), which always lands an order of magnitude past the milestone frontier. A\n48: reference to a small, real, *below-frontier* number is not that class, and the acceptance logic\n49: (`highest < int(num) <= highest + 10`) only ever admits numbers **above** the frontier \u2014 so a\n50: below-frontier unknown can never pass.\n51: \n52: ## Why it matters beyond one line of Markdown\n53: \n54: - **It misreports the baseline.** M34's epic specs state a 366/0/0 baseline that has been false since\n55:   `973a7f5`. Any epic that trusts a stated baseline instead of measuring it will either report a green\n56:   suite it never saw, or attribute a pre-existing red to its own work. E34.2 measured, which is the\n57:   only reason it was caught.\n58: - **It penalizes cross-repo epics specifically.** P10 is a *fleet adoption* phase: its epics exist to\n59:   talk about other repositories' branches. A guard that treats another repo's branch name as a typo in\n60:   this repo will keep firing for as long as the phase's subject matter is the fleet.\n61: - **The fix is not obviously \"loosen it\".** Simply accepting all below-frontier numbers would blunt the\n62:   guard for genuine mistakes. The interesting question is whether the ground truth should come from\n63:   something better than starter filenames \u2014 `docs/phases/*/` directory contents, milestone specs, or\n64:   an explicit registry \u2014 which is a design call above this level.\n65: \n66: ## Candidate directions (not decided here)\n67: \n68: 1. **Widen the ground truth.** Derive known milestones from milestone specs or phase directories, not\n69:    starter filenames alone. Fixes reason 1 and needs no new convention; does nothing for reason 2.\n70: 2. **Teach the guard about cross-repo references** \u2014 e.g. skip a match when the line also names a\n71:    known fleet project, or honor an explicit inline marker. Fixes reason 2; adds a convention.\n72: 3. **Narrow the guard to its stated defect class.** Flag only references implausibly far past the\n73:    frontier (which is all the docstring ever claimed to catch). Simplest, and it keeps the teeth for\n74:    stray-digit typos; accepts that a wrong-but-plausible milestone number goes uncaught.\n75: 4. **Leave it and document the workaround.** Cheapest, but the trap re-arms for the next cross-repo\n76:    epic, and the false baseline in the specs stays wrong.\n77: \n78: **No recommendation from this level** \u2014 this is a framework capability judgment, and option 1 vs 3 is a\n79: question about what the guard is *for*, which belongs to whoever owns the test.\n80: \n81: ## What E34.2 did instead\n82: \n83: Reworded its own starter so the sentence no longer emits the literal `milestone/M<n>` token \u2014\n84: `footboard`'s branch is now described as \"its own `M1` milestone branch\", with an inline note pointing\n85: here. **The branch in `footboard` is unchanged; only the phrasing in this repo is.** No test, no spec,\n86: and no other starter was touched. Suite afterwards: **366 passed, 0 failed, 0 skipped.**\n87: \n88: This is a workaround in one document, not a fix \u2014 the next Epic starter that needs to name a target\n89: repo's milestone branch will hit the same wall.\n90: \n91: ## Explicitly not done here\n92: \n93: - `tests/test_starter_lint.py` **not modified** \u2014 no loosened regex, no new allowlist, no changed\n94:   lookahead.\n95: - The stale 366/0/0 baseline claims in the E34.2 spec/starter and the M34 milestone spec are **not**\n96:   rewritten; the true measured baseline is recorded in\n97:   `P10-M34-E34.2__confirmation-evidence.md` instead.\n98: - No other starter was audited for the same latent trigger. Any starter referencing `milestone/M1`\n99:   through `milestone/M8` would fail the same way; **only E34.2's was in the failing set**, so no\n100:   sweep was performed.\n101: - No renumbering of P10-GH-1 (`framework_version` unschema'd), P10-GH-2 (Creation Seed lacks E31.3\n102:   verification), P10-GH-3 (policy row P1 vs live config), P10-GH-4 (`delivery_notice.merge_details`\n103:   unfillable), or P10-GH-5 (yml validation rules unenforced). This is **P10-GH-6**.\n104: \n105:   > **Amendment 2026-08-04 (P11-M36-E36.5) \u2014 the parenthetical gloss of P10-GH-2 above restates a\n106:   > false premise.** The original text is left unedited, deliberately. `governance/templates/seed.md`\n107:   > has carried the E31.3 check since **`d7ee7cd` (2026-07-19)**, nine days before the ruling that\n108:   > filed the gap. The real defect was `creation-chat-guide.md`'s re-instantiation ritual, and\n109:   > **E36.3 (merged `d8f4871`) has closed it.** Per **SN-26** (Required action 1) and **HQ Ruling\n110:   > 2026-08-01, Decision 8**.\n111:   >\n112:   > **This amendment corrects the gloss only.** It renumbers nothing, reopens nothing, and leaves\n113:   > this note's P10-GH-6 subject matter entirely untouched.\n\n(End of file - total 113 lines)\n</content>",
+            "metadata": {
+              "preview": "---\nproject: ai-project-system\nphase: P10\nmilestone: M34\ntype: note\nstatus: active\nissuer_chat: Epic Execution Chat (P10-M34-E34.2)\nissued_to: Milestone Chat (P10-M34) \u2192 Phase Chat (P10)\nlast_updated: 2026-07-29\n---\n\n# Carry-Forward Note \u2014 P10-GH-6: the Epic-starter lint flags real milestones as typos\n\n**Recorded, not fixed.** Changing `tests/test_starter_lint.py` is a framework *capability* change, and\nthe bump procedure's Failure Mode 4 already establishes that framework-repo changes are **out of scope\nfor adoption epics**. E34.2 worked around it in its own document and filed this instead.\n\n**Origin:** found during E34.2's Prerequisite Verification. The Epic spec and starter both state the\nsuite baseline is **366 / 0 / 0**. It was actually **365 passed / 1 failed / 0 skipped** on\n`milestone/M34` before any E34.2 work \u2014 and the failing test was triggered by E34.2's *own* starter,",
+              "truncated": false,
+              "loaded": [],
+              "display": {
+                "type": "file",
+                "path": "/home/panchew/soft-dev/ai-project-system/docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md",
+                "text": "---\nproject: ai-project-system\nphase: P10\nmilestone: M34\ntype: note\nstatus: active\nissuer_chat: Epic Execution Chat (P10-M34-E34.2)\nissued_to: Milestone Chat (P10-M34) \u2192 Phase Chat (P10)\nlast_updated: 2026-07-29\n---\n\n# Carry-Forward Note \u2014 P10-GH-6: the Epic-starter lint flags real milestones as typos\n\n**Recorded, not fixed.** Changing `tests/test_starter_lint.py` is a framework *capability* change, and\nthe bump procedure's Failure Mode 4 already establishes that framework-repo changes are **out of scope\nfor adoption epics**. E34.2 worked around it in its own document and filed this instead.\n\n**Origin:** found during E34.2's Prerequisite Verification. The Epic spec and starter both state the\nsuite baseline is **366 / 0 / 0**. It was actually **365 passed / 1 failed / 0 skipped** on\n`milestone/M34` before any E34.2 work \u2014 and the failing test was triggered by E34.2's *own* starter,\ncommitted in `973a7f5`.\n\n---\n\n## The finding\n\n```\nE           Failed: Milestone branch-name typo(s) detected in Epic starters:\nE             docs/phases/P10__.../P10-M34-E34.2__epic-execution-chat-starter.md:111 -> milestone/M1 (not a known milestone)\nE           Fix the milestone number (likely a stray extra digit).\n```\n\nThe flagged reference is **not a typo**, and `milestone/M1` is **not a fake milestone**. Two\nindependent reasons the guard is wrong here:\n\n1. **M1 is a real milestone of this repo.** `docs/phases/P1__.../P1-M1-E1.1__spec__project-tracker-integration-system.md`\n   and its completion record both exist. But `known_milestones()` derives the set of real milestones\n   **exclusively from Epic-starter filenames** matching\n   `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$`. This repo has no M1 *starter* file, so\n   **every milestone that predates the starter naming convention is invisible to the guard.** The\n   lowest milestone it can see is M9; M1\u2013M8 are all unrepresentable.\n2. **The reference was to another repository's branch.** Line 111 described `footboard` sitting on its\n   own `milestone/M1` branch \u2014 a target-repo fact, which is exactly the subject matter of a\n   cross-repo adoption epic. The guard has no notion of a branch name belonging to a different repo.\n\nThe guard's own docstring scopes it to a specific defect class: a **stray extra digit** (`M14` \u2192\n`M144`, `M17` \u2192 `M147`), which always lands an order of magnitude past the milestone frontier. A\nreference to a small, real, *below-frontier* number is not that class, and the acceptance logic\n(`highest < int(num) <= highest + 10`) only ever admits numbers **above** the frontier \u2014 so a\nbelow-frontier unknown can never pass.\n\n## Why it matters beyond one line of Markdown\n\n- **It misreports the baseline.** M34's epic specs state a 366/0/0 baseline that has been false since\n  `973a7f5`. Any epic that trusts a stated baseline instead of measuring it will either report a green\n  suite it never saw, or attribute a pre-existing red to its own work. E34.2 measured, which is the\n  only reason it was caught.\n- **It penalizes cross-repo epics specifically.** P10 is a *fleet adoption* phase: its epics exist to\n  talk about other repositories' branches. A guard that treats another repo's branch name as a typo in\n  this repo will keep firing for as long as the phase's subject matter is the fleet.\n- **The fix is not obviously \"loosen it\".** Simply accepting all below-frontier numbers would blunt the\n  guard for genuine mistakes. The interesting question is whether the ground truth should come from\n  something better than starter filenames \u2014 `docs/phases/*/` directory contents, milestone specs, or\n  an explicit registry \u2014 which is a design call above this level.\n\n## Candidate directions (not decided here)\n\n1. **Widen the ground truth.** Derive known milestones from milestone specs or phase directories, not\n   starter filenames alone. Fixes reason 1 and needs no new convention; does nothing for reason 2.\n2. **Teach the guard about cross-repo references** \u2014 e.g. skip a match when the line also names a\n   known fleet project, or honor an explicit inline marker. Fixes reason 2; adds a convention.\n3. **Narrow the guard to its stated defect class.** Flag only references implausibly far past the\n   frontier (which is all the docstring ever claimed to catch). Simplest, and it keeps the teeth for\n   stray-digit typos; accepts that a wrong-but-plausible milestone number goes uncaught.\n4. **Leave it and document the workaround.** Cheapest, but the trap re-arms for the next cross-repo\n   epic, and the false baseline in the specs stays wrong.\n\n**No recommendation from this level** \u2014 this is a framework capability judgment, and option 1 vs 3 is a\nquestion about what the guard is *for*, which belongs to whoever owns the test.\n\n## What E34.2 did instead\n\nReworded its own starter so the sentence no longer emits the literal `milestone/M<n>` token \u2014\n`footboard`'s branch is now described as \"its own `M1` milestone branch\", with an inline note pointing\nhere. **The branch in `footboard` is unchanged; only the phrasing in this repo is.** No test, no spec,\nand no other starter was touched. Suite afterwards: **366 passed, 0 failed, 0 skipped.**\n\nThis is a workaround in one document, not a fix \u2014 the next Epic starter that needs to name a target\nrepo's milestone branch will hit the same wall.\n\n## Explicitly not done here\n\n- `tests/test_starter_lint.py` **not modified** \u2014 no loosened regex, no new allowlist, no changed\n  lookahead.\n- The stale 366/0/0 baseline claims in the E34.2 spec/starter and the M34 milestone spec are **not**\n  rewritten; the true measured baseline is recorded in\n  `P10-M34-E34.2__confirmation-evidence.md` instead.\n- No other starter was audited for the same latent trigger. Any starter referencing `milestone/M1`\n  through `milestone/M8` would fail the same way; **only E34.2's was in the failing set**, so no\n  sweep was performed.\n- No renumbering of P10-GH-1 (`framework_version` unschema'd), P10-GH-2 (Creation Seed lacks E31.3\n  verification), P10-GH-3 (policy row P1 vs live config), P10-GH-4 (`delivery_notice.merge_details`\n  unfillable), or P10-GH-5 (yml validation rules unenforced). This is **P10-GH-6**.\n\n  > **Amendment 2026-08-04 (P11-M36-E36.5) \u2014 the parenthetical gloss of P10-GH-2 above restates a\n  > false premise.** The original text is left unedited, deliberately. `governance/templates/seed.md`\n  > has carried the E31.3 check since **`d7ee7cd` (2026-07-19)**, nine days before the ruling that\n  > filed the gap. The real defect was `creation-chat-guide.md`'s re-instantiation ritual, and\n  > **E36.3 (merged `d8f4871`) has closed it.** Per **SN-26** (Required action 1) and **HQ Ruling\n  > 2026-08-01, Decision 8**.\n  >\n  > **This amendment corrects the gloss only.** It renumbers nothing, reopens nothing, and leaves\n  > this note's P10-GH-6 subject matter entirely untouched.",
+                "lineStart": 1,
+                "lineEnd": 113,
+                "totalLines": 113,
+                "truncated": false
+              }
+            },
+            "title": "docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md",
+            "time": {
+              "start": 1788293153274,
+              "end": 1788293153279
+            }
+          },
+          "id": "prt_05e93ffdd0015izXtkbxl1fmsm",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "messageID": "msg_05e93f70d001A0JD1484hb0s3E"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788293153676,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_47f4200245974bcca23b68c0",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/P1__System_Foundation_and_Adoption/ | grep -i starter"
+            },
+            "output": "P1-M5-E5.4__completion__epic-execution-chat-starter-format.md\nP1-M5-E5.4__delivery-notice__epic-execution-chat-starter-format.md\nP1-M5-E5.4__spec__epic-execution-chat-starter-format.md\n",
+            "metadata": {
+              "output": "P1-M5-E5.4__completion__epic-execution-chat-starter-format.md\nP1-M5-E5.4__delivery-notice__epic-execution-chat-starter-format.md\nP1-M5-E5.4__spec__epic-execution-chat-starter-format.md\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/P1__System_Foundation_and_Adoption/ | grep -i starter",
+            "time": {
+              "start": 1788293153673,
+              "end": 1788293153675
+            }
+          },
+          "id": "prt_05e940219001jWC1rUiTkYk9ir",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "messageID": "msg_05e93f70d001A0JD1484hb0s3E"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788293153863,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e93ff4a0014W4olxGwxorM8D",
+          "messageID": "msg_05e93f70d001A0JD1484hb0s3E",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "text",
+          "text": "\n\n",
+          "time": {
+            "start": 1788293152586,
+            "end": 1788293153861
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788293153874,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e94044f001qAIXuKJD0brdhS",
+          "reason": "tool-calls",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "messageID": "msg_05e93f70d001A0JD1484hb0s3E",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "step-finish",
+          "tokens": {
+            "total": 18765,
+            "input": 6910,
+            "output": 165,
+            "reasoning": 46,
+            "cache": {
+              "write": 0,
+              "read": 11644
+            }
+          },
+          "cost": 0.01452202
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788293155653,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e940b43001wtgStifYGUsSui",
+          "messageID": "msg_05e940457001U4nV74uja5NTdg",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788293159120,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "type": "tool",
+          "tool": "read",
+          "callID": "call_51c22c20f55f4f54882545e9",
+          "state": {
+            "status": "completed",
+            "input": {
+              "filePath": "/home/panchew/soft-dev/ai-project-system/docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md",
+              "offset": 100,
+              "limit": 20
+            },
+            "output": "<path>/home/panchew/soft-dev/ai-project-system/docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md</path>\n<type>file</type>\n<content>\n100: \n101: ---\n102: \n103: ## Execution Contract\n104: \n105: ### Your Responsibilities (Coding Agent)\n106: \n107: 1. **Create branch** `epic/P10-M34-E34.2` from `milestone/M34` (in **this** repo).\n108: 2. **Run Prerequisite Verification**; record every result including all three pre-states.\n109: 3. **Decide and document the branch base** for each target (spec Judgment call 1). Two projects sit\n110:    on non-default branches mid-governance-work \u2014 `Getawayinsured2023` on `phase/P1`, `footboard` on\n111:    its own `M1` milestone branch. Recommendation is to branch from the default branch so the bump is\n112:    independently publishable. **State your choice and reasoning per project.**\n113: \n114:    > Wording note (E34.2 execution, 2026-07-29): `footboard`'s branch is named here without the\n115:    > literal `milestone/M<n>` token because `tests/test_starter_lint.py` false-positives on it \u2014\n116:    > see **P10-GH-6**. The branch in `footboard` is unchanged; only this sentence's phrasing is.\n117: 4. **`Getawayinsured2023` \u2014 stamp only.** Its submodule is already at v7.0.0 and its agent sha is\n118:    already canonical. **Re-run the FM3 agent-freshness check and record that it passed** (it is the\n119:    only fleet project where FM3 does not bite \u2014 that is worth recording, not skipping). Add\n\n(Showing lines 100-119 of 220. Use offset=120 to continue.)\n</content>",
+            "metadata": {
+              "preview": "\n---\n\n## Execution Contract\n\n### Your Responsibilities (Coding Agent)\n\n1. **Create branch** `epic/P10-M34-E34.2` from `milestone/M34` (in **this** repo).\n2. **Run Prerequisite Verification**; record every result including all three pre-states.\n3. **Decide and document the branch base** for each target (spec Judgment call 1). Two projects sit\n   on non-default branches mid-governance-work \u2014 `Getawayinsured2023` on `phase/P1`, `footboard` on\n   its own `M1` milestone branch. Recommendation is to branch from the default branch so the bump is\n   independently publishable. **State your choice and reasoning per project.**\n\n   > Wording note (E34.2 execution, 2026-07-29): `footboard`'s branch is named here without the\n   > literal `milestone/M<n>` token because `tests/test_starter_lint.py` false-positives on it \u2014\n   > see **P10-GH-6**. The branch in `footboard` is unchanged; only this sentence's phrasing is.\n4. **`Getawayinsured2023` \u2014 stamp only.** Its submodule is already at v7.0.0 and its agent sha is\n   already canonical. **Re-run the FM3 agent-freshness check and record that it passed** (it is the\n   only fleet project where FM3 does not bite \u2014 that is worth recording, not skipping). Add",
+              "truncated": true,
+              "loaded": [],
+              "display": {
+                "type": "file",
+                "path": "/home/panchew/soft-dev/ai-project-system/docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md",
+                "text": "\n---\n\n## Execution Contract\n\n### Your Responsibilities (Coding Agent)\n\n1. **Create branch** `epic/P10-M34-E34.2` from `milestone/M34` (in **this** repo).\n2. **Run Prerequisite Verification**; record every result including all three pre-states.\n3. **Decide and document the branch base** for each target (spec Judgment call 1). Two projects sit\n   on non-default branches mid-governance-work \u2014 `Getawayinsured2023` on `phase/P1`, `footboard` on\n   its own `M1` milestone branch. Recommendation is to branch from the default branch so the bump is\n   independently publishable. **State your choice and reasoning per project.**\n\n   > Wording note (E34.2 execution, 2026-07-29): `footboard`'s branch is named here without the\n   > literal `milestone/M<n>` token because `tests/test_starter_lint.py` false-positives on it \u2014\n   > see **P10-GH-6**. The branch in `footboard` is unchanged; only this sentence's phrasing is.\n4. **`Getawayinsured2023` \u2014 stamp only.** Its submodule is already at v7.0.0 and its agent sha is\n   already canonical. **Re-run the FM3 agent-freshness check and record that it passed** (it is the\n   only fleet project where FM3 does not bite \u2014 that is worth recording, not skipping). Add",
+                "lineStart": 100,
+                "lineEnd": 119,
+                "totalLines": 220,
+                "truncated": true
+              }
+            },
+            "title": "docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md",
+            "time": {
+              "start": 1788293159116,
+              "end": 1788293159119
+            }
+          },
+          "id": "prt_05e9415e7001jsvQvzbN473GHk",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "messageID": "msg_05e940457001U4nV74uja5NTdg"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788293159189,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e94159d0017QI0zlqVdWOHuj",
+          "messageID": "msg_05e940457001U4nV74uja5NTdg",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "text",
+          "text": "\n\n",
+          "time": {
+            "start": 1788293158301,
+            "end": 1788293159187
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788293159195,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e941919001aTq3TgxztJJnMq",
+          "reason": "tool-calls",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "messageID": "msg_05e940457001U4nV74uja5NTdg",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "step-finish",
+          "tokens": {
+            "total": 21355,
+            "input": 2478,
+            "output": 126,
+            "reasoning": 198,
+            "cache": {
+              "write": 0,
+              "read": 18553
+            }
+          },
+          "cost": 0.008246065
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788293160144,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e941ccd001alosnTdx2xbB2B",
+          "messageID": "msg_05e941921001rBuDVfcv8StrwW",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788293164327,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_b70ce4fe41a5417287505b6e",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && grep -rn \"milestone/M1\" docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md"
+            },
+            "output": "(no output)",
+            "metadata": {
+              "output": "(no output)",
+              "exit": 1,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && grep -rn \"milestone/M1\" docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md",
+            "time": {
+              "start": 1788293164318,
+              "end": 1788293164326
+            }
+          },
+          "id": "prt_05e942ae1001drWe3WrjAwu28X",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "messageID": "msg_05e941921001rBuDVfcv8StrwW"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788293164916,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e942a87001MoZ0E4qXVb3xEG",
+          "messageID": "msg_05e941921001rBuDVfcv8StrwW",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "text",
+          "text": "\n\n",
+          "time": {
+            "start": 1788293163655,
+            "end": 1788293164915
+          }
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788293164919,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "call_a1f6694ce4e74dec988d9e2b",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && git log --oneline -5 -- docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md"
+            },
+            "output": "042a2d1 governance(P10-M34-E34.2): dormant-project roadmap + roll-forward\n973a7f5 governance(P10-M34-E34.2): epic spec + execution chat starter\n",
+            "metadata": {
+              "output": "042a2d1 governance(P10-M34-E34.2): dormant-project roadmap + roll-forward\n973a7f5 governance(P10-M34-E34.2): epic spec + execution chat starter\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && git log --oneline -5 -- docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md",
+            "time": {
+              "start": 1788293164893,
+              "end": 1788293164917
+            }
+          },
+          "id": "prt_05e942d73001UqnFmqRYu8Dm7N",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "messageID": "msg_05e941921001rBuDVfcv8StrwW"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788293164928,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e942f7d001cS9sZp35vgIhNd",
+          "reason": "tool-calls",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "messageID": "msg_05e941921001rBuDVfcv8StrwW",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "step-finish",
+          "tokens": {
+            "total": 22336,
+            "input": 793,
+            "output": 192,
+            "reasoning": 321,
+            "cache": {
+              "write": 0,
+              "read": 21030
+            }
+          },
+          "cost": 0.00639909
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788293166016,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e9433bc0016C6YRpRL7R9xbL",
+          "messageID": "msg_05e942f8a001VD3LSRMm4P1cxy",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788293213526,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e94c23700162vJ3YCDgntCKH",
+          "messageID": "msg_05e942f8a001VD3LSRMm4P1cxy",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "text",
+          "text": "**Conclusion:** The test is red because of a false positive in `tests/test_starter_lint.py` \u2014 the reference flagged on line 111 is correct and deliberate, not a typo. The defect that should be changed is in the test, not in the starter document.\n\n## Reasons\n\n**1. What the test asserts, and its mechanism.**\n`test_no_branch_name_typos_in_starters` scans every `*epic-execution-chat-starter.md`, extracts every `milestone/M<n>` token via `BRANCH_RE = r\"milestone/M(\\d+)\\b\"`, and declares a token a typo unless it is either (a) a \"known milestone\" \u2014 derived strictly from starter filenames matching `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$` \u2014 or (b) a \"planned\" milestone: a number in the narrow window `(highest, highest + 10]`. Here `highest` is M41. `M1` fails both tests: it is *not* a known milestone (no `P1-M1-E*__epic-execution-chat-starter.md` exists \u2014 this repo's starter convention only begins at M9, so real milestones M1\u2013M8 are invisible to `known_milestones()`), and `M1` is *below* the frontier, so it can never satisfy the planned-milestone clause (which only admits numbers *above* the highest existing milestone). The guard can therefore only ever accept a below-frontier number if it happens to already be in the starter-derived set.\n\n**2. Is line 111 a mistake?** No. Two independent reasons it is legitimate, both surfaced in `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`:\n\n- The token describes the `footboard` repository's *own* `milestone/M1` branch. P10/E34.2's subject is bumping three *separate* repositories (`Getawayinsured2023`, `footboard`, `courtis`), each with its own governance numbering. A reference to another repository's branch is exactly what this cross-repo adoption epic exists to talk about, and the guard has no notion of a branch name belonging to a different repo.\n- M1 is also a *real milestone of this repository* (`P1-M1-E1.1__spec__\u2026` exists), just one that predates the starter-filename convention the detector keys on. So even absent the cross-repo aspect, the ground-truth derivation is incomplete.\n\nThe test's failure text (\"Fix the milestone number, likely a stray extra digit\") points at the wrong remedy: the digit is not stray, and the defect class the guard was built for (stray digits like M14\u2192M144, which land an order of magnitude *past* the frontier) is not present here.\n\n**3. What should be changed, in which file.** The bug lives in `tests/test_starter_lint.py`, not in the document. Two defects in the detector need fixing: (i) `known_milestones()` under-derives ground truth (starter filenames only, blind to M1\u2013M8 and other milestones without a starter file), and (ii) the guard cannot distinguish a foreign repo's branch reference from this repo's `milestone/M<n>`. The durable fixes are: widen the ground truth (derive known milestones from milestone specs/phase directories rather than starter filenames alone), and/or narrow the guard to its actual stated defect class (flag only references implausibly far past the frontier).\n\nNote on current state: my `git log`/`grep` shows the repo has *since* applied a document-level workaround \u2014 `P10-M34-E34.2__epic-execution-chat-starter.md` now reads \"`footboard` on its own `M1` milestone branch\" (with an inline \"Wording note \u2026 see P10-GH-6\"), so `milestone/M1` no longer appears and the suite is currently green. That is a workaround in one file, not a fix: any future cross-repo starter that names a target repo's `milestone/M<n>` below the frontier will fail the same way. The correct permanent change is to the test's detector logic, as recorded (without decision) in the P10-GH-6 carry-forward note.",
+          "time": {
+            "start": 1788293202487,
+            "end": 1788293213524
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788293213534,
+        "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+        "part": {
+          "id": "prt_05e94ed5c001HoViigqQtqSlMc",
+          "reason": "stop",
+          "snapshot": "7d0d09175bd68631567a1fc3014375d7e006cf92",
+          "messageID": "msg_05e942f8a001VD3LSRMm4P1cxy",
+          "sessionID": "ses_fa16c771fffeCubEswZVfRCiT4",
+          "type": "step-finish",
+          "tokens": {
+            "total": 26478,
+            "input": 579,
+            "output": 946,
+            "reasoning": 3131,
+            "cache": {
+              "write": 0,
+              "read": 21822
+            }
+          },
+          "cost": 0.01982733
+        }
+      }
+    ]
+  }
+}

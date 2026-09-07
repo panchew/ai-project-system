@@ -132,7 +132,7 @@ Governance at delivery: **PSG v2.3.0**, **AOG v2.9.0**, yml-spec **v2.3.1** (bum
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Phase
 - **State:** implemented
@@ -166,7 +166,7 @@ flowchart LR
 
 | ID | Title | Priority |
 |----|-------|----------|
-| P8-GH-1 | **Stale governance prose about this repo's own opt-out survives E29.2's reality.** AOG §16.5's source-repo sentence ("It stays opted out because... a live endpoint the suite doesn't have"), plus `governance/guides/visual-artifacts.md` §1's note and §6 ("skips when enabled is false"), and any sibling remnant, now contradict the actual state: `enabled: true`, a real passing endpoint test, and an opt-**out** env var for the no-endpoint case. Flagged by E29.2's own Delivery Notice; the CFO chose to handle it separately from M29's epics rather than block on it. | Medium |
+| P8-GH-1 | **Stale governance prose about this repo's own opt-out survives E29.2's reality.** AOG §17.5's source-repo sentence ("It stays opted out because... a live endpoint the suite doesn't have"), plus `governance/guides/visual-artifacts.md` §1's note and §6 ("skips when enabled is false"), and any sibling remnant, now contradict the actual state: `enabled: true`, a real passing endpoint test, and an opt-**out** env var for the no-endpoint case. Flagged by E29.2's own Delivery Notice; the CFO chose to handle it separately from M29's epics rather than block on it. | Medium |
 | P8-GH-2 | **Machine-local hosting limitation.** The storage backend provisioned to complete E29.3's bindings is local only — `file://` links resolve on this machine and nowhere else (dead on GitHub, dead for any other reader). Accepted by CFO ruling for this phase; revisit only if cloud-reachable hosting is ever actually needed for this project. | Low |
 | P8-GH-3 | **"Phase Delivery Notice" is vestigial post-§5C but still gets typed into planning docs.** The P8 phase spec, this milestone's own spec, and both Execution Chat Starters all say phase delivery ends with "...+ the Phase Delivery Notice" — a distinct artifact P4 and P5 each produced as a separate file (`P4__phase-delivery-notice.md`, `P5__phase-delivery-notice.md`). Neither P6 nor P7 produced one; PSG §5C's own 9 steps name no such artifact — Step 9's Phase Closure Declaration is the delivery record. This Phase Chat followed the P6/P7 working precedent (no separate file) rather than the stale phrasing habit. Worth a small reconciliation epic to stop the phrase from propagating into P9's own planning docs by copy-paste. | Low |
 | SN-20 Carry-Over 3 | **Whether a separate governed ComfyUI-workflow project is still needed** — now unblocked with real evidence (both precision cases FAIL, above). Belongs to the CFO at Creation/HQ level, not this phase. | — |

@@ -67,9 +67,9 @@ Milestone P11-M36.
 - Load at session start: this starter; the Milestone spec (full); the Phase spec **by targeted
   section only** — §P11.1 and M36's entry in §Milestones, plus the phase §Acceptance Criteria; PSG
   preamble+§1, §1A, §2, §5, §6, §7, §8, §9, §10, §11, §11.5, §11.6 (incl. §11.6.1), §12, §13C, §15;
-  AOG preamble+§1, §1A, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §10, §12, §13, §14.
+  AOG preamble+§1, §1.1, §2, §3.7, §3.9, §3.10, §4, §5, §6, §7, §9, §12, §14, §15, §16.
 - Load on trigger: PSG §5B + AOG §3.4 at milestone-closure time (**§5B, not §5C** — M36 is not
-  final); PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §11, §16 (visual bindings / diagram
+  final); PSG §3, §8A, §13D, §14A, §14C, §18; AOG §3.2, §8, §13, §17 (visual bindings / diagram
   obligation — **this one fires for every M36 epic**, see constraint 8).
 - Do not load: PSG/AOG changelogs; other levels' role or starter-format sections; the P11 phase
   spec's §P11.2/§P11.3/§P11.4 (M37/M38/M39 — not yours).

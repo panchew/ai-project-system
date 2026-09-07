@@ -58,7 +58,7 @@ Nine epics across three milestones; each epic independently reviewed and merged 
    `governance/guides/integrations/`; adoption docs decoupled from `.github/agents/`.
 8. ✅ **Visual artifacts fully implemented (VA-1 / SN-11)** — validated `visual_artifacts`
    block in `governance/ai-project-yml-spec.md` (repo `.ai-project.yml` `enabled: false`);
-   AOG §16 per-level guidance; `seed.md` Rule 4 visual intent; `bin/ai-project-visual`
+   AOG §17 per-level guidance; `seed.md` Rule 4 visual intent; `bin/ai-project-visual`
    ComfyUI helper; `governance/guides/visual-artifacts.md`; skip-on-disabled integration test.
 
 ---

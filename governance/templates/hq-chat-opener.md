@@ -6,6 +6,13 @@ last_updated: 2026-01-17
 
 # HQ Chat Opener — Project Control Room
 
+> **Re-instantiation is governed by `governance/systems/hq-re-instantiation.md` — "HQ Chat
+> Re-instantiation Ritual" — cited here, not restated.** Openers are committed instances at
+> `.ai-project/artifacts/hq-openers/`, named `<ISO-date>__hq-chat-opener.md`; a re-opened
+> session passes the most recent opener, the Steering Notes it carries as agenda, and the
+> most recent Progress Digest, and reconstructs the handoff from committed state alone when
+> the departing session could not write anything.
+
 ## Prerequisite Verification (do this first — P9-M31-E31.3)
 
 HQ Chat is manual-only, permanently (SN-22) — it never takes an Execution Mode

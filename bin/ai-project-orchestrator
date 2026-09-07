@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import sys
 import json
 import subprocess
@@ -39,6 +40,34 @@ DEFAULT_MODELS = {
 # bin/ai-project-visual's execution-lock guardrail (governance/guides/
 # gpu-coexistence.md) for the adjacent GPU-contention case. P9-M31-E31.2.
 LOCAL_UNAVAILABLE_EXIT = 5
+
+# E42.1 — what "Docker is available" is taken to mean, and how it is detected.
+# Two distinct failures, each handled as its own fail-closed case:
+#   1. The `docker` BINARY is absent: subprocess.run raises FileNotFoundError.
+#   2. The daemon is installed but NOT RUNNING (or unreachable): the binary runs,
+#      so no FileNotFoundError — but `docker run` exits non-zero with a stderr
+#      naming the connection failure. This is a DIFFERENT fault from a missing
+#      binary and must not be retried as an ordinary task failure or silently
+#      take any other path. The marker set below is deliberately narrow so an
+#      ordinary in-container command failure (arbitrary stderr, any exit code) is
+#      never misread as a daemon outage.
+DAEMON_NOT_RUNNING_MARKERS = (
+    "Cannot connect to the Docker daemon",
+    "Is the docker daemon running",
+)
+
+
+class SandboxUnavailable(Exception):
+    """E42.1 sentinel: the Docker sandbox cannot run (binary absent, or daemon
+    installed-but-not-running), so the model's command must NOT run unsandboxed
+    on the host. Raised by run_in_sandbox; caught by handle_epic_execution, which
+    applies the file's own local-unavailable shape (state reason -> escalation
+    report -> archive trigger file -> exit LOCAL_UNAVAILABLE_EXIT)."""
+
+    def __init__(self, reason):
+        self.reason = reason
+        super().__init__(reason)
+
 
 # Sandbox → host reachability (Bugfix B2.1). A container's `localhost` is its own
 # loopback, not the host's, so an endpoint that is correct on the host is severed
@@ -392,17 +421,206 @@ def run_in_sandbox(image, command, active_model):
     try:
         try:
             result = subprocess.run(docker_cmd, capture_output=True, text=True)
-            return result.returncode, result.stdout, result.stderr
         except FileNotFoundError:
-            # Fallback to local execution if Docker is not available in current environment
-            print("[!] Docker is not installed or available. Executing locally with model environment...")
-            env = os.environ.copy()
-            env["AI_PROJECT_ACTIVE_MODEL"] = active_model
-            result = subprocess.run(command, shell=True, env=env, capture_output=True, text=True)
+            # E42.1 — Docker BINARY absent. The sandbox is the only thing between
+            # a dispatched model and the operator's machine; its absence must fail
+            # closed (LOCAL_UNAVAILABLE_EXIT, G1's convention), never run the
+            # model's command unsandboxed on the host. The host-execution path
+            # that used to live here (subprocess.run(command, shell=True)) is
+            # REMOVED — the epic's recorded decision. The sentinel is caught by
+            # handle_epic_execution, which states the reason, generates an
+            # escalation report, archives the trigger file and exits 5.
+            raise SandboxUnavailable(
+                "Docker binary is not installed or available "
+                "(FileNotFoundError invoking 'docker run')"
+            )
+        else:
+            # E42.1 — Docker is installed but the DAEMON is not running (or
+            # unreachable). A different failure from a missing binary: it must
+            # not be retried as an ordinary task failure, and it must not take
+            # any other path. Fails closed with its own stated reason.
+            if result.returncode != 0 and any(
+                marker in (result.stderr or "") for marker in DAEMON_NOT_RUNNING_MARKERS
+            ):
+                raise SandboxUnavailable(
+                    "Docker is installed but the daemon is not running or unreachable "
+                    f"(docker run exit {result.returncode}; stderr: {result.stderr.strip()})"
+                )
             return result.returncode, result.stdout, result.stderr
     finally:
         if container_name in ACTIVE_CONTAINERS:
             ACTIVE_CONTAINERS.remove(container_name)
+
+def _safe_epic_dir_name(epic_id):
+    """Mirror bin/run-dev-agent's sanitization so the epic's run transcript
+    (.ai-project/artifacts/agentic-runs/<epic_id>/transcript.json) resolves."""
+    return re.sub(r"[^A-Za-z0-9._-]", "_", str(epic_id))
+
+
+def _epic_transcript_path(epic_id):
+    return (
+        PROJECT_ROOT
+        / ".ai-project" / "artifacts" / "agentic-runs"
+        / _safe_epic_dir_name(epic_id) / "transcript.json"
+    )
+
+
+# E42.2 — the orchestrator's own runtime machinery. These paths are handled by their
+# own code paths (the trigger is removed after staging, feedback.json is unlinked on
+# success, locks/logs are runtime state) and are never part of the epic's deliverables
+# nor evidence of an agent out-of-scope touch. Excluded from the out-of-scope record.
+_MACHINERY_PREFIXES = (
+    ".ai-project/queue/",
+    ".ai-project/locks/",
+    ".ai-project/logs/",
+    ".ai-project/feedback.json",
+)
+
+# Tool calls that record a file the agent's run actually changed. Reads are not
+# touches; run_command has no path. Mirrors the tool names the transcripts record.
+_TRANSCRIPT_WRITE_TOOLS = frozenset({
+    "write_file", "edit_file", "create_file", "append_file",
+    "delete_file", "copy_file", "rename_file",
+})
+
+
+def _transcript_touched_paths(epic_id):
+    """D1 Part A (candidate 3) — the paths the epic's own run recorded as touched:
+    the write/edit/create tool-call paths in the run's transcript, resolved to
+    project-relative. This is the agent's own recorded footprint — the evidence the
+    milestone says gates the commit. An absent transcript yields the empty set: an
+    epic whose run left no footprint cannot claim a scoped commit (fail closed)."""
+    touched = set()
+    tp = _epic_transcript_path(epic_id)
+    if not tp.exists():
+        return touched
+    try:
+        data = json.loads(tp.read_text())
+    except (OSError, ValueError):
+        return touched
+    for entry in data.get("transcript", []):
+        tc = entry.get("tool_call") or entry.get("call") or {}
+        name = tc.get("name", "")
+        if name not in _TRANSCRIPT_WRITE_TOOLS:
+            continue
+        args = tc.get("args") or tc.get("arguments") or {}
+        p = args.get("path") or args.get("file_path")
+        if not isinstance(p, str) or not p.strip():
+            continue
+        raw = p.strip()
+        candidate = Path(raw)
+        if candidate.is_absolute():
+            try:
+                candidate = candidate.relative_to(PROJECT_ROOT)
+            except ValueError:
+                # An absolute path outside PROJECT_ROOT (e.g. a harness scratchpad)
+                # cannot be mapped to a project path — it did not land in this tree.
+                continue
+        touched.add(candidate.as_posix())
+    return touched
+
+
+def _worktree_diff_paths():
+    """Every path the working tree differs from HEAD — modified, added, deleted or
+    untracked — enumerated by git, never globbed. Robust to non-porcelain stdout so a
+    harness that feeds unrelated text cannot fabricate dirty paths."""
+    res = subprocess.run(
+        ["git", "status", "--porcelain", "--untracked-files=all"],
+        cwd=PROJECT_ROOT, capture_output=True, text=True,
+    )
+    paths = set()
+    status_chars = "MADRCU?! "
+    for line in res.stdout.splitlines():
+        if len(line) < 4:
+            continue
+        if line[0] not in status_chars or line[1] not in status_chars:
+            continue
+        if line[2] != " ":
+            continue
+        entry = line[3:].strip()
+        if " -> " in entry:
+            entry = entry.split(" -> ")[-1]
+        if entry:
+            paths.add(entry)
+    return paths
+
+
+def _write_out_of_scope_record(epic_id, out_of_scope):
+    """D3 — the out-of-scope remainder is written to a record under the epic's own
+    artifact root so a reader can afterwards distinguish an out-of-scope run from one
+    where nothing out of scope happened. The paths are recorded, never staged."""
+    safe = _safe_epic_dir_name(epic_id)
+    rec_dir = (
+        PROJECT_ROOT / ".ai-project" / "artifacts" / "agentic-runs" / safe
+    )
+    rec_dir.mkdir(parents=True, exist_ok=True)
+    rec_path = rec_dir / "out-of-scope.json"
+    payload = {
+        "epic_id": epic_id,
+        "out_of_scope_paths": sorted(out_of_scope),
+        "disposition": "recorded; NOT staged or committed with the epic",
+    }
+    rec_path.write_text(json.dumps(payload, indent=2))
+    rel = rec_path.relative_to(PROJECT_ROOT).as_posix()
+    print(
+        f"[!] Out-of-scope paths recorded in {rel}, not committed with the epic: "
+        f"{', '.join(sorted(out_of_scope))}",
+        file=sys.stderr,
+    )
+    return rel
+
+
+def _stage_and_commit_epic(epic_id, dev_model, qa_model):
+    """E42.2 — replaces the `git add .` at the staging/commit site. Stages exactly the
+    epic's files (per the committed D1 definition) and represents the out-of-scope
+    remainder in a record instead of absorbing it. Returns one of:
+      "nothing"    — no epic files attributable, no out-of-scope work: nothing to do
+      "committed"  — in-scope staged and committed (record written iff out-of-scope)
+      "escalate"   — no epic footprint at all yet the tree is dirty: fail closed."""
+    raw_diff = _worktree_diff_paths()
+    diff = {p for p in raw_diff if not p.startswith(_MACHINERY_PREFIXES)}
+
+    artifact_dir = (
+        PROJECT_ROOT / ".ai-project" / "artifacts" / "agentic-runs"
+        / _safe_epic_dir_name(epic_id)
+    )
+    artifact_prefix = artifact_dir.relative_to(PROJECT_ROOT).as_posix() + "/"
+
+    in_scope = set(_transcript_touched_paths(epic_id) & diff)
+    # The epic's own run record (transcript, context, metadata, out-of-scope record)
+    # is an epic artifact, committed with the epic.
+    in_scope |= {p for p in diff if p.startswith(artifact_prefix)}
+    out_of_scope = diff - in_scope
+
+    if not in_scope and out_of_scope:
+        # No footprint attributable to the epic, yet the tree is dirty: cannot claim a
+        # scoped commit, so fail closed (record written, trigger archived, exit 1).
+        _write_out_of_scope_record(epic_id, out_of_scope)
+        return "escalate"
+
+    staged = set(in_scope)
+    if out_of_scope:
+        staged.add(_write_out_of_scope_record(epic_id, out_of_scope))
+    if not staged:
+        return "nothing"
+
+    subprocess.run(["git", "add", "--"] + sorted(staged), cwd=PROJECT_ROOT)
+    message = (
+        f"feat: programmatically implement Epic {epic_id} deliverables\n\n"
+        f"Resolved via Developer: {dev_model} and QA: {qa_model}\n\n"
+        f"Staged files: {', '.join(sorted(staged))}"
+    )
+    if out_of_scope:
+        record_rel = ".ai-project/artifacts/agentic-runs/{}/out-of-scope.json".format(
+            _safe_epic_dir_name(epic_id)
+        )
+        message += (
+            f"\n\nOut-of-scope paths recorded in {record_rel} and NOT committed: "
+            f"{', '.join(sorted(out_of_scope))}"
+        )
+    subprocess.run(["git", "commit", "-m", message], cwd=PROJECT_ROOT)
+    return "committed"
+
 
 def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.json"):
     epic_id = trigger.get("epic_id", "unknown")
@@ -448,7 +666,9 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
         # Run dev_command (only if attempt > 1 OR if explicitly flagged to run initially)
         if (attempt > 1) or run_dev_initially:
             print(f"[*] Running developer command inside sandbox (active model: {dev_model}): {dev_cmd}")
-            dev_code, dev_out, dev_err = run_in_sandbox(sandbox_image, dev_cmd, active_model=dev_model)
+            dev_code, dev_out, dev_err = _run_sandbox_or_escalate(
+                sandbox_image, dev_cmd, dev_model, epic_id, dev_model, qa_model, trigger_file_name
+            )
             print(f"[*] Developer command finished with exit code: {dev_code}")
             if dev_code != 0:
                 print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
@@ -458,7 +678,9 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
 
         # Run validation_command inside sandbox under epic_qa model configuration
         print(f"[*] Running validation command inside sandbox (active model: {qa_model}): {validation_cmd}")
-        val_code, stdout, stderr = run_in_sandbox(sandbox_image, validation_cmd, active_model=qa_model)
+        val_code, stdout, stderr = _run_sandbox_or_escalate(
+            sandbox_image, validation_cmd, qa_model, epic_id, dev_model, qa_model, trigger_file_name
+        )
         
         if val_code == 0:
             print(f"[✓] Epic {epic_id} validation passed successfully on attempt {attempt}!")
@@ -471,10 +693,27 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
                 except Exception as e:
                     print(f"[!] Failed to clean up feedback.json: {e}", file=sys.stderr)
             
-            # Automate staging and commit
+            # Automate staging and commit — E42.2: scoped to the epic's files, with
+            # the out-of-scope remainder recorded, never absorbed (the design decision
+            # and definition are committed in P12-M42-E42.2's record artifact).
             print("[*] Staging and committing changes...")
-            subprocess.run(["git", "add", "."], cwd=PROJECT_ROOT)
-            subprocess.run(["git", "commit", "-m", f"feat: programmatically implement Epic {epic_id} deliverables\n\nResolved via Developer: {dev_model} and QA: {qa_model}"], cwd=PROJECT_ROOT)
+            stage_result = _stage_and_commit_epic(epic_id, dev_model, qa_model)
+            if stage_result == "escalate":
+                print(
+                    f"[X] Epic {epic_id} produced no attributable files yet the working "
+                    f"tree is dirty — refusing to commit unclaimed changes. Out-of-scope "
+                    f"record written; archiving trigger.",
+                    file=sys.stderr,
+                )
+                trigger_file = QUEUE_DIR / trigger_file_name
+                if trigger_file.exists():
+                    archived_file = QUEUE_DIR / f"{trigger_file_name}.failed"
+                    try:
+                        trigger_file.rename(archived_file)
+                        print(f"[✓] Archived trigger file to {archived_file} to prevent duplicate runs.")
+                    except Exception as e:
+                        print(f"[!] Failed to archive trigger file: {e}", file=sys.stderr)
+                sys.exit(1)
             
             # Remove trigger file from queue
             trigger_file = QUEUE_DIR / trigger_file_name
@@ -510,7 +749,9 @@ def handle_epic_execution(trigger, models_config, trigger_file_name="04_epic.jso
             
         # Run dev_command inside sandbox under epic_dev model configuration
         print(f"[*] Running developer command on failure inside sandbox (active model: {dev_model}): {dev_cmd}")
-        dev_code, dev_out, dev_err = run_in_sandbox(sandbox_image, dev_cmd, active_model=dev_model)
+        dev_code, dev_out, dev_err = _run_sandbox_or_escalate(
+            sandbox_image, dev_cmd, dev_model, epic_id, dev_model, qa_model, trigger_file_name
+        )
         print(f"[*] Developer command on failure finished with exit code: {dev_code}")
         if dev_code != 0:
             print(f"[!] Warning: Developer command failed with exit code {dev_code}", file=sys.stderr)
@@ -569,7 +810,46 @@ def _escalate_if_local_unavailable(dev_code, epic_id, dev_out, dev_err, dev_mode
     sys.exit(LOCAL_UNAVAILABLE_EXIT)
 
 
-def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model, status="blocked"):
+def _run_sandbox_or_escalate(image, command, active_model, epic_id, dev_model, qa_model, trigger_file_name):
+    """E42.1: run the sandbox, and translate a SandboxUnavailable sentinel into
+    the file's own fail-closed disposition instead of letting the model's command
+    reach the host unsandboxed. _escalate_if_sandbox_unavailable never returns
+    (it sys.exit's), so this either returns run_in_sandbox's tuple or aborts."""
+    try:
+        return run_in_sandbox(image, command, active_model)
+    except SandboxUnavailable as exc:
+        _escalate_if_sandbox_unavailable(
+            epic_id, exc.reason, dev_model, qa_model, trigger_file_name
+        )
+
+
+def _escalate_if_sandbox_unavailable(epic_id, reason, dev_model, qa_model, trigger_file_name):
+    """E42.1 -- fail closed when the sandbox cannot run. Applies the file's own
+    local-unavailable shape (G1; the same escalation-plus-archive record as
+    _escalate_if_local_unavailable): state the reason, generate an escalation
+    report, archive the trigger file so the run is not silently retried, and exit
+    LOCAL_UNAVAILABLE_EXIT. The Docker-absent path must never run the model's
+    command unsandboxed on the host."""
+    print(
+        f"[X] Sandbox unavailable for Epic {epic_id}: {reason} -- refusing to run "
+        f"the model's command unsandboxed on the host (fail closed).",
+        file=sys.stderr,
+    )
+    generate_escalation_report(
+        epic_id, "", "", dev_model, qa_model, status="sandbox-unavailable", reason=reason
+    )
+    trigger_file = QUEUE_DIR / trigger_file_name
+    if trigger_file.exists():
+        archived_file = QUEUE_DIR / f"{trigger_file_name}.failed"
+        try:
+            trigger_file.rename(archived_file)
+            print(f"[✓] Archived trigger file to {archived_file} to prevent duplicate runs.")
+        except Exception as e:
+            print(f"[!] Failed to archive trigger file: {e}", file=sys.stderr)
+    sys.exit(LOCAL_UNAVAILABLE_EXIT)
+
+
+def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model, status="blocked", reason=None):
     admin_dir = PROJECT_ROOT / "docs" / "admin"
     admin_dir.mkdir(parents=True, exist_ok=True)
 
@@ -588,6 +868,22 @@ def generate_escalation_report(epic_id, stdout, stderr, dev_model, qa_model, sta
             "Confirm the Ollama endpoint is reachable and the resolved model tag is "
             "pulled, then re-queue the Epic trigger. This is a local-infrastructure gap, "
             "not a structural code defect or an Epic Spec issue."
+        )
+    elif status == "sandbox-unavailable":
+        heading = f"# Escalation Report: Epic {epic_id} — Sandbox Unavailable"
+        intro = (
+            "The Docker sandbox could not run, so the model's command was refused "
+            "unsandboxed on the host (fail closed, E42.1). This is **not** a task "
+            "failure and the retry ceiling was not exhausted -- the loop refused "
+            "immediately rather than run without isolation."
+        )
+        if reason:
+            intro += f"\n\n**Reason:** `{reason}`"
+        intervention = (
+            "Confirm Docker is available -- the binary present and the daemon "
+            "running -- then re-queue the Epic trigger. This is a "
+            "local-infrastructure gap, not a structural code defect or an Epic "
+            "Spec issue."
         )
     else:
         heading = f"# Escalation Report: Epic {epic_id} Blocked"

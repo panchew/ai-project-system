@@ -549,7 +549,7 @@ runtime decision)
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -570,7 +570,7 @@ flowchart LR
   handback/escalation record; the execution matrix is ratified independently; the local-inference
   evaluation runs in parallel as evidence-gathering, not governance authorship. All five feed the
   milestone's completion, which is P10's final gate before phase closure. Proposed-track
-  Structural diagram (AOG §16.3/§16.6).
+  Structural diagram (AOG §17.3/§17.6).
 
 ---
 
@@ -591,7 +591,7 @@ flowchart LR
   prerequisite, not P10's.
 - **On the suite baseline:** the 366/0/0 suite lives in this framework repo, and every M35
   deliverable touches this repo (no cross-repo split to reason about, unlike M33/M34).
-- Default-accept (PSG §11.6 / AOG §12) governs this milestone's delivery: clean Epic/Milestone
+- Default-accept (PSG §11.6 / AOG §14) governs this milestone's delivery: clean Epic/Milestone
   deliveries are accepted by silence; a Review Decision is the exception path only. Per SN-19,
   acceptance and the merge instruction are in-chat acts — no ceremonial artifact. The harness
   enforces explicit human authorization on every merge regardless.

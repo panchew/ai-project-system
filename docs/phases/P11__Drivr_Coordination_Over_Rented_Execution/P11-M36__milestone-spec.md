@@ -834,7 +834,7 @@ firm: it reports and stops.
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -878,7 +878,7 @@ flowchart TB
   deliberately frozen:** the Authority Boundary block across three documents, the Seed's
   verification behaviour, and SN-23's ID itself. **Where authority flowed:** nowhere new — E36.4
   records practice already in use and the SN-21/SN-22 pin stands. Proposed-track Structural diagram
-  (AOG §16.3/§16.6), Mermaid, no ComfyUI.
+  (AOG §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 
@@ -907,7 +907,7 @@ flowchart TB
   dense-prose governance amendment, measured as `qwen3-coder:30b`'s weakest case — not a restriction
   on the ratified execution matrix and not a reversal of anything P10 settled. **M37's code-shaped
   epics are where the local lane gets tested.**
-- **Default-accept (PSG §11.6 / AOG §12) governs this milestone's delivery:** clean Epic deliveries
+- **Default-accept (PSG §11.6 / AOG §14) governs this milestone's delivery:** clean Epic deliveries
   are accepted by silence; a Review Decision is the exception path only. Per SN-19, acceptance and
   the merge instruction are **in-chat acts — no ceremonial artifact**. The harness enforces explicit
   human authorization on every merge regardless.

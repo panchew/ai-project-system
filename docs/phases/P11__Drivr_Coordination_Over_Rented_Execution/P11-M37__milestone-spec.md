@@ -817,7 +817,7 @@ catch.
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -870,7 +870,7 @@ flowchart TB
   `GH-` ranges, the `rulings/` date shorthand, and closed M36. **Where authority flowed:** nowhere new
   — both epics execute rulings already issued. The erratum edge is the milestone's single most
   skippable-looking and least skippable dependency. Proposed-track Structural diagram (AOG
-  §16.3/§16.6), Mermaid, no ComfyUI.
+  §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 
@@ -939,7 +939,7 @@ flowchart TB
   milestone exists because a previous one became "the milestone things get put in." A third epic
   arriving by convenience — most plausibly as a convention-enforcing test — would reproduce the defect
   inside the milestone created to fix it.
-- **Default-accept (PSG §11.6 / AOG §12) governs delivery:** clean Epic deliveries are accepted by
+- **Default-accept (PSG §11.6 / AOG §14) governs delivery:** clean Epic deliveries are accepted by
   silence; a Review Decision is the exception path only. Per SN-19, acceptance and the merge
   instruction are **in-chat acts — no ceremonial artifact.** The harness enforces explicit human merge
   authorization regardless.

@@ -179,7 +179,7 @@ SN-30 Carry-Over 2 flagged this for HQ to decide and correctly declined to assum
 **The boundary is:** *adds or corrects mechanically-checkable structure, changes no normative text.*
 
 **Renumbering fails it.** Every cross-reference by number changes, and cross-references are load-
-bearing normative text — `§11.6`, `§11.6.1`, `§5C` and `§16.3` are cited across the corpus, the
+bearing normative text — `§11.6`, `§11.6.1`, `§5C` and `§17.3` are cited across the corpus, the
 starters and this ruling. A hotfix that silently invalidates citations is worse than the defect.
 
 **Verified still live, 2026-08-19:** the order is `1, 1A, 2-9, 13, 14, 10, 11, 12, 13, 14, 16, 15`,

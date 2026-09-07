@@ -1,0 +1,13 @@
+name: ledger-api
+owner: platform-team@example.com
+tier: silver
+replicas: 3
+port: 8080
+healthcheck:
+  path: healthz
+  timeout_s: 45
+dependencies:
+  - postgres-primary
+  - Redis-Cache
+region: us-central
+retries: 2

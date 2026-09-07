@@ -1,0 +1,15 @@
+{
+  "epic_id": "TASK-DEV-1",
+  "model": "qwen3-coder:30b",
+  "runner": "/home/panchew/soft-dev/ai-project-system/bin/local-agent-runner-shim",
+  "endpoint": "runner-default",
+  "exit_code": 2,
+  "started_utc": "2026-08-22T18:40:17.818705+00:00",
+  "duration_ms": 121164,
+  "transcript": ".ai-project/artifacts/agentic-runs/TASK-DEV-1/transcript.json",
+  "context": ".ai-project/artifacts/agentic-runs/TASK-DEV-1/context.md",
+  "context_sources": [
+    "docs/TASK-DEV-1__spec__parse-duration.md"
+  ],
+  "tools": ".ai-project/agents/tools.json"
+}

@@ -3,11 +3,12 @@ project: ai-project-system
 phase: P12
 milestone: null
 type: note
-status: active
+status: closed
 issuer_chat: HQ Chat (ai-project-system)
 issued_to: P12 Phase Chat → M43
-last_updated: 2026-08-19
+last_updated: 2026-09-02
 severity: medium
+closing_epic: E43.3 (P12-M43)
 ---
 
 # Carry-Forward Note — P12-GH-1: the rework limit reaches one starter surface of nine, zero templates, and now has two contradictory extension semantics
@@ -19,6 +20,38 @@ consolidation is scoped into M43 and a deferred fix must not take the defect's r
 **Re-measured by HQ on `master` at `19c77ab`, 2026-08-19.** Two of SN-32's figures do not survive
 re-measurement. The substantive finding does. Both are recorded below, because a gap record that
 inherits an unverified count is the defect this project has now filed twice (`P11-GH-2`).
+
+---
+
+## Outcome — CLOSED by E43.3 (P12-M43), 2026-09-02
+
+**The defect's record is closed, not silently retired.** E43.3 wrote the one normative
+statement, reconciled the two extension semantics, itemized the surface set, routed
+every surface to the statement, and added a check that fails when a surface falls out
+of coverage.
+
+- **The one normative statement (D1):** PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework
+  Limit" — a parent may reject a child's delivery a **maximum of 3 attempts**; a
+  written extension grants **exactly ONE further attempt, not a reset to three**. It
+  also defines **rework exhaustion** (3 attempts + any written +1, without an
+  acceptable delivery) as the state E43.4's flip triggers on. **Placement decision:**
+  PSG, the normative tier — the rule was in no normative document at all, which
+  argued for the normative tier, not for leaving it in a starter.
+- **The two extension statements reconciled to one (D2):** `:341`'s *"resets"* is
+  removed; the SN-36/37 `+1` is the surviving semantics. One statement survives — the
+  drift is resolved, not annotated (Binding Constraint 5).
+- **The itemized surface set (D3) — a list, never a count:** ten starter-shaped
+  surfaces (four `systems/*-execution-chat-starter.md`, three
+  `templates/*-execution-chat-starter.md`, the two seeds, and the root canonical
+  `EPIC-EXECUTION-CHAT-STARTER.md` E43.1 counted). Each reaches the statement by
+  **carry** (the two Milestone surfaces, where the chat that runs the loop reads its
+  contract) or **cite** (the other eight). The three templates are in the set.
+- **The check (D5):** `tests/test_rework_limit_single_statement.py` — 50 tests. Fails
+  if a listed surface neither carries nor reaches the statement, and fails if the
+  "resets" semantics reappear. Falsified twice on the branch: a cite removed from
+  `templates/epic-execution-chat-starter.md` → 2 failed; the `:341` reconciliation
+  reverted → 2 failed. Both restored.
+- **Record:** `docs/phases/P12__.../P12-M43-E43.3__record__rework-limit-one-statement-itemized-set.md`.
 
 ---
 

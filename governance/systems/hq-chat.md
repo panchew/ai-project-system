@@ -143,6 +143,11 @@ HQ Chats persist across all of these steps.
 
 ## Standard HQ Chat Opener (Recommended)
 
+**Re-instantiation is governed by `governance/systems/hq-re-instantiation.md` — "HQ Chat
+Re-instantiation Ritual" — and is cited there, not restated here.** That document records
+the ritual from the nine committed opener instances (`.ai-project/artifacts/hq-openers/`),
+covers departure as well as arrival, and reports its divergences.
+
 When starting an HQ Chat for a new project, the following context should be established:
 
 - Project name
@@ -174,10 +179,10 @@ things, and only these four:
    decision-column-unchanged.
 4. **Where authority flowed** — who decided, who applies, who reviews.
 
-**Structural only** (Mermaid/PlantUML — AOG §16.3 "Two modes"). It commits as a fenced code block
+**Structural only** (Mermaid/PlantUML — AOG §17.3 "Two modes"). It commits as a fenced code block
 inside the ruling itself, needs **no ComfyUI endpoint and no `visual_artifacts` configuration at
-all** (AOG §16.3/§16.8), renders in the PR diff, and is reviewable as text. This is the mode AOG
-§16 already tells you to prefer for most coverage.
+all** (AOG §17.3/§17.8), renders in the PR diff, and is reviewable as text. This is the mode AOG
+§17 already tells you to prefer for most coverage.
 
 **Not Generative.** The ComfyUI track is a different capability with its own gating, and its
 precision-validation evidence in this repository is two recorded FAILs (P8-M29-E29.3). A diagram

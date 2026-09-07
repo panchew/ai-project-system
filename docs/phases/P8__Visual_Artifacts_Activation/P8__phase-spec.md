@@ -15,7 +15,7 @@ P5–P7 built the visual-artifacts framework, flipped it default-on framework-wi
 proved the generative endpoint works (P6: FLUX-schnell, SDXL, LTX-Video all verified against
 `localhost:8188`) — but this source repo has never actually run its own capability. It carries
 its own opt-out (`visual_artifacts.enabled: false`) because of a naming collision between the
-`.ai-project.yml` schema's `types: diagrams` value and AOG §16.3's endpoint-free "Structural"
+`.ai-project.yml` schema's `types: diagrams` value and AOG §17.3's endpoint-free "Structural"
 mode: the schema value and even the yml-spec's own §3.5 documentation describe `diagrams` as
 Mermaid/PlantUML, but `bin/ai-project-visual --type diagrams` is, in the current implementation,
 always a ComfyUI generative call. Enabling the capability today doesn't turn on free structural
@@ -44,7 +44,7 @@ One milestone:
 By the end of P8:
 
 - ✅ **The naming collision is gone.** The `.ai-project.yml` schema's generative `types` values
-  and AOG §16.3's Structural/Generative mode split no longer share a confusable name; the
+  and AOG §17.3's Structural/Generative mode split no longer share a confusable name; the
   yml-spec §3.5 documentation table (currently wrong — it describes `diagrams` as
   "Mermaid/PlantUML structural") matches what the code actually does.
 - ✅ **This repo dogfoods its own default-on flip.** `visual_artifacts.enabled: true` in this
@@ -65,7 +65,7 @@ By the end of P8:
 ### P8.1: Visual Artifacts Activation (M29)
 
 **The naming-collision fix (P7-GH-21).** Two things are tangled under one schema value:
-- AOG §16.3's **Structural** mode — an agent writing Mermaid/PlantUML text directly, no endpoint,
+- AOG §17.3's **Structural** mode — an agent writing Mermaid/PlantUML text directly, no endpoint,
   no `bin/ai-project-visual` call at all.
 - The `.ai-project.yml` `visual_artifacts.types` schema's `diagrams` value — which, in
   `bin/ai-project-visual`'s actual implementation, selects a ComfyUI txt2img workflow. There is no
@@ -95,11 +95,11 @@ or something else is an implementation decision within this epic's scope.
 
 **Precision validation.** Confirm, empirically, that the P6-verified workflows produce artifacts
 good enough for **technical explanation** — not merely "renders successfully" (the P6/P7 bar,
-explicitly left unconfirmed at P7 closure). Two cases, agent-chosen form per AOG §16.3:
+explicitly left unconfirmed at P7 closure). Two cases, agent-chosen form per AOG §17.3:
 1. A **workflow-diagram-style case** — e.g. a generated visual explaining a governance or code
    flow.
 2. A **short explainer-clip case** — e.g. an LTX-Video clip narrating a proposed→implemented arc
-   (AOG §16.6/§16.7).
+   (AOG §17.6/§17.7).
 
 Judge both against whether a reader unfamiliar with the underlying flow could follow it from the
 artifact alone. Document the finding (pass, partial, or fail per case) — this is the evidence the
@@ -146,7 +146,7 @@ verified P6 workflows meet the bar for technical-explanation precision.
 
 **Indicative Epics** (the Milestone Chat owns final decomposition):
 - **E29.1 — Naming-collision resolution (P7-GH-21).** Disambiguate the schema's generative
-  `types` values from AOG §16.3's Structural mode; reconcile `ai-project-yml-spec.md` §3.5,
+  `types` values from AOG §17.3's Structural mode; reconcile `ai-project-yml-spec.md` §3.5,
   `bin/ai-project-visual`'s docstring, `.ai-project.yml`'s comment, and
   `VISUAL-ARTIFACTS.md`'s config example. Land before E29.2 so the enable step isn't undone by a
   documentation/schema change immediately after.
@@ -195,7 +195,7 @@ The CFO (Layer 8) will accept P8 complete when:
 - [ ] The full suite is green at delivery (no regressions, no new skips introduced to route
   around the change)
 - [ ] A diagram-style generated artifact and a clip-style generated artifact both exist (by link,
-  per AOG §16.5 — not committed as binaries) with a documented precision judgment for each
+  per AOG §17.5 — not committed as binaries) with a documented precision judgment for each
 - [ ] The phase closure declaration records issue #126 as deferred-not-dropped and restates
   SN-20 Carry-Over items 2 and 3 as open items for the CFO
 
@@ -204,7 +204,7 @@ The CFO (Layer 8) will accept P8 complete when:
 ## Dependencies
 
 ### Internal
-- P7's default-on visuals framework (AOG §16, `ai-project-yml-spec.md` §3.5, `bin/ai-project-visual`) —
+- P7's default-on visuals framework (AOG §17, `ai-project-yml-spec.md` §3.5, `bin/ai-project-visual`) —
   complete, on master at v6.0.0
 - P6's verified ComfyUI endpoint contract
   (`.ai-project/artifacts/reference/comfyui-endpoint/VISUAL-ARTIFACTS.md`) — complete; all three
@@ -213,7 +213,7 @@ The CFO (Layer 8) will accept P8 complete when:
 ### External / CFO-side
 - **Live ComfyUI endpoint at `http://localhost:8188`** — confirmed reachable at phase-open
   (`system_stats` responded; RTX 5060 Ti 16 GB, all six P6 models present). Availability during
-  Epic execution is the CFO's responsibility, as with any generative-mode work (AOG §16.5).
+  Epic execution is the CFO's responsibility, as with any generative-mode work (AOG §17.5).
 - **GPU exclusivity is real but moot for P8.** Local ComfyUI and local-LLM agentic execution
   cannot run concurrently on this hardware; moot here only because agentic execution is deferred
   for the whole phase.
@@ -235,7 +235,7 @@ The CFO (Layer 8) will accept P8 complete when:
   — P8 spine, scope boundary, five ratified decisions, Carry-Over items (binding)
 
 ### Key Reference Documents
-- `governance/AI-OPERATING-GUIDELINES.md` §16.1–§16.8 — Structural vs. Generative policy,
+- `governance/AI-OPERATING-GUIDELINES.md` §17.1–§17.8 — Structural vs. Generative policy,
   default-on trigger policy
 - `governance/ai-project-yml-spec.md` §3.5 — `visual_artifacts` schema (contains the collision
   this phase resolves)

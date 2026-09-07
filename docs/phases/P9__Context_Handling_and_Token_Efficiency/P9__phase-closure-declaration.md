@@ -43,7 +43,7 @@ removed, no skip introduced to route around any change).
 
 ## Process Record
 
-Closure was recorded under the **SN-13 default-accept model** (PSG §11.6 / AOG §12): each
+Closure was recorded under the **SN-13 default-accept model** (PSG §11.6 / AOG §14): each
 milestone's delivery was independently re-verified by this Phase Chat — live suite re-runs,
 grep checks re-run personally rather than trusted from Delivery Notices or Closure
 Declarations, direct inspection of the edited governance surfaces — before consolidation, at
@@ -126,7 +126,7 @@ the one HQ-triaged mid-flight addition (E30.4, above); no epic was added to M31 
   cross-project, one-desk-per-machine participant, not a fifth per-project level
 - `governance/systems/system-hq-seed.md` — the daily System Chat re-instantiation seed,
   analogous to Creation Chat's Genesis/seed pattern
-- AOG §16.5 and `governance/guides/visual-artifacts.md` corrected — no governance surface
+- AOG §17.5 and `governance/guides/visual-artifacts.md` corrected — no governance surface
   describes this repo as opted out of `visual_artifacts` (P8-GH-1 closed)
 - Six pre-P9 planning documents purged of the vestigial "Phase Delivery Notice" phrase,
   preserving the P8 closure declaration's own intentional carry-forward record unchanged

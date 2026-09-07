@@ -82,7 +82,7 @@ Do NOT proceed to execution or merge without Phase Chat acceptance.
   `db4a34f`) and its cross-repo hand-back to `local-agent-runner` is delivered and resolved.
   Suite on `phase/P7`: 292 passed / 1 skipped.
 - **M27 is milestone two of P7**, independent of M26's agentic-execution surface. It touches
-  the visual-artifacts framework built in P5/P6 (AOG §16, yml-spec §3.5, the visual-artifacts
+  the visual-artifacts framework built in P5/P6 (AOG §17, yml-spec §3.5, the visual-artifacts
   guide) — currently **opt-in and off by default**, which SN-17 flips.
 - M28 (governance reconciliations, now 4 epics per SN-19's E28.4 amendment) may run in
   parallel with M27 per the phase spec — not this Milestone Chat's concern; stay in scope.
@@ -108,7 +108,7 @@ Do NOT proceed to execution or merge without Phase Chat acceptance.
 of E27.1, E27.2, E27.3, then return them to the Phase Chat for review and acceptance.
 
 **Sequencing (not a strict 3-way chain like M26):**
-- **E27.1 and E27.2 both edit AOG §16** (different subsections) — serialize them or use a
+- **E27.1 and E27.2 both edit AOG §17** (different subsections) — serialize them or use a
   worktree (GH-2) to avoid file contention. They are also **coupled at the acceptance-criteria
   level**: "a fresh project with no `visual_artifacts` block produces structural visuals for a
   new spec" needs both the on/off default (E27.1) and the structural-first/trigger-set policy
@@ -121,7 +121,7 @@ of E27.1, E27.2, E27.3, then return them to the Phase Chat for review and accept
 
 **Epic boundaries (the milestone spec fixes these; you may refine within M27's scope, not add/drop):**
 
-- **E27.1 — Default-on flip + enforcement setting.** Flip AOG §16.1 from opt-in to
+- **E27.1 — Default-on flip + enforcement setting.** Flip AOG §17.1 from opt-in to
   default-on/opt-out; flip `ai-project-yml-spec.md` §3.5's documented `enabled` default to
   `true`; flip `bin/ai-project-orchestrator`'s `DEFAULT_VISUAL_ARTIFACTS["enabled"]` (line 31)
   and remove/invert `resolve_visual_artifacts()`'s hardcoded `resolved["enabled"] = False`
@@ -136,8 +136,8 @@ of E27.1, E27.2, E27.3, then return them to the Phase Chat for review and accept
   files contain no opt-in language, confirm this remains true rather than assuming an edit is
   needed); decide and document whether the source repo's own `.ai-project.yml` (currently
   explicit `enabled: false`) changes, given structural visuals need no endpoint and are not
-  "generated binaries" in the §16.5 sense.
-- **E27.2 — Structural-first + trigger-set behavior.** AOG §16.3/§16.4 already define
+  "generated binaries" in the §17.5 sense.
+- **E27.2 — Structural-first + trigger-set behavior.** AOG §17.3/§17.4 already define
   Structural/Generative and the capability gate from P5/P6 — do not rebuild that machinery.
   Add the **default-on trigger policy**: with the capability on (default), no `comfyui_url` ⇒
   structural only; automatic production is limited to specs + delivery/closure declarations;
@@ -182,7 +182,7 @@ Produce the following deliverables, **one Epic at a time**:
    - Epic goals and scope
    - Definition of Done
    - Deliverables (name the exact surfaces and anchors from the Milestone spec's Epic Detail —
-     AOG §16.1/§16.3/§16.4, yml-spec §3.5, `bin/ai-project-orchestrator` lines 30-34/139-149,
+     AOG §17.1/§17.3/§17.4, yml-spec §3.5, `bin/ai-project-orchestrator` lines 30-34/139-149,
      `governance/guides/visual-artifacts.md`, `~/soft-dev/ai-stack/docker-compose.yml` — and
      carry the binding SN-17 decisions verbatim where relevant to the Epic)
    - Dependencies and prerequisites
@@ -218,7 +218,7 @@ wait for a Review Decision artifact on the happy path.
 
 - Treat the Milestone spec as the single source of truth for M27.
 - Produce Epic deliverables one Epic at a time; await acceptance before proceeding.
-- **E27.1 and E27.2 both edit AOG §16** — serialize them or use a worktree (GH-2). **E27.3 is
+- **E27.1 and E27.2 both edit AOG §17** — serialize them or use a worktree (GH-2). **E27.3 is
   independent** and may run in parallel with either.
 - **E27.1 and E27.2 are coupled at the acceptance-criteria level** — do not consider the
   milestone-level "structural visuals produced by default" criterion satisfied until both are

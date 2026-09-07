@@ -93,7 +93,7 @@ By the end of this milestone:
 
 This milestone explicitly does **not**:
 
-- **Change the visual layer.** M23/M24 surfaces (by-link, §7 binding, §16.6/§16.7, guide §5/§8)
+- **Change the visual layer.** M23/M24 surfaces (by-link, §7 binding, §17.6/§17.7, guide §5/§8)
   are done and out of scope here.
 - **Remove Layer-8 human review.** E25.2 codifies *default-accept at the parent-chat→child gate*;
   it must **not** delete the human-review requirement the framework mandates. It scopes which

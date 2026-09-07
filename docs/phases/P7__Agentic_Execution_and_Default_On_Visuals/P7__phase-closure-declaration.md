@@ -29,8 +29,8 @@ out-of-band Steering Note.
 | Milestone | Epics | Scope / gaps closed | PR | Merge commit |
 |-----------|-------|---------------------|-----|--------------|
 | M26 — First Real Agentic Run | E26.1, E26.2, E26.3 (3) | `bin/run-dev-agent` adapter wired as the orchestrator's `dev_command`; `04_epic.json` mock trigger retired; `epic_dev` moved off `llama3:8b`; the framework's **first genuine non-mocked agentic Epic run**, converged attempt 1/3 after 3 resolved escalations; cross-repo hand-back accepted in `local-agent-runner`'s P2-M3 Milestone Chat | #113 | `db4a34f` |
-| M27 — Visuals Default-On | E27.1, E27.2, E27.3 (3) + B4.1 bugfix | Visual artifacts flipped opt-in → **default-on/opt-out** (AOG §16.1); `visual_required_for_specs` enforcement key; **structural-first** zero-infra default + automatic trigger set for specs and delivery/closure declarations (AOG §16.8); documented Ollama+ComfyUI single-GPU coexistence (`governance/guides/gpu-coexistence.md`, orchestrator execution-lock reuse, exit code 5); B4.1 fixed 2 stale default-assertion failures in the orchestrator's embedded `--test` suite, found during E27.3's own due diligence | #117 | `e982085` |
-| M28 — Governance Reconciliations | E28.1, E28.2, E28.3, E28.4 (4) | Level-0 handoff reconciled to a scale-dependent fork (`seed.md`/`genesis.md`/`start-a-project.md`/`chat-hierarchy.md`); HQ Chat Opener template promoted to `governance/templates/`; stale `docs/systems/start-a-project.md` duplicate removed; Delivery-Notice terminology reconciled (`artifact-communication-protocol.md` rewritten to match PSG §12/AOG's already-practiced single-artifact model — **the opposite direction from the milestone spec's own stated recommendation**, with reasoning grounded in direct evidence); `bin/ai-project-init` installs the canonical `governance.agent.md`; the Delivery Authorization ceremonial block retired from both starter templates and all touch points in the three `governance/systems/` mirrors and AOG §1A/§10, in-chat merge authorization preserved everywhere | #125 | `43261e9` |
+| M27 — Visuals Default-On | E27.1, E27.2, E27.3 (3) + B4.1 bugfix | Visual artifacts flipped opt-in → **default-on/opt-out** (AOG §17.1); `visual_required_for_specs` enforcement key; **structural-first** zero-infra default + automatic trigger set for specs and delivery/closure declarations (AOG §17.8); documented Ollama+ComfyUI single-GPU coexistence (`governance/guides/gpu-coexistence.md`, orchestrator execution-lock reuse, exit code 5); B4.1 fixed 2 stale default-assertion failures in the orchestrator's embedded `--test` suite, found during E27.3's own due diligence | #117 | `e982085` |
+| M28 — Governance Reconciliations | E28.1, E28.2, E28.3, E28.4 (4) | Level-0 handoff reconciled to a scale-dependent fork (`seed.md`/`genesis.md`/`start-a-project.md`/`chat-hierarchy.md`); HQ Chat Opener template promoted to `governance/templates/`; stale `docs/systems/start-a-project.md` duplicate removed; Delivery-Notice terminology reconciled (`artifact-communication-protocol.md` rewritten to match PSG §12/AOG's already-practiced single-artifact model — **the opposite direction from the milestone spec's own stated recommendation**, with reasoning grounded in direct evidence); `bin/ai-project-init` installs the canonical `governance.agent.md`; the Delivery Authorization ceremonial block retired from both starter templates and all touch points in the three `governance/systems/` mirrors and AOG §1.1/§12, in-chat merge authorization preserved everywhere | #125 | `43261e9` |
 
 **10 epics across 3 milestones, plus 1 bugfix (B4.1).** Suite at delivery: **306 passed, 1
 skipped** (the visual-artifact endpoint integration test, skipped by design at the repo default
@@ -63,7 +63,7 @@ default even under M27's own default-on flip). Governance at delivery: **PSG v2.
   explicitly** — this Phase Chat treats that as the milestone functioning correctly (the spec's
   own Non-Goals/DoD language explicitly anticipated and authorized exactly this outcome), not
   as a deviation requiring correction. Re-verified directly by this Phase Chat before accepting
-  M28's consolidation: PSG §12, AOG §1A step 2, and AOG line 716 already agreed with each other
+  M28's consolidation: PSG §12, AOG §1.1 step 2, and AOG line 716 already agreed with each other
   before E28.2 touched anything; only `artifact-communication-protocol.md` (P4.1) disagreed,
   and every one of seven recent standard Epics practiced the model E28.2 reconciled toward.
 - **Human-authorized merges throughout, with one corrected process lapse.** Every epic-PR and
@@ -96,7 +96,7 @@ default even under M27's own default-on flip). Governance at delivery: **PSG v2.
   outcome.
 - A new `visual_required_for_specs` enforcement setting (defaulted `true`) governs whether
   specs/delivery/closure declarations are required to carry a visual.
-- **Structural-first** is the zero-infrastructure default (AOG §16.8): the automatic trigger
+- **Structural-first** is the zero-infrastructure default (AOG §17.8): the automatic trigger
   set is specs plus the four delivery/closure declaration types; everything else is on-demand.
 - A documented Ollama+ComfyUI single-GPU coexistence design
   (`governance/guides/gpu-coexistence.md`) reuses the orchestrator's own PID-based execution

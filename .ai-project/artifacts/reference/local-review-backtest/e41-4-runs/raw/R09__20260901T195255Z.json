@@ -1,0 +1,601 @@
+{
+  "runid": "R09",
+  "opaque": true,
+  "model_string": "anthropic/claude-opus-5",
+  "packet": "packet-5-test-correctness.md",
+  "attempt": 1,
+  "audit_header_transmitted": false,
+  "no_tuning_applied": true,
+  "sampling": "vendor defaults, seed not fixed",
+  "credential_visibility": {
+    "XDG_DATA_HOME": "UNSET",
+    "XDG_CONFIG_HOME": "UNSET",
+    "credential_path_present": "/home/panchew/.local/share/opencode/auth.json",
+    "count_credentials": "NOT-READ"
+  },
+  "run": {
+    "exit": 0,
+    "stderr": "",
+    "elapsed_s": 85.393,
+    "finish_reason": "stop",
+    "tokens": {
+      "total": 29298,
+      "input": 2,
+      "output": 1782,
+      "reasoning": 0,
+      "cache": {
+        "write": 685,
+        "read": 26829
+      }
+    },
+    "cost": 0.06225575,
+    "response": "**Conclusion: the test is defective, not the document. `milestone/M1` on line 111 is correct and must not be changed; fix `tests/test_starter_lint.py` by widening how it derives the set of real milestones.**\n\n---\n\n### 1. What the test asserts, and its decision mechanism\n\nIt asserts that every `milestone/M<n>` token appearing in any `**/*epic-execution-chat-starter.md` under `docs/` names a real milestone. Its ground truth is built in `known_milestones()`: it takes the *filenames* of the starter files it just globbed and extracts `M(\\d+)` via `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$`. A reference passes if either:\n\n- its number is in that filename-derived set, or\n- `highest < int(num) <= highest + 10`, where `highest` is the max of that same set.\n\nThat is the whole mechanism, and both branches inherit the same flaw: **the only evidence a milestone exists is that someone wrote an Epic starter file for it.** In this repo that set is `{9, 10, 14\u202641}`. M1\u2013M8 and M11\u2013M13 are structurally unrepresentable \u2014 they predate or skip the starter naming convention. The lookahead does not rescue them either, since it admits only numbers *above* the frontier (41). A real, below-frontier milestone with no starter file can therefore never pass. That is not a tuning problem; it is the ground-truth source being wrong.\n\nNote also the docstring's own scoping: the defect class is a *stray extra digit* (`M14`\u2192`M144`, `M17`\u2192`M147`), which by construction lands an order of magnitude past the frontier. `M1` is not that class. The implementation is far broader than the contract it documents.\n\n### 2. Is line 111 a mistake?\n\nNo, on two independent grounds \u2014 either alone is sufficient.\n\n- **M1 is a real milestone of this repository.** `docs/phases/P1__System_Foundation_and_Adoption/` contains `P1-M1__milestone.md`, `P1-M1-E1.1__spec__\u2026`, and `P1-M1__completion__\u2026`. The test simply cannot see it.\n- **The reference isn't to this repository at all.** E34.2 is a fleet-adoption epic about bumping `Getawayinsured2023`, `footboard` and `courtis`. Line 111 records a fact about *footboard's* checkout state. The guard has no notion of repo scope, so it reads another project's branch name as a claim about this one. This blind spot is structural for P10: a phase whose subject matter is other repositories' branches will keep tripping a guard that assumes every branch token is local.\n\nThe suggested remedy in the failure message \u2014 \"likely a stray extra digit,\" implying `M1` \u2192 some longer number \u2014 would corrupt a true statement about a third-party repo. Following it would be worse than the red suite.\n\n### 3. What to change\n\n**Change `tests/test_starter_lint.py`.** Replace `FILENAME_RE` / `known_milestones()` so the milestone set is derived from *all* governance documents in `docs/phases/*/`, not starter filenames alone \u2014 i.e. match the `P\\d+-M([\\d.]+)` prefix on any file in a phase directory. I verified this yields M1\u2013M45 contiguously, so it fixes the under-approximation at the root without a hand-maintained allowlist (preserving the property the docstring is proud of). Every existing synthetic fixture in the file still passes under that change, since each writes its files into a phase directory; `test_detector_flags_far_future_typo_beyond_lookahead` and both stray-digit regressions keep their teeth, because M99/M144/M147 remain absent from any filename.\n\nTwo things I would **not** do:\n\n- **Do not edit the starter.** The repo currently carries the E34.2 workaround \u2014 line 111 was reworded to \"its own `M1` milestone branch\" purely to avoid emitting the literal token, with an inline note pointing at carry-forward note P10-GH-6. That turned the suite green but is the wrong shape of fix: it makes governance prose self-censor to placate a broken lint, and the trap re-arms for the next cross-repo epic. P10-GH-6 says as much explicitly and declines to recommend. I am recommending: option 1 in that note (widen the ground truth), and the workaround should be reverted once the test is fixed so the sentence reads naturally again.\n- **Do not simply accept all below-frontier numbers.** That would blunt the guard against a plausible-but-wrong milestone reference. The problem is the *source* of truth, not the strictness.\n\nTwo residual items worth recording separately, neither blocking:\n\n- The cross-repo blind spot (reason 2) survives this fix \u2014 it passes here only because footboard's M1 coincides with a valid local M1. A reference to a fleet project's `milestone/M50` would still fire falsely. Worth a follow-up, not worth inventing a marker convention today.\n- The M34 epic specs and starter state a **366/0/0** baseline that has been false since `973a7f5`. A stale asserted baseline is the more dangerous defect here: it invites an epic to either claim a green suite it never observed or blame a pre-existing red on its own work. E34.2 caught this only because it measured rather than trusted. Those baseline claims should be corrected, and \"measure, don't cite\" reinforced in the Prerequisite Verification step.",
+    "event_count": 23,
+    "raw_events": [
+      {
+        "type": "step_start",
+        "timestamp": 1788292296036,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e86ed60001Vcv3qfLTVhMTJz",
+          "messageID": "msg_05e86dd5a001TazVtLIbJrhIVW",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292306719,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_019EeM88tgJoByCP1BYVAc43",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "ls /home/panchew/soft-dev/ai-project-system/docs/phases/ 2>/dev/null | head -30; echo \"---STARTERS---\"; ls /home/panchew/soft-dev/ai-project-system/docs/phases/*/ 2>/dev/null | grep -c starter"
+            },
+            "output": "P0-M0.1-E0.1.1__completion__retired.md\nP0-M0.1-E0.1.1__epic__formalize-system-repository.md\nP0-M0.1__milestone__repository-bootstrap.md\nP0__phase__project-formalization.md\nP10__Fleet_Adoption_and_Local_Inference_Proving\nP11__Drivr_Coordination_Over_Rented_Execution\nP12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP\nP1__System_Foundation_and_Adoption\nP1__phase.md\nP2__Adoption_Architecture_and_Multi_Project_Support\nP3__Agentic_Execution_Model_Maturity\nP4__Team_Collaboration_and_Artifact_Driven_Communication\nP5__Process_Hardening_and_Visual_Artifacts\nP6__Visual_Comprehension_Layer_and_Process_Refinements\nP7__Agentic_Execution_and_Default_On_Visuals\nP8__Visual_Artifacts_Activation\nP9__Context_Handling_and_Token_Efficiency\n---STARTERS---\n157\n",
+            "metadata": {
+              "output": "P0-M0.1-E0.1.1__completion__retired.md\nP0-M0.1-E0.1.1__epic__formalize-system-repository.md\nP0-M0.1__milestone__repository-bootstrap.md\nP0__phase__project-formalization.md\nP10__Fleet_Adoption_and_Local_Inference_Proving\nP11__Drivr_Coordination_Over_Rented_Execution\nP12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP\nP1__System_Foundation_and_Adoption\nP1__phase.md\nP2__Adoption_Architecture_and_Multi_Project_Support\nP3__Agentic_Execution_Model_Maturity\nP4__Team_Collaboration_and_Artifact_Driven_Communication\nP5__Process_Hardening_and_Visual_Artifacts\nP6__Visual_Comprehension_Layer_and_Process_Refinements\nP7__Agentic_Execution_and_Default_On_Visuals\nP8__Visual_Artifacts_Activation\nP9__Context_Handling_and_Token_Efficiency\n---STARTERS---\n157\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "ls /home/panchew/soft-dev/ai-project-system/docs/phases/ 2>/dev/null | head -30; echo \"---STARTERS---\"; ls /home/panchew/soft-dev/ai-project-system/docs/phases/*/ 2>/dev/null | grep -c starter",
+            "time": {
+              "start": 1788292306713,
+              "end": 1788292306717
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e871170001H1vZzsfy7m4P5Q",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e86dd5a001TazVtLIbJrhIVW"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292307258,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01YafPYFMFzPQVWheE5fD3Lh",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/*/*epic-execution-chat-starter.md 2>/dev/null | sed 's#.*/##' | sort"
+            },
+            "output": "P10-M33-E33.1__epic-execution-chat-starter.md\nP10-M33-E33.2__epic-execution-chat-starter.md\nP10-M33-E33.3__epic-execution-chat-starter.md\nP10-M33-E33.4__epic-execution-chat-starter.md\nP10-M34-E34.1__epic-execution-chat-starter.md\nP10-M34-E34.2__epic-execution-chat-starter.md\nP10-M34-E34.3__epic-execution-chat-starter.md\nP10-M35-E35.1__epic-execution-chat-starter.md\nP10-M35-E35.2__epic-execution-chat-starter.md\nP10-M35-E35.3__epic-execution-chat-starter.md\nP10-M35-E35.4__epic-execution-chat-starter.md\nP10-M35-E35.5__epic-execution-chat-starter.md\nP11-M36-E36.1__epic-execution-chat-starter.md\nP11-M36-E36.2__epic-execution-chat-starter.md\nP11-M36-E36.3__epic-execution-chat-starter.md\nP11-M36-E36.4__epic-execution-chat-starter.md\nP11-M36-E36.5__epic-execution-chat-starter.md\nP11-M37-E37.1__epic-execution-chat-starter.md\nP11-M37-E37.2__epic-execution-chat-starter.md\nP11-M38-E38.1__epic-execution-chat-starter.md\nP11-M38-E38.2__epic-execution-chat-starter.md\nP11-M38-E38.3__epic-execution-chat-starter.md\nP11-M38-E38.4__epic-execution-chat-starter.md\nP11-M38-E38.5__epic-execution-chat-starter.md\nP11-M38-E38.6__epic-execution-chat-starter.md\nP11-M39-E39.1__epic-execution-chat-starter.md\nP11-M39-E39.2__epic-execution-chat-starter.md\nP11-M39-E39.3__epic-execution-chat-starter.md\nP11-M40-E40.1__epic-execution-chat-starter.md\nP11-M40-E40.2__epic-execution-chat-starter.md\nP11-M40-E40.3__epic-execution-chat-starter.md\nP11-M40-E40.4__epic-execution-chat-starter.md\nP11-M40-E40.5__epic-execution-chat-starter.md\nP12-M41-E41.1__epic-execution-chat-starter.md\nP12-M41-E41.2__epic-execution-chat-starter.md\nP12-M41-E41.3__epic-execution-chat-starter.md\nP12-M41-E41.4__epic-execution-chat-starter.md\nP12-M41-E41.5__epic-execution-chat-starter.md\nP2-M10-E10.1__epic-execution-chat-starter.md\nP2-M10-E10.2__epic-execution-chat-starter.md\nP2-M10-E10.3__epic-execution-chat-starter.md\nP2-M10-E10.4__epic-execution-chat-starter.md\nP2-M9-E9.1__epic-execution-chat-starter.md\nP2-M9-E9.2__epic-execution-chat-starter.md\nP2-M9-E9.3__epic-execution-chat-starter.md\nP2-M9-E9.4__epic-execution-chat-starter.md\nP4-M14-E14.1__epic-execution-chat-starter.md\nP4-M14-E14.2__epic-execution-chat-starter.md\nP4-M14-E14.3__epic-execution-chat-starter.md\nP4-M15-E15.1__epic-execution-chat-starter.md\nP4-M15-E15.2__epic-execution-chat-starter.md\nP4-M16-E16.1__epic-execution-chat-starter.md\nP4-M16-E16.2__epic-execution-chat-starter.md\nP4-M17-E17.1__epic-execution-chat-starter.md\nP4-M17-E17.2__epic-execution-chat-starter.md\nP4-M18-E18.1__epic-execution-chat-starter.md\nP4-M19-E19.1__epic-execution-chat-starter.md\nP4-M19-E19.2__epic-execution-chat-starter.md\nP5-M20-E20.1__epic-execution-chat-starter.md\nP5-M20-E20.2__epic-execution-chat-starter.md\nP5-M20-E20.3__epic-execution-chat-starter.md\nP5-M20-E20.4__epic-execution-chat-starter.md\nP5-M20-E20.5__epic-execution-chat-starter.md\nP5-M21-E21.1__epic-execution-chat-starter.md\nP5-M21-E21.2__epic-execution-chat-starter.md\nP5-M22-E22.1__epic-execution-chat-starter.md\nP5-M22-E22.2__epic-execution-chat-starter.md\nP6-M23-E23.1__epic-execution-chat-starter.md\nP6-M23-E23.2__epic-execution-chat-starter.md\nP6-M24-E24.1__epic-execution-chat-starter.md\nP6-M24-E24.2__epic-execution-chat-starter.md\nP6-M25-E25.1__epic-execution-chat-starter.md\nP6-M25-E25.2__epic-execution-chat-starter.md\nP6-M25-E25.3__epic-execution-chat-starter.md\nP6-M25-E25.4__epic-execution-chat-starter.md\nP6-M25-E25.5__epic-execution-chat-starter.md\nP6-M25-E25.6__epic-execution-chat-starter.md\nP7-M26-E26.1__epic-execution-chat-starter.md\nP7-M26-E26.2__epic-execution-chat-starter.md\nP7-M26-E26.3__epic-execution-chat-starter.md\nP7-M27-E27.1__epic-execution-chat-starter.md\nP7-M27-E27.2__epic-execution-chat-starter.md\nP7-M27-E27.3__epic-execution-chat-starter.md\nP7-M28-E28.1__epic-execution-chat-starter.md\nP7-M28-E28.2__epic-execution-chat-starter.md\nP7-M28-E28.3__epic-execution-chat-starter.md\nP7-M28-E28.4__epic-execution-chat-starter.md\nP8-M29-E29.1__epic-execution-chat-starter.md\nP8-M29-E29.2__epic-execution-chat-starter.md\nP8-M29-E29.3__epic-execution-chat-starter.md\nP9-M30-E30.1__epic-execution-chat-starter.md\nP9-M30-E30.2__epic-execution-chat-starter.md\nP9-M30-E30.3__epic-execution-chat-starter.md\nP9-M30-E30.4__epic-execution-chat-starter.md\nP9-M31-E31.1__epic-execution-chat-starter.md\nP9-M31-E31.1-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.2__epic-execution-chat-starter.md\nP9-M31-E31.2-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.3__epic-execution-chat-starter.md\nP9-M32-E32.1__epic-execution-chat-starter.md\nP9-M32-E32.2__epic-execution-chat-starter.md\nP9-M32-E32.3__epic-execution-chat-starter.md\n",
+            "metadata": {
+              "output": "P10-M33-E33.1__epic-execution-chat-starter.md\nP10-M33-E33.2__epic-execution-chat-starter.md\nP10-M33-E33.3__epic-execution-chat-starter.md\nP10-M33-E33.4__epic-execution-chat-starter.md\nP10-M34-E34.1__epic-execution-chat-starter.md\nP10-M34-E34.2__epic-execution-chat-starter.md\nP10-M34-E34.3__epic-execution-chat-starter.md\nP10-M35-E35.1__epic-execution-chat-starter.md\nP10-M35-E35.2__epic-execution-chat-starter.md\nP10-M35-E35.3__epic-execution-chat-starter.md\nP10-M35-E35.4__epic-execution-chat-starter.md\nP10-M35-E35.5__epic-execution-chat-starter.md\nP11-M36-E36.1__epic-execution-chat-starter.md\nP11-M36-E36.2__epic-execution-chat-starter.md\nP11-M36-E36.3__epic-execution-chat-starter.md\nP11-M36-E36.4__epic-execution-chat-starter.md\nP11-M36-E36.5__epic-execution-chat-starter.md\nP11-M37-E37.1__epic-execution-chat-starter.md\nP11-M37-E37.2__epic-execution-chat-starter.md\nP11-M38-E38.1__epic-execution-chat-starter.md\nP11-M38-E38.2__epic-execution-chat-starter.md\nP11-M38-E38.3__epic-execution-chat-starter.md\nP11-M38-E38.4__epic-execution-chat-starter.md\nP11-M38-E38.5__epic-execution-chat-starter.md\nP11-M38-E38.6__epic-execution-chat-starter.md\nP11-M39-E39.1__epic-execution-chat-starter.md\nP11-M39-E39.2__epic-execution-chat-starter.md\nP11-M39-E39.3__epic-execution-chat-starter.md\nP11-M40-E40.1__epic-execution-chat-starter.md\nP11-M40-E40.2__epic-execution-chat-starter.md\nP11-M40-E40.3__epic-execution-chat-starter.md\nP11-M40-E40.4__epic-execution-chat-starter.md\nP11-M40-E40.5__epic-execution-chat-starter.md\nP12-M41-E41.1__epic-execution-chat-starter.md\nP12-M41-E41.2__epic-execution-chat-starter.md\nP12-M41-E41.3__epic-execution-chat-starter.md\nP12-M41-E41.4__epic-execution-chat-starter.md\nP12-M41-E41.5__epic-execution-chat-starter.md\nP2-M10-E10.1__epic-execution-chat-starter.md\nP2-M10-E10.2__epic-execution-chat-starter.md\nP2-M10-E10.3__epic-execution-chat-starter.md\nP2-M10-E10.4__epic-execution-chat-starter.md\nP2-M9-E9.1__epic-execution-chat-starter.md\nP2-M9-E9.2__epic-execution-chat-starter.md\nP2-M9-E9.3__epic-execution-chat-starter.md\nP2-M9-E9.4__epic-execution-chat-starter.md\nP4-M14-E14.1__epic-execution-chat-starter.md\nP4-M14-E14.2__epic-execution-chat-starter.md\nP4-M14-E14.3__epic-execution-chat-starter.md\nP4-M15-E15.1__epic-execution-chat-starter.md\nP4-M15-E15.2__epic-execution-chat-starter.md\nP4-M16-E16.1__epic-execution-chat-starter.md\nP4-M16-E16.2__epic-execution-chat-starter.md\nP4-M17-E17.1__epic-execution-chat-starter.md\nP4-M17-E17.2__epic-execution-chat-starter.md\nP4-M18-E18.1__epic-execution-chat-starter.md\nP4-M19-E19.1__epic-execution-chat-starter.md\nP4-M19-E19.2__epic-execution-chat-starter.md\nP5-M20-E20.1__epic-execution-chat-starter.md\nP5-M20-E20.2__epic-execution-chat-starter.md\nP5-M20-E20.3__epic-execution-chat-starter.md\nP5-M20-E20.4__epic-execution-chat-starter.md\nP5-M20-E20.5__epic-execution-chat-starter.md\nP5-M21-E21.1__epic-execution-chat-starter.md\nP5-M21-E21.2__epic-execution-chat-starter.md\nP5-M22-E22.1__epic-execution-chat-starter.md\nP5-M22-E22.2__epic-execution-chat-starter.md\nP6-M23-E23.1__epic-execution-chat-starter.md\nP6-M23-E23.2__epic-execution-chat-starter.md\nP6-M24-E24.1__epic-execution-chat-starter.md\nP6-M24-E24.2__epic-execution-chat-starter.md\nP6-M25-E25.1__epic-execution-chat-starter.md\nP6-M25-E25.2__epic-execution-chat-starter.md\nP6-M25-E25.3__epic-execution-chat-starter.md\nP6-M25-E25.4__epic-execution-chat-starter.md\nP6-M25-E25.5__epic-execution-chat-starter.md\nP6-M25-E25.6__epic-execution-chat-starter.md\nP7-M26-E26.1__epic-execution-chat-starter.md\nP7-M26-E26.2__epic-execution-chat-starter.md\nP7-M26-E26.3__epic-execution-chat-starter.md\nP7-M27-E27.1__epic-execution-chat-starter.md\nP7-M27-E27.2__epic-execution-chat-starter.md\nP7-M27-E27.3__epic-execution-chat-starter.md\nP7-M28-E28.1__epic-execution-chat-starter.md\nP7-M28-E28.2__epic-execution-chat-starter.md\nP7-M28-E28.3__epic-execution-chat-starter.md\nP7-M28-E28.4__epic-execution-chat-starter.md\nP8-M29-E29.1__epic-execution-chat-starter.md\nP8-M29-E29.2__epic-execution-chat-starter.md\nP8-M29-E29.3__epic-execution-chat-starter.md\nP9-M30-E30.1__epic-execution-chat-starter.md\nP9-M30-E30.2__epic-execution-chat-starter.md\nP9-M30-E30.3__epic-execution-chat-starter.md\nP9-M30-E30.4__epic-execution-chat-starter.md\nP9-M31-E31.1__epic-execution-chat-starter.md\nP9-M31-E31.1-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.2__epic-execution-chat-starter.md\nP9-M31-E31.2-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.3__epic-execution-chat-starter.md\nP9-M32-E32.1__epic-execution-chat-starter.md\nP9-M32-E32.2__epic-execution-chat-starter.md\nP9-M32-E32.3__epic-execution-chat-starter.md\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/*/*epic-execution-chat-starter.md 2>/dev/null | sed 's#.*/##' | sort",
+            "time": {
+              "start": 1788292307255,
+              "end": 1788292307257
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e8716fe001Px35RAc0x81x3h",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e86dd5a001TazVtLIbJrhIVW"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292307287,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e871954001ujigMH6zQAvGkV",
+          "reason": "tool-calls",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "messageID": "msg_05e86dd5a001TazVtLIbJrhIVW",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "step-finish",
+          "tokens": {
+            "total": 17101,
+            "input": 2,
+            "output": 950,
+            "reasoning": 0,
+            "cache": {
+              "write": 5711,
+              "read": 10438
+            }
+          },
+          "cost": 0.06467275
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292310165,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e872493001ybi4LxQKm5g4zb",
+          "messageID": "msg_05e87195d001LrhAZUDnUJeyfz",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292313034,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_019fejq2UdhamKFXiXhMygk9",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && sed -n '100,120p' \"docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md\""
+            },
+            "output": "\n---\n\n## Execution Contract\n\n### Your Responsibilities (Coding Agent)\n\n1. **Create branch** `epic/P10-M34-E34.2` from `milestone/M34` (in **this** repo).\n2. **Run Prerequisite Verification**; record every result including all three pre-states.\n3. **Decide and document the branch base** for each target (spec Judgment call 1). Two projects sit\n   on non-default branches mid-governance-work \u2014 `Getawayinsured2023` on `phase/P1`, `footboard` on\n   its own `M1` milestone branch. Recommendation is to branch from the default branch so the bump is\n   independently publishable. **State your choice and reasoning per project.**\n\n   > Wording note (E34.2 execution, 2026-07-29): `footboard`'s branch is named here without the\n   > literal `milestone/M<n>` token because `tests/test_starter_lint.py` false-positives on it \u2014\n   > see **P10-GH-6**. The branch in `footboard` is unchanged; only this sentence's phrasing is.\n4. **`Getawayinsured2023` \u2014 stamp only.** Its submodule is already at v7.0.0 and its agent sha is\n   already canonical. **Re-run the FM3 agent-freshness check and record that it passed** (it is the\n   only fleet project where FM3 does not bite \u2014 that is worth recording, not skipping). Add\n   `framework_version: v7.0.0`. **Do not touch its `models:` block.** Confirm, commit locally.\n",
+            "metadata": {
+              "output": "\n---\n\n## Execution Contract\n\n### Your Responsibilities (Coding Agent)\n\n1. **Create branch** `epic/P10-M34-E34.2` from `milestone/M34` (in **this** repo).\n2. **Run Prerequisite Verification**; record every result including all three pre-states.\n3. **Decide and document the branch base** for each target (spec Judgment call 1). Two projects sit\n   on non-default branches mid-governance-work \u2014 `Getawayinsured2023` on `phase/P1`, `footboard` on\n   its own `M1` milestone branch. Recommendation is to branch from the default branch so the bump is\n   independently publishable. **State your choice and reasoning per project.**\n\n   > Wording note (E34.2 execution, 2026-07-29): `footboard`'s branch is named here without the\n   > literal `milestone/M<n>` token because `tests/test_starter_lint.py` false-positives on it \u2014\n   > see **P10-GH-6**. The branch in `footboard` is unchanged; only this sentence's phrasing is.\n4. **`Getawayinsured2023` \u2014 stamp only.** Its submodule is already at v7.0.0 and its agent sha is\n   already canonical. **Re-run the FM3 agent-freshness check and record that it passed** (it is the\n   only fleet project where FM3 does not bite \u2014 that is worth recording, not skipping). Add\n   `framework_version: v7.0.0`. **Do not touch its `models:` block.** Confirm, commit locally.\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && sed -n '100,120p' \"docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md\"",
+            "time": {
+              "start": 1788292313030,
+              "end": 1788292313033
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e872a42001q7kmlPmK6fE6fV",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e87195d001LrhAZUDnUJeyfz"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292313780,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01TERdj3ypbDQDWAUsKebKwx",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && grep -rn \"milestone/M[0-9]\" docs/phases/*/*epic-execution-chat-starter.md | grep -oP \"milestone/M\\d+\" | sort -u | sort -t M -k2 -n"
+            },
+            "output": "milestone/M9\nmilestone/M10\nmilestone/M14\nmilestone/M15\nmilestone/M16\nmilestone/M17\nmilestone/M18\nmilestone/M19\nmilestone/M20\nmilestone/M21\nmilestone/M22\nmilestone/M23\nmilestone/M24\nmilestone/M25\nmilestone/M26\nmilestone/M27\nmilestone/M28\nmilestone/M29\nmilestone/M30\nmilestone/M31\nmilestone/M32\nmilestone/M33\nmilestone/M34\nmilestone/M35\nmilestone/M36\nmilestone/M37\nmilestone/M38\nmilestone/M39\nmilestone/M40\nmilestone/M41\n",
+            "metadata": {
+              "output": "milestone/M9\nmilestone/M10\nmilestone/M14\nmilestone/M15\nmilestone/M16\nmilestone/M17\nmilestone/M18\nmilestone/M19\nmilestone/M20\nmilestone/M21\nmilestone/M22\nmilestone/M23\nmilestone/M24\nmilestone/M25\nmilestone/M26\nmilestone/M27\nmilestone/M28\nmilestone/M29\nmilestone/M30\nmilestone/M31\nmilestone/M32\nmilestone/M33\nmilestone/M34\nmilestone/M35\nmilestone/M36\nmilestone/M37\nmilestone/M38\nmilestone/M39\nmilestone/M40\nmilestone/M41\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && grep -rn \"milestone/M[0-9]\" docs/phases/*/*epic-execution-chat-starter.md | grep -oP \"milestone/M\\d+\" | sort -u | sort -t M -k2 -n",
+            "time": {
+              "start": 1788292313776,
+              "end": 1788292313778
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e872fc3001s28PWyhpDwUd2W",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e87195d001LrhAZUDnUJeyfz"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292313793,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e8732be001eNh83s26L2g79B",
+          "reason": "tool-calls",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "messageID": "msg_05e87195d001LrhAZUDnUJeyfz",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "step-finish",
+          "tokens": {
+            "total": 20483,
+            "input": 2,
+            "output": 377,
+            "reasoning": 0,
+            "cache": {
+              "write": 3955,
+              "read": 16149
+            }
+          },
+          "cost": 0.04222825
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292316117,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e873bd30019yCkF9BIHQ0gVa",
+          "messageID": "msg_05e8732c6001zm7yHeiAcR0VOC",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292320154,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01UhZHHqLR5FuEbnFtPa1tvY",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && grep -rln \"P10-GH-6\" --include=*.md . | head -20"
+            },
+            "output": "./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-closure-declaration.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38__milestone-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36__milestone-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__delivery-notice.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__spec__milestone-local-inference-backtest.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-closure-declaration.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__confirmation-evidence.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-spec.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35__milestone-spec.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35__carry-forward-note__P10-GH-10-flaky-artifact-router-test.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\n./.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__milestone-locality-row-p4.md\n./.ai-project/artifacts/rulings/2026-07-30__ai-project-system-hq__ruling__sn-25-handback-and-execution-matrix.md\n",
+            "metadata": {
+              "output": "./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-closure-declaration.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38__milestone-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36__milestone-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-execution-chat-starter.md\n./docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__delivery-notice.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__spec__milestone-local-inference-backtest.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-closure-declaration.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__confirmation-evidence.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-spec.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35__milestone-spec.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35__carry-forward-note__P10-GH-10-flaky-artifact-router-test.md\n./docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\n./.ai-project/artifacts/rulings/2026-07-31__ai-project-system-hq__ruling__milestone-locality-row-p4.md\n./.ai-project/artifacts/rulings/2026-07-30__ai-project-system-hq__ruling__sn-25-handback-and-execution-matrix.md\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && grep -rln \"P10-GH-6\" --include=*.md . | head -20",
+            "time": {
+              "start": 1788292320151,
+              "end": 1788292320153
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e8749d3001axdoCUbGYGT9za",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e8732c6001zm7yHeiAcR0VOC"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292320166,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e874ba3001MnNAHJw8GjdJoa",
+          "reason": "tool-calls",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "messageID": "msg_05e8732c6001zm7yHeiAcR0VOC",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "step-finish",
+          "tokens": {
+            "total": 21633,
+            "input": 2,
+            "output": 390,
+            "reasoning": 0,
+            "cache": {
+              "write": 1137,
+              "read": 20104
+            }
+          },
+          "cost": 0.02691825
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292323392,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e87583d001OvNTqSEwvdJBw6",
+          "messageID": "msg_05e874bab001sj9CIVGOqhW03x",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292323957,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01LpRQ7dcVtXwn6jVLGTmrUk",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && cat \"docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\""
+            },
+            "output": "---\nproject: ai-project-system\nphase: P10\nmilestone: M34\ntype: note\nstatus: active\nissuer_chat: Epic Execution Chat (P10-M34-E34.2)\nissued_to: Milestone Chat (P10-M34) \u2192 Phase Chat (P10)\nlast_updated: 2026-07-29\n---\n\n# Carry-Forward Note \u2014 P10-GH-6: the Epic-starter lint flags real milestones as typos\n\n**Recorded, not fixed.** Changing `tests/test_starter_lint.py` is a framework *capability* change, and\nthe bump procedure's Failure Mode 4 already establishes that framework-repo changes are **out of scope\nfor adoption epics**. E34.2 worked around it in its own document and filed this instead.\n\n**Origin:** found during E34.2's Prerequisite Verification. The Epic spec and starter both state the\nsuite baseline is **366 / 0 / 0**. It was actually **365 passed / 1 failed / 0 skipped** on\n`milestone/M34` before any E34.2 work \u2014 and the failing test was triggered by E34.2's *own* starter,\ncommitted in `973a7f5`.\n\n---\n\n## The finding\n\n```\nE           Failed: Milestone branch-name typo(s) detected in Epic starters:\nE             docs/phases/P10__.../P10-M34-E34.2__epic-execution-chat-starter.md:111 -> milestone/M1 (not a known milestone)\nE           Fix the milestone number (likely a stray extra digit).\n```\n\nThe flagged reference is **not a typo**, and `milestone/M1` is **not a fake milestone**. Two\nindependent reasons the guard is wrong here:\n\n1. **M1 is a real milestone of this repo.** `docs/phases/P1__.../P1-M1-E1.1__spec__project-tracker-integration-system.md`\n   and its completion record both exist. But `known_milestones()` derives the set of real milestones\n   **exclusively from Epic-starter filenames** matching\n   `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$`. This repo has no M1 *starter* file, so\n   **every milestone that predates the starter naming convention is invisible to the guard.** The\n   lowest milestone it can see is M9; M1\u2013M8 are all unrepresentable.\n2. **The reference was to another repository's branch.** Line 111 described `footboard` sitting on its\n   own `milestone/M1` branch \u2014 a target-repo fact, which is exactly the subject matter of a\n   cross-repo adoption epic. The guard has no notion of a branch name belonging to a different repo.\n\nThe guard's own docstring scopes it to a specific defect class: a **stray extra digit** (`M14` \u2192\n`M144`, `M17` \u2192 `M147`), which always lands an order of magnitude past the milestone frontier. A\nreference to a small, real, *below-frontier* number is not that class, and the acceptance logic\n(`highest < int(num) <= highest + 10`) only ever admits numbers **above** the frontier \u2014 so a\nbelow-frontier unknown can never pass.\n\n## Why it matters beyond one line of Markdown\n\n- **It misreports the baseline.** M34's epic specs state a 366/0/0 baseline that has been false since\n  `973a7f5`. Any epic that trusts a stated baseline instead of measuring it will either report a green\n  suite it never saw, or attribute a pre-existing red to its own work. E34.2 measured, which is the\n  only reason it was caught.\n- **It penalizes cross-repo epics specifically.** P10 is a *fleet adoption* phase: its epics exist to\n  talk about other repositories' branches. A guard that treats another repo's branch name as a typo in\n  this repo will keep firing for as long as the phase's subject matter is the fleet.\n- **The fix is not obviously \"loosen it\".** Simply accepting all below-frontier numbers would blunt the\n  guard for genuine mistakes. The interesting question is whether the ground truth should come from\n  something better than starter filenames \u2014 `docs/phases/*/` directory contents, milestone specs, or\n  an explicit registry \u2014 which is a design call above this level.\n\n## Candidate directions (not decided here)\n\n1. **Widen the ground truth.** Derive known milestones from milestone specs or phase directories, not\n   starter filenames alone. Fixes reason 1 and needs no new convention; does nothing for reason 2.\n2. **Teach the guard about cross-repo references** \u2014 e.g. skip a match when the line also names a\n   known fleet project, or honor an explicit inline marker. Fixes reason 2; adds a convention.\n3. **Narrow the guard to its stated defect class.** Flag only references implausibly far past the\n   frontier (which is all the docstring ever claimed to catch). Simplest, and it keeps the teeth for\n   stray-digit typos; accepts that a wrong-but-plausible milestone number goes uncaught.\n4. **Leave it and document the workaround.** Cheapest, but the trap re-arms for the next cross-repo\n   epic, and the false baseline in the specs stays wrong.\n\n**No recommendation from this level** \u2014 this is a framework capability judgment, and option 1 vs 3 is a\nquestion about what the guard is *for*, which belongs to whoever owns the test.\n\n## What E34.2 did instead\n\nReworded its own starter so the sentence no longer emits the literal `milestone/M<n>` token \u2014\n`footboard`'s branch is now described as \"its own `M1` milestone branch\", with an inline note pointing\nhere. **The branch in `footboard` is unchanged; only the phrasing in this repo is.** No test, no spec,\nand no other starter was touched. Suite afterwards: **366 passed, 0 failed, 0 skipped.**\n\nThis is a workaround in one document, not a fix \u2014 the next Epic starter that needs to name a target\nrepo's milestone branch will hit the same wall.\n\n## Explicitly not done here\n\n- `tests/test_starter_lint.py` **not modified** \u2014 no loosened regex, no new allowlist, no changed\n  lookahead.\n- The stale 366/0/0 baseline claims in the E34.2 spec/starter and the M34 milestone spec are **not**\n  rewritten; the true measured baseline is recorded in\n  `P10-M34-E34.2__confirmation-evidence.md` instead.\n- No other starter was audited for the same latent trigger. Any starter referencing `milestone/M1`\n  through `milestone/M8` would fail the same way; **only E34.2's was in the failing set**, so no\n  sweep was performed.\n- No renumbering of P10-GH-1 (`framework_version` unschema'd), P10-GH-2 (Creation Seed lacks E31.3\n  verification), P10-GH-3 (policy row P1 vs live config), P10-GH-4 (`delivery_notice.merge_details`\n  unfillable), or P10-GH-5 (yml validation rules unenforced). This is **P10-GH-6**.\n\n  > **Amendment 2026-08-04 (P11-M36-E36.5) \u2014 the parenthetical gloss of P10-GH-2 above restates a\n  > false premise.** The original text is left unedited, deliberately. `governance/templates/seed.md`\n  > has carried the E31.3 check since **`d7ee7cd` (2026-07-19)**, nine days before the ruling that\n  > filed the gap. The real defect was `creation-chat-guide.md`'s re-instantiation ritual, and\n  > **E36.3 (merged `d8f4871`) has closed it.** Per **SN-26** (Required action 1) and **HQ Ruling\n  > 2026-08-01, Decision 8**.\n  >\n  > **This amendment corrects the gloss only.** It renumbers nothing, reopens nothing, and leaves\n  > this note's P10-GH-6 subject matter entirely untouched.\n",
+            "metadata": {
+              "output": "---\nproject: ai-project-system\nphase: P10\nmilestone: M34\ntype: note\nstatus: active\nissuer_chat: Epic Execution Chat (P10-M34-E34.2)\nissued_to: Milestone Chat (P10-M34) \u2192 Phase Chat (P10)\nlast_updated: 2026-07-29\n---\n\n# Carry-Forward Note \u2014 P10-GH-6: the Epic-starter lint flags real milestones as typos\n\n**Recorded, not fixed.** Changing `tests/test_starter_lint.py` is a framework *capability* change, and\nthe bump procedure's Failure Mode 4 already establishes that framework-repo changes are **out of scope\nfor adoption epics**. E34.2 worked around it in its own document and filed this instead.\n\n**Origin:** found during E34.2's Prerequisite Verification. The Epic spec and starter both state the\nsuite baseline is **366 / 0 / 0**. It was actually **365 passed / 1 failed / 0 skipped** on\n`milestone/M34` before any E34.2 work \u2014 and the failing test was triggered by E34.2's *own* starter,\ncommitted in `973a7f5`.\n\n---\n\n## The finding\n\n```\nE           Failed: Milestone branch-name typo(s) detected in Epic starters:\nE             docs/phases/P10__.../P10-M34-E34.2__epic-execution-chat-starter.md:111 -> milestone/M1 (not a known milestone)\nE           Fix the milestone number (likely a stray extra digit).\n```\n\nThe flagged reference is **not a typo**, and `milestone/M1` is **not a fake milestone**. Two\nindependent reasons the guard is wrong here:\n\n1. **M1 is a real milestone of this repo.** `docs/phases/P1__.../P1-M1-E1.1__spec__project-tracker-integration-system.md`\n   and its completion record both exist. But `known_milestones()` derives the set of real milestones\n   **exclusively from Epic-starter filenames** matching\n   `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$`. This repo has no M1 *starter* file, so\n   **every milestone that predates the starter naming convention is invisible to the guard.** The\n   lowest milestone it can see is M9; M1\u2013M8 are all unrepresentable.\n2. **The reference was to another repository's branch.** Line 111 described `footboard` sitting on its\n   own `milestone/M1` branch \u2014 a target-repo fact, which is exactly the subject matter of a\n   cross-repo adoption epic. The guard has no notion of a branch name belonging to a different repo.\n\nThe guard's own docstring scopes it to a specific defect class: a **stray extra digit** (`M14` \u2192\n`M144`, `M17` \u2192 `M147`), which always lands an order of magnitude past the milestone frontier. A\nreference to a small, real, *below-frontier* number is not that class, and the acceptance logic\n(`highest < int(num) <= highest + 10`) only ever admits numbers **above** the frontier \u2014 so a\nbelow-frontier unknown can never pass.\n\n## Why it matters beyond one line of Markdown\n\n- **It misreports the baseline.** M34's epic specs state a 366/0/0 baseline that has been false since\n  `973a7f5`. Any epic that trusts a stated baseline instead of measuring it will either report a green\n  suite it never saw, or attribute a pre-existing red to its own work. E34.2 measured, which is the\n  only reason it was caught.\n- **It penalizes cross-repo epics specifically.** P10 is a *fleet adoption* phase: its epics exist to\n  talk about other repositories' branches. A guard that treats another repo's branch name as a typo in\n  this repo will keep firing for as long as the phase's subject matter is the fleet.\n- **The fix is not obviously \"loosen it\".** Simply accepting all below-frontier numbers would blunt the\n  guard for genuine mistakes. The interesting question is whether the ground truth should come from\n  something better than starter filenames \u2014 `docs/phases/*/` directory contents, milestone specs, or\n  an explicit registry \u2014 which is a design call above this level.\n\n## Candidate directions (not decided here)\n\n1. **Widen the ground truth.** Derive known milestones from milestone specs or phase directories, not\n   starter filenames alone. Fixes reason 1 and needs no new convention; does nothing for reason 2.\n2. **Teach the guard about cross-repo references** \u2014 e.g. skip a match when the line also names a\n   known fleet project, or honor an explicit inline marker. Fixes reason 2; adds a convention.\n3. **Narrow the guard to its stated defect class.** Flag only references implausibly far past the\n   frontier (which is all the docstring ever claimed to catch). Simplest, and it keeps the teeth for\n   stray-digit typos; accepts that a wrong-but-plausible milestone number goes uncaught.\n4. **Leave it and document the workaround.** Cheapest, but the trap re-arms for the next cross-repo\n   epic, and the false baseline in the specs stays wrong.\n\n**No recommendation from this level** \u2014 this is a framework capability judgment, and option 1 vs 3 is a\nquestion about what the guard is *for*, which belongs to whoever owns the test.\n\n## What E34.2 did instead\n\nReworded its own starter so the sentence no longer emits the literal `milestone/M<n>` token \u2014\n`footboard`'s branch is now described as \"its own `M1` milestone branch\", with an inline note pointing\nhere. **The branch in `footboard` is unchanged; only the phrasing in this repo is.** No test, no spec,\nand no other starter was touched. Suite afterwards: **366 passed, 0 failed, 0 skipped.**\n\nThis is a workaround in one document, not a fix \u2014 the next Epic starter that needs to name a target\nrepo's milestone branch will hit the same wall.\n\n## Explicitly not done here\n\n- `tests/test_starter_lint.py` **not modified** \u2014 no loosened regex, no new allowlist, no changed\n  lookahead.\n- The stale 366/0/0 baseline claims in the E34.2 spec/starter and the M34 milestone spec are **not**\n  rewritten; the true measured baseline is recorded in\n  `P10-M34-E34.2__confirmation-evidence.md` instead.\n- No other starter was audited for the same latent trigger. Any starter referencing `milestone/M1`\n  through `milestone/M8` would fail the same way; **only E34.2's was in the failing set**, so no\n  sweep was performed.\n- No renumbering of P10-GH-1 (`framework_version` unschema'd), P10-GH-2 (Creation Seed lacks E31.3\n  verification), P10-GH-3 (policy row P1 vs live config), P10-GH-4 (`delivery_notice.merge_details`\n  unfillable), or P10-GH-5 (yml validation rules unenforced). This is **P10-GH-6**.\n\n  > **Amendment 2026-08-04 (P11-M36-E36.5) \u2014 the parenthetical gloss of P10-GH-2 above restates a\n  > false premise.** The original text is left unedited, deliberately. `governance/templates/seed.md`\n  > has carried the E31.3 check since **`d7ee7cd` (2026-07-19)**, nine days before the ruling that\n  > filed the gap. The real defect was `creation-chat-guide.md`'s re-instantiation ritual, and\n  > **E36.3 (merged `d8f4871`) has closed it.** Per **SN-26** (Required action 1) and **HQ Ruling\n  > 2026-08-01, Decision 8**.\n  >\n  > **This amendment corrects the gloss only.** It renumbers nothing, reopens nothing, and leaves\n  > this note's P10-GH-6 subject matter entirely untouched.\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && cat \"docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\"",
+            "time": {
+              "start": 1788292323953,
+              "end": 1788292323955
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e87583e001G5AzhMPER1uCU0",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e874bab001sj9CIVGOqhW03x"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292323965,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e875a7c0011H4sORL4H1o2Uk",
+          "reason": "tool-calls",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "messageID": "msg_05e874bab001sj9CIVGOqhW03x",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "step-finish",
+          "tokens": {
+            "total": 22829,
+            "input": 2,
+            "output": 137,
+            "reasoning": 0,
+            "cache": {
+              "write": 1449,
+              "read": 21241
+            }
+          },
+          "cost": 0.02311175
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292326962,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e87662f001P35sZ826mlJoEP",
+          "messageID": "msg_05e875a88001iF6DUhw2PCr9TR",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292337708,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01DZsAua9NeJQDQBirt6iJ8s",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/*/ | grep -oP \"^P\\d+-M[\\d.]+\" | sort -u | tr '\\n' ' '; echo; echo \"--- milestone docs ---\"; ls docs/phases/*/*milestone*.md docs/phases/*milestone*.md 2>/dev/null | sed 's#.*/##' | grep -oP \"^P\\d+-M[\\d.]+\" | sort -u | tr '\\n' ' '"
+            },
+            "output": "P10-M33 P10-M34 P10-M35 P11-M36 P11-M37 P11-M38 P11-M39 P11-M40 P12-M41 P12-M42 P12-M43 P12-M44 P12-M45 P1-M1 P1-M2 P1-M3 P1-M4 P1-M5 P2-M10 P2-M6 P2-M7 P2-M8 P2-M9 P3-M11 P3-M12 P3-M13 P4-M14 P4-M15 P4-M16 P4-M17 P4-M18 P4-M19 P5-M20 P5-M21 P5-M22 P6-M23 P6-M24 P6-M25 P7-M26 P7-M27 P7-M28 P8-M29 P9-M30 P9-M31 P9-M32 \n--- milestone docs ---\nP0-M0.1 P10-M33 P10-M34 P10-M35 P11-M36 P11-M37 P11-M38 P11-M39 P11-M40 P12-M41 P12-M42 P12-M43 P12-M44 P12-M45 P1-M1 P1-M2 P1-M3 P1-M4 P1-M5 P2-M10 P2-M6 P2-M7 P2-M9 P3-M11 P3-M12 P3-M13 P4-M14 P4-M15 P4-M16 P4-M17 P4-M18 P4-M19 P5-M20 P5-M21 P5-M22 P6-M23 P6-M24 P6-M25 P7-M26 P7-M27 P7-M28 P8-M29 P9-M30 P9-M31 P9-M32 ",
+            "metadata": {
+              "output": "P10-M33 P10-M34 P10-M35 P11-M36 P11-M37 P11-M38 P11-M39 P11-M40 P12-M41 P12-M42 P12-M43 P12-M44 P12-M45 P1-M1 P1-M2 P1-M3 P1-M4 P1-M5 P2-M10 P2-M6 P2-M7 P2-M8 P2-M9 P3-M11 P3-M12 P3-M13 P4-M14 P4-M15 P4-M16 P4-M17 P4-M18 P4-M19 P5-M20 P5-M21 P5-M22 P6-M23 P6-M24 P6-M25 P7-M26 P7-M27 P7-M28 P8-M29 P9-M30 P9-M31 P9-M32 \n--- milestone docs ---\nP0-M0.1 P10-M33 P10-M34 P10-M35 P11-M36 P11-M37 P11-M38 P11-M39 P11-M40 P12-M41 P12-M42 P12-M43 P12-M44 P12-M45 P1-M1 P1-M2 P1-M3 P1-M4 P1-M5 P2-M10 P2-M6 P2-M7 P2-M9 P3-M11 P3-M12 P3-M13 P4-M14 P4-M15 P4-M16 P4-M17 P4-M18 P4-M19 P5-M20 P5-M21 P5-M22 P6-M23 P6-M24 P6-M25 P7-M26 P7-M27 P7-M28 P8-M29 P9-M30 P9-M31 P9-M32 ",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/*/ | grep -oP \"^P\\d+-M[\\d.]+\" | sort -u | tr '\\n' ' '; echo; echo \"--- milestone docs ---\"; ls docs/phases/*/*milestone*.md docs/phases/*milestone*.md 2>/dev/null | sed 's#.*/##' | grep -oP \"^P\\d+-M[\\d.]+\" | sort -u | tr '\\n' ' '",
+            "time": {
+              "start": 1788292337705,
+              "end": 1788292337706
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e878a54001P01eFevnxcPx4F",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e875a88001iF6DUhw2PCr9TR"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292337714,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e879030001yp5mDiqhIr66NJ",
+          "reason": "tool-calls",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "messageID": "msg_05e875a88001iF6DUhw2PCr9TR",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "step-finish",
+          "tokens": {
+            "total": 26273,
+            "input": 2,
+            "output": 814,
+            "reasoning": 0,
+            "cache": {
+              "write": 2767,
+              "read": 22690
+            }
+          },
+          "cost": 0.04899875
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292342612,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e87a35100169koerLbbbNgD1",
+          "messageID": "msg_05e87903c0015ks3ZBzG6w8Gh3",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292347726,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01SDfgUEfP7bhgWTHdGsrLU2",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && grep -n \"known_milestones\\|FILENAME_RE\\|LOOKAHEAD =\" tests/test_starter_lint.py"
+            },
+            "output": "50:FILENAME_RE = re.compile(r\"^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$\")\n59:PLANNED_MILESTONE_LOOKAHEAD = 10\n67:def known_milestones(files):\n71:        m = FILENAME_RE.match(f.name)\n88:    valid = known_milestones(files)\n116:def test_known_milestones_non_empty():\n117:    valid = known_milestones(find_starter_files())\n",
+            "metadata": {
+              "output": "50:FILENAME_RE = re.compile(r\"^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$\")\n59:PLANNED_MILESTONE_LOOKAHEAD = 10\n67:def known_milestones(files):\n71:        m = FILENAME_RE.match(f.name)\n88:    valid = known_milestones(files)\n116:def test_known_milestones_non_empty():\n117:    valid = known_milestones(find_starter_files())\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && grep -n \"known_milestones\\|FILENAME_RE\\|LOOKAHEAD =\" tests/test_starter_lint.py",
+            "time": {
+              "start": 1788292347721,
+              "end": 1788292347724
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e87b5a9001b5epalSGyI8PwE",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "messageID": "msg_05e87903c0015ks3ZBzG6w8Gh3"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292347738,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e87b758001qDw6LO6krr0F9U",
+          "reason": "tool-calls",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "messageID": "msg_05e87903c0015ks3ZBzG6w8Gh3",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "step-finish",
+          "tokens": {
+            "total": 27342,
+            "input": 2,
+            "output": 511,
+            "reasoning": 0,
+            "cache": {
+              "write": 1372,
+              "read": 25457
+            }
+          },
+          "cost": 0.0340885
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292350340,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e87c181001er7NDa9JaIwEW5",
+          "messageID": "msg_05e87b764001cbTjX1n2T5ucD1",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788292375792,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e87c1820019rmqBxUpatKsln",
+          "messageID": "msg_05e87b764001cbTjX1n2T5ucD1",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "text",
+          "text": "**Conclusion: the test is defective, not the document. `milestone/M1` on line 111 is correct and must not be changed; fix `tests/test_starter_lint.py` by widening how it derives the set of real milestones.**\n\n---\n\n### 1. What the test asserts, and its decision mechanism\n\nIt asserts that every `milestone/M<n>` token appearing in any `**/*epic-execution-chat-starter.md` under `docs/` names a real milestone. Its ground truth is built in `known_milestones()`: it takes the *filenames* of the starter files it just globbed and extracts `M(\\d+)` via `^P\\d+-M(\\d+)-E[\\d.]+__epic-execution-chat-starter\\.md$`. A reference passes if either:\n\n- its number is in that filename-derived set, or\n- `highest < int(num) <= highest + 10`, where `highest` is the max of that same set.\n\nThat is the whole mechanism, and both branches inherit the same flaw: **the only evidence a milestone exists is that someone wrote an Epic starter file for it.** In this repo that set is `{9, 10, 14\u202641}`. M1\u2013M8 and M11\u2013M13 are structurally unrepresentable \u2014 they predate or skip the starter naming convention. The lookahead does not rescue them either, since it admits only numbers *above* the frontier (41). A real, below-frontier milestone with no starter file can therefore never pass. That is not a tuning problem; it is the ground-truth source being wrong.\n\nNote also the docstring's own scoping: the defect class is a *stray extra digit* (`M14`\u2192`M144`, `M17`\u2192`M147`), which by construction lands an order of magnitude past the frontier. `M1` is not that class. The implementation is far broader than the contract it documents.\n\n### 2. Is line 111 a mistake?\n\nNo, on two independent grounds \u2014 either alone is sufficient.\n\n- **M1 is a real milestone of this repository.** `docs/phases/P1__System_Foundation_and_Adoption/` contains `P1-M1__milestone.md`, `P1-M1-E1.1__spec__\u2026`, and `P1-M1__completion__\u2026`. The test simply cannot see it.\n- **The reference isn't to this repository at all.** E34.2 is a fleet-adoption epic about bumping `Getawayinsured2023`, `footboard` and `courtis`. Line 111 records a fact about *footboard's* checkout state. The guard has no notion of repo scope, so it reads another project's branch name as a claim about this one. This blind spot is structural for P10: a phase whose subject matter is other repositories' branches will keep tripping a guard that assumes every branch token is local.\n\nThe suggested remedy in the failure message \u2014 \"likely a stray extra digit,\" implying `M1` \u2192 some longer number \u2014 would corrupt a true statement about a third-party repo. Following it would be worse than the red suite.\n\n### 3. What to change\n\n**Change `tests/test_starter_lint.py`.** Replace `FILENAME_RE` / `known_milestones()` so the milestone set is derived from *all* governance documents in `docs/phases/*/`, not starter filenames alone \u2014 i.e. match the `P\\d+-M([\\d.]+)` prefix on any file in a phase directory. I verified this yields M1\u2013M45 contiguously, so it fixes the under-approximation at the root without a hand-maintained allowlist (preserving the property the docstring is proud of). Every existing synthetic fixture in the file still passes under that change, since each writes its files into a phase directory; `test_detector_flags_far_future_typo_beyond_lookahead` and both stray-digit regressions keep their teeth, because M99/M144/M147 remain absent from any filename.\n\nTwo things I would **not** do:\n\n- **Do not edit the starter.** The repo currently carries the E34.2 workaround \u2014 line 111 was reworded to \"its own `M1` milestone branch\" purely to avoid emitting the literal token, with an inline note pointing at carry-forward note P10-GH-6. That turned the suite green but is the wrong shape of fix: it makes governance prose self-censor to placate a broken lint, and the trap re-arms for the next cross-repo epic. P10-GH-6 says as much explicitly and declines to recommend. I am recommending: option 1 in that note (widen the ground truth), and the workaround should be reverted once the test is fixed so the sentence reads naturally again.\n- **Do not simply accept all below-frontier numbers.** That would blunt the guard against a plausible-but-wrong milestone reference. The problem is the *source* of truth, not the strictness.\n\nTwo residual items worth recording separately, neither blocking:\n\n- The cross-repo blind spot (reason 2) survives this fix \u2014 it passes here only because footboard's M1 coincides with a valid local M1. A reference to a fleet project's `milestone/M50` would still fire falsely. Worth a follow-up, not worth inventing a marker convention today.\n- The M34 epic specs and starter state a **366/0/0** baseline that has been false since `973a7f5`. A stale asserted baseline is the more dangerous defect here: it invites an epic to either claim a green suite it never observed or blame a pre-existing red on its own work. E34.2 caught this only because it measured rather than trusted. Those baseline claims should be corrected, and \"measure, don't cite\" reinforced in the Prerequisite Verification step.",
+          "time": {
+            "start": 1788292350338,
+            "end": 1788292375790
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292375824,
+        "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+        "part": {
+          "id": "prt_05e88250d001TNfy6D8t9RjoQK",
+          "reason": "stop",
+          "snapshot": "916405d3bab43588a08bb8018696d9b0f1189031",
+          "messageID": "msg_05e87b764001cbTjX1n2T5ucD1",
+          "sessionID": "ses_fa1792617fferJzoRLEC9C2wyg",
+          "type": "step-finish",
+          "tokens": {
+            "total": 29298,
+            "input": 2,
+            "output": 1782,
+            "reasoning": 0,
+            "cache": {
+              "write": 685,
+              "read": 26829
+            }
+          },
+          "cost": 0.06225575
+        }
+      }
+    ]
+  }
+}

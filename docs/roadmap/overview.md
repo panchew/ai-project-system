@@ -196,7 +196,7 @@ by design). Second phase closed through the canonical **PSG §5C** sequence. See
 - ✅ First genuine non-mocked agentic run — `bin/run-dev-agent` wired as the orchestrator's
   `dev_command` on `qwen2.5-coder`, `04_epic.json` mock trigger retired, transcript accepted in
   `local-agent-runner`'s P2-M3 Milestone Chat (P7-AE-1)
-- ✅ Visual artifacts default-on/opt-out framework-wide (AOG §16.1, §16.8 trigger policy,
+- ✅ Visual artifacts default-on/opt-out framework-wide (AOG §17.1, §17.8 trigger policy,
   `visual_required_for_specs` enforcement key, structural-first zero-infra default) (P7-VC-1)
 - ✅ Documented Ollama+ComfyUI single-GPU coexistence design (`governance/guides/
   gpu-coexistence.md`, orchestrator execution-lock reuse, exit code 5)
@@ -208,7 +208,7 @@ by design). Second phase closed through the canonical **PSG §5C** sequence. See
 - ✅ `ai-project-init` installs the canonical `governance.agent.md`, not the superseded
   `hq.agent.md` (P6-GH-15)
 - ✅ Delivery Authorization ceremonial block retired everywhere it survived — both starter
-  templates, all three `governance/systems/` mirrors, and AOG §1A/§10 — in-chat merge
+  templates, all three `governance/systems/` mirrors, and AOG §1.1/§12 — in-chat merge
   authorization preserved (P7-GH-17)
 - ✅ Governance at delivery: **PSG v2.3.0**, **AOG v2.9.0**
 
@@ -273,10 +273,10 @@ P6 itself codified. See the
 **Key Deliverables**:
 - ✅ By-link storage model — generated visual material referenced by link, never committed to git (v5.0.0 commit-the-binary guidance reversed and reconciled everywhere) (P6-VC-1)
 - ✅ Binding convention (guide §7) — link + What / Level / State / Description metadata with per-level placement (P6-VC-2)
-- ✅ Proposed-vs-implemented visuals as the routine default at every level, Structural-first (AOG §16.6) (P6-VC-3)
-- ✅ Single-parent clips as documentation that doubles as publishable media, on the verified LTX-Video path (AOG §16.7, guide §8) (P6-VC-4)
+- ✅ Proposed-vs-implemented visuals as the routine default at every level, Structural-first (AOG §17.6) (P6-VC-3)
+- ✅ Single-parent clips as documentation that doubles as publishable media, on the verified LTX-Video path (AOG §17.7, guide §8) (P6-VC-4)
 - ✅ Canonical phase closure (PSG §5C) — README update, version bump, tag as mandatory automatic steps (P6-GH-12)
-- ✅ SN-13 default-accept codified (PSG §11.6, AOG §12) and reconciled framework-wide, Layer-8 human review preserved (P6-GH-10)
+- ✅ SN-13 default-accept codified (PSG §11.6, AOG §14) and reconciled framework-wide, Layer-8 human review preserved (P6-GH-10)
 - ✅ `ai-project-init` writes tool-neutral `.ai-project/agents/`, with the framework's first test of that behavior (P6-GH-11)
 - ✅ Governance at delivery: **PSG v2.3.0**, **AOG v2.6.0**
 

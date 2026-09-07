@@ -487,7 +487,7 @@ required early.
 ## Visual Bindings
 
 **Visual binding**
-- **Link:** (inline — Structural diagram; no hosted link needed per AOG §16.3/§16.5)
+- **Link:** (inline — Structural diagram; no hosted link needed per AOG §17.3/§17.5)
 - **What:** diagram
 - **Level:** Milestone
 - **State:** proposed
@@ -526,7 +526,7 @@ flowchart TB
   correct in both, which is a direction rather than a decision. **`epic_qa` has no dispatch path**, so
   E39.3's shape depends on whether E39.1's mechanism includes a QA second pass. **Deliberately not
   built:** everything in M40, which this milestone gates. Proposed-track Structural diagram (AOG
-  §16.3/§16.6), Mermaid, no ComfyUI.
+  §17.3/§17.6), Mermaid, no ComfyUI.
 
 ---
 
@@ -555,7 +555,7 @@ flowchart TB
 - **M38's three findings are inputs here, not conclusions** — capacity FAIL, local MISS/paid CATCH on
   one pair, C3's ceiling distinction. C3 in particular is *raw material*: one engine already exposes
   the distinction M39 must construct.
-- **Default-accept (PSG §11.6 / AOG §12) governs delivery**; a Review Decision is the exception path.
+- **Default-accept (PSG §11.6 / AOG §14) governs delivery**; a Review Decision is the exception path.
   Acceptance and merge instruction are **in-chat acts** (SN-19). The harness enforces human merge
   authorization regardless, and **merge authorization for a child PR belongs in this Phase Chat's
   Stage-2 review** — P9-GH-1's guard reaches only the Epic template, with a live instance recorded

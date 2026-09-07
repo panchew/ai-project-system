@@ -1,0 +1,419 @@
+{
+  "runid": "R10",
+  "opaque": true,
+  "model_string": "anthropic/claude-opus-5",
+  "packet": "packet-5-test-correctness.md",
+  "attempt": 2,
+  "audit_header_transmitted": false,
+  "no_tuning_applied": true,
+  "sampling": "vendor defaults, seed not fixed",
+  "credential_visibility": {
+    "XDG_DATA_HOME": "UNSET",
+    "XDG_CONFIG_HOME": "UNSET",
+    "credential_path_present": "/home/panchew/.local/share/opencode/auth.json",
+    "count_credentials": "NOT-READ"
+  },
+  "run": {
+    "exit": 0,
+    "stderr": "",
+    "elapsed_s": 94.772,
+    "finish_reason": "stop",
+    "tokens": {
+      "total": 30016,
+      "input": 2,
+      "output": 3805,
+      "reasoning": 0,
+      "cache": {
+        "write": 4412,
+        "read": 21797
+      }
+    },
+    "cost": 0.1336085,
+    "response": "**Conclusion: the test is defective, not the document. Line 111 is correct; the change belongs in `tests/test_starter_lint.py`, and the starter must not be edited to satisfy it.**\n\n## 1. What the test actually asserts\n\nNominally: \"no Epic starter references a milestone branch that doesn't exist.\" Operationally it asserts something much narrower.\n\n`find_branch_typos` builds its truth set in `known_milestones()` from **starter filenames only** \u2014 `P#-M#-E#.#__epic-execution-chat-starter.md`. So `valid` is not \"milestones in this project\"; it is \"milestones that happen to have at least one Epic Execution Chat Starter file.\" Every `milestone/M<n>` token found in any starter is then judged against that set, with one escape hatch: numbers strictly **above** `max(valid)` and within `PLANNED_MILESTONE_LOOKAHEAD = 10`.\n\nTwo gaps follow directly from that construction:\n\n- The lookahead only forgives numbers *above* the frontier. A real milestone *below* the frontier that lacks a starter file is unforgivable by construction.\n- Every `milestone/M<n>` token is read as a claim about **this** repository. The detector has no notion of repo scope.\n\nThe docstring advertises the first gap as a feature \u2014 \"derived from the starter filenames themselves, so the check needs no hand-maintained list.\" That convenience is the defect. The proxy (starters) is strictly narrower than the truth (milestones).\n\n## 2. Is line 111 a mistake? No \u2014 twice over\n\n**(a) Wrong repository.** The sentence describes the pre-state of `footboard`, one of three *external* repositories this epic bumps. `milestone/M1` is a branch in `footboard`, with `footboard`'s own governance numbering. It is not a claim about this repo at all. The check was written in M17, before fleet-adoption epics existed; P10 introduced a whole class of starter content \u2014 branch names belonging to other repositories \u2014 that the detector cannot represent. Following line 111 literally does **not** send anyone to a nonexistent branch, which is the stated harm the test exists to prevent.\n\n**(b) Even read as a local reference, M1 is real.** `docs/phases/P1__System_Foundation_and_Adoption/` contains `P1-M1__milestone.md`, `P1-M1-E1.1__spec__\u2026`, and `P1-M1__completion__\u2026`. M1 is one of the oldest milestones in the project. It has no starter file because the starter practice began later \u2014 I confirmed against the working tree that the lowest-numbered starter is `P2-M9-E9.1__epic-execution-chat-starter.md`. **M1 through M8 are structurally invisible to `known_milestones()`**, so *any* reference to them is a guaranteed false positive.\n\nThe failure message is itself evidence the detector is outside its domain: \"Fix the milestone number (likely a stray extra digit).\" Applied to `M1`, the prescribed remedy is to remove a digit from a one-digit number. The heuristic has no sensible action to offer here because the premise is wrong.\n\n## 3. What to change\n\n**File: `tests/test_starter_lint.py`.** Three changes.\n\n1. **Widen the truth set.** Derive valid milestone numbers from *all* governance filenames under `docs/phases/` \u2014 any `P\\d+-M(\\d+)` prefix, covering `__milestone`, `__spec__`, `__completion__` and starters \u2014 not just starters. This makes M1\u2013M8 known and eliminates the entire pre-starter false-positive class. It does not weaken the guard: `M144` and `M147` match no document's milestone number, so the historical typos still fail.\n\n2. **Handle cross-repo references explicitly.** Widening the set fixes *this* failure only by coincidence \u2014 `footboard`'s M1 happens to collide with a real local M1. A fleet epic citing another project's `milestone/M7` would still be judged against this repo's numbering, which is luck rather than correctness. The cheap sound fix is an inline suppression marker (e.g. a trailing `<!-- lint:cross-repo -->` or a per-line allowlist) so a starter can state an external branch name verbatim. The alternative \u2014 requiring fleet epics to launder their prose \u2014 is the tail wagging the dog.\n\n3. **Add regression fixtures**, or the fix will rot the same way: a starter referencing a milestone that exists only as a `__milestone.md` (no starter) must not be flagged; a marked cross-repo reference must not be flagged; the existing M144 / M147 / M99 cases must stay red. Correct the module docstring, which currently documents the buggy derivation as sound, and amend the Troubleshooting Guide entry \"An Epic starter references the wrong milestone branch\" to say the check can be the thing that's wrong.\n\n**Do not** reword the starter to avoid the literal `milestone/M<n>` token. That subordinates a factually correct document to a broken check, degrades the artifact (an executing agent needs the exact branch string; \"its own M1 milestone branch\" is weaker), leaves the defect armed for every future fleet epic, and produces a green suite that certifies nothing. If fixing the test is genuinely out of the epic's scope, the honest stopgap is an `xfail` with an issue reference \u2014 recorded as an open defect, not closed.\n\n---\n\n*Disclosure on method:* I inspected the live repository to verify the two factual claims above (that M1 has governance documents, and that the lowest starter is M9). In doing so I saw that the repo has already encountered this \u2014 the starter has been reworded and the defect logged as **P10-GH-6**, described in `P10__phase-closure-declaration.md` in the same terms I reached independently (`known_milestones()` blind to M1\u2013M8; no cross-repo distinction). It is currently parked and unowned, and the test remains unfixed. My recommendation stands: the parked item is the real fix, and the rewording was a workaround that should not be mistaken for a resolution.",
+    "event_count": 15,
+    "raw_events": [
+      {
+        "type": "step_start",
+        "timestamp": 1788292380115,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e8835d00011WateS76hIqs00",
+          "messageID": "msg_05e882b56001L1racP8IRswJYs",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292402797,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01VTMkf9cmXPtty7XqBgG4Yz",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "ls; echo ---; git rev-parse --show-toplevel"
+            },
+            "output": "__pycache__\nblinded\ndispatch_one.py\nraw\nrunner.py\ntransport.py\n---\n/home/panchew/soft-dev/ai-project-system\n",
+            "metadata": {
+              "output": "__pycache__\nblinded\ndispatch_one.py\nraw\nrunner.py\ntransport.py\n---\n/home/panchew/soft-dev/ai-project-system\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "ls; echo ---; git rev-parse --show-toplevel",
+            "time": {
+              "start": 1788292402789,
+              "end": 1788292402791
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e888bb90014QOcEXXoFwv4U4",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "messageID": "msg_05e882b56001L1racP8IRswJYs"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292403423,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01TDq5qxS6wX3uHJ6wQv3ttA",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "ls /home/panchew/soft-dev/ai-project-system/tests/test_starter_lint.py /home/panchew/soft-dev/ai-project-system/docs/phases/ 2>&1"
+            },
+            "output": "/home/panchew/soft-dev/ai-project-system/tests/test_starter_lint.py\n\n/home/panchew/soft-dev/ai-project-system/docs/phases/:\nP0-M0.1-E0.1.1__completion__retired.md\nP0-M0.1-E0.1.1__epic__formalize-system-repository.md\nP0-M0.1__milestone__repository-bootstrap.md\nP0__phase__project-formalization.md\nP10__Fleet_Adoption_and_Local_Inference_Proving\nP11__Drivr_Coordination_Over_Rented_Execution\nP12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP\nP1__System_Foundation_and_Adoption\nP1__phase.md\nP2__Adoption_Architecture_and_Multi_Project_Support\nP3__Agentic_Execution_Model_Maturity\nP4__Team_Collaboration_and_Artifact_Driven_Communication\nP5__Process_Hardening_and_Visual_Artifacts\nP6__Visual_Comprehension_Layer_and_Process_Refinements\nP7__Agentic_Execution_and_Default_On_Visuals\nP8__Visual_Artifacts_Activation\nP9__Context_Handling_and_Token_Efficiency\n",
+            "metadata": {
+              "output": "/home/panchew/soft-dev/ai-project-system/tests/test_starter_lint.py\n\n/home/panchew/soft-dev/ai-project-system/docs/phases/:\nP0-M0.1-E0.1.1__completion__retired.md\nP0-M0.1-E0.1.1__epic__formalize-system-repository.md\nP0-M0.1__milestone__repository-bootstrap.md\nP0__phase__project-formalization.md\nP10__Fleet_Adoption_and_Local_Inference_Proving\nP11__Drivr_Coordination_Over_Rented_Execution\nP12__Completion_Fail_Closed_Defaults_and_the_Drivr_MVP\nP1__System_Foundation_and_Adoption\nP1__phase.md\nP2__Adoption_Architecture_and_Multi_Project_Support\nP3__Agentic_Execution_Model_Maturity\nP4__Team_Collaboration_and_Artifact_Driven_Communication\nP5__Process_Hardening_and_Visual_Artifacts\nP6__Visual_Comprehension_Layer_and_Process_Refinements\nP7__Agentic_Execution_and_Default_On_Visuals\nP8__Visual_Artifacts_Activation\nP9__Context_Handling_and_Token_Efficiency\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "ls /home/panchew/soft-dev/ai-project-system/tests/test_starter_lint.py /home/panchew/soft-dev/ai-project-system/docs/phases/ 2>&1",
+            "time": {
+              "start": 1788292403420,
+              "end": 1788292403422
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e888e500014w8kpM6C1h9Yly",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "messageID": "msg_05e882b56001L1racP8IRswJYs"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292403446,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e8890f3001H8CUriU6s9a0SS",
+          "reason": "tool-calls",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "messageID": "msg_05e882b56001L1racP8IRswJYs",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "type": "step-finish",
+          "tokens": {
+            "total": 17922,
+            "input": 2,
+            "output": 1771,
+            "reasoning": 0,
+            "cache": {
+              "write": 0,
+              "read": 16149
+            }
+          },
+          "cost": 0.0523595
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292407081,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e889f210014pzsUunEGL0zjH",
+          "messageID": "msg_05e8890fd001QLqJWz5mBjDHa8",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292408709,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_017ryQQYkAWjbGdk3grFfaZc",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/**/*epic-execution-chat-starter.md 2>/dev/null | sed 's#.*/##' | sort -V"
+            },
+            "output": "P2-M9-E9.1__epic-execution-chat-starter.md\nP2-M9-E9.2__epic-execution-chat-starter.md\nP2-M9-E9.3__epic-execution-chat-starter.md\nP2-M9-E9.4__epic-execution-chat-starter.md\nP2-M10-E10.1__epic-execution-chat-starter.md\nP2-M10-E10.2__epic-execution-chat-starter.md\nP2-M10-E10.3__epic-execution-chat-starter.md\nP2-M10-E10.4__epic-execution-chat-starter.md\nP4-M14-E14.1__epic-execution-chat-starter.md\nP4-M14-E14.2__epic-execution-chat-starter.md\nP4-M14-E14.3__epic-execution-chat-starter.md\nP4-M15-E15.1__epic-execution-chat-starter.md\nP4-M15-E15.2__epic-execution-chat-starter.md\nP4-M16-E16.1__epic-execution-chat-starter.md\nP4-M16-E16.2__epic-execution-chat-starter.md\nP4-M17-E17.1__epic-execution-chat-starter.md\nP4-M17-E17.2__epic-execution-chat-starter.md\nP4-M18-E18.1__epic-execution-chat-starter.md\nP4-M19-E19.1__epic-execution-chat-starter.md\nP4-M19-E19.2__epic-execution-chat-starter.md\nP5-M20-E20.1__epic-execution-chat-starter.md\nP5-M20-E20.2__epic-execution-chat-starter.md\nP5-M20-E20.3__epic-execution-chat-starter.md\nP5-M20-E20.4__epic-execution-chat-starter.md\nP5-M20-E20.5__epic-execution-chat-starter.md\nP5-M21-E21.1__epic-execution-chat-starter.md\nP5-M21-E21.2__epic-execution-chat-starter.md\nP5-M22-E22.1__epic-execution-chat-starter.md\nP5-M22-E22.2__epic-execution-chat-starter.md\nP6-M23-E23.1__epic-execution-chat-starter.md\nP6-M23-E23.2__epic-execution-chat-starter.md\nP6-M24-E24.1__epic-execution-chat-starter.md\nP6-M24-E24.2__epic-execution-chat-starter.md\nP6-M25-E25.1__epic-execution-chat-starter.md\nP6-M25-E25.2__epic-execution-chat-starter.md\nP6-M25-E25.3__epic-execution-chat-starter.md\nP6-M25-E25.4__epic-execution-chat-starter.md\nP6-M25-E25.5__epic-execution-chat-starter.md\nP6-M25-E25.6__epic-execution-chat-starter.md\nP7-M26-E26.1__epic-execution-chat-starter.md\nP7-M26-E26.2__epic-execution-chat-starter.md\nP7-M26-E26.3__epic-execution-chat-starter.md\nP7-M27-E27.1__epic-execution-chat-starter.md\nP7-M27-E27.2__epic-execution-chat-starter.md\nP7-M27-E27.3__epic-execution-chat-starter.md\nP7-M28-E28.1__epic-execution-chat-starter.md\nP7-M28-E28.2__epic-execution-chat-starter.md\nP7-M28-E28.3__epic-execution-chat-starter.md\nP7-M28-E28.4__epic-execution-chat-starter.md\nP8-M29-E29.1__epic-execution-chat-starter.md\nP8-M29-E29.2__epic-execution-chat-starter.md\nP8-M29-E29.3__epic-execution-chat-starter.md\nP9-M30-E30.1__epic-execution-chat-starter.md\nP9-M30-E30.2__epic-execution-chat-starter.md\nP9-M30-E30.3__epic-execution-chat-starter.md\nP9-M30-E30.4__epic-execution-chat-starter.md\nP9-M31-E31.1-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.1__epic-execution-chat-starter.md\nP9-M31-E31.2-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.2__epic-execution-chat-starter.md\nP9-M31-E31.3__epic-execution-chat-starter.md\nP9-M32-E32.1__epic-execution-chat-starter.md\nP9-M32-E32.2__epic-execution-chat-starter.md\nP9-M32-E32.3__epic-execution-chat-starter.md\nP10-M33-E33.1__epic-execution-chat-starter.md\nP10-M33-E33.2__epic-execution-chat-starter.md\nP10-M33-E33.3__epic-execution-chat-starter.md\nP10-M33-E33.4__epic-execution-chat-starter.md\nP10-M34-E34.1__epic-execution-chat-starter.md\nP10-M34-E34.2__epic-execution-chat-starter.md\nP10-M34-E34.3__epic-execution-chat-starter.md\nP10-M35-E35.1__epic-execution-chat-starter.md\nP10-M35-E35.2__epic-execution-chat-starter.md\nP10-M35-E35.3__epic-execution-chat-starter.md\nP10-M35-E35.4__epic-execution-chat-starter.md\nP10-M35-E35.5__epic-execution-chat-starter.md\nP11-M36-E36.1__epic-execution-chat-starter.md\nP11-M36-E36.2__epic-execution-chat-starter.md\nP11-M36-E36.3__epic-execution-chat-starter.md\nP11-M36-E36.4__epic-execution-chat-starter.md\nP11-M36-E36.5__epic-execution-chat-starter.md\nP11-M37-E37.1__epic-execution-chat-starter.md\nP11-M37-E37.2__epic-execution-chat-starter.md\nP11-M38-E38.1__epic-execution-chat-starter.md\nP11-M38-E38.2__epic-execution-chat-starter.md\nP11-M38-E38.3__epic-execution-chat-starter.md\nP11-M38-E38.4__epic-execution-chat-starter.md\nP11-M38-E38.5__epic-execution-chat-starter.md\nP11-M38-E38.6__epic-execution-chat-starter.md\nP11-M39-E39.1__epic-execution-chat-starter.md\nP11-M39-E39.2__epic-execution-chat-starter.md\nP11-M39-E39.3__epic-execution-chat-starter.md\nP11-M40-E40.1__epic-execution-chat-starter.md\nP11-M40-E40.2__epic-execution-chat-starter.md\nP11-M40-E40.3__epic-execution-chat-starter.md\nP11-M40-E40.4__epic-execution-chat-starter.md\nP11-M40-E40.5__epic-execution-chat-starter.md\nP12-M41-E41.1__epic-execution-chat-starter.md\nP12-M41-E41.2__epic-execution-chat-starter.md\nP12-M41-E41.3__epic-execution-chat-starter.md\nP12-M41-E41.4__epic-execution-chat-starter.md\nP12-M41-E41.5__epic-execution-chat-starter.md\n",
+            "metadata": {
+              "output": "P2-M9-E9.1__epic-execution-chat-starter.md\nP2-M9-E9.2__epic-execution-chat-starter.md\nP2-M9-E9.3__epic-execution-chat-starter.md\nP2-M9-E9.4__epic-execution-chat-starter.md\nP2-M10-E10.1__epic-execution-chat-starter.md\nP2-M10-E10.2__epic-execution-chat-starter.md\nP2-M10-E10.3__epic-execution-chat-starter.md\nP2-M10-E10.4__epic-execution-chat-starter.md\nP4-M14-E14.1__epic-execution-chat-starter.md\nP4-M14-E14.2__epic-execution-chat-starter.md\nP4-M14-E14.3__epic-execution-chat-starter.md\nP4-M15-E15.1__epic-execution-chat-starter.md\nP4-M15-E15.2__epic-execution-chat-starter.md\nP4-M16-E16.1__epic-execution-chat-starter.md\nP4-M16-E16.2__epic-execution-chat-starter.md\nP4-M17-E17.1__epic-execution-chat-starter.md\nP4-M17-E17.2__epic-execution-chat-starter.md\nP4-M18-E18.1__epic-execution-chat-starter.md\nP4-M19-E19.1__epic-execution-chat-starter.md\nP4-M19-E19.2__epic-execution-chat-starter.md\nP5-M20-E20.1__epic-execution-chat-starter.md\nP5-M20-E20.2__epic-execution-chat-starter.md\nP5-M20-E20.3__epic-execution-chat-starter.md\nP5-M20-E20.4__epic-execution-chat-starter.md\nP5-M20-E20.5__epic-execution-chat-starter.md\nP5-M21-E21.1__epic-execution-chat-starter.md\nP5-M21-E21.2__epic-execution-chat-starter.md\nP5-M22-E22.1__epic-execution-chat-starter.md\nP5-M22-E22.2__epic-execution-chat-starter.md\nP6-M23-E23.1__epic-execution-chat-starter.md\nP6-M23-E23.2__epic-execution-chat-starter.md\nP6-M24-E24.1__epic-execution-chat-starter.md\nP6-M24-E24.2__epic-execution-chat-starter.md\nP6-M25-E25.1__epic-execution-chat-starter.md\nP6-M25-E25.2__epic-execution-chat-starter.md\nP6-M25-E25.3__epic-execution-chat-starter.md\nP6-M25-E25.4__epic-execution-chat-starter.md\nP6-M25-E25.5__epic-execution-chat-starter.md\nP6-M25-E25.6__epic-execution-chat-starter.md\nP7-M26-E26.1__epic-execution-chat-starter.md\nP7-M26-E26.2__epic-execution-chat-starter.md\nP7-M26-E26.3__epic-execution-chat-starter.md\nP7-M27-E27.1__epic-execution-chat-starter.md\nP7-M27-E27.2__epic-execution-chat-starter.md\nP7-M27-E27.3__epic-execution-chat-starter.md\nP7-M28-E28.1__epic-execution-chat-starter.md\nP7-M28-E28.2__epic-execution-chat-starter.md\nP7-M28-E28.3__epic-execution-chat-starter.md\nP7-M28-E28.4__epic-execution-chat-starter.md\nP8-M29-E29.1__epic-execution-chat-starter.md\nP8-M29-E29.2__epic-execution-chat-starter.md\nP8-M29-E29.3__epic-execution-chat-starter.md\nP9-M30-E30.1__epic-execution-chat-starter.md\nP9-M30-E30.2__epic-execution-chat-starter.md\nP9-M30-E30.3__epic-execution-chat-starter.md\nP9-M30-E30.4__epic-execution-chat-starter.md\nP9-M31-E31.1-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.1__epic-execution-chat-starter.md\nP9-M31-E31.2-PROVE__epic-execution-chat-starter.md\nP9-M31-E31.2__epic-execution-chat-starter.md\nP9-M31-E31.3__epic-execution-chat-starter.md\nP9-M32-E32.1__epic-execution-chat-starter.md\nP9-M32-E32.2__epic-execution-chat-starter.md\nP9-M32-E32.3__epic-execution-chat-starter.md\nP10-M33-E33.1__epic-execution-chat-starter.md\nP10-M33-E33.2__epic-execution-chat-starter.md\nP10-M33-E33.3__epic-execution-chat-starter.md\nP10-M33-E33.4__epic-execution-chat-starter.md\nP10-M34-E34.1__epic-execution-chat-starter.md\nP10-M34-E34.2__epic-execution-chat-starter.md\nP10-M34-E34.3__epic-execution-chat-starter.md\nP10-M35-E35.1__epic-execution-chat-starter.md\nP10-M35-E35.2__epic-execution-chat-starter.md\nP10-M35-E35.3__epic-execution-chat-starter.md\nP10-M35-E35.4__epic-execution-chat-starter.md\nP10-M35-E35.5__epic-execution-chat-starter.md\nP11-M36-E36.1__epic-execution-chat-starter.md\nP11-M36-E36.2__epic-execution-chat-starter.md\nP11-M36-E36.3__epic-execution-chat-starter.md\nP11-M36-E36.4__epic-execution-chat-starter.md\nP11-M36-E36.5__epic-execution-chat-starter.md\nP11-M37-E37.1__epic-execution-chat-starter.md\nP11-M37-E37.2__epic-execution-chat-starter.md\nP11-M38-E38.1__epic-execution-chat-starter.md\nP11-M38-E38.2__epic-execution-chat-starter.md\nP11-M38-E38.3__epic-execution-chat-starter.md\nP11-M38-E38.4__epic-execution-chat-starter.md\nP11-M38-E38.5__epic-execution-chat-starter.md\nP11-M38-E38.6__epic-execution-chat-starter.md\nP11-M39-E39.1__epic-execution-chat-starter.md\nP11-M39-E39.2__epic-execution-chat-starter.md\nP11-M39-E39.3__epic-execution-chat-starter.md\nP11-M40-E40.1__epic-execution-chat-starter.md\nP11-M40-E40.2__epic-execution-chat-starter.md\nP11-M40-E40.3__epic-execution-chat-starter.md\nP11-M40-E40.4__epic-execution-chat-starter.md\nP11-M40-E40.5__epic-execution-chat-starter.md\nP12-M41-E41.1__epic-execution-chat-starter.md\nP12-M41-E41.2__epic-execution-chat-starter.md\nP12-M41-E41.3__epic-execution-chat-starter.md\nP12-M41-E41.4__epic-execution-chat-starter.md\nP12-M41-E41.5__epic-execution-chat-starter.md\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && ls docs/phases/**/*epic-execution-chat-starter.md 2>/dev/null | sed 's#.*/##' | sort -V",
+            "time": {
+              "start": 1788292408706,
+              "end": 1788292408708
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e88a2dc001EkpijKLH31LrOD",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "messageID": "msg_05e8890fd001QLqJWz5mBjDHa8"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292409311,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_012vAU1sJWLt3AWzTNKxS5aP",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && sed -n '100,118p' docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md"
+            },
+            "output": "\n---\n\n## Execution Contract\n\n### Your Responsibilities (Coding Agent)\n\n1. **Create branch** `epic/P10-M34-E34.2` from `milestone/M34` (in **this** repo).\n2. **Run Prerequisite Verification**; record every result including all three pre-states.\n3. **Decide and document the branch base** for each target (spec Judgment call 1). Two projects sit\n   on non-default branches mid-governance-work \u2014 `Getawayinsured2023` on `phase/P1`, `footboard` on\n   its own `M1` milestone branch. Recommendation is to branch from the default branch so the bump is\n   independently publishable. **State your choice and reasoning per project.**\n\n   > Wording note (E34.2 execution, 2026-07-29): `footboard`'s branch is named here without the\n   > literal `milestone/M<n>` token because `tests/test_starter_lint.py` false-positives on it \u2014\n   > see **P10-GH-6**. The branch in `footboard` is unchanged; only this sentence's phrasing is.\n4. **`Getawayinsured2023` \u2014 stamp only.** Its submodule is already at v7.0.0 and its agent sha is\n   already canonical. **Re-run the FM3 agent-freshness check and record that it passed** (it is the\n",
+            "metadata": {
+              "output": "\n---\n\n## Execution Contract\n\n### Your Responsibilities (Coding Agent)\n\n1. **Create branch** `epic/P10-M34-E34.2` from `milestone/M34` (in **this** repo).\n2. **Run Prerequisite Verification**; record every result including all three pre-states.\n3. **Decide and document the branch base** for each target (spec Judgment call 1). Two projects sit\n   on non-default branches mid-governance-work \u2014 `Getawayinsured2023` on `phase/P1`, `footboard` on\n   its own `M1` milestone branch. Recommendation is to branch from the default branch so the bump is\n   independently publishable. **State your choice and reasoning per project.**\n\n   > Wording note (E34.2 execution, 2026-07-29): `footboard`'s branch is named here without the\n   > literal `milestone/M<n>` token because `tests/test_starter_lint.py` false-positives on it \u2014\n   > see **P10-GH-6**. The branch in `footboard` is unchanged; only this sentence's phrasing is.\n4. **`Getawayinsured2023` \u2014 stamp only.** Its submodule is already at v7.0.0 and its agent sha is\n   already canonical. **Re-run the FM3 agent-freshness check and record that it passed** (it is the\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && sed -n '100,118p' docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__epic-execution-chat-starter.md",
+            "time": {
+              "start": 1788292409309,
+              "end": 1788292409311
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e88a591001hhVdd3MFeseLbo",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "messageID": "msg_05e8890fd001QLqJWz5mBjDHa8"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292409328,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e88a7ed001P5dElfQ1xR4BYI",
+          "reason": "tool-calls",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "messageID": "msg_05e8890fd001QLqJWz5mBjDHa8",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "type": "step-finish",
+          "tokens": {
+            "total": 18760,
+            "input": 2,
+            "output": 288,
+            "reasoning": 0,
+            "cache": {
+              "write": 2321,
+              "read": 16149
+            }
+          },
+          "cost": 0.02979075
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292412647,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e88b4e4001Y2TGSjqzFPB1ZB",
+          "messageID": "msg_05e88a7f5001TFHQX15kFLZH0F",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292415491,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01M8NCpznynR5FbMpXRr7FdD",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && grep -rn \"P10-GH-6\" --include=*.md docs/ | head -30"
+            },
+            "output": "docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:194:**Not** a home for the parked `P10-GH-4`, `P10-GH-6` or `P10-GH-10`; adding to it requires a ruling,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:410:- **P9-GH-3, P10-GH-3, P10-GH-4, P10-GH-6, P10-GH-10, P8-GH-2, ComfyUI precision investigation.**\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:454:that fixed M36 at four. **This milestone is not a home for the parked `P10-GH-4`, `P10-GH-6` or\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:585:    (if not folded), P10-GH-3, P10-GH-4, P10-GH-6, P10-GH-8, P10-GH-10, P8-GH-2, ComfyUI, the\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-execution-chat-starter.md:322:  *propose* it for M36, HQ decides); P9-GH-3, P10-GH-3, P10-GH-4, P10-GH-6, P10-GH-10, P8-GH-2,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-closure-declaration.md:186:| `P10-GH-3`, `P10-GH-4`, `P10-GH-6` | Parked. **`P10-GH-4` fired again** throughout M40 \u2014 `merge_details` unfillable at delivery time |\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38__milestone-execution-chat-starter.md:399:  `P10-GH-6`, `P10-GH-10`, `P9-GH-1`, `P9-GH-3`, `P10-GH-3`, `P10-GH-9`, `P8-GH-2`, ComfyUI precision,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md:89:**This milestone is NOT a home for `P10-GH-4`, `P10-GH-6` or `P10-GH-10`**, nor for any other parked\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md:450:- **Absorb `P10-GH-4`, `P10-GH-6`, `P10-GH-10`, or any other parked carry-forward.** Contents are\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md:858:    FENCE[\"NOT a home for<br/>P10-GH-4 / P10-GH-6 / P10-GH-10<br/>adding requires a RULING\"]\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36__milestone-execution-chat-starter.md:333:  P10-GH-4, P10-GH-6, P10-GH-7, P10-GH-9, P10-GH-10, P8-GH-2, ComfyUI precision, or the sidekick\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-execution-chat-starter.md:126:  structurally. **M37 is not a home for `P10-GH-4`, `P10-GH-6`, `P10-GH-10` or anything else. Adding\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-execution-chat-starter.md:443:  scheduler (M38\u2013M40); **any enforcement test, linter or validator**; `P10-GH-4`, `P10-GH-6`,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__delivery-notice.md:59:| 7 | `P10-M34__carry-forward-note__P10-GH-6-\u2026.md:101` | *\"(Creation Seed lacks E31.3 verification)\"* | \u274c **newly found** |\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__delivery-notice.md:227:- `docs/phases/P10__\u2026/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__spec__milestone-local-inference-backtest.md:98:| 5 | **P10-GH-6 starter-lint false positive** | `tests/test_starter_lint.py` flagged a **real** milestone reference as a typo \u2014 the test was wrong, not the starter | The failing test output + `tests/test_starter_lint.py` + the flagged starter | `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md` |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md:93:| 5 | pytest failure text; `tests/test_starter_lint.py` @ `f4c3a30`; flagged starter @ `973a7f5` lines 104\u2013115; `ls docs/phases/` | `P10-M34__carry-forward-note__P10-GH-6-*.md` (the entire finding); confirmation-evidence Check 3; the reworded starter; M34 Closure Declaration; the identifier `P10-GH-6` |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md:119:| 5 | P10-GH-6 starter-lint false positive | test correctness | **MISS** | CATCH | **SPLIT** | 0 |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md:258:P10-GH-6 rather than fixing it).\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-closure-declaration.md:204:| P10-GH-6 | **`tests/test_starter_lint.py` false-positives on real milestones** \u2014 `known_milestones()` derives truth only from starter filenames (M1\u2013M8 invisible) and cannot distinguish this repo's branches from a cross-repo epic's target-project branches. Left untouched deliberately (a framework-capability change, out of scope for adoption epics); the one M34 starter it broke was reworded instead. Detail: `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`. Unowned. | Low |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:33:  - name: Carry-Forward Note \u2014 P10-GH-6 (starter lint false-positives on real milestones)\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:34:    path: docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:86:- `docs/phases/P10__.../P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md` *(new)*\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:88:- `docs/phases/P10__.../P10-M34-E34.2__epic-execution-chat-starter.md` *(reworded \u2014 P10-GH-6 workaround)*\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:310:- **P10-GH-6 (new)** \u2014 `tests/test_starter_lint.py` false-positives on real milestones. **The spec's\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:332:- **No sweep for other starters** carrying the same latent P10-GH-6 trigger. Only E34.2's was in the\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:374:**365/1** (P10-GH-6), so this is a green suite reached by fixing a pre-existing red, not a baseline\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__confirmation-evidence.md:75:unchanged; only the sentence's phrasing is), and the underlying defect is recorded as **P10-GH-6** \u2014\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__confirmation-evidence.md:76:see `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`.\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-spec.md:107:  miscount, P10-GH-6), measuring review quality rather than throughput or cost.\n",
+            "metadata": {
+              "output": "docs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:194:**Not** a home for the parked `P10-GH-4`, `P10-GH-6` or `P10-GH-10`; adding to it requires a ruling,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:410:- **P9-GH-3, P10-GH-3, P10-GH-4, P10-GH-6, P10-GH-10, P8-GH-2, ComfyUI precision investigation.**\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:454:that fixed M36 at four. **This milestone is not a home for the parked `P10-GH-4`, `P10-GH-6` or\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-spec.md:585:    (if not folded), P10-GH-3, P10-GH-4, P10-GH-6, P10-GH-8, P10-GH-10, P8-GH-2, ComfyUI, the\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-execution-chat-starter.md:322:  *propose* it for M36, HQ decides); P9-GH-3, P10-GH-3, P10-GH-4, P10-GH-6, P10-GH-10, P8-GH-2,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11__phase-closure-declaration.md:186:| `P10-GH-3`, `P10-GH-4`, `P10-GH-6` | Parked. **`P10-GH-4` fired again** throughout M40 \u2014 `merge_details` unfillable at delivery time |\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M38__milestone-execution-chat-starter.md:399:  `P10-GH-6`, `P10-GH-10`, `P9-GH-1`, `P9-GH-3`, `P10-GH-3`, `P10-GH-9`, `P8-GH-2`, ComfyUI precision,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md:89:**This milestone is NOT a home for `P10-GH-4`, `P10-GH-6` or `P10-GH-10`**, nor for any other parked\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md:450:- **Absorb `P10-GH-4`, `P10-GH-6`, `P10-GH-10`, or any other parked carry-forward.** Contents are\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-spec.md:858:    FENCE[\"NOT a home for<br/>P10-GH-4 / P10-GH-6 / P10-GH-10<br/>adding requires a RULING\"]\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36__milestone-execution-chat-starter.md:333:  P10-GH-4, P10-GH-6, P10-GH-7, P10-GH-9, P10-GH-10, P8-GH-2, ComfyUI precision, or the sidekick\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-execution-chat-starter.md:126:  structurally. **M37 is not a home for `P10-GH-4`, `P10-GH-6`, `P10-GH-10` or anything else. Adding\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M37__milestone-execution-chat-starter.md:443:  scheduler (M38\u2013M40); **any enforcement test, linter or validator**; `P10-GH-4`, `P10-GH-6`,\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__delivery-notice.md:59:| 7 | `P10-M34__carry-forward-note__P10-GH-6-\u2026.md:101` | *\"(Creation Seed lacks E31.3 verification)\"* | \u274c **newly found** |\ndocs/phases/P11__Drivr_Coordination_Over_Rented_Execution/P11-M36-E36.5__delivery-notice.md:227:- `docs/phases/P10__\u2026/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__spec__milestone-local-inference-backtest.md:98:| 5 | **P10-GH-6 starter-lint false positive** | `tests/test_starter_lint.py` flagged a **real** milestone reference as a typo \u2014 the test was wrong, not the starter | The failing test output + `tests/test_starter_lint.py` + the flagged starter | `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md` |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md:93:| 5 | pytest failure text; `tests/test_starter_lint.py` @ `f4c3a30`; flagged starter @ `973a7f5` lines 104\u2013115; `ls docs/phases/` | `P10-M34__carry-forward-note__P10-GH-6-*.md` (the entire finding); confirmation-evidence Check 3; the reworded starter; M34 Closure Declaration; the identifier `P10-GH-6` |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md:119:| 5 | P10-GH-6 starter-lint false positive | test correctness | **MISS** | CATCH | **SPLIT** | 0 |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M35-E35.5__delivery-notice.md:258:P10-GH-6 rather than fixing it).\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-closure-declaration.md:204:| P10-GH-6 | **`tests/test_starter_lint.py` false-positives on real milestones** \u2014 `known_milestones()` derives truth only from starter filenames (M1\u2013M8 invisible) and cannot distinguish this repo's branches from a cross-repo epic's target-project branches. Left untouched deliberately (a framework-capability change, out of scope for adoption epics); the one M34 starter it broke was reworded instead. Detail: `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`. Unowned. | Low |\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:33:  - name: Carry-Forward Note \u2014 P10-GH-6 (starter lint false-positives on real milestones)\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:34:    path: docs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:86:- `docs/phases/P10__.../P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md` *(new)*\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:88:- `docs/phases/P10__.../P10-M34-E34.2__epic-execution-chat-starter.md` *(reworded \u2014 P10-GH-6 workaround)*\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:310:- **P10-GH-6 (new)** \u2014 `tests/test_starter_lint.py` false-positives on real milestones. **The spec's\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:332:- **No sweep for other starters** carrying the same latent P10-GH-6 trigger. Only E34.2's was in the\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__delivery-notice.md:374:**365/1** (P10-GH-6), so this is a green suite reached by fixing a pre-existing red, not a baseline\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__confirmation-evidence.md:75:unchanged; only the sentence's phrasing is), and the underlying defect is recorded as **P10-GH-6** \u2014\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10-M34-E34.2__confirmation-evidence.md:76:see `P10-M34__carry-forward-note__P10-GH-6-starter-lint-false-positive.md`.\ndocs/phases/P10__Fleet_Adoption_and_Local_Inference_Proving/P10__phase-spec.md:107:  miscount, P10-GH-6), measuring review quality rather than throughput or cost.\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && grep -rn \"P10-GH-6\" --include=*.md docs/ | head -30",
+            "time": {
+              "start": 1788292415488,
+              "end": 1788292415490
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e88bd34001cuJ8BkjwPNfnlQ",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "messageID": "msg_05e88a7f5001TFHQX15kFLZH0F"
+        }
+      },
+      {
+        "type": "tool_use",
+        "timestamp": 1788292416484,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "type": "tool",
+          "tool": "bash",
+          "callID": "toolu_01VqMFDfCrfeigHPNPdVtBi2",
+          "state": {
+            "status": "completed",
+            "input": {
+              "command": "cd /home/panchew/soft-dev/ai-project-system && grep -n \"known_milestones\\|LOOKAHEAD\\|def \\|milestone__\\|glob\" tests/test_starter_lint.py | head -40"
+            },
+            "output": "26:existing milestone \u2014 within ``PLANNED_MILESTONE_LOOKAHEAD`` \u2014 is treated as a\n59:PLANNED_MILESTONE_LOOKAHEAD = 10\n62:def find_starter_files(docs_root: Path = DOCS_ROOT):\n64:    return sorted(docs_root.glob(STARTER_GLOB))\n67:def known_milestones(files):\n77:def find_branch_typos(docs_root: Path = DOCS_ROOT):\n83:    ``PLANNED_MILESTONE_LOOKAHEAD`` \u2014 which the project may reference before its\n88:    valid = known_milestones(files)\n100:                if highest < int(num) <= highest + PLANNED_MILESTONE_LOOKAHEAD:\n110:def test_starter_files_are_discovered():\n111:    \"\"\"Sanity: the glob actually finds the starters (guards against a path slip).\"\"\"\n116:def test_known_milestones_non_empty():\n117:    valid = known_milestones(find_starter_files())\n121:def test_no_branch_name_typos_in_starters():\n141:def _write_starter(root: Path, name: str, body: str) -> Path:\n149:def test_detector_flags_extra_digit_typo(tmp_path):\n161:def test_detector_flags_m144_regression(tmp_path):\n172:def test_detector_allows_legitimate_cross_reference(tmp_path):\n185:def test_detector_allows_own_milestone(tmp_path):\n191:def test_detector_allows_planned_milestone_within_lookahead(tmp_path):\n206:def test_detector_flags_far_future_typo_beyond_lookahead(tmp_path):\n",
+            "metadata": {
+              "output": "26:existing milestone \u2014 within ``PLANNED_MILESTONE_LOOKAHEAD`` \u2014 is treated as a\n59:PLANNED_MILESTONE_LOOKAHEAD = 10\n62:def find_starter_files(docs_root: Path = DOCS_ROOT):\n64:    return sorted(docs_root.glob(STARTER_GLOB))\n67:def known_milestones(files):\n77:def find_branch_typos(docs_root: Path = DOCS_ROOT):\n83:    ``PLANNED_MILESTONE_LOOKAHEAD`` \u2014 which the project may reference before its\n88:    valid = known_milestones(files)\n100:                if highest < int(num) <= highest + PLANNED_MILESTONE_LOOKAHEAD:\n110:def test_starter_files_are_discovered():\n111:    \"\"\"Sanity: the glob actually finds the starters (guards against a path slip).\"\"\"\n116:def test_known_milestones_non_empty():\n117:    valid = known_milestones(find_starter_files())\n121:def test_no_branch_name_typos_in_starters():\n141:def _write_starter(root: Path, name: str, body: str) -> Path:\n149:def test_detector_flags_extra_digit_typo(tmp_path):\n161:def test_detector_flags_m144_regression(tmp_path):\n172:def test_detector_allows_legitimate_cross_reference(tmp_path):\n185:def test_detector_allows_own_milestone(tmp_path):\n191:def test_detector_allows_planned_milestone_within_lookahead(tmp_path):\n206:def test_detector_flags_far_future_typo_beyond_lookahead(tmp_path):\n",
+              "exit": 0,
+              "truncated": false
+            },
+            "title": "cd /home/panchew/soft-dev/ai-project-system && grep -n \"known_milestones\\|LOOKAHEAD\\|def \\|milestone__\\|glob\" tests/test_starter_lint.py | head -40",
+            "time": {
+              "start": 1788292416482,
+              "end": 1788292416484
+            }
+          },
+          "metadata": {
+            "anthropic": {
+              "caller": {
+                "type": "direct"
+              }
+            }
+          },
+          "id": "prt_05e88bffb001AkWhsn7rFytBzQ",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "messageID": "msg_05e88a7f5001TFHQX15kFLZH0F"
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292416502,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e88c3f4001z4yjC7dc6orZCy",
+          "reason": "tool-calls",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "messageID": "msg_05e88a7f5001TFHQX15kFLZH0F",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "type": "step-finish",
+          "tokens": {
+            "total": 22173,
+            "input": 2,
+            "output": 374,
+            "reasoning": 0,
+            "cache": {
+              "write": 3327,
+              "read": 18470
+            }
+          },
+          "cost": 0.03938875
+        }
+      },
+      {
+        "type": "step_start",
+        "timestamp": 1788292420352,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e88d2fc001S0slQvrpNgrfOj",
+          "messageID": "msg_05e88c3fc0017VdfEtc7xJadsF",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "type": "step-start"
+        }
+      },
+      {
+        "type": "text",
+        "timestamp": 1788292470638,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e893ca800154L2yPAvydIhxZ",
+          "messageID": "msg_05e88c3fc0017VdfEtc7xJadsF",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "type": "text",
+          "text": "**Conclusion: the test is defective, not the document. Line 111 is correct; the change belongs in `tests/test_starter_lint.py`, and the starter must not be edited to satisfy it.**\n\n## 1. What the test actually asserts\n\nNominally: \"no Epic starter references a milestone branch that doesn't exist.\" Operationally it asserts something much narrower.\n\n`find_branch_typos` builds its truth set in `known_milestones()` from **starter filenames only** \u2014 `P#-M#-E#.#__epic-execution-chat-starter.md`. So `valid` is not \"milestones in this project\"; it is \"milestones that happen to have at least one Epic Execution Chat Starter file.\" Every `milestone/M<n>` token found in any starter is then judged against that set, with one escape hatch: numbers strictly **above** `max(valid)` and within `PLANNED_MILESTONE_LOOKAHEAD = 10`.\n\nTwo gaps follow directly from that construction:\n\n- The lookahead only forgives numbers *above* the frontier. A real milestone *below* the frontier that lacks a starter file is unforgivable by construction.\n- Every `milestone/M<n>` token is read as a claim about **this** repository. The detector has no notion of repo scope.\n\nThe docstring advertises the first gap as a feature \u2014 \"derived from the starter filenames themselves, so the check needs no hand-maintained list.\" That convenience is the defect. The proxy (starters) is strictly narrower than the truth (milestones).\n\n## 2. Is line 111 a mistake? No \u2014 twice over\n\n**(a) Wrong repository.** The sentence describes the pre-state of `footboard`, one of three *external* repositories this epic bumps. `milestone/M1` is a branch in `footboard`, with `footboard`'s own governance numbering. It is not a claim about this repo at all. The check was written in M17, before fleet-adoption epics existed; P10 introduced a whole class of starter content \u2014 branch names belonging to other repositories \u2014 that the detector cannot represent. Following line 111 literally does **not** send anyone to a nonexistent branch, which is the stated harm the test exists to prevent.\n\n**(b) Even read as a local reference, M1 is real.** `docs/phases/P1__System_Foundation_and_Adoption/` contains `P1-M1__milestone.md`, `P1-M1-E1.1__spec__\u2026`, and `P1-M1__completion__\u2026`. M1 is one of the oldest milestones in the project. It has no starter file because the starter practice began later \u2014 I confirmed against the working tree that the lowest-numbered starter is `P2-M9-E9.1__epic-execution-chat-starter.md`. **M1 through M8 are structurally invisible to `known_milestones()`**, so *any* reference to them is a guaranteed false positive.\n\nThe failure message is itself evidence the detector is outside its domain: \"Fix the milestone number (likely a stray extra digit).\" Applied to `M1`, the prescribed remedy is to remove a digit from a one-digit number. The heuristic has no sensible action to offer here because the premise is wrong.\n\n## 3. What to change\n\n**File: `tests/test_starter_lint.py`.** Three changes.\n\n1. **Widen the truth set.** Derive valid milestone numbers from *all* governance filenames under `docs/phases/` \u2014 any `P\\d+-M(\\d+)` prefix, covering `__milestone`, `__spec__`, `__completion__` and starters \u2014 not just starters. This makes M1\u2013M8 known and eliminates the entire pre-starter false-positive class. It does not weaken the guard: `M144` and `M147` match no document's milestone number, so the historical typos still fail.\n\n2. **Handle cross-repo references explicitly.** Widening the set fixes *this* failure only by coincidence \u2014 `footboard`'s M1 happens to collide with a real local M1. A fleet epic citing another project's `milestone/M7` would still be judged against this repo's numbering, which is luck rather than correctness. The cheap sound fix is an inline suppression marker (e.g. a trailing `<!-- lint:cross-repo -->` or a per-line allowlist) so a starter can state an external branch name verbatim. The alternative \u2014 requiring fleet epics to launder their prose \u2014 is the tail wagging the dog.\n\n3. **Add regression fixtures**, or the fix will rot the same way: a starter referencing a milestone that exists only as a `__milestone.md` (no starter) must not be flagged; a marked cross-repo reference must not be flagged; the existing M144 / M147 / M99 cases must stay red. Correct the module docstring, which currently documents the buggy derivation as sound, and amend the Troubleshooting Guide entry \"An Epic starter references the wrong milestone branch\" to say the check can be the thing that's wrong.\n\n**Do not** reword the starter to avoid the literal `milestone/M<n>` token. That subordinates a factually correct document to a broken check, degrades the artifact (an executing agent needs the exact branch string; \"its own M1 milestone branch\" is weaker), leaves the defect armed for every future fleet epic, and produces a green suite that certifies nothing. If fixing the test is genuinely out of the epic's scope, the honest stopgap is an `xfail` with an issue reference \u2014 recorded as an open defect, not closed.\n\n---\n\n*Disclosure on method:* I inspected the live repository to verify the two factual claims above (that M1 has governance documents, and that the lowest starter is M9). In doing so I saw that the repo has already encountered this \u2014 the starter has been reworded and the defect logged as **P10-GH-6**, described in `P10__phase-closure-declaration.md` in the same terms I reached independently (`known_milestones()` blind to M1\u2013M8; no cross-repo distinction). It is currently parked and unowned, and the test remains unfixed. My recommendation stands: the parked item is the real fix, and the rewording was a workaround that should not be mistaken for a resolution.",
+          "time": {
+            "start": 1788292447400,
+            "end": 1788292470635
+          }
+        }
+      },
+      {
+        "type": "step_finish",
+        "timestamp": 1788292470666,
+        "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+        "part": {
+          "id": "prt_05e899787001WhxT7IxA6k0Wd6",
+          "reason": "stop",
+          "snapshot": "fe8282c798c499da4696a50c582599bede2ca288",
+          "messageID": "msg_05e88c3fc0017VdfEtc7xJadsF",
+          "sessionID": "ses_fa177d839ffel5hv7Jy1iuVgxT",
+          "type": "step-finish",
+          "tokens": {
+            "total": 30016,
+            "input": 2,
+            "output": 3805,
+            "reasoning": 0,
+            "cache": {
+              "write": 4412,
+              "read": 21797
+            }
+          },
+          "cost": 0.1336085
+        }
+      }
+    ]
+  }
+}
