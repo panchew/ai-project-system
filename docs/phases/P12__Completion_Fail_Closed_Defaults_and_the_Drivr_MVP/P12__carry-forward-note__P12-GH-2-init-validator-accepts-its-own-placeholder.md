@@ -3,10 +3,10 @@ project: ai-project-system
 phase: P12
 milestone: null
 type: note
-status: active
+status: closed
 issuer_chat: HQ Chat (ai-project-system)
 issued_to: P12 Phase Chat → M42
-last_updated: 2026-08-19
+last_updated: 2026-09-07
 severity: high
 ---
 
@@ -134,3 +134,29 @@ substitute is the one answer that must not survive the milestone.
 
 **M42 must also invert the test**, not delete it: the suite should fail if a stub is installable at
 all.
+
+
+---
+
+## CLOSED — 2026-09-07, by the P12 Phase Chat at phase closure
+
+**This note was `status: active` with `last_updated: 2026-08-19` — written the day it was filed and
+never updated, while the defect it describes was fixed on 2026-09-02 by M42.** The record said the
+gap was open; the code said otherwise. **Closing it is the correction; recording that it went stale
+is the finding**, because a carry-forward note that survives its own remedy is exactly the
+derived-claim rot `P12-GH-3` names, in the register meant to track such things.
+
+**All three mechanisms re-measured on `phase/P12`, 2026-09-07:**
+
+| Mechanism (as filed 2026-08-19) | Now |
+|---|---|
+| `bin/ai-project-init` writes a placeholder agent when the real one is missing | **gone** — 0 occurrences of the stub text (E42.4) |
+| Its own validator accepts the placeholder | **inverted** — the validator asserts `name: hq`, 2 occurrences (E42.4) |
+| Live victim: `social-stories-creator` carries a 230-byte placeholder | **repaired** — **14,711 bytes** of real content (E42.5) |
+
+**Guarded:** `tests/test_init_agent_path.py`, 5 tests, green — the suite now fails if a placeholder is
+installable at all (P12 success criterion 5).
+
+**Inherited from P11's closure declaration** as *"the two `bin/ai-project-init` defects, one with a
+live victim"* with no gap-record ID; this note gave it one, M42 closed it, and the closure is now in
+the note rather than only in M42's declaration.
