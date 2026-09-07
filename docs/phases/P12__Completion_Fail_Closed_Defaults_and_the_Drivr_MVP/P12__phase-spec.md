@@ -826,10 +826,40 @@ The CFO (Layer 8) will accept P12 complete when:
       choice, the run record, and the framework's own failures during it committed
 - [ ] The full suite is green at delivery (**549 baseline on `master`**, no regressions, no skips
       introduced to route around changes) for changes touching this repo
-- [ ] **`model_verification` is flipped from `advisory` to `blocking` as the LAST act of P12's
-      closure, performed by HQ** (CFO decision 2026-08-27; ordering corrected 2026-08-27 after the
-      Phase Chat found the deadlock). **P12 may not close without disposing of this**: flip it, or
-      record why not. **SN-37's model-qualification gate resumes binding lineup changes at the same
+- [x] **`model_verification` — DISPOSED 2026-09-07 by the second path: RECORDED WHY NOT.**
+      *(CFO decision, 2026-09-07: "I don't deem it necessary now. It can be a carry-forward so when
+      it runs, the model blocks are already aligned.")* **The key stays `advisory`; the flip is
+      carried to P13 with its trigger.** The criterion offered two paths — *flip it, or record why
+      not* — and the second is taken, on a reason that did not exist when the criterion was written:
+      **the three governed rows that would halt cannot be measured, because this phase made them
+      unmeasurable.** `model_verification` governs **manual instances only**
+      (`chat-hierarchy.md:313-314`), so its keys are `creation`, `hq`, `phase`, `milestone`,
+      `epic_manual` — **`epic_dev`/`epic_qa` are dispatch lanes and are not governed at all.** Of the
+      five, `hq` and `creation` are measured and true; `phase`, `milestone` and `epic_manual` hold
+      allowance-set values (SN-41) that no measurement supports — and **cannot be qualified by
+      E46.5's gate**, because `drivr/capabilities/model.py:20-21` makes phase/milestone dispatch
+      unconstructible (E46.3) and `bin/successful-nothing-instrument:64` is
+      `LANES = ("epic_dev", "epic_qa")`. **A manual chat's backing model cannot be qualified by a
+      dispatch instrument, and P12 built it that way on purpose.** Arming the gate now would refuse
+      the working levels on values the phase itself records as unsupported.
+      - **What WAS done, and it was the half with no decision attached:** the key is **blessed** —
+        yml-spec §3.9, §4 rule 29, declaration block, `KNOWN_TOP_LEVEL` (`36e89d2`, spec 2.10.0).
+        It was the only warning the validator emitted; E43.4 blessed its two siblings and left this
+        one solely because it sat outside M43's scope. **Config: 0 errors, 0 warnings. Suite 774.**
+        §3.9 states in its own text that blessing adds **no enforcement**, with a test asserting it
+        says so — `blocking` is carried by agent compliance, as `chat-hierarchy.md` already says of
+        itself.
+      - **CARRY-FORWARD TO P13, with its trigger — `P12-CF-1`.** **Arm the flip when
+        `models.phase`, `models.milestone` and `models.epic_manual` name what those chats actually
+        run on.** Alignment is the trigger, not a date. Until then `advisory` is the honest setting:
+        the mismatch is stated plainly and work proceeds. **E41.5's ungated rows ride with this**;
+        `epic_manual` additionally has **no attribution row in the policy mapping at all**, and R6's
+        surface confirmation for it was never performed. Full measurement in
+        `.ai-project/artifacts/escalations/2026-09-07__p12-phase-chat__disposal__model-verification-flip.md`.
+      - *(Superseded requirement, retained: the original text read "flipped … as the LAST act of
+        P12's closure, performed by HQ." That instruction stands for whoever arms it later; it is
+        no longer a P12 closure obligation.)* **SN-37's model-qualification gate resumes binding
+        lineup changes when the flip is armed**, as does HQ's suspended fidelity condition. **SN-37's model-qualification gate resumes binding lineup changes at the same
       moment**, as does HQ's suspended fidelity condition.
       - **WHO: HQ, and only HQ.** `models.hq` and `models.creation` are `remote:claude-opus-5` and
         those chats self-report the same, so **HQ and Creation survive the flip. Every Phase,
@@ -997,6 +1027,7 @@ Not decided here, and named so their status is explicit rather than unknown:
 
 | Version | Date | Change |
 |---|---|---|
+| 1.4.0 | 2026-09-07 | **`model_verification` DISPOSED — the criterion's second path taken.** CFO decision 2026-09-07: keep `advisory`, carry the flip to P13 with an alignment trigger (**`P12-CF-1`**). The reason is stronger than any available when the criterion was written: **the three governed rows that would halt cannot be measured, because P12 made them unmeasurable** — the key governs *manual instances only*, and E46.3 made phase/milestone dispatch unconstructible while the instrument's lanes are `epic_dev`/`epic_qa`. Two Phase-Chat errors are corrected in the record: the disposal note first framed this as *four rows* including the dispatch lanes (**not governed**), and recommended measuring them with E46.5's gate (**impossible for every row it applied to**). **The blessing half was completed** — it carried no decision — at `36e89d2`, leaving the config at 0 warnings. |
 | 1.3.3 | 2026-09-04 | **Reconciles the successful-nothing set, which this spec stated three different ways.** `:563` said the failure was recorded **twice**; the qualification criterion said *"flags **both** E33.2 and E39.3"*; the M47 criterion said **three** — *E33.2 Run A, E39.3, and E41.2's DEV RUN 2*. **The set is three, itemized.** *"Both"* and *"twice"* were **counts standing where a list belongs** — Hard Constraint 1, in this spec's own success criteria, which is why the discrepancy survived three amendments unnoticed. Also records that the **`llama3.1:8b` overpack is not a member**: it is a context-declaration defect caught by the bar's context check, a different class from a run reporting success having done nothing. **Escalated by the M46 Milestone Chat at planning close** (its Finding 4) after the Phase Chat's M46 spec propagated a fourth variant. |
 | 1.3.2 | 2026-08-27 | **Amends the M46 role-identification input: the harness moved.** `ListAgents` now reports a session its own address; it did not on 2026-08-20. **The *requires-an-outside-correlator* claim dies** — it lived in messages and **never reached an artifact**, so nothing had to be unwound. **The registry requirement survives, re-justified**: names carry no role, which is what M46 must build against. Caught by the M41 chat running the command instead of asserting from memory, one turn short of shipping — `P12-GH-3` with a claim-in-flight about the environment as its dependent. **HQ had seen the self-address line hours earlier and amended nothing**, which is recorded here as the counter-example. |
 | 1.3.1 | 2026-08-27 | **Ordering defect in v1.3.0's own criterion, found by the P12 Phase Chat and corrected.** The flip was placed *as part of* closure; **the Phase Chat runs the closure and is one of the chats the flip halts**, so a mid-sequence flip stops the executor half-finished and the phase cannot close itself. **Now the LAST act, performed by HQ** — the only level besides Creation that survives it. Deferring to the boundary was right; placing it *inside* the boundary was not. **No decision changed; only who acts and when.** |
