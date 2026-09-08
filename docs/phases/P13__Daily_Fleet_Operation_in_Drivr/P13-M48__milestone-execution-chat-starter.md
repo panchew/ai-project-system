@@ -152,6 +152,21 @@ Carry only the findings relevant to that Epic, but do not lose these boundaries 
 
 ## Epic Planning Requirements
 
+### E48.1 exhaustion ruling and one final attempt
+
+The P13 Phase Chat resolved E48.1's exhausted-rework Escalation Notice on 2026-09-08 by amending
+the M48 spec at `## Phase Ruling on E48.1 Rework Exhaustion`. **Read that section in full before
+touching E48.1.** Its five decisions are fixed: source-repository bar ownership; source-graph
+dispatch-manifest ancestry plus runtime dispatch time; exact source-side OpenCode tool mapping and
+authoritative `files_changed`; immutable commit-permalink proposed visual; and bounded quarantine
+hardening under the fixed XDG state root.
+
+The same ruling grants a written PSG §11.6 **`+1` extension: exactly one final E48.1 planning
+attempt, not a reset.** Reissue the E48.1 spec and Starter from the amended parent contract and
+return only that set. E48.2/E48.3 remain paused until E48.1 receives named acceptance. This grant
+does not authorize E48.1 execution or any merge. If the final delivery is not acceptable, stop and
+escalate; no further rework attempt exists.
+
 ### E48.1 — Operational Evidence and Run Gate
 
 - Commit the normalized record contract and task-specific quality bars before either run.
