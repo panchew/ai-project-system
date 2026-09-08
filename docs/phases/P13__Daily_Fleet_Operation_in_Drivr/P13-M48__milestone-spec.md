@@ -1,0 +1,377 @@
+---
+milestone: M48
+name: "Fleet Readiness, Proven by Running It"
+phase: P13
+status: planned
+start_date: 2026-09-08
+epics:
+  - E48.1
+  - E48.2
+  - E48.3
+  - E48.4
+  - E48.5
+  - E48.6
+is_final: false
+---
+
+# Milestone M48 — Fleet Readiness, Proven by Running It
+
+## Purpose
+
+P12 proved one real Epic on `panchew-io`. M48 determines whether that path generalizes before P13
+builds a surface on top of it. It prepares `footboard` and `home_finance` without overwriting their
+active work, dispatches one real pre-existing Epic in each project through Drivr's proven headless
+OpenCode-adapter path, and records enough independent evidence to tell whether useful work happened.
+
+The milestone also establishes the first P13 cost-and-quality baseline. Usage is tied to reviewed
+results, defects, rework, elapsed time, and human intervention. Missing telemetry is named rather
+than estimated.
+
+M48 may succeed with a named, understood run failure. It may not succeed with static readiness
+alone, an exit code standing in for work evidence, or a failure hidden behind a green aggregate.
+
+## Planning-Time Findings
+
+Measured on 2026-09-08 against `ai-project-system` `cddbed7`, Drivr `114de1c`, `panchew-io`
+`0b520aa`, `footboard` `d0c4c2a`, and `home_finance` `fbfc4b1`. These findings constrain the Epic
+specs; execution must re-measure the relevant state at its own repository, ref, and date.
+
+1. **The project model value is not an executable provider route.** The fleet projects declare
+   `remote:deepseek-v4-flash`. Drivr passes the requested model directly to OpenCode, while the
+   catalog exposes both `opencode/` and `opencode-go/` routes. M48 must record the executable route
+   chosen for each attempt without creating M53's general model-selection mechanism.
+2. **Credential lookup depends on the launch environment.** Drivr supplies a temporary
+   `XDG_CONFIG_HOME` but inherits `XDG_DATA_HOME`. A confined value can hide the normal host
+   credential store. Readiness records presence and the effective path category only; credential
+   values never enter logs, artifacts, commands, or chat.
+3. **The required projects are benched.** The fleet registry marks `footboard` and
+   `home_finance` benched; the scheduler dispatches only active, enrolled projects. Any transition
+   must be explicit and authorized. It may not be inferred from disk presence or from this spec.
+4. **The proven path is the Drivr adapter, not a raw CLI replay.** P12 used
+   `OpenCodeAdapter.execute(ExecutionRequest(...))` with `HostEnvironment` and an explicit route.
+   A direct `opencode run` invocation alone does not prove reuse of that path.
+5. **No Drivr code change is authorized by M48.** This boundary comes from the Phase Execution
+   Chat Starter. Configuration, launch procedure, evidence capture, and project readiness are the
+   work. If a required run needs new Drivr machinery, stop that path and escalate rather than
+   absorbing it.
+6. **Governance alignment is a migration, not a version edit.** `footboard` and `home_finance`
+   are on v7.0.0 while the released framework is v9.0.0. `footboard` also has substantial dirty
+   planning work. Each migration starts from an explicitly chosen integration baseline in an
+   isolated worktree and preserves project configuration and in-flight work.
+7. **`home_finance` remains invalid by the current schema.** It lacks
+   `project.description`, uses `project.name: home_finance` against the hyphenated-slug rule, and
+   has two schema-undefined-key warnings. No rename is authorized. The disposition must be an
+   explicit, evidence-backed project supersession or a filed schema finding against the rule.
+8. **The source suite mixes deterministic acceptance with a live endpoint.** With
+   `visual_artifacts.enabled: true`, one integration test depends on local ComfyUI availability.
+   M48 must make deterministic suite status stable and report live qualification separately.
+9. **P12's raw OpenCode events expose the needed usage dimensions per step, not as a run
+   summary.** Available fields include input, output, reasoning, cache read/write, and reported
+   cost. M48 normalizes them without double-counting totals and preserves the raw source.
+10. **`panchew-io` is verification evidence, not a third new run.** Its P12 proof is the first
+    fleet run. M48 verifies that its committed `models:` block remains present and records its
+    P12 baseline beside the two new runs; M53 owns making silent reversion impossible.
+
+## Binding Constraints
+
+1. **M48 gates M50.** No P13 UI work starts until M48 is accepted.
+2. **No new surface and no Drivr implementation.** Use the P12 path as it exists. A machinery
+   requirement is a named blocker and escalation.
+3. **Real work only.** Each project run executes a pre-existing, parent-governed Epic that would
+   have been done anyway. A synthetic probe may test transport but cannot satisfy the run.
+4. **Evidence precedes judgment.** Before dispatch, commit the task-specific quality bar, record
+   contract, selected repository/ref, route, and credential-presence check. Do not design the bar
+   after seeing the result.
+5. **The reviewer re-measures.** Preserve raw events and project commits. Record exit status, but
+   never use it as the completion or quality signal.
+6. **`undetermined` remains first-class.** Missing evidence, an unavailable provider, an
+   authenticated allowance/resource refusal, and a confirmed execution blocker remain distinct.
+7. **Secrets remain absent.** Check only credential-store/path presence and route availability.
+   No credential value, token, secret-bearing environment value, or secret file content is read
+   into a committed artifact.
+8. **Dirty work is preserved.** In particular, do not modify or clean the existing `footboard`
+   checkout. Use an isolated worktree from a recorded integration baseline and stage only intended
+   migration/run changes.
+9. **Repository claims are bounded.** Every validation claim states repository, ref, date,
+   command/check, and result. "Suite green" never silently covers another repository.
+10. **A named failure is an allowed result, not a waiver.** It must identify the failed layer,
+    route, evidence, and consequence for P13. A failure does not permit M50 to open unless the
+    Phase Chat accepts the resulting disposition.
+11. **Local inference remains parked.** M48 may produce future re-entry evidence but does not
+    dispatch locally or reopen llama.cpp/non-Ollama runtimes.
+12. **Out-of-scope carry-forwards stay out.** Do not absorb `P12-GH-3`, the Delivery Notice
+    location split, duplicate AOG Error Handling content, closed-phase sweep scope, `P11-GH-2`,
+    or the untemplated `rulings` class.
+
+## Planned Epics
+
+Six Epics. E48.1, E48.2, and E48.3 may proceed in parallel. E48.4 and E48.5 require E48.1's
+accepted pre-run contract, deterministic acceptance from E48.2, and explicit project eligibility.
+E48.6 requires both project attempts and their independent reviews.
+
+- **E48.1 — Operational Evidence and Run Gate**
+- **E48.2 — Deterministic Acceptance, Live Qualification Separate**
+- **E48.3 — Enrollment Completes the Delivery Substrate**
+- **E48.4 — Footboard Readiness and Real Epic Run**
+- **E48.5 — Home Finance Disposition and Real Epic Run**
+- **E48.6 — Fleet Cost-and-Quality Baseline**
+
+Every Epic Chat is manually supervised. The real project work inside E48.4 and E48.5 is agentic;
+the Epic Chat collecting and judging that evidence remains manual. Mode is not authority.
+
+## Epic Detail
+
+### E48.1 — Operational Evidence and Run Gate
+
+Define and prove the common pre-run contract before either project result is visible.
+
+**Scope and deliverables**
+
+- A versioned run-record contract covering every attempt: task/project/level, repository and
+  branch/ref, Drivr ref, declared model identity, executable provider route, effective launch
+  environment category, credential-store presence without values, timestamps/elapsed time, raw
+  event source, completion judgment, work-evidence counts, review result, defects, rework, human
+  intervention, and missing-data fields.
+- A tested normalization path for uncached input, cache creation/write, cache reads, output,
+  separately reported reasoning, and provider-reported cost. Raw counts and economic evidence
+  remain separate; overlapping provider totals are not summed twice.
+- A committed task-specific quality bar for each selected project Epic before its dispatch.
+- A reproducible adapter-level invocation procedure using Drivr's `OpenCodeAdapter`, not a raw CLI
+  substitute, including presence-only route and credential checks.
+- Re-measurement that `panchew-io`'s seven-key `models:` block remains committed, plus extraction
+  of the available P12 run baseline under the new contract. Missing P12 fields stay missing.
+- The explicit authority record required to move each target from benched to eligible, or a named
+  block if that authorization is not supplied. This Epic does not infer or grant eligibility.
+
+**Acceptance criteria**
+
+- [ ] The contract and quality bars are committed before either real project dispatch
+- [ ] Normalization is tested against representative complete, partial, and missing telemetry
+- [ ] Route identity and model identity are distinct in every record
+- [ ] Credential diagnostics prove presence only and emit no values
+- [ ] The invocation exercises `OpenCodeAdapter.execute`
+- [ ] `panchew-io` model persistence and available P12 baseline are independently verified
+- [ ] Each benched target has explicit human transition authority recorded, or remains blocked with
+      that missing authority named
+
+### E48.2 — Deterministic Acceptance, Live Qualification Separate
+
+Make "suite green" reproducible while preserving honest evidence about the configured live visual
+endpoint.
+
+**Scope and deliverables**
+
+- Separate deterministic acceptance from live ComfyUI qualification so identical source and an
+  unchanged declared test mode produce the same acceptance result.
+- Keep live endpoint testing available and default behavior explicit; do not convert an expected
+  live check into an unreported skip or mock.
+- Report deterministic test totals and live qualification status independently, including the
+  environment and reason for any intentional skip.
+- Add regression coverage for endpoint available, unavailable, and explicitly skipped states.
+
+**Acceptance criteria**
+
+- [ ] Deterministic acceptance no longer depends on machine-local endpoint availability
+- [ ] Live qualification remains runnable and is never represented as deterministic coverage
+- [ ] Pass, fail, and skip semantics are explicit and tested
+- [ ] P13 delivery reports can state one unambiguous source-suite gate
+
+### E48.3 — Enrollment Completes the Delivery Substrate
+
+Close SN-45: initialization currently creates a local repository but no remote enrollment path,
+even though governed delivery depends on PRs.
+
+**Scope and deliverables**
+
+- Add an explicit, fail-closed enrollment step or option to the supported initialization path that
+  can establish and verify the configured remote/tracking relationship without embedding
+  credentials.
+- Preserve an intentional local-only choice as an explicit result rather than silently treating it
+  as fleet-ready.
+- Cover remote present, remote absent, invalid/failing remote, and intentional local-only cases.
+- Document the boundary between creating/configuring a remote and project eligibility in the fleet
+  registry. Enrollment does not auto-activate or dispatch a project.
+
+**Acceptance criteria**
+
+- [ ] A newly initialized project cannot be reported delivery-ready without a verified remote or
+      an explicit local-only disposition
+- [ ] Diagnostics contain no credential values
+- [ ] Enrollment alone changes neither fleet eligibility nor execution state
+- [ ] Automated tests cover all supported outcomes
+
+### E48.4 — Footboard Readiness and Real Epic Run
+
+Migrate `footboard` safely and execute one real pre-existing Epic through the accepted M48 run
+gate.
+
+E48.4 is an `ai-project-system` proof-and-coordination Epic, following P12 E47.3's pattern. Its
+record and Delivery Notice land in this repository. It does not become `footboard`'s parent:
+project-side migration and product work are planned, accepted, and merged by `footboard`'s own
+hierarchy, with cross-project direction routed through the governed System HQ channel when needed.
+
+**Scope and deliverables**
+
+- Record the chosen integration baseline and preserve the dirty governance-bump/planning checkout
+  untouched by using an isolated worktree and branch.
+- Reconcile governance pin, installed agent copies, adoption stamp, and project configuration as
+  an explicit v7.0.0-to-v9.0.0 migration; remove no project-owned setting by template overwrite.
+- Validate the project and verify its remote/tracking and explicit fleet eligibility.
+- Select a real Epic already present in `footboard`'s accepted Milestone plan. Its current Epic spec
+  and Starter must be produced or confirmed and accepted by `footboard`'s own parent chain before
+  dispatch; do not invent proving work inside M48.
+- Dispatch it headlessly through Drivr's adapter with the precommitted quality bar and evidence
+  contract, then preserve raw evidence and project commits.
+- Obtain independent project-level review and record defects, rework, elapsed time, intervention,
+  completion judgment, and all available usage dimensions.
+
+**Acceptance criteria**
+
+- [ ] Existing dirty work is byte-for-byte outside this Epic's changes and remains unstaged
+- [ ] Governance migration is complete and validated from the recorded integration baseline
+- [ ] The benched-to-eligible transition has explicit human authority recorded
+- [ ] A real Epic accepted by `footboard`'s own parent was attempted through the adapter path with
+      an explicit route
+- [ ] Independent evidence shows useful work, or a named and understood failure explains why not
+- [ ] The record contains no credential value and estimates no missing telemetry
+
+### E48.5 — Home Finance Disposition and Real Epic Run
+
+Resolve `home_finance`'s schema state explicitly, migrate it safely, and execute one real
+pre-existing Epic through the accepted M48 run gate.
+
+E48.5 is an `ai-project-system` proof-and-coordination Epic. Its schema-disposition record, run
+record, and Delivery Notice land in this repository. It does not become `home_finance`'s parent:
+project configuration, migration, and product work remain under `home_finance`'s hierarchy, with
+cross-project direction routed through System HQ when needed. M48 may file a schema finding against
+the rule; it does not amend the source schema.
+
+**Scope and deliverables**
+
+- Decide the `project.name: home_finance` conflict with evidence: either a separately authorized,
+  recorded project supersession or a filed schema finding against the rule. No silent rename is
+  permitted; M48 does not amend the source schema.
+- Resolve the absent description and explicitly dispose of the two schema-undefined-key warnings;
+  report the exact post-change validator result.
+- Record the accepted integration baseline and reconcile governance pin, installed agent,
+  adoption stamp, and project configuration as a v7.0.0-to-v9.0.0 migration.
+- Select a real Epic already present in `home_finance`'s accepted M1 plan. E1.1 is already delivered
+  and cannot be replayed as new proof; a remaining planned Epic must receive its own accepted spec
+  and Starter from `home_finance`'s parent chain before dispatch.
+- Dispatch it headlessly through Drivr's adapter with the precommitted quality bar and evidence
+  contract, then preserve raw evidence and project commits.
+- Obtain independent project-level review and record defects, rework, elapsed time, intervention,
+  completion judgment, and all available usage dimensions.
+
+**Acceptance criteria**
+
+- [ ] Every original schema error and warning has an explicit recorded disposition
+- [ ] No project rename occurs without separate human authorization and a supersession record
+- [ ] Governance migration is complete and validated from the recorded integration baseline
+- [ ] The benched-to-eligible transition has explicit human authority recorded
+- [ ] A remaining real Epic accepted by `home_finance`'s own parent was attempted through the
+      adapter path with an explicit route; delivered E1.1 was not replayed
+- [ ] Independent evidence shows useful work, or a named and understood failure explains why not
+- [ ] The record contains no credential value and estimates no missing telemetry
+
+### E48.6 — Fleet Cost-and-Quality Baseline
+
+Consolidate the P12 `panchew-io` evidence and both M48 attempts into the record that decides whether
+the proven path generalized.
+
+**Scope and deliverables**
+
+- A raw-data-derived baseline for all three pilots. Per attempt, report context composition where
+  attributable; uncached input; cache creation/write; cache reads; output; reasoning; elapsed time;
+  provider-reported cost or allowance evidence; reviewed result; defects; rework; and human
+  intervention.
+- Independent re-measurement from raw events and repository commits rather than acceptance of each
+  executor's summary.
+- A comparability statement: task, model/provider, and context differences are visible so none is
+  presented as a context-saving effect.
+- A readiness result per project and one bounded fleet conclusion: `n=3`, or the named failure and
+  its consequence. A partial result does not silently become `n=3`.
+- A list of what the framework got wrong, what data was unavailable, and which findings block M50,
+  re-scope later P13 work, or remain owned by later milestones.
+
+**Acceptance criteria**
+
+- [ ] Every normalized count is reproducible from a cited raw source
+- [ ] Reviewed quality evidence appears beside usage evidence for each project
+- [ ] Missing fields are `unavailable` with reasons, never zero-filled or estimated
+- [ ] Subscription allowance pressure and cash/API cost remain distinct
+- [ ] The fleet conclusion is no larger than the evidence and explicitly states whether M50 may open
+
+## Dependencies and Prerequisites
+
+**Satisfied phase entry conditions**
+
+- Drivr has private `origin`, and `main` tracks `origin/main`.
+- The three pilot projects' model additions are committed and pushed.
+- `models.creation: remote:gpt-6` is committed and the source suite baseline is 774 passing.
+
+**Internal ordering**
+
+- E48.1, E48.2, and E48.3 may run in parallel.
+- E48.4 and E48.5 require accepted E48.1 evidence/quality contracts, accepted E48.2 deterministic
+  suite semantics, explicit fleet eligibility, and their own parent-governed real Epic.
+- E48.6 requires completed attempts and independent reviews from E48.4 and E48.5.
+
+**External authority and environment**
+
+- Human authorization is required for fleet-registry eligibility changes, project/schema
+  supersession, Stage-2 acceptance, and merge authorization. Cross-project direction is routed by
+  a System HQ request/response and, where work belongs to another governed project, a steering note
+  into that project's HQ; routing never commands or substitutes for that project's acceptance.
+- The intended headless launch environment must expose the selected provider route and the normal
+  host credential store. Presence may be tested; values may not be printed.
+- Provider allowance/resource availability is external. An authenticated refusal is recorded as
+  such and not relabeled as a credential failure.
+
+## Definition of Done
+
+- [ ] All six M48 Epics are delivered, accepted, and merged through the `ai-project-system` M48
+      gate; every completed project-side change and real Epic delivery is separately accepted and
+      merged through the owning project's hierarchy, or the named failure records why that delivery
+      could not complete
+- [ ] `footboard` and `home_finance` each attempted one real pre-existing Epic headlessly through
+      Drivr's P12 adapter path, or a named and understood failure explains why not
+- [ ] `panchew-io`'s model block is verified present and its P12 proof is normalized without
+      invented data
+- [ ] Provider routes and credential-store presence are resolved in the intended launch environment
+      without exposing values
+- [ ] Governance migrations use recorded integration baselines and preserve in-flight work
+- [ ] `home_finance`'s two errors and two warnings have explicit dispositions; no silent rename
+- [ ] SN-45's enrollment gap is closed and tested
+- [ ] Deterministic source-suite acceptance is stable; live visual qualification is separate
+- [ ] Cost and quality are reported together from raw evidence, with missing fields named
+- [ ] The fleet conclusion states `n=3` or names and explains every failure
+- [ ] Repository/ref/date and verification command are stated for each delivery claim
+- [ ] The Phase Chat explicitly decides whether M48's evidence opens M50
+
+## Milestone Acceptance Criteria
+
+- [ ] Static validation is not used as proof that dispatch works
+- [ ] A reader can distinguish work evidence, completion judgment, provider/credential state,
+      reviewed quality, and economic evidence for every attempt
+- [ ] No exit code or executor prose stands in for independent evidence
+- [ ] `undetermined` and unavailable data remain visible rather than rendered as success or progress
+- [ ] No secret value appears in committed changes, logs, or delivery artifacts
+- [ ] Existing user work in all pilot repositories remains intact
+- [ ] Claims do not exceed the repositories, refs, dates, and attempts actually reviewed
+
+## Out of Scope
+
+- Drivr UI, conversational execution, Phase/Milestone dispatch, eligibility-lever implementation,
+  model-selection UI, or a general provider-route resolver
+- New Drivr execution machinery
+- Local inference or any non-Ollama runtime
+- Git-history investigation or rewriting
+- General corpus cleanup or the six explicitly carried unowned findings
+- Automatic governance updater completion; M48 records current compatibility/readiness only
+
+## Changelog
+
+| Version | Date | Change |
+|---|---|---|
+| 1.0.0 | 2026-09-08 | Initial M48 spec. Six Epics put the evidence contract and stable acceptance gate before two isolated project migrations and real runs, close SN-45 separately, and consolidate cost with independently reviewed quality. Records that both targets are currently benched, model identity is not an executable route, credential lookup inherits `XDG_DATA_HOME`, M48 changes no Drivr code, and a named understood failure is an allowed result but not a silent waiver. |
