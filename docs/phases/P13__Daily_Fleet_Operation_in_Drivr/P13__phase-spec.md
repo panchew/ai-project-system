@@ -4,7 +4,7 @@ name: "Daily Fleet Operation in Drivr"
 status: scoping
 start_date: 2026-09-07
 planned_end_date: 2026-10-31
-version: 1.0.0
+version: 1.1.0
 ---
 
 # Phase P13 — Daily Fleet Operation in Drivr
@@ -96,16 +96,39 @@ suite to M48.
 each one is a state the acceptance machinery depends on, and none can be accepted by that
 machinery while it is unmet.
 
-1. **Drivr has a private remote**, `master` pushed, branch protection configured to match this
-   framework's expectations. Until then no Drivr epic can produce a PR, and no Stage-2 review,
-   merge authorization, or CFO diff gate can operate on Drivr work. *(Blocks M50 onward; M48 and
-   M49 do not change Drivr code and may proceed.)*
-2. **The three fleet projects' uncommitted `.ai-project.yml` model additions are committed on
-   purpose**, on their existing branches, preserving unrelated work. All three currently sit
-   uncommitted on non-default branches — the precise state that produced the `panchew-io` silent
-   reversion.
-3. **`models.creation: gpt-6` is committed and the suite is green at 774.** *(Discharged by the
-   opening ruling's own PR — verify the merge, do not redo the work.)* The opening ruling declares
+**All three were discharged on 2026-09-07, the day the phase opened.** Each entry below records
+what was done. **The Phase Chat verifies them; it does not redo them.**
+
+1. **Drivr has a private remote.** ✅ **DISCHARGED** — `https://github.com/panchew/drivr`,
+   **private**, default branch **`main`**, all 28 commits pushed and tracking. Until this, no
+   Drivr epic could produce a PR, and no Stage-2 review, merge authorization, or CFO diff gate
+   could operate on Drivr work — and every Drivr commit existed on one disk.
+
+   > **Correction to this condition as originally written.** It said *"`master` pushed, branch
+   > protection configured to match this framework's expectations."* Both halves were wrong.
+   > **Drivr's default branch is `main`, not `master`.** And **this framework's expectation is
+   > *no* branch protection** — `panchew/ai-project-system`'s own `master` returns *"Branch not
+   > protected."* The PR discipline here is **procedural and harness-enforced, not enforced by
+   > GitHub**. Drivr therefore matches the convention by having no protection rule, and none was
+   > added. **Do not treat an absent protection rule as an unmet entry condition.**
+   >
+   > **Filed as an observation, not resolved here:** P12 removed the merge ladder's `--admin`
+   > rung and inverted its test *"it once asserted the override beat a protected branch; it now
+   > asserts the override is unreachable."* That test contemplates a protected branch which, on
+   > `master`, does not exist. The guarantee is real but rests on procedure and the harness
+   > rather than on the branch setting the test names. **Owner: unplaced. Not scoped into P13.**
+
+2. **The three fleet projects' `.ai-project.yml` model additions are committed on purpose.**
+   ✅ **DISCHARGED** — `panchew-io` `0b520aa` (`milestone/M1`), `footboard` `d0c4c2a`
+   (`chore/framework-v7.0.0-bump`, newly pushed to `origin`), `home_finance` `fbfc4b1`
+   (`epic/E1.1`). All three pushed. Each commit is **scoped to `.ai-project.yml` alone**;
+   `footboard`'s 21 other in-flight planning changes were left untouched, as required.
+   Validator after: `panchew-io` and `footboard` clean; **`home_finance` 2 errors / 2 warnings,
+   all four pre-existing** — the model addition introduced no new finding. Those errors are
+   **M48's** to resolve, and **no rename is authorized**.
+3. **`models.creation: gpt-6` is committed and the suite is green at 774.** ✅ **DISCHARGED** —
+   PR #283 merged as `dfb9d14`; `master` verified at **774 passed**, validator clean, and
+   `models.creation` reads `remote:gpt-6` in the committed record. The opening ruling declares
    the model rows true; the committed record must agree. Verifying this uncovered that **`master`
    was red from `2ed2a48` (2026-09-07 08:44)**: the `creation` divergence guard between
    `chat-hierarchy.md`'s mapping table and `.ai-project.yml` failed, 773 passed / 1 failed against
@@ -346,4 +369,5 @@ has a remote, that repository cannot carry a Delivery Notice through a gate.
 
 | Version | Date | Change |
 |---------|------|--------|
+| 1.1.0 | 2026-09-07 | **All three entry conditions discharged the day the phase opened**, and each recorded with what was done so the Phase Chat verifies rather than redoes. Drivr's private remote created (`panchew/drivr`, 28 commits, default branch `main`); the three fleet projects' model additions committed scoped to `.ai-project.yml` and pushed, `footboard`'s 21 in-flight changes untouched; PR #283 merged at `dfb9d14` with `master` verified at 774. **Two corrections to Entry Condition 1 as originally written:** Drivr's default branch is **`main`**, not `master`; and **this framework expects *no* branch protection** — `ai-project-system`'s own `master` returns *"Branch not protected"*, so PR discipline is procedural and harness-enforced. An absent protection rule is the convention, not an unmet condition. **New unplaced observation filed there:** P12 inverted the merge ladder's `--admin` test to assert the override is unreachable *against a protected branch*, and no such protection exists on `master` — the guarantee rests on procedure and the harness rather than the branch setting the test names. Not scoped into P13. |
 | 1.0.0 | 2026-09-07 | Initial P13 phase spec, from SN-47 and the 2026-09-07 opening ruling. **Eight milestones (M48–M55)**, amending SN-47's seven: repeatability proven in M48 rather than M54, and SN-47's M51 split into M51 (surface) and M52 (capability domain). **Three entry conditions** — Drivr's private remote, the fleet projects' uncommitted model additions, and the `models.creation` record consistency — elevated from SN-47's phase-opening agenda because the acceptance machinery depends on each. Six unowned carry-forwards named in Out of Scope so they are not absorbed. |
