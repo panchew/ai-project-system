@@ -96,19 +96,33 @@ authoring chat.**
 
 ## Entry Conditions — verify before opening any Milestone
 
-The Phase Spec defines three. **Verify each and report the result before Stage 1 planning
-proceeds.** They are conditions rather than deliverables because the acceptance machinery depends
-on each, and none can be accepted by that machinery while unmet.
+The Phase Spec defines three. **All three were discharged on 2026-09-07, the day the phase
+opened.** Your job is to **verify and report** — not to redo them. If any check below fails, stop
+and report to HQ Chat.
 
-1. **Drivr has a private git remote**, `master` pushed, branch protection configured.
-   Verify: `git -C /home/panchew/soft-dev/drivr remote -v` returns a remote.
-   *Gates M50 onward. M48 and M49 change no Drivr code and may proceed without it.*
-2. **The three fleet projects' `.ai-project.yml` model additions are committed** on their
-   existing branches, unrelated work preserved.
+1. **Drivr has a private git remote.** ✅ Discharged — `https://github.com/panchew/drivr`,
+   private, default branch **`main`**, 28 commits pushed.
+   Verify: `git -C /home/panchew/soft-dev/drivr remote -v` returns a remote, and
+   `git -C /home/panchew/soft-dev/drivr status -sb | head -1` shows `main...origin/main`.
+   *Gates M50 onward. M48 and M49 change no Drivr code.*
+
+   > **Do not check for branch protection.** An earlier draft of this condition asked for it.
+   > **This framework's expectation is no branch protection** — `panchew/ai-project-system`'s own
+   > `master` returns *"Branch not protected."* PR discipline here is procedural and
+   > harness-enforced. **An absent protection rule is the convention, not an unmet condition.**
+   > Note also that Drivr's default branch is **`main`**, not `master`.
+
+2. **The three fleet projects' `.ai-project.yml` model additions are committed.** ✅ Discharged —
+   `panchew-io` `0b520aa`, `footboard` `d0c4c2a`, `home_finance` `fbfc4b1`, all pushed. Each
+   commit is scoped to `.ai-project.yml` alone; `footboard`'s 21 other in-flight planning changes
+   were deliberately left uncommitted.
    Verify: `git -C /home/panchew/soft-dev/<project> status --short -- .ai-project.yml` is clean,
    for `panchew-io`, `footboard`, `home_finance`.
-3. **`models.creation: gpt-6` is committed and the suite is green at 774.** *(Discharged by the
-   opening ruling's PR — verify it merged; do not redo it.)*
+   *Expect `home_finance` to fail validation with **2 errors / 2 warnings** — all four are
+   pre-existing (absent `project.description`; underscore in `project.name`) and are **M48's** to
+   resolve. **No rename is authorized.** They are not an unmet entry condition.*
+3. **`models.creation: gpt-6` is committed and the suite is green at 774.** ✅ Discharged —
+   PR #283 merged as `dfb9d14`.
    Verify: `git show HEAD:.ai-project.yml | grep '^  creation:'` reads `remote:gpt-6`, and
    `PYTHONPATH=. python3 -m pytest -q` reports **774 passed**.
    *Context: `master` was red from `2ed2a48` (2026-09-07 08:44) until that PR — the divergence
