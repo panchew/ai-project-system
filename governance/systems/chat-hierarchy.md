@@ -2,7 +2,7 @@
 type: system
 status: active
 effective_date: 2026-09-03
-version: 1.6.0
+version: 1.7.0
 ---
 
 # Chat Hierarchy — System Reference
@@ -317,7 +317,7 @@ E31.2's surface, untouched here.
 
 | `.ai-project.yml` key | Value | Level | Basis |
 |---|---|---|---|
-| `creation` | `remote:claude-opus-5` | Creation | New key (this Epic). Policy row P1 (`model-routing-policy.md`): paid frontier, manual. |
+| `creation` | `remote:gpt-6` | Creation | New key (P9-M31-E31.3). Policy row P1 (`model-routing-policy.md`): paid frontier, manual. **Value changed from `remote:claude-opus-5` by CFO direct commit 2026-09-07** — see the dated note below. |
 | `hq` | `remote:claude-opus-5` | HQ | Existing key (P9-M30-E30.2). Policy row P2. |
 | `phase` | `remote:gpt-5.6-sol` | Phase | Existing key. Policy row P3. |
 | `milestone` | `remote:deepseek-v4-pro` | Milestone | Existing key. Policy row P4. |
@@ -336,6 +336,23 @@ deprecation, and treat it as a mapping change rather than a policy change — se
 which model fills the tier *per level per project* is routing, and routing is Drivr's
 domain from P11 onward; the framework does not build a relocation of these values in the
 interim. See `.ai-project/artifacts/rulings/2026-07-28__ai-project-system-hq__ruling__paid-frontier-model-mapping-refresh.md`.
+
+**Dated note — the `creation` cell moved off the Claude line, 2026-09-07.** `models.creation`
+was changed to `remote:gpt-6-astra` (`2ed2a48`) and then to `remote:gpt-6`, by **CFO direct
+commit and working-tree edit**, without the paired update this table requires. **The divergence
+guard caught it and `master` was red from `2ed2a48` until this reconciliation** — 773 passed, 1
+failed, against the 774 the P12 Progress Digest reports at close-out. This row records the value
+the CFO set; it does not re-derive it.
+
+**Two consequences worth stating rather than leaving implicit.** First, this is a **lineup
+change, not a version refresh**: unlike the 2026-07-28 `claude-opus-4-8 → claude-opus-5` move
+above, it does not track a deprecated version to its successor within the same line — it moves
+Creation to a different provider's line entirely. Second, it **supersedes, on the `creation` cell
+only**, SN-41's recorded allowance decision that *"Claude allowance is spent at Creation and HQ
+only, Opus 5."* **`hq` is unchanged and remains `remote:claude-opus-5`.** The provenance stated
+for the SN-41 lineup still holds and still applies here: this is a **CFO allowance decision, not
+a measurement-grounded mapping** — no token-burn dataset, back-test, or qualification run
+supports it. Recorded by the P13 opening HQ session, 2026-09-07.
 
 (This table records all five manual-verification keys for completeness; `tests/test_model_config.py`'s divergence guard applies it only to the two keys with no pre-existing coverage — `creation` and `epic_manual` — since `hq`/`phase`/`milestone` are already fully guarded via `model-routing-policy.md`'s own mapping table, unchanged by this Epic.)
 
@@ -1355,6 +1372,7 @@ it without a second hop. The two statements must always agree; on any divergence
 | Version | Date | Change |
 |---------|------|--------|
 | 1.7.0 | 2026-09-03 | **`P10-GH-7` re-rated on measured evidence, not closed (E45.3, P12-M45).** The gap record at "The signal this rule depends on is measured broken (P10-GH-7)" is amended with a dated re-rating block. Status: **re-rated (not closed)** — the evidence does not show block detection is trustworthy; it shows detection is **structurally absent** (Direction A: a claimed-but-never-finished run writes no journal record, nothing ages `claimed/`, absence of a finished record reads as "still in flight") and **correctly refusing the wrong signal** (Direction B: `exit_code` confirmed untrustworthy, already reads as `IGNORED` per the judgment). Severity **High, owner unassigned — both unchanged** (the mechanism is still absent; the build is M46/later). Amended gap statement narrows the claim from *"detection is measured broken in both directions"* to *block detection is structurally absent, and the signal a naive detector would reach for (the exit code) is confirmed-unreliable and already refused*. Measured at Drivr `17aef91` (== `f15e239` for the block-detection modules, G2-verified), 2026-09-03; full record in the E45.3 measurement-and-adjudication record. No authority, gate, or §11.6.1 rule changed. |
+| 1.7.0 | 2026-09-07 | **The `creation` cell reconciled to the CFO's value; `master` un-redded (P13 opening HQ session).** §Manual Chat Model Verification → "The mapping": the `creation` row's Value changed `remote:claude-opus-5` → **`remote:gpt-6`**, matching `.ai-project.yml`, plus a dated note recording how it happened. **`models.creation` was changed by CFO direct commit (`2ed2a48`, `remote:gpt-6-astra`) and a follow-up working-tree edit (`remote:gpt-6`) without the paired table update this section requires, and `tests/test_model_config.py::test_chat_hierarchy_manual_mapping_agrees_with_yml_block[creation]` failed from `2ed2a48` until this change** — 773 passed / 1 failed against the 774 the 2026-09-07 Progress Digest reports at P12 close-out. **The guard worked; nothing else caught it.** The note states two things the value alone does not: this is a **lineup change, not a version refresh** (it moves Creation to a different provider's line rather than tracking a deprecated version to its successor, unlike 2026-07-28), and it **supersedes SN-41's "Claude allowance at Creation and HQ, Opus 5" on the `creation` cell only** — **`hq` is unchanged.** SN-41's stated provenance carries over unamended: a **CFO allowance decision, not a measurement-grounded mapping**. No authority, mode, gate, or §11.6.1 rule changed; no other cell touched. |
 | 1.6.0 | 2026-09-03 | **The fourth verification state and the inter-chat rule (E44.3, P12-M44, executing R6 Decision 3).** **(a)** New subsection "Config present + self-report absent: refuse by default; the recorded-declaration exception" in §Manual Chat Model Verification, defining the **fourth** state (config present + self-report absent) alongside the existing three, itemized, with the four states together admitting no path taken in silence. Disposition ruled, not written: **refuse by default**; the single exception is a **recorded human declaration** the chat states in its **first substantive response** (proceeded on a declared rather than self-reported identity, and what was declared); **silence never available**. States the E42.1 parallel (a fail-closed default with an explicit, recorded human opt-in is now a **pattern**, not a one-off), the why-of-the-exception (a recorded declaration is the same epistemic strength as the conceded-unverifiable self-report, **with a named accountable party**; without it the rule is a wall, not a gate), and writes for a corpus where **Claude Code is one surface among several** (the state is defined by the absence of a self-report to read, not by which harness is in use). **(b)** New section "Cannot establish a sender's role? Refuse — the counterparty layer" — the narrow half of `P12-GH-4`, written as the **second layer of the same rule** (the self case carries the exception, the counterparty case carries **none** — the asymmetry is the point), restating **SN-36** (*a chat reply is never authorization, because agents can write into chats*) applied to the live inter-chat channel, **inbound-as-threat-model**, with the content-fixed paragraph landed in the normative tier verbatim in substance, and the wider half cited as **filed unowned** — the channel is **not designed** here. No authority, gate, or §11.6.1 rule changed. |
 | 1.5.0 | 2026-09-02 | **The rework-exhaustion flip and resume (E43.4, P12-M43).** **(a)** New subsection "The rework-exhaustion flip: the invariant survives, the record is the source" — added immediately after the Declaration-mechanism committed-starter invariant (`:229-231`): a runtime flip **never rewrites the committed starter**; Drivr performs and records the flip, so the committed record stays the source of truth and the flip is discoverable from the **record**, not from a mutated committed file. The flip itself is stated **by reference** to the one normative statement at PROJECT-SYSTEM-GUIDELINES.md §11.6 "The Rework-Exhaustion Flip". **(b)** New subsection "Resume: restores, never promotes; returns the mode, not the budget" — the **normative home** of resume (finding W5: it existed in no normative document): resume **restores** the declared mode and **never promotes** (only an agentic-declared starter may be resumed to agentic; no control moves manual → agentic) and **returns the mode, not the budget** (no rework-counter reset). Drivr performs and records the resume in the same recorded mode transition as the flip. No authority, gate, or §11.6.1 rule changed. |
 | 1.4.0 | 2026-09-02 | **Acceptance distinguishable from absence (E43.2, P12-M43, D3).** Reconciled the §Execution Mode corollary (`:201-205`) with the amended PROJECT-SYSTEM-GUIDELINES.md §11.6: the corollary no longer rests default-accept on the attendance presumption (*"the human's key is present at the session by construction"*). It now states that acceptance is carried by an **in-chat acknowledgment that names the party that reviewed and accepted** (role + session identity) — a **positive signal an identified party emitted**, never an absence attributed to a role — and that **silence accepts nothing**; presence is not evidence of review, the acknowledgment is. The manual/agentic line survives: an agentic instance's silence is not an acknowledgment and does not by itself accept a delivery. No authority, mode, gate, or §11.6.1 rule changed. |

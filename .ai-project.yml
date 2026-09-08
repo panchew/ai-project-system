@@ -65,6 +65,15 @@ rework_exhaustion_flip: enabled
 # describe how the PREVIOUS values were derived; they do not describe these.
 #   Claude allowance is spent at Creation and HQ only, Opus 5 (not Fable 5).
 #   SN-38's scheduled models.creation -> fable-5 edit is CANCELLED; it never landed.
+#   SUPERSEDED ON THE `creation` CELL ONLY, 2026-09-07: `creation` moved off the Claude
+#   line to `remote:gpt-6` by CFO direct commit (2ed2a48 -> gpt-6-astra) and a follow-up
+#   edit (-> gpt-6). `hq` is UNCHANGED at claude-opus-5, so "Creation and HQ only" now
+#   reads "HQ only" for Claude spend. This is a LINEUP change, not a version refresh:
+#   it crosses provider lines rather than tracking a deprecation. The provenance note
+#   above applies to it unchanged — a CFO allowance decision, NOT a measurement-grounded
+#   mapping. The paired governance/systems/chat-hierarchy.md "The mapping" row was not
+#   updated with the value; the divergence guard caught it and master was RED from
+#   2ed2a48 until the P13 opening reconciliation (chat-hierarchy.md v1.7.0).
 #   Local inference is PARKED, re-enterable (SN-43) — epic_dev/epic_qa leave
 #   local:qwen3-coder:30b, which is not deleted, only off the baseline. Its E33.2/E33.4
 #   evidence stands. Re-entry condition: agentic runs working properly (SN-42).
@@ -73,7 +82,7 @@ rework_exhaustion_flip: enabled
 # the catalogue with XDG_DATA_HOME corrected). `remote:<name>` records WHICH MODEL, NOT
 # WHICH ROUTE. Selecting the route is the dispatcher's, not this block's.
 models:
-  creation: remote:gpt-6-astra
+  creation: remote:gpt-6
   hq: remote:claude-opus-5
   phase: remote:gpt-5.6-sol
   milestone: remote:deepseek-v4-pro
