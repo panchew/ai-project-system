@@ -1,0 +1,14 @@
+flowchart LR
+  CONTRACT["D1 RUN-RECORD CONTRACT<br/>model identity != executable route<br/>manifest identity + runtime dispatch time<br/>missing-data fields named"]
+  NORM["D2 NORMALIZATION<br/>input/output/reasoning/cache/cost<br/>complete · partial · missing (tested)"]
+  ADAPTER["D2a INPUT ADAPTER<br/>Drivr raw events -> instrument transcript<br/>fixed OpenCode tool-name map + files_changed"]
+  BAR["D3 TWO-LAYER BAR (source-repo owned)<br/>activity floor + Epic acceptance criteria<br/>+ independent review + manifest proof"]
+  INVOKE["D4 INVOCATION PROCEDURE<br/>OpenCodeAdapter.execute + HostEnvironment<br/>presence-only checks + labeled probe"]
+  SCAN["D4a SECRET-SCAN GATE<br/>bin/retain-raw-events — quarantine OUTSIDE git<br/>XDG state root, hardened, fail-closed"]
+  BASELINE["D5 panchew-io re-measure<br/>+ supported P12 baseline"]
+  ELIG["D6 ELIGIBILITY AUTHORITY<br/>authority recorded — or named block"]
+
+  CONTRACT --> NORM --> ADAPTER --> BAR --> INVOKE --> SCAN --> BASELINE --> ELIG
+
+  classDef a fill:#1e3a5f,stroke:#93c5fd,color:#fff
+  class CONTRACT,NORM,ADAPTER,BAR,INVOKE,SCAN,BASELINE,ELIG a
