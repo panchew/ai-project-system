@@ -1,11 +1,11 @@
 flowchart LR
   LIVE["test_helper_generates_against_endpoint<br/>live ComfyUI (localhost:8188)"]
-  MARK["live_endpoint marker"]
-  DET["DETERMINISTIC ACCEPTANCE<br/>pytest -m 'not live_endpoint'<br/>reproducible from identical source"]
+  MARK["live_endpoint marker<br/>(on the live test)"]
+  DET["DETERMINISTIC ACCEPTANCE<br/>pytest -m 'not live_endpoint'<br/>EXCLUDES the marked live test"]
   QUAL["LIVE QUALIFICATION<br/>pytest -m live_endpoint<br/>pass | fail | skip + env + reason"]
-  REP["DELIVERY REPORT<br/>deterministic totals  ⁄  live qualification status<br/>two independent signals"]
+  REP["DELIVERY REPORT<br/>deterministic totals  /  live qualification status<br/>two independent signals"]
 
-  LIVE --> MARK --> DET
+  LIVE --> MARK
   MARK --> QUAL
   DET --> REP
   QUAL --> REP
