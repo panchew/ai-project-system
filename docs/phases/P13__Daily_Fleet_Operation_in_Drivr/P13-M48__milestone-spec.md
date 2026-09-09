@@ -103,6 +103,53 @@ specs; execution must re-measure the relevant state at its own repository, ref, 
     location split, duplicate AOG Error Handling content, closed-phase sweep scope, `P11-GH-2`,
     or the untemplated `rulings` class.
 
+## Phase Ruling on E48.1 Rework Exhaustion
+
+**Issued 2026-09-08 by the P13 Phase Chat** in response to
+`.ai-project/artifacts/escalation-notices/2026-09-08T00_00_00Z__P13-M48-E48.1__escalation_notice.md`.
+These decisions amend E48.1's contract and are not delegated back for redesign.
+
+1. **Quality-bar ownership stays in `ai-project-system`.** Each instantiated E48.4/E48.5
+   `quality-bar.yml` is an M48 evidence artifact under
+   `.ai-project/artifacts/agentic-runs/P13-M48-<E>/` in this repository. It cites the selected
+   project's Epic spec and acceptance criteria by target-repository path, branch, and immutable
+   commit SHA. E48.1 and the M48 proof Epics write no bar into a fleet project.
+2. **Pre-dispatch ordering is proved in the M48 evidence graph and runtime record.** Before invoking
+   Drivr, E48.4/E48.5 commit a dispatch manifest in `ai-project-system` that contains the bar commit
+   SHA and target-project worktree HEAD. The bar commit must be an ancestor of the manifest commit.
+   The invocation records that manifest SHA and Drivr's runtime `dispatched_at` (or, for the direct
+   P12 adapter path which has no scheduler timestamp, the supervisor's UTC `started_at` captured
+   immediately before `OpenCodeAdapter.execute`). Missing ancestry, manifest identity, target HEAD,
+   or runtime start time is fail-closed. Git author dates are never ordering evidence.
+3. **The event adapter is source-side; no Drivr change is authorized.** E48.1's
+   `bin/drivr-events-to-instrument` maps OpenCode `read`→`read_file`, `write`→`write_file`,
+   `edit`→`edit_file`, and `bash`→`run_command`. `glob`, `grep`, `todowrite`, and any unknown tool
+   remain executed rounds but are not relabeled as mutating calls. C-B uses the dispatch record's
+   authoritative `files_changed` list/count through the instrument's `--files-changed` input; it is
+   not inferred from mapped calls. Missing or malformed tool/result/files evidence yields
+   `undetermined`/`ERROR`, never a fabricated zero or pass. Tests use the real P12 Drivr record
+   shape and cover known, unknown, denied/error, missing, and malformed events.
+4. **The proposed Structural visual uses an immutable hosted commit permalink.** Commit the Mermaid
+   diagram as a sibling `.mmd` file first, push that commit, and bind the proposed visual to the
+   exact GitHub `blob/<40-character-commit-SHA>/...mmd` URL. A branch URL, local path, deferred link,
+   or currently unresolved URL is not a permalink. The implemented binding remains separately due
+   in the Delivery Notice.
+5. **Minimal quarantine hardening belongs to E48.1.** This does not absorb M49's broader
+   future-commit protection. The fixed root is
+   `${XDG_STATE_HOME:-$HOME/.local/state}/ai-project-system/m48-quarantine`; the implementation
+   resolves canonical paths, refuses a root or destination inside any Git worktree, rejects
+   symlinks and path traversal, restricts run/file components to `[A-Za-z0-9._-]+`, creates
+   directories mode `0700` and files mode `0600`, and moves atomically without following links.
+   The committed notice contains only a logical quarantine ID, SHA-256, redacted region metadata,
+   and scan disposition — never an absolute host path or matched content. Scanner error, unsafe
+   destination, or inability to apply those controls is fail-closed.
+
+**Written `+1` extension.** PSG §11.6 permits exactly one further attempt after exhaustion when a
+written decision grants it. This ruling grants E48.1 **one final rework attempt only**, solely to
+apply the five decisions above and synchronize its spec/Starter. It does not reset the budget and
+does not authorize execution. If that delivery is not acceptable, no additional rework is
+available; M48 must escalate again.
+
 ## Planned Epics
 
 Six Epics. E48.1, E48.2, and E48.3 may proceed in parallel. E48.4 and E48.5 require E48.1's
@@ -374,4 +421,5 @@ the proven path generalized.
 
 | Version | Date | Change |
 |---|---|---|
+| 1.1.0 | 2026-09-08 | Resolves E48.1's exhausted-rework escalation at the Phase-owned contract boundary. Rules source-repository quality-bar ownership, source-graph manifest ancestry plus runtime dispatch time, a complete source-side Drivr-event mapping with authoritative `files_changed`, immutable commit-permalink visuals, and bounded out-of-Git quarantine hardening. Grants exactly one written `+1` E48.1 planning attempt; no reset and no execution authorization. |
 | 1.0.0 | 2026-09-08 | Initial M48 spec. Six Epics put the evidence contract and stable acceptance gate before two isolated project migrations and real runs, close SN-45 separately, and consolidate cost with independently reviewed quality. Records that both targets are currently benched, model identity is not an executable route, credential lookup inherits `XDG_DATA_HOME`, M48 changes no Drivr code, and a named understood failure is an allowed result but not a silent waiver. |
