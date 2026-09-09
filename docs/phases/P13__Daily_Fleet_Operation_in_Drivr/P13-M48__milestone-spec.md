@@ -150,6 +150,24 @@ apply the five decisions above and synchronize its spec/Starter. It does not res
 does not authorize execution. If that delivery is not acceptable, no additional rework is
 available; M48 must escalate again.
 
+### Final disposition — amend then close
+
+**Issued 2026-09-08** in response to the final exhausted-rework notice
+`.ai-project/artifacts/escalation-notices/2026-09-08T02_00_00Z__P13-M48-E48.1__escalation_notice.md`.
+The Phase Chat selects **amend-then-close**. E48.1 is contract-only: it delivers the reusable
+run-record, quality-bar and dispatch-manifest schemas; adapters and tests; invocation and retention
+procedures; `panchew-io` baseline extraction; and eligibility record. It does **not** instantiate or
+commit either target's task-specific `quality-bar.yml` or dispatch manifest. E48.4 and E48.5 each
+instantiate and commit those artifacts on their own source-repository Epic branch before dispatch.
+
+This higher-authority disposition supersedes four stale clauses in E48.1 spec v1.5.0 without a
+further child edit: Context lines 59–61, Goal 3 line 76, Definition of Done lines 332–335, and
+Acceptance Criteria lines 361–362. Wherever those clauses say E48.1 produces or commits an
+instantiated task-specific bar, read **"E48.1 commits the reusable two-layer quality-bar contract
+and enforcement schema; E48.4/E48.5 instantiate and commit each selected Epic's bar before its
+dispatch."** No other E48.1 term is changed. This is a parent disposition after exhausted rework,
+not another attempt or a waiver of the pre-dispatch bar.
+
 ## Planned Epics
 
 Six Epics. E48.1, E48.2, and E48.3 may proceed in parallel. E48.4 and E48.5 require E48.1's
@@ -182,7 +200,8 @@ Define and prove the common pre-run contract before either project result is vis
 - A tested normalization path for uncached input, cache creation/write, cache reads, output,
   separately reported reasoning, and provider-reported cost. Raw counts and economic evidence
   remain separate; overlapping provider totals are not summed twice.
-- A committed task-specific quality bar for each selected project Epic before its dispatch.
+- A committed reusable two-layer quality-bar contract and enforcement schema. E48.4/E48.5 each
+  instantiate and commit the selected project Epic's task-specific bar before its dispatch.
 - A reproducible adapter-level invocation procedure using Drivr's `OpenCodeAdapter`, not a raw CLI
   substitute, including presence-only route and credential checks.
 - Re-measurement that `panchew-io`'s seven-key `models:` block remains committed, plus extraction
@@ -192,7 +211,8 @@ Define and prove the common pre-run contract before either project result is vis
 
 **Acceptance criteria**
 
-- [ ] The contract and quality bars are committed before either real project dispatch
+- [ ] E48.1's reusable contract/schema is committed; E48.4/E48.5 are fail-closed until their own
+      instantiated task-specific quality bar is committed before dispatch
 - [ ] Normalization is tested against representative complete, partial, and missing telemetry
 - [ ] Route identity and model identity are distinct in every record
 - [ ] Credential diagnostics prove presence only and emit no values
@@ -421,5 +441,6 @@ the proven path generalized.
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.0 | 2026-09-08 | Final exhausted-rework disposition: amend then close. Makes E48.1 contract-only in its own Epic Detail and explicitly assigns instantiated target bars/manifests to E48.4/E48.5. Supersedes the four stale E48.1 v1.5.0 prose clauses by exact replacement from this higher-authority contract; no further child rework, no waiver, and no execution authorization. |
 | 1.1.0 | 2026-09-08 | Resolves E48.1's exhausted-rework escalation at the Phase-owned contract boundary. Rules source-repository quality-bar ownership, source-graph manifest ancestry plus runtime dispatch time, a complete source-side Drivr-event mapping with authoritative `files_changed`, immutable commit-permalink visuals, and bounded out-of-Git quarantine hardening. Grants exactly one written `+1` E48.1 planning attempt; no reset and no execution authorization. |
 | 1.0.0 | 2026-09-08 | Initial M48 spec. Six Epics put the evidence contract and stable acceptance gate before two isolated project migrations and real runs, close SN-45 separately, and consolidate cost with independently reviewed quality. Records that both targets are currently benched, model identity is not an executable route, credential lookup inherits `XDG_DATA_HOME`, M48 changes no Drivr code, and a named understood failure is an allowed result but not a silent waiver. |
