@@ -152,7 +152,7 @@ Carry only the findings relevant to that Epic, but do not lose these boundaries 
 
 ## Epic Planning Requirements
 
-### E48.1 exhaustion ruling and one final attempt
+### E48.1 exhaustion ruling and final disposition
 
 The P13 Phase Chat resolved E48.1's exhausted-rework Escalation Notice on 2026-09-08 by amending
 the M48 spec at `## Phase Ruling on E48.1 Rework Exhaustion`. **Read that section in full before
@@ -161,15 +161,18 @@ dispatch-manifest ancestry plus runtime dispatch time; exact source-side OpenCod
 authoritative `files_changed`; immutable commit-permalink proposed visual; and bounded quarantine
 hardening under the fixed XDG state root.
 
-The same ruling grants a written PSG §11.6 **`+1` extension: exactly one final E48.1 planning
-attempt, not a reset.** Reissue the E48.1 spec and Starter from the amended parent contract and
-return only that set. E48.2/E48.3 remain paused until E48.1 receives named acceptance. This grant
-does not authorize E48.1 execution or any merge. If the final delivery is not acceptable, stop and
-escalate; no further rework attempt exists.
+The written PSG §11.6 `+1` and its replacement attempt are exhausted; this is historical state, not
+an available attempt. The final Escalation Notice is resolved by **amend-then-close** in the M48 spec
+section `### Final disposition — amend then close`. That higher-authority text makes E48.1
+contract-only and supersedes the four named stale clauses in E48.1 spec v1.5.0. Do not reissue or
+rework E48.1 again. Its accepted planning contract is the v1.5.0 spec/Starter as bounded by the M48
+v1.2.0 replacement text. Instantiated target bars and manifests remain E48.4/E48.5 deliverables.
+This disposition authorizes no E48.1 execution or merge by itself.
 
 ### E48.1 — Operational Evidence and Run Gate
 
-- Commit the normalized record contract and task-specific quality bars before either run.
+- Commit the normalized record contract and reusable two-layer quality-bar/manifest schemas.
+  E48.4/E48.5 instantiate and commit their own target-specific bars/manifests before dispatch.
 - Test complete, partial, and missing telemetry without double-counting provider totals.
 - Specify an adapter-level replay/invocation, executable route selection per attempt, presence-only
   credential check, raw-event retention, and independent work/quality review.
