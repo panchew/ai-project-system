@@ -1,22 +1,26 @@
 flowchart LR
-  INIT["bin/ai-project-init<br/>(new project, local repo only)"]
-  ENROLL["ENROLLMENT STEP (fail-closed)<br/>set remote + tracking, push branch"]
-  VERIFY["END-TO-END VERIFICATION<br/>tracking recorded · branch pushed · ref equality<br/>(NOT mere reachability)"]
-  READY["delivery-ready"]
-  ABSENT["remote absent — fail-closed"]
-  FAIL["failing remote — stated failure"]
-  LOCAL["local-only — durable disposition record"]
-  BOUNDARY["ELIGIBILITY BOUNDARY<br/>enrollment changes no fleet state,<br/>never activates or dispatches"]
+  INIT["bin/ai-project-init<br/>+ final commit amendment"]
+  ENROLL["bin/ai-project-enroll<br/>query · --remote · --local-only"]
+  VERIFY["THREE-PART VERIFICATION (final HEAD)<br/>tracking recorded · branch pushed · ref equality"]
+  READY["delivery-ready (detail: verified)"]
+  LOCAL["local-only — durable record<br/>(detail: local-only, NON-delivery-ready)"]
+  ABSENT["absent"]
+  CRED_ABS["credential-absent"]
+  REFUSE["authenticated-refusal"]
+  VFAIL["verification-failure"]
+  UNDET["undetermined"]
+  INVALID["invalid-url (reject credential URL)<br/>remote: null"]
 
-  INIT --> ENROLL --> VERIFY
-  VERIFY --> READY
-  VERIFY --> FAIL
-  ENROLL -.no remote.-> ABSENT
-  ENROLL -.explicit opt-out.-> LOCAL
-  READY --> BOUNDARY
-  ABSENT --> BOUNDARY
-  FAIL --> BOUNDARY
-  LOCAL --> BOUNDARY
+  INIT --> ENROLL
+  ENROLL -- "--remote" --> VERIFY
+  VERIFY -- all three --> READY
+  VERIFY -- any fails --> VFAIL
+  ENROLL -- "--local-only" --> LOCAL
+  ENROLL -- "query, no remote/disposition" --> ABSENT
+  ENROLL -- "query, credential-URL" --> INVALID
+  VERIFY -- "no credentials" --> CRED_ABS
+  VERIFY -- "remote refused" --> REFUSE
+  VERIFY -- "cannot determine" --> UNDET
 
   classDef a fill:#1e3a5f,stroke:#93c5fd,color:#fff
-  class INIT,ENROLL,VERIFY,READY,ABSENT,FAIL,LOCAL,BOUNDARY a
+  class INIT,ENROLL,VERIFY,READY,LOCAL,ABSENT,CRED_ABS,REFUSE,VFAIL,UNDET,INVALID a
