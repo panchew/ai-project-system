@@ -228,6 +228,68 @@ This is a parent disposition after all rework was exhausted, not another attempt
 accepted under this disposition by **P13 Phase Chat, OpenCode session (`remote:gpt-5.6-sol`)**. It
 authorizes no E48.2 execution or merge. E48.3 may now be submitted alone for planning review.
 
+## Phase Ruling on E48.3 Rework Exhaustion
+
+**Issued 2026-09-09 by the P13 Phase Chat** in response to
+`.ai-project/artifacts/escalation-notices/2026-09-09T01_00_00Z__P13-M48-E48.3__escalation_notice.md`.
+The Phase Chat grants one written `+1` under PSG §11.6 to apply the fixed contract below. These are
+implementation terms, not choices delegated back for redesign.
+
+### Enrollment state and evidence
+
+1. `tracking`, `pushed`, and `ref_equal` are each `true | false | null`. `null` means the observation
+   could not be made; it is never converted to `false`. `pushed` means the target branch was observed
+   on the remote, not merely that a push command was attempted.
+2. Query mode is read-only and exits `0` for freshly verified `delivery-ready` or recorded
+   `local-only`; every `not-delivery-ready` result exits `1`. It checks both fetch and push URLs. A
+   credential-bearing supplied or stored URL yields `not-delivery-ready`/`invalid-url`, `remote:
+   null`, exit `1`, and no transport invocation.
+3. Query precedence is fixed: no `origin` and no record→`absent`; no `origin` plus a valid local-only
+   record→`local-only`; `origin` plus any local-only record→`verification-failure` conflict; `origin`
+   without a local-only record→fresh read-only three-part verification. A persisted record never
+   asserts delivery readiness.
+
+### Durable local-only lifecycle and recovery
+
+4. Mutation requires a clean worktree so no unrelated path can be committed. `--local-only` is
+   allowed only without `origin`; it writes `.ai-project/enrollment.yml`, stages only that path, and
+   commits it as `chore: record local-only enrollment`. Repeating it with the same valid record and
+   no `origin` is a no-op success. With `origin`, it fails without mutation.
+5. `--remote` validates the requested URL and any existing `origin` before mutation. A different
+   existing URL fails without mutation. With a local-only record, it then requires a clean worktree,
+   removes only that record, and commits the removal as `chore: transition to remote enrollment`;
+   that new `HEAD` is the SHA pushed and verified. A same-URL `origin` is reverified. Once a push
+   changes remote state, failure never deletes or rewinds the remote. Every post-failure boolean
+   preserves its observed value, and retry resumes from the retained local/remote state.
+6. `bin/ai-project-init` performs its final agent amend before forwarding to enrollment. Option
+   validation happens before project creation: both enrollment options→usage exit `2`; otherwise an
+   enrollment option combined with `--skip-git`→usage exit `3`. These checks have that precedence.
+
+### Diagnostic classification and visual
+
+7. Classification uses redacted, lowercased stderr. Compute refusal-token and credential-absence-
+   token matches independently: both or neither→`undetermined`; refusal only→`authenticated-refusal`;
+   credential-absence only→`credential-absent`. `repository not found` alone is not refusal evidence.
+   Known non-auth Git failures and failed three-part checks remain `verification-failure`.
+8. The visual sends query through stored-URL credential inspection before any absent/local-only/
+   verification branch and shows the fixed artifact lifecycle and nullable observations.
+
+### Delivery Notice boundary
+
+9. E48.3 does not close or redesign the already-recorded `P10-GH-4` template lifecycle gap. Its
+   Delivery Notice is created and committed once before review and is never updated after merge. It
+   uses `status: delivered` to mean delivered for review; `completion_notice_timestamp`,
+   `review_decision_timestamp`, and unknown PR/merge fields are `null`; `target_branch` is
+   `milestone/M48`. The body states execution complete, no PR or merge yet, and review/authorization
+   pending. On a clean path, parent merge plus named acknowledgment records acceptance separately.
+
+This ruling grants exactly one final planning attempt, not a reset to three. It authorizes edits only
+to the E48.3 spec, synchronized Starter, and proposed Mermaid visual needed to carry these nine
+terms. The exclusive delivery-ready predicate, command modes, initializer placement, prerequisite
+verification, eligibility boundary, and secret prohibition are closed. No execution or merge is
+authorized. If the `+1` is not acceptable, no further rework is available and M48 must escalate
+again.
+
 ## Planned Epics
 
 Six Epics. E48.1, E48.2, and E48.3 may proceed in parallel. E48.4 and E48.5 require E48.1's
@@ -501,6 +563,7 @@ the proven path generalized.
 
 | Version | Date | Change |
 |---|---|---|
+| 1.5.0 | 2026-09-09 | Resolves E48.3's exhausted-rework escalation with one written `+1` and a fixed enrollment state machine: nullable independent observations; read-only query precedence and exits; credential-safe stored URLs; committed local-only/transition lifecycle; retained-state retry; exact init usage exits; ambiguity-first diagnostic classification; synchronized visual; and a bounded, append-only pre-review Delivery Notice convention that does not claim to close `P10-GH-4`. No execution, merge, redesign, or budget reset is authorized. |
 | 1.4.0 | 2026-09-09 | Final E48.2 exhausted-rework disposition: amend then close. Supersedes stale five-outcome and incomplete regression summaries in E48.2 v1.4.0/Starter with exact six-outcome, unknown-return, non-invocation, and complete regression replacements. Accepts E48.2 planning under the parent disposition; authorizes no execution or merge and permits E48.3 planning review next. |
 | 1.3.0 | 2026-09-08 | Resolves E48.2's exhausted-rework escalation with exactly one written `+1`. Fixes the live-result contract to six outcomes including `undetermined`, makes `helper_exit` integer-or-null without fabricated non-invocation evidence, freezes known/unknown mappings, and requires the synchronized Starter and visual to mirror the contract. No redesign, execution, merge, or budget reset is authorized. |
 | 1.2.0 | 2026-09-08 | Final exhausted-rework disposition: amend then close. Makes E48.1 contract-only in its own Epic Detail and explicitly assigns instantiated target bars/manifests to E48.4/E48.5. Supersedes the four stale E48.1 v1.5.0 prose clauses by exact replacement from this higher-authority contract; no further child rework, no waiver, and no execution authorization. |

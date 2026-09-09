@@ -211,6 +211,20 @@ execution or merge. E48.3 may be submitted alone for planning review.
 
 ### E48.3 — Enrollment Completes the Delivery Substrate
 
+**Exhausted-rework ruling:** read M48 spec `## Phase Ruling on E48.3 Rework Exhaustion` in full
+before touching E48.3. P13 Phase Chat grants exactly one written PSG §11.6 `+1`, limited to
+synchronizing the E48.3 spec, Starter, and proposed visual with that fixed nine-term contract. This
+is not a budget reset and no listed term is delegated for redesign.
+
+The ruling fixes nullable independent evidence, read-only query exits and precedence, credential-
+safe stored-URL handling, the committed local-only/transition lifecycle, retained-state retries,
+exact initializer usage exits, ambiguity-first diagnostic classification, query routing in the
+visual, and one append-only pre-review Delivery Notice convention. The Notice convention is bounded
+to E48.3 and does not close or absorb `P10-GH-4`. Preserve the already-accepted delivery-ready,
+command-mode, initializer-placement, prerequisite, eligibility, and secret boundaries. No execution
+or merge is authorized. If this `+1` is unacceptable, stop and escalate again rather than attempting
+further rework.
+
 - Close SN-45 in the supported initialization path with remote present, absent, failure, and
   intentional local-only coverage.
 - Keep remote enrollment distinct from fleet activation and dispatch.
