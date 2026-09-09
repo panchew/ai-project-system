@@ -1,14 +1,13 @@
 flowchart LR
-  LIVE["test_helper_generates_against_endpoint<br/>live ComfyUI (localhost:8188)"]
-  MARK["live_endpoint marker<br/>(on the live test)"]
-  DET["DETERMINISTIC ACCEPTANCE<br/>pytest -m 'not live_endpoint'<br/>EXCLUDES the marked live test"]
-  QUAL["LIVE QUALIFICATION<br/>pytest -m live_endpoint<br/>pass | fail | skip + env + reason"]
-  REP["DELIVERY REPORT<br/>deterministic totals  /  live qualification status<br/>two independent signals"]
+  DET["DETERMINISTIC ACCEPTANCE<br/>pytest -m 'not live_endpoint'<br/>(excludes the live test)"]
+  LIVE["LIVE QUALIFICATION<br/>bin/suite-gate live<br/>invokes bin/ai-project-visual directly<br/>(raw exit code preserved)"]
+  MAP["OUTCOME MAPPING<br/>0→pass · 4→fail · 2→skip<br/>5→deferred · 3→config-error"]
+  GATE["bin/suite-gate<br/>single integration point<br/>deterministic totals + live outcome<br/>exit = deterministic only"]
+  REP["DELIVERY REPORT<br/>records both fields<br/>deterministic gate · live alongside"]
 
-  LIVE --> MARK
-  MARK --> QUAL
-  DET --> REP
-  QUAL --> REP
+  DET --> GATE
+  LIVE --> MAP --> GATE
+  GATE --> REP
 
   classDef a fill:#1e3a5f,stroke:#93c5fd,color:#fff
-  class LIVE,MARK,DET,QUAL,REP a
+  class DET,LIVE,MAP,GATE,REP a
