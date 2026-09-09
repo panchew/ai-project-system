@@ -1,7 +1,7 @@
 flowchart LR
   DET["DETERMINISTIC ACCEPTANCE<br/>pytest -m 'not live_endpoint'<br/>(excludes the live test)"]
-  LIVE["LIVE QUALIFICATION<br/>bin/suite-gate live<br/>invokes bin/ai-project-visual directly<br/>(raw exit code preserved)"]
-  MAP["OUTCOME MAPPING<br/>0→pass · 4→fail · 2→skip<br/>5→deferred · 3→config-error"]
+  LIVE["LIVE QUALIFICATION<br/>bin/suite-gate live<br/>invokes bin/ai-project-visual directly<br/>(raw exit preserved)"]
+  MAP["OUTCOME MAPPING (six outcomes)<br/>0→pass · 4→fail · 2→skip<br/>5→deferred · 3→config-error<br/>other→undetermined · no exit→null"]
   GATE["bin/suite-gate<br/>single integration point<br/>deterministic totals + live outcome<br/>exit = deterministic only"]
   REP["DELIVERY REPORT<br/>records both fields<br/>deterministic gate · live alongside"]
 
