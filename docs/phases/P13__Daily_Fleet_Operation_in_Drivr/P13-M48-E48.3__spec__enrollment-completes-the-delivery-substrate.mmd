@@ -1,0 +1,22 @@
+flowchart LR
+  INIT["bin/ai-project-init<br/>(new project, local repo only)"]
+  ENROLL["ENROLLMENT STEP (fail-closed)<br/>set remote + tracking, push branch"]
+  VERIFY["END-TO-END VERIFICATION<br/>tracking recorded · branch pushed · ref equality<br/>(NOT mere reachability)"]
+  READY["delivery-ready"]
+  ABSENT["remote absent — fail-closed"]
+  FAIL["failing remote — stated failure"]
+  LOCAL["local-only — durable disposition record"]
+  BOUNDARY["ELIGIBILITY BOUNDARY<br/>enrollment changes no fleet state,<br/>never activates or dispatches"]
+
+  INIT --> ENROLL --> VERIFY
+  VERIFY --> READY
+  VERIFY --> FAIL
+  ENROLL -.no remote.-> ABSENT
+  ENROLL -.explicit opt-out.-> LOCAL
+  READY --> BOUNDARY
+  ABSENT --> BOUNDARY
+  FAIL --> BOUNDARY
+  LOCAL --> BOUNDARY
+
+  classDef a fill:#1e3a5f,stroke:#93c5fd,color:#fff
+  class INIT,ENROLL,VERIFY,READY,ABSENT,FAIL,LOCAL,BOUNDARY a
