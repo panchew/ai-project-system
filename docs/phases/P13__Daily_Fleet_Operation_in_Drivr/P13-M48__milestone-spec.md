@@ -196,6 +196,38 @@ canonical-ref procedure, bounded claims, and diagram routing are closed and may 
 No execution or merge is authorized. If the `+1` delivery is not acceptable, no further rework is
 available and M48 must escalate again.
 
+### Final E48.2 disposition — amend then close
+
+**Issued 2026-09-09** in response to the final exhausted-rework notice
+`.ai-project/artifacts/escalation-notices/2026-09-09T00_00_00Z__P13-M48-E48.2__escalation_notice.md`.
+The Phase Chat selects **amend-then-close**. E48.2 spec v1.4.0 and its synchronized Starter are read
+under these exact higher-authority replacements:
+
+1. Wherever a live-outcome enumeration omits `undetermined`, read
+   **`pass | fail | skip | deferred | config-error | undetermined`**. Wherever the deterministic-only
+   gate rule lists non-pass live outcomes, it includes `undetermined`: none of `fail`, `skip`,
+   `deferred`, `config-error`, or `undetermined` changes `bin/suite-gate`'s deterministic exit.
+2. Wherever a returned-code mapping summary stops at the five known codes, append: **any other
+   returned integer maps to `undetermined` and is preserved in `helper_exit`; no helper return code
+   maps to `helper_exit: null`, with explicit opt-out producing `skip` and helper-start failure
+   producing `undetermined`.**
+3. Wherever a regression list names only available, unavailable, disabled/opt-out, locked, and
+   config-error cases, replace it with this required set: **available/pass; unavailable/exit-4
+   `fail`; disabled/exit-2 `skip`; explicit opt-out `skip` with `helper_exit: null`; locked/exit-5
+   `deferred`; config/exit-3 `config-error`; unknown returned integer `undetermined` preserving the
+   integer; helper-start failure `undetermined` with `helper_exit: null`; and deterministic-result
+   reproducibility independent of endpoint availability.** Disabled and explicit opt-out are
+   separate cases, not alternatives.
+
+These replacements apply to E48.2 v1.4.0 Goal 4, D2/D3/D4 summaries, Deliverables, Definition of
+Done, Acceptance Criteria, Execution Notes, and the corresponding Starter summaries and D3 line.
+The v1.4.0 core schema, detailed D2 mappings, proposed Mermaid visual and immutable binding are
+already correct and remain unchanged. No other E48.2 term is changed.
+
+This is a parent disposition after all rework was exhausted, not another attempt. E48.2 planning is
+accepted under this disposition by **P13 Phase Chat, OpenCode session (`remote:gpt-5.6-sol`)**. It
+authorizes no E48.2 execution or merge. E48.3 may now be submitted alone for planning review.
+
 ## Planned Epics
 
 Six Epics. E48.1, E48.2, and E48.3 may proceed in parallel. E48.4 and E48.5 require E48.1's
@@ -469,6 +501,7 @@ the proven path generalized.
 
 | Version | Date | Change |
 |---|---|---|
+| 1.4.0 | 2026-09-09 | Final E48.2 exhausted-rework disposition: amend then close. Supersedes stale five-outcome and incomplete regression summaries in E48.2 v1.4.0/Starter with exact six-outcome, unknown-return, non-invocation, and complete regression replacements. Accepts E48.2 planning under the parent disposition; authorizes no execution or merge and permits E48.3 planning review next. |
 | 1.3.0 | 2026-09-08 | Resolves E48.2's exhausted-rework escalation with exactly one written `+1`. Fixes the live-result contract to six outcomes including `undetermined`, makes `helper_exit` integer-or-null without fabricated non-invocation evidence, freezes known/unknown mappings, and requires the synchronized Starter and visual to mirror the contract. No redesign, execution, merge, or budget reset is authorized. |
 | 1.2.0 | 2026-09-08 | Final exhausted-rework disposition: amend then close. Makes E48.1 contract-only in its own Epic Detail and explicitly assigns instantiated target bars/manifests to E48.4/E48.5. Supersedes the four stale E48.1 v1.5.0 prose clauses by exact replacement from this higher-authority contract; no further child rework, no waiver, and no execution authorization. |
 | 1.1.0 | 2026-09-08 | Resolves E48.1's exhausted-rework escalation at the Phase-owned contract boundary. Rules source-repository quality-bar ownership, source-graph manifest ancestry plus runtime dispatch time, a complete source-side Drivr-event mapping with authoritative `files_changed`, immutable commit-permalink visuals, and bounded out-of-Git quarantine hardening. Grants exactly one written `+1` E48.1 planning attempt; no reset and no execution authorization. |

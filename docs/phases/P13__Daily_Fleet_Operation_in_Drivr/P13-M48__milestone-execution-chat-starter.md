@@ -195,6 +195,15 @@ integer to `undetermined` while preserving it; and show `other`→`undetermined`
 inventing an opt-out exit. No execution or merge is authorized. If this `+1` is unacceptable, stop
 and escalate again rather than attempting further rework.
 
+**Final disposition:** the `+1` is exhausted and is historical, not an available attempt. Read the
+M48 spec section `### Final E48.2 disposition — amend then close` as the higher-authority replacement
+for the stale E48.2 v1.4.0/Starter summaries. All live enumerations contain six outcomes, all mapping
+summaries preserve unknown returned integers and truthful `null` non-invocation, and the required
+regression set includes separate disabled and opt-out cases plus unknown-return and helper-start
+failure cases. Do not reissue or rework E48.2 planning. It is accepted by **P13 Phase Chat, OpenCode
+session (`remote:gpt-5.6-sol`)** under that parent disposition. This acceptance authorizes no E48.2
+execution or merge. E48.3 may be submitted alone for planning review.
+
 - Separate deterministic acceptance from live ComfyUI qualification without silently deleting,
   mocking, or skipping the live check.
 - Require explicit pass/fail/skip semantics and endpoint available/unavailable/opt-out coverage.
