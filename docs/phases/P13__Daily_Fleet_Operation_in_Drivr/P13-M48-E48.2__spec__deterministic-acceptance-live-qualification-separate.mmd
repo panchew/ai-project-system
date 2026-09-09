@@ -1,0 +1,14 @@
+flowchart LR
+  LIVE["test_helper_generates_against_endpoint<br/>live ComfyUI (localhost:8188)"]
+  MARK["live_endpoint marker"]
+  DET["DETERMINISTIC ACCEPTANCE<br/>pytest -m 'not live_endpoint'<br/>reproducible from identical source"]
+  QUAL["LIVE QUALIFICATION<br/>pytest -m live_endpoint<br/>pass | fail | skip + env + reason"]
+  REP["DELIVERY REPORT<br/>deterministic totals  ⁄  live qualification status<br/>two independent signals"]
+
+  LIVE --> MARK --> DET
+  MARK --> QUAL
+  DET --> REP
+  QUAL --> REP
+
+  classDef a fill:#1e3a5f,stroke:#93c5fd,color:#fff
+  class LIVE,MARK,DET,QUAL,REP a
