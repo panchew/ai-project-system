@@ -181,6 +181,20 @@ This disposition authorizes no E48.1 execution or merge by itself.
 
 ### E48.2 — Deterministic Acceptance, Live Qualification Separate
 
+**Exhausted-rework ruling:** read the M48 spec section `## Phase Ruling on E48.2 Rework
+Exhaustion` before touching E48.2. The P13 Phase Chat grants exactly one written PSG §11.6 `+1`,
+limited to synchronizing the E48.2 spec, Starter, and proposed Mermaid visual with the fixed
+six-outcome schema. This is not a budget reset. Preserve the accepted direct-helper path,
+delivery-report consumer, deterministic-only gate exit, canonical-ref procedure, bounded claims,
+and diagram routing without redesign.
+
+The exact correction is: include `undetermined` as the sixth outcome; type `helper_exit` as
+`int|null`; use `null` only when no helper return code exists; represent explicit opt-out as
+`skip`/`null`; represent helper-start failure as `undetermined`/`null`; map any unknown returned
+integer to `undetermined` while preserving it; and show `other`→`undetermined` in the visual without
+inventing an opt-out exit. No execution or merge is authorized. If this `+1` is unacceptable, stop
+and escalate again rather than attempting further rework.
+
 - Separate deterministic acceptance from live ComfyUI qualification without silently deleting,
   mocking, or skipping the live check.
 - Require explicit pass/fail/skip semantics and endpoint available/unavailable/opt-out coverage.

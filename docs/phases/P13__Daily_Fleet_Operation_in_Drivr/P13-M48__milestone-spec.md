@@ -168,6 +168,34 @@ and enforcement schema; E48.4/E48.5 instantiate and commit each selected Epic's 
 dispatch."** No other E48.1 term is changed. This is a parent disposition after exhausted rework,
 not another attempt or a waiver of the pre-dispatch bar.
 
+## Phase Ruling on E48.2 Rework Exhaustion
+
+**Issued 2026-09-08 by the P13 Phase Chat** in response to
+`.ai-project/artifacts/escalation-notices/2026-09-08T03_00_00Z__P13-M48-E48.2__escalation_notice.md`.
+The remaining defects are bounded representation errors, not an open design question. The Phase
+Chat grants one written `+1` under PSG §11.6 solely to apply this exact correction:
+
+1. The fixed `live` result schema is
+   `{"outcome": <pass|fail|skip|deferred|config-error|undetermined>, "helper_exit": <int|null>,
+   "environment": {"enabled": <bool>, "comfyui_url": <str>}, "reason": <str>}`.
+2. `helper_exit` is an integer only when the helper process returned that code. It is `null` when no
+   helper return code exists. Explicit opt-out therefore yields `outcome: skip`,
+   `helper_exit: null`, and a reason naming the opt-out; a failure to start the helper yields
+   `outcome: undetermined`, `helper_exit: null`, and the non-secret failure reason.
+3. Existing returned-code mappings remain unchanged: `0`→`pass`, `4`→`fail`, `2`→`skip`,
+   `5`→`deferred`, and `3`→`config-error`. Any other returned integer maps to `undetermined` while
+   preserving that integer in `helper_exit`.
+4. Every outcome enumeration, DoD/Starter summary, test obligation, and the proposed Mermaid visual
+   must show all six outcomes. The visual mapping must include `other`→`undetermined` and must not
+   imply a fabricated helper exit for opt-out.
+
+This is exactly one final planning attempt, not a reset to three. It authorizes edits only to the
+E48.2 spec, synchronized Starter, and proposed `.mmd` needed to apply the four clauses above. The
+already accepted direct-helper path, delivery-report consumer, deterministic-only gate exit,
+canonical-ref procedure, bounded claims, and diagram routing are closed and may not be redesigned.
+No execution or merge is authorized. If the `+1` delivery is not acceptable, no further rework is
+available and M48 must escalate again.
+
 ## Planned Epics
 
 Six Epics. E48.1, E48.2, and E48.3 may proceed in parallel. E48.4 and E48.5 require E48.1's
@@ -441,6 +469,7 @@ the proven path generalized.
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.0 | 2026-09-08 | Resolves E48.2's exhausted-rework escalation with exactly one written `+1`. Fixes the live-result contract to six outcomes including `undetermined`, makes `helper_exit` integer-or-null without fabricated non-invocation evidence, freezes known/unknown mappings, and requires the synchronized Starter and visual to mirror the contract. No redesign, execution, merge, or budget reset is authorized. |
 | 1.2.0 | 2026-09-08 | Final exhausted-rework disposition: amend then close. Makes E48.1 contract-only in its own Epic Detail and explicitly assigns instantiated target bars/manifests to E48.4/E48.5. Supersedes the four stale E48.1 v1.5.0 prose clauses by exact replacement from this higher-authority contract; no further child rework, no waiver, and no execution authorization. |
 | 1.1.0 | 2026-09-08 | Resolves E48.1's exhausted-rework escalation at the Phase-owned contract boundary. Rules source-repository quality-bar ownership, source-graph manifest ancestry plus runtime dispatch time, a complete source-side Drivr-event mapping with authoritative `files_changed`, immutable commit-permalink visuals, and bounded out-of-Git quarantine hardening. Grants exactly one written `+1` E48.1 planning attempt; no reset and no execution authorization. |
 | 1.0.0 | 2026-09-08 | Initial M48 spec. Six Epics put the evidence contract and stable acceptance gate before two isolated project migrations and real runs, close SN-45 separately, and consolidate cost with independently reviewed quality. Records that both targets are currently benched, model identity is not an executable route, credential lookup inherits `XDG_DATA_HOME`, M48 changes no Drivr code, and a named understood failure is an allowed result but not a silent waiver. |
