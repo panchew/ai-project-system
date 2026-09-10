@@ -1,0 +1,14 @@
+flowchart LR
+  BASE["INTEGRATION BASELINE<br/>footboard d0c4c2a recorded<br/>isolated worktree (dirty checkout untouched)"]
+  MIGRATE["MIGRATION v7.0.0 → v9.0.0<br/>pin + agent + stamp + config<br/>(not a version-string edit)"]
+  VALIDATE["VALIDATE + REMOTE/TRACKING<br/>+ eligibility authority recorded<br/>(benched→eligible = human-granted)"]
+  SELECT["SELECT REAL EPIC (E1.x)<br/>from footboard accepted P1-M1 plan<br/>spec + Starter parent-accepted"]
+  BAR["QUALITY BAR + DISPATCH MANIFEST<br/>(E48.1 contract, on epic/E48.4)"]
+  DISPATCH["ADAPTER DISPATCH<br/>OpenCodeAdapter.execute + explicit route<br/>E48.2 suite-gate + raw evidence preserved"]
+  REVIEW["INDEPENDENT PROJECT REVIEW<br/>defects · rework · elapsed · intervention<br/>judgment · usage dimensions"]
+  RECORD["RUN RECORD (E48.1 contract)<br/>useful work OR named failure"]
+
+  BASE --> MIGRATE --> VALIDATE --> SELECT --> BAR --> DISPATCH --> REVIEW --> RECORD
+
+  classDef a fill:#1e3a5f,stroke:#93c5fd,color:#fff
+  class BASE,MIGRATE,VALIDATE,SELECT,BAR,DISPATCH,REVIEW,RECORD a
