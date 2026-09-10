@@ -1,28 +1,34 @@
 flowchart LR
-  INIT["bin/ai-project-init<br/>+ final commit amendment"]
+  INIT["bin/ai-project-init<br/>final agent amend, then forward<br/>usage exits: both→2, +skip-git→3"]
   ENROLL["bin/ai-project-enroll<br/>query · --remote · --local-only"]
-  REJECT["credential-bearing URL?<br/>(--remote or existing origin)"]
-  INVALID["invalid-url<br/>remote: null (redacted)"]
-  VERIFY["THREE-PART VERIFICATION (final HEAD)<br/>tracking recorded · branch pushed · ref equality"]
-  READY["delivery-ready (detail: verified)"]
-  LOCAL["local-only — durable record<br/>(detail: local-only, NON-delivery-ready)"]
+  CRED["credential-bearing URL?<br/>(supplied OR stored origin)"]
+  INVALID["invalid-url<br/>remote: null · exit 1 · no transport"]
+  Q["QUERY (read-only)<br/>four-case precedence"]
   ABSENT["absent"]
+  LOCAL["local-only — committed record<br/>(clean worktree, staged-only chore commit)"]
+  CONFLICT["verification-failure<br/>(origin + local-only conflict)"]
+  VERIFY["THREE-PART VERIFICATION (final HEAD)<br/>tracking · pushed (observed) · ref_equal<br/>each: true|false|null"]
+  READY["delivery-ready (detail: verified)"]
+  VFAIL["verification-failure"]
   CRED_ABS["credential-absent"]
   REFUSE["authenticated-refusal"]
-  VFAIL["verification-failure"]
   UNDET["undetermined"]
 
   INIT --> ENROLL
-  ENROLL -- "query" --> ABSENT
-  ENROLL -- "--remote" --> REJECT
-  REJECT -- "yes" --> INVALID
-  REJECT -- "no" --> VERIFY
+  ENROLL -- "query" --> CRED
+  CRED -- "yes" --> INVALID
+  CRED -- "no" --> Q
+  Q -- "no origin, no record" --> ABSENT
+  Q -- "no origin + local-only" --> LOCAL
+  Q -- "origin + local-only" --> CONFLICT
+  Q -- "origin, no record" --> VERIFY
+  ENROLL -- "--local-only" --> LOCAL
+  ENROLL -- "--remote" --> VERIFY
   VERIFY -- all three --> READY
   VERIFY -- any fails --> VFAIL
-  ENROLL -- "--local-only" --> LOCAL
   VERIFY -- "no credentials" --> CRED_ABS
   VERIFY -- "remote refused" --> REFUSE
-  VERIFY -- "cannot determine" --> UNDET
+  VERIFY -- "ambiguous/unknown" --> UNDET
 
   classDef a fill:#1e3a5f,stroke:#93c5fd,color:#fff
-  class INIT,ENROLL,REJECT,INVALID,VERIFY,READY,LOCAL,ABSENT,CRED_ABS,REFUSE,VFAIL,UNDET a
+  class INIT,ENROLL,CRED,INVALID,Q,ABSENT,LOCAL,CONFLICT,VERIFY,READY,VFAIL,CRED_ABS,REFUSE,UNDET a
