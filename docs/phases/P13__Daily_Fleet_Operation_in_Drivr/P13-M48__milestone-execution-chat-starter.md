@@ -225,6 +225,17 @@ command-mode, initializer-placement, prerequisite, eligibility, and secret bound
 or merge is authorized. If this `+1` is unacceptable, stop and escalate again rather than attempting
 further rework.
 
+**Final planning disposition:** the `+1` was rejected and exhausted. Read M48 spec
+`## Final Phase Disposition on E48.3 Planning` as the higher-authority exact replacement for the five
+remaining stale E48.3 v1.4.0 spec/Starter/visual surfaces. Every mutation, including ordinary
+`--remote`, requires a clean worktree; stored fetch/push credential inspection precedes every query
+branch; every visual `--remote` route passes URL/origin preflight, the clean gate, any exact-path
+transition commit and resulting `HEAD`, push/verification, retained failure state, and retry; the
+full regression matrix is mandatory; and fixed command modes, initializer placement, artifact path,
+schema, and append-only lifecycle are not delegated. E48.3 planning is accepted under that parent
+disposition. No E48.3 execution or merge is authorized. E48.4 planning may be submitted alone next,
+but execution still requires all parent prerequisites and explicit project eligibility.
+
 - Close SN-45 in the supported initialization path with remote present, absent, failure, and
   intentional local-only coverage.
 - Keep remote enrollment distinct from fleet activation and dispatch.
